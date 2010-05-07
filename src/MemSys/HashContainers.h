@@ -62,10 +62,18 @@ public:
 	}
 };
 
+#if defined (WIN32) || defined (_WIN32)
 template <class Key, class Val, class Hash = HashInteropReplacement<Key>, class Comparator = std::less<Key> >
-   class HashMap : public HASH_MAP<Key, Val, HashTraitsInteropReplacement<Key, Hash, Comparator> >{};
+   class HashMap : public stdext::hash_map<Key, Val, HashTraitsInteropReplacement<Key, Hash, Comparator> >{};
 template <class Key, class Hash = HashInteropReplacement<Key>, class Comparator = std::less<Key> >
-   class HashSet : public HASH_SET<Key,HashTraitsInteropReplacement<Key, Hash,Comparator> >{};
+   class HashSet : public stdext::hash_set<Key,HashTraitsInteropReplacement<Key, Hash,Comparator> >{};
 template <class Key, class Val, class Hash = HashInteropReplacement<Key>, class Comparator = std::less<Key> >
-   class HashMultiMap : public HASH_MULTIMAP<Key,Val,HashTraitsInteropReplacement<Key, Hash,Comparator> >{};
-
+   class HashMultiMap : public stdext::hash_multimap<Key,Val,HashTraitsInteropReplacement<Key, Hash,Comparator> >{};
+#else
+template <class Key, class Val, class Hash = HashInteropReplacement<Key>, class Comparator = std::less<Key> >
+   class HashMap : public __gnu_cxx::hash_map<Key, Val, HashTraitsInteropReplacement<Key, Hash, Comparator> >{};
+template <class Key, class Hash = HashInteropReplacement<Key>, class Comparator = std::less<Key> >
+   class HashSet : public  __gnu_cxx::hash_set<Key,HashTraitsInteropReplacement<Key, Hash,Comparator> >{};
+template <class Key, class Val, class Hash = HashInteropReplacement<Key>, class Comparator = std::less<Key> >
+   class HashMultiMap : public __gnu_cxx::hash_multimap<Key,Val,HashTraitsInteropReplacement<Key, Hash,Comparator> >{};
+#endif
