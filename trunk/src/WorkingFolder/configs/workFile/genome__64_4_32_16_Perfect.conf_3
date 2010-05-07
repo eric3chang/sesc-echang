@@ -1,0 +1,27 @@
+ShouldLoadCheckpoint = 1
+CheckpointName = "checkpoints\chk_genome_16.checkpoint"
+DieAfterCheckpointTaken = 1
+HeapMemorySize = 134217728
+FilterSize = 64
+ReportFile = 'results\genome__64_4_32_16_Perfect_3.txt'
+CompositionResultFile = 'results\genome__64_4_32_16_Perfect_composition_3.dat'
+ProcessorSkew[0] = 209
+ProcessorSkew[1] = 246
+ProcessorSkew[2] = 209
+ProcessorSkew[3] = 493
+ProcessorSkew[4] = 411
+ProcessorSkew[5] = 263
+ProcessorSkew[6] = 307
+ProcessorSkew[7] = 258
+ProcessorSkew[8] = 235
+ProcessorSkew[9] = 56
+ProcessorSkew[10] = 462
+ProcessorSkew[11] = 395
+ProcessorSkew[12] = 440
+ProcessorSkew[13] = 336
+ProcessorSkew[14] = 219
+ProcessorSkew[15] = 205
+BenchName = 'genome'
+<base.conf>
+<memSysConfigs/MemConfig_4_32_16.conf>
+

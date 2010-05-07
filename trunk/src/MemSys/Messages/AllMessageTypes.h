@@ -1,0 +1,10 @@
+#pragma once
+#include "BaseMsg.h"
+#include "ReadMsg.h"
+#include "WriteMsg.h"
+#include "InvalidateMsg.h"
+#include "EvictionMsg.h"
+#include "ReadResponseMsg.h"
+#include "WriteResponseMsg.h"
+#include "InvalidateResponseMsg.h"
+#include "EvictionResponseMsg.h"
