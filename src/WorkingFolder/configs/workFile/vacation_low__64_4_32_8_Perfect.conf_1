@@ -1,0 +1,19 @@
+ShouldLoadCheckpoint = 1
+CheckpointName = "checkpoints\chk_vacation_low_8.checkpoint"
+DieAfterCheckpointTaken = 1
+HeapMemorySize = 134217728
+FilterSize = 64
+ReportFile = 'results\vacation_low__64_4_32_8_Perfect_1.txt'
+CompositionResultFile = 'results\vacation_low__64_4_32_8_Perfect_composition_1.dat'
+ProcessorSkew[0] = 218
+ProcessorSkew[1] = 380
+ProcessorSkew[2] = 298
+ProcessorSkew[3] = 234
+ProcessorSkew[4] = 72
+ProcessorSkew[5] = 59
+ProcessorSkew[6] = 92
+ProcessorSkew[7] = 303
+BenchName = 'vacationlow'
+<base.conf>
+<memSysConfigs/MemConfig_4_32_8.conf>
+

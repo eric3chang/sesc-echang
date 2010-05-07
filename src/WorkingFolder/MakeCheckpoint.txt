@@ -1,0 +1,20 @@
+1
+short jobs
+very low
+winSesc.exe -w1 -cconfigs\checkpointMakers\genome_2.conf -dconfigs\checkpointMakers\genome_2.conf.report benchmarks\genome -t2 -g256 -s16 -n16384
+winSesc.exe -w1 -cconfigs\checkpointMakers\vacation_low_2.conf -dconfigs\checkpointMakers\vacation_low_2.conf.report benchmarks\vacation -c2 -n2 -q90 -u98 -r16384 -t4096
+winSesc.exe -w1 -cconfigs\checkpointMakers\vacation_high_2.conf -dconfigs\checkpointMakers\vacation_high_2.conf.report benchmarks\vacation -c2 -n4 -q60 -u90 -r16384 -t4096
+winSesc.exe -w1 -cconfigs\checkpointMakers\yada_2.conf -dconfigs\checkpointMakers\yada_2.conf.report benchmarks\yada -t2 -a20 -i yadaInput
+winSesc.exe -w1 -cconfigs\checkpointMakers\genome_4.conf -dconfigs\checkpointMakers\genome_4.conf.report benchmarks\genome -t4 -g256 -s16 -n16384
+winSesc.exe -w1 -cconfigs\checkpointMakers\vacation_low_4.conf -dconfigs\checkpointMakers\vacation_low_4.conf.report benchmarks\vacation -c4 -n2 -q90 -u98 -r16384 -t4096
+winSesc.exe -w1 -cconfigs\checkpointMakers\vacation_high_4.conf -dconfigs\checkpointMakers\vacation_high_4.conf.report benchmarks\vacation -c4 -n4 -q60 -u90 -r16384 -t4096
+winSesc.exe -w1 -cconfigs\checkpointMakers\yada_4.conf -dconfigs\checkpointMakers\yada_4.conf.report benchmarks\yada -t4 -a20 -i yadaInput
+winSesc.exe -w1 -cconfigs\checkpointMakers\genome_8.conf -dconfigs\checkpointMakers\genome_8.conf.report benchmarks\genome -t8 -g256 -s16 -n16384
+winSesc.exe -w1 -cconfigs\checkpointMakers\vacation_low_8.conf -dconfigs\checkpointMakers\vacation_low_8.conf.report benchmarks\vacation -c8 -n2 -q90 -u98 -r16384 -t4096
+winSesc.exe -w1 -cconfigs\checkpointMakers\vacation_high_8.conf -dconfigs\checkpointMakers\vacation_high_8.conf.report benchmarks\vacation -c8 -n4 -q60 -u90 -r16384 -t4096
+winSesc.exe -w1 -cconfigs\checkpointMakers\yada_8.conf -dconfigs\checkpointMakers\yada_8.conf.report benchmarks\yada -t8 -a20 -i yadaInput
+winSesc.exe -w1 -cconfigs\checkpointMakers\genome_16.conf -dconfigs\checkpointMakers\genome_16.conf.report benchmarks\genome -t16 -g256 -s16 -n16384
+winSesc.exe -w1 -cconfigs\checkpointMakers\vacation_low_16.conf -dconfigs\checkpointMakers\vacation_low_16.conf.report benchmarks\vacation -c16 -n2 -q90 -u98 -r16384 -t4096
+winSesc.exe -w1 -cconfigs\checkpointMakers\vacation_high_16.conf -dconfigs\checkpointMakers\vacation_high_16.conf.report benchmarks\vacation -c16 -n4 -q60 -u90 -r16384 -t4096
+winSesc.exe -w1 -cconfigs\checkpointMakers\yada_16.conf -dconfigs\checkpointMakers\yada_16.conf.report benchmarks\yada -t16 -a20 -i yadaInput
+end
