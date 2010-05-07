@@ -51,6 +51,7 @@ ENDIF(UNIX)
 add_subdirectory (libcore)
 add_subdirectory (libll)
 add_subdirectory (libmem)
+add_subdirectory (libmint)
 
 #  set (EXTRA_LIBS ${EXTRA_LIBS} MathFunctions)
 

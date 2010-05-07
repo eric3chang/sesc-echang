@@ -33,7 +33,7 @@ namespace Memory
 		virtual bool canAcceptLoad(PAddr addr);
 		virtual void dump() const;
 	private:
-		typedef CallbackMember1<SESCProcessorInterface, MemRequest*,&access> accessCB;
+		typedef CallbackMember1<SESCProcessorInterface::SESCProcessorInterface, MemRequest*,&SESCProcessorInterface::access> accessCB;
 	public:
 #endif
 		virtual void Initialize(EventManager* em, const RootConfigNode& config, const std::vector<Connection*>& connectionSet);
