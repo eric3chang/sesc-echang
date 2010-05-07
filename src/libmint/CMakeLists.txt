@@ -1,3 +1,16 @@
 add_library (libmint
    coproc.cpp
+   dump.cpp
+   elf.cpp
+   error_ops.cpp
+   exec.cpp
+   icode.cpp
+   mendian.cpp
+   mint_init.cpp
+   non_mips.cpp
+   opcodes.cpp
+   ops.cpp
+   subst.cpp
+   symtab.cpp
+   utils.cpp
 )
