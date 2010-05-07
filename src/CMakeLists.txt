@@ -30,8 +30,19 @@ include_directories ("${PROJECT_SOURCE_DIR}/libtrans")
 include_directories ("${PROJECT_SOURCE_DIR}/libvmem")
 include_directories ("${PROJECT_SOURCE_DIR}/MemSys")
 
+# add compiler option
+IF (UNIX)
+   IF (CMAKE_COMPILER_IS_GNUCC)
+      SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-deprecated")
+   ENDIF(CMAKE_COMPILER_IS_GNUCC)
+   IF (CMAKE_COMPILER_IS_GNUCXX)
+      SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated")
+   ENDIF (CMAKE_COMPILER_IS_GNUCXX)
+ ENDIF(UNIX)
+
 # add compilation of the necessary directories of sesc
 add_subdirectory (libcore)
+add_subdirectory (libll)
 
 #  set (EXTRA_LIBS ${EXTRA_LIBS} MathFunctions)
 
