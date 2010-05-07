@@ -3,11 +3,12 @@
 
 #include <map>
 #include <list>
-#include <string>
+#include <cstring>
 #include <iostream>
 #include <nanassert.h>
 #include <stdint.h>
 #include <strings.h>
+//#include <strings.h>
 
 using namespace std;
 
