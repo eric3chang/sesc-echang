@@ -30,15 +30,22 @@ include_directories ("${PROJECT_SOURCE_DIR}/libtrans")
 include_directories ("${PROJECT_SOURCE_DIR}/libvmem")
 include_directories ("${PROJECT_SOURCE_DIR}/MemSys")
 
-# add compiler option
+# add definitions to compiler
+# have to do this before add_subdirectory
 IF (UNIX)
-   IF (CMAKE_COMPILER_IS_GNUCC)
-      SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-deprecated")
-   ENDIF(CMAKE_COMPILER_IS_GNUCC)
-   IF (CMAKE_COMPILER_IS_GNUCXX)
-      SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated")
-   ENDIF (CMAKE_COMPILER_IS_GNUCXX)
- ENDIF(UNIX)
+   ADD_DEFINITIONS (-Wno-deprecated)
+   ADD_DEFINITIONS (-DHANGING_ASERT)
+   ADD_DEFINITIONS (-D_DEBUG)
+   ADD_DEFINITIONS (-DSYSTEM_SESC)
+   ADD_DEFINITIONS (-DDEBUG)
+   ADD_DEFINITIONS (-D_CONSOLE)
+   ADD_DEFINITIONS (-DLENDIAN)
+   ADD_DEFINITIONS (-DDEBUG_DUMP_PROGRAM)
+   ADD_DEFINITIONS (-DTRANSACTIONAL_MEMORY)
+   ADD_DEFINITIONS (-DTRANSACTIONAL_ONLY)
+   ADD_DEFINITIONS (-DADDRESS_CHK)
+   ADD_DEFINITIONS (-DTRANSACTIONAL_COMPOSITION_TRACKING)
+ENDIF(UNIX)
 
 # add compilation of the necessary directories of sesc
 add_subdirectory (libcore)
