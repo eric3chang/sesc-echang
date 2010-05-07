@@ -43,6 +43,7 @@ IF (UNIX)
 # add compilation of the necessary directories of sesc
 add_subdirectory (libcore)
 add_subdirectory (libll)
+add_subdirectory (libmem)
 
 #  set (EXTRA_LIBS ${EXTRA_LIBS} MathFunctions)
 
