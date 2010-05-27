@@ -54,6 +54,7 @@ add_subdirectory (libmem)
 add_subdirectory (libmint)
 add_subdirectory (libpint)
 add_subdirectory (libsuc)
+add_subdirectory (libsuperlu)
 
 #  set (EXTRA_LIBS ${EXTRA_LIBS} MathFunctions)
 
