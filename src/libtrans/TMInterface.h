@@ -9,6 +9,9 @@
 #include <stack>
 #include <iostream>
 #include <string.h>
+#ifndef _MSC_VER
+	#include "hash_fun_extra.h"
+#endif
 
 class ITMCollisionDetection;
 class ITMCollisionManager;

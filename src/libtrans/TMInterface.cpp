@@ -561,10 +561,6 @@ bool TMInterface::MayEndTransaction(uint32_t transID)
 
 void TMInterface::RetireAccess(uint64_t stamp)
 {
-	//accessSet;
-	accessSet.find(stamp);
-
-	/* TODO needs to figure out why this causes it to not compile 2010-05-27
 	I(accessSet.find(stamp) != accessSet.end());
 	StoredAccess* a = accessSet[stamp];
 	if(a->retired)
@@ -588,21 +584,17 @@ void TMInterface::RetireAccess(uint64_t stamp)
 		TryRetireTransaction(a->dependantTransaction);
 	}
 	a->retired = true;
-	*/
 }
 void TMInterface::DestroyAccess(uint64_t stamp)
 {
-	/* TODO needs to figure out why this is causing compiler error 2010-05-27
 	I(accessSet.find(stamp) != accessSet.end());
 	StoredAccess* a = accessSet[stamp];
 	I(a->retired);
 	a->Dispose();
 	accessSet.erase(stamp);
-	*/
 }
 bool TMInterface::IsDeadAccess(uint64_t stamp)
 {
-	/* TODO needs to figure out why this is causing compiler error 2010-05-27
 	I(accessSet.find(stamp) != accessSet.end());
 	StoredAccess* a = accessSet[stamp];
 	if(a->dependantTransaction)
@@ -617,7 +609,6 @@ bool TMInterface::IsDeadAccess(uint64_t stamp)
 		}
 	}
 	return false;
-	*/
 }
 void TMInterface::AbortTransactionTree(uint32_t transID)
 {
@@ -810,7 +801,6 @@ void TMInterface::ConfirmTransferCompleted(int cpuID, bool isRead, uint32_t addr
 }
 void TMInterface::ObserveAccess(uint64_t instrID)
 {
-	/* TODO needs to figure out why this is causing compiler error 2010-05-27
 #ifdef TRANSACTIONAL_MEMORY
 	if(accessSet.find(instrID) == accessSet.end())
 	{
@@ -904,7 +894,6 @@ void TMInterface::ObserveAccess(uint64_t instrID)
 		DestroyAccess(instrID);
 	}
 #endif
-	*/
 }
 uint32_t TMInterface::RetryTime()
 {
@@ -1140,7 +1129,6 @@ void TMInterface::ProcessAction(uint64_t instrID)
 	{
 		if(lastInstIsAccess)
 		{
-			/* TODO needs to figure out why this is causing compiler error 2010-05-27
 			I(accessSet.find(instrID) == accessSet.end());
 			uint32_t dependant;
 			if(transRecordSet.find(lastTransactionSeen[lastActionPid]) != transRecordSet.end() && lastTransactionSeen[lastActionPid])
@@ -1170,7 +1158,6 @@ void TMInterface::ProcessAction(uint64_t instrID)
 				transRecordSet[a->dependantTransaction].dependantAccessCounter++;
 			}
 			privateMemorySet[latestMemorySlice[lastActionPid]]->CheckMemory(ThreadContext::getContext(0)->virt2real(accessAddr));
-			*/
 		}
 		else
 		{
@@ -1323,14 +1310,11 @@ void TMInterface::EraseMemInstr(uint64_t stamp)
 {
 #ifdef TRANSACTIONAL_MEMORY
 #ifdef TRANSACTIONAL_ONLY
-	/* TODO needs to figure out why this is causing compiler error 2010-05-27 remove comment when fixed
 	if(accessSet.find(stamp) == accessSet.end())
 	{
 		return;
 	}
-	*/
 #endif
-	/* TODO needs to figure out why this is causing compiler error 2010-05-27
 	I(accessSet.find(stamp) != accessSet.end());
 	if(!(accessSet[stamp]->transactionEntry == 0) && !IsDeadAccess(stamp))
 	{
@@ -1354,13 +1338,11 @@ void TMInterface::EraseMemInstr(uint64_t stamp)
 		RetireAccess(stamp);
 		DestroyAccess(stamp);
 	}
-	*/
 #endif
 }
 bool TMInterface::MayForward(uint64_t load, uint64_t store)
 {
 #ifdef TRANSACTIONAL_MEMORY
-	/* TODO needs to figure out why this is causing compiler error 2010-05-27
 	if(accessSet.find(load) == accessSet.end() || accessSet.find(store) == accessSet.end())
 	{
 		return true;
@@ -1370,7 +1352,6 @@ bool TMInterface::MayForward(uint64_t load, uint64_t store)
 		return true;
 	}
 	return false;
-	*/
 #else
 	return true;
 #endif
