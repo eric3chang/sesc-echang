@@ -1,0 +1,2 @@
+only need to include .cpp files inside cmake add_executable and add_library commands
+

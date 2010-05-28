@@ -21,7 +21,7 @@ Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #ifndef ESTL_H
 #define ESTL_H
 
-// Diferent compilers have slightly different calling conventions for
+// Different compilers have slightly different calling conventions for
 // STL. This file has a cross-compiler implementation.
 
 #ifdef _MSC_VER
