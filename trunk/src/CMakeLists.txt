@@ -29,6 +29,7 @@ include_directories ("${PROJECT_SOURCE_DIR}/libtm")
 include_directories ("${PROJECT_SOURCE_DIR}/libtrans")
 include_directories ("${PROJECT_SOURCE_DIR}/libvmem")
 include_directories ("${PROJECT_SOURCE_DIR}/MemSys")
+include_directories ("${PROJECT_SOURCE_DIR}/include")
 
 # add definitions to compiler
 # have to do this before add_subdirectory
