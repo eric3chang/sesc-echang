@@ -22,3 +22,5 @@ add_library (libcore
    ValueTable.cpp
    VPred.cpp
 )
+
+set (EXTRA_LIBS ${EXTRA_LIBS} libcore)

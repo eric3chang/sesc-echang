@@ -9,3 +9,5 @@ add_library (libll
    QemuSescReader.cpp
    ThreadContext.cpp
 )
+
+set (EXTRA_LIBS ${EXTRA_LIBS} libll)

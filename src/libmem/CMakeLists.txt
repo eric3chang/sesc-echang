@@ -14,3 +14,5 @@ add_library ( libmem
    TLB.cpp
    UglyMemRequest.cpp
 )
+
+set (EXTRA_LIBS ${EXTRA_LIBS} libmem)
