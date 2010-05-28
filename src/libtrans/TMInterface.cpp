@@ -561,7 +561,10 @@ bool TMInterface::MayEndTransaction(uint32_t transID)
 
 void TMInterface::RetireAccess(uint64_t stamp)
 {
-	/* TODO
+	//accessSet;
+	accessSet.find(stamp);
+
+	/* TODO needs to figure out why this causes it to not compile 2010-05-27
 	I(accessSet.find(stamp) != accessSet.end());
 	StoredAccess* a = accessSet[stamp];
 	if(a->retired)

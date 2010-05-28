@@ -19,8 +19,8 @@ class TMProcessorCheckpoint;
 class icode;
 
 #ifndef _MSC_VER
-	typedef uintptr_t hash_uintptr_t;
-	typedef uintptr_t compare_uintptr_t;
+//	typedef uintptr_t hash_uintptr_t;		// commented this out 2010-05-28
+//	typedef uintptr_t compare_uintptr_t;	// commented this out 2010-05-28
 #endif
 
 class TMInterface
@@ -354,7 +354,7 @@ class TMInterface
 		};
 		typedef HASH_MAP<uintptr_t,PrivateMemoryBlock
 #ifndef _MSC_VER
-//TODO			,hash_uintptr_t, compare_uintptr_t
+//			,hash_uintptr_t, compare_uintptr_t	// commented this out 2010-05-28
 #endif
 			> AddrHashMap;
 		AddrHashMap memMap;
@@ -621,12 +621,12 @@ class TMInterface
 	template <class T>
 	class ULL_HASH_MAP : public HASH_MAP<uint64_t,T
 #ifndef _MSC_VER
-			,hash_uintptr_t, compare_uintptr_t
+//			,hash_uintptr_t, compare_uintptr_t	// commented this out 2010-05-28
 #endif
 		> {};
 	typedef HASH_SET<uint64_t
 #ifndef _MSC_VER
-			,hash_uintptr_t, compare_uintptr_t
+//			,hash_uintptr_t, compare_uintptr_t	// commented this out 2010-05-28
 #endif
 		> ULL_HASH_SET;
 
