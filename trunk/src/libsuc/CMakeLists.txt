@@ -19,3 +19,5 @@ add_library (libsuc
    TraceGen.cpp
    zlibStreams.cpp
 )
+
+set (EXTRA_LIBS ${EXTRA_LIBS} libsuc)

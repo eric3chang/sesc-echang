@@ -14,3 +14,5 @@ add_library (libmint
    symtab.cpp
    utils.cpp
 )
+
+set (EXTRA_LIBS ${EXTRA_LIBS} libmint)

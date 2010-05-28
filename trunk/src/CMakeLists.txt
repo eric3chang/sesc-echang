@@ -29,6 +29,8 @@ include_directories ("${PROJECT_SOURCE_DIR}/libtm")
 include_directories ("${PROJECT_SOURCE_DIR}/libtrans")
 include_directories ("${PROJECT_SOURCE_DIR}/libvmem")
 include_directories ("${PROJECT_SOURCE_DIR}/MemSys")
+include_directories ("${PROJECT_SOURCE_DIR}/MemSys/Devices")
+include_directories ("${PROJECT_SOURCE_DIR}/MemSys/Messages")
 include_directories ("${PROJECT_SOURCE_DIR}/include")
 
 # add definitions to compiler
@@ -56,6 +58,7 @@ add_subdirectory (libmint)
 add_subdirectory (libpint)
 add_subdirectory (libsuc)
 add_subdirectory (libtrans)
+add_subdirectory (MemSys)
 
 #  set (EXTRA_LIBS ${EXTRA_LIBS} MathFunctions)
 
