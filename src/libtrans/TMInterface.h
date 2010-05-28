@@ -621,12 +621,12 @@ class TMInterface
 	template <class T>
 	class ULL_HASH_MAP : public HASH_MAP<uint64_t,T
 #ifndef _MSC_VER
-//TODO			,hash_uintptr_t, compare_uintptr_t
+			,hash_uintptr_t, compare_uintptr_t
 #endif
 		> {};
 	typedef HASH_SET<uint64_t
 #ifndef _MSC_VER
-//TODO			,hash_uintptr_t, compare_uintptr_t
+			,hash_uintptr_t, compare_uintptr_t
 #endif
 		> ULL_HASH_SET;
 

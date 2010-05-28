@@ -5,7 +5,7 @@ add_library (libtrans
     PerfectCollisionDetection.cpp
     PerfectCollisionManager.cpp
     PerfectVersioning.cpp
-    #    TMInterface.cpp
+    TMInterface.cpp
     #TMMemory.cpp
     #TMProcessor.cpp
 )
