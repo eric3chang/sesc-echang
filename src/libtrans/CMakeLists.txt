@@ -1,4 +1,4 @@
-add_library (libtrans
+add_library (trans
     CollisionDetectionExcludeAllBut.cpp
     LogTMCollisionDetection.cpp
     LogTMSECollisionDetection.cpp

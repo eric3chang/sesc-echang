@@ -10,24 +10,25 @@ configure_file (
 
 # add the binary tree to the search path for include files
 # so that we will find all the header files
+# uncommented the ones that we don't need
 #include_directories ("${PROJECT_BINARY_DIR}")
 include_directories ("${PROJECT_SOURCE_DIR}/libapp")
 include_directories ("${PROJECT_SOURCE_DIR}/libcore")
-include_directories ("${PROJECT_SOURCE_DIR}/libemul")
+#include_directories ("${PROJECT_SOURCE_DIR}/libemul")
 include_directories ("${PROJECT_SOURCE_DIR}/libll")
 include_directories ("${PROJECT_SOURCE_DIR}/libmem")
 include_directories ("${PROJECT_SOURCE_DIR}/libmint")
 include_directories ("${PROJECT_SOURCE_DIR}/libnet")
 include_directories ("${PROJECT_SOURCE_DIR}/libpint")
-include_directories ("${PROJECT_SOURCE_DIR}/libpower")
-include_directories ("${PROJECT_SOURCE_DIR}/librst")
-include_directories ("${PROJECT_SOURCE_DIR}/libsescspot")
+#include_directories ("${PROJECT_SOURCE_DIR}/libpower")
+#include_directories ("${PROJECT_SOURCE_DIR}/librst")
+#include_directories ("${PROJECT_SOURCE_DIR}/libsescspot")
 include_directories ("${PROJECT_SOURCE_DIR}/libsmp")
 include_directories ("${PROJECT_SOURCE_DIR}/libsuc")
-include_directories ("${PROJECT_SOURCE_DIR}/libsuperlu")
-include_directories ("${PROJECT_SOURCE_DIR}/libtm")
+#include_directories ("${PROJECT_SOURCE_DIR}/libsuperlu")
+#include_directories ("${PROJECT_SOURCE_DIR}/libtm")
 include_directories ("${PROJECT_SOURCE_DIR}/libtrans")
-include_directories ("${PROJECT_SOURCE_DIR}/libvmem")
+#include_directories ("${PROJECT_SOURCE_DIR}/libvmem")
 include_directories ("${PROJECT_SOURCE_DIR}/MemSys")
 include_directories ("${PROJECT_SOURCE_DIR}/MemSys/Devices")
 include_directories ("${PROJECT_SOURCE_DIR}/MemSys/Messages")
@@ -60,9 +61,10 @@ add_subdirectory (libsuc)
 add_subdirectory (libtrans)
 add_subdirectory (MemSys)
 
-#  set (EXTRA_LIBS ${EXTRA_LIBS} MathFunctions)
+#set (EXTRA_LIBS ${EXTRA_LIBS} MathFunctions)
 
 # add the executable
-#add_executable (augSesc tutorial.cxx)
-#target_link_libraries (Tutorial  ${EXTRA_LIBS})
+#target_link_libraries (augSesc ${EXTRA_LIBS})
+#add_executable (augSesc "${PROJECT_SOURCE_DIR}/libmem/mtst1.cpp")
+
 

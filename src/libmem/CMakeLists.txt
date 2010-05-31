@@ -1,4 +1,4 @@
-add_library ( libmem
+add_library ( mem
    AddressPrefetcher.cpp
    AlwaysPrefetch.cpp
    Bank.cpp
@@ -16,3 +16,6 @@ add_library ( libmem
 )
 
 set (EXTRA_LIBS ${EXTRA_LIBS} libmem)
+
+#add_executable (augSesc mtst1.cpp)
+#target_link_libraries (augSesc ${EXTRA_LIBS})
