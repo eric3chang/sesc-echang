@@ -1,4 +1,4 @@
-add_library (libsuc
+add_library (suc
    BloomFilter.cpp
    CacheCore.cpp
    callback.cpp

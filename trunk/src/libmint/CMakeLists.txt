@@ -1,4 +1,4 @@
-add_library (libmint
+add_library (mint
    coproc.cpp
    dump.cpp
    elf.cpp

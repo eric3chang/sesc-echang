@@ -1,4 +1,4 @@
-add_library (libcore
+add_library (core
    AdvancedStats.cpp
    BPred.cpp
    Cluster.cpp
@@ -23,4 +23,5 @@ add_library (libcore
    VPred.cpp
 )
 
-set (EXTRA_LIBS ${EXTRA_LIBS} libcore)
+#set (EXTRA_LIBS ${EXTRA_LIBS} libcore)
+#link_directories 

@@ -1,4 +1,4 @@
-add_library (libpint
+add_library (pint
    PPCDecoder.cpp
 )
 

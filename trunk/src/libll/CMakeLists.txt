@@ -1,4 +1,4 @@
-add_library (libll
+add_library (ll
    Events.cpp
    ExecutionFlow.cpp
    GFlow.cpp
