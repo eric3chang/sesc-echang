@@ -9,5 +9,3 @@ add_library (trans
     TMMemory.cpp
     TMProcessor.cpp
 )
-
-set (EXTRA_LIBS ${EXTRA_LIBS} trans)

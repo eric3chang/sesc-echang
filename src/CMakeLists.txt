@@ -64,9 +64,10 @@ add_subdirectory (libsuc)
 add_subdirectory (libtrans)
 add_subdirectory (MemSys)
 
-#set (EXTRA_LIBS ${EXTRA_LIBS} MathFunctions)
+# add all the libraries so that the linker can find them
+#set (EXTRA_LIBS ${EXTRA_LIBS} core mem suc)
+set (EXTRA_LIBS ${EXTRA_LIBS} core ll mem mint pint suc trans MemSys Devices)
 
 # add the executable
+add_executable (augSesc "${PROJECT_SOURCE_DIR}/libmem/mtst1.cpp")
 target_link_libraries (augSesc ${EXTRA_LIBS})
-#add_executable (augSesc "${PROJECT_SOURCE_DIR}/libmem/mtst1.cpp")
-

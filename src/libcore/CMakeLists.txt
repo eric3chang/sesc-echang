@@ -15,6 +15,7 @@ add_library (core
    OSSim.cpp
    Pipeline.cpp
    ProcessId.cpp
+   Processor.cpp
    Resource.cpp
    RiskLoadProf.cpp
    RunningProcs.cpp
@@ -22,6 +23,3 @@ add_library (core
    ValueTable.cpp
    VPred.cpp
 )
-
-#link_directories 
-set (EXTRA_LIBS ${EXTRA_LIBS} core)

@@ -17,7 +17,7 @@
 #include "SescConf.h"
 
 int32_t main(int32_t argc, char **argv, char **envp)
-{ 
+{
   osSim = new OSSim(argc, argv, envp);
 
   int32_t nProcs = SescConf->getRecordSize("","cpucore");
@@ -48,6 +48,5 @@ int32_t main(int32_t argc, char **argv, char **envp)
 
   delete osSim;
   
-
   return 0;
 }
