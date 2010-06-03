@@ -1,3 +1,3 @@
 - only need to include .cpp files inside cmake add_executable and add_library commands
 - to eliminate "destructor not called" error, use #include instead of forward declaration. basically, we have to include the class before calling the destructor
-
+- RunFile.txt contains sample ways to run the program
