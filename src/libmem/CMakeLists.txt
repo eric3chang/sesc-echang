@@ -15,7 +15,7 @@ add_library ( mem
    UglyMemRequest.cpp
 )
 
-set (EXTRA_LIBS ${EXTRA_LIBS} libmem)
+set (EXTRA_LIBS ${EXTRA_LIBS} mem)
 
 #add_executable (augSesc mtst1.cpp)
 #target_link_libraries (augSesc ${EXTRA_LIBS})

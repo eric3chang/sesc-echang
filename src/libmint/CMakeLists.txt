@@ -15,4 +15,4 @@ add_library (mint
    utils.cpp
 )
 
-set (EXTRA_LIBS ${EXTRA_LIBS} libmint)
+set (EXTRA_LIBS ${EXTRA_LIBS} mint)

@@ -10,4 +10,4 @@ add_library (trans
     TMProcessor.cpp
 )
 
-set (EXTRA_LIBS ${EXTRA_LIBS} libtrans)
+set (EXTRA_LIBS ${EXTRA_LIBS} trans)
