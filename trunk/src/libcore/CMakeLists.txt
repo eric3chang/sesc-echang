@@ -23,5 +23,5 @@ add_library (core
    VPred.cpp
 )
 
-#set (EXTRA_LIBS ${EXTRA_LIBS} libcore)
 #link_directories 
+set (EXTRA_LIBS ${EXTRA_LIBS} core)

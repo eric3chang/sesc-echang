@@ -10,4 +10,4 @@ add_library (ll
    ThreadContext.cpp
 )
 
-set (EXTRA_LIBS ${EXTRA_LIBS} libll)
+set (EXTRA_LIBS ${EXTRA_LIBS} ll)

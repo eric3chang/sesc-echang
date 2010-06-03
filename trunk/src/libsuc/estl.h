@@ -111,11 +111,26 @@ class SGI_HashMultimap : public stdext::hash_multimap<Key,Val,MS_HashTraits<Key,
 #include <ext/hash_set>
 #include <ext/slist>
 #include <ext/algorithm>
+
 #define HASH_MAP       __gnu_cxx::hash_map
 #define HASH_SET       __gnu_cxx::hash_set
 #define HASH_MULTIMAP  __gnu_cxx::hash_multimap
 #define HASH           __gnu_cxx::hash
 #define SLIST          __gnu_cxx::slist
+
+/* too bad we can't use the following experimental headers,
+ * it would make life easier. It's supported in gcc-4.4.1,
+ * but I don't know about lower versions. You have to use
+ * -std=c++0x option in your gcc to get it to work for now.
+ * Eric Chang 2010/06/02
+ */
+/*
+#include <unordered_map>
+
+#define HASH_MAP        std::unordered_map
+#define HASH_SET        std::unordered_set
+ */
+
 #endif
 
 #endif // ESTL_H

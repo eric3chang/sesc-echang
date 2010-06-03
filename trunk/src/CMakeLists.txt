@@ -49,6 +49,9 @@ IF (UNIX)
    ADD_DEFINITIONS (-DTRANSACTIONAL_ONLY)
    ADD_DEFINITIONS (-DADDRESS_CHK)
    ADD_DEFINITIONS (-DTRANSACTIONAL_COMPOSITION_TRACKING)
+   #  the following definition doesn't work in older gnu compilers
+   #  enable it to use new standards unordered_map and unordered_set
+   #   ADD_DEFINITIONS (-std=c++0x)
 ENDIF(UNIX)
 
 # add compilation of the necessary directories of sesc
@@ -64,7 +67,6 @@ add_subdirectory (MemSys)
 #set (EXTRA_LIBS ${EXTRA_LIBS} MathFunctions)
 
 # add the executable
-#target_link_libraries (augSesc ${EXTRA_LIBS})
+target_link_libraries (augSesc ${EXTRA_LIBS})
 #add_executable (augSesc "${PROJECT_SOURCE_DIR}/libmem/mtst1.cpp")
-
 
