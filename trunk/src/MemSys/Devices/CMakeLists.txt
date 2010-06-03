@@ -5,5 +5,3 @@ add_library (Devices
    SnoopyBus.cpp
    TestMemory.cpp
 )
-
-set (EXTRA_LIBS ${EXTRA_LIBS} Devices)

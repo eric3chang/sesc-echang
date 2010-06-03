@@ -20,4 +20,4 @@ add_library (suc
    zlibStreams.cpp
 )
 
-set (EXTRA_LIBS ${EXTRA_LIBS} suc)
+target_link_libraries (suc z)

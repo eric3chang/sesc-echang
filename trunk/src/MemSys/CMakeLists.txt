@@ -5,5 +5,3 @@ add_library (MemSys
 )
 
 add_subdirectory (Devices)
-
-set (EXTRA_LIBS ${EXTRA_LIBS} MemSys)
