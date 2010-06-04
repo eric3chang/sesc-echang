@@ -42,7 +42,7 @@ int32_t main(int32_t argc, char **argv, char **envp)
   
   
   for(int32_t i = 0; i < nProcs; i ++) {
-    GProcessor *gp = pr[i];
+    //GProcessor *gp = pr[i];	//unused variable
     delete ms[i];
   }
 

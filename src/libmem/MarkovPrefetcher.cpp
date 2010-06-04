@@ -123,7 +123,7 @@ void MarkovPrefetcher::read(MemRequest *mreq)
   bLine *l = buff->readLine(paddr);
 
   if(l) { //hit
-    LOG("GHBP: hit on [%08lx]", paddr);
+    LOG("GHBP: hit on [%08lx]", (long unsigned int) paddr);
     hit.inc();
     mreq->goUpAbs(nextBuffSlot());
     return;
@@ -167,7 +167,7 @@ void MarkovPrefetcher::prefetch(PAddr prefAddr, Time_t lat)
       }
       
       predictions.inc();
-      LOG("GHBP: prefetch [0x%08lx]", paddr);
+      LOG("GHBP: prefetch [0x%08lx]", (long unsigned int) paddr);
       pendingFetches.insert(paddr);
     }
   }
@@ -176,7 +176,7 @@ void MarkovPrefetcher::prefetch(PAddr prefAddr, Time_t lat)
 
 void MarkovPrefetcher::returnAccess(MemRequest *mreq)
 {
-  uint32_t paddr = mreq->getPAddr() & defaultMask;
+  //uint32_t paddr = mreq->getPAddr() & defaultMask;	//unused variable
 
   //LOG("GHBP: returnAccess [%08lx]", paddr);
   mreq->goUp(0);
@@ -210,7 +210,7 @@ void MarkovPrefetcher::processAck(PAddr addr)
   if(itF == pendingFetches.end()) 
     return;
 
-  bLine *l = buff->fillLine(paddr);
+  //bLine *l = buff->fillLine(paddr);	//unused variable
 
   penReqMapper::iterator it = pendingRequests.find(paddr);
 

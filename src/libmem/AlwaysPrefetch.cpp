@@ -93,7 +93,7 @@ void AlwaysPrefetch::read(MemRequest *mreq)
   bLine *l = buff->readLine(paddr);
 
   if(l) { //hit
-    LOG("NLAP: hit on [%08lx]", paddr);
+    LOG("NLAP: hit on [%08lx]", (long unsigned int) paddr);
     hit.inc();    
     mreq->goUpAbs(nextBuffSlot());
     return;
@@ -101,7 +101,7 @@ void AlwaysPrefetch::read(MemRequest *mreq)
 
   penFetchSet::iterator it = pendingFetches.find(paddr);
   if(it != pendingFetches.end()) { // half-miss
-    LOG("NLAP: half-miss on %08lx", paddr);
+    LOG("NLAP: half-miss on %08lx",(long unsigned int)  paddr);
     penReqMapper::iterator itR = pendingRequests.find(paddr);
     halfMiss.inc();
     if (itR == pendingRequests.end()) {
@@ -117,7 +117,7 @@ void AlwaysPrefetch::read(MemRequest *mreq)
     return;
   }
 
-  LOG("NLAP: miss on [%08lx]", paddr);
+  LOG("NLAP: miss on [%08lx]", (long unsigned int) paddr);
   miss.inc();
 
   Time_t lat = nextTableSlot() - globalClock;    
@@ -139,7 +139,7 @@ void AlwaysPrefetch::prefetch(PAddr prefAddr, Time_t lat)
 	r = CBMemRequest::create(lat, lowerLevel[0], MemRead, prefAddr, 
 				 processAckCB::create(this, prefAddr));
 	r->markPrefetch();
-	LOG("NLAP: prefetch [0x%08lx]", prefAddr);
+	LOG("NLAP: prefetch [0x%08lx]", (long unsigned int) prefAddr);
 	predictions.inc();
 	pendingFetches.insert(prefAddr);
       }
@@ -149,7 +149,7 @@ void AlwaysPrefetch::prefetch(PAddr prefAddr, Time_t lat)
 void AlwaysPrefetch::returnAccess(MemRequest *mreq)
 {
   uint32_t paddr = mreq->getPAddr();
-  LOG("NLAP: returnAccess [%08lx]", paddr);
+  LOG("NLAP: returnAccess [%08lx]", (long unsigned int) paddr);
   mreq->goUp(0);
 }
 
@@ -175,12 +175,12 @@ void AlwaysPrefetch::processAck(PAddr addr)
   if(itF == pendingFetches.end()) 
     return;
 
-  bLine *l = buff->fillLine(paddr);
+  //bLine *l = buff->fillLine(paddr);	//unused variable
 
   penReqMapper::iterator it = pendingRequests.find(paddr);
 
   if(it != pendingRequests.end()) {
-    LOG("NLAP: returnAccess [%08lx]", paddr);
+    LOG("NLAP: returnAccess [%08lx]", (long unsigned int) paddr);
     std::queue<MemRequest *> *tmpReqQueue;
     tmpReqQueue = (*it).second;
     while (tmpReqQueue->size()) {

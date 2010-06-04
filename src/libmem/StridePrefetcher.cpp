@@ -118,7 +118,7 @@ void StridePrefetcher::read(MemRequest *mreq)
   bLine *l = buff->readLine(paddr);
 
   if(l) { //hit
-    LOG("SP: hit on %08lx", paddr);
+    LOG("SP: hit on %08lx", (long unsigned int) paddr);
     hit.inc();
     mreq->goUpAbs(nextBuffSlot() + hitDelay); 
     learnHit(paddr);
@@ -127,7 +127,7 @@ void StridePrefetcher::read(MemRequest *mreq)
 
   penFetchSet::iterator it = pendingFetches.find(paddr);
   if(it != pendingFetches.end()) { // half-miss
-    LOG("SP: half-miss on %08lx", paddr);
+    LOG("SP: half-miss on %08lx", (long unsigned int) paddr);
     halfMiss.inc();
     penReqMapper::iterator itR = pendingRequests.find(paddr);
 
@@ -143,7 +143,7 @@ void StridePrefetcher::read(MemRequest *mreq)
     return;
   }
 
-  LOG("SP:miss on %08lx", paddr);
+  LOG("SP:miss on %08lx", (long unsigned int) paddr);
   miss.inc();
   learnMiss(paddr);
   mreq->goDownAbs(nextBuffSlot() + missDelay, lowerLevel[0]); 
@@ -160,7 +160,7 @@ void StridePrefetcher::learnHit(PAddr addr)
 
   prefetch(pe, lat + learnHitDelay); 
   pe->setTag(table->calcTag(pe->nextAddr(table)));
-  LOG("SP:prefetching more: addr=%08lx", paddr + pe->stride);
+  LOG("SP:prefetching more: addr=%08lx", (long unsigned int) (paddr + pe->stride) );
 }
 
 void StridePrefetcher::learnMiss(PAddr addr)
@@ -212,7 +212,7 @@ void StridePrefetcher::learnMiss(PAddr addr)
     newStride = minDelta;
   }
 
-  LOG("minDelta = %ld", minDelta);
+  LOG("minDelta = %ld", (long int) minDelta);
   
   if(newStride == 0 || newStride == (unsigned int) -1 || newStride > maxStride) {
     ignoredStreams.inc();
@@ -226,7 +226,9 @@ void StridePrefetcher::learnMiss(PAddr addr)
     pEntry *pe = table->fillLine(paddr);
     pe->stride = newStride;
     pe->goingUp = goingUp;
-    LOG("SP: new stream. stride=%d paddr=%08lx nextAddr=%08lx %s", (int) newStride, paddr, nextAddr, goingUp ? "UP" : "DOWN");
+    LOG("SP: new stream. stride=%d paddr=%08lx nextAddr=%08lx %s", (int) newStride,
+   		 (long unsigned int) paddr, (long unsigned int) nextAddr,
+   		 goingUp ? "UP" : "DOWN");
     prefetch(pe, lat + learnMissDelay); 
     pe->setTag(table->calcTag(pe->nextAddr(table)));
   }
@@ -234,7 +236,7 @@ void StridePrefetcher::learnMiss(PAddr addr)
 
 void StridePrefetcher::prefetch(pEntry *pe, Time_t lat)
 {
-  uint32_t bsize = buff->getLineSize();
+  // uint32_t bsize = buff->getLineSize(); // unused variable
   PAddr prefAddr = pe->nextAddr(table);
 
   for(int32_t i = 0; i < depth; i++) {
@@ -258,14 +260,14 @@ void StridePrefetcher::prefetch(pEntry *pe, Time_t lat)
 void StridePrefetcher::access(MemRequest *mreq)
 {
   uint32_t paddr = mreq->getPAddr() & defaultMask;
-  LOG("SP:access addr=%08lx", paddr);
+  LOG("SP:access addr=%08lx", (long unsigned int) paddr);
 
   // TODO: should i really consider all these read types? 
   if (mreq->getMemOperation() == MemRead
       || mreq->getMemOperation() == MemReadW) {
     read(mreq);
   } else {
-    LOG("SP:ignoring access addr=%08lx type=%d", paddr, mreq->getMemOperation());
+    LOG("SP:ignoring access addr=%08lx type=%d", (long unsigned int) paddr, mreq->getMemOperation());
     nextBuffSlot();
     
     bLine *l = buff->readLine(paddr);
@@ -280,7 +282,7 @@ void StridePrefetcher::access(MemRequest *mreq)
 void StridePrefetcher::returnAccess(MemRequest *mreq)
 {
   uint32_t paddr = mreq->getPAddr() & defaultMask;
-  LOG("SP:returnAccess addr=%08lx", paddr);
+  LOG("SP:returnAccess addr=%08lx", (long unsigned int) paddr);
 
   mreq->goUp(0);
 }
@@ -293,12 +295,12 @@ void StridePrefetcher::processAck(PAddr addr)
   if(itF == pendingFetches.end()) 
     return;
 
-  bLine *l = buff->fillLine(paddr);
+  //bLine *l = buff->fillLine(paddr);	//unused variable
 
   penReqMapper::iterator it = pendingRequests.find(paddr);
 
   if(it != pendingRequests.end()) {
-    LOG("SP:returnAccess addr=%08lx", paddr);
+    LOG("SP:returnAccess addr=%08lx", (long unsigned int) paddr);
     std::queue<MemRequest *> *tmpReqQueue;
     tmpReqQueue = (*it).second;
     while (tmpReqQueue->size()) {
