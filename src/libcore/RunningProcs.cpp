@@ -105,7 +105,7 @@ void RunningProcs::run()
 			while(osSim->isGoingRabbit() && allFinished == false)
 			{
 				allFinished = true;
-				for(int i = 0; i < size(); i++)
+				for(unsigned int i = 0; i < size(); i++)
 				{
 					if( !getProcessor(i)->availableFlows() )
 					{

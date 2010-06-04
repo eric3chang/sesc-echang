@@ -971,7 +971,7 @@ void OSSim::simFinish()
 	  {
 		  out << " string BenchName " << SescConf->getCharPtr("","BenchName");
 	  }
-	  for(int i = 0; i < cpus.size(); i++)
+	  for(unsigned int i = 0; i < cpus.size(); i++)
 	  {
 		  if(SescConf->checkInt("","ProcessorSkew",i))
 		  {
