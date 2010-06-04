@@ -37,6 +37,7 @@ include_directories ("${PROJECT_SOURCE_DIR}/include")
 # add definitions to compiler
 # have to do this before add_subdirectory
 IF (UNIX)
+   ADD_DEFINITIONS (-Wall)
    ADD_DEFINITIONS (-Wno-deprecated)
    ADD_DEFINITIONS (-DHANGING_ASERT)
    ADD_DEFINITIONS (-D_DEBUG)

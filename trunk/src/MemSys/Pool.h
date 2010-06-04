@@ -53,7 +53,7 @@ public:
 			compareStack.pop();
 		}
 #endif
-		if((int)bank.size() < upperBound)
+		if(bank.size() < upperBound)
 		{
 			bank.push(element);
 		}

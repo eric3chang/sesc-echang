@@ -129,7 +129,7 @@ uint32_t PerfectCollisionDetection::GetDelay(){ return 0; }
 void PerfectCollisionDetection::MayNotDelay(){}
 int PerfectCollisionDetection::CollisionCount()
 {
-	bool detectBogusCollision = false;
+	//bool detectBogusCollision = false;	//unused variable
 	collisionSet.clear();
 	if(currentCpu != -1 && currentIsAccess && oldLevel != 0)
 	{

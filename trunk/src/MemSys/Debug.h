@@ -4,6 +4,7 @@
 inline void DebugFaultCatcher()
 {
 	int a = 0;//this doesn't do anything special
+	a++;	// to stop the compiler from complaining about unused variable
 	//it is just a spot to drop break points that is convenient
 }
 
