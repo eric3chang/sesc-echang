@@ -104,7 +104,7 @@ MSHR<Addr_t,Cache_t> *MSHR<Addr_t, Cache_t>::attach(const char *name,
                                                     MSHR<Addr_t,Cache_t> *mshr)
 {
   MSHR *newmshr;
-  int32_t aPolicy = SPECIAL;
+  //int32_t aPolicy = SPECIAL;	//unused variable
 
     {
       newmshr = MSHR<Addr_t,Cache_t>::create(name,section);

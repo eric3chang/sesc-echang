@@ -65,6 +65,6 @@ bool debacc  = false;
 void debugAccess()
 {
   debacc = true;
-  int32_t j = rand();
+  //int32_t j = rand();	//unused variable
 }
 

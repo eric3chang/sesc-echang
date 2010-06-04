@@ -8,7 +8,7 @@
 
 class ZlibOut
 {
-	static const int chunkSize = 1048576;
+	static const size_t chunkSize = 1048576;
 	uint8_t* inBuffer;
 	size_t currentMarker;
 
