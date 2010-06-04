@@ -77,7 +77,7 @@ Cache::Cache(MemorySystem *gms, const char *section, const char *name)
 #endif
 {
   MemObj *lower_level = NULL;
-  char busName[512];
+  //char busName[512];	//unused variable
   char tmpName[512];
   
   if(SescConf->checkInt(section,"nBanks")) 
@@ -920,10 +920,12 @@ void WTCache::doReturnAccess(MemRequest *mreq)
 }
 
 void WTCache::inclusionCheck(PAddr addr) {
+  /* unused variables
   const LevelType* la  = getLowerLevel();
   MemObj*    c  = (*la)[0];
   const LevelType* lb = c->getLowerLevel();
   MemObj*    cc = (*lb)[0];
+  */
   //I(((SMPCache*)cc)->findLine(addr));
 }
 
@@ -947,8 +949,8 @@ SVCache::~SVCache()
 
 void SVCache::doWrite(MemRequest *mreq)
 {
-  DInst *dinst = mreq->getDInst();
-  PAddr addr = mreq->getPAddr();
+  //DInst *dinst = mreq->getDInst();	//unused variable
+  //PAddr addr = mreq->getPAddr();	//unused variable
 
   
   WBCache::doWrite(mreq);
@@ -957,8 +959,8 @@ void SVCache::doWrite(MemRequest *mreq)
 
 void SVCache::doReturnAccess(MemRequest *mreq)
 {
-  DInst *dinst = mreq->getDInst();
-  PAddr addr = mreq->getPAddr();
+  //DInst *dinst = mreq->getDInst();	//unused variable
+  //PAddr addr = mreq->getPAddr();	//unused variable
 
 
   WBCache::doReturnAccess(mreq);

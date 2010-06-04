@@ -224,7 +224,7 @@ void Bank::write(MemRequest *mreq)
   int32_t addr= mreq->getPAddr();
   int32_t seg = SEG(addr);
   int32_t  bank = BANK(addr);
-  bool rbhit = RBHIT(addr);
+  //bool rbhit = RBHIT(addr);	//unused variable
 
   //BBF : ? statistics->inc_bank_wr_access(getId(), rbhit);
   if (isPipe) {
