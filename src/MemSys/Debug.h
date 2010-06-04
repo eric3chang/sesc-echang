@@ -14,3 +14,4 @@ inline void DebugFaultCatcher()
 #define DebugAssert(x) 
 #define DebugFail(x) assert(x == 0)
 #endif
+

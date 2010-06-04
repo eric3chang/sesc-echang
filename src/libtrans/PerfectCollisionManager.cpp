@@ -196,8 +196,8 @@ int PerfectCollisionManager::AbortCount()
 	abortSet.clear();
 	pid = collisionSet[0].localPid;
 	HASH_SET<uint32_t> abortMask;
-	uint64_t localTimeStamp = 0xFFFFFFFFFFFFFFFF;
-	uint64_t enemyTimeStamp = 0xFFFFFFFFFFFFFFFF;
+	uint64_t localTimeStamp = 0xFFFFFFFFFFFFFFFFll;
+	uint64_t enemyTimeStamp = 0xFFFFFFFFFFFFFFFFll;
 	if(pidDependancy[pid] == -1)
 	{
 		pidDependancy[pid] = collisionSet[0].enemyPid;
