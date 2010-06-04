@@ -423,7 +423,7 @@ void ProcessId::printQueue(char *where)
 void ProcessId::decSuspendedCounter(){
   I(suspendedCounter > 0); 
   if(suspendedCounter <= 0){
-    int32_t j = rand();
+    //int32_t j = rand();	//unused variable
   }
   suspendedCounter--; 
 }

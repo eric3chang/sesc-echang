@@ -378,7 +378,7 @@ Selector::Selector(int32_t size, const char *name, GValuePredictor *p1, GValuePr
 
 unsigned Selector::getIndex(PAddr iPC)
 {
-  unsigned index;
+  //unsigned index;	// unused variable
 
   return (iPC >> 2);
 }

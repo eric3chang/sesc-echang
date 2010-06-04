@@ -99,7 +99,7 @@ StallCause DepWindow::canIssue(DInst *dinst) const
 
 void DepWindow::addInst(DInst *dinst)
 {
-  const Instruction *inst = dinst->getInst();
+  //const Instruction *inst = dinst->getInst();	// unused variable
   
   I(dinst->getResource() != 0); // Resource::schedule must set the resource field
 
@@ -179,7 +179,7 @@ void DepWindow::select(DInst *dinst)
 // Called when dinst finished execution. Look for dependent to wakeUp
 void DepWindow::executed(DInst *dinst)
 {
-  const Instruction *inst = dinst->getInst();
+  //const Instruction *inst = dinst->getInst();	// unused variable
 
 #ifdef SESC_BAAD
   dinst->setExeTime();
