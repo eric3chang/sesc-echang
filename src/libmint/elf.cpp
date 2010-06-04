@@ -109,7 +109,7 @@ elf_read_hdrs(char *objfile)
    */
   for (i = 0; i < nscns; i++) {
     fseek(Fobj, shoff + i * shsize, SEEK_SET);
-	size_t elf32Size = sizeof(Elf32_Shdr);
+	//size_t elf32Size = sizeof(Elf32_Shdr);	//unused variable
     if (fread(&shdr, sizeof(Elf32_Shdr), 1, Fobj) < 1)
 	{
 		if(ferror(Fobj))
@@ -477,7 +477,7 @@ elf_read_hdrs(char *objfile)
           Data_size += size + addr - ( Data_start + Data_size);
         }else{
           fprintf(stderr,".got (%x vs %lx)\n"
-                  ,addr,( Data_start + Data_size));
+                  ,addr,(long unsigned int) ( Data_start + Data_size));
           fatal(".srdata data sections not contiguous\n");
         }
       }else
@@ -496,7 +496,7 @@ elf_read_hdrs(char *objfile)
           Data_size += size + addr - ( Data_start + Data_size);
         }else{
           fprintf(stderr,".srdata (%x vs %lx)\n"
-                  ,addr,( Data_start + Data_size));
+                  ,addr,(long unsigned int)( Data_start + Data_size));
                 
           fatal(".srdata data sections not contiguous\n");
         }                               
