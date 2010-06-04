@@ -15,4 +15,4 @@ add_library (mint
    utils.cpp
 )
 
-target_link_libraries (mint "${PROJECT_SOURCE_DIR}/libll/libll.a")
+target_link_libraries (mint "${PROJECT_BINARY_DIR}/libll/libll.a")

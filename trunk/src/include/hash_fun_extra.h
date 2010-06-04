@@ -10,16 +10,22 @@
 
 #include <cstddef>
 
-_GLIBCXX_BEGIN_NAMESPACE(__gnu_cxx)
+//using namespace __gnu_cxx;
+
+//_GLIBCXX_BEGIN_NAMESPACE(__gnu_cxx)
 
 using std::size_t;
+using __gnu_cxx::hash;
 
-template<> struct hash<uint64_t>
+namespace __gnu_cxx
 {
-	size_t operator()(uint64_t __x) const
-	{ return __x; }
-};
+   template<> struct hash<uint64_t>
+   {
+   	size_t operator()(uint64_t __x) const
+    	{ return __x; }
+   };
+}
 
-_GLIBCXX_END_NAMESPACE
+//_GLIBCXX_END_NAMESPACE
 
 #endif /* HASH_FUN_EXTRA_H_ */
