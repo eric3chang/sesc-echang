@@ -78,7 +78,7 @@ void Instruction::initializeMINT(int32_t argc,
 
   maxFuncID=0;
   
-  char *cFuncName = strdup("func0");
+  //char *cFuncName = strdup("func0");	// unused variable
 
   for(size_t i = 0; i < codeSize; i++) {
     

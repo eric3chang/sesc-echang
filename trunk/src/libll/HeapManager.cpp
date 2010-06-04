@@ -9,7 +9,7 @@ HeapManager::HeapManager(VAddr base, size_t size)
   // The base and the size need to be non-zero multiples of MinBlockSize
   I(base&&!(base&MinBlockMask));
   I(size&&!(size&MinBlockMask));
-  BlockInfo *blockInfo=new BlockInfo(base,size);
+  //BlockInfo *blockInfo=new BlockInfo(base,size);	// unused variable
   freeByAddr.insert(BlockInfo(base,size));
   freeBySize.insert(BlockInfo(base,size));
 }

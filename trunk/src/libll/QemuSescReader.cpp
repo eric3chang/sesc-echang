@@ -71,7 +71,7 @@ void QemuSescReader::advancePC() {
 void QemuSescReader::readInst() { 
 
   if (fread(qst, sizeof(QemuSescTrace), 1, trace) !=1){
-    MSG("Size of each structure is %lu", sizeof(qst));
+    MSG("Size of each structure is %zu", sizeof(qst));
     if (feof(trace))
       tracEof = true;
     else {
