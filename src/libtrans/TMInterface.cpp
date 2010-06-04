@@ -439,7 +439,7 @@ void TMInterface::EndTransaction(uint32_t transID, bool force)
 	I(tr.progressObserved);
 	I(tr.transEndOp);
 	I(tr.transEndOp->opCode == TMOpCodes::TransEnd);
-	uint32_t parentID = tr.parentTransactionID;
+	//uint32_t parentID = tr.parentTransactionID;	//unused variable
 	if(!raceAheadMode[tr.pid])
 	{
 		ExecuteTransactionInst(tr.transEndOp,force);
@@ -1274,7 +1274,7 @@ void TMInterface::DumpStats(std::ostream& out)
 uintptr_t TMInterface::RedirectAddr(int pid, bool isRead, uintptr_t addr, size_t size)
 {
 #ifdef TRANSACTIONAL_MEMORY
-	I(addr > Private_start && addr < Private_end);
+	I((int)addr > Private_start && (int)addr < Private_end);
 #ifdef TRANSACTIONAL_COMPOSITION_TRACKING
 	if(compositionRecordingEnabled && currentTransID[pid])
 	{

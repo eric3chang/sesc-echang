@@ -182,7 +182,7 @@ class TMInterface
 		}
 		void RecordBarrierExit(uint64_t time)
 		{
-			const uint64_t limit32Bit = 4294967296ll;
+			//const uint64_t limit32Bit = 4294967296ll;	// unused variable
 			int pid = -1;
 			outStream->write((char*)&pid,sizeof(pid));
 			outStream->write((char*)&time,sizeof(time));
@@ -341,7 +341,7 @@ class TMInterface
 						I(relevant[i] == (isRead[i] || isWrite[i]));
 						if(!isWrite[i])
 						{
-							oldData[i] == newData[i];
+							I(oldData[i] == newData[i]);
 						}
 					}
 					else
