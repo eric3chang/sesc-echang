@@ -93,7 +93,7 @@ void allocate_fixed(int32_t addr, int32_t nbytes);
 /* private functions */
 static void parse_args(int32_t argc, char **argv);
 static void copy_argv(int32_t argc, char **argv, char **envp);
-static void mint_stats();
+//static void mint_stats();	//never defined
 #if !(defined ADDRESS_SPACES)
 static void create_addr_space();
 #endif // !(defined ADDRESS_SPACES)
@@ -288,7 +288,7 @@ static int
 logbase2(int32_t *pnum)
 {
     uint32_t logsize;
-    uint32_t exp;
+    int32_t exp;
 
     for (logsize = 0, exp = 1; exp < *pnum; logsize++)
         exp *= 2;

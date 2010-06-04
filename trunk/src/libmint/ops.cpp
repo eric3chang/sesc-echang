@@ -2967,7 +2967,7 @@ OP(syscall_op_0)
   sysnum = pthread->getREGNUM(2);
   addr = pthread->getREGNUM(31) - 8;
   
-  if (sysnum=0x4001) /* syscall_exit */
+  if (sysnum==0x4001) /* syscall_exit */
     mint_exit(picode, pthread);
   else
     fatal("syscall %d at 0x%x, called from 0x%x, not supported yet.\n", sysnum, picode->addr, addr);

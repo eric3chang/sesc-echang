@@ -1236,7 +1236,7 @@ struct targRusage{
 OP(mint_getrusage)
 {
   MintFuncArgs funcArgs(pthread,picode);
-  targInt who   = funcArgs.getInt32();
+  //targInt who   = funcArgs.getInt32();	//unused variable
   VAddr   usage = funcArgs.getVAddr();
   targInt retVal=0;
 #ifdef DEBUG_VERBOSE
@@ -1553,7 +1553,7 @@ OP(mint_mmap)
   // Prefered address for mmap
   VAddr addr=pthread->getIntArg1();
   // Size of block to mmap
-  size_t size=pthread->getIntArg2();
+  //size_t size=pthread->getIntArg2();	//unused variable
 #ifdef DEBUG_VERBOSE
   printf("mint_mmap(%d)\n", size);
 #endif
@@ -1711,7 +1711,7 @@ OP(mint_read)
 
 /* ARGSUSED */
 OP(mint_write){
-  ID(Pid_t thePid=pthread->getPid());
+  //ID(Pid_t thePid=pthread->getPid());	//unused variable
   // Set things up for the return from this call
   pthread->setPCIcode(pthread->getRetIcode());
   // Arguments of the write call
@@ -1722,7 +1722,7 @@ OP(mint_write){
 
   int32_t err;
 
-  int32_t pid=pthread->getPid();
+  //int32_t pid=pthread->getPid();	//unused variable
 
 #ifdef DEBUG_VERBOSE
   printf("mint_write(%d, 0x%08x, %d)\n",(int)fd,(unsigned)buf ,(int)count);
@@ -2430,10 +2430,10 @@ OP(mint_fxstat64)
 #else // Begin (defined TLS) else block
   MintFuncArgs funcArgs(pthread, picode);
   /* We ignore the glibc stat_ver parameter (parameter 1) */
-  targInt    statVer=funcArgs.getInt32();
-  targInt    fd     =funcArgs.getInt32();
-  VAddr      addr   =funcArgs.getVAddr();
-  int32_t   retVal;
+  //targInt    statVer=funcArgs.getInt32();	//unused variable
+  //targInt    fd     =funcArgs.getInt32();	//unused variable
+  //VAddr      addr   =funcArgs.getVAddr();	//unused variable
+  //int32_t   retVal;	//unused variable
 #endif // End (defined TLS) else block
 #endif
   return pthread->getRetIcode();
@@ -3139,9 +3139,9 @@ OP(mint_sendmsg)
 #endif
          int32_t r4, r5, r6;
     int32_t err;
-    uint32_t i;
-    struct msghdr *msg;
-    struct iovec *iovp;
+    //uint32_t i;	//unused variable
+    //struct msghdr *msg;	//unused variable
+    //struct iovec *iovp;	//unused variable
 
 #ifdef DEBUG_VERBOSE
     printf("mint_sendmsg()\n");
@@ -3297,9 +3297,9 @@ OP(mint_recvmsg)
 #endif
          int32_t r4, r5, r6;
     int32_t err;
-    uint32_t i;
-    struct msghdr *msg;
-    struct iovec *iovp;
+    //uint32_t i;	//unused variable
+    //struct msghdr *msg;	//unused variable
+    //struct iovec *iovp;	//unused variable
 
 #ifdef DEBUG_VERBOSE
     printf("mint_recvmsg()\n");
@@ -3571,7 +3571,7 @@ OP(mint_times) {
 #ifdef TASKSCALAR
       rsesc_OS_write_block(pthread->getPid(), picode->addr, REGNUM(4), cad1 , sizeof(struct tms));
 #else
-    struct tms *t = (struct tms *)pthread->virt2real(REGNUM(4));
+    //struct tms *t = (struct tms *)pthread->virt2real(REGNUM(4));	//unused variable
     // FIXME: convert from 64 to 32bit
     err = 0;
 #endif
