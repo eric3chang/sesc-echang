@@ -155,7 +155,7 @@ bool PerfectVersioning::HasTransfers(int cpuID)
 void PerfectVersioning::GetTransferInfo(bool& isRead, bool& isRequired, VAddr& address, size_t& transferSize)
 {
 	I(transferEnabled);
-	I(currentCpu >= 0 && currentCpu < necessaryTransfers.size());
+	I(currentCpu >= 0 && currentCpu < (int)necessaryTransfers.size());
 	I(!necessaryTransfers[currentCpu].empty());
 	isRead = necessaryTransfers[currentCpu].front().isRead;
 	isRequired = true;
@@ -165,7 +165,7 @@ void PerfectVersioning::GetTransferInfo(bool& isRead, bool& isRequired, VAddr& a
 void PerfectVersioning::AcceptTransfer()
 {
 	I(transferEnabled);
-	I(currentCpu >= 0 && currentCpu< necessaryTransfers.size());
+	I(currentCpu >= 0 && currentCpu< (int)necessaryTransfers.size());
 	I(!necessaryTransfers[currentCpu].empty());
 	necessaryTransfers[currentCpu].pop();
 	currentCpu = -1;
@@ -173,7 +173,7 @@ void PerfectVersioning::AcceptTransfer()
 void PerfectVersioning::DenyTransfer()
 {
 	I(transferEnabled);
-	I(currentCpu >= 0 && currentCpu < necessaryTransfers.size());
+	I(currentCpu >= 0 && currentCpu < (int)necessaryTransfers.size());
 	I(!necessaryTransfers[currentCpu].empty());
 	currentCpu = -1;
 }
