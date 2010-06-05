@@ -52,6 +52,7 @@ public:
 		return (size_t)(v[0]);
 	}
 };
+
 template <>
 class HashInteropReplacement<std::string>
 {
@@ -62,19 +63,30 @@ public:
 	}
 };
 
+template <class Key, class Compare> class EqualKeyReplacement
+{
+	Compare lessThan;
+public:
+	bool operator() (const Key& k1, const Key& k2) const
+	{
+		// simulate equals(k1,k2) using the Comparator
+		return !(lessThan(k1,k2) || lessThan(k2,k1));
+	}
+};
+
 #if defined (WIN32) || defined (_WIN32)
-template <class Key, class Val, class Hash = HashInteropReplacement<Key>, class Comparator = std::less<Key> >
-   class HashMap : public stdext::hash_map<Key, Val, HashTraitsInteropReplacement<Key, Hash, Comparator> >{};
-template <class Key, class Hash = HashInteropReplacement<Key>, class Comparator = std::less<Key> >
-   class HashSet : public stdext::hash_set<Key,HashTraitsInteropReplacement<Key, Hash,Comparator> >{};
-template <class Key, class Val, class Hash = HashInteropReplacement<Key>, class Comparator = std::less<Key> >
-   class HashMultiMap : public stdext::hash_multimap<Key,Val,HashTraitsInteropReplacement<Key, Hash,Comparator> >{};
+template <class Key,class Val,class Hash=HashInteropReplacement<Key>,class Comparator=std::less<Key>>
+   class HashMap:public stdext::hash_map<Key,Val,HashTraitsInteropReplacement<Key,Hash,Comparator>>{};
+template <class Key, class Hash = HashInteropReplacement<Key>, class Comparator = std::less<Key>>
+   class HashSet : public stdext::hash_set<Key,HashTraitsInteropReplacement<Key, Hash,Comparator>>{};
+template<class Key,class Val,class Hash=HashInteropReplacement<Key>,class Comparator=std::less<Key>>
+   class HashMultiMap:public stdext::hash_multimap<Key,Val,HashTraitsInteropReplacement<Key,Hash,Comparator>>{};
 #else
 //TODO finish editing the below stuff, there needs to be a EqualKey class after Key, Val, Hash
 template <class Key, class Val, class Hash = HashInteropReplacement<Key>, class Comparator = std::less<Key> >
-   class HashMap : public __gnu_cxx::hash_map<Key, Val, Hash >{};
+   class HashMap : public __gnu_cxx::hash_map<Key, Val, Hash, EqualKeyReplacement <Key,Comparator> >{};
 template <class Key, class Hash = HashInteropReplacement<Key>, class Comparator = std::less<Key> >
-   class HashSet : public  __gnu_cxx::hash_set<Key, Hash >{};
+   class HashSet : public  __gnu_cxx::hash_set<Key, Hash, EqualKeyReplacement <Key,Comparator> >{};
 template <class Key, class Val, class Hash = HashInteropReplacement<Key>, class Comparator = std::less<Key> >
-   class HashMultiMap : public __gnu_cxx::hash_multimap<Key,Val, Hash >{};
+   class HashMultiMap:public __gnu_cxx::hash_multimap<Key,Val,Hash,EqualKeyReplacement<Key,Comparator> >{};
 #endif
