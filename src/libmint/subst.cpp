@@ -4084,7 +4084,7 @@ OP(mint_sesc_barrier)
 		TMInterface::MarkBarrierExit();
 		for(HASH_SET<uint32_t>::iterator it = mint_barrier_set[barrierAddr].waitingSet.begin(); it != mint_barrier_set[barrierAddr].waitingSet.end(); it++)
 		{
-			if(*it != pid)
+			if(*it != (unsigned int)pid)
 			{
 				if(osSim->isGoingRabbit())
 				{

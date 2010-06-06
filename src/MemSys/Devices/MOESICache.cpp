@@ -629,7 +629,7 @@ namespace Memory
 			}
 			else if(b->state == bs_Shared)
 			{
-				b->state == bs_Owned;
+				b->state = bs_Owned;
 			}
 		}
 		if(pendingInvalidate.find(tag) != pendingInvalidate.end())

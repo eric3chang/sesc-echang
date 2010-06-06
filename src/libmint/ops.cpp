@@ -2675,7 +2675,7 @@ OP(sw_op_2)
   v1 = SWAP_WORD(v1);
   *(unsigned int *) raddr = v1;
   I(vTest == SWAP_WORD(v1));
-  I(SWAP_WORD(v1) == pthread->getREG(picode, RT));
+  I(SWAP_WORD(v1) == (unsigned int)pthread->getREG(picode, RT));
 #else
   *(int *) raddr = pthread->getREG(picode, RT);
 #endif

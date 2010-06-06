@@ -216,13 +216,13 @@ void ThreadContext::initAddressing(VAddr dataVAddrLb2, VAddr dataVAddrUb2,
   }
     
   // Rdata should be in the static data area
-  I(Rdata_start >= dataVAddrLb &&
-    Rdata_end <= heapManager->getHeapAddrLb());
+  I( ((unsigned int)Rdata_start >= dataVAddrLb) &&
+    ( (unsigned int)Rdata_end <= heapManager->getHeapAddrLb()));
   // Data should be in the static data area
-  I(Data_start >=  dataVAddrLb &&
-    Data_end <= heapManager->getHeapAddrLb());
+  I( ((unsigned int)Data_start >=  dataVAddrLb) &&
+    ( (unsigned int)Data_end <= heapManager->getHeapAddrLb()));
   // BSS should be in the static data area
-  I(Bss_start >= dataVAddrLb &&
+  I( ((unsigned int)Bss_start) >= dataVAddrLb &&
     (Bss_start + Bss_size) <= heapManager->getHeapAddrLb());
   // Heap should be between static and stack areas
   I(allStacksAddrLb>=heapManager->getHeapAddrUb());
