@@ -3,8 +3,21 @@
 #include "../StoredFunctionCall.h"
 #include "../HashContainers.h"
 
+/* added this to remove complaints about forward declaration and
+ * possible problems with invocation of delete operator 2010-06-09
+ */
+#include "ReadMsg.h"
+#include "WriteMsg.h"
+#include "InvalidateMsg.h"
+#include "EvictionMsg.h"
+#include "ReadResponseMsg.h"
+#include "WriteResponseMsg.h"
+#include "InvalidateResponseMsg.h"
+#include "EvictionResponseMsg.h"
+
 namespace Memory
 {
+/*
 	class ReadMsg;
 	class WriteMsg;
 	class InvalidateMsg;
@@ -13,6 +26,7 @@ namespace Memory
 	class WriteResponseMsg;
 	class InvalidateResponseMsg;
 	class EvictionResponseMsg;
+	*/
 	class MOESICache : public BaseMemDevice
 	{
 		static const int InvalidBlock = -1;
