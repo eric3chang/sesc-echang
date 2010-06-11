@@ -1,5 +1,15 @@
 cmake_minimum_required (VERSION 2.6)
-project (augSesc)
+
+if (UNIX)
+   # if the user specifies -DCMAKE_BUILD_TYPE on the command line, take their
+   # definition and dump it in the cache, otherwise set CMAKE_BUILD_TYPE to Debug prior to calling PROJECT()
+   if (NOT DEFINED CMAKE_BUILD_TYPE)
+      set (CMAKE_BUILD_TYPE Debug CACHE STRING
+         "Choose the type of build, options are: None Debug Release")
+   endif (NOT DEFINED CMAKE_BUILD_TYPE)
+endif(UNIX)
+
+project (augSescProject)
 
 # configure a header file to pass some of the CMake settings
 # to the source code
@@ -36,20 +46,21 @@ include_directories ("${PROJECT_SOURCE_DIR}/include")
 
 # add definitions to compiler
 # have to do this before add_subdirectory
+
 IF (UNIX)
    ADD_DEFINITIONS (-Wall)
    ADD_DEFINITIONS (-Wno-deprecated)
    ADD_DEFINITIONS (-DHANGING_ASERT)
-   ADD_DEFINITIONS (-D_DEBUG)
    ADD_DEFINITIONS (-DSYSTEM_SESC)
-   ADD_DEFINITIONS (-DDEBUG)
    ADD_DEFINITIONS (-D_CONSOLE)
    ADD_DEFINITIONS (-DLENDIAN)
-   ADD_DEFINITIONS (-DDEBUG_DUMP_PROGRAM)
+   #   ADD_DEFINITIONS (-DDEBUG_DUMP_PROGRAM)
    ADD_DEFINITIONS (-DTRANSACTIONAL_MEMORY)
    ADD_DEFINITIONS (-DTRANSACTIONAL_ONLY)
    ADD_DEFINITIONS (-DADDRESS_CHK)
    ADD_DEFINITIONS (-DTRANSACTIONAL_COMPOSITION_TRACKING)
+
+  
    #  the following definition doesn't work in older gnu compilers
    #  enable it to use new standards unordered_map and unordered_set
    #   ADD_DEFINITIONS (-std=c++0x)
@@ -64,11 +75,12 @@ add_subdirectory (libpint)
 add_subdirectory (libsuc)
 add_subdirectory (libtrans)
 add_subdirectory (MemSys)
+add_subdirectory (WorkingFolder)
 
 # add all the libraries so that the linker can find them
 #set (EXTRA_LIBS ${EXTRA_LIBS} core mem suc)
 set (EXTRA_LIBS ${EXTRA_LIBS} core ll mem mint pint suc trans MemSys Devices)
 
 # add the executable
-add_executable (augSesc "${PROJECT_SOURCE_DIR}/libmem/mtst1.cpp")
-target_link_libraries (augSesc ${EXTRA_LIBS})
+#add_executable (augSesc "${PROJECT_SOURCE_DIR}/libmem/mtst1.cpp")
+#target_link_libraries (augSesc ${EXTRA_LIBS})
