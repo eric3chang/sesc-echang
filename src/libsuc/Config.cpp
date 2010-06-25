@@ -24,6 +24,7 @@ along with SESC; see the file COPYING. If not, write to the Free
 Software Foundation, 59 Temple Place - Suite 330, Boston, MA
 02111-1307, USA.
 */
+#include <iostream>
 #ifndef _MSC_VER
 #include <alloca.h>
 #else
@@ -259,7 +260,7 @@ const Config::Record * Config::getRecord(const char *block,
 //          ,pos->second->getVectorFirst(),pos->second->getVectorLast(),vectorPos);
       
       pos->second->setUsed();
-            
+
       return pos->second;
     }
   }
@@ -599,8 +600,46 @@ const char *Config::getCharPtr(const char *block,
 {
   const Record *rec = getRecord(block, name, vectorPos);
 
-  if(rec)
-    return rec->getCharPtr();
+  if (rec)
+  {
+
+// hack to deal with windows/unix problem
+#ifdef __unix__
+    // convert windows names to unix names
+    int myStrLen = strlen(rec->getCharPtr());
+
+    char *modStr = (char*) malloc ((myStrLen+1) * sizeof(char));
+
+    strcpy(modStr, rec->getCharPtr());
+
+    for (int i = 0; i< myStrLen; i++)
+    {
+       if (modStr[i] == '\\')
+       {
+          modStr[i] = '/';
+       }
+    }
+
+    return modStr;
+#else
+    // convert unix names to window names
+    int myStrLen = strlen(rec->getCharPtr());
+
+    char *modStr = (char*) malloc ((myStrLen+1) * sizeof(char));
+
+    strcpy(modStr, rec->getCharPtr());
+
+    for (int i = 0; i< myStrLen; i++)
+    {
+       if (modStr[i] == '/')
+       {
+          modStr[i] = '\\';
+       }
+    }
+
+    return modStr;
+#endif
+  }
 
   MSG("Config::getCharPtr for %s in %s[%d] not found in config file.",
       name, block, vectorPos);
