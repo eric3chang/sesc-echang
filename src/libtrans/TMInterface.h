@@ -9,7 +9,8 @@
 #include <stack>
 #include <iostream>
 #include <string.h>
-#ifndef _MSC_VER
+// include the extra fun if we are using 32-bit GNU
+#if defined(__GNUC__) && !defined(__x86_64__)
 	#include "hash_fun_extra.h"
 #endif
 

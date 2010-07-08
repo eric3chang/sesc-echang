@@ -59,7 +59,7 @@ IF (UNIX)
    ADD_DEFINITIONS (-DTRANSACTIONAL_ONLY)
    ADD_DEFINITIONS (-DADDRESS_CHK)
    ADD_DEFINITIONS (-DTRANSACTIONAL_COMPOSITION_TRACKING)
-
+   ADD_DEFINITIONS (-m32)
   
    #  the following definition doesn't work in older gnu compilers
    #  enable it to use new standards unordered_map and unordered_set
@@ -81,6 +81,6 @@ add_subdirectory (WorkingFolder)
 #set (EXTRA_LIBS ${EXTRA_LIBS} core mem suc)
 set (EXTRA_LIBS ${EXTRA_LIBS} core ll mem mint pint suc trans MemSys Devices)
 
-# add the executable
+# do not add the executable, the executable is in WorkingFolder
 #add_executable (augSesc "${PROJECT_SOURCE_DIR}/libmem/mtst1.cpp")
 #target_link_libraries (augSesc ${EXTRA_LIBS})
