@@ -2,3 +2,24 @@ Section 02 Different Types of Cache Coherence Protocols
 There are two main types of cache coherence protocols - Directory based and
 snooping. A third one is available on Wikipedia. In my report, we will focuson
 directory-based cache coherence protocols and what they bring to the table. 
+
+There are several cache-coherence protocols. 
+
+When it comes to cache-coherence, there are several types. There is the
+directory-based cache-coherence protocl, first invented in 
+
+In this report, I will talk about
+different directory-based protocols and how they compare against each other. 
+
+Snoopy-based protocols have an advantage when it comes to manufacturing
+because they can use the existing bus to memory as the broadcast medium for
+communicating information about cache coherence (Hennessey 208). However, from
+the results in the following table, we can see that a snoopy-based protocol is
+not as scalable as a directory-based protocol. So in my report, we will check
+out various directory-based protocols
+
+[Figure comparing snoopy-based protocol vs directory-based protocol]
+# of processors
+% speedup
+# of collisions
+
