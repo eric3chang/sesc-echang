@@ -55,3 +55,19 @@ program contains sequential code. Since sequential code cannot be sped up, we
 can never achieve a speedup faster than the time it takes to run that
 sequential code.
 
+Section 01-2
+"In a coherent multiprocessor, the caches provide both migration and replication of shared data items" (Hennessey 207). It is important for the architect of the processor to design these features into the processor as to allow the programmer to take advantage of the speedup available in having multiple data. Having multiple data allows for multiple reads at the same time.
+
+Read Request   Read Request
+   |              |           Time
+Cache01        Cache02
+
+Read Request
+   |              Time
+Cache 01          |
+                  |
+Read Request      |
+   |              Time
+Cache 01
+
+
