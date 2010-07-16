@@ -1,0 +1,4 @@
+Section 02 Different Types of Cache Coherence Protocols
+There are two main types of cache coherence protocols - Directory based and
+snooping. A third one is available on Wikipedia. In my report, we will focuson
+directory-based cache coherence protocols and what they bring to the table. 
