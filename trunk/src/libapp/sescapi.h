@@ -5,6 +5,7 @@
 #include "simicsapi.h"
 #endif
 
+#include <stdint.h>
 
 /*
  * Flags specification:
