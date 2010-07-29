@@ -1,3 +1,6 @@
+Title: An Implementation of the standard directory-based cache-coherence
+protocol on the SESC simulator
+
 Comparing different directory-based cache coherence protocols.
 
 Section 1
