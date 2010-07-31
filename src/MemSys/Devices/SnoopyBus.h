@@ -11,6 +11,9 @@ namespace Memory
 		{
 			int remoteConnection;
 		public:
+         // added virtual destructor to eliminate constructor warnings
+         // Eric Chang 2010/07/30
+			virtual ~BusArbitration(){};
 			BusArbitration(int remoteConnection);
 			virtual int SelectNext(const std::vector<bool>& pending) = 0;
 
@@ -31,6 +34,9 @@ namespace Memory
 		class LatencyCalculator
 		{
 		public:
+		   // added virtual destructor to eliminate constructor warnings
+         // Eric Chang 2010/07/30
+		   virtual ~LatencyCalculator(){}
 			virtual TimeDelta CalculateTime(const BaseMsg* m) = 0;
 		};
 		class ConstantLatencyCalculator : public LatencyCalculator

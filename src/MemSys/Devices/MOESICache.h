@@ -52,6 +52,9 @@ namespace Memory
 		class EvictionPolicy
 		{
 		public:
+		   // added virtual destructor to eliminate constructor warnings
+		   // Eric Chang 2010/07/30
+		   virtual ~EvictionPolicy(){}
 			virtual int Evict(BlockState* set, int setSize) = 0;
 		};
 		class RandomEvictionPolicy : public EvictionPolicy
