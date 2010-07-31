@@ -7,6 +7,9 @@ protected:
 	StoredFunctionBase(){}
 	virtual void Execute() = 0;
 public:
+   // added virtual destructor to eliminate constructor warnings
+   // Eric Chang 2010/07/30
+   virtual ~StoredFunctionBase(){}
 	void Call()
 	{
 		Execute();
