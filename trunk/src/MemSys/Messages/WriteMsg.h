@@ -17,7 +17,9 @@ namespace Memory
 		virtual bool IsResponse() const { return false; }
 		virtual size_t MsgSize() const { return sizeof(Address) + size + 2; }
 		virtual MsgType Type() const { return mt_Write; }
-		void SignalComplete()
+		//TODO Eric 2010/08/02
+		//void SignalComplete()
+		void SignalComplete() const
 		{
 			if(onCompletedCallback)
 			{
