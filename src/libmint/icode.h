@@ -126,7 +126,7 @@ inline icode_ptr addr2icode(Address addr) {
 
 // Takes a pointer to an icode, returns the logical instruction address
 inline Address icode2addr(icode_ptr picode) {
-	size_t val = (size_t)(picode-icodeArray);
+  size_t val = (size_t)(picode-icodeArray);
   I(val<icodeArraySize);
   Address addr=Text_start+sizeof(icodeArray->instr)*(picode-icodeArray);
   I(addr>=Text_start);

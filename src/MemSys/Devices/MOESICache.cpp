@@ -138,7 +138,7 @@ namespace Memory
 		{
 			DebugAssert(pendingEviction.find(set[eviction].tag) == pendingEviction.end());
 			pendingEviction[set[eviction].tag] = set[eviction];
-			if(pendingInvalidate.find(tag) != pendingInvalidate.end())
+			if(pendingInvalidate.find(tag) == pendingInvalidate.end())
 			{
 				InvalidateMsg* im = EM().CreateInvalidateMsg(ID(),0);
 				im->addr = CalcAddr(set[eviction].tag);
@@ -196,7 +196,7 @@ namespace Memory
 		BlockState* b = Lookup(tag);
 		DebugAssert(b);
 		if(b->state == bs_Invalid || (m->requestingExclusive && (b->state == bs_Shared || b->state == bs_Owned)))
-		{
+		{//miss
 			if(!b->locked)
 			{
 				LockBlock(tag);
@@ -213,8 +213,9 @@ namespace Memory
 			WaitOnBlockUnlock(tag,f);
 		}
 		else
-		{
+		{//hit 
 			ReadResponseMsg* res = EM().CreateReadResponseMsg(ID(),m->GeneratingPC());
+			m->SignalComplete();
 			res->addr = m->addr;
 			res->size = m->size;
 			res->blockAttached = !m->alreadyHasBlock;
@@ -234,6 +235,7 @@ namespace Memory
 		ReadResponseMsg* res = EM().CreateReadResponseMsg(ID(),m->GeneratingPC());
 		res->addr = m->addr;
 		res->size = m->size;
+		m->SignalComplete();
 		res->solicitingMessage = m->MsgID();
 		if(b == NULL || b->state == bs_Invalid)
 		{
@@ -272,6 +274,7 @@ namespace Memory
 			res->satisfied = true;
 		}
 		remoteConnection->SendMsg(res,hitTime);
+		EM().DisposeMsg(m);
 	}
 	void MOESICache::PerformWrite(const WriteMsg* m)
 	{
@@ -298,10 +301,12 @@ namespace Memory
 		}
 		else
 		{
+			b->state = bs_Modified;
 			WriteResponseMsg* res = EM().CreateWriteResponseMsg(ID(),m->GeneratingPC());
 			res->addr = m->addr;
 			res->size = m->size;
 			res->solicitingMessage = m->MsgID();
+			m->SignalComplete();
 			localConnection->SendMsg(res,hitTime);
 			EM().DisposeMsg(m);
 		}
@@ -414,7 +419,7 @@ namespace Memory
 		}
 		waitingOnRemoteReads[tag] = f;
 	}
-	void MOESICache::OnLocalRead(ReadMsg* m)
+	void MOESICache::OnLocalRead(const ReadMsg* m)
 	{
 		DebugAssert(m);
 		AddrTag tag = CalcTag(m->addr);
@@ -437,7 +442,7 @@ namespace Memory
 			}
 		}
 	}
-	void MOESICache::OnRemoteRead(ReadMsg* m)
+	void MOESICache::OnRemoteRead(const ReadMsg* m)
 	{
 		DebugAssert(m);
 		AddrTag tag = CalcTag(m->addr);
@@ -467,7 +472,7 @@ namespace Memory
 			PerformRemoteRead(m);
 		}
 	}
-	void MOESICache::OnLocalWrite(WriteMsg* m)
+	void MOESICache::OnLocalWrite(const WriteMsg* m)
 	{
 		DebugAssert(m);
 		AddrTag tag = CalcTag(m->addr);
@@ -490,21 +495,22 @@ namespace Memory
 			}
 		}
 	}
-	void MOESICache::OnRemoteWrite(WriteMsg* m)
+	void MOESICache::OnRemoteWrite(const WriteMsg* m)
 	{
 		WriteResponseMsg* res = EM().CreateWriteResponseMsg(ID(),m->GeneratingPC());
 		res->addr = m->addr;
 		res->size = m->size;
 		res->solicitingMessage = m->MsgID();
+		m->SignalComplete();
 		remoteConnection->SendMsg(res,satisfyRequestTime);
 		EM().DisposeMsg(m);
 	}
-	void MOESICache::OnLocalInvalidate(InvalidateMsg* m)
+	void MOESICache::OnLocalInvalidate(const InvalidateMsg* m)
 	{
 		EM().DisposeMsg(m);
 		DebugFail("Local Invalidates illegal in this cache");
 	}
-	void MOESICache::OnRemoteInvalidate(InvalidateMsg* m)
+	void MOESICache::OnRemoteInvalidate(const InvalidateMsg* m)
 	{
 		DebugAssert(m);
 		AddrTag tag = CalcTag(m->addr);
@@ -515,7 +521,7 @@ namespace Memory
 		}
 		else
 		{
-			pendingInvalidate[tag] = m;
+		   pendingInvalidate[tag] = m;
 		}
 		if(topCache)
 		{
@@ -532,7 +538,7 @@ namespace Memory
 			RespondInvalidate(tag);
 		}
 	}
-	void MOESICache::OnLocalEviction(EvictionMsg* m)
+	void MOESICache::OnLocalEviction(const EvictionMsg* m)
 	{
 		DebugAssert(m);
 		AddrTag tag = CalcTag(m->addr);
@@ -555,7 +561,7 @@ namespace Memory
 		localConnection->SendMsg(res,hitTime);
 		EM().DisposeMsg(m);
 	}
-	void MOESICache::OnRemoteEviction(EvictionMsg* m)
+	void MOESICache::OnRemoteEviction(const EvictionMsg* m)
 	{
 		DebugAssert(m);
 		EvictionResponseMsg* res = EM().CreateEvictionResponseMsg(ID(),m->GeneratingPC());
@@ -565,7 +571,7 @@ namespace Memory
 		remoteConnection->SendMsg(res,hitTime);
 		EM().DisposeMsg(m);
 	}
-	void MOESICache::OnLocalReadResponse(ReadResponseMsg* m)
+	void MOESICache::OnLocalReadResponse(const ReadResponseMsg* m)
 	{
 		DebugAssert(m);
 		AddrTag tag = CalcTag(m->addr);
@@ -577,7 +583,7 @@ namespace Memory
 		}
 		EM().DisposeMsg(m);
 	}
-	void MOESICache::OnRemoteReadResponse(ReadResponseMsg* m)
+	void MOESICache::OnRemoteReadResponse(const ReadResponseMsg* m)
 	{
 		DebugAssert(m);
 		AddrTag tag = CalcTag(m->addr);
@@ -598,16 +604,16 @@ namespace Memory
 		UnlockBlock(tag);
 		EM().DisposeMsg(m);
 	}
-	void MOESICache::OnLocalWriteResponse(WriteResponseMsg* m)
+	void MOESICache::OnLocalWriteResponse(const WriteResponseMsg* m)
 	{
 		EM().DisposeMsg(m);
 		DebugFail("A Write should never have been emitted");
 	}
-	void MOESICache::OnRemoteWriteResponse(WriteResponseMsg* m)
+	void MOESICache::OnRemoteWriteResponse(const WriteResponseMsg* m)
 	{
 		EM().DisposeMsg(m);
 	}
-	void MOESICache::OnLocalInvalidateResponse(InvalidateResponseMsg* m)
+	void MOESICache::OnLocalInvalidateResponse(const InvalidateResponseMsg* m)
 	{
 		DebugAssert(m);
 		AddrTag tag = CalcTag(m->addr);
@@ -629,7 +635,7 @@ namespace Memory
 			}
 			else if(b->state == bs_Shared)
 			{
-				b->state = bs_Owned;
+				b->state == bs_Owned;
 			}
 		}
 		if(pendingInvalidate.find(tag) != pendingInvalidate.end())
@@ -647,16 +653,16 @@ namespace Memory
 		}
 		EM().DisposeMsg(m);
 	}
-	void MOESICache::OnRemoteInvalidateResponse(InvalidateResponseMsg* m)
+	void MOESICache::OnRemoteInvalidateResponse(const InvalidateResponseMsg* m)
 	{
 		EM().DisposeMsg(m);
 	}
-	void MOESICache::OnLocalEvictionResponse(EvictionResponseMsg* m)
+	void MOESICache::OnLocalEvictionResponse(const EvictionResponseMsg* m)
 	{
 		EM().DisposeMsg(m);
 		DebugFail("An Eviction should never have been emitted");
 	}
-	void MOESICache::OnRemoteEvictionResponse(EvictionResponseMsg* m)
+	void MOESICache::OnRemoteEvictionResponse(const EvictionResponseMsg* m)
 	{
 		EM().DisposeMsg(m);
 	}
@@ -750,6 +756,9 @@ namespace Memory
 		for(size_t i = 0; i < cacheContents.size(); i++)
 		{
 			cacheContents[i].valid = false;
+			cacheContents[i].tag = 0;
+			cacheContents[i].lastRead = cacheContents[i].lastWrite = false;
+			cacheContents[i].locked = false;
 		}
 		for(size_t i = 0; i < waitingOnSetUnlock.size(); i++)
 		{
@@ -780,28 +789,28 @@ namespace Memory
 			switch(msg->Type())
 			{
 			case(mt_Read):
-				OnLocalRead((ReadMsg*)msg);
+				OnLocalRead((const ReadMsg*)msg);
 				break;
 			case(mt_Write):
-				OnLocalWrite((WriteMsg*)msg);
+				OnLocalWrite((const WriteMsg*)msg);
 				break;
 			case(mt_Invalidate):
-				OnLocalInvalidate((InvalidateMsg*)msg);
+				OnLocalInvalidate((const InvalidateMsg*)msg);
 				break;
 			case(mt_Eviction):
-				OnLocalEviction((EvictionMsg*)msg);
+				OnLocalEviction((const EvictionMsg*)msg);
 				break;
 			case(mt_ReadResponse):
-				OnLocalReadResponse((ReadResponseMsg*)msg);
+				OnLocalReadResponse((const ReadResponseMsg*)msg);
 				break;
 			case(mt_WriteResponse):
-				OnLocalWriteResponse((WriteResponseMsg*)msg);
+				OnLocalWriteResponse((const WriteResponseMsg*)msg);
 				break;
 			case(mt_InvalidateResponse):
-				OnLocalInvalidateResponse((InvalidateResponseMsg*)msg);
+				OnLocalInvalidateResponse((const InvalidateResponseMsg*)msg);
 				break;
 			case(mt_EvictionResponse):
-				OnLocalEvictionResponse((EvictionResponseMsg*)msg);
+				OnLocalEvictionResponse((const EvictionResponseMsg*)msg);
 				break;
 			default:
 				DebugFail("Bad msg Type");
@@ -812,28 +821,28 @@ namespace Memory
 			switch(msg->Type())
 			{
 			case(mt_Read):
-				OnRemoteRead((ReadMsg*)msg);
+				OnRemoteRead((const ReadMsg*)msg);
 				break;
 			case(mt_Write):
-				OnRemoteWrite((WriteMsg*)msg);
+				OnRemoteWrite((const WriteMsg*)msg);
 				break;
 			case(mt_Invalidate):
-				OnRemoteInvalidate((InvalidateMsg*)msg);
+				OnRemoteInvalidate((const InvalidateMsg*)msg);
 				break;
 			case(mt_Eviction):
-				OnRemoteEviction((EvictionMsg*)msg);
+				OnRemoteEviction((const EvictionMsg*)msg);
 				break;
 			case(mt_ReadResponse):
-				OnRemoteReadResponse((ReadResponseMsg*)msg);
+				OnRemoteReadResponse((const ReadResponseMsg*)msg);
 				break;
 			case(mt_WriteResponse):
-				OnRemoteWriteResponse((WriteResponseMsg*)msg);
+				OnRemoteWriteResponse((const WriteResponseMsg*)msg);
 				break;
 			case(mt_InvalidateResponse):
-				OnRemoteInvalidateResponse((InvalidateResponseMsg*)msg);
+				OnRemoteInvalidateResponse((const InvalidateResponseMsg*)msg);
 				break;
 			case(mt_EvictionResponse):
-				OnRemoteEvictionResponse((EvictionResponseMsg*)msg);
+				OnRemoteEvictionResponse((const EvictionResponseMsg*)msg);
 				break;
 			default:
 				DebugFail("Bad msg Type");

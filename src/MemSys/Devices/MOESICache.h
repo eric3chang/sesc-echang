@@ -91,7 +91,9 @@ namespace Memory
 		HashMap<AddrTag, StoredFunctionBase*> waitingOnRemoteReads;
 
 		HashMap<AddrTag, BlockState> pendingEviction;
-		HashMap<AddrTag, InvalidateMsg*> pendingInvalidate;
+		//TODO: 2010/08/02 Eric
+		HashMap<AddrTag, const InvalidateMsg*> pendingInvalidate;
+		//HashMap<AddrTag, InvalidateMsg*> pendingInvalidate;
 
 		BlockState* GetSet(int i);
 		void InvalidateBlock(BlockState& block);
@@ -138,22 +140,22 @@ namespace Memory
 		void WaitOnSetUnlock(int s, StoredFunctionBase* f);
 		void WaitOnRemoteReadResponse(AddrTag tag, StoredFunctionBase* f);
 
-		void OnLocalRead(ReadMsg* m);
-		void OnRemoteRead(ReadMsg* m);
-		void OnLocalWrite(WriteMsg* m);
-		void OnRemoteWrite(WriteMsg* m);
-		void OnLocalInvalidate(InvalidateMsg* m);
-		void OnRemoteInvalidate(InvalidateMsg* m);
-		void OnLocalEviction(EvictionMsg* m);
-		void OnRemoteEviction(EvictionMsg* m);
-		void OnLocalReadResponse(ReadResponseMsg* m);
-		void OnRemoteReadResponse(ReadResponseMsg* m);
-		void OnLocalWriteResponse(WriteResponseMsg* m);
-		void OnRemoteWriteResponse(WriteResponseMsg* m);
-		void OnLocalInvalidateResponse(InvalidateResponseMsg* m);
-		void OnRemoteInvalidateResponse(InvalidateResponseMsg* m);
-		void OnLocalEvictionResponse(EvictionResponseMsg* m);
-		void OnRemoteEvictionResponse(EvictionResponseMsg* m);
+		void OnLocalRead(const ReadMsg* m);
+		void OnRemoteRead(const ReadMsg* m);
+		void OnLocalWrite(const WriteMsg* m);
+		void OnRemoteWrite(const WriteMsg* m);
+		void OnLocalInvalidate(const InvalidateMsg* m);
+		void OnRemoteInvalidate(const InvalidateMsg* m);
+		void OnLocalEviction(const EvictionMsg* m);
+		void OnRemoteEviction(const EvictionMsg* m);
+		void OnLocalReadResponse(const ReadResponseMsg* m);
+		void OnRemoteReadResponse(const ReadResponseMsg* m);
+		void OnLocalWriteResponse(const WriteResponseMsg* m);
+		void OnRemoteWriteResponse(const WriteResponseMsg* m);
+		void OnLocalInvalidateResponse(const InvalidateResponseMsg* m);
+		void OnRemoteInvalidateResponse(const InvalidateResponseMsg* m);
+		void OnLocalEvictionResponse(const EvictionResponseMsg* m);
+		void OnRemoteEvictionResponse(const EvictionResponseMsg* m);
 	public:
 		virtual ~MOESICache();
 		virtual void Initialize(EventManager* em, const RootConfigNode& config, const std::vector<Connection*>& connectionSet);
