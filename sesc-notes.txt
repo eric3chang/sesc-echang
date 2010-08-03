@@ -6,4 +6,5 @@
 - use lion to run simulations. lion is a 8-core system with 12GB of memory
 - src/libapp contains files related to compiling custom multi-threaded
   programs
+- use DebugFail(), DebugAssert(), fatal() to indicate error conditions
 
