@@ -63,6 +63,12 @@ namespace Memory
 		m->SetIDInfo(currentMsgStamp++,devID,generatingPC);
 		return m;
 	}
+	NetworkMsg* EventManager::CreateNetworkMsg(DeviceID devID, Address generatingPC)
+	{
+		NetworkMsg* m = networkPool.Take();
+		m->SetIDInfo(currentMsgStamp++,devID,generatingPC);
+		return m;
+	}
 	BaseMsg* EventManager::ReplicateMsg(const BaseMsg* msg)
 	{
 		DebugAssert(msg);
@@ -71,57 +77,64 @@ namespace Memory
 		{
 		case(mt_Read):
 			{
-				ReadMsg* m = CreateReadMsg(msg->GeneratingDeviceID(),msg->GeneratingPCValid());
+				ReadMsg* m = CreateReadMsg(msg->GeneratingDeviceID(),msg->GeneratingPC());
 				*m = *((ReadMsg*)msg);
 				ret = m;
 				break;
 			}
 		case(mt_Write):
 			{
-				WriteMsg* m = CreateWriteMsg(msg->GeneratingDeviceID(),msg->GeneratingPCValid());
+				WriteMsg* m = CreateWriteMsg(msg->GeneratingDeviceID(),msg->GeneratingPC());
 				*m = *((WriteMsg*)msg);
 				ret = m;
 				break;
 			}
 		case(mt_Invalidate):
 			{
-				InvalidateMsg* m = CreateInvalidateMsg(msg->GeneratingDeviceID(),msg->GeneratingPCValid());
+				InvalidateMsg* m = CreateInvalidateMsg(msg->GeneratingDeviceID(),msg->GeneratingPC());
 				*m = *((InvalidateMsg*)msg);
 				ret = m;
 				break;
 			}
 		case(mt_Eviction):
 			{
-				EvictionMsg* m = CreateEvictionMsg(msg->GeneratingDeviceID(),msg->GeneratingPCValid());
+				EvictionMsg* m = CreateEvictionMsg(msg->GeneratingDeviceID(),msg->GeneratingPC());
 				*m = *((EvictionMsg*)msg);
 				ret = m;
 				break;
 			}
 		case(mt_ReadResponse):
 			{
-				ReadResponseMsg* m = CreateReadResponseMsg(msg->GeneratingDeviceID(),msg->GeneratingPCValid());
+				ReadResponseMsg* m = CreateReadResponseMsg(msg->GeneratingDeviceID(),msg->GeneratingPC());
 				*m = *((ReadResponseMsg*)msg);
 				ret = m;
 				break;
 			}
 		case(mt_WriteResponse):
 			{
-				WriteResponseMsg* m = CreateWriteResponseMsg(msg->GeneratingDeviceID(),msg->GeneratingPCValid());
+				WriteResponseMsg* m = CreateWriteResponseMsg(msg->GeneratingDeviceID(),msg->GeneratingPC());
 				*m = *((WriteResponseMsg*)msg);
 				ret = m;
 				break;
 			}
 		case(mt_InvalidateResponse):
 			{
-				InvalidateResponseMsg* m = CreateInvalidateResponseMsg(msg->GeneratingDeviceID(),msg->GeneratingPCValid());
+				InvalidateResponseMsg* m = CreateInvalidateResponseMsg(msg->GeneratingDeviceID(),msg->GeneratingPC());
 				*m = *((InvalidateResponseMsg*)msg);
 				ret = m;
 				break;
 			}
 		case(mt_EvictionResponse):
 			{
-				EvictionResponseMsg* m = CreateEvictionResponseMsg(msg->GeneratingDeviceID(),msg->GeneratingPCValid());
+				EvictionResponseMsg* m = CreateEvictionResponseMsg(msg->GeneratingDeviceID(),msg->GeneratingPC());
 				*m = *((EvictionResponseMsg*)msg);
+				ret = m;
+				break;
+			}
+		case(mt_Network):
+			{
+				NetworkMsg* m = CreateNetworkMsg(msg->GeneratingDeviceID(),msg->GeneratingPC());
+				*m = *((NetworkMsg*)msg);
 				ret = m;
 				break;
 			}
@@ -145,6 +158,7 @@ namespace Memory
 			case(mt_WriteResponse): writeResponsePool.Return((WriteResponseMsg*)msg); break;
 			case(mt_InvalidateResponse): invalidateResponsePool.Return((InvalidateResponseMsg*)msg); break;
 			case(mt_EvictionResponse): evictionResponsePool.Return((EvictionResponseMsg*)msg); break;
+			case(mt_Network): networkPool.Return((NetworkMsg*)msg); break;
 			default: DebugFail("Unknown Msg Type");
 		}
 	}

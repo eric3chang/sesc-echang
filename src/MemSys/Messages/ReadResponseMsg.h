@@ -9,6 +9,7 @@ namespace Memory
 	public:
 		Address addr;
 		size_t size;
+		bool directoryLookup; // TODO: Eric 2010/08/04
 		bool satisfied;
 		bool blockAttached;
 		bool exclusiveOwnership;
