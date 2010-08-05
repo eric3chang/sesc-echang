@@ -36,9 +36,16 @@ using std::string;
 #include "nanassert.h"
 #include "estl.h"
 
+#include "MSTypes.h"
+#include "Configuration.h"
+
 using std::string;
+using Memory::TimeDelta;
+using Memory::RootConfigNode;
 
 class Config {
+   //class Memory;  // TODO: Eric 2010/08/04
+
 public:
 
   class KeyIndex {
@@ -316,6 +323,16 @@ public:
   int32_t getInt(const char *block,
                const char *name,
 					int32_t vectorPos=0);
+  // TODO: Eric 2010/08/04
+  static Memory::Address GetInt(const RootConfigNode& node, const char *myString) {return 0;}
+  static Memory::Address GetInt(const RootConfigNode& node, const char *myString, int num1, int &num2) {return 0;}
+  static TimeDelta GetIntOrElse(int, const RootConfigNode& config, const char *myString) {return 0;}
+  static int GetSetSize(const RootConfigNode& node, const char *myString) {return 0;}
+  static float GetReal(const RootConfigNode& node, const char *myString) {return 0;}
+  static string GetString(const RootConfigNode& node, const char *myString);
+  static const RootConfigNode &GetSubRoot(const RootConfigNode& node, const char *myString);
+  static const RootConfigNode &GetSubRoot(const RootConfigNode& node, const char *myString, int i);
+
   const char *getCharPtr(const char *block,
                          const char *name,
 								 int32_t vectorPos=0);

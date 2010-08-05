@@ -5,6 +5,11 @@
 
 namespace Memory
 {
+	void BaseMemDevice::SendMsg(int connectionID, const BaseMsg* msg, TimeDelta delay)
+	{
+		DebugAssert(msg);
+		GetConnection(connectionID).SendMsg(msg,delay);
+   }
 	BaseMemDevice::BaseMemDevice(){}
 	BaseMemDevice::~BaseMemDevice(){}
 	void BaseMemDevice::Initialize(EventManager* em, const RootConfigNode& config, const std::vector<Connection*>& connectionSet)
@@ -40,7 +45,11 @@ namespace Memory
 	}
 	DeviceID BaseMemDevice::ID() const
 	{
-		return deviceID;
+	   return deviceID;
+	}
+	DeviceID BaseMemDevice::getDeviceID() const
+	{
+		return ID();
 	}
 	const std::string& BaseMemDevice::DeviceName()
 	{

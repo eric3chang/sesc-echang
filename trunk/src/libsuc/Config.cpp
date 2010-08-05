@@ -565,8 +565,6 @@ bool Config::checkDouble(const char *block,
   return false ;
 }
 
-
-
 int32_t Config::getInt(const char *block,
                      const char *name,
 							int32_t vectorPos)

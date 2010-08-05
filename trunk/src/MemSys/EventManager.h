@@ -3,6 +3,7 @@
 #include "HashContainers.h"
 #include "Pool.h"
 #include "StoredFunctionCall.h"
+#include "NetworkMsg.h"
 #include <vector>
 
 namespace Memory
@@ -39,6 +40,7 @@ namespace Memory
 		Pool<WriteResponseMsg> writeResponsePool;
 		Pool<InvalidateResponseMsg> invalidateResponsePool;
 		Pool<EvictionResponseMsg> evictionResponsePool;
+		Pool<NetworkMsg> networkPool;
 	public:
 		ReadMsg* CreateReadMsg(DeviceID devID, Address generatingPC = 0);
 		WriteMsg* CreateWriteMsg(DeviceID devID, Address generatingPC = 0);
@@ -48,6 +50,7 @@ namespace Memory
 		WriteResponseMsg* CreateWriteResponseMsg(DeviceID devID, Address generatingPC = 0);
 		InvalidateResponseMsg* CreateInvalidateResponseMsg(DeviceID devID, Address generatingPC = 0);
 		EvictionResponseMsg* CreateEvictionResponseMsg(DeviceID devID, Address generatingPC = 0);
+		NetworkMsg* CreateNetworkMsg(DeviceID devID, Address generatingPC = 0);
 
 		BaseMsg* ReplicateMsg(const BaseMsg* msg);
 
