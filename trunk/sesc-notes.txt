@@ -7,4 +7,6 @@
 - src/libapp contains files related to compiling custom multi-threaded
   programs
 - use DebugFail(), DebugAssert(), fatal() to indicate error conditions
+- Connection - Local means sending something towards CPU. Remote means sending
+  data away from CPU towards the network or main memory.
 
