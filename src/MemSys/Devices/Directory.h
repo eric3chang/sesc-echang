@@ -40,6 +40,7 @@ namespace Memory
 		public:
 			HashSet<NodeID> sharers;
 			NodeID owner;
+
 			BlockData()
 			{
 				owner = InvalidNodeID;

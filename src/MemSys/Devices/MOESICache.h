@@ -91,9 +91,7 @@ namespace Memory
 		HashMap<AddrTag, StoredFunctionBase*> waitingOnRemoteReads;
 
 		HashMap<AddrTag, BlockState> pendingEviction;
-		//TODO: 2010/08/02 Eric
 		HashMap<AddrTag, const InvalidateMsg*> pendingInvalidate;
-		//HashMap<AddrTag, InvalidateMsg*> pendingInvalidate;
 
 		BlockState* GetSet(int i);
 		void InvalidateBlock(BlockState& block);
