@@ -9,11 +9,12 @@ namespace Memory
 	public:
 		Address addr;
 		size_t size;
-      bool directoryLookup;
 		bool satisfied;
 		bool blockAttached;
 		bool exclusiveOwnership;
 		MessageID solicitingMessage;
+
+		bool directoryLookup;
 
 		virtual bool IsResponse() const { return true; }
 		virtual size_t MsgSize() const { return 1 + sizeof(Address) + (blockAttached ? size : 0); }

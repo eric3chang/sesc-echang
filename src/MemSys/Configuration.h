@@ -302,5 +302,295 @@ namespace Memory
 			return *this;
 		}
 	};
+	class Config
+	{
+	public:
+		static ConfigString GetString(const ConfigNode& n)
+		{
+			DebugAssert(n.IsA<StringConfigNode>());
+			return ((const StringConfigNode&)n).Value();
+		}
+		static ConfigInt GetInt(const ConfigNode& n)
+		{
+			DebugAssert(n.IsA<IntConfigNode>());
+			return ((const IntConfigNode&)n).Value();
+		}
+		static ConfigReal GetReal(const ConfigNode& n)
+		{
+			DebugAssert(n.IsA<RealConfigNode>());
+			return ((const RealConfigNode&)n).Value();
+		}
+		static ConfigString GetString(const ConfigNode& n, int index)
+		{
+			DebugAssert(n.IsA<StringSetConfigNode>());
+			const StringSetConfigNode& s = (const StringSetConfigNode&)n;
+			DebugAssert(index < s.SetSize());
+			DebugAssert(index >= 0);
+			return s.Value(index);
+		}
+		static ConfigInt GetInt(const ConfigNode& n, int index)
+		{
+			DebugAssert(n.IsA<IntSetConfigNode>());
+			const IntSetConfigNode& s = (const IntSetConfigNode&)n;
+			DebugAssert(index < s.SetSize());
+			DebugAssert(index >= 0);
+			return s.Value(index);
+		}
+		static ConfigReal GetReal(const ConfigNode& n, int index)
+		{
+			DebugAssert(n.IsA<RealSetConfigNode>());
+			const RealSetConfigNode& s = (const RealSetConfigNode&)n;
+			DebugAssert(index < s.SetSize());
+			DebugAssert(index >= 0);
+			return s.Value(index);
+		}
+		static ConfigString GetString(const ConfigNode& n, const std::string& nodeName, int nodeIndex = 0)
+		{
+			DebugAssert(n.IsA<RootConfigNode>());
+			const RootConfigNode& r = (const RootConfigNode&) n;
+			DebugAssert(r.ContainsSubNode(nodeName));
+			DebugAssert(nodeIndex >= 0);
+			DebugAssert(nodeIndex < r.SubNodeCount(nodeName));
+			return GetString(r.SubNode(nodeName,nodeIndex));
+		}
+		static ConfigInt GetInt(const ConfigNode& n, const std::string& nodeName, int nodeIndex = 0)
+		{
+			DebugAssert(n.IsA<RootConfigNode>());
+			const RootConfigNode& r = (const RootConfigNode&) n;
+			DebugAssert(r.ContainsSubNode(nodeName));
+			DebugAssert(nodeIndex >= 0);
+			DebugAssert(nodeIndex < r.SubNodeCount(nodeName));
+			return GetInt(r.SubNode(nodeName,nodeIndex));
+		}
+		static ConfigReal GetReal(const ConfigNode& n, const std::string& nodeName, int nodeIndex = 0)
+		{
+			DebugAssert(n.IsA<RootConfigNode>());
+			const RootConfigNode& r = (const RootConfigNode&) n;
+			DebugAssert(r.ContainsSubNode(nodeName));
+			DebugAssert(nodeIndex >= 0);
+			DebugAssert(nodeIndex < r.SubNodeCount(nodeName));
+			return GetReal(r.SubNode(nodeName,nodeIndex));
+		}
+		static ConfigString GetString(const ConfigNode& n, const std::string& nodeName, int nodeIndex, int elementIndex)
+		{
+			DebugAssert(n.IsA<RootConfigNode>());
+			const RootConfigNode& r = (const RootConfigNode&) n;
+			DebugAssert(r.ContainsSubNode(nodeName));
+			DebugAssert(nodeIndex >= 0);
+			DebugAssert(nodeIndex < r.SubNodeCount(nodeName));
+			return GetString(r.SubNode(nodeName,nodeIndex), elementIndex);
+		}
+		static ConfigInt GetInt(const ConfigNode& n, const std::string& nodeName, int nodeIndex, int elementIndex)
+		{
+			DebugAssert(n.IsA<RootConfigNode>());
+			const RootConfigNode& r = (const RootConfigNode&) n;
+			DebugAssert(r.ContainsSubNode(nodeName));
+			DebugAssert(nodeIndex >= 0);
+			DebugAssert(nodeIndex < r.SubNodeCount(nodeName));
+			return GetInt(r.SubNode(nodeName,nodeIndex), elementIndex);
+		}
+		static ConfigReal GetReal(const ConfigNode& n, const std::string& nodeName, int nodeIndex, int elementIndex)
+		{
+			DebugAssert(n.IsA<RootConfigNode>());
+			const RootConfigNode& r = (const RootConfigNode&) n;
+			DebugAssert(r.ContainsSubNode(nodeName));
+			DebugAssert(nodeIndex >= 0);
+			DebugAssert(nodeIndex < r.SubNodeCount(nodeName));
+			return GetReal(r.SubNode(nodeName,nodeIndex), elementIndex);
+		}
+		static int GetSetSize(const ConfigNode& n)
+		{
+			DebugAssert(n.IsA<IntSetConfigNode>() || n.IsA<RealSetConfigNode>() || n.IsA<StringSetConfigNode>());
+			if(n.IsA<IntSetConfigNode>())
+			{
+				return ((const IntSetConfigNode&)n).SetSize();
+			}
+			else if(n.IsA<RealSetConfigNode>())
+			{
+				return ((const RealSetConfigNode&)n).SetSize();
+			}
+			else if(n.IsA<StringSetConfigNode>())
+			{
+				return ((const StringSetConfigNode&)n).SetSize();
+			}
+			else
+			{
+			   DebugFail("Error: Config::GetSetSize(const ConfigNode& n)");
+			}
+		}
+		static int GetSetSize(const ConfigNode& n, const std::string& name, int index = 0)
+		{
+			DebugAssert(n.IsA<RootConfigNode>());
+			const RootConfigNode& r = (const RootConfigNode&) n;
+			DebugAssert(r.ContainsSubNode(name));
+			DebugAssert(r.SubNodeCount(name) > index);
+			return GetSetSize(r.SubNode(name,index));
+		}
+		static RootConfigNode& GetSubRoot(ConfigNode& n, const std::string& subNodeName)
+		{
+			DebugAssert(n.IsA<RootConfigNode>());
+			RootConfigNode& r = (RootConfigNode&) n;
+			DebugAssert(r.ContainsSubNode(subNodeName));
+			DebugAssert(r.SubNode(subNodeName).IsA<RootConfigNode>());
+			return (RootConfigNode&) r.SubNode(subNodeName);
+		}
+		static RootConfigNode& GetSubRoot(ConfigNode& n, const std::string& subNodeName, int index)
+		{
+			DebugAssert(n.IsA<RootConfigNode>());
+			RootConfigNode& r = (RootConfigNode&) n;
+			DebugAssert(r.ContainsSubNode(subNodeName));
+			DebugAssert(index >= 0);
+			DebugAssert(index < r.SubNodeCount(subNodeName));
+			DebugAssert(r.SubNode(subNodeName,index).IsA<RootConfigNode>());
+			return (RootConfigNode&) r.SubNode(subNodeName,index);
+		}
+		static const RootConfigNode& GetSubRoot(const ConfigNode& n, const std::string& subNodeName)
+		{
+			DebugAssert(n.IsA<RootConfigNode>());
+			const RootConfigNode& r = (const RootConfigNode&) n;
+			DebugAssert(r.ContainsSubNode(subNodeName));
+			DebugAssert(r.SubNode(subNodeName).IsA<RootConfigNode>());
+			return (const RootConfigNode&) r.SubNode(subNodeName);
+		}
+		static const RootConfigNode& GetSubRoot(const ConfigNode& n, const std::string& subNodeName, int index)
+		{
+			DebugAssert(n.IsA<RootConfigNode>());
+			const RootConfigNode& r = (const RootConfigNode&) n;
+			DebugAssert(r.ContainsSubNode(subNodeName));
+			DebugAssert(index >= 0);
+			DebugAssert(index < r.SubNodeCount(subNodeName));
+			DebugAssert(r.SubNode(subNodeName,index).IsA<RootConfigNode>());
+			return (const RootConfigNode&) r.SubNode(subNodeName,index);
+		}
+		static ConfigString GetStringOrElse(const ConfigString&  orValue, const ConfigNode& n)
+		{
+			if(n.IsA<StringConfigNode>())
+			{
+				return ((const StringConfigNode&)n).Value();
+			}
+			else
+			{
+				return orValue;
+			}
+		}
+		static ConfigInt GetIntOrElse(const ConfigInt&  orValue, const ConfigNode& n)
+		{
+			if(n.IsA<IntConfigNode>())
+			{
+				return ((const IntConfigNode&)n).Value();
+			}
+			else
+			{
+				return orValue;
+			}
+		}
+		static ConfigReal GetRealOrElse(const ConfigReal&  orValue, const ConfigNode& n)
+		{
+			if(n.IsA<RealConfigNode>())
+			{
+				return ((const RealConfigNode&)n).Value();
+			}
+			else
+			{
+				return orValue;
+			}
+		}
+		static ConfigString GetStringOrElse(const ConfigString&  orValue, const ConfigNode& n, int index)
+		{
+			if(n.IsA<StringSetConfigNode>())
+			{
+				const StringSetConfigNode& s = (const StringSetConfigNode&)n;
+				if(index < s.SetSize() && index >= 0)
+				{
+					return s.Value(index);
+				}
+			}
+			return orValue;
+		}
+		static ConfigInt GetIntOrElse(const ConfigInt&  orValue, const ConfigNode& n, int index)
+		{
+			if(n.IsA<IntSetConfigNode>())
+			{
+				const IntSetConfigNode& s = (const IntSetConfigNode&)n;
+				if(index < s.SetSize() && index >= 0)
+				{
+					return s.Value(index);
+				}
+			}
+			return orValue;
+		}
+		static ConfigReal GetRealOrElse(const ConfigReal&  orValue, const ConfigNode& n, int index)
+		{
+			if(n.IsA<RealSetConfigNode>())
+			{
+				const RealSetConfigNode& s = (const RealSetConfigNode&)n;
+				if(index < s.SetSize() && index >= 0)
+				{
+					return s.Value(index);
+				}
+			}
+			return orValue;
+		}
+		static ConfigString GetStringOrElse(const ConfigString& orValue, const ConfigNode& n, const std::string& nodeName, int nodeIndex = 0)
+		{
+			DebugAssert(n.IsA<RootConfigNode>());
+			const RootConfigNode& r = (const RootConfigNode&) n;
+			if(r.ContainsSubNode(nodeName) && nodeIndex >= 0 && nodeIndex < r.SubNodeCount(nodeName))
+			{
+				return GetString(r.SubNode(nodeName,nodeIndex));
+			}
+			return orValue;
+		}
+		static ConfigInt GetIntOrElse(const ConfigInt&  orValue, const ConfigNode& n, const std::string& nodeName, int nodeIndex = 0)
+		{
+			DebugAssert(n.IsA<RootConfigNode>());
+			const RootConfigNode& r = (const RootConfigNode&) n;
+			if(r.ContainsSubNode(nodeName) && nodeIndex >= 0 && nodeIndex < r.SubNodeCount(nodeName))
+			{
+				return GetInt(r.SubNode(nodeName,nodeIndex));
+			}
+			return orValue;
+		}
+		static ConfigReal GetRealOrElse(const ConfigReal&  orValue, const ConfigNode& n, const std::string& nodeName, int nodeIndex = 0)
+		{
+			DebugAssert(n.IsA<RootConfigNode>());
+			const RootConfigNode& r = (const RootConfigNode&) n;
+			if(r.ContainsSubNode(nodeName) && nodeIndex >= 0 && nodeIndex < r.SubNodeCount(nodeName))
+			{
+				return GetReal(r.SubNode(nodeName,nodeIndex));
+			}
+			return orValue;
+		}
+		static ConfigString GetStringOrElse(const ConfigString&  orValue, const ConfigNode& n, const std::string& nodeName, int nodeIndex, int elementIndex)
+		{
+			DebugAssert(n.IsA<RootConfigNode>());
+			const RootConfigNode& r = (const RootConfigNode&) n;
+			if(r.ContainsSubNode(nodeName) && nodeIndex >= 0 && nodeIndex < r.SubNodeCount(nodeName))
+			{
+				return GetString(r.SubNode(nodeName,nodeIndex));
+			}
+			return orValue;
+		}
+		static ConfigInt GetIntOrElse(const ConfigInt&  orValue, const ConfigNode& n, const std::string& nodeName, int nodeIndex, int elementIndex)
+		{
+			DebugAssert(n.IsA<RootConfigNode>());
+			const RootConfigNode& r = (const RootConfigNode&) n;
+			if(r.ContainsSubNode(nodeName) && nodeIndex >= 0 && nodeIndex < r.SubNodeCount(nodeName))
+			{
+				return GetInt(r.SubNode(nodeName,nodeIndex));
+			}
+			return orValue;
+		}
+		static ConfigReal GetRealOrElse(const ConfigReal&  orValue, const ConfigNode& n, const std::string& nodeName, int nodeIndex, int elementIndex)
+		{
+			DebugAssert(n.IsA<RootConfigNode>());
+			const RootConfigNode& r = (const RootConfigNode&) n;
+			if(r.ContainsSubNode(nodeName) && nodeIndex >= 0 && nodeIndex < r.SubNodeCount(nodeName))
+			{
+				return GetReal(r.SubNode(nodeName,nodeIndex));
+			}
+			return orValue;
+		}
+	};
 }
 
