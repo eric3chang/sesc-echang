@@ -1,0 +1,5 @@
+section01.3 Why Directory-based cache coherence protocols is advantageous for the future
+
+"As processor speeds and the number of cores per processor increase, more
+designers are likely to opt for [directory-based cache coherence] protocols to
+avoid the broadcase limit of a snoopy protocol (217 Hennessey).

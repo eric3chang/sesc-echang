@@ -1,17 +1,19 @@
-#ifndef _MEMSYS_MSTYPES_H
-#define _MEMSYS_MSTYPES_H
+#pragma once
+
+// added this to remove warnings in eclipse
+// when using unsigned int and unsigned long long
+#include <sys/types.h>
 
 namespace Memory
 {
 	typedef unsigned int Address;
 	typedef unsigned int ProcessorID;
 	typedef unsigned int DeviceID;
+	typedef int NodeID;
+	const NodeID InvalidNodeID = -1;
 	typedef unsigned long long MessageID;
 	typedef unsigned long long TickTime;
 	typedef unsigned long long TimeDelta;
-	typedef int NodeID;
-   const NodeID InvalidNodeID = -1;
-
 	enum MsgType
 	{
 		mt_Read,
@@ -27,5 +29,3 @@ namespace Memory
 		mt_Network,
 	};
 }
-
-#endif // _MEMSYS_MSTYPES_H
