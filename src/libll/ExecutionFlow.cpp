@@ -164,8 +164,8 @@ DInst *ExecutionFlow::executePC()
   }
   DInst *dinst=0;
   // We will need the original picodePC later
-  icode_ptr origPIcode=picodePC;
-  I(origPIcode);
+  //icode_ptr origPIcode=picodePC;
+  I(picodePC);
   // Need to get the pid here because exeInst may switch to another thread
   Pid_t     origPid=thread.getPid();
   // Determine whether the instruction has a delay slot

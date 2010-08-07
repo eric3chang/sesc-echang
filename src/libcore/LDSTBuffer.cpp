@@ -76,10 +76,9 @@ void LDSTBuffer::getFenceEntry(DInst *dinst)
    * 
    */
 
-  const Instruction *inst = dinst->getInst();
   int32_t cid = dinst->getContextId();  // FIXME: Is contextId correct?
 
-  I(inst->isFence());
+  I(dinst->getInst()->isFence());
 
 #ifdef LDSTBUFFER_IGNORE_DEPS
   return;

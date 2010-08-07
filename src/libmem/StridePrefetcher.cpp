@@ -281,8 +281,7 @@ void StridePrefetcher::access(MemRequest *mreq)
 
 void StridePrefetcher::returnAccess(MemRequest *mreq)
 {
-  uint32_t paddr = mreq->getPAddr() & defaultMask;
-  LOG("SP:returnAccess addr=%08lx", (long unsigned int) paddr);
+  LOG("SP:returnAccess addr=%08lx", (long unsigned int) (mreq->getPAddr() & defaultMask));
 
   mreq->goUp(0);
 }

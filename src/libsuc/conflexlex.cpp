@@ -618,7 +618,8 @@ extern int yyConfwrap (void );
 #endif
 #endif
 
-    static void yyunput (int c,char *buf_ptr  );
+// 2010/08/06 Eric: never used
+    //static void yyunput (int c,char *buf_ptr  );
     
 #ifndef yytext_ptr
 static void yy_flex_strncpy (char *,yyconst char *,int );
@@ -1399,18 +1400,21 @@ static int yy_get_next_buffer (void)
 	return yy_is_jam ? 0 : yy_current_state;
 }
 
+/*
+ * 2010/08/06 eric
+ * commented out because not being used
     static void yyunput (int c, register char * yy_bp )
 {
 	register char *yy_cp;
     
     yy_cp = (yy_c_buf_p);
 
-	/* undo effects of setting up yyConftext */
+	// undo effects of setting up yyConftext
 	*yy_cp = (yy_hold_char);
 
 	if ( yy_cp < YY_CURRENT_BUFFER_LVALUE->yy_ch_buf + 2 )
-		{ /* need to shift things up to make room */
-		/* +2 for EOB chars. */
+		{ // need to shift things up to make room
+		// +2 for EOB chars.
 		register int number_to_move = (yy_n_chars) + 2;
 		register char *dest = &YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[
 					YY_CURRENT_BUFFER_LVALUE->yy_buf_size + 2];
@@ -1435,6 +1439,7 @@ static int yy_get_next_buffer (void)
 	(yy_hold_char) = *yy_cp;
 	(yy_c_buf_p) = yy_cp;
 }
+*/
 
 #ifndef YY_NO_INPUT
 #ifdef __cplusplus

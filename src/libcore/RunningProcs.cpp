@@ -254,9 +254,8 @@ void RunningProcs::setProcessor(CPU_t cpu, GProcessor *newCore)
   // Is there was an old core in this slot
   if(oldCore){
     // Erase all instances of the old core from the available multiset
-    size_t erased=availableProcessors.erase(oldCore);
     // Check whether we erased the right number of entries
-    I(oldCore->getMaxFlows()==erased);
+    I(oldCore->getMaxFlows()==availableProcessors.erase(oldCore));
   }
 
   // If there is a new core in this slot

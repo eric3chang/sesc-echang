@@ -17,6 +17,8 @@ namespace Memory
 	}
 	void Directory::HashedPageCalculator::Initialize(const RootConfigNode& node)
 	{
+	   // "PageSize" should be a multiple of block size
+	   // usually, PageSize would be the same as block size
 		pageSize = Config::GetInt(node,"PageSize");
 		elementCount = Config::GetSetSize(node,"NodeIDSet");
 		for(int i = 0; i < elementCount; i++)
@@ -86,6 +88,9 @@ namespace Memory
 			b.sharers.insert(id);
 		}
 	}
+	/**
+	 * the message came from the local (cpu) side. It is a read msg
+	 */
 	void Directory::OnLocalRead(const ReadMsg* m)
 	{
 		DebugAssert(m);
@@ -551,7 +556,11 @@ namespace Memory
 		localSendTime = Config::GetIntOrElse(1,config,"LocalSendTime");
 		remoteSendTime = Config::GetIntOrElse(1,config,"RemoteSendTime");
 		lookupRetryTime = Config::GetIntOrElse(1,config,"LookupRetryTime");
+		// the time for the requesting node to ask for the data,
+		// until the home node has received the data
 		lookupTime = Config::GetIntOrElse(1,config,"LookupTime");
+		// the time after home node has received the requested data,
+		// until the requesting node received the requested data
 		satisfyTime = Config::GetIntOrElse(1,config,"SatisfyTime");
 		nodeID = (NodeID)Config::GetIntOrElse(1,config,"NodeID");
 		const RootConfigNode& dirCalc = Config::GetSubRoot(config,"DirectoryNodeCalculator");
@@ -575,10 +584,20 @@ namespace Memory
 		directoryNodeCalc->Initialize(dirCalc);
 		memoryNodeCalc->Initialize(memCalc);
 	}
+	/**
+	 * this is used for checkpoint purposes
+	 */
 	void Directory::DumpRunningState(RootConfigNode& node)
 	{}
+	/**
+	 * put anything here that you might want to output to the terminal
+	 */
 	void Directory::DumpStats(std::ostream& out)
 	{}
+	/**
+	 * Handles all the incoming messages from outside of the directory.
+	 * The message can come from the cache side or from the network.
+	 */
 	void Directory::RecvMsg(const BaseMsg* msg, int connectionID)
 	{
 		DebugAssert(msg);
