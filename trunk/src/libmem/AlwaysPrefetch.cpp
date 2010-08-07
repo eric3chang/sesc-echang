@@ -148,8 +148,7 @@ void AlwaysPrefetch::prefetch(PAddr prefAddr, Time_t lat)
 
 void AlwaysPrefetch::returnAccess(MemRequest *mreq)
 {
-  uint32_t paddr = mreq->getPAddr();
-  LOG("NLAP: returnAccess [%08lx]", (long unsigned int) paddr);
+  LOG("NLAP: returnAccess [%08lx]", (long unsigned int) mreq->getPAddr());
   mreq->goUp(0);
 }
 

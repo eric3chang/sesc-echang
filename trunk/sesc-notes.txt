@@ -9,4 +9,7 @@
 - use DebugFail(), DebugAssert(), fatal() to indicate error conditions
 - Connection - Local means sending something towards CPU. Remote means sending
   data away from CPU towards the network or main memory.
+- only need to modify genome__64_1_8_2_Perfect.conf_0 type files and .memory
+  files
+- nothing useful in libvmem
 

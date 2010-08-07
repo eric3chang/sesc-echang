@@ -11,7 +11,7 @@ namespace Memory
 	public:
 		Address addr;
 		size_t size;
-      bool directoryLookup; // TODO 2010/08/04 Eric
+      bool directoryLookup;
 		bool requestingExclusive;
 		bool alreadyHasBlock;
 

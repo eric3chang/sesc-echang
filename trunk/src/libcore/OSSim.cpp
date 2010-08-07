@@ -78,6 +78,10 @@ std::map<VAddr,int> allocSizeMap;
 
 char *OSSim::benchName=0;
 
+/*
+ * 2010/08/06 eric
+ * commented out because not being used
+ *
 static void sescConfSignal(int32_t sig)
 {
   static bool sigFaulting=false;
@@ -95,6 +99,7 @@ static void sescConfSignal(int32_t sig)
 
   abort();
 }
+*/
 
 void OSSim::reportOnTheFly(const char *file)
 {
@@ -453,10 +458,9 @@ void OSSim::eventSysconf(Pid_t ppid, Pid_t fid, int32_t flags)
     // Tre process can not be reconfigured while running where it is running
     // Make it non-runnable
     cpus.makeNonRunnable(myProcessId);
-    // Now reconfigure it
-    bool secondTry=myProcessId->sysconf(flags);
+    // Now reconfigure it, this is the second try
     // Should always succeed
-    I(secondTry);
+    I(myProcessId->sysconf(flags));
     // Make it runnable again
     cpus.makeRunnable(myProcessId);
   }

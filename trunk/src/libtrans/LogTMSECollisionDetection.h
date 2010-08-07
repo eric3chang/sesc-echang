@@ -15,6 +15,7 @@ public:
 	{
 	public:
 		virtual uint32_t Hash(uint32_t, int) = 0;
+		virtual ~RollingHash() {}
 	};
 	class BasicHash : public RollingHash
 	{

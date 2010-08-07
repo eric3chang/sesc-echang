@@ -41,7 +41,8 @@ Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #include "ValueTable.h"
 #endif
 
-static long long NES=0; // Number of exits pending to scape
+// 2010/08/06 eric: commented out because not being used
+//static long long NES=0; // Number of exits pending to scape
 
 int32_t rsesc_usecs(void)
 {

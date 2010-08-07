@@ -20,6 +20,7 @@ namespace Memory
 			virtual void OnMsgSend(const NetworkMsg* msg, int fromNode, int toNode, TickTime time) = 0;
 			virtual void OnMsgDelivered(const NetworkMsg* msg, int fromNode, int toNode, TickTime time) = 0;
 			virtual void Initialize(const RootConfigNode& config, int nodeCount) = 0;
+			virtual ~MsgDelayCalculator() {}
 		};
 		class ConstantCalculator : public MsgDelayCalculator
 		{
