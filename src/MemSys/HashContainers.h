@@ -82,7 +82,6 @@ template <class Key, class Hash = HashInteropReplacement<Key>, class Comparator 
 template<class Key,class Val,class Hash=HashInteropReplacement<Key>,class Comparator=std::less<Key>>
    class HashMultiMap:public stdext::hash_multimap<Key,Val,HashTraitsInteropReplacement<Key,Hash,Comparator>>{};
 #else
-//TODO finish editing the below stuff, there needs to be a EqualKey class after Key, Val, Hash
 template <class Key, class Val, class Hash = HashInteropReplacement<Key>, class Comparator = std::less<Key> >
    class HashMap : public __gnu_cxx::hash_map<Key, Val, Hash, EqualKeyReplacement <Key,Comparator> >{};
 template <class Key, class Hash = HashInteropReplacement<Key>, class Comparator = std::less<Key> >
