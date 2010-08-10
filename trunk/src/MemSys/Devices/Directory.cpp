@@ -593,7 +593,9 @@ namespace Memory
 	 * put anything here that you might want to output to the terminal
 	 */
 	void Directory::DumpStats(std::ostream& out)
-	{}
+	{
+	   std::cout << "Hello, World" << std::endl;
+	}
 	/**
 	 * Handles all the incoming messages from outside of the directory.
 	 * The message can come from the cache side or from the network.

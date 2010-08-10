@@ -60,6 +60,7 @@ IF (UNIX)
    ADD_DEFINITIONS (-DADDRESS_CHK)
    ADD_DEFINITIONS (-DTRANSACTIONAL_COMPOSITION_TRACKING)
    ADD_DEFINITIONS (-m32)
+   ADD_DEFINITIONS (-ggdb)
   
    #  the following definition doesn't work in older gnu compilers
    #  enable it to use new standards unordered_map and unordered_set

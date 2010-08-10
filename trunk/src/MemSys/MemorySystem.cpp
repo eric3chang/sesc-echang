@@ -26,15 +26,19 @@ namespace Memory
 		{
 			if(deviceSet[i]->DeviceName() == name)
 			{
-				true;
+				return true;
 			}
 		}
 		return false;
 	}
 	MemorySystem::MemorySystem()
 	{
-		deviceFactory.RegisterNode("SnoopyBus",new Factory<std::string,BaseMemDevice>::GenericFactoryNode<SnoopyBus>());
+	   deviceFactory.RegisterNode("Directory",new Factory<std::string,BaseMemDevice>::GenericFactoryNode<Directory>());
 		deviceFactory.RegisterNode("MOESICache",new Factory<std::string,BaseMemDevice>::GenericFactoryNode<MOESICache>());
+		deviceFactory.RegisterNode("NetworkMemoryInterface",new Factory<std::string,BaseMemDevice>::GenericFactoryNode<NetworkMemoryInterface>());
+		deviceFactory.RegisterNode("RandomLoadNetwork",new Factory<std::string,BaseMemDevice>::GenericFactoryNode<RandomLoadNetwork>());
+		//deviceFactory.RegisterNode("SESCInterface",new Factory<std::string,BaseMemDevice>::GenericFactoryNode<SESCProcessorInterface>());
+		deviceFactory.RegisterNode("SnoopyBus",new Factory<std::string,BaseMemDevice>::GenericFactoryNode<SnoopyBus>());
 		deviceFactory.RegisterNode("TestMemory",new Factory<std::string,BaseMemDevice>::GenericFactoryNode<TestMemory>());
 	}
 	MemorySystem::~MemorySystem()
@@ -86,6 +90,7 @@ namespace Memory
 			}
 			else
 			{
+			   std::cout << ((const StringConfigNode&)(devConfig.SubNode("DeviceType"))).Value() << std::endl;
 				BaseMemDevice* d = deviceFactory.Create(((const StringConfigNode&)(devConfig.SubNode("DeviceType"))).Value());
 				deviceSet.push_back(d);
 			}
