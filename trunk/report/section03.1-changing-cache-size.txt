@@ -1,3 +1,0 @@
-increasing cache size increases coherence misses because more invalidates occur because fewer blocks are bumped due to capacity misses. Of course, capacity misses decrease because the cache has more spaces to put blocks (Hennessey 229).
-
-Increasing blocksize means capacity miss decreases and compulsory miss decreases for certain applications. When this happens, it most likely means that there is a lot of spatial locality in the code, such as when running kernel code. Because increasing blocksize grabs more of the code in the same area together, which directly reduces compulsory misses. The capacity miss is reduced because we're storing more of the necessary code in the cache (Hennessey 228).
