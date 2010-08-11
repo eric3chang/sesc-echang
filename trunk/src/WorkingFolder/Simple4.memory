@@ -17,7 +17,7 @@ String ArbitrationType RemoteFirstRandom
 End
 Root MemoryDevice Begin
 String DeviceType SESCInterface
-String DeviceName DataInterface0
+String DeviceName ProcessorInterface_0
 Int DeviceID 3
 End
 Root MemoryDevice Begin
@@ -45,7 +45,7 @@ Int TopCache 0
 String EvictionPolicy LRU
 End
 Root Connection Begin
-String FromDevice DataInterface0
+String FromDevice ProcessorInterface_0
 String ToDevice L1_0
 String FromName Connection
 String ToName LocalConnection
@@ -67,7 +67,7 @@ Int Latency 0
 End
 Root MemoryDevice Begin
 String DeviceType SESCInterface
-String DeviceName DataInterface1
+String DeviceName ProcessorInterface_1
 Int DeviceID 6
 End
 Root MemoryDevice Begin
@@ -95,7 +95,7 @@ Int TopCache 0
 String EvictionPolicy LRU
 End
 Root Connection Begin
-String FromDevice DataInterface1
+String FromDevice ProcessorInterface_1
 String ToDevice L1_1
 String FromName Connection
 String ToName LocalConnection
@@ -117,7 +117,7 @@ Int Latency 0
 End
 Root MemoryDevice Begin
 String DeviceType SESCInterface
-String DeviceName DataInterface2
+String DeviceName ProcessorInterface_2
 Int DeviceID 9
 End
 Root MemoryDevice Begin
@@ -145,7 +145,7 @@ Int TopCache 0
 String EvictionPolicy LRU
 End
 Root Connection Begin
-String FromDevice DataInterface2
+String FromDevice ProcessorInterface_2
 String ToDevice L1_2
 String FromName Connection
 String ToName LocalConnection
@@ -167,7 +167,7 @@ Int Latency 0
 End
 Root MemoryDevice Begin
 String DeviceType SESCInterface
-String DeviceName DataInterface3
+String DeviceName ProcessorInterface_3
 Int DeviceID 12
 End
 Root MemoryDevice Begin
@@ -195,7 +195,7 @@ Int TopCache 0
 String EvictionPolicy LRU
 End
 Root Connection Begin
-String FromDevice DataInterface3
+String FromDevice ProcessorInterface_3
 String ToDevice L1_3
 String FromName Connection
 String ToName LocalConnection

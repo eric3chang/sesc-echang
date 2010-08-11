@@ -594,7 +594,8 @@ namespace Memory
 	 */
 	void Directory::DumpStats(std::ostream& out)
 	{
-	   std::cout << "Hello, World" << std::endl;
+	   std::cout << "My name is Eric" << std::endl;
+	   out << "My name is Eric" << std::endl;
 	}
 	/**
 	 * Handles all the incoming messages from outside of the directory.
