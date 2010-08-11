@@ -17,7 +17,7 @@ String ArbitrationType RemoteFirstRandom
 End
 Root MemoryDevice Begin
 String DeviceType SESCInterface
-String DeviceName DataInterface0
+String DeviceName ProcessorInterface_0
 Int DeviceID 3
 End
 Root MemoryDevice Begin
@@ -45,7 +45,7 @@ Int TopCache 0
 String EvictionPolicy LRU
 End
 Root Connection Begin
-String FromDevice DataInterface0
+String FromDevice ProcessorInterface_0
 String ToDevice L1_0
 String FromName Connection
 String ToName LocalConnection
