@@ -1,0 +1,125 @@
+[[Title: An Implementation of the standard directory-based cache-coherence protocol on the SESC simulator]]
+[[Title: An analysis of directory-based cache-coherence protocol on symmetric multiprocessors using the SESC simulator]]
+
+
+
+[[Section 1 Comparing different directory-based cache coherence protocols.]]
+
+The user-defined values could be contained in the configuration file or passed
+on the command-line like the other parameters. The configuration file is read
+through OSSim.cpp file under the libcore folder. It is read into a SescConf
+variable. I will design the SimpleDirectoryController in a way so that most of
+the common parameters will be changeable through the header file. The most
+obvious parameter that comes to mind is the directory size parameter, but more
+options will be added as necessary to increase the flexibility of the
+simulator. Some of the parameters that will need to be tracked are how many
+accesses to the directory are being made, how many reads and writes to the
+directory, and so on.
+
+[[Section 01-2]]
+
+"In a coherent multiprocessor, the caches provide both migration and replication of shared data items" (Hennessey 207). It is important for the architect of the processor to design these features into the processor as to allow the programmer to take advantage of the speedup available in having multiple data. Having multiple data allows for multiple reads at the same time.
+
+Read Request   Read Request
+   |              |           Time
+Cache01        Cache02
+
+Read Request
+   |              Time
+Cache 01          |
+                  |
+Read Request      |
+   |              Time
+Cache 01
+
+
+[[Section 02 Different Types of Cache Coherence Protocols]]
+
+There are two main types of cache coherence protocols - Directory based and
+snooping. A third one is available on Wikipedia. In my report, we will focuson
+directory-based cache coherence protocols and what they bring to the table. 
+
+There are several cache-coherence protocols. 
+
+When it comes to cache-coherence, there are several types. There is the
+directory-based cache-coherence protocl, first invented in 
+
+In this report, I will talk about
+different directory-based protocols and how they compare against each other. 
+
+Snoopy-based protocols have an advantage when it comes to manufacturing
+because they can use the existing bus to memory as the broadcast medium for
+communicating information about cache coherence (Hennessey 208). However, from
+the results in the following table, we can see that a snoopy-based protocol is
+not as scalable as a directory-based protocol. So in my report, we will check
+out various directory-based protocols
+
+[Figure comparing snoopy-based protocol vs directory-based protocol]
+# of processors
+% speedup
+# of collisions
+
+[[Section01.3 Why Directory-based cache coherence protocols is advantageous for the future]]
+
+"As processor speeds and the number of cores per processor increase, more
+designers are likely to opt for [directory-based cache coherence] protocols to
+avoid the broadcase limit of a snoopy protocol (217 Hennessey).
+
+[[Section 03.1 Changing Cache Size]]
+
+increasing cache size increases coherence misses because more invalidates occur because fewer blocks are bumped due to capacity misses. Of course, capacity misses decrease because the cache has more spaces to put blocks (Hennessey 229).
+
+Increasing blocksize means capacity miss decreases and compulsory miss decreases for certain applications. When this happens, it most likely means that there is a lot of spatial locality in the code, such as when running kernel code. Because increasing blocksize grabs more of the code in the same area together, which directly reduces compulsory misses. The capacity miss is reduced because we're storing more of the necessary code in the cache (Hennessey 228).
+
+[[Section 04]]
+Section 04 Table. What MOESI means to each memory unit
+
+[[Section 04.1 Directory-Based Cache-Coherence Protocol]]
+A directory-based cache-coherence protocol can be designed several ways. One of the easiest ways to keep track of the directories is to keep a bit vector in each distributed directory about which CPU has which cache block. Another way would be to keep track of the nodeID. The advantage of using a nodeID is that it can potentially take up less space in the directory. However, there is a disadvantage to keeping track of the nodeID. Usually, in a nodeID-based directory-based cache-coherence system, we do not keep track of all the nodeID's because that would defeat the primary purpose of using the nodeID to keep track of which CPU's contain a specific cache block, which is to save space. So usually, when we have a system that keeps track of the cache block using nodeID, we are unable to keep track of all the CPU's that might potentially request for a cache block. In which case, we would have to tell a CPU that have a cache block to mark their copy as invalid so we can free up a space in the directory.
+
+In this way, we can see that using bit vector to keep track of the CPU that has a specific cache block is an efficient way to implement directory-based cache-coherence protocol, but it has a certain limit on how many CPU's can be used together with the system.
+
+[[Section 05.1 Network]]
+The underlying network in use for this simulator is a simple blackbox model. It does not model a real network that has routing issues. Instead it models messages going in and out of the network using a random delay with a lower-bound of [] and an upper-bound of []. When more messages arrhive, the delay coming from the random delay generator will be shifted higher as to model the higher traffic conditions.
+
+The reason the network is not simulated in detail is because that is not the focus of this report. The focus of this report is on the various directory-based cache-coherence protocols that are able to be modeled using the SESC simulator. Although the SESC simulator has the capability to model a network, a simple network, such as the one used here, can illustrate our point.
+
+[[Section 06.1 Simple C Program]]
+Here I will demonstrate a simple c program. The purpose of this program is to demonstrate more clearly what is going on at the detailed directory-level. This program has a global variable that a function accesses. The main() function will split off threads of this function. We can see what goes on in the directory from this simple program.
+
+[[Section 99]]
+Include state-transition diagrams for MOESI and for MSI
+
+The MESI protocol adds an "Exclusive" state to reduce the traffic caused by
+writes of blocks that only exist in one cache. The MOSI protocol adds an
+"Owned" state to reduce the traffic caused by write-backs of blocks that are
+read by other caches. The MOESI protocol does both of these things. [copied
+from Wikipedia]
+
+CPU1 - CPU2
+ |      |
+cache   cache
+ |         |
+memA       memA
+
+If cpu1 and cpu2 are using the same piece of memory, then when cpu1 modifies
+memA, cpu2 needs to know that its copy of memA is no longer valid. This is
+what a cache coherence protocol does. There are several cache coherence
+protocols. [list cache coherence protocols]
+
+There are also several cache coherence mechanisms that enables these cache
+coherence protocols to be done.
+
+From wikipedia. We also need to talk about consistency models, which are contracts between thethe system and the programmer. Essentially, these models state that if the programmer follows a specific set of rules, the memory of the system would be consistent with the intentions of the programmers. However, if the programmer does not follow these rules, then the memory would be inconsistent and undeterministic. There are several levels of consistency. Certain processors allow for multiple levels of consistency. For example, Intel's Itanium processor allows for [blah] by using [blah], while using [blah], we can get a higher level of consistency, at the possible expense of a speed loss.
+
+While taking care of cache coherency, we also need to keep in mind that
+Amdahl's law prevents us from improving our speedup to a certain degree if our
+program contains sequential code. Since sequential code cannot be sped up, we
+can never achieve a speedup faster than the time it takes to run that
+sequential code.
+
+
+[Skewed Cache]
+Skewed cache is better than regular set-associative cache
+(A case for two-way skewed-associative caches)
+(Andre Seznec page 4) 
