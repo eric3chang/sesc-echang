@@ -12,4 +12,6 @@
 - only need to modify genome__64_1_8_2_Perfect.conf_0 type files and .memory
   files
 - nothing useful in libvmem
+- run benchmark on regular machine, store the result, then run the benchmark
+  inside sesc simulator, then compare if the results are correct.
 
