@@ -60,6 +60,8 @@ IF (UNIX)
    ADD_DEFINITIONS (-DADDRESS_CHK)
    ADD_DEFINITIONS (-DTRANSACTIONAL_COMPOSITION_TRACKING)
    ADD_DEFINITIONS (-m32)
+   #ADD_DEFINITIONS (-march=i386)
+   #ADD_DEFINITIONS (-mtune=i386)
    ADD_DEFINITIONS (-ggdb)
   
    #  the following definition doesn't work in older gnu compilers
