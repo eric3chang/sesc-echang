@@ -7,6 +7,8 @@
 #include "../Connection.h"
 #include "Config.h"
 
+int mySuperGlobalInt = 0;
+
 namespace Memory
 {
 	NodeID Directory::HashedPageCalculator::CalcNodeID(Address addr) const
@@ -603,6 +605,7 @@ namespace Memory
 	 */
 	void Directory::RecvMsg(const BaseMsg* msg, int connectionID)
 	{
+	   std::cout << mySuperGlobalInt++ << ' ' << std::endl;
 		DebugAssert(msg);
 		if(connectionID == localConnectionID)
 		{
