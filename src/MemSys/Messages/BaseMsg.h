@@ -1,11 +1,13 @@
 #pragma once
 #include "../MSTypes.h"
 #include "../Debug.h"
+#include <iostream>
 
 namespace Memory
 {
 	class BaseMsg
 	{
+	private:
 		MessageID msgID;
 		DeviceID deviceID;
 		Address generatingPC;
@@ -38,6 +40,13 @@ namespace Memory
 		void SetIDInfo(MessageID msgID, DeviceID devID, Address generatingPC)
 		{
 			DebugAssert(msgID);
+			/*
+			std::cout << "BaseMsg::SetIDInfo: " <<
+			      "msgID=" << msgID <<
+			      " devID=" << devID <<
+			      " generatingPC=" << generatingPC << std::endl;
+			      */
+			std::cout << "BaseMsg::SetIDInnfo: msgID=" << msgID << std::endl;
 			this->msgID = msgID;
 			this->deviceID = devID;
 			this->generatingPC = generatingPC;

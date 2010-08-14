@@ -45,8 +45,7 @@ Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #endif
 
 int32_t main(int32_t argc, char **argv, char **envp)
-{ 
-	std::cout << "HAAAAAAAAAAAAAA" << std::endl;
+{
 #ifdef TASKSCALAR
   taskHandler = new TaskHandler();
 #endif
