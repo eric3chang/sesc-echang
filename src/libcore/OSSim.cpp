@@ -163,7 +163,7 @@ void OSSim::processParams(int32_t argc, char **argv, char **envp)
   
   nargv[0] = strdup(argv[0]);
 
-  int32_t i=1;
+  int32_t i;
   int32_t ni=1;
 
   nInst2Skip=0;
@@ -205,17 +205,21 @@ void OSSim::processParams(int32_t argc, char **argv, char **envp)
     exit(0);
   }
   
-  for(; i < argc; i++) 
+  for(i=1; i < argc; i++)
   {
-    if(argv[i][0] == '-') {
-      if( argv[i][1] == 'w' ){
+    if(argv[i][0] == '-')
+    {
+      if( argv[i][1] == 'w' )
+      {
         if( isdigit(argv[i][2]) )
           nInst2Skip = strtol(&argv[i][2], 0, 0 );
         else {
           i++;
           nInst2Skip = strtol(argv[i], 0, 0 );
         }
-      }else if( argv[i][1] == 'y' ){
+      }
+      else if( argv[i][1] == 'y' )
+      {
         if( isdigit(argv[i][2]) )
           nInst2Sim = strtol(&argv[i][2], 0, 0 );
         else {
@@ -223,8 +227,8 @@ void OSSim::processParams(int32_t argc, char **argv, char **envp)
           nInst2Sim = strtol(argv[i], 0, 0 );
         }
       }
-
-      else if( argv[i][1] == 'm' ) {
+      else if( argv[i][1] == 'm' )
+      {
         useMTMarks=true;
         simMarks.mtMarks=true;
         if( argv[i][2] != 0 ) 
@@ -238,8 +242,8 @@ void OSSim::processParams(int32_t argc, char **argv, char **envp)
         idSimMarks[mtId].end = (~0UL)-1;
         idSimMarks[mtId].mtMarks=false;
       }
-
-      else if( argv[i][1] == '1' ) {
+      else if( argv[i][1] == '1' )
+      {
         if( argv[i][2] != 0 ) {
           if( useMTMarks )
             idSimMarks[mtId].begin = strtol(&argv[i][2], 0, 0);
@@ -255,8 +259,8 @@ void OSSim::processParams(int32_t argc, char **argv, char **envp)
         if(!useMTMarks)
           simMarks.total = 0;
       }
-
-      else if( argv[i][1] == '2' ) {
+      else if( argv[i][1] == '2' )
+      {
         if( argv[i][2] != 0 ) {
           if( useMTMarks)
             idSimMarks[mtId].end = strtol(&argv[i][2], 0, 0 );
@@ -272,8 +276,8 @@ void OSSim::processParams(int32_t argc, char **argv, char **envp)
         if(!useMTMarks)
           simMarks.total = 0;
       }
-
-      else if( argv[i][1] == 'b' ) {
+      else if( argv[i][1] == 'b' )
+      {
         if( argv[i][2] != 0 )
           benchSection = &argv[i][2];
         else {
@@ -281,7 +285,8 @@ void OSSim::processParams(int32_t argc, char **argv, char **envp)
           benchSection = argv[i];
         }
       }
-      else if( argv[i][1] == 'c' ) {
+      else if( argv[i][1] == 'c' )
+      {
         if( argv[i][2] != 0 )
           confName = &argv[i][2];
         else {
@@ -289,8 +294,8 @@ void OSSim::processParams(int32_t argc, char **argv, char **envp)
           confName = argv[i];
         }
       }
-
-      else if( argv[i][1] == 'x' ) {
+      else if( argv[i][1] == 'x' )
+      {
         if( argv[i][2] != 0 )
           xtraPat = &argv[i][2];
         else {
@@ -298,8 +303,8 @@ void OSSim::processParams(int32_t argc, char **argv, char **envp)
           xtraPat = argv[i];
         }
       }
-
-      else if( argv[i][1] == 'd' ) {
+      else if( argv[i][1] == 'd' )
+      {
         I(reportTo==0);
         if( argv[i][2] != 0 )
           reportTo = &argv[i][2];
@@ -308,8 +313,8 @@ void OSSim::processParams(int32_t argc, char **argv, char **envp)
           reportTo = argv[i];
         }
       }
-      
-      else if( argv[i][1] == 'f' ) {
+      else if( argv[i][1] == 'f' )
+      {
         I(extension==0);
         if( argv[i][2] != 0 )
           extension = &argv[i][2];
@@ -318,30 +323,33 @@ void OSSim::processParams(int32_t argc, char **argv, char **envp)
           extension = argv[i];
         }
       }
-
-      else if( argv[i][1] == 'P' ) {
+      else if( argv[i][1] == 'P' )
+      {
         justTest = true;
       }
-
-      else if( argv[i][1] == 't' ) {
+      else if( argv[i][1] == 't' )
+      {
         justTest = true;
       }
-
-      else if( argv[i][1] == 'T' ) {
+      else if( argv[i][1] == 'T' )
+      {
         trace_flag = true;
-      }else{
+      }
+      else
+      {
         nargv[ni] = strdup(argv[i]);
         ni++;
       }
       continue;
-    }
+    }    //    if(argv[i][0] == '-')
+
     if(isdigit(argv[i][0])) {
       nargv[ni] = strdup(argv[i]);
       continue;
     }
 
     break;
-  }
+  } //for(i=1; i < argc; i++)
 
   char *name = (i == argc) ? argv[0] : argv[i];
   {
@@ -1246,6 +1254,7 @@ bool OSSim::LoadCheckpoint()
 	in.Read((char*)&procCount,sizeof(procCount));
 	in.Read((char*)&allocCount,sizeof(allocCount));
 	in.Read((char*)&memorySize,sizeof(memorySize));
+	//TODO 2010/08/13 Eric: figure out why the following doesn't work sometimes
 	I(memorySize == Mem_size);
 	in.Read((char*)&barrierCount,sizeof(barrierCount));
 	for(uint32_t i = 0; i < barrierCount; i++)
