@@ -1,13 +1,14 @@
 cmake_minimum_required (VERSION 2.6)
 
-if (UNIX)
+# added debug into the definitions below
+#if (UNIX)
    # if the user specifies -DCMAKE_BUILD_TYPE on the command line, take their
    # definition and dump it in the cache, otherwise set CMAKE_BUILD_TYPE to Debug prior to calling PROJECT()
-   if (NOT DEFINED CMAKE_BUILD_TYPE)
-      set (CMAKE_BUILD_TYPE Debug CACHE STRING
-         "Choose the type of build, options are: None Debug Release")
-   endif (NOT DEFINED CMAKE_BUILD_TYPE)
-endif(UNIX)
+#   if (NOT DEFINED CMAKE_BUILD_TYPE)
+      #set (CMAKE_BUILD_TYPE Debug CACHE STRING
+        # "Choose the type of build, options are: None Debug Release")
+   #endif (NOT DEFINED CMAKE_BUILD_TYPE)
+#endif(UNIX)
 
 project (augSescProject)
 
@@ -50,6 +51,8 @@ include_directories ("${PROJECT_SOURCE_DIR}/include")
 IF (UNIX)
    ADD_DEFINITIONS (-Wall)
    ADD_DEFINITIONS (-Wno-deprecated)
+   # made it so it permanently debugs
+   ADD_DEFINITIONS(-DDEBUG)
    ADD_DEFINITIONS (-DHANGING_ASERT)
    ADD_DEFINITIONS (-DSYSTEM_SESC)
    ADD_DEFINITIONS (-D_CONSOLE)

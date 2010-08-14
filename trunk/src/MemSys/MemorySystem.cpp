@@ -89,7 +89,7 @@ namespace Memory
 			}
 			else
 			{
-			   //std::cout << ((const StringConfigNode&)(devConfig.SubNode("DeviceType"))).Value() << std::endl;
+			   //std::cout << "MemorySystem::Initialize: " << ((const StringConfigNode&)(devConfig.SubNode("DeviceType"))).Value() << std::endl;
 				BaseMemDevice* d = deviceFactory.Create(((const StringConfigNode&)(devConfig.SubNode("DeviceType"))).Value());
 				deviceSet.push_back(d);
 			}

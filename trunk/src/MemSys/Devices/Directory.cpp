@@ -5,7 +5,6 @@
 #include "../Configuration.h"
 #include "../EventManager.h"
 #include "../Connection.h"
-#include "Config.h"
 
 int mySuperGlobalInt = 0;
 
@@ -514,7 +513,9 @@ namespace Memory
 	void Directory::OnDirectoryBlockResponse(const ReadResponseMsg* m, NodeID src)
 	{
 		DebugAssert(m);
+		// check that m->solicitingMessage is in pendingLocalReads before accessing it
 		DebugAssert(pendingLocalReads.find(m->solicitingMessage) != pendingLocalReads.end());
+
 		const ReadMsg* ref = pendingLocalReads[m->solicitingMessage];
 		if(!m->satisfied)
 		{
@@ -605,7 +606,7 @@ namespace Memory
 	 */
 	void Directory::RecvMsg(const BaseMsg* msg, int connectionID)
 	{
-	   std::cout << mySuperGlobalInt++ << ' ' << std::endl;
+	   //std::cout << "Directory::RecvMsg: " << mySuperGlobalInt++ << ' ' << std::endl;
 		DebugAssert(msg);
 		if(connectionID == localConnectionID)
 		{
