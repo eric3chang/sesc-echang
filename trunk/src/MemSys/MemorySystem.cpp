@@ -157,6 +157,7 @@ namespace Memory
 				connectionSet.push_back(tempConSet[i][j]);
 			}
 		}
+		// check that there's the number of interfaces specified .memory is >= than in .conf
 		DebugAssert(interfaceDevices.empty());
 	}
 	void MemorySystem::SubmitInterfaceDevice(const std::string& name, BaseMemDevice* device)

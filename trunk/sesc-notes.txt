@@ -14,4 +14,5 @@
 - nothing useful in libvmem
 - run benchmark on regular machine, store the result, then run the benchmark
   inside sesc simulator, then compare if the results are correct.
+- efence vs valgrind
 
