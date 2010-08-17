@@ -180,6 +180,7 @@ static void parse_args(int32_t argc, char **argv)
 #ifndef _MSC_VER
   char c;
   while((c=getopt(argc, argv, "n:h:k:P:p:s:W"))!=-1){ //MARK TODO
+     std::cout << argv << std::endl;
     switch (c) {
     case 'n':
       NiceValue=strtol(optarg,NULL,0);

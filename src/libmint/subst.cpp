@@ -844,7 +844,9 @@ OP(mint_printf)
   }
 
   if(index>10)
+  {
     fatal("mint_printf: too many args\n");
+  }
   printf((char *)addr, args[1], args[2], args[3], args[4], args[5], args[6],
          args[7], args[8], args[9], args[10]);
 

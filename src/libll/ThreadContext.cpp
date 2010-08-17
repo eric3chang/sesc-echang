@@ -175,7 +175,8 @@ void ThreadContext::free(void)
   // pid zero because it can not be distinguished from the parent in
   // fork-like function calls (which return child's pid in the parent and
   // zero in the child process).
-  I((this!=mainThreadContext)||(nThreads==1));
+   //std::cout << this << " " << mainThreadContext << " " << nThreads << std::endl;
+  I((this!=mainThreadContext) || (nThreads==1));
   I(pid>=0);
   I((size_t)pid<pid2context.size());
   I(pid2context[pid]==this);

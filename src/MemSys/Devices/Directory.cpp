@@ -8,6 +8,9 @@
 
 int mySuperGlobalInt = 0;
 
+using std::cout;
+using std::endl;
+
 namespace Memory
 {
 	NodeID Directory::HashedPageCalculator::CalcNodeID(Address addr) const
@@ -517,6 +520,9 @@ namespace Memory
 		DebugAssert(pendingLocalReads.find(m->solicitingMessage) != pendingLocalReads.end());
 
 		const ReadMsg* ref = pendingLocalReads[m->solicitingMessage];
+
+		ref->print();
+
 		if(!m->satisfied)
 		{
 			pendingLocalReads.erase(m->solicitingMessage);
