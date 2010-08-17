@@ -3,6 +3,9 @@
 #include "../Debug.h"
 #include <iostream>
 
+using std::cout;
+using std::endl;
+
 namespace Memory
 {
 	class BaseMsg
@@ -37,6 +40,14 @@ namespace Memory
 			return deviceID;
 		}
 
+		virtual void print() const
+		{
+		   cout << "msgID=" << msgID <<
+		         " devID=" << deviceID <<
+		         " generatingPC=" << generatingPC <<
+		         endl;
+		}
+
 		void SetIDInfo(MessageID msgID, DeviceID devID, Address generatingPC)
 		{
 			DebugAssert(msgID);
@@ -46,7 +57,7 @@ namespace Memory
 			      " devID=" << devID <<
 			      " generatingPC=" << generatingPC << std::endl;
 			      */
-			std::cout << "BaseMsg::SetIDInnfo: msgID=" << msgID << std::endl;
+			//std::cout << "BaseMsg::SetIDInnfo: msgID=" << msgID << std::endl;
 			this->msgID = msgID;
 			this->deviceID = devID;
 			this->generatingPC = generatingPC;
