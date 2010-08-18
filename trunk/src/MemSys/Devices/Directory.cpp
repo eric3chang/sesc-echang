@@ -623,7 +623,7 @@ namespace Memory
 	 */
 	void Directory::RecvMsg(const BaseMsg* msg, int connectionID)
 	{
-	   //std::cout << "Directory::RecvMsg: " << mySuperGlobalInt++ << ' ' << std::endl;
+	   cout << "Directory::RecvMsg: " << mySuperGlobalInt++ << ' ' << endl;
 		DebugAssert(msg);
 		if(connectionID == localConnectionID)
 		{
