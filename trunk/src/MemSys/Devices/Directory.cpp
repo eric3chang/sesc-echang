@@ -8,6 +8,7 @@
 
 int mySuperGlobalInt = 0;
 
+using std::cerr;
 using std::cout;
 using std::endl;
 
@@ -99,6 +100,7 @@ namespace Memory
 	{
 		DebugAssert(m);
 		NodeID remoteNode = directoryNodeCalc->CalcNodeID(m->addr);
+      printPendingLocalReads("OnLocalRead", m->MsgID(), "insert");
 		DebugAssert(pendingLocalReads.find(m->MsgID()) == pendingLocalReads.end());
 		pendingLocalReads[m->MsgID()] = m;
 		ReadMsg* forward = (ReadMsg*)EM().ReplicateMsg(m);
@@ -242,7 +244,7 @@ namespace Memory
 					AddDirectoryShare(m->addr,i->second.sourceNode,false);
 					if(i->second.sourceNode == nodeID)
 					{
-					   cout << "called from OnRemoteReadResponse()" << endl;
+					   //cout << "called from OnRemoteReadResponse()" << endl;
 						OnDirectoryBlockResponse(r,nodeID);
 					}
 					else
@@ -429,9 +431,9 @@ namespace Memory
 		}
 		if(pendingDirectoryExclusiveReads.find(m->addr) != pendingDirectoryExclusiveReads.end())
 		{
-			if(b.owner == InvalidNodeID && b.sharers.size() == 0 ||
-				b.owner == pendingDirectoryExclusiveReads[m->addr].sourceNode && b.sharers.size() == 0 ||
-				b.owner == InvalidNodeID && b.sharers.size() == 1 && b.sharers.find(pendingDirectoryExclusiveReads[m->addr].sourceNode) != b.sharers.end())
+			if( (b.owner == InvalidNodeID && b.sharers.size() == 0) ||
+				(b.owner == pendingDirectoryExclusiveReads[m->addr].sourceNode && b.sharers.size() == 0) ||
+				(b.owner == InvalidNodeID && b.sharers.size() == 1 && b.sharers.find(pendingDirectoryExclusiveReads[m->addr].sourceNode) != b.sharers.end()))
 			{
 				b.sharers.clear();
 				b.owner = pendingDirectoryExclusiveReads[m->addr].sourceNode;
@@ -521,18 +523,18 @@ namespace Memory
 		// check that m->solicitingMessage is in pendingLocalReads before accessing it
 		// error here means that we expect there to be a message in pendingLocalReads,
 		// but it turns out that the message is not there
-		cout << "Directory::OnDirectoryBlockResponse: pendingLocalReads.size()="
-		      << pendingLocalReads.size() << endl;
-		DebugAssert(pendingLocalReads.find(m->solicitingMessage) != pendingLocalReads.end());
 
+      printPendingLocalReads("OnDirectoryBlockResponse",m->solicitingMessage,"read");
+		DebugAssert(pendingLocalReads.find(m->solicitingMessage) != pendingLocalReads.end());
 		const ReadMsg* ref = pendingLocalReads[m->solicitingMessage];
 
-		ref->print();
+		//ref->print();
 
 		//pendingLocalReads.
 
 		if(!m->satisfied)
 		{
+		   printPendingLocalReads("OnDirectoryBlockResponse",m->solicitingMessage,"erase");
 			pendingLocalReads.erase(m->solicitingMessage);
 			OnLocalRead(ref);
 			return;
@@ -546,6 +548,7 @@ namespace Memory
 		r->size = ref->size;
 		r->solicitingMessage = ref->MsgID();
 		EM().DisposeMsg(ref);
+		printPendingLocalReads("OnLocalRead", m->solicitingMessage, "erase");
 		pendingLocalReads.erase(m->solicitingMessage);
 		EM().DisposeMsg(m);
 		SendMsg(localConnectionID, r, satisfyTime + localSendTime);
@@ -683,7 +686,7 @@ namespace Memory
 					ReadResponseMsg* m = (ReadResponseMsg*)payload;
 					if(m->directoryLookup)
 					{
-					   cout << "called from RecvMsg()" << endl;
+					   //cout << "called from RecvMsg()" << endl;
 						OnDirectoryBlockResponse(m,src);
 					}
 					else
@@ -730,5 +733,12 @@ namespace Memory
 		{
 			DebugFail("Connection not a valid ID");
 		}
+	}
+
+	void Directory::printPendingLocalReads(const char* fromMethod, MessageID myMessageID, const char* operation)
+	{
+	   cout << "Directory::" << fromMethod << ": Directory" << nodeID
+	         << ".pendingLocalReads."
+	         << operation << " " << (MessageID) myMessageID << endl;
 	}
 }

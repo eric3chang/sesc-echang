@@ -38,12 +38,14 @@ namespace Memory
 	{
 		DebugAssert(index >= 0 && index < (int)connectionSet.size());
 
-		//TODO 2010/08/17 Eric
+		/*
 		std::cout << "BaseMemDevice::GetConnection: " << std::endl;
 		for (int i=0; i<(int)connectionSet.size(); i++)
 		{
+		   std::cout << "   ";
 		   connectionSet[i]->print();
 		}
+		*/
 
 		return *(connectionSet[index]);
 	}
