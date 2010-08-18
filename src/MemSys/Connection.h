@@ -1,10 +1,11 @@
 #pragma once
 #include <string>
+#include "BaseMemDevice.h"
 #include "MSTypes.h"
 
 namespace Memory
 {
-	class BaseMemDevice;
+	//class BaseMemDevice;
 	class EventManager;
 	class BaseMsg;
 	class Connection
@@ -19,5 +20,6 @@ namespace Memory
 		Connection(std::string linkName, BaseMemDevice* from, BaseMemDevice* to, int toConnectionID, TimeDelta delay, EventManager* ev);
 		void SendMsg(const BaseMsg* msg, TimeDelta delay = 0);
 		const std::string& Name();
+		void print() const;
 	};
 }

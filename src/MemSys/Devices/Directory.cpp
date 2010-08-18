@@ -242,6 +242,7 @@ namespace Memory
 					AddDirectoryShare(m->addr,i->second.sourceNode,false);
 					if(i->second.sourceNode == nodeID)
 					{
+					   cout << "called from OnRemoteReadResponse()" << endl;
 						OnDirectoryBlockResponse(r,nodeID);
 					}
 					else
@@ -464,7 +465,8 @@ namespace Memory
 	void Directory::OnDirectoryBlockRequest(const ReadMsg* m, NodeID src)
 	{
 		DebugAssert(m);
-		if(pendingDirectoryExclusiveReads.find(m->addr) != pendingDirectoryExclusiveReads.end() || (m->requestingExclusive && pendingDirectorySharedReads.find(m->addr) != pendingDirectorySharedReads.end()))
+		if(pendingDirectoryExclusiveReads.find(m->addr) != pendingDirectoryExclusiveReads.end() ||
+		      (m->requestingExclusive && pendingDirectorySharedReads.find(m->addr) != pendingDirectorySharedReads.end()))
 		{//cannot complete the request at this time
 			if(src == nodeID)
 			{
@@ -517,11 +519,17 @@ namespace Memory
 	{
 		DebugAssert(m);
 		// check that m->solicitingMessage is in pendingLocalReads before accessing it
+		// error here means that we expect there to be a message in pendingLocalReads,
+		// but it turns out that the message is not there
+		cout << "Directory::OnDirectoryBlockResponse: pendingLocalReads.size()="
+		      << pendingLocalReads.size() << endl;
 		DebugAssert(pendingLocalReads.find(m->solicitingMessage) != pendingLocalReads.end());
 
 		const ReadMsg* ref = pendingLocalReads[m->solicitingMessage];
 
 		ref->print();
+
+		//pendingLocalReads.
 
 		if(!m->satisfied)
 		{
@@ -675,6 +683,7 @@ namespace Memory
 					ReadResponseMsg* m = (ReadResponseMsg*)payload;
 					if(m->directoryLookup)
 					{
+					   cout << "called from RecvMsg()" << endl;
 						OnDirectoryBlockResponse(m,src);
 					}
 					else
