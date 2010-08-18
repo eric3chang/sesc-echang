@@ -1,0 +1,445 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="genome-directory|Win32">
+      <Configuration>genome-directory</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{A54864F1-6C99-4165-A176-888B5427ADC2}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='genome-directory|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='genome-directory|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Debug\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='genome-directory|Win32'">Debug\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Debug\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='genome-directory|Win32'">Debug\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='genome-directory|Win32'">true</LinkIncremental>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Release\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Release\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='genome-directory|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <AdditionalIncludeDirectories>MemSys\Messages\;PersonalTools\includes\;libtrans\;libvmem\;libtm\;libsuperlu\;libsuc\;libsmp\;libsesctherm\;libsescspot\;librst\;libpower\;libpint\;libnet\;libmem\;libemul\;libcore\;libll\;libmint\;libapp\;libAugMem\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;HANGING_ASSERT;_DEBUG;SYSTEM_SESC;DEBUG;_CONSOLE;LENDIAN;__i386__;DEBUG_DUMP_PROGRAM;TRANSACTIONAL_MEMORY;TRANSACTIONAL_ONLY;ADDRESS_CHK;TRANSACTIONAL_COMPOSITION_TRACKING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <AdditionalOptions>zdll.exp zdll.lib %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalLibraryDirectories>PersonalTools\libraries\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <LinkTimeCodeGeneration>
+      </LinkTimeCodeGeneration>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='genome-directory|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <AdditionalIncludeDirectories>MemSys\Messages\;PersonalTools\includes\;libtrans\;libvmem\;libtm\;libsuperlu\;libsuc\;libsmp\;libsesctherm\;libsescspot\;librst\;libpower\;libpint\;libnet\;libmem\;libemul\;libcore\;libll\;libmint\;libapp\;libAugMem\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;HANGING_ASSERT;_DEBUG;SYSTEM_SESC;DEBUG;_CONSOLE;LENDIAN;__i386__;DEBUG_DUMP_PROGRAM;TRANSACTIONAL_MEMORY;TRANSACTIONAL_ONLY;ADDRESS_CHK;TRANSACTIONAL_COMPOSITION_TRACKING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <AdditionalOptions>zdll.exp zdll.lib %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalLibraryDirectories>PersonalTools\libraries\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <LinkTimeCodeGeneration>
+      </LinkTimeCodeGeneration>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>Full</Optimization>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <EnableFiberSafeOptimizations>false</EnableFiberSafeOptimizations>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
+      <AdditionalIncludeDirectories>misc/;libvmem/;libtrans/;libtm/;libsuc/;libsmp/;libsesctherm/;libsescspot/;librst/;libpower/;libpint/;libnet/;libmint/;libmem/;libll/;libemul/;libcore/;libapp/;libAugMem/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_CONSOLE;DEBUG;SYSTEM_SESC;LENDIAN;__i386__;TRANSACTIONAL_MEMORY;TRANSACTIONAL_ONLY;_SECURE_SCL=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <AdditionalOptions>zdll.exp zdll.lib %(AdditionalOptions)</AdditionalOptions>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <GenerateMapFile>true</GenerateMapFile>
+      <SubSystem>Console</SubSystem>
+      <OptimizeReferences>
+      </OptimizeReferences>
+      <EnableCOMDATFolding>
+      </EnableCOMDATFolding>
+      <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="libmint\Addressing.h" />
+    <ClInclude Include="libmem\AddressPrefetcher.h" />
+    <ClInclude Include="libmint\AddressSpace.h" />
+    <ClInclude Include="libcore\AdvancedStats.h" />
+    <ClInclude Include="MemSys\Devices\AllDeviceTypes.h" />
+    <ClInclude Include="memsys\devices\directory.h" />
+    <ClInclude Include="memsys\devices\networkmemoryinterface.h" />
+    <ClInclude Include="memsys\devices\randomloadnetwork.h" />
+    <ClInclude Include="MemSys\Messages\AllMessageTypes.h" />
+    <ClInclude Include="libsuc\alloca.h" />
+    <ClInclude Include="libmem\AlwaysPrefetch.h" />
+    <ClInclude Include="libmem\Bank.h" />
+    <ClInclude Include="MemSys\Devices\BaseMemDevice.h" />
+    <ClInclude Include="MemSys\Messages\BaseMsg.h" />
+    <ClInclude Include="libsuc\BloomFilter.h" />
+    <ClInclude Include="libcore\BPred.h" />
+    <ClInclude Include="libmem\Bus.h" />
+    <ClInclude Include="libmem\Cache.h" />
+    <ClInclude Include="libsuc\CacheCore.h" />
+    <ClInclude Include="libsuc\callback.h" />
+    <ClInclude Include="libcore\Cluster.h" />
+    <ClInclude Include="libmint\coff.h" />
+    <ClInclude Include="libtrans\CollisionDetectionExcludeAllBut.h" />
+    <ClInclude Include="libtrans\CollisionDetectionFlatten.h" />
+    <ClInclude Include="libtrans\CollisionDetectionNoBlend.h" />
+    <ClInclude Include="libmint\common.h" />
+    <ClInclude Include="libsuc\Config.h" />
+    <ClInclude Include="MemSys\Configuration.h" />
+    <ClInclude Include="MemSys\Connection.h" />
+    <ClInclude Include="libsuc\DbgObject.h" />
+    <ClInclude Include="MemSys\Debug.h" />
+    <ClInclude Include="libcore\DepWindow.h" />
+    <ClInclude Include="libcore\DInst.h" />
+    <ClInclude Include="libmint\elf.h" />
+    <ClInclude Include="libmint\ElfObject.h" />
+    <ClInclude Include="libcore\EnergyMgr.h" />
+    <ClInclude Include="libsuc\estl.h" />
+    <ClInclude Include="libmint\event.h" />
+    <ClInclude Include="MemSys\EventManager.h" />
+    <ClInclude Include="libll\Events.h" />
+    <ClInclude Include="MemSys\Messages\EvictionMsg.h" />
+    <ClInclude Include="MemSys\Messages\EvictionResponseMsg.h" />
+    <ClInclude Include="libll\ExecutionFlow.h" />
+    <ClInclude Include="libmint\export.h" />
+    <ClInclude Include="MemSys\Factory.h" />
+    <ClInclude Include="libsuc\FastQueue.h" />
+    <ClInclude Include="libcore\FetchEngine.h" />
+    <ClInclude Include="libsuc\fpu_control.h" />
+    <ClInclude Include="libsuc\GCObject.h" />
+    <ClInclude Include="libsuc\GEnergy.h" />
+    <ClInclude Include="libll\GFlow.h" />
+    <ClInclude Include="libmint\globals.h" />
+    <ClInclude Include="libcore\GLVID.h" />
+    <ClInclude Include="libcore\GMemoryOS.h" />
+    <ClInclude Include="libcore\GMemorySystem.h" />
+    <ClInclude Include="libcore\GProcessor.h" />
+    <ClInclude Include="libsuc\GStats.h" />
+    <ClInclude Include="MemSys\HashContainers.h" />
+    <ClInclude Include="libll\HeapManager.h" />
+    <ClInclude Include="libcore\HVersion.h" />
+    <ClInclude Include="libmint\icode.h" />
+    <ClInclude Include="libll\Instruction.h" />
+    <ClInclude Include="libll\InstType.h" />
+    <ClInclude Include="MemSys\Messages\InvalidateMsg.h" />
+    <ClInclude Include="MemSys\Messages\InvalidateResponseMsg.h" />
+    <ClInclude Include="libtrans\ITMCollisionDetection.h" />
+    <ClInclude Include="libtrans\ITMCollisionManager.h" />
+    <ClInclude Include="libtrans\ITMVersioning.h" />
+    <ClInclude Include="libcore\LDSTBuffer.h" />
+    <ClInclude Include="libcore\LDSTQ.h" />
+    <ClInclude Include="libtrans\LogTMCollisionDetection.h" />
+    <ClInclude Include="libtrans\LogTMSECollisionDetection.h" />
+    <ClInclude Include="libmem\MarkovPrefetcher.h" />
+    <ClInclude Include="libmem\MemCtrl.h" />
+    <ClInclude Include="libcore\MemObj.h" />
+    <ClInclude Include="libmem\MemoryOS.h" />
+    <ClInclude Include="MemSys\MemorySystem.h" />
+    <ClInclude Include="libmem\MemorySystem.h" />
+    <ClInclude Include="libcore\MemRequest.h" />
+    <ClInclude Include="libmint\mendian.h" />
+    <ClInclude Include="libll\minidecoder.h" />
+    <ClInclude Include="libmint\mint.h" />
+    <ClInclude Include="libmint\mintapi.h" />
+    <ClInclude Include="MemSys\Devices\MOESICache.h" />
+    <ClInclude Include="libsuc\MSHR.h" />
+    <ClInclude Include="memsys\messages\networkmsg.h" />
+    <ClInclude Include="MemSys\MSTypes.h" />
+    <ClInclude Include="libmem\mtst1.h" />
+    <ClInclude Include="libmint\myelf.h" />
+    <ClInclude Include="libsuc\nanassert.h" />
+    <ClInclude Include="libmint\non_mips.h" />
+    <ClInclude Include="libmint\opcodes.h" />
+    <ClInclude Include="libcore\OSSim.h" />
+    <ClInclude Include="libtrans\PerfectCollisionDetection.h" />
+    <ClInclude Include="libtrans\PerfectCollisionManager.h" />
+    <ClInclude Include="libtrans\PerfectVersioning.h" />
+    <ClInclude Include="libcore\Pipeline.h" />
+    <ClInclude Include="MemSys\Pool.h" />
+    <ClInclude Include="libsuc\pool.h" />
+    <ClInclude Include="libsuc\Port.h" />
+    <ClInclude Include="libpint\PPCDecoder.h" />
+    <ClInclude Include="libpint\PPCOpcodes.h" />
+    <ClInclude Include="libmint\prctl.h" />
+    <ClInclude Include="libmem\PriorityBus.h" />
+    <ClInclude Include="libcore\ProcessId.h" />
+    <ClInclude Include="libcore\Processor.h" />
+    <ClInclude Include="libll\QemuSescReader.h" />
+    <ClInclude Include="libll\QemuSescTrace.h" />
+    <ClInclude Include="MemSys\Messages\ReadMsg.h" />
+    <ClInclude Include="MemSys\Messages\ReadResponseMsg.h" />
+    <ClInclude Include="libsuc\ReportGen.h" />
+    <ClInclude Include="libsuc\ReportTherm.h" />
+    <ClInclude Include="libcore\Resource.h" />
+    <ClInclude Include="libcore\RiskLoadProf.h" />
+    <ClInclude Include="libll\RSTFlow.h" />
+    <ClInclude Include="libll\RSTReader.h" />
+    <ClInclude Include="libcore\RunningProcs.h" />
+    <ClInclude Include="libsuc\SCTable.h" />
+    <ClInclude Include="libapp\sescapi.h" />
+    <ClInclude Include="libsuc\SescConf.h" />
+    <ClInclude Include="MemSys\Devices\SESCProcessorInterface.h" />
+    <ClInclude Include="libapp\simicsapi.h" />
+    <ClInclude Include="libsuc\SizedTypes.h" />
+    <ClInclude Include="libcore\SMTProcessor.h" />
+    <ClInclude Include="libsuc\Snippets.h" />
+    <ClInclude Include="MemSys\Devices\SnoopyBus.h" />
+    <ClInclude Include="libll\SPARCInstruction.h" />
+    <ClInclude Include="MemSys\StoredFunctionCall.h" />
+    <ClInclude Include="libmem\StridePrefetcher.h" />
+    <ClInclude Include="libmint\symtab.h" />
+    <ClInclude Include="MemSys\Devices\TestEmitterProcessorInterface.h" />
+    <ClInclude Include="MemSys\Devices\TestMemory.h" />
+    <ClInclude Include="libsuc\ThermTrace.h" />
+    <ClInclude Include="libll\ThreadContext.h" />
+    <ClInclude Include="libmem\TLB.h" />
+    <ClInclude Include="libtrans\TMInterface.h" />
+    <ClInclude Include="libtrans\TMMemory.h" />
+    <ClInclude Include="libtrans\TMOpCodes.h" />
+    <ClInclude Include="libtrans\TMProcessor.h" />
+    <ClInclude Include="libsuc\TQueue.h" />
+    <ClInclude Include="libll\TraceEntry.h" />
+    <ClInclude Include="libll\TraceFlow.h" />
+    <ClInclude Include="libsuc\TraceGen.h" />
+    <ClInclude Include="libll\TraceReader.h" />
+    <ClInclude Include="libll\TT6Reader.h" />
+    <ClInclude Include="libmem\UglyMemRequest.h" />
+    <ClInclude Include="libcore\ValueTable.h" />
+    <ClInclude Include="libcore\VPred.h" />
+    <ClInclude Include="MemSys\Messages\WriteMsg.h" />
+    <ClInclude Include="MemSys\Messages\WriteResponseMsg.h" />
+    <ClInclude Include="libsuc\zlibStreams.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="libmem\AddressPrefetcher.cpp" />
+    <ClCompile Include="libcore\AdvancedStats.cpp" />
+    <ClCompile Include="libmem\AlwaysPrefetch.cpp" />
+    <ClCompile Include="libmem\Bank.cpp" />
+    <ClCompile Include="MemSys\Devices\BaseMemDevice.cpp" />
+    <ClCompile Include="libsuc\BloomFilter.cpp" />
+    <ClCompile Include="libcore\BPred.cpp" />
+    <ClCompile Include="libmem\Bus.cpp" />
+    <ClCompile Include="libmem\Cache.cpp" />
+    <ClCompile Include="libsuc\CacheCore.cpp" />
+    <ClCompile Include="libsuc\callback.cpp" />
+    <ClCompile Include="libcore\Cluster.cpp" />
+    <ClCompile Include="libtrans\CollisionDetectionExcludeAllBut.cpp" />
+    <ClCompile Include="libsuc\Config.cpp" />
+    <ClCompile Include="libsuc\conflex.tab.cpp" />
+    <ClCompile Include="libsuc\conflexlex.cpp" />
+    <ClCompile Include="MemSys\Connection.cpp" />
+    <ClCompile Include="libmint\coproc.cpp" />
+    <ClCompile Include="libcore\DepWindow.cpp" />
+    <ClCompile Include="libcore\DInst.cpp" />
+    <ClCompile Include="libmint\dump.cpp" />
+    <ClCompile Include="libmint\elf.cpp" />
+    <ClCompile Include="libmint\error_ops.cpp" />
+    <ClCompile Include="MemSys\Devices\Directory.cpp" />
+    <ClCompile Include="MemSys\Devices\NetworkMemoryInterface.cpp" />
+    <ClCompile Include="MemSys\Devices\RandomLoadNetwork.cpp" />
+    <ClCompile Include="MemSys\EventManager.cpp" />
+    <ClCompile Include="libll\Events.cpp" />
+    <ClCompile Include="libmint\exec.cpp" />
+    <ClCompile Include="libll\ExecutionFlow.cpp" />
+    <ClCompile Include="libcore\FetchEngine.cpp" />
+    <ClCompile Include="libll\GFlow.cpp" />
+    <ClCompile Include="libcore\GMemoryOS.cpp" />
+    <ClCompile Include="libcore\GMemorySystem.cpp" />
+    <ClCompile Include="libcore\GProcessor.cpp" />
+    <ClCompile Include="libsuc\GStats.cpp" />
+    <ClCompile Include="libll\HeapManager.cpp" />
+    <ClCompile Include="libmint\icode.cpp" />
+    <ClCompile Include="libll\Instruction.cpp" />
+    <ClCompile Include="libcore\LDSTBuffer.cpp" />
+    <ClCompile Include="libcore\LDSTQ.cpp" />
+    <ClCompile Include="libtrans\LogTMCollisionDetection.cpp" />
+    <ClCompile Include="libtrans\LogTMSECollisionDetection.cpp" />
+    <ClCompile Include="libmem\MarkovPrefetcher.cpp" />
+    <ClCompile Include="libmem\MemCtrl.cpp" />
+    <ClCompile Include="libcore\MemObj.cpp" />
+    <ClCompile Include="libmem\MemoryOS.cpp" />
+    <ClCompile Include="MemSys\MemorySystem.cpp" />
+    <ClCompile Include="libmem\MemorySystem_Old.cpp" />
+    <ClCompile Include="libcore\MemRequest.cpp" />
+    <ClCompile Include="libmint\mendian.cpp" />
+    <ClCompile Include="libmint\mint_init.cpp" />
+    <ClCompile Include="libll\MIPSInstruction.cpp" />
+    <ClCompile Include="MemSys\Devices\MOESICache.cpp" />
+    <ClCompile Include="libsuc\MSHR.cpp" />
+    <ClCompile Include="libmem\mtst1.cpp" />
+    <ClCompile Include="libsuc\nanassert.cpp" />
+    <ClCompile Include="libmint\non_mips.cpp" />
+    <ClCompile Include="libmint\opcodes.cpp" />
+    <ClCompile Include="libmint\ops.cpp" />
+    <ClCompile Include="libcore\OSSim.cpp" />
+    <ClCompile Include="libtrans\PerfectCollisionDetection.cpp" />
+    <ClCompile Include="libtrans\PerfectCollisionManager.cpp" />
+    <ClCompile Include="libtrans\PerfectVersioning.cpp" />
+    <ClCompile Include="libcore\Pipeline.cpp" />
+    <ClCompile Include="libsuc\Port.cpp" />
+    <ClCompile Include="libpint\PPCDecoder.cpp" />
+    <ClCompile Include="libll\PPCInstruction.cpp" />
+    <ClCompile Include="libmem\PriorityBus.cpp" />
+    <ClCompile Include="libcore\ProcessId.cpp" />
+    <ClCompile Include="libcore\Processor.cpp" />
+    <ClCompile Include="libll\QemuSescReader.cpp" />
+    <ClCompile Include="libsuc\ReportGen.cpp" />
+    <ClCompile Include="libsuc\ReportTherm.cpp" />
+    <ClCompile Include="libcore\Resource.cpp" />
+    <ClCompile Include="libcore\RiskLoadProf.cpp" />
+    <ClCompile Include="libcore\RunningProcs.cpp" />
+    <ClCompile Include="libsuc\SCTable.cpp" />
+    <ClCompile Include="libsuc\SescConf.cpp" />
+    <ClCompile Include="MemSys\Devices\SESCProcessorInterface.cpp" />
+    <ClCompile Include="libcore\SMTProcessor.cpp" />
+    <ClCompile Include="libsuc\Snippets.cpp" />
+    <ClCompile Include="MemSys\Devices\SnoopyBus.cpp" />
+    <ClCompile Include="libmem\StridePrefetcher.cpp" />
+    <ClCompile Include="libmint\subst.cpp" />
+    <ClCompile Include="libmint\symtab.cpp" />
+    <ClCompile Include="MemSys\Devices\TestMemory.cpp" />
+    <ClCompile Include="libsuc\ThermTrace.cpp" />
+    <ClCompile Include="libll\ThreadContext.cpp" />
+    <ClCompile Include="libmem\TLB.cpp" />
+    <ClCompile Include="libtrans\TMInterface.cpp" />
+    <ClCompile Include="libtrans\TMMemory.cpp" />
+    <ClCompile Include="libtrans\TMProcessor.cpp" />
+    <ClCompile Include="libsuc\TQueue.cpp" />
+    <ClCompile Include="libsuc\TraceGen.cpp" />
+    <ClCompile Include="libmem\UglyMemRequest.cpp" />
+    <ClCompile Include="libmint\utils.cpp" />
+    <ClCompile Include="libcore\ValueTable.cpp" />
+    <ClCompile Include="libcore\VPred.cpp" />
+    <ClCompile Include="libsuc\zlibStreams.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="libpint\PPCInsts.def" />
+    <None Include="libmint\AddressSpace.cpp~" />
+    <None Include="libcore\ASVersion.cpp~" />
+    <None Include="libsuc\BloomFilter.cpp~" />
+    <None Include="libcore\BPred.cpp~" />
+    <None Include="libsuc\CacheCore.cpp~" />
+    <None Include="libsuc\Config.cpp~" />
+    <None Include="libmint\elf.cpp~" />
+    <None Include="libcore\EnergyMgr.cpp~" />
+    <None Include="libcore\Epoch.cpp~" />
+    <None Include="libmint\exec.cpp~" />
+    <None Include="libll\ExecutionFlow.cpp~" />
+    <None Include="libcore\GLVID.cpp~" />
+    <None Include="libcore\GMemorySystem.cpp~" />
+    <None Include="libsuc\GStats.cpp~" />
+    <None Include="libll\HeapManager.cpp~" />
+    <None Include="libcore\HVersion.cpp~" />
+    <None Include="libcore\main.cpp~" />
+    <None Include="Makefile.defs" />
+    <None Include="Makefile.defs~" />
+    <None Include="libcore\MemBuffer.cpp~" />
+    <None Include="libmint\mint_init.cpp~" />
+    <None Include="libmem\MOESICache.cpp~" />
+    <None Include="libmem\mtst1.cpp~" />
+    <None Include="libmint\non_mips.cpp~" />
+    <None Include="libmint\opcodes.cpp~" />
+    <None Include="libmem\augmemory\OracleDirectoryController.cpp~" />
+    <None Include="libcore\OSSim.cpp~" />
+    <None Include="libtrans\perfect\PerfectCollisionDetection.cpp~" />
+    <None Include="libtrans\perfect\PerfectCollisionManager.cpp~" />
+    <None Include="libtrans\perfect\PerfectVersioning.cpp~" />
+    <None Include="libll\PPCInstruction.cpp~" />
+    <None Include="libcore\Profile.cpp~" />
+    <None Include="libll\QEMUFlow.cpp~" />
+    <None Include="libll\QemuSparcInstruction.cpp~" />
+    <None Include="libll\RSTIntruction.cpp~" />
+    <None Include="libll\RSTReader.cpp~" />
+    <None Include="libcore\RunningProcs.cpp~" />
+    <None Include="libcore\Signature.cpp~" />
+    <None Include="libmint\subst.cpp~" />
+    <None Include="libcore\SysCall.cpp~" />
+    <None Include="libmem\TaggedPrefetcher.cpp~" />
+    <None Include="libsuc\ThermTrace.cpp~" />
+    <None Include="libtrans\TMInterface.cpp~" />
+    <None Include="libtrans\TMMemory.cpp~" />
+    <None Include="libtrans\TMProcessor.cpp~" />
+    <None Include="libll\TraceFlow.cpp~" />
+    <None Include="libsuc\TraceGen.cpp~" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
