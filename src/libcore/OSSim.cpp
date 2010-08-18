@@ -1254,7 +1254,7 @@ bool OSSim::LoadCheckpoint()
 	in.Read((char*)&procCount,sizeof(procCount));
 	in.Read((char*)&allocCount,sizeof(allocCount));
 	in.Read((char*)&memorySize,sizeof(memorySize));
-	//TODO 2010/08/13 Eric: figure out why the following doesn't work sometimes
+	// the following can sometimes catch when checkpoint files are missing
 	I(memorySize == Mem_size);
 	in.Read((char*)&barrierCount,sizeof(barrierCount));
 	for(uint32_t i = 0; i < barrierCount; i++)
