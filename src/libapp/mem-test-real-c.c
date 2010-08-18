@@ -1,7 +1,8 @@
-//#include <pthread.h>
-#include "sescapi.h"
+#include <pthread.h>
+//#include "sescapi.h"
 #include <stdio.h>
-#define NUM_THREADS        2
+#include <stdlib.h>
+#define NUM_THREADS        5
 
 #define SIM_CHECKPOINT 2
 #define SIM_START_RABBIT 0
@@ -31,30 +32,28 @@ char myString8[8] = "8888888";
 char myString9[8] = "9999999";
 */
 
-void *readChar(void *threadid)
+void *readChar()
 {
-   int i;
 	printf("myChar=%c\n", *myChar);
    *myChar = *myChar + 1;
-   for (i=0; i<1024; i++);
-//    pthread_exit(NULL);
-	sesc_exit(0);
+//   *myChar = *myChar + 1;
+    pthread_exit(NULL);
+//	sesc_exit(0);
 }
 
 int main()
 {
-//    pthread_t threads[NUM_THREADS];
-	int t,i;
+    pthread_t threads[NUM_THREADS];
+	int t;
    myChar = malloc(sizeof(char) * 1);
    *myChar = 'a';
-	sesc_init();
+//	sesc_init();
     for(t=0;t<NUM_THREADS;t++){
        printf("Creating thread %d\n", t);
-//       pthread_create(&threads[t], NULL, print_hello_world, (void *)t);
-	   sesc_spawn((void*) *readChar, (void *)t, 0);
+       pthread_create(&threads[t], NULL, readChar, (void *)t);
+//	   sesc_spawn((void*) *readChar, 0, 0);
     }
-   for (i=0; i<1024*2; i++);
-//    pthread_exit(NULL);
-	sesc_exit(0);
+    pthread_exit(NULL);
+//	sesc_exit(0);
 }
 
