@@ -60,10 +60,12 @@ public:
   void switchOut(CPU_t id, ProcessId *proc);
   
   GProcessor *getProcessor(CPU_t cpu) const {
+    /*
     std::cout << "RunningProcs.h:getProcessor: "
         << "cpuVector.size()=" << cpuVector.size()
         << "cpu=" << cpu
         << std::endl;
+        */
     I((CPU_t)cpuVector.size() > cpu);
     return cpuVector[cpu];
   }
