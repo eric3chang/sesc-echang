@@ -246,7 +246,10 @@ PredType BPBTB::predict(const Instruction * inst, InstID oracleID, bool doUpdate
   I(doUpdate);
 
   // The branch is taken. Update the cache
-
+  /* 2010/08/18 Eric
+    std::cout << "Bpred.cpp:BPBTB::predict: data->fillLine("
+	  << key << ")" << std::endl;
+	  */
   BTBCache::CacheLine *cl = data->fillLine(key);
   I( cl );
   
