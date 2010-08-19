@@ -15,4 +15,5 @@
 - run benchmark on regular machine, store the result, then run the benchmark
   inside sesc simulator, then compare if the results are correct.
 - efence vs valgrind
+- gcc -S [filename].c produces disassembly
 
