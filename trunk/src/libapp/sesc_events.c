@@ -1,4 +1,6 @@
-#include "../AugTime.h"
+#ifdef WIN32
+   #include "../AugTime.h"
+#endif
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -73,6 +75,10 @@ void sesc_release(int vaddr)
 }
 
 /***********************************/
+void sesc_simulation_mark();
+void sesc_simulation_mark_id(int id);
+void sesc_fast_sim_begin();
+void sesc_fast_sim_end();
 
 void sesc_simulation_mark_()
 {

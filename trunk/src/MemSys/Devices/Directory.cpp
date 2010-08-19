@@ -623,7 +623,7 @@ namespace Memory
 	 */
 	void Directory::RecvMsg(const BaseMsg* msg, int connectionID)
 	{
-	   cout << "Directory::RecvMsg: " << mySuperGlobalInt++ << ' ' << endl;
+	   //cout << "Directory::RecvMsg: " << mySuperGlobalInt++ << ' ' << endl;
 		DebugAssert(msg);
 		if(connectionID == localConnectionID)
 		{
@@ -737,6 +737,10 @@ namespace Memory
 
 	void Directory::printPendingLocalReads(const char* fromMethod, MessageID myMessageID, const char* operation)
 	{
+	   if (nodeID == 1)
+	   {
+	      cout << "\t\t\t\t\t\t\t";
+	   }
 	   cout << "Directory::" << fromMethod << ": Directory" << nodeID
 	         << ".pendingLocalReads."
 	         << operation << " " << (MessageID) myMessageID << endl;
