@@ -75,8 +75,7 @@ public:
   int32_t bpred4CycleAddrShift;
 
   HistoryType calcInstID(const Instruction *inst) const {
-	  std::cout << "BPred.h:BPred::calcInstID: inst->currentID()="
-		  << inst->currentID() << std::endl;
+
     HistoryType cid = inst->currentID(); // psudo-PC works, no need addr (slower)
 
     // Remove used bits (restrict predictions per cycle)
@@ -84,6 +83,18 @@ public:
     // randomize it
     cid = (cid >> 17) ^ (cid); 
 
+    // This hack makes sure that cid != 0 when inst is a small number
+    // 2010/08/18 Eric
+    if ((cid==0) && (inst->currentID()<10))
+    {
+      cid = inst->currentID()+1;
+    }
+    /*
+    std::cout << "BPred.h:BPred::calcInstID: inst->currentID()="
+      << inst->currentID()
+      << " cid=" << cid
+      << std::endl;
+*/
     return cid;
   }
 public:
