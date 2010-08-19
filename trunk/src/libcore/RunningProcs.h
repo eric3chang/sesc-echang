@@ -24,6 +24,7 @@ Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #define RUNNINGPROCS
 
 #include <set>
+#include <iostream>
 
 #include "estl.h"
 #include "nanassert.h"
@@ -59,6 +60,10 @@ public:
   void switchOut(CPU_t id, ProcessId *proc);
   
   GProcessor *getProcessor(CPU_t cpu) const {
+    std::cout << "RunningProcs.h:getProcessor: "
+        << "cpuVector.size()=" << cpuVector.size()
+        << "cpu=" << cpu
+        << std::endl;
     I((CPU_t)cpuVector.size() > cpu);
     return cpuVector[cpu];
   }
