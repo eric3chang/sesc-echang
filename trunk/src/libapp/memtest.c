@@ -6,7 +6,8 @@ extern "C" {
 #include "sescapi.h"
 #include <stdio.h>
 #include <stdlib.h>
-#define NUM_THREADS        5000
+//#define NUM_THREADS        5000
+#define NUM_THREADS        5
 
 #define SIM_CHECKPOINT 2
 #define SIM_START_RABBIT 0
