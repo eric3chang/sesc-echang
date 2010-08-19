@@ -13,6 +13,10 @@
       <Configuration>mem-test</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="memtest-snoopy|Win32">
+      <Configuration>memtest-snoopy</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Release|Win32">
       <Configuration>Release</Configuration>
       <Platform>Win32</Platform>
@@ -36,6 +40,9 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='mem-test|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='memtest-snoopy|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+  </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
@@ -51,23 +58,30 @@
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='mem-test|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='memtest-snoopy|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Debug\</OutDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='genome-directory|Win32'">Debug\</OutDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='mem-test|Win32'">Debug\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='memtest-snoopy|Win32'">Debug\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Debug\</IntDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='genome-directory|Win32'">Debug\</IntDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='mem-test|Win32'">Debug\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='memtest-snoopy|Win32'">Debug\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='genome-directory|Win32'">true</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='mem-test|Win32'">true</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='memtest-snoopy|Win32'">true</LinkIncremental>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Release\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Release\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='genome-directory|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='mem-test|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='memtest-snoopy|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -120,6 +134,31 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='mem-test|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <AdditionalIncludeDirectories>MemSys\Messages\;PersonalTools\includes\;libtrans\;libvmem\;libtm\;libsuperlu\;libsuc\;libsmp\;libsesctherm\;libsescspot\;librst\;libpower\;libpint\;libnet\;libmem\;libemul\;libcore\;libll\;libmint\;libapp\;libAugMem\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;HANGING_ASSERT;_DEBUG;SYSTEM_SESC;DEBUG;_CONSOLE;LENDIAN;__i386__;DEBUG_DUMP_PROGRAM;TRANSACTIONAL_MEMORY;TRANSACTIONAL_ONLY;ADDRESS_CHK;TRANSACTIONAL_COMPOSITION_TRACKING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <AdditionalOptions>zdll.exp zdll.lib %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalLibraryDirectories>PersonalTools\libraries\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <LinkTimeCodeGeneration>
+      </LinkTimeCodeGeneration>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='memtest-snoopy|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>

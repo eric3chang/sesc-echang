@@ -75,6 +75,8 @@ public:
   int32_t bpred4CycleAddrShift;
 
   HistoryType calcInstID(const Instruction *inst) const {
+	  std::cout << "BPred.h:BPred::calcInstID: inst->currentID()="
+		  << inst->currentID() << std::endl;
     HistoryType cid = inst->currentID(); // psudo-PC works, no need addr (slower)
 
     // Remove used bits (restrict predictions per cycle)

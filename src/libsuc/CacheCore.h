@@ -185,7 +185,11 @@ template<class State, class Addr_t = uint32_t, bool Energy=true>
     CacheLine *l = findLine2Replace(addr);
     if (l==0)
       return 0;
-    
+    /* 2010/08/18 Eric
+	std::cout << "CacheCore::CacheLine::fillLine: calcTag("
+		<< addr << ")=" << calcTag(addr)
+		<< std::endl;
+		*/
     l->setTag(calcTag(addr));
     
     return l;
@@ -196,7 +200,7 @@ template<class State, class Addr_t = uint32_t, bool Energy=true>
     rplcAddr = 0;
     if (l==0)
       return 0;
-    
+
     Addr_t newTag = calcTag(addr);
     if (l->isValid()) {
       Addr_t curTag = l->getTag();
@@ -204,7 +208,6 @@ template<class State, class Addr_t = uint32_t, bool Energy=true>
         rplcAddr = calcAddr4Tag(curTag);
       }
     }
-    
     l->setTag(newTag);
     
     return l;

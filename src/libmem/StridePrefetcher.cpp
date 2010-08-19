@@ -159,6 +159,11 @@ void StridePrefetcher::learnHit(PAddr addr)
     return;   // from a no longer active stream
 
   prefetch(pe, lat + learnHitDelay); 
+  /* 2010/08/18 Eric
+  std::cout << "StridePrefetcher::learnHit: pe->setTag("
+	  << table->calcTag(pe->nextAddr(table))
+	  << ") " << std::endl;
+	  */
   pe->setTag(table->calcTag(pe->nextAddr(table)));
   LOG("SP:prefetching more: addr=%08lx", (long unsigned int) (paddr + pe->stride) );
 }
@@ -230,6 +235,11 @@ void StridePrefetcher::learnMiss(PAddr addr)
    		 (long unsigned int) paddr, (long unsigned int) nextAddr,
    		 goingUp ? "UP" : "DOWN");
     prefetch(pe, lat + learnMissDelay); 
+	/* 2010/08/18 Eric
+	std::cout << "StridePrefetcher::learnMiss: pe->setTag("
+		<< table->calcTag(pe->nextAddr(table))
+		<< std::endl;
+		*/
     pe->setTag(table->calcTag(pe->nextAddr(table)));
   }
 }
