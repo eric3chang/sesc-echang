@@ -31,10 +31,12 @@ VAddr TMProcessor::GetPCAddr() const
 }
 icode_ptr TMProcessor::GetPC() const
 {
+   /*
    std::cout << "proc=" << proc;
    std::cout << " proc->currentFlow()=" << proc->currentFlow();
    std::cout << " proc->currentFlow()->getInstructionPointer()=" << proc->currentFlow()->getInstructionPointer();
    std::cout << std::endl;
+   */
 	return proc->currentFlow()->getInstructionPointer();
 }
 void TMProcessor::SetPCAddr(VAddr pc)
