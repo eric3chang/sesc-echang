@@ -97,8 +97,11 @@ namespace Memory
 		void OnDirectoryBlockRequest(const ReadMsg* m, NodeID src);
 		void OnDirectoryBlockResponse(const ReadResponseMsg* m, NodeID src);
 
-	   void printPendingLocalReads(const char* fromMethod, MessageID myMessageID, const char* operation);
-      void printMessageID(const char* fromMethod, MessageID myMessageID, const char* operation = "");
+		void printPendingLocalReads(const char* fromMethod, MessageID myMessageID, const char* operation);
+		void printMessageID(const char* fromMethod, MessageID myMessageID, const char* operation = "");
+		void printPendingDirectorySharedReads(const HashMultiMap<Address, LookupData<ReadMsg> > &pendingDirectorySharedReads);
+	   void lookup(const HashMultiMap<Address, LookupData<ReadMsg> >& Map, const char* str);
+	   void printPendingLocalReads();
 
 		typedef PooledFunctionGenerator<StoredClassFunction2<Directory,const ReadMsg*, NodeID, &Directory::OnDirectoryBlockRequest> > CBOnDirectoryBlockRequest;
 		CBOnDirectoryBlockRequest cbOnDirectoryBlockRequest;

@@ -556,8 +556,11 @@ namespace Memory
 		//pendingEviction;
 		//directoryData;
 
+
+		printPendingDirectorySharedReads(pendingDirectorySharedReads);
       printPendingLocalReads("OnDirectoryBlockResponse",m->solicitingMessage,"read");
       printMessageID("OnDirectoryBlockResponse",m->solicitingMessage,"m->solicitingMessage:read");
+      printPendingLocalReads();
 
       // the address should already be placed inside either pendingDirectoryExclusiveReads or pendingDirectorySharedReads
       DebugAssert((pendingDirectoryExclusiveReads.find(m->addr) != pendingDirectoryExclusiveReads.end()) ||
@@ -807,6 +810,76 @@ namespace Memory
 		{
 			DebugFail("Connection not a valid ID");
 		}
+	}
+
+	void Directory::lookup(const HashMultiMap<Address, LookupData<ReadMsg> >& Map, const char* str)
+	{
+	   /*
+	  cout << str << ": ";
+	  std::pair<HashMultiMap<Address, LookupData<ReadMsg> >::const_iterator, map_type::const_iterator> p =
+	        Map.begin();
+	    //Map.equal_range(str);
+	  for (HashMultiMap<Address, LookupData<ReadMsg> >::const_iterator i = p.first; i != p.second; ++i)
+	  {
+	    cout << (*i).second << " ";
+	  }
+	  cout << endl;
+	  */
+	}
+
+	void Directory::printPendingDirectorySharedReads(const HashMultiMap<Address, LookupData<ReadMsg> > &pendingDirectorySharedReads)
+	{
+	   HashMultiMap<Address, LookupData<ReadMsg> >::const_iterator myIterator;
+
+
+	   myIterator = pendingDirectorySharedReads.begin();
+      cout << "Directory::printPendingDirectorySharedReads: " << endl;
+
+      int size = pendingDirectorySharedReads.size();
+
+      const ReadMsg *readMsgArray[size];
+
+      int i = 0;
+	   for (myIterator = pendingDirectorySharedReads.begin();
+	         myIterator != pendingDirectorySharedReads.end(); ++myIterator)
+	   {
+	      cout << "myIterator->first=" << myIterator->first << " ";
+	      //const ReadMsg *myReadMsg = myIterator->second.msg;
+	      readMsgArray[i] = myIterator->second.msg;
+	      i++;
+	   }
+
+	   /*
+	   for each (pair <Address, LookupData<ReadMsg> > in pendingDirectorySharedReads)
+      {
+	      ;
+      }
+      */
+	}
+
+	void Directory::printPendingLocalReads()
+	{
+      HashMap<MessageID, const ReadMsg*>::const_iterator myIterator;
+
+      myIterator = pendingLocalReads.begin();
+
+      cout << "Directory::printPendingLocalReads: ";
+
+      int size = pendingLocalReads.size();
+      cout << "size=" << size;
+
+      const ReadMsg *readMsgArray[size];
+
+      int i = 0;
+      for (myIterator = pendingLocalReads.begin();
+            myIterator != pendingLocalReads.end(); ++myIterator)
+      {
+         cout << "myIterator->first=" << myIterator->first << " ";
+         //const ReadMsg *myReadMsg = myIterator->second.msg;
+         readMsgArray[i] = myIterator->second;
+         i++;
+      }
+      true;
 	}
 
 	void Directory::printPendingLocalReads(const char* fromMethod, MessageID myMessageID, const char* operation)
