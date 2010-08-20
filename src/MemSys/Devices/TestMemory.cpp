@@ -31,6 +31,7 @@ namespace Memory
 			{
 				ReadMsg* rm = (ReadMsg*)msg;
 				replyTime = readTime;
+            std::cout << "TestMemory::RecvMsg: ID()=" << ID() << std::endl;
 				ReadResponseMsg* m = EM().CreateReadResponseMsg(ID(),msg->GeneratingPC());
 				m->addr = rm->addr;
 				m->size = rm->size;
