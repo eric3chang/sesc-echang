@@ -540,6 +540,9 @@ namespace Memory
 	}
 	void Directory::OnDirectoryBlockResponse(const ReadResponseMsg* m, NodeID src)
 	{
+      // indicates that we found this msg inside pendingDirectoryExclusiveReads
+      bool isExclusive = false;
+
 		DebugAssert(m);
 		// check that m->solicitingMessage is in pendingLocalReads before accessing it
 		// error here means that we expect there to be a message in pendingLocalReads,
@@ -571,23 +574,20 @@ namespace Memory
       }
       else if (pendingDirectoryExclusiveReads.find(m->addr) != pendingDirectoryExclusiveReads.end())
       {
+         isExclusive = true;
          ld = pendingDirectoryExclusiveReads.find(m->addr)->second;
       }
       else
       {
          DebugFail("Directory::OnDirectoryBlockResponse: address not in pendingDirectoryExclusiveReads or pendingDirectorySharedReads");
       }
-      //LookupData<ReadMsg> ld = 
-
-      //const ReadMsg* ref = 
-
+      
+      const ReadMsg* ref = ld.msg;
 
       //DebugAssert(pendingLocalReads.find(m->solicitingMessage) != pendingLocalReads.end());
-		const ReadMsg* ref = pendingLocalReads[m->solicitingMessage];
+		//const ReadMsg* ref = pendingLocalReads[m->solicitingMessage];
 
 		//ref->print();
-
-		//pendingLocalReads.
 
 		if(!m->satisfied)
 		{
@@ -609,7 +609,17 @@ namespace Memory
 		r->solicitingMessage = ref->MsgID();
 		EM().DisposeMsg(ref);
 		printPendingLocalReads("OnLocalRead", m->solicitingMessage, "pendingLocalReads.erase(m->solicitingMessage)");
-		pendingLocalReads.erase(m->solicitingMessage);
+
+		//pendingLocalReads.erase(m->solicitingMessage);
+      if (isExclusive)
+      {
+         pendingDirectoryExclusiveReads.erase(m->addr);
+      }
+      else
+      {
+         pendingDirectorySharedReads.erase(m->addr);
+      }
+
 		EM().DisposeMsg(m);
 		SendMsg(localConnectionID, r, satisfyTime + localSendTime);
 	}
