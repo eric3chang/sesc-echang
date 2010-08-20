@@ -242,6 +242,7 @@ namespace Memory
 			}
 			if(pendingDirectorySharedReads.find(m->addr) != pendingDirectorySharedReads.end())
 			{
+			   // for all the elements in pendingDirectorySharedReads where key is in the range of m->addr
 				for(HashMap<Address,LookupData<ReadMsg> >::iterator i = pendingDirectorySharedReads.equal_range(m->addr).first; i != pendingDirectorySharedReads.equal_range(m->addr).second; i++)
 				{
 					ReadResponseMsg* r = EM().CreateReadResponseMsg(getDeviceID(),i->second.msg->GeneratingPC());
@@ -698,10 +699,6 @@ namespace Memory
 	{
 	   //cout << "Directory::RecvMsg: " << mySuperGlobalInt++ << ' ' << endl;
 		DebugAssert(msg);
-      if (msg->MsgID()==3)
-      {
-         cout << "Directory::RecvMsg: received a message of msgID 3" << endl;
-      }
 		if(connectionID == localConnectionID)
 		{
 			switch(msg->Type())
