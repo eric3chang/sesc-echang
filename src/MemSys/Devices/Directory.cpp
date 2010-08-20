@@ -482,6 +482,8 @@ namespace Memory
 	void Directory::OnDirectoryBlockRequest(const ReadMsg* m, NodeID src)
 	{
 		DebugAssert(m);
+      // if the address is in pendingDirectoryExclusiveReads or
+      //    the address is in pendingDirectorySharedReads
 		if(pendingDirectoryExclusiveReads.find(m->addr) != pendingDirectoryExclusiveReads.end() ||
 		      (m->requestingExclusive && pendingDirectorySharedReads.find(m->addr) != pendingDirectorySharedReads.end()))
 		{//cannot complete the request at this time
@@ -543,9 +545,44 @@ namespace Memory
 		// error here means that we expect there to be a message in pendingLocalReads,
 		// but it turns out that the message is not there
 
+      //pendingLocalReads;
+		//pendingRemoteReads;
+		//pendingRemoteInvalidates;
+		pendingDirectorySharedReads;
+		pendingDirectoryExclusiveReads;
+		//pendingEviction;
+		//directoryData;
+
       printPendingLocalReads("OnDirectoryBlockResponse",m->solicitingMessage,"read");
       printMessageID("OnDirectoryBlockResponse",m->solicitingMessage,"m->solicitingMessage:read");
-		DebugAssert(pendingLocalReads.find(m->solicitingMessage) != pendingLocalReads.end());
+
+      // the address should already be placed inside either pendingDirectoryExclusiveReads or pendingDirectorySharedReads
+      DebugAssert((pendingDirectoryExclusiveReads.find(m->addr) != pendingDirectoryExclusiveReads.end()) ||
+		      (pendingDirectorySharedReads.find(m->addr) != pendingDirectorySharedReads.end()));
+      // but it should not exist in both.
+      // It should either not exist in pendingDirectoryExclusiveReads or pendingDirectorySharedReads
+      DebugAssert ( (pendingDirectoryExclusiveReads.find(m->addr) == pendingDirectoryExclusiveReads.end()) ||
+		      (pendingDirectorySharedReads.find(m->addr) == pendingDirectorySharedReads.end()));
+
+      LookupData <ReadMsg> ld;
+      if (pendingDirectorySharedReads.find(m->addr) != pendingDirectorySharedReads.end())
+      {
+         ld = pendingDirectorySharedReads.find(m->addr)->second;
+      }
+      else if (pendingDirectoryExclusiveReads.find(m->addr) != pendingDirectoryExclusiveReads.end())
+      {
+         ld = pendingDirectoryExclusiveReads.find(m->addr)->second;
+      }
+      else
+      {
+         DebugFail("Directory::OnDirectoryBlockResponse: address not in pendingDirectoryExclusiveReads or pendingDirectorySharedReads");
+      }
+      //LookupData<ReadMsg> ld = 
+
+      //const ReadMsg* ref = 
+
+
+      //DebugAssert(pendingLocalReads.find(m->solicitingMessage) != pendingLocalReads.end());
 		const ReadMsg* ref = pendingLocalReads[m->solicitingMessage];
 
 		//ref->print();
