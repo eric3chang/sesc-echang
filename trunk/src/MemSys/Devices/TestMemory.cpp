@@ -31,11 +31,11 @@ namespace Memory
 			{
 				ReadMsg* rm = (ReadMsg*)msg;
 				replyTime = readTime;
-            std::cout << "TestMemory::RecvMsg: deviceID()=" << ID() << std::endl;
 				ReadResponseMsg* m = EM().CreateReadResponseMsg(ID(),msg->GeneratingPC());
 				m->addr = rm->addr;
 				m->size = rm->size;
 				m->blockAttached = true;
+				m->directoryLookup = false;
 				m->exclusiveOwnership = true;
 				m->satisfied = true;
 				m->solicitingMessage = rm->MsgID();
