@@ -8,7 +8,7 @@
 
 // toggles on debug messages
 #define MEMORY_DIRECTORY_DEBUG
-//#define MEMORY_DIRECTORY_DEBUG_VERBOSE
+//#define MEMORY_DIRECTORY_DEBUG_MSG_COUNT
 
 using std::cerr;
 using std::cout;
@@ -689,7 +689,7 @@ namespace Memory
 	 */
 	void Directory::RecvMsg(const BaseMsg* msg, int connectionID)
 	{
-#ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE
+#ifdef MEMORY_DIRECTORY_DEBUG_MSG_COUNT
 	   cout << "Directory::RecvMsg: " << memoryDirectoryGlobalInt++ << ' ' << endl;
 #endif
 		DebugAssert(msg);
