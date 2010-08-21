@@ -542,14 +542,11 @@ namespace Memory
 	void Directory::OnDirectoryBlockResponse(const ReadResponseMsg* m, NodeID src)
 	{
       // indicates that we found this msg inside pendingDirectoryExclusiveReads
-      bool isExclusive = false;
+      //bool isExclusive = false;
 
 		DebugAssert(m);
-		// check that m->solicitingMessage is in pendingLocalReads before accessing it
-		// error here means that we expect there to be a message in pendingLocalReads,
-		// but it turns out that the message is not there
 
-      //pendingLocalReads;
+      pendingLocalReads;
 		//pendingRemoteReads;
 		//pendingRemoteInvalidates;
 		pendingDirectorySharedReads;
@@ -557,12 +554,12 @@ namespace Memory
 		//pendingEviction;
 		//directoryData;
 
-
-		printPendingDirectorySharedReads(pendingDirectorySharedReads);
+		printPendingDirectorySharedReads();
       printPendingLocalReads("OnDirectoryBlockResponse",m->solicitingMessage,"read");
       printMessageID("OnDirectoryBlockResponse",m->solicitingMessage,"m->solicitingMessage:read");
       printPendingLocalReads();
 
+      /*
       // the address should already be placed inside either pendingDirectoryExclusiveReads or pendingDirectorySharedReads
       DebugAssert((pendingDirectoryExclusiveReads.find(m->addr) != pendingDirectoryExclusiveReads.end()) ||
 		      (pendingDirectorySharedReads.find(m->addr) != pendingDirectorySharedReads.end()));
@@ -587,16 +584,28 @@ namespace Memory
       }
       
       const ReadMsg* ref = ld.msg;
+      */      
 
-      //DebugAssert(pendingLocalReads.find(m->solicitingMessage) != pendingLocalReads.end());
-		//const ReadMsg* ref = pendingLocalReads[m->solicitingMessage];
-
-		//ref->print();
+		// check that m->solicitingMessage is in pendingLocalReads before accessing it
+		// error here means that we expect there to be a message in pendingLocalReads,
+		// but it turns out that the message is not there
+      DebugAssert(pendingLocalReads.find(m->solicitingMessage) != pendingLocalReads.end());
+		const ReadMsg* ref = pendingLocalReads[m->solicitingMessage];
 
 		if(!m->satisfied)
 		{
          printMessageID("OnDirectoryBlockResponse",m->solicitingMessage,"m->solicitingMessage:erase");
 		   printPendingLocalReads("OnDirectoryBlockResponse",m->solicitingMessage,"erase");
+         /*
+         if (isExclusive)
+         {
+            pendingDirectoryExclusiveReads.erase(m->addr);
+         }
+         else
+         {
+            pendingDirectorySharedReads.erase(m->addr);
+         }
+         */
 			pendingLocalReads.erase(m->solicitingMessage);
 			OnLocalRead(ref);
 			return;
@@ -614,7 +623,8 @@ namespace Memory
 		EM().DisposeMsg(ref);
 		printPendingLocalReads("OnLocalRead", m->solicitingMessage, "pendingLocalReads.erase(m->solicitingMessage)");
 
-		//pendingLocalReads.erase(m->solicitingMessage);
+		pendingLocalReads.erase(m->solicitingMessage);
+      /*
       if (isExclusive)
       {
          pendingDirectoryExclusiveReads.erase(m->addr);
@@ -623,6 +633,7 @@ namespace Memory
       {
          pendingDirectorySharedReads.erase(m->addr);
       }
+      */
 
 		EM().DisposeMsg(m);
 		SendMsg(localConnectionID, r, satisfyTime + localSendTime);
@@ -824,7 +835,7 @@ namespace Memory
 	  */
 	}
 
-	void Directory::printPendingDirectorySharedReads(const HashMultiMap<Address, LookupData<ReadMsg> > &pendingDirectorySharedReads)
+	void Directory::printPendingDirectorySharedReads()
 	{
 	   HashMultiMap<Address, LookupData<ReadMsg> >::const_iterator myIterator;
 
@@ -834,7 +845,7 @@ namespace Memory
 
       int size = pendingDirectorySharedReads.size();
 
-      const ReadMsg *readMsgArray[size];
+      ReadMsg const** readMsgArray = new ReadMsg const*[size];
 
       int i = 0;
 	   for (myIterator = pendingDirectorySharedReads.begin();
@@ -845,7 +856,8 @@ namespace Memory
 	      readMsgArray[i] = myIterator->second.msg;
 	      i++;
 	   }
-
+      delete [] readMsgArray;
+      readMsgArray = NULL;
 	   /*
 	   for each (pair <Address, LookupData<ReadMsg> > in pendingDirectorySharedReads)
       {
@@ -865,7 +877,7 @@ namespace Memory
       int size = pendingLocalReads.size();
       cout << "size=" << size;
 
-      const ReadMsg *readMsgArray[size];
+      ReadMsg const ** readMsgArray = new ReadMsg const *[size];
 
       int i = 0;
       for (myIterator = pendingLocalReads.begin();
@@ -876,7 +888,9 @@ namespace Memory
          readMsgArray[i] = myIterator->second;
          i++;
       }
-      true;
+      
+      delete [] readMsgArray;
+      readMsgArray = NULL;
 	}
 
 	void Directory::printPendingLocalReads(const char* fromMethod, MessageID myMessageID, const char* operation)

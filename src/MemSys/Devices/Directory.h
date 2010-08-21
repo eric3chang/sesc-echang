@@ -99,7 +99,7 @@ namespace Memory
 
 		void printPendingLocalReads(const char* fromMethod, MessageID myMessageID, const char* operation);
 		void printMessageID(const char* fromMethod, MessageID myMessageID, const char* operation = "");
-		void printPendingDirectorySharedReads(const HashMultiMap<Address, LookupData<ReadMsg> > &pendingDirectorySharedReads);
+		void printPendingDirectorySharedReads();
 	   void lookup(const HashMultiMap<Address, LookupData<ReadMsg> >& Map, const char* str);
 	   void printPendingLocalReads();
 
