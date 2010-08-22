@@ -18,9 +18,9 @@ namespace Memory
 		virtual MsgType Type() const { return mt_Network; }
 
    protected:
-      virtual void print() const
+		virtual void print(DeviceID destinationDeviceID) const
 		{
-		   BaseMsg::print();
+		   BaseMsg::print(destinationDeviceID);
 		   cout << " sourceNode=" << sourceNode
             << "destinationNode=" << destinationNode
 		   ;

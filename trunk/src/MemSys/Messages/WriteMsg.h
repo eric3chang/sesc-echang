@@ -28,9 +28,9 @@ namespace Memory
 		}
 
    protected:
-      virtual void print() const
+      virtual void print(DeviceID destinationDeviceID) const
 		{
-		   BaseMsg::print();
+		   BaseMsg::print(destinationDeviceID);
 		   cout << " addr=" << addr
 		   ;
 		}

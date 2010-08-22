@@ -8,7 +8,7 @@
 #include <algorithm>
 
 // toggles debug output
-#define MEMORY_MOESICACHE_DEBUG
+#define MEMORY_MOESI_CACHE_DEBUG
 
 namespace Memory
 {
@@ -792,49 +792,49 @@ namespace Memory
 			switch(msg->Type())
 			{
 			case(mt_Read):
-         #ifdef MEMORY_MOESICACHE_DEBUG
+         #ifdef MEMORY_MOESI_CACHE_DEBUG
             printDebugInfo("OnLocalRead", *msg, "read");
          #endif
 				OnLocalRead((const ReadMsg*)msg);
 				break;
 			case(mt_Write):
-         #ifdef MEMORY_MOESICACHE_DEBUG
+         #ifdef MEMORY_MOESI_CACHE_DEBUG
             printDebugInfo("OnLocalWrite", *msg, "read");
          #endif
 				OnLocalWrite((const WriteMsg*)msg);
 				break;
 			case(mt_Invalidate):
-         #ifdef MEMORY_MOESICACHE_DEBUG
+         #ifdef MEMORY_MOESI_CACHE_DEBUG
             printDebugInfo("OnLocalInvalidate", *msg, "read");
          #endif
 				OnLocalInvalidate((const InvalidateMsg*)msg);
 				break;
 			case(mt_Eviction):
-         #ifdef MEMORY_MOESICACHE_DEBUG
+         #ifdef MEMORY_MOESI_CACHE_DEBUG
             printDebugInfo("OnLocalEviction", *msg, "read");
          #endif
 				OnLocalEviction((const EvictionMsg*)msg);
 				break;
 			case(mt_ReadResponse):
-         #ifdef MEMORY_MOESICACHE_DEBUG
+         #ifdef MEMORY_MOESI_CACHE_DEBUG
             printDebugInfo("OnLocalReadResponse", *msg, "read");
          #endif
 				OnLocalReadResponse((const ReadResponseMsg*)msg);
 				break;
 			case(mt_WriteResponse):
-         #ifdef MEMORY_MOESICACHE_DEBUG
+         #ifdef MEMORY_MOESI_CACHE_DEBUG
             printDebugInfo("OnLocalWriteResponse", *msg, "read");
          #endif
 				OnLocalWriteResponse((const WriteResponseMsg*)msg);
 				break;
 			case(mt_InvalidateResponse):
-         #ifdef MEMORY_MOESICACHE_DEBUG
+         #ifdef MEMORY_MOESI_CACHE_DEBUG
             printDebugInfo("OnLocalInvalidateResponse", *msg, "read");
          #endif
 				OnLocalInvalidateResponse((const InvalidateResponseMsg*)msg);
 				break;
 			case(mt_EvictionResponse):
-         #ifdef MEMORY_MOESICACHE_DEBUG
+         #ifdef MEMORY_MOESI_CACHE_DEBUG
             printDebugInfo("OnLocalEvictionResponse", *msg, "read");
          #endif
 				OnLocalEvictionResponse((const EvictionResponseMsg*)msg);
@@ -848,49 +848,49 @@ namespace Memory
 			switch(msg->Type())
 			{
 			case(mt_Read):
-         #ifdef MEMORY_MOESICACHE_DEBUG
+         #ifdef MEMORY_MOESI_CACHE_DEBUG
             printDebugInfo("OnRemoteRead", *msg, "read");
          #endif
 				OnRemoteRead((const ReadMsg*)msg);
 				break;
 			case(mt_Write):
-         #ifdef MEMORY_MOESICACHE_DEBUG
+         #ifdef MEMORY_MOESI_CACHE_DEBUG
             printDebugInfo("OnRemoteWrite", *msg, "read");
          #endif
 				OnRemoteWrite((const WriteMsg*)msg);
 				break;
 			case(mt_Invalidate):
-         #ifdef MEMORY_MOESICACHE_DEBUG
+         #ifdef MEMORY_MOESI_CACHE_DEBUG
             printDebugInfo("OnRemoteInvalidate", *msg, "read");
          #endif
 				OnRemoteInvalidate((const InvalidateMsg*)msg);
 				break;
 			case(mt_Eviction):
-         #ifdef MEMORY_MOESICACHE_DEBUG
+         #ifdef MEMORY_MOESI_CACHE_DEBUG
             printDebugInfo("OnRemoteEviction", *msg, "read");
          #endif
 				OnRemoteEviction((const EvictionMsg*)msg);
 				break;
 			case(mt_ReadResponse):
-         #ifdef MEMORY_MOESICACHE_DEBUG
+         #ifdef MEMORY_MOESI_CACHE_DEBUG
             printDebugInfo("OnRemoteReadResponse", *msg, "read");
          #endif
 				OnRemoteReadResponse((const ReadResponseMsg*)msg);
 				break;
 			case(mt_WriteResponse):
-         #ifdef MEMORY_MOESICACHE_DEBUG
+         #ifdef MEMORY_MOESI_CACHE_DEBUG
             printDebugInfo("OnRemoteWriteResponse", *msg, "read");
          #endif
 				OnRemoteWriteResponse((const WriteResponseMsg*)msg);
 				break;
 			case(mt_InvalidateResponse):
-         #ifdef MEMORY_MOESICACHE_DEBUG
+         #ifdef MEMORY_MOESI_CACHE_DEBUG
             printDebugInfo("OnRemoteInvalidateResponse", *msg, "read");
          #endif
 				OnRemoteInvalidateResponse((const InvalidateResponseMsg*)msg);
 				break;
 			case(mt_EvictionResponse):
-         #ifdef MEMORY_MOESICACHE_DEBUG
+         #ifdef MEMORY_MOESI_CACHE_DEBUG
             printDebugInfo("OnRemoteEvictionResponse", *msg, "read");
          #endif
 				OnRemoteEvictionResponse((const EvictionResponseMsg*)msg);
