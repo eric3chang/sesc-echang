@@ -65,10 +65,7 @@ namespace Memory
       void printBaseMemDeviceDebugInfo(const char* childClass,
             const char* fromMethod, const BaseMsg &myBaseMsg, const char* operation)
       {
-         std::cout
-            << "devID=" << std::setw(2) << deviceID << ":"
-         ;
-         myBaseMsg.print();
+         myBaseMsg.print(deviceID);
          std::cout
             << " " << childClass << "::" << fromMethod
             << " " << operation

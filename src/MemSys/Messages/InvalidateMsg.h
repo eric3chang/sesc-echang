@@ -13,9 +13,9 @@ namespace Memory
 		virtual size_t MsgSize() const { return 1 + sizeof(Address); }
 		virtual MsgType Type() const { return mt_Invalidate; }
    protected:
-      virtual void print() const
+      virtual void print(DeviceID destinationDeviceID) const
 		{
-		   BaseMsg::print();
+		   BaseMsg::print(destinationDeviceID);
 		   cout << " addr=" << addr
 		   ;
 		}

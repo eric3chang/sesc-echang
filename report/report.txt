@@ -5,17 +5,6 @@
 
 [[Section 1 Comparing different directory-based cache coherence protocols.]]
 
-The user-defined values could be contained in the configuration file or passed
-on the command-line like the other parameters. The configuration file is read
-through OSSim.cpp file under the libcore folder. It is read into a SescConf
-variable. I will design the SimpleDirectoryController in a way so that most of
-the common parameters will be changeable through the header file. The most
-obvious parameter that comes to mind is the directory size parameter, but more
-options will be added as necessary to increase the flexibility of the
-simulator. Some of the parameters that will need to be tracked are how many
-accesses to the directory are being made, how many reads and writes to the
-directory, and so on.
-
 [[Section 01-2]]
 
 "In a coherent multiprocessor, the caches provide both migration and replication of shared data items" (Hennessey 207). It is important for the architect of the processor to design these features into the processor as to allow the programmer to take advantage of the speedup available in having multiple data. Having multiple data allows for multiple reads at the same time.
@@ -108,6 +97,19 @@ Network
 
 The SESC simulator supports both a regular mode, where everything is simulated, and a rabbit mode, which only simulates the timing. Rabbit mode is about 1000 times faster than the regular mode, but since the Memory System is implemented in the regular mode, most of the programs are run in that mode. {Since the memory portion of the simulator is stored in the non-rabbit mode, we run all our applications out of rabbit mode.} (from SESC documents).
 
+The user-defined values could be contained in the configuration file or passed
+on the command-line like the other parameters. The configuration file is read
+through OSSim.cpp file under the libcore folder. It is read into a SescConf
+variable. I will design the SimpleDirectoryController in a way so that most of
+the common parameters will be changeable through the header file. The most
+obvious parameter that comes to mind is the directory size parameter, but more
+options will be added as necessary to increase the flexibility of the
+simulator. Some of the parameters that will need to be tracked are how many
+accesses to the directory are being made, how many reads and writes to the
+directory, and so on.
+
+
+
 [[Section 06.xx MOESI Cache]]
 The MOESI protocol was used in both L1 and L2 cache. This protocol was chosen because it contains the most states. The advantages to that is that it reduces the traffic going across the network. The "Owned" state allows dirty lines to be shared quickly (Wikipedia MOESI). The disadvantage of this protocol is that it uses the most amount of space to store this information, since it needs to store more states, compared to MESI, MOSI, or MSI protocols.
 
@@ -133,6 +135,12 @@ O : {P-owner} {Shared P}
 in the bit-vector case, we can have an extra entry to store the address of the owner. Or we can indicate owner using an extra bit in each cache line. We can also keep owner at the top of the list, to indicate an owner.
 
 Keeping track of the owner could be done by either adding a bit to each directory entry, or making sure the owner is on the very top, or simply not keeping track of it at all and using S for it. In the last method, the directory that contains the owner would be responsible for updating other directories that are requesting for the value. However, this would be somewhat difficult, because any request to the directory would return the old value from the memory. In a snoopy protocol, this is not a problem, since the owner can just intercept a read request. However, in a directory-based cache-coherence protocol, the owner directory cannot see all the requests. Therefore, the directory should keep track of the owner somehow.
+
+[[Section 06.xx.2 Scenarios for the Directory]]
+Read miss message from CPU when when block is not held in any cache line:
+OnLocalRead, OnDirectoryBlockRequest, OnRemoteRead, OnDirectoryBlockResponse
+
+invalidate message comes from the network:
 
 
 [[Section 07.1 Simple C Program]]

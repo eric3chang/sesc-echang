@@ -25,16 +25,6 @@ namespace Memory
 		virtual size_t MsgSize() const { return sizeof(Address) + 1; }
 		virtual MsgType Type() const { return mt_Read; }
 
-		virtual void print() const
-		{
-		   BaseMsg::print();
-		   cout << " addr=" << addr
-		         << " requestingExclusive=" << requestingExclusive
-		         << " alreadyHasBlock=" << alreadyHasBlock
-		         << " directoryLookup=" << directoryLookup
-		   ;
-		}
-
 		void SignalComplete() const
 		{
 			if(onCompletedCallback)
@@ -42,5 +32,16 @@ namespace Memory
 				onCompletedCallback->Call();
 			}
 		}
+	protected:
+		virtual void print(DeviceID destinationDeviceID) const
+		{
+		   BaseMsg::print(destinationDeviceID);
+		   cout << " addr=" << addr
+		         << " requestingExclusive=" << requestingExclusive
+		         << " alreadyHasBlock=" << alreadyHasBlock
+		         << " directoryLookup=" << directoryLookup
+		   ;
+		}
+
 	};
 }
