@@ -16,5 +16,14 @@ namespace Memory
 		virtual bool IsResponse() const { return payloadMsg->IsResponse(); }
 		virtual size_t MsgSize() const { return payloadMsg->MsgSize() + 4; }
 		virtual MsgType Type() const { return mt_Network; }
+
+   protected:
+      virtual void print() const
+		{
+		   BaseMsg::print();
+		   cout << " sourceNode=" << sourceNode
+            << "destinationNode=" << destinationNode
+		   ;
+		}
 	};
 }

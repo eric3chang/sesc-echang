@@ -26,5 +26,13 @@ namespace Memory
 				onCompletedCallback->Call();
 			}
 		}
+
+   protected:
+      virtual void print() const
+		{
+		   BaseMsg::print();
+		   cout << " addr=" << addr
+		   ;
+		}
 	};
 }

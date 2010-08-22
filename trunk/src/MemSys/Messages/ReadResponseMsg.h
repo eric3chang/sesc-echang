@@ -23,5 +23,17 @@ namespace Memory
 		virtual bool IsResponse() const { return true; }
 		virtual size_t MsgSize() const { return 1 + sizeof(Address) + (blockAttached ? size : 0); }
 		virtual MsgType Type() const { return mt_ReadResponse; }
+   protected:
+      virtual void print() const
+		{
+		   BaseMsg::print();
+		   cout << " addr=" << addr
+            << "satisfied=" << satisfied
+		      << " blockAttached=" << blockAttached
+            << " exclusiveOwnership=" << exclusiveOwnership
+            << " solicitingMessage=" << solicitingMessage
+		   ;
+		}
+
 	};
 }

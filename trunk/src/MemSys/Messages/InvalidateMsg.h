@@ -12,5 +12,12 @@ namespace Memory
 		virtual bool IsResponse() const { return false; }
 		virtual size_t MsgSize() const { return 1 + sizeof(Address); }
 		virtual MsgType Type() const { return mt_Invalidate; }
+   protected:
+      virtual void print() const
+		{
+		   BaseMsg::print();
+		   cout << " addr=" << addr
+		   ;
+		}
 	};
 }
