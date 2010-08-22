@@ -136,6 +136,22 @@ in the bit-vector case, we can have an extra entry to store the address of the o
 
 Keeping track of the owner could be done by either adding a bit to each directory entry, or making sure the owner is on the very top, or simply not keeping track of it at all and using S for it. In the last method, the directory that contains the owner would be responsible for updating other directories that are requesting for the value. However, this would be somewhat difficult, because any request to the directory would return the old value from the memory. In a snoopy protocol, this is not a problem, since the owner can just intercept a read request. However, in a directory-based cache-coherence protocol, the owner directory cannot see all the requests. Therefore, the directory should keep track of the owner somehow.
 
+The (remoteNode == nodeID) check in these places [and you'll see a  
+similar check in a few places] is done to prevent an access where the  
+sending node is also the home node or destination node, from emitting  
+a network message addressed to itself.
+
+For example, given if processor 1 requests a block A, where processor  
+1 is block A's home node, the pattern I described to you earlier would  
+be to send a network message from processor 1 [requester] to processor  
+1 [home node].  Since this is pretty pointless, and just results in  
+needless network traffic, I perform a check to see if the destination  
+for a message is the same as the source of the message, previous to  
+sending the network msg.  If this is the case, it just forwards it  
+straight on to the function that would handle it on the local  
+directory node [with a delay added for lookup or whatever], rather  
+than emitting something on the network.
+
 [[Section 06.xx.2 Scenarios for the Directory]]
 Read miss message from CPU when when block is not held in any cache line:
 OnLocalRead, OnDirectoryBlockRequest, OnRemoteRead, OnDirectoryBlockResponse
