@@ -28,11 +28,11 @@ namespace Memory
 		virtual void print() const
 		{
 		   BaseMsg::print();
-		   cout << "addr=" << addr
+		   cout << " addr=" << addr
 		         << " requestingExclusive=" << requestingExclusive
 		         << " alreadyHasBlock=" << alreadyHasBlock
 		         << " directoryLookup=" << directoryLookup
-		         << endl;
+		   ;
 		}
 
 		void SignalComplete() const

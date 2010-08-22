@@ -2,9 +2,14 @@
 #include "../MSTypes.h"
 #include "../Debug.h"
 #include <iostream>
+#include <iomanip>
+
+// toggle debug messages
+//#define MEMORY_BASEMSG_DEBUG
 
 using std::cout;
 using std::endl;
+using std::setw;
 
 namespace Memory
 {
@@ -42,22 +47,21 @@ namespace Memory
 
 		virtual void print() const
 		{
-		   cout << "msgID=" << msgID <<
-		         " devID=" << deviceID <<
-		         " generatingPC=" << generatingPC <<
-		         endl;
+		   cout
+		      << " msgID=" << setw(6) << msgID
+		      << " devID=" << setw(2) << deviceID
+		      << " generatingPC=" << generatingPC
+		   ;
 		}
 
 		void SetIDInfo(MessageID msgID, DeviceID devID, Address generatingPC)
 		{
 			DebugAssert(msgID);
-			/*
-			std::cout << "BaseMsg::SetIDInfo: " <<
-			      "msgID=" << msgID <<
-			      " devID=" << devID <<
-			      " generatingPC=" << generatingPC << std::endl;
-			      */
-			//std::cout << "BaseMsg::SetIDInnfo: msgID=" << msgID << std::endl;
+#ifdef MEMORY_BASEMSG_DEBUG
+			std::cout << "BaseMsg::SetIDInfo: msgID=" << msgID
+			      << " devID=" << devID
+			      <<" generatingPC=" << generatingPC << std::endl;
+#endif
 			this->msgID = msgID;
 			this->deviceID = devID;
 			this->generatingPC = generatingPC;

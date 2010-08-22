@@ -154,6 +154,9 @@ namespace Memory
 		void OnRemoteInvalidateResponse(const InvalidateResponseMsg* m);
 		void OnLocalEvictionResponse(const EvictionResponseMsg* m);
 		void OnRemoteEvictionResponse(const EvictionResponseMsg* m);
+
+		// debug functions
+      void printDebugInfo(const char* fromMethod, const BaseMsg &myMessage, const char* operation);
 	public:
 		virtual ~MOESICache();
 		virtual void Initialize(EventManager* em, const RootConfigNode& config, const std::vector<Connection*>& connectionSet);

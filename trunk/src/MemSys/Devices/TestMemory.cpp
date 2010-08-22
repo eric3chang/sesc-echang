@@ -25,6 +25,7 @@ namespace Memory
 		DebugAssert(msg);
 		TimeDelta replyTime = 0;
 		BaseMsg* reply = NULL;
+
 		switch(msg->Type())
 		{
 		case(mt_Read):
@@ -66,8 +67,42 @@ namespace Memory
 				break;
 			}
 		case(mt_Invalidate):
-			DebugFail("Main memory being told to invalidate");
+         {
+			   DebugFail("TestMemory::RecvMsg: Main memory being told to invalidate");
+			   break;
+         }
+      case(mt_EvictionResponse):
+         {
+            DebugFail("TestMemory::RecvMsg: Main memory received eviction response message");
+            break;
+         }
+      case(mt_InvalidateResponse):
+         {
+            DebugFail("TestMemory::RecvMsg: Main memory received invalidate response message");
+            break;
+         }
+      case(mt_Network):
+         {
+            DebugFail("TestMemory::RecvMsg: Main memory received network message");
+            break;
+         }
+      case(mt_ReadResponse):
+         {
+            DebugFail("TestMemory::RecvMsg: Main memory received read response message");
+            break;
+         }
+      case(mt_WriteResponse):
+         {
+            DebugFail("TestMemory::RecvMsg: Main memory received write response message");
+            break;
+         }
+      default:
+         {
+            DebugFail("TestMemory::RecvMsg: Main memory received message with unknown message type");
+            break;
+         }
 		}
+		// end switch(msg->Type())
 		if(reply)
 		{
 			DebugAssert(reply->IsResponse());

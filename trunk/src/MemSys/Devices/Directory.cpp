@@ -7,7 +7,7 @@
 #include "../Connection.h"
 
 // toggles on debug messages
-#define MEMORY_DIRECTORY_DEBUG
+//#define MEMORY_DIRECTORY_DEBUG
 //#define MEMORY_DIRECTORY_DEBUG_MSG_COUNT
 
 using std::cerr;
@@ -41,10 +41,14 @@ namespace Memory
 	void Directory::PerformDirectoryFetch(Address a)
 	{
       // check that Address a is in pendingDirectorySharedReads or pendingDirectoryExclusiveReads
-		DebugAssert(pendingDirectorySharedReads.find(a) != pendingDirectorySharedReads.end() || pendingDirectoryExclusiveReads.find(a) != pendingDirectoryExclusiveReads.end());
+		DebugAssert(pendingDirectorySharedReads.find(a) != pendingDirectorySharedReads.end()
+		      || pendingDirectoryExclusiveReads.find(a) != pendingDirectoryExclusiveReads.end());
       // check that Address a is not in both pendingDirectorySharedReads and pendingDirectoryExclusiveReads
-		DebugAssert(pendingDirectorySharedReads.find(a) == pendingDirectorySharedReads.end() || pendingDirectoryExclusiveReads.find(a) == pendingDirectoryExclusiveReads.end());
-		ReadMsg* m = (ReadMsg*)EM().ReplicateMsg((pendingDirectorySharedReads.find(a) != pendingDirectorySharedReads.end())?pendingDirectorySharedReads.find(a)->second.msg:pendingDirectoryExclusiveReads[a].msg);
+		DebugAssert(pendingDirectorySharedReads.find(a) == pendingDirectorySharedReads.end()
+		      || pendingDirectoryExclusiveReads.find(a) == pendingDirectoryExclusiveReads.end());
+		ReadMsg* m = (ReadMsg*)EM().ReplicateMsg(
+		      (pendingDirectorySharedReads.find(a) != pendingDirectorySharedReads.end())
+		      ?pendingDirectorySharedReads.find(a)->second.msg : pendingDirectoryExclusiveReads[a].msg);
 		m->directoryLookup = false;
 		m->onCompletedCallback = NULL;
 		m->alreadyHasBlock = false;
@@ -252,7 +256,7 @@ namespace Memory
 	{
 		DebugAssert(m);
 #ifdef MEMORY_DIRECTORY_DEBUG
-		cout << "Directory::OnRemoteReadResponse: m->MsgId()=" << m->MsgID() << endl;
+		printDebugInfo("OnRemoteReadResponse", m->MsgID(), "read");
 #endif
 		DebugAssert(!m->directoryLookup);
 		DebugAssert(pendingDirectorySharedReads.find(m->addr) != pendingDirectorySharedReads.end() || pendingDirectoryExclusiveReads.find(m->addr) != pendingDirectoryExclusiveReads.end());
@@ -383,11 +387,17 @@ namespace Memory
 	void Directory::OnRemoteWriteResponse(const WriteResponseMsg* m, NodeID src)
 	{
 		DebugAssert(m);
+#ifdef MEMORY_DIRECTORY_DEBUG
+		printDebugInfo("OnRemoteWriteResponse", m->MsgID(), "disponse message m");
+#endif
 		EM().DisposeMsg(m);
 	}
 	void Directory::OnRemoteEviction(const EvictionMsg* m, NodeID src)
 	{
 		DebugAssert(m);
+#ifdef MEMORY_DIRECTORY_DEBUG
+      printDebugInfo("OnRemoteEviction", m->MsgID(), "read");
+#endif
 		DebugAssert(directoryData.find(m->addr) != directoryData.end());
 		BlockData& b = directoryData[m->addr];
 		if(b.owner == src)
@@ -434,6 +444,9 @@ namespace Memory
 	void Directory::OnRemoteEvictionResponse(const EvictionResponseMsg* m, NodeID src)
 	{
 		DebugAssert(m);
+#ifdef MEMORY_DIRECTORY_DEBUG
+      printDebugInfo("OnRemoteEvictionResponse", m->MsgID(), "pendingEviction.erase(m->addr)");
+#endif
 		DebugAssert(pendingEviction.find(m->addr) != pendingEviction.end());
 		pendingEviction.erase(m->addr);
 		SendMsg(localConnectionID, m, localSendTime);
@@ -441,6 +454,9 @@ namespace Memory
 	void Directory::OnRemoteInvalidate(const InvalidateMsg* m, NodeID src)
 	{
 		DebugAssert(m);
+#ifdef MEMORY_DIRECTORY_DEBUG
+      printDebugInfo("OnRemoteInvalidate", m->MsgID(), "pendingRemoteInvalidates.insert(m->addr)");
+#endif
 		DebugAssert(pendingRemoteInvalidates.find(m->addr) == pendingRemoteInvalidates.end());
 		pendingRemoteInvalidates[m->addr].sourceNode = src;
 		pendingRemoteInvalidates[m->addr].msg = m;
@@ -449,6 +465,9 @@ namespace Memory
 	void Directory::OnRemoteInvalidateResponse(const InvalidateResponseMsg* m, NodeID src)
 	{
 		DebugAssert(m);
+#ifdef MEMORY_DIRECTORY_DEBUG
+      printDebugInfo("OnRemoteInvalidateResponse", m->MsgID(), "read");
+#endif
 		DebugAssert(directoryData.find(m->addr) != directoryData.end());
 		BlockData& b = directoryData[m->addr];
 		DebugAssert(!m->blockAttached || b.owner == src);
@@ -515,8 +534,10 @@ namespace Memory
 	void Directory::OnDirectoryBlockRequest(const ReadMsg* m, NodeID src)
 	{
 		DebugAssert(m);
-      // if the address is in pendingDirectoryExclusiveReads or
-      //    the address is in pendingDirectorySharedReads
+#ifdef MEMORY_DIRECTORY_DEBUG
+		printDebugInfo("OnDirectoryBlockRequest", m->MsgID(), "read");
+#endif
+      // if the address is in pendingDirectoryExclusiveReads or in pendingDirectorySharedReads
 		if(pendingDirectoryExclusiveReads.find(m->addr) != pendingDirectoryExclusiveReads.end() ||
 		      (m->requestingExclusive && pendingDirectorySharedReads.find(m->addr) != pendingDirectorySharedReads.end()))
 		{//cannot complete the request at this time
@@ -869,11 +890,6 @@ namespace Memory
 
 	void Directory::printDebugInfo(const char* fromMethod, MessageID myMessageID, const char* operation)
 	{
-	   if (nodeID == 1)
-	   {
-	      cout << "\t\t\t\t\t\t\t";
-	   }
-	   cout << "Directory::" << fromMethod << ": nodeID=" << nodeID
-	         << " " << operation << " msgID=" << (MessageID) myMessageID << endl;
+	   printBaseMemDeviceDebugInfo("Directory", fromMethod, myMessageID, operation);
 	}
 }
