@@ -153,7 +153,8 @@ template <class Key, class Val, class Hash = HashInteropReplacement<Key>, class 
          //myKeyArray = NULL;
          return myValArray;
       }
-   };
+   };  
+   
 template <typename T>
 const T* convertVectorToArray(std::vector<T>& myVector)
 {
