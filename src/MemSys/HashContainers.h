@@ -13,65 +13,65 @@
 template <class Key, class Hash, class Compare>
 class HashTraitsInteropReplacement
 {
-	Hash h;
-	Compare c;
+   Hash h;
+   Compare c;
 public:
-	static const size_t bucket_size = 4;
-	static const size_t min_buckets = 8;
-	HashTraitsInteropReplacement( )
-	{}
-	HashTraitsInteropReplacement( Compare pred )
-		: c(pred)
-	{}
-	size_t operator( )( const Key& k ) const
-	{
-		return h(k);
-	}
-	bool operator( )(const Key& k1, const Key& k2) const
-	{
-		return c(k1,k2);
-	}
+   static const size_t bucket_size = 4;
+   static const size_t min_buckets = 8;
+   HashTraitsInteropReplacement( )
+   {}
+   HashTraitsInteropReplacement( Compare pred )
+      : c(pred)
+   {}
+   size_t operator( )( const Key& k ) const
+   {
+      return h(k);
+   }
+   bool operator( )(const Key& k1, const Key& k2) const
+   {
+      return c(k1,k2);
+   }
 };
 
 template <class T>
 class HashInteropReplacement
 {
 public:
-	size_t operator()(const T& v) const
-	{
-		return (size_t) v;
-	}
+   size_t operator()(const T& v) const
+   {
+      return (size_t) v;
+   }
 };
 
 template <>
 class HashInteropReplacement<char*>
 {
 public:
-	size_t operator()(const char* v) const
-	{
-		return (size_t)(v[0]);
-	}
+   size_t operator()(const char* v) const
+   {
+      return (size_t)(v[0]);
+   }
 };
 
 template <>
 class HashInteropReplacement<std::string>
 {
 public:
-	size_t operator()(const std::string& s) const
-	{
-		return (size_t)(s[0]) + s.size();
-	}
+   size_t operator()(const std::string& s) const
+   {
+      return (size_t)(s[0]) + s.size();
+   }
 };
 
 template <class Key, class Compare> class EqualKeyReplacement
 {
-	Compare lessThan;
+   Compare lessThan;
 public:
-	bool operator() (const Key& k1, const Key& k2) const
-	{
-		// simulate equals(k1,k2) using the Comparator
-		return !(lessThan(k1,k2) || lessThan(k2,k1));
-	}
+   bool operator() (const Key& k1, const Key& k2) const
+   {
+      // simulate equals(k1,k2) using the Comparator
+      return !(lessThan(k1,k2) || lessThan(k2,k1));
+   }
 };
 
 #if defined (WIN32) || defined (_WIN32)
@@ -83,9 +83,93 @@ template<class Key,class Val,class Hash=HashInteropReplacement<Key>,class Compar
    class HashMultiMap:public stdext::hash_multimap<Key,Val,HashTraitsInteropReplacement<Key,Hash,Comparator>>{};
 #else
 template <class Key, class Val, class Hash = HashInteropReplacement<Key>, class Comparator = std::less<Key> >
-   class HashMap : public __gnu_cxx::hash_map<Key, Val, Hash, EqualKeyReplacement <Key,Comparator> >{};
+   class HashMap : public __gnu_cxx::hash_map<Key, Val, Hash, EqualKeyReplacement <Key,Comparator> >
+   {
+   public:
+      const Val* convertToArray()
+      {
+         int i;
+         typename HashMap<Key,Val>::const_iterator myIterator;
+         Val * myValArray;
+
+         myValArray = new Val[this->size()];
+
+         i = 0;
+         for (myIterator=this->begin(); myIterator!=this->end(); ++myIterator)
+         {
+            myValArray[i] = myIterator->second;
+            i++;
+         }
+
+         //delete [] myKeyArray;
+         //myKeyArray = NULL;
+         return myValArray;
+      }
+   };
 template <class Key, class Hash = HashInteropReplacement<Key>, class Comparator = std::less<Key> >
-   class HashSet : public  __gnu_cxx::hash_set<Key, Hash, EqualKeyReplacement <Key,Comparator> >{};
+   class HashSet : public  __gnu_cxx::hash_set<Key, Hash, EqualKeyReplacement <Key,Comparator> >
+   {
+   public:
+      const Key* convertToArray()
+      {
+         int i;
+         typename HashSet<Key>::const_iterator myIterator;
+         Key * myKeyArray;
+
+         myKeyArray = new Key[this->size()];
+
+         i = 0;
+         for (myIterator=this->begin(); myIterator!=this->end(); ++myIterator)
+         {
+            myKeyArray[i] = *myIterator;
+            i++;
+         }
+
+         //delete [] myKeyArray;
+         //myKeyArray = NULL;
+         return myKeyArray;
+      }
+   };
 template <class Key, class Val, class Hash = HashInteropReplacement<Key>, class Comparator = std::less<Key> >
-   class HashMultiMap:public __gnu_cxx::hash_multimap<Key,Val,Hash,EqualKeyReplacement<Key,Comparator> >{};
+   class HashMultiMap:public __gnu_cxx::hash_multimap<Key,Val,Hash,EqualKeyReplacement<Key,Comparator> >
+   {
+   public:
+      const Val* convertToArray()
+      {
+         int i;
+         typename HashMap<Key,Val>::const_iterator myIterator;
+         Val * myValArray;
+
+         myValArray = new Val[this->size()];
+
+         i = 0;
+         for (myIterator=this->begin(); myIterator!=this->end(); ++myIterator)
+         {
+            myValArray[i] = myIterator->second;
+            i++;
+         }
+
+         //delete [] myKeyArray;
+         //myKeyArray = NULL;
+         return myValArray;
+      }
+   };
+template <typename T>
+const T* convertVectorToArray(std::vector<T>& myVector)
+{
+   typename std::vector<T>::const_iterator myIterator;
+   T* myTArray;
+   int i;
+
+   myTArray = new T[myVector.size()];
+
+   i = 0;
+   for (myIterator = myVector.begin(); myIterator != myVector.end(); ++myIterator)
+   {
+      myTArray[i] = *myIterator;
+      i++;
+   }
+
+   return myTArray;
+}
 #endif
