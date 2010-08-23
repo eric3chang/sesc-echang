@@ -1,6 +1,7 @@
 #pragma once
 #include "../MSTypes.h"
 #include "../StoredFunctionCall.h"
+#include "../HashContainers.h"
 #include <iostream>
 #include <iomanip>
 #include <vector>
