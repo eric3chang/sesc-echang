@@ -618,6 +618,13 @@ namespace Memory
 	}
 	void MOESICache::OnLocalInvalidateResponse(const InvalidateResponseMsg* m)
 	{
+#ifdef WIN32
+      waitingOnBlockUnlock;
+      waitingOnSetUnlock;
+      waitingOnRemoteReads;
+      pendingEviction;
+      pendingInvalidate;
+#elif defined linux
 	   StoredFunctionBase *const * waitingOnBlockUnlockArray =
 	      waitingOnBlockUnlock.convertToArray();
       //std::vector<StoredFunctionBase*> waitingOnSetUnlock;
@@ -626,6 +633,9 @@ namespace Memory
       const BlockState * pendingEvictionArray = pendingEviction.convertToArray();
       const InvalidateMsg *const * pendingInvalidateArray =
             pendingInvalidate.convertToArray();
+      StoredFunctionBase* const * waitingOnSetUnlockArray =
+         convertVectorToArray<StoredFunctionBase*>(waitingOnSetUnlock);
+#endif
 
 		DebugAssert(m);
 		AddrTag tag = CalcTag(m->addr);
