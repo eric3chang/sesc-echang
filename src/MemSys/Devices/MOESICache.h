@@ -157,6 +157,7 @@ namespace Memory
 
 		// debug functions
       void printDebugInfo(const char* fromMethod, const BaseMsg &myMessage, const char* operation);
+      void printDebugInfo(const char* fromMethod, const AddrTag tag, const char* operation);
 	public:
 		virtual ~MOESICache();
 		virtual void Initialize(EventManager* em, const RootConfigNode& config, const std::vector<Connection*>& connectionSet);

@@ -9,6 +9,12 @@
 
 // toggles debug output
 #define MEMORY_MOESI_CACHE_DEBUG
+#define MEMORY_MOESI_CACHE_DEBUG_PENDING_EVICTION
+#define MEMORY_MOESI_CACHE_DEBUG_PENDING_INVALIDATE
+
+#ifdef MEMORY_MOESI_CACHE_DEBUG_PENDING_INVALIDATE
+   #include "to_string.h"
+#endif
 
 namespace Memory
 {
@@ -139,6 +145,9 @@ namespace Memory
 		}
 		else
 		{
+#ifdef MEMORY_MOESI_CACHE_DEBUG_PENDING_EVICTION
+		   printDebugInfo("AllocateBlock",tag,"pendingEviction.insert");
+#endif
 			DebugAssert(pendingEviction.find(set[eviction].tag) == pendingEviction.end());
 			pendingEviction[set[eviction].tag] = set[eviction];
 			if(pendingInvalidate.find(tag) == pendingInvalidate.end())
@@ -171,6 +180,9 @@ namespace Memory
 		else
 		{
 			s[index] = pendingEviction[tag];
+#ifdef MEMORY_MOESI_CACHE_DEBUG_PENDING_EVICTION
+			printDebugInfo("PrepareFreshBlock",tag,"pendingEviction.erase");
+#endif
 			pendingEviction.erase(tag);
 			DebugAssert(s[index].state != bs_Invalid);
 		}
@@ -330,6 +342,9 @@ namespace Memory
 		else if(b == NULL && pendingEviction.find(tag) != pendingEviction.end())
 		{
 			res->blockAttached = pendingEviction[tag].state == bs_Modified || pendingEviction[tag].state == bs_Owned;
+#ifdef MEMORY_MOESI_CACHE_DEBUG_PENDING_EVICTION
+			printDebugInfo("RespondInvalidate",tag,"pendingEviction.erase");
+#endif
 			pendingEviction.erase(tag);
 		}
 		else
@@ -355,6 +370,9 @@ namespace Memory
 			InvalidateBlock(*b);
 		}
 		EM().DisposeMsg(pendingInvalidate[tag]);
+#ifdef MEMORY_MOESI_CACHE_DEBUG_PENDING_INVALIDATE
+		printDebugInfo("RespondInvalidate",tag,"pendingInvalidate.erase");
+#endif
 		pendingInvalidate.erase(tag);
 	}
 	void MOESICache::LockBlock(MOESICache::AddrTag tag)
@@ -524,6 +542,10 @@ namespace Memory
 		}
 		else
 		{
+#ifdef MEMORY_MOESI_CACHE_DEBUG_PENDING_INVALIDATE
+		   printDebugInfo("OnRemoteInvalidate",*m,
+		         ("pendingInvalidate.insert(" + to_string<AddrTag>(tag)+")").c_str());
+#endif
 		   pendingInvalidate[tag] = m;
 		}
 		if(topCache)
@@ -671,6 +693,9 @@ namespace Memory
 			forward->addr = CalcAddr(CalcTag(m->addr));
 			forward->size = lineSize;
 			forward->blockAttached = pendingEviction[tag].state == bs_Modified || pendingEviction[tag].state == bs_Owned;
+#ifdef MEMORY_MOESI_CACHE_DEBUG_PENDING_EVICTION
+			printDebugInfo("OnLocalInvalidateResponse",tag,"pendingEviction.erase");
+#endif
 			pendingEviction.erase(tag);
 			remoteConnection->SendMsg(forward,evictionTime);
 		}
@@ -928,5 +953,14 @@ namespace Memory
    void MOESICache::printDebugInfo(const char* fromMethod, const BaseMsg &myMessage, const char* operation)
    {
       printBaseMemDeviceDebugInfo("MOESICache", fromMethod, myMessage, operation);
+   }
+
+   void MOESICache::printDebugInfo(const char* fromMethod, const AddrTag tag, const char* operation)
+   {
+      cout << setw(17) << " destID=" << setw(2) << getDeviceID()
+            << " MOESICache::" << fromMethod
+            << " " << operation
+            << "(" << tag << ")"
+            << endl;
    }
 }
