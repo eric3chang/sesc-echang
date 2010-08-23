@@ -1,11 +1,14 @@
 #pragma once
+
 #include <list>
 #include <algorithm>
 
 #if defined (WIN32) || defined (_WIN32)
    #include <hash_map>
    #include <hash_set>
-#else
+#elif defined linux
+   #include <cstring>
+   #include <iostream>
    #include <ext/hash_map>
    #include <ext/hash_set>
 #endif
@@ -81,96 +84,124 @@ template <class Key, class Hash = HashInteropReplacement<Key>, class Comparator 
    class HashSet : public stdext::hash_set<Key,HashTraitsInteropReplacement<Key, Hash,Comparator>>{};
 template<class Key,class Val,class Hash=HashInteropReplacement<Key>,class Comparator=std::less<Key>>
    class HashMultiMap:public stdext::hash_multimap<Key,Val,HashTraitsInteropReplacement<Key,Hash,Comparator>>{};
-#else
+#elif defined linux
+// use a fixed size for the arrays to aid debugging
+#define HASH_CONTAINERS_ARRAY_SIZE 10
 template <class Key, class Val, class Hash = HashInteropReplacement<Key>, class Comparator = std::less<Key> >
    class HashMap : public __gnu_cxx::hash_map<Key, Val, Hash, EqualKeyReplacement <Key,Comparator> >
    {
    public:
-      const Val* convertToArray()
+      void convertToArray(Val myValArray [], size_t arraySize)
       {
-         int i;
          typename HashMap<Key,Val>::const_iterator myIterator;
-         Val * myValArray;
+         size_t i;
 
-         myValArray = new Val[this->size()];
+         // zero out memory first
+         memset(myValArray,0,sizeof(Val) * arraySize);
 
          i = 0;
          for (myIterator=this->begin(); myIterator!=this->end(); ++myIterator)
          {
-            myValArray[i] = myIterator->second;
+            if (i<arraySize)
+            {
+               myValArray[i] = myIterator->second;
+            }
             i++;
          }
-
-         //delete [] myKeyArray;
-         //myKeyArray = NULL;
-         return myValArray;
+         if (i>arraySize)
+         {
+            std::cout << "HashContainers::HashMap::convertToArray: arraySize "
+                  << arraySize << " is smaller than hashMapSize "
+                  << i << std::endl;
+         }
+         return ;
       }
    };
 template <class Key, class Hash = HashInteropReplacement<Key>, class Comparator = std::less<Key> >
    class HashSet : public  __gnu_cxx::hash_set<Key, Hash, EqualKeyReplacement <Key,Comparator> >
    {
    public:
-      const Key* convertToArray()
+      void convertToArray(Key myKeyArray [], size_t arraySize)
       {
-         int i;
          typename HashSet<Key>::const_iterator myIterator;
-         Key * myKeyArray;
+         size_t i;
 
-         myKeyArray = new Key[this->size()];
+         // zero out memory first
+         memset(myKeyArray,0,sizeof(Key) * arraySize);
 
          i = 0;
          for (myIterator=this->begin(); myIterator!=this->end(); ++myIterator)
          {
-            myKeyArray[i] = *myIterator;
+            if (i < arraySize)
+            {
+               myKeyArray[i] = *myIterator;
+            }
             i++;
          }
-
-         //delete [] myKeyArray;
-         //myKeyArray = NULL;
-         return myKeyArray;
+         if (i>arraySize)
+         {
+            std::cout << "HashContainers::HashSet::convertToArray: arraySize "
+                  << arraySize << " is smaller than hashSetSize "
+                  << i << std::endl;
+         }
+         return;
       }
    };
 template <class Key, class Val, class Hash = HashInteropReplacement<Key>, class Comparator = std::less<Key> >
    class HashMultiMap:public __gnu_cxx::hash_multimap<Key,Val,Hash,EqualKeyReplacement<Key,Comparator> >
    {
    public:
-      const Val* convertToArray()
+      void convertToArray(Val myValArray [], size_t arraySize)
       {
-         int i;
          typename HashMap<Key,Val>::const_iterator myIterator;
-         Val * myValArray;
+         size_t i;
 
-         myValArray = new Val[this->size()];
+         // zero out memory first
+         memset(myValArray,0,sizeof(Val) * arraySize);
 
          i = 0;
          for (myIterator=this->begin(); myIterator!=this->end(); ++myIterator)
          {
-            myValArray[i] = myIterator->second;
+            if (i<arraySize)
+            {
+               myValArray[i] = myIterator->second;
+            }
             i++;
          }
-
-         //delete [] myKeyArray;
-         //myKeyArray = NULL;
-         return myValArray;
+         if (i>arraySize)
+         {
+            std::cout << "HashContainers::HashMap::convertToArray: arraySize "
+                  << arraySize << " is smaller than hashMapSize "
+                  << i << std::endl;
+         }
+         return;
       }
-   };  
-   
+   };
+
 template <typename T>
-const T* convertVectorToArray(std::vector<T>& myVector)
+void convertVectorToArray(std::vector<T>& myVector,T myTArray[], size_t arraySize)
 {
    typename std::vector<T>::const_iterator myIterator;
-   T* myTArray;
-   int i;
+   size_t i;
 
-   myTArray = new T[myVector.size()];
+   // zero out memory first
+   memset(myTArray, 0, sizeof(T) * arraySize);
 
    i = 0;
    for (myIterator = myVector.begin(); myIterator != myVector.end(); ++myIterator)
    {
-      myTArray[i] = *myIterator;
+      if (i<arraySize)
+      {
+         myTArray[i] = *myIterator;
+      }
       i++;
    }
-
-   return myTArray;
+   if (i>arraySize)
+   {
+      std::cout << "HashContainers::convertVectorToArray: arraySize "
+            << arraySize << " is smaller than vectorSize "
+            << i << std::endl;
+   }
+   return;
 }
-#endif
+#endif // elif defined linux
