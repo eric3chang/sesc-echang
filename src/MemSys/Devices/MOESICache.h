@@ -93,6 +93,7 @@ namespace Memory
 
 		HashMap<AddrTag, BlockState> pendingEviction;
 		HashMap<AddrTag, const InvalidateMsg*> pendingInvalidate;
+		HashSet<AddrTag> canceledBlockEviction;
 
 		BlockState* GetSet(int i);
 		void InvalidateBlock(BlockState& block);
