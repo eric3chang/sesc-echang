@@ -197,6 +197,7 @@ namespace Memory
 		else
 		{  // cancel pendingEviction
          // need to tell OnLocalInvalidResponse that BlockEviction was canceled
+		   canceledBlockEviction.insert(tag);
 			mySet[index] = pendingEviction[tag];
 #ifdef MEMORY_MOESI_CACHE_DEBUG_PENDING_EVICTION
 			printDebugInfo("PrepareFreshBlock",tag,"pendingEviction.erase");
@@ -681,10 +682,19 @@ namespace Memory
 #endif
 		DebugAssert(m);
 		AddrTag tag = CalcTag(m->addr);
-		DebugAssert(pendingEviction.find(tag) != pendingEviction.end() || pendingInvalidate.find(tag) != pendingInvalidate.end());
+		DebugAssert(pendingEviction.find(tag) != pendingEviction.end()
+		      || pendingInvalidate.find(tag) != pendingInvalidate.end()
+		      || canceledBlockEviction.find(tag) != canceledBlockEviction.end()
+		      );
+		// if a block eviction was canceled by PrepareFreshBlock()
+		if (canceledBlockEviction.find(tag) != canceledBlockEviction.end())
+		{
+		   canceledBlockEviction.erase(tag);
+		   return;
+		}
 		if(m->blockAttached)
 		{
-			BlockState* b;
+			BlockState* b = NULL;
 			if(pendingEviction.find(tag) != pendingEviction.end())
 			{
 				b = &(pendingEviction[tag]);
@@ -693,15 +703,20 @@ namespace Memory
 			{
 				b = Lookup(tag);
 			}
-			if(b->state == bs_Exclusive)
+			// if blockState was not set to anything, don't do
+			// anything to it, otherwise, it would cause an error
+			if (b)
 			{
-				b->state = bs_Modified;
+            if(b->state == bs_Exclusive)
+            {
+               b->state = bs_Modified;
+            }
+            else if(b->state == bs_Shared)
+            {
+               b->state = bs_Owned;
+            }
 			}
-			else if(b->state == bs_Shared)
-			{
-				b->state = bs_Owned;
-			}
-		}
+      }
 		if(pendingInvalidate.find(tag) != pendingInvalidate.end())
 		{
 			RespondInvalidate(tag);
