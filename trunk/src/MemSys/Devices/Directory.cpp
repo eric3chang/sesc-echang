@@ -268,6 +268,7 @@ namespace Memory
 			{
 				EraseDirectoryShare(m->addr,src);
 			}
+			// if there is some pending shared read on this address
 			if(pendingDirectorySharedReads.find(m->addr) != pendingDirectorySharedReads.end())
 			{
 			   // for all the elements in pendingDirectorySharedReads where key is in the range of m->addr
@@ -303,7 +304,7 @@ namespace Memory
 				pendingDirectorySharedReads.erase(pendingDirectorySharedReads.equal_range(m->addr).first,pendingDirectorySharedReads.equal_range(m->addr).second);
 			}
 			else
-			{
+			{  // there is no pending shared read on this address
 				DebugAssert(m->exclusiveOwnership);
 				DebugAssert(m->blockAttached);
 				DebugAssert(directoryData[m->addr].owner == InvalidNodeID || directoryData[m->addr].owner == src);
@@ -537,7 +538,8 @@ namespace Memory
 #ifdef MEMORY_DIRECTORY_DEBUG
 		printDebugInfo("OnDirectoryBlockRequest", m->MsgID(), "read");
 #endif
-      // if the address is in pendingDirectoryExclusiveReads or in pendingDirectorySharedReads
+      // if the address is in pendingDirectoryExclusiveReads or
+		// we are requesting for exclusive access and the address is in pendingDirectorySharedReads
 		if(pendingDirectoryExclusiveReads.find(m->addr) != pendingDirectoryExclusiveReads.end() ||
 		      (m->requestingExclusive && pendingDirectorySharedReads.find(m->addr) != pendingDirectorySharedReads.end()))
 		{//cannot complete the request at this time

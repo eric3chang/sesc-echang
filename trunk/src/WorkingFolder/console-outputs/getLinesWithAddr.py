@@ -1,5 +1,10 @@
+#!/usr/bin/python
 import os
 import sys
+
+if (len(sys.argv) < 2):
+   print('Error: number of arguments less than 2')
+   sys.exit()
 
 oldFilename = sys.argv[1]
 #oldFilename = 'genome-directory-02cpu.out.win-mbp'
