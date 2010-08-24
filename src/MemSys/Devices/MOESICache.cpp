@@ -122,6 +122,11 @@ namespace Memory
 		}
 		return NULL;
 	}
+
+	/**
+	 * can be called as the result of a block not being found in cache
+	 * during a read from the CPU side (OnLocalRead)
+	 */
 	bool MOESICache::AllocateBlock(MOESICache::AddrTag tag)
 	{
 		BlockState* set = GetSet(CalcSetFromTag(tag));
@@ -139,27 +144,39 @@ namespace Memory
 		{
 			return false;
 		}
-		if(topCache)
+		else  // eviction indexes a valid block
 		{
-			EvictBlock(set[eviction].tag);
+         if(topCache)
+         {
+            EvictBlock(set[eviction].tag);
+            PrepareFreshBlock(CalcSetFromTag(tag),eviction,tag);
+         }
+         else
+         {
+   #ifdef MEMORY_MOESI_CACHE_DEBUG_PENDING_EVICTION
+            printDebugInfo("AllocateBlock",set[eviction].tag,"pendingEviction.insert");
+   #endif
+            DebugAssert(pendingEviction.find(set[eviction].tag) == pendingEviction.end());
+            pendingEviction[set[eviction].tag] = set[eviction];
+
+            // don't send invalidate message if set[eviction].tag == tag.
+            // Doesn't work, because it's supposed to be different.
+            // What it is is that PrepareFreshBlock prepares the block that we
+            // just inserted
+            //if(pendingInvalidate.find(tag) == pendingInvalidate.end()
+                  //&& set[eviction].tag != tag)
+            if(pendingInvalidate.find(tag) == pendingInvalidate.end())
+            {
+               InvalidateMsg* im = EM().CreateInvalidateMsg(ID(),0);
+               im->addr = CalcAddr(set[eviction].tag);
+               im->size = lineSize;
+               localConnection->SendMsg(im,invalidateTime);
+            }
+
+            PrepareFreshBlock(CalcSetFromTag(tag),eviction,tag);
+         }
+         return true;
 		}
-		else
-		{
-#ifdef MEMORY_MOESI_CACHE_DEBUG_PENDING_EVICTION
-		   printDebugInfo("AllocateBlock",tag,"pendingEviction.insert");
-#endif
-			DebugAssert(pendingEviction.find(set[eviction].tag) == pendingEviction.end());
-			pendingEviction[set[eviction].tag] = set[eviction];
-			if(pendingInvalidate.find(tag) == pendingInvalidate.end())
-			{
-				InvalidateMsg* im = EM().CreateInvalidateMsg(ID(),0);
-				im->addr = CalcAddr(set[eviction].tag);
-				im->size = lineSize;
-				localConnection->SendMsg(im,invalidateTime);
-			}
-		}
-		PrepareFreshBlock(CalcSetFromTag(tag),eviction,tag);
-		return true;
 	}
 	void MOESICache::RetryMsg(const BaseMsg* m, int connectionID)
 	{
@@ -167,26 +184,26 @@ namespace Memory
 	}
 	void MOESICache::PrepareFreshBlock(int set, int index, AddrTag tag)
 	{
-		BlockState* s = GetSet(set);
-		DebugAssert(s[index].locked == false);
+		BlockState* mySet = GetSet(set);
+		DebugAssert(mySet[index].locked == false);
 		if(pendingEviction.find(tag) == pendingEviction.end())
 		{
-			s[index].valid = true;
-			s[index].tag = tag;
-			s[index].lastWrite = 0;
-			s[index].lastRead = 0;
-			s[index].state = bs_Invalid;
+			mySet[index].valid = true;
+			mySet[index].tag = tag;
+			mySet[index].lastWrite = 0;
+			mySet[index].lastRead = 0;
+			mySet[index].state = bs_Invalid;
 		}
 		else
 		{
-			s[index] = pendingEviction[tag];
+			mySet[index] = pendingEviction[tag];
 #ifdef MEMORY_MOESI_CACHE_DEBUG_PENDING_EVICTION
 			printDebugInfo("PrepareFreshBlock",tag,"pendingEviction.erase");
 #endif
 			pendingEviction.erase(tag);
-			DebugAssert(s[index].state != bs_Invalid);
+			DebugAssert(mySet[index].state != bs_Invalid);
 		}
-		DebugAssert(s[index].locked == false);
+		DebugAssert(mySet[index].locked == false);
 	}
 	void MOESICache::EvictBlock(MOESICache::AddrTag tag)
 	{
@@ -451,7 +468,8 @@ namespace Memory
 		}
 		else
 		{//block not found at all
-			if(!AllocateBlock(tag))
+		   bool allocateBlockResult = AllocateBlock(tag);
+			if(!allocateBlockResult)
 			{
 				CBRetryMsg::FunctionType* retry = cbRetryMsg.Create();
 				retry->Initialize(this,m,localConnectionID);
