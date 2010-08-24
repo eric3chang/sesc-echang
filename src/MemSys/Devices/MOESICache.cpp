@@ -640,7 +640,7 @@ namespace Memory
 	}
 	void MOESICache::OnLocalInvalidateResponse(const InvalidateResponseMsg* m)
 	{
-#ifdef WIN32
+#ifdef _WIN32
       waitingOnBlockUnlock;
       waitingOnSetUnlock;
       waitingOnRemoteReads;
