@@ -195,7 +195,8 @@ namespace Memory
 			mySet[index].state = bs_Invalid;
 		}
 		else
-		{
+		{  // cancel pendingEviction
+         // need to tell OnLocalInvalidResponse that BlockEviction was canceled
 			mySet[index] = pendingEviction[tag];
 #ifdef MEMORY_MOESI_CACHE_DEBUG_PENDING_EVICTION
 			printDebugInfo("PrepareFreshBlock",tag,"pendingEviction.erase");
