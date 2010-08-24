@@ -6,7 +6,7 @@
 #if defined (WIN32) || defined (_WIN32)
    #include <hash_map>
    #include <hash_set>
-#elif defined linux
+#else
    #include <cstring>
    #include <iostream>
    #include <ext/hash_map>
@@ -84,9 +84,7 @@ template <class Key, class Hash = HashInteropReplacement<Key>, class Comparator 
    class HashSet : public stdext::hash_set<Key,HashTraitsInteropReplacement<Key, Hash,Comparator>>{};
 template<class Key,class Val,class Hash=HashInteropReplacement<Key>,class Comparator=std::less<Key>>
    class HashMultiMap:public stdext::hash_multimap<Key,Val,HashTraitsInteropReplacement<Key,Hash,Comparator>>{};
-#elif defined linux
-// use a fixed size for the arrays to aid debugging
-#define HASH_CONTAINERS_ARRAY_SIZE 10
+#else
 template <class Key, class Val, class Hash = HashInteropReplacement<Key>, class Comparator = std::less<Key> >
    class HashMap : public __gnu_cxx::hash_map<Key, Val, Hash, EqualKeyReplacement <Key,Comparator> >
    {
@@ -204,4 +202,4 @@ void convertVectorToArray(std::vector<T>& myVector,T myTArray[], size_t arraySiz
    }
    return;
 }
-#endif // elif defined linux
+#endif // else !defined WIN32

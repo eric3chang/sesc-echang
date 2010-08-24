@@ -228,7 +228,7 @@ namespace Memory
 			WaitOnBlockUnlock(tag,f);
 		}
 		else
-		{//hit 
+		{  //hit
 			ReadResponseMsg* res = EM().CreateReadResponseMsg(ID(),m->GeneratingPC());
 			m->SignalComplete();
 			res->addr = m->addr;
@@ -646,7 +646,7 @@ namespace Memory
       waitingOnRemoteReads;
       pendingEviction;
       pendingInvalidate;
-#elif defined linux
+#else
       #define MEMORY_MOESI_CACHE_ARRAY_SIZE 10
       StoredFunctionBase* waitingOnBlockUnlockArray[MEMORY_MOESI_CACHE_ARRAY_SIZE];
       StoredFunctionBase* waitingOnSetUnlockArray[MEMORY_MOESI_CACHE_ARRAY_SIZE];

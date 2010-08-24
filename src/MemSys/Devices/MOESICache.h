@@ -29,6 +29,7 @@ namespace Memory
 	*/
 	class MOESICache : public BaseMemDevice
 	{
+	private:
 		static const int InvalidBlock = -1;
 		typedef Address AddrTag;
 		enum MOESIState
