@@ -182,9 +182,9 @@ namespace Memory
 	{
 		RecvMsg(m,connectionID);
 	}
-	void MOESICache::PrepareFreshBlock(int set, int index, AddrTag tag)
+	void MOESICache::PrepareFreshBlock(int setNumber, int index, AddrTag tag)
 	{
-		BlockState* mySet = GetSet(set);
+		BlockState* mySet = GetSet(setNumber);
 		DebugAssert(mySet[index].locked == false);
 		if(pendingEviction.find(tag) == pendingEviction.end())
 		{
@@ -690,50 +690,54 @@ namespace Memory
 		if (canceledBlockEviction.find(tag) != canceledBlockEviction.end())
 		{
 		   canceledBlockEviction.erase(tag);
+		   EM().DisposeMsg(m);
 		   return;
 		}
-		if(m->blockAttached)
+		else
 		{
-			BlockState* b = NULL;
-			if(pendingEviction.find(tag) != pendingEviction.end())
-			{
-				b = &(pendingEviction[tag]);
-			}
-			else if(pendingInvalidate.find(tag) != pendingInvalidate.end())
-			{
-				b = Lookup(tag);
-			}
-			// if blockState was not set to anything, don't do
-			// anything to it, otherwise, it would cause an error
-			if (b)
-			{
-            if(b->state == bs_Exclusive)
+         if(m->blockAttached)
+         {
+            BlockState* b = NULL;
+            if(pendingEviction.find(tag) != pendingEviction.end())
             {
-               b->state = bs_Modified;
+               b = &(pendingEviction[tag]);
             }
-            else if(b->state == bs_Shared)
+            else if(pendingInvalidate.find(tag) != pendingInvalidate.end())
             {
-               b->state = bs_Owned;
+               b = Lookup(tag);
             }
-			}
-      }
-		if(pendingInvalidate.find(tag) != pendingInvalidate.end())
-		{
-			RespondInvalidate(tag);
-		}
-		if(pendingEviction.find(tag) != pendingEviction.end())
-		{
-			EvictionMsg* forward = EM().CreateEvictionMsg(ID(),m->GeneratingPC());
-			forward->addr = CalcAddr(CalcTag(m->addr));
-			forward->size = lineSize;
-			forward->blockAttached = pendingEviction[tag].state == bs_Modified || pendingEviction[tag].state == bs_Owned;
-#ifdef MEMORY_MOESI_CACHE_DEBUG_PENDING_EVICTION
-			printDebugInfo("OnLocalInvalidateResponse",tag,"pendingEviction.erase");
-#endif
-			pendingEviction.erase(tag);
-			remoteConnection->SendMsg(forward,evictionTime);
-		}
-		EM().DisposeMsg(m);
+            // if blockState was not set to anything, don't do
+            // anything to it, otherwise, it would cause an error
+            if (b)
+            {
+               if(b->state == bs_Exclusive)
+               {
+                  b->state = bs_Modified;
+               }
+               else if(b->state == bs_Shared)
+               {
+                  b->state = bs_Owned;
+               }
+            }
+         }
+         if(pendingInvalidate.find(tag) != pendingInvalidate.end())
+         {
+            RespondInvalidate(tag);
+         }
+         if(pendingEviction.find(tag) != pendingEviction.end())
+         {
+            EvictionMsg* forward = EM().CreateEvictionMsg(ID(),m->GeneratingPC());
+            forward->addr = CalcAddr(CalcTag(m->addr));
+            forward->size = lineSize;
+            forward->blockAttached = pendingEviction[tag].state == bs_Modified || pendingEviction[tag].state == bs_Owned;
+   #ifdef MEMORY_MOESI_CACHE_DEBUG_PENDING_EVICTION
+            printDebugInfo("OnLocalInvalidateResponse",tag,"pendingEviction.erase");
+   #endif
+            pendingEviction.erase(tag);
+            remoteConnection->SendMsg(forward,evictionTime);
+         }
+         EM().DisposeMsg(m);
+		} // else (canceledBlockEviction.find(tag) == canceledBlockEviction.end())
 	}
 	void MOESICache::OnRemoteInvalidateResponse(const InvalidateResponseMsg* m)
 	{
