@@ -3,7 +3,7 @@
 #include <list>
 #include <algorithm>
 
-#if defined (WIN32) || defined (_WIN32)
+#ifdef _WIN32
    #include <hash_map>
    #include <hash_set>
 #else
@@ -77,7 +77,7 @@ public:
    }
 };
 
-#if defined (WIN32) || defined (_WIN32)
+#ifdef _WIN32
 template <class Key,class Val,class Hash=HashInteropReplacement<Key>,class Comparator=std::less<Key>>
    class HashMap:public stdext::hash_map<Key,Val,HashTraitsInteropReplacement<Key,Hash,Comparator>>{};
 template <class Key, class Hash = HashInteropReplacement<Key>, class Comparator = std::less<Key>>
@@ -202,4 +202,4 @@ void convertVectorToArray(std::vector<T>& myVector,T myTArray[], size_t arraySiz
    }
    return;
 }
-#endif // else !defined WIN32
+#endif // else !defined _WIN32
