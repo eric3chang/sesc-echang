@@ -660,6 +660,7 @@ namespace Memory
 	}
 	void MOESICache::OnLocalInvalidateResponse(const InvalidateResponseMsg* m)
 	{
+#ifdef MEMORY_MOESI_CACHE_DEBUG
 #ifdef _WIN32
       waitingOnBlockUnlock;
       waitingOnSetUnlock;
@@ -667,7 +668,7 @@ namespace Memory
       pendingEviction;
       pendingInvalidate;
 #else
-      #define MEMORY_MOESI_CACHE_ARRAY_SIZE 10
+      #define MEMORY_MOESI_CACHE_ARRAY_SIZE 20
       StoredFunctionBase* waitingOnBlockUnlockArray[MEMORY_MOESI_CACHE_ARRAY_SIZE];
       StoredFunctionBase* waitingOnSetUnlockArray[MEMORY_MOESI_CACHE_ARRAY_SIZE];
       StoredFunctionBase* waitingOnRemoteReadsArray[MEMORY_MOESI_CACHE_ARRAY_SIZE];
@@ -679,6 +680,7 @@ namespace Memory
       waitingOnRemoteReads.convertToArray(waitingOnRemoteReadsArray,MEMORY_MOESI_CACHE_ARRAY_SIZE);
       pendingEviction.convertToArray(pendingEvictionArray,MEMORY_MOESI_CACHE_ARRAY_SIZE);
       pendingInvalidate.convertToArray(pendingInvalidateArray,MEMORY_MOESI_CACHE_ARRAY_SIZE);
+#endif
 #endif
 		DebugAssert(m);
 		AddrTag tag = CalcTag(m->addr);
