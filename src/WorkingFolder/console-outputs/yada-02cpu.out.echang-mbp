@@ -1,0 +1,41 @@
+.text Minor header aligment correction (400130 vs 400128)
+.data Minor header aligment correction (49e110 vs 49e108)
+static[0x47cea0-0x1000523c] heap[0x10006000-0x18006000] stack[0x18006000-0x187fe000] -> [0x96f9b008-0xaf31c168]
+Device : P(0)_DL1  Description : ProcessorInterface_0
+Device : P(0)_IL1  Description : InstSource
+Device : P(1)_DL1  Description : ProcessorInterface_1
+Device : P(1)_IL1  Description : InstSource
+OSSim::spawn(-1,0,0x10000,0)
+Start rabbit mode forever...
+Rabbit Mode Start 
+benchmarks/yada: invalid option -- 8
+benchmarks/yada: invalid option -- n
+benchmarks/yada: invalid option -- 2
+benchmarks/yada: invalid option -- q
+benchmarks/yada: invalid option -- 9
+benchmarks/yada: invalid option -- 0
+benchmarks/yada: invalid option -- u
+benchmarks/yada: invalid option -- 9
+benchmarks/yada: invalid option -- 8
+benchmarks/yada: invalid option -- r
+benchmarks/yada: invalid option -- 1
+benchmarks/yada: invalid option -- 6
+benchmarks/yada: invalid option -- 3
+benchmarks/yada: invalid option -- 8
+benchmarks/yada: invalid option -- 4
+OSSim::exit err[1] (cpid 0)
+Usage: benchmarks/yada [options]
+
+Options:                              (defaults)
+
+    a <FLT>   Min [a]ngle constraint  (20.000001)
+    i <STR>   [i]nput name prefix     ()
+    t <UINT>  Number of [t]hreads     (1)
+mint_exit 0
+Leaving rabbit mode...
+Get out of 'has-work' loop
+Finished running 
+Dumping stats
+beginning collision detection dump
+dumping result set
+ending collision detection dump
