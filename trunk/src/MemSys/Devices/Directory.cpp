@@ -16,9 +16,8 @@ using std::endl;
 
 namespace Memory
 {
-
    // this is a debug variable
-   int memoryDirectoryGlobalInt = 0;
+   int debugMemoryDirectoryGlobalInt = 0;
 
 	NodeID Directory::HashedPageCalculator::CalcNodeID(Address addr) const
 	{
