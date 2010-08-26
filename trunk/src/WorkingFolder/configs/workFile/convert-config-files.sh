@@ -1,8 +1,8 @@
 #/bin/bash
 # transform old conf files into new conf files
 
-#file='vacation-low-02cpu-00.conf'
-for file in $(ls vacation-low-02cpu-??.conf); do
+#file='vacation-high-02cpu-00.conf'
+for file in $(ls vacation-high-02cpu-??.conf); do
    truncatedFile=${file%.*}
 
    # add commented 1st line for auto syntax highlighting
