@@ -458,7 +458,9 @@ namespace Memory
 #ifdef MEMORY_DIRECTORY_DEBUG_DIRECTORY_DATA
 #define MEMORY_DIRECTORY_DEBUG_ARRAY_SIZE 20
 		NodeID sharers[MEMORY_DIRECTORY_DEBUG_ARRAY_SIZE];
+   #ifndef _WIN32
 		b.sharers.convertToArray(sharers,MEMORY_DIRECTORY_DEBUG_ARRAY_SIZE);
+   #endif
 #endif
 		DebugAssert(m->blockAttached || b.sharers.find(src) != b.sharers.end());
 		if(b.owner == src)
