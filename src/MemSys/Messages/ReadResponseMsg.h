@@ -28,10 +28,10 @@ namespace Memory
 		{
 		   BaseMsg::print(destinationDeviceID);
 		   cout << " addr=" << addr
-            << " satisfied=" << satisfied
-		      << " blockAttached=" << blockAttached
-            << " exclusiveOwnership=" << exclusiveOwnership
-            << " solicitingMessage=" << solicitingMessage
+            << " satis=" << satisfied
+		      << " blkAtt=" << blockAttached
+            << " excluOwn=" << exclusiveOwnership
+            << " solicMsg=" << solicitingMessage
 		   ;
 		}
 

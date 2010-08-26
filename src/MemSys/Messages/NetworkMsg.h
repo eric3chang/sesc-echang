@@ -21,8 +21,8 @@ namespace Memory
 		virtual void print(DeviceID destinationDeviceID) const
 		{
 		   BaseMsg::print(destinationDeviceID);
-		   cout << " sourceNode=" << sourceNode
-            << "destinationNode=" << destinationNode
+		   cout << " srcNode=" << sourceNode
+            << " destNode=" << destinationNode
 		   ;
 		}
 	};

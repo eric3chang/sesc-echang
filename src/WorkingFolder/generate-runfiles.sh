@@ -2,7 +2,7 @@
 HOSTNAME=$(hostname)
 
 # already tested
-for i in {1..14}
+for i in {0..14}
 do
    # if the number is single digit, append 0
    if [[ ${#i} == 1 ]]

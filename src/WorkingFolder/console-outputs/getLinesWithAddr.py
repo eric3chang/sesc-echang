@@ -2,16 +2,16 @@
 import os
 import sys
 
-if (len(sys.argv) < 2):
-   print('Error: number of arguments less than 2')
+if (len(sys.argv) < 3):
+   print('Usage: getLinesWithAddr.py filename methodname')
    sys.exit()
 
 oldFilename = sys.argv[1]
+methodname = sys.argv[2]
 #oldFilename = 'genome-directory-02cpu.out.win-mbp'
 
 oldfile = open(oldFilename, 'r')
 newfile = open(oldFilename+'.new','w')
-errfile = open(oldFilename+'.err','w')
 
 addrArray = []
 errAddrArray = []
@@ -20,7 +20,7 @@ lines = oldfile.readlines()
 
 #1st pass - get addresses that contain OnLocalInvalidateResponse
 for line in lines:
-    if line.count('OnLocalInvalidateResponse'):
+    if line.count(methodname):
         splitLine = line.split();
         for block in splitLine:
             if block.count('addr'):
@@ -37,8 +37,9 @@ for addr in addrArray:
     newfile.write('\n')
 newfile.close()
 
+'''
 newfile = open(oldFilename+'.new','r')
-# 3rd pass - put all addresses where OnLocalInvalidateResponse wasn't preceded
+# 3rd pass - put all addresses where methodname wasn't preceded
 # immediately by a OnRemoteInvalidate in an array
 thirdfileLines = newfile.readlines()
 previousLine = ''
@@ -56,6 +57,7 @@ for currentLine in thirdfileLines:
 
 print(len(errAddrArray))
 
+errfile = open(oldFilename+'.err','w')
 # 4th pass - put all addresses where OnLocalInvalidateResponse wasn't preceded
 # immediately by a OnRemoteInvalidate in one file
 for addr in errAddrArray:
@@ -63,8 +65,10 @@ for addr in errAddrArray:
         if line.count(addr):
             errfile.write(line)
     errfile.write('\n')
+errfile.close()
+'''
 
+# close files
 oldfile.close()
 newfile.close()
-errfile.close()
-raw_input()
+raw_input('press any key to continue...')
