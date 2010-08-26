@@ -6,20 +6,11 @@ EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
-		genome-directory|Win32 = genome-directory|Win32
-		memtest-directory|Win32 = memtest-directory|Win32
-		memtest-snoopy|Win32 = memtest-snoopy|Win32
 		Release|Win32 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{A54864F1-6C99-4165-A176-888B5427ADC2}.Debug|Win32.ActiveCfg = Debug|Win32
 		{A54864F1-6C99-4165-A176-888B5427ADC2}.Debug|Win32.Build.0 = Debug|Win32
-		{A54864F1-6C99-4165-A176-888B5427ADC2}.genome-directory|Win32.ActiveCfg = genome-directory|Win32
-		{A54864F1-6C99-4165-A176-888B5427ADC2}.genome-directory|Win32.Build.0 = genome-directory|Win32
-		{A54864F1-6C99-4165-A176-888B5427ADC2}.memtest-directory|Win32.ActiveCfg = mem-test|Win32
-		{A54864F1-6C99-4165-A176-888B5427ADC2}.memtest-directory|Win32.Build.0 = mem-test|Win32
-		{A54864F1-6C99-4165-A176-888B5427ADC2}.memtest-snoopy|Win32.ActiveCfg = memtest-snoopy|Win32
-		{A54864F1-6C99-4165-A176-888B5427ADC2}.memtest-snoopy|Win32.Build.0 = memtest-snoopy|Win32
 		{A54864F1-6C99-4165-A176-888B5427ADC2}.Release|Win32.ActiveCfg = Release|Win32
 		{A54864F1-6C99-4165-A176-888B5427ADC2}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
