@@ -1,0 +1,18 @@
+#/bin/bash
+# transform old conf files into new conf files
+
+#file='vacation-low-02cpu-00.conf'
+for file in $(ls vacation-low-02cpu-??.conf); do
+   truncatedFile=${file%.*}
+
+   # add commented 1st line for auto syntax highlighting
+   sed -i -e '1i\#' \
+      -e 's/DieAfterCheckpointTaken = 1/DieAfterCheckpointTaken = 0/' \
+      -e "s_results\\\.*.txt_results/$truncatedFile.txt_" \
+      -e 's@<base.conf>@MemorySystemConfig = "memgen/memoryConfigs/Directory_p2_c1L1-2L2.memory"@' \
+      -e 's@<memSysConfigs/MemConfig_1_8_2.conf>@<base_02cpu.conf>@' \
+      $file
+
+   dos2unix $file
+done
+
