@@ -15,6 +15,15 @@
 #include "InvalidateResponseMsg.h"
 #include "EvictionResponseMsg.h"
 
+// toggles debug output
+// toggles common debug methods,
+// should be enabled if any debug flag is on
+//#define MEMORY_MOESI_CACHE_DEBUG_COMMON
+
+//#define MEMORY_MOESI_CACHE_DEBUG_VERBOSE
+//#define MEMORY_MOESI_CACHE_DEBUG_PENDING_EVICTION
+//#define MEMORY_MOESI_CACHE_DEBUG_PENDING_INVALIDATE
+
 namespace Memory
 {
 /*
@@ -157,9 +166,10 @@ namespace Memory
 		void OnLocalEvictionResponse(const EvictionResponseMsg* m);
 		void OnRemoteEvictionResponse(const EvictionResponseMsg* m);
 
-		// debug functions
+#ifdef MEMORY_MOESI_CACHE_DEBUG_COMMON
       void printDebugInfo(const char* fromMethod, const BaseMsg &myMessage, const char* operation);
-      void printDebugInfo(const char* fromMethod, const AddrTag tag, const char* operation);
+      void printDebugInfo(const char* fromMethod,const AddrTag tag,const char* operation);
+#endif
 	public:
 		virtual ~MOESICache();
 		virtual void Initialize(EventManager* em, const RootConfigNode& config, const std::vector<Connection*>& connectionSet);

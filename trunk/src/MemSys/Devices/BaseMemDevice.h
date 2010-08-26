@@ -16,6 +16,9 @@
 #endif
 */
 
+using std::cout;
+using std::endl;
+
 namespace Memory
 {
 	class Connection;
@@ -52,25 +55,28 @@ namespace Memory
 	   DeviceID getDeviceID() const;
 		const std::string& DeviceName();
 
-	   void printBaseMemDeviceDebugInfo(const char* childClass,
-	         const char* fromMethod,MessageID myMessageID, const char* operation)
-	   {
-	      std::cout
-            << "devID=" << std::setw(2) << deviceID
-            << ": msgID=" << std::setw(6) << (MessageID) myMessageID
-            << " " << childClass << "::" << fromMethod
-	         << " " << operation
-	      << std::endl;
-	   }
-
-      void printBaseMemDeviceDebugInfo(const char* childClass,
-            const char* fromMethod, const BaseMsg &myBaseMsg, const char* operation)
+      void printBaseMemDeviceDebugInfo(const char* childClass, const char* fromMethod,
+            const BaseMsg &myBaseMsg, const char* operation, NodeID src)
       {
+         if ((src == InvalidNodeID) || (src == 0))
+         {
+            cout << setw(7) << " ";
+         }
+         else
+         {
+            cout << " src=" << setw(2) << src;
+         }
          myBaseMsg.print(deviceID);
-         std::cout
+         cout
             << " " << childClass << "::" << fromMethod
             << " " << operation
-         << std::endl;
+            << endl;
+      }
+      void printBaseMemDeviceDebugInfo(const char* childClass, const char* fromMethod,
+            const BaseMsg &myBaseMsg, const char* operation)
+      {
+         printBaseMemDeviceDebugInfo(childClass,fromMethod,myBaseMsg,operation,
+            InvalidNodeID);
       }
 	};
 } // namespace Memory

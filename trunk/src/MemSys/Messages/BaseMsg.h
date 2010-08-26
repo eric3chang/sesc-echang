@@ -48,9 +48,9 @@ namespace Memory
 		virtual void print(DeviceID destinationDeviceID) const
 		{
 		   cout
-            << " srcID=" << setw(2) << deviceID
-		      << " destID=" << setw(2) << destinationDeviceID
-		      << " msgID=" << setw(5) << msgID
+            << " msgSrc=" << setw(2) << deviceID
+		      << " dst=" << setw(2) << destinationDeviceID
+		      << " msg=" << setw(5) << msgID
 		      // generatingPC doesn't seem to be used
 		      //<< " generatingPC=" << generatingPC
 		   ;
