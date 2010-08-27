@@ -1,7 +1,7 @@
 #/bin/bash
 # transform old conf files into new conf files
 
-#file='vacation-high-02cpu-00.conf'
+file='vacation-high-02cpu-00.conf'
 for file in $(ls yada-dots-02cpu-??.conf); do
    truncatedFile=${file%.*}
 
