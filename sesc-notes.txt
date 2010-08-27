@@ -17,4 +17,7 @@
 - efence vs valgrind
 - gcc -S [filename].c produces disassembly
 2010/08/25 - use yada-dots for testing OnRemoteInvalidateResponse error because it's the smallest
+- use the following splash2 benchmarks:
+-- kernel: cholesky, fft, lu, radix
+-- apps: Ocean, fmm : only these two provide correct.out
 
