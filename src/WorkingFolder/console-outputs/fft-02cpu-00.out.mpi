@@ -1,0 +1,85 @@
+.text Minor header aligment correction (10000040 vs 1000003c)
+.data Minor header aligment correction (100816e0 vs 100816d8)
+1.bss Minor header aligment correction 12 (100834d0 vs 100834c4)
+.bss Minor header aligment correction (100834d0 vs 100834c4)
+static[0x10069a30-0x10083f84] heap[0x10084000-0x23f42000] stack[0x23f42000-0x2473a000] -> [0x97ad8008-0xac1a85d8]
+OSSim::spawn(-1,0,0x10000,0)
+Device : P(0)_DL1  Description : ProcessorInterface_0
+Device : P(0)_IL1  Description : InstSource
+Device : P(1)_DL1  Description : ProcessorInterface_1
+Device : P(1)_IL1  Description : InstSource
+   1024 Complex Doubles
+   2 Processors
+   65536 Cache lines
+   16 Byte line size
+   4096 Bytes per page
+Simulated 500006 instructions so far at clock 1057551
+OSSim::spawn(0,1,0x10000,0)
+sesc_spawn( 0x100013d4, 0x0, 0x0 ) pid = 0, child pid = 1, child context = 97ca590
+Stalling processor 0 at barrier
+Processor 1 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Stalling processor 0 at barrier
+Processor 1 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Stalling processor 0 at barrier
+Processor 1 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Stalling processor 1 at barrier
+Processor 0 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Stalling processor 1 at barrier
+Processor 0 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Stalling processor 1 at barrier
+Processor 0 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Stalling processor 0 at barrier
+Processor 1 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Stalling processor 0 at barrier
+Processor 1 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Simulated 1000002 instructions so far at clock 1879930
+Stalling processor 1 at barrier
+Processor 0 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Stalling processor 1 at barrier
+Processor 0 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Stalling processor 0 at barrier
+Processor 1 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Stalling processor 0 at barrier
+Processor 1 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+OSSim::wait (cpid 0)
+OSSim::exit err[268976840] (cpid 1)
+Waiting pid(0) is awaked (child 1 call)
+OSSim::wait (cpid 0)
+mint_exit 1
+    0               212            105       0.00000
+Start time                        :       1975948889
+Initialization finish time        :       1975949121
+Overall finish time               :       1975949333
+Total time with initialization    :              444
+Total time without initialization :              212
+Overall transpose time            :              105
+Overall transpose fraction        :          0.49528
+Checksum difference is -0.000 (0.000, 0.000)
+OSSim::exit err[0] (cpid 0)
+mint_exit 0
+Get out of 'has-work' loop
+Finished running 
