@@ -82,12 +82,16 @@ namespace Memory
 			SendMsg(remoteConnectionID, nm, lookupTime + remoteSendTime);
 		}
 	}
+
 	void Directory::EraseDirectoryShare(Address a, NodeID id)
 	{
 		DebugAssert(directoryData.find(a) != directoryData.end());
 		BlockData& b = directoryData[a];
 		if(b.owner == id)
 		{
+#ifdef MEMORY_DIRECTORY_DEBUG_DIRECTORY_DATA
+         printEraseOwner("EraseDirectoryShare",a, id,"b.owner=InvalidNodeID");
+#endif
 			b.owner = InvalidNodeID;
 			DebugAssert(b.sharers.find(id) == b.sharers.end());
 		}
@@ -99,12 +103,16 @@ namespace Memory
 			b.sharers.erase(id);
 		}
 	}
+
 	void Directory::AddDirectoryShare(Address a, NodeID id, bool exclusive)
 	{
 		BlockData& b = directoryData[a];
 		DebugAssert(!exclusive || (b.sharers.size() == 0 && (b.owner == id || b.owner == InvalidNodeID)));
 		if(b.owner == id || b.owner == InvalidNodeID)
 		{
+#ifdef MEMORY_DIRECTORY_DEBUG_DIRECTORY_DATA
+         printDebugInfo("AddDirectoryShare",a, id, "b.owner=");
+#endif
 			b.owner = id;
 		}
 		else if(b.sharers.find(id) == b.sharers.end())
@@ -116,6 +124,7 @@ namespace Memory
 			b.sharers.insert(id);
 		}
 	}
+
 	/**
 	 * the message came from the local (cpu) side. It is a read msg
 	 */
@@ -398,13 +407,16 @@ namespace Memory
 		BlockData& b = directoryData[m->addr];
 		if(b.owner == src)
 		{
+#ifdef MEMORY_DIRECTORY_DEBUG_DIRECTORY_DATA
+         printDebugInfo("OnRemoteEviction",*m,"b.owner=InvalidNodeID",src);
+#endif
 			b.owner = InvalidNodeID;
 		}
 		else if(b.sharers.find(src) != b.sharers.end())
 		{
 #ifdef MEMORY_DIRECTORY_DEBUG_DIRECTORY_DATA
          printDebugInfo("OnRemoteEviction",*m,
-            ("b.sharers.erase("+to_string<NodeID>(src)+")").c_str());
+            ("b.sharers.erase("+to_string<NodeID>(src)+")").c_str(),src);
 #endif
 			b.sharers.erase(src);
 		}
@@ -480,6 +492,9 @@ namespace Memory
 		DebugAssert(m->blockAttached || b.sharers.find(src) != b.sharers.end());
 		if(b.owner == src)
 		{
+#ifdef MEMORY_DIRECTORY_DEBUG_DIRECTORY_DATA
+         printDebugInfo("OnRemoteInvalidateResponse",*m,"b.owner=InvalidNodeID",src);
+#endif
 			b.owner = InvalidNodeID;
 		}
 		else
@@ -487,7 +502,7 @@ namespace Memory
 			DebugAssert(b.sharers.find(src) != b.sharers.end());
 #ifdef MEMORY_DIRECTORY_DEBUG_DIRECTORY_DATA
 			printDebugInfo("OnRemoteInvalidateResponse",*m,
-			   ("b.sharers.erase("+to_string<NodeID>(src)+")").c_str());
+			   ("b.sharers.erase("+to_string<NodeID>(src)+")").c_str(),src);
 #endif
 			b.sharers.erase(src);
 		}
@@ -510,7 +525,10 @@ namespace Memory
 				(b.owner == InvalidNodeID && b.sharers.size() == 1 && b.sharers.find(pendingDirectoryExclusiveReads[m->addr].sourceNode) != b.sharers.end()))
 			{
 #ifdef MEMORY_DIRECTORY_DEBUG_DIRECTORY_DATA
-			   printDebugInfo("OnRemoteInvalidateResponse",*m,"b.sharers.clear()");
+			   printDebugInfo("OnRemoteInvalidateResponse",*m,"b.sharers.clear()",src);
+            printDebugInfo("OnRemoteInvalidateResponse",*m,
+               ("b.owner="+to_string<NodeID>(pendingDirectoryExclusiveReads[m->addr].sourceNode)).c_str(),
+               src);
 #endif
 				b.sharers.clear();
 				b.owner = pendingDirectoryExclusiveReads[m->addr].sourceNode;
@@ -537,10 +555,11 @@ namespace Memory
 				AddDirectoryShare(m->addr,pendingDirectoryExclusiveReads[m->addr].sourceNode,true);
 				EM().DisposeMsg(pendingDirectoryExclusiveReads[m->addr].msg);
 				pendingDirectoryExclusiveReads.erase(m->addr);
-			}
-		}
+			} //        if( (b.owner == InvalidNodeID && b.sharers.size() == 0) ||
+		} // if(pendingDirectoryExclusiveReads.find(m->addr) != pendingDirectoryExclusiveReads.end())
 		EM().DisposeMsg(m);
 	}
+
 	void Directory::OnDirectoryBlockRequest(const ReadMsg* m, NodeID src)
 	{
 		DebugAssert(m);
@@ -955,8 +974,20 @@ namespace Memory
             << " dst=" << setw(2) << getDeviceID()
             << setw(10) << " "   // account for spacing from msgID
             << " addr=" << addr
-            << " MOESICache::" << fromMethod
+            << " Dir::" << fromMethod
             << " " << operation << "(" << id << ")"
+            << endl;
+   }
+
+   void Directory::printEraseOwner(const char* fromMethod,Address addr,NodeID id,const char* operation)
+   {
+      cout << setw(17) << " " // account for spacing from src and msgSrc
+            << " dst=" << setw(2) << getDeviceID()
+            << setw(10) << " "   // account for spacing from msgID
+            << " addr=" << addr
+            << " Dir::" << fromMethod
+            << " nodeID=" << id
+            << " " << operation
             << endl;
    }
 #endif
