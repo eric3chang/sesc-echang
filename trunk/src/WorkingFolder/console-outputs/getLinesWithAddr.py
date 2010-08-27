@@ -8,17 +8,18 @@ if (len(sys.argv) < 3):
 
 oldFilename = sys.argv[1]
 methodname = sys.argv[2]
+newFilename = oldFilename+'.'+methodname
 #oldFilename = 'genome-directory-02cpu.out.win-mbp'
 
 oldfile = open(oldFilename, 'r')
-newfile = open(oldFilename+'.new','w')
+newfile = open(newFilename,'w')
 
 addrArray = []
 errAddrArray = []
 
 lines = oldfile.readlines()
 
-#1st pass - get addresses that contain OnLocalInvalidateResponse
+#1st pass - get addresses that contain methodname
 for line in lines:
     if line.count(methodname):
         splitLine = line.split();
@@ -67,6 +68,8 @@ for addr in errAddrArray:
     errfile.write('\n')
 errfile.close()
 '''
+
+os.system('dos2unix '+newFilename)
 
 # close files
 oldfile.close()
