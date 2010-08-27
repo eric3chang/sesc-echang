@@ -25,6 +25,7 @@ namespace Memory
 		DebugAssert(index >= 0 && index < (int)nodeSet.size());
 		return nodeSet[index];
 	}
+
 	void Directory::HashedPageCalculator::Initialize(const RootConfigNode& node)
 	{
 	   // "PageSize" should be a multiple of block size
@@ -67,6 +68,9 @@ namespace Memory
 		}
 		if(target == nodeID)
 		{
+#ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE
+               printDebugInfo("OnRemoteRead",*m,"PerformDirectoryFetch:Error",nodeID);
+#endif
 			OnRemoteRead(m, nodeID);//ERROR
 		}
 		else
@@ -202,6 +206,9 @@ namespace Memory
 		NodeID id = directoryNodeCalc->CalcNodeID(m->addr);
 		if(id == nodeID)
 		{
+#ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE
+               printDebugInfo("OnRemoteEviction",*m,"OnLocalEviction",nodeID);
+#endif
 			OnRemoteEviction(m,nodeID);
 		}
 		else
@@ -229,6 +236,9 @@ namespace Memory
 		}
 		else
 		{
+#ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE
+               printDebugInfo("OnRemoteInvalidateResponse",*m,"OnLocalInvalidateResponse",nodeID);
+#endif
 			OnRemoteInvalidateResponse(m,nodeID);
 		}
 		EM().DisposeMsg(d.msg);
@@ -277,7 +287,9 @@ namespace Memory
 					AddDirectoryShare(m->addr,i->second.sourceNode,false);
 					if(i->second.sourceNode == nodeID)
 					{
-					   //cout << "called from OnRemoteReadResponse()" << endl;
+#ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE
+               printDebugInfo("OnDirectoryBlockResponse",*r,"OnRemoteReadResponse",nodeID);
+#endif
 						OnDirectoryBlockResponse(r,nodeID);
 					}
 					else
@@ -334,6 +346,9 @@ namespace Memory
 						}
 						else
 						{
+#ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE
+               printDebugInfo("OnRemoteInvalidate",*inv,"OnRemoteReadResponse",nodeID);
+#endif
 							OnRemoteInvalidate(inv, nodeID);
 						}
 					}
@@ -606,6 +621,9 @@ namespace Memory
 		         ("pendingLocalReads.erase("+to_string<MessageID>(m->solicitingMessage)+")").c_str());
 #endif
 			pendingLocalReads.erase(m->solicitingMessage);
+#ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE
+               printDebugInfo("OnLocalRead",*m,"OnDirectoryBlockResponse");
+#endif
 			OnLocalRead(ref);
 			return;
 		}
@@ -924,11 +942,13 @@ namespace Memory
    {
       printBaseMemDeviceDebugInfo("Dir", fromMethod, myMessage, operation);
    }
+
    void Directory::printDebugInfo(const char* fromMethod, const BaseMsg &myMessage,
          const char* operation, NodeID src)
    {
       printBaseMemDeviceDebugInfo("Dir", fromMethod, myMessage, operation, src);
    }
+
    void Directory::printDebugInfo(const char* fromMethod,Address addr,NodeID id,const char* operation)
    {
       cout << setw(17) << " " // account for spacing from src and msgSrc
