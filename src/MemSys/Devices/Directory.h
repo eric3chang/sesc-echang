@@ -115,6 +115,7 @@ namespace Memory
 		void printDebugInfo(const char* fromMethod, const BaseMsg &myMessage, const char* operation);
 		void printDebugInfo(const char* fromMethod, const BaseMsg &myMessage, const char* operation,NodeID src);
 	   void printDebugInfo(const char* fromMethod,Address addr,NodeID id,const char* operation);
+	   void printEraseOwner(const char* fromMethod,Address addr,NodeID id,const char* operation);
 #endif
 #ifdef MEMORY_DIRECTORY_DEBUG_PENDING_DIRECTORY_SHARED_READS
 		void printPendingDirectorySharedReads();
