@@ -262,7 +262,7 @@ void FetchEngine::realFetch(IBucket *bucket, int32_t fetchMax)
   
   do {
     nGradInsts++; // Before executePC because it can trigger a context switch
-    cout << "FetchEngine::realFetch: nGradInsts=" << nGradInsts << endl;
+    //TODO 2010/08/27 Eric cout << "FetchEngine::realFetch: nGradInsts=" << nGradInsts << endl;
 
     DInst *dinst = flow.executePC();
 	if (dinst == 0)

@@ -1,14 +1,14 @@
 cmake_minimum_required (VERSION 2.6)
 
 # added debug into the definitions below
-#if (UNIX)
+if (UNIX)
    # if the user specifies -DCMAKE_BUILD_TYPE on the command line, take their
    # definition and dump it in the cache, otherwise set CMAKE_BUILD_TYPE to Debug prior to calling PROJECT()
-#   if (NOT DEFINED CMAKE_BUILD_TYPE)
-      #set (CMAKE_BUILD_TYPE Debug CACHE STRING
-        # "Choose the type of build, options are: None Debug Release")
-   #endif (NOT DEFINED CMAKE_BUILD_TYPE)
-#endif(UNIX)
+   if (NOT DEFINED CMAKE_BUILD_TYPE)
+      set (CMAKE_BUILD_TYPE Debug CACHE STRING
+         "Choose the type of build, options are: None Debug Release")
+   endif (NOT DEFINED CMAKE_BUILD_TYPE)
+endif(UNIX)
 
 project (augSescProject)
 
@@ -61,13 +61,12 @@ IF (UNIX)
    #ADD_DEFINITIONS (-march=i386)
    #ADD_DEFINITIONS (-mtune=i386)
    ADD_DEFINITIONS (-ggdb)
+   # performs address alignment checks on individual memory accesses
+   ADD_DEFINITIONS (-DADDRESS_CHK)
 
    # turned off
    # dumps program binary in a readable state upon startup
    # ADD_DEFINITIONS (-DDEBUG_DUMP_PROGRAM)
-   # performs address alignment checks on individual memory accesses
-   # ADD_DEFINITIONS (-DADDRESS_CHK)
-
    # transactional memory only
    #ADD_DEFINITIONS (-DTRANSACTIONAL_COMPOSITION_TRACKING)
    #ADD_DEFINITIONS (-DTRANSACTIONAL_MEMORY)

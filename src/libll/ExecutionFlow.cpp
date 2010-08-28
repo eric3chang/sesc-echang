@@ -233,7 +233,8 @@ DInst *ExecutionFlow::executePC()
 
   // Execute the actual event (but do not time it)
   I(thread.getPid()==origPid);
-  cout << "I(thread.getPid()==origPid);" << endl;
+  //TODO 2010/08/27 Eric
+  //cout << "I(thread.getPid()==origPid);" << endl;
   vaddr = exeInst();
   I(vaddr);
   if( ev == NoEvent ) {
