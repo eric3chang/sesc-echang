@@ -83,10 +83,13 @@ int32_t ExecutionFlow::exeInst(void)
   }
 
   I(!thread.IsBusyWaiting());
-  cout << "ExecutionFlow::exeInst: " << endl;
-  cout << "picodePC=(picodePC->func)(picodePC, &thread);" << endl;
+  cout << "ExecutionFlow::exeInst:";
+  cout << " picodePC->func=" << picodePC->func;
+  cout << " picodePC=" << picodePC;
+  cout << " thread=" << &thread << endl;
+
   picodePC=(picodePC->func)(picodePC, &thread);
-  cout << "I(picodePC);" << endl;
+  cout << " picodePC=" << picodePC << endl;
   I(picodePC);
   I(picodePC->addr != iAddr || thread.IsBusyWaiting());
 
@@ -171,7 +174,7 @@ DInst *ExecutionFlow::executePC()
   }
   DInst *dinst=0;
   // We will need the original picodePC later
-  //icode_ptr origPIcode=picodePC;
+  icode_ptr origPIcode=picodePC;
   I(picodePC);
   // Need to get the pid here because exeInst may switch to another thread
   Pid_t     origPid=thread.getPid();
@@ -225,7 +228,8 @@ DInst *ExecutionFlow::executePC()
                             ,fid
 							);
   	globalInstructionStampCounter++;
-
+  	cout << "ExecutionFlow::executePC: globalInstructionStampCounter="
+  	      << globalInstructionStampCounter << endl;
   TMInterface::ProcessAction(dinst->instructionStamp);
 
 
@@ -237,7 +241,7 @@ DInst *ExecutionFlow::executePC()
   // Execute the actual event (but do not time it)
   I(thread.getPid()==origPid);
   //TODO 2010/08/27 Eric
-  //cout << "I(thread.getPid()==origPid);" << endl;
+  cout << "ExecutionFlow::executePC(): I(thread.getPid()==origPid);" << endl;
   vaddr = exeInst();
   I(vaddr);
   if( ev == NoEvent ) {
