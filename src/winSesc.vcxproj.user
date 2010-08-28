@@ -5,18 +5,24 @@
     <LocalDebuggerWorkingDirectory Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)\WorkingFolder</LocalDebuggerWorkingDirectory>
     <LocalDebuggerWorkingDirectory Condition="'$(Configuration)|$(Platform)'=='genome-directory|Win32'">$(ProjectDir)\WorkingFolder</LocalDebuggerWorkingDirectory>
     <LocalDebuggerWorkingDirectory Condition="'$(Configuration)|$(Platform)'=='genome 2_00|Win32'">$(ProjectDir)\WorkingFolder</LocalDebuggerWorkingDirectory>
+    <LocalDebuggerWorkingDirectory Condition="'$(Configuration)|$(Platform)'=='fft-002-0001-0002-00|Win32'">$(ProjectDir)\WorkingFolder</LocalDebuggerWorkingDirectory>
+    <LocalDebuggerWorkingDirectory Condition="'$(Configuration)|$(Platform)'=='genome-4-00|Win32'">$(ProjectDir)\WorkingFolder</LocalDebuggerWorkingDirectory>
     <LocalDebuggerWorkingDirectory Condition="'$(Configuration)|$(Platform)'=='vacation-low|Win32'">$(ProjectDir)\WorkingFolder</LocalDebuggerWorkingDirectory>
     <LocalDebuggerWorkingDirectory Condition="'$(Configuration)|$(Platform)'=='mem-test|Win32'">$(ProjectDir)\WorkingFolder</LocalDebuggerWorkingDirectory>
     <LocalDebuggerWorkingDirectory Condition="'$(Configuration)|$(Platform)'=='memtest-snoopy|Win32'">$(ProjectDir)\WorkingFolder</LocalDebuggerWorkingDirectory>
     <DebuggerFlavor Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">WindowsLocalDebugger</DebuggerFlavor>
     <DebuggerFlavor Condition="'$(Configuration)|$(Platform)'=='genome-directory|Win32'">WindowsLocalDebugger</DebuggerFlavor>
     <DebuggerFlavor Condition="'$(Configuration)|$(Platform)'=='genome 2_00|Win32'">WindowsLocalDebugger</DebuggerFlavor>
+    <DebuggerFlavor Condition="'$(Configuration)|$(Platform)'=='fft-002-0001-0002-00|Win32'">WindowsLocalDebugger</DebuggerFlavor>
+    <DebuggerFlavor Condition="'$(Configuration)|$(Platform)'=='genome-4-00|Win32'">WindowsLocalDebugger</DebuggerFlavor>
     <DebuggerFlavor Condition="'$(Configuration)|$(Platform)'=='vacation-low|Win32'">WindowsLocalDebugger</DebuggerFlavor>
     <DebuggerFlavor Condition="'$(Configuration)|$(Platform)'=='mem-test|Win32'">WindowsLocalDebugger</DebuggerFlavor>
     <DebuggerFlavor Condition="'$(Configuration)|$(Platform)'=='memtest-snoopy|Win32'">WindowsLocalDebugger</DebuggerFlavor>
     <LocalDebuggerCommandArguments Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">-w1 -cconfigs\workFile\genome-02cpu-00.conf -dconfigs\workFile\genome-02cpu-00.report benchmarks\genome -t2 -g256 -s16 -n16384</LocalDebuggerCommandArguments>
     <LocalDebuggerCommandArguments Condition="'$(Configuration)|$(Platform)'=='genome-directory|Win32'">-w1 -cconfigs\workFile\genome-directory-02cpu.conf -dconfigs\workFile\genome-directory-02cpu.report benchmarks\genome -t2 -g256 -s16 -n16384</LocalDebuggerCommandArguments>
     <LocalDebuggerCommandArguments Condition="'$(Configuration)|$(Platform)'=='genome 2_00|Win32'">-w1 -cconfigs\workFile\genome-02cpu-00.conf -dconfigs\workFile\genome-02cpu-00.report benchmarks\genome -t2 -g256 -s16 -n16384</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments Condition="'$(Configuration)|$(Platform)'=='fft-002-0001-0002-00|Win32'">-cconfigs\workFile\fft-002-0001-0002-00.conf -dconfigs\workFile\fft-002-0001-0002-00.report benchmarks-splash2-sesc\fft.mips  -m10 -p2 -n65536 -l4 -t</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments Condition="'$(Configuration)|$(Platform)'=='genome-4-00|Win32'">-w1 -cconfigs\workFile\genome-directory-04cpu.conf -dconfigs\workFile\genome-directory-04cpu.report benchmarks-sesc-stamp\genome -t2 -g256 -s16 -n16384</LocalDebuggerCommandArguments>
     <LocalDebuggerCommandArguments Condition="'$(Configuration)|$(Platform)'=='vacation-low|Win32'">-w1 -cconfigs\workFile\vacation-low-02cpu-00.conf -dconfigs\workFile\vacation-low-02cpu-00.report benchmarks\vacation -c2 -n2 -q90 -u98 -r16384 -t4096</LocalDebuggerCommandArguments>
     <LocalDebuggerCommandArguments Condition="'$(Configuration)|$(Platform)'=='mem-test|Win32'">-cconfigs\workFile\memtest-directory-02cpu.conf -dconfigs\workFile\memtest-directory-02cpu.report ..\libapp\memtest.sesc</LocalDebuggerCommandArguments>
     <LocalDebuggerCommandArguments Condition="'$(Configuration)|$(Platform)'=='memtest-snoopy|Win32'">-cconfigs\workFile\memtest-snoopy-02cpu.conf -dconfigs\workFile\memtest-snoopy-02cpu.report ..\libapp\memtest.sesc</LocalDebuggerCommandArguments>
