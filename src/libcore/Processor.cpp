@@ -33,6 +33,9 @@ Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #include "OSSim.h"
 #include "TMInterface.h"
 
+using std::cout;
+using std::endl;
+
 Processor::Processor(GMemorySystem *gm, CPU_t i)
   :GProcessor(gm, i, 1)
   ,IFID(i, i, gm, this)
@@ -163,9 +166,7 @@ void Processor::goRabbitMode(long long n2Skip)
 
 void Processor::advanceClock()
 {
-
   clockTicks++;
-
   //  GMSG(!ROB.empty(),"robTop %d Ul %d Us %d Ub %d",ROB.getIdFromTop(0)
   //       ,unresolvedLoad, unresolvedStore, unresolvedBranch);
 
@@ -216,6 +217,7 @@ void Processor::advanceClock()
 		  break;
 	  }
   } 
+
   retire();
 }
 void Processor::NotifyCompletedTrans(CPU_t cpuID, bool isRead, VAddr address)

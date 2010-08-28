@@ -533,6 +533,7 @@ SMPCache::Line *SMPCache::allocateLine(PAddr addr, CallbackBase *cb,
   if(!l->isValid()) {
     if(canDestroyCB)
       cb->destroy();
+    std::cout << "SMPCache::allocateLine:setTag from isValid" << std::endl;
     l->setTag(cache->calcTag(addr));
     return l;
   }
@@ -546,6 +547,7 @@ SMPCache::Line *SMPCache::allocateLine(PAddr addr, CallbackBase *cb,
     if(canDestroyCB)
       cb->destroy();
     l->invalidate();
+    std::cout << "SMPCache::allocateLine:setTag from canDestroyCB" << std::endl;
     l->setTag(cache->calcTag(addr));
     return l;
   }
@@ -581,6 +583,7 @@ void SMPCache::doAllocateLine(PAddr addr, PAddr rpl_addr, CallbackBase *cb)
 
     if(l) {
       I(cb);
+      std::cout << "SMPCache::allocateLine:setTag l" << std::endl;
       l->setTag(calcTag(addr));
       l->changeStateTo(SMP_TRANS_RSV);
       cb->call();
@@ -598,6 +601,7 @@ void SMPCache::doAllocateLine(PAddr addr, PAddr rpl_addr, CallbackBase *cb)
   }
 
   I(cb);
+  std::cout << "SMPCache::allocateLine:setTag cb" << std::endl;
   l->setTag(cache->calcTag(addr));
   l->changeStateTo(SMP_TRANS_RSV);
   cb->call();

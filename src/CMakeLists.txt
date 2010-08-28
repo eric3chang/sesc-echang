@@ -53,19 +53,29 @@ IF (UNIX)
    ADD_DEFINITIONS (-Wno-deprecated)
    # made it so it permanently debugs
    ADD_DEFINITIONS(-DDEBUG)
-   ADD_DEFINITIONS (-DHANGING_ASERT)
+   # causes assertions to halt the program instead of exit the program
+   ADD_DEFINITIONS (-DHANGING_ASSERT)
    ADD_DEFINITIONS (-DSYSTEM_SESC)
-   ADD_DEFINITIONS (-D_CONSOLE)
    ADD_DEFINITIONS (-DLENDIAN)
-   #   ADD_DEFINITIONS (-DDEBUG_DUMP_PROGRAM)
-   ADD_DEFINITIONS (-DTRANSACTIONAL_MEMORY)
-   ADD_DEFINITIONS (-DTRANSACTIONAL_ONLY)
-   ADD_DEFINITIONS (-DADDRESS_CHK)
-   ADD_DEFINITIONS (-DTRANSACTIONAL_COMPOSITION_TRACKING)
    ADD_DEFINITIONS (-m32)
    #ADD_DEFINITIONS (-march=i386)
    #ADD_DEFINITIONS (-mtune=i386)
    ADD_DEFINITIONS (-ggdb)
+
+   # turned off
+   # dumps program binary in a readable state upon startup
+   # ADD_DEFINITIONS (-DDEBUG_DUMP_PROGRAM)
+   # performs address alignment checks on individual memory accesses
+   # ADD_DEFINITIONS (-DADDRESS_CHK)
+
+   # transactional memory only
+   #ADD_DEFINITIONS (-DTRANSACTIONAL_COMPOSITION_TRACKING)
+   #ADD_DEFINITIONS (-DTRANSACTIONAL_MEMORY)
+   #ADD_DEFINITIONS (-DTRANSACTIONAL_ONLY)
+
+   # vs specific
+   #ADD_DEFINITIONS (-D_CONSOLE)
+   #ADD_DEFINITIONS (-D_DEBUG)
   
    #  the following definition doesn't work in older gnu compilers
    #  enable it to use new standards unordered_map and unordered_set

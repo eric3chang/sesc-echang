@@ -813,6 +813,7 @@ void SMPCache::concludeAccess(MemRequest *mreq)
 	
 	  if(!l->isValid()) {
 	    cb->destroy();
+	    std::cout << "TMCache::SMPCache::allocateLine:setTag from isValid" << std::endl;
 	    l->setTag(cache->calcTag(addr));
 	    return l;
 	  }
@@ -825,6 +826,7 @@ void SMPCache::concludeAccess(MemRequest *mreq)
 	
 	    cb->destroy();
 	    l->invalidate();
+	    std::cout << "TMCache::SMPCache::allocateLine:setTag from invalidate" << std::endl;
 	    l->setTag(cache->calcTag(addr));
 	    return l;
 	  }
@@ -852,6 +854,7 @@ void SMPCache::doAllocateLine(PAddr addr, PAddr rpl_addr, CallbackBase *cb)
   }
 
   I(cb);
+  std::cout << "TMCache::SMPCache::allocateLine:setTag(cache->calcTag(addr))" << std::endl;
   l->setTag(cache->calcTag(addr));
   l->changeStateTo(SMP_TRANS_RSV);
   cb->call();
