@@ -1,8 +1,0 @@
-Group string ReportFileName results/genome__64_1_8_2_Perfect_0.txt string BenchName genome int ProcessorSkew0 46 int ProcessorSkew1 344 #
-int TotalRunTime 1 #
-Group string Aspect Flatten string Module CollisionDetection #
-EndGroup #
-string CollisionDetection Perfect int LineSize 64 #
-string CollisionManager Perfect #
-string Versioning Perfect int LineSize 64 bool TransfersEnabled false #
-EndGroup #

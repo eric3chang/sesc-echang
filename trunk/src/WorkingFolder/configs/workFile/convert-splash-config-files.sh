@@ -1,7 +1,7 @@
 #/bin/bash
 # transform old conf files into splash conf files
 
-for file in $(ls fft-02cpu-??.conf); do
+for file in $(ls cholesky-02cpu-??.conf); do
    truncatedFile=${file%.*}
    sed -i\
       -e 's/ShouldLoadCheckpoint = 1/ShouldLoadCheckpoint = 0/' \
