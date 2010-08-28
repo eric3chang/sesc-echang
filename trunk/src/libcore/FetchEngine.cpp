@@ -40,6 +40,9 @@ Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #include "XactionManager.h"
 #endif
 
+using std::cout;
+using std::endl;
+
 long long FetchEngine::nInst2Sim=0;
 long long FetchEngine::totalnInst=0;
 long long FetchEngine::instrCheckpoint = INSTR_CHECKPOINT_INCREMENT;
@@ -259,6 +262,7 @@ void FetchEngine::realFetch(IBucket *bucket, int32_t fetchMax)
   
   do {
     nGradInsts++; // Before executePC because it can trigger a context switch
+    cout << "FetchEngine::realFetch: nGradInsts=" << nGradInsts << endl;
 
     DInst *dinst = flow.executePC();
 	if (dinst == 0)

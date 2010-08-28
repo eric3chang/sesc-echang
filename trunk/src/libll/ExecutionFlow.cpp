@@ -36,6 +36,9 @@ Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #include "mintapi.h"
 #include "opcodes.h"
 
+using std::cout;
+using std::endl;
+
 ExecutionFlow::ExecutionFlow(int32_t cId, int32_t i, GMemorySystem *gmem)
   : GFlow(i, cId, gmem)
 {
@@ -78,6 +81,7 @@ int32_t ExecutionFlow::exeInst(void)
 	// Put the Real data address in the thread structure
     thread.setRAddr(dAddrR);
   }
+
   I(!thread.IsBusyWaiting());
   picodePC=(picodePC->func)(picodePC, &thread);
   I(picodePC);
@@ -229,6 +233,7 @@ DInst *ExecutionFlow::executePC()
 
   // Execute the actual event (but do not time it)
   I(thread.getPid()==origPid);
+  cout << "I(thread.getPid()==origPid);" << endl;
   vaddr = exeInst();
   I(vaddr);
   if( ev == NoEvent ) {
@@ -243,6 +248,7 @@ DInst *ExecutionFlow::executePC()
     ev = NoEvent;
     return dinst;
   }
+  cout << "FastSimBeginEvent" << endl;
   I(ev != FastSimBeginEvent);
   I(ev != FastSimEndEvent);
   I(pendingDInst);

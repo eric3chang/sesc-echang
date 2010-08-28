@@ -1114,8 +1114,8 @@ uint32_t TMInterface::DoAllocate(int pid, size_t size)
 }
 void TMInterface::DoFree(int pid, uint32_t addr)
 {
-	uint32_t size = (uint32_t)ThreadContext::getContext(pid)->getHeapManager()->deallocate(addr);
 #ifdef TRANSACTIONAL_COMPOSITION_TRACKING
+   uint32_t size = (uint32_t)ThreadContext::getContext(pid)->getHeapManager()->deallocate(addr);
 	if(compositionRecordingEnabled && currentTransID[pid])
 	{
 		compositionRecordSet->RecordAllocate(currentTransID[pid],addr,size);
@@ -1358,12 +1358,17 @@ bool TMInterface::MayForward(uint64_t load, uint64_t store)
 }
 bool TMInterface::MayRaceAhead(int pid)
 {
+#ifdef TRANSACTIONAL_MEMORY
 	I(raceAheadMode[pid]);
 	runningAhead = !raceAheadStarted[pid] || !raceAheadFinished[pid] || residualInstructionCount[pid] > 0;
 	return runningAhead;
+#else
+	return false;
+#endif
 }
 void TMInterface::MarkInstructionExecution(int pid)
 {
+#ifdef TRANSACTIONAL_MEMORY
 	if(raceAheadMode[pid] && raceAheadStarted[pid])
 	{
 		if(currentTransID[pid] == 0)
@@ -1384,8 +1389,13 @@ void TMInterface::MarkInstructionExecution(int pid)
 	{
 		residualInstructionCount[pid] = 0;
 	}
+#endif
 }
 bool TMInterface::IsTransacting(int pid)
 {
+#ifdef TRANSACTIONAL_MEMORY
 	return !(privateMemoryQueue[pid].empty());
+#else
+	return false;
+#endif
 }

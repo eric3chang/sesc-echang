@@ -28,6 +28,10 @@ Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #include "ReportTherm.h"
 #endif
 
+using std::cout;
+using std::endl;
+
+int coreRunningProcsGlobalCounter = 0;
 
 RunningProcs::RunningProcs()
 {
@@ -95,82 +99,101 @@ void RunningProcs::run()
 
       startProc = 0;
 
-      do{
-		if(osSim->isGoingRabbit())
-		{
-			long long counter = 0;
-			std::cout << "Rabbit Mode Start " << std::endl;
-			bool allFinished = false;
-			TMInterface::BeginRabbit();
-			while(osSim->isGoingRabbit() && allFinished == false)
-			{
-				allFinished = true;
-				for(unsigned int i = 0; i < size(); i++)
-				{
-					if( !getProcessor(i)->availableFlows() )
-					{
+      do
+      {
+         if(osSim->isGoingRabbit())
+         {
+            long long counter = 0;
+            std::cout << "Rabbit Mode Start " << std::endl;
+            bool allFinished = false;
+            TMInterface::BeginRabbit();
+            while (osSim->isGoingRabbit() && allFinished == false)
+            {
+               allFinished = true;
+               for(unsigned int i = 0;i < size();i++)
+               {
+                  if( !getProcessor(i)->availableFlows() )
+                  {
 #ifdef DEBUG_DUMP_INSTR
-						std::cout << i << "-";
+                     std::cout << i << "-";
 #endif
 #ifdef DEBUG_PROC_DIAG
-						gbCurrentProcessor = i;
+                     gbCurrentProcessor = i;
 #endif
-						getProcessor(i)->goRabbitMode(1);
-						allFinished = false;
+                     getProcessor(i)->goRabbitMode(1);
+                     allFinished = false;
 #ifdef DEBUG_DUMP_INSTR
-						std::cout << std::endl;
+                     std::cout << std::endl;
 #endif
-					}
-				}
-				counter++;
-				if(counter % 1000000 == 0)
-				{
-					std::cout << "Tick " << counter << std::endl;
-				}
-			}
-			TMInterface::EndRabbit();
-			std::cout << "Leaving rabbit mode..." << std::endl;
-		}
-		bool workDone = false;
+                  }
+               }
+               counter++;
+               if(counter % 1000000 == 0)
+               {
+                  std::cout << "Tick " << counter << std::endl;
+               }
+            }
+            TMInterface::EndRabbit();
+            std::cout << "Leaving rabbit mode..." << std::endl;
+         }
+         bool workDone = false;
 
-        for(size_t i=startProc ; i < workingList.size() ; i++) {
-          if (workingList[i]->hasWork()) {
-			  workDone = true;
-            currentCPU = workingList[i];
-            currentCPU->advanceClock();
-          }else{
-            workingListRemove(workingList[i]);
-          }
-        }
-        for(size_t i=0 ; i < startProc ; i++) {
-          if (workingList[i]->hasWork()) {
-			  workDone = true;
-            currentCPU = workingList[i];
-            currentCPU->advanceClock();
-          }else{
-            workingListRemove(workingList[i]);
-          }
-        }
-		ticker++;
-		if(!workDone)
-			noWorkTicker++;
-		if(ticker % 1000000000 == 0)
-			std::cout << "*** Ticker at " << ticker << std::endl;
-		if(noWorkTicker % 1000000 == 0)
-			std::cout << "*** *** No work ticker at " << noWorkTicker << std::endl;
+         for (size_t i = startProc; i < workingList.size(); i++)
+         {
+            if (workingList[i]->hasWork())
+            {
+               workDone = true;
+               currentCPU = workingList[i];
+               currentCPU->advanceClock();
+            }
+            else
+            {
+               workingListRemove(workingList[i]);
+            }
+         }
 
-        startProc++;
-        if (startProc >= workingList.size())
-          startProc = 0;
+         for (size_t i = 0; i < startProc; i++)
+         {
+            if (workingList[i]->hasWork())
+            {
+               workDone = true;
+               currentCPU = workingList[i];
+               currentCPU->advanceClock();
+            }
+            else
+            {
+               workingListRemove(workingList[i]);
+            }
+         }
 
-		TMInterface::ClockTick();
+         ticker++;
+         if (!workDone)
+         {
+            noWorkTicker++;
+         }
+         if (ticker % 1000000000 == 0)
+         {
+            std::cout << "*** Ticker at " << ticker << std::endl;
+         }
+         if (noWorkTicker % 1000000 == 0)
+         {
+            std::cout << "*** *** No work ticker at " << noWorkTicker << std::endl;
+         }
 
-        IS(currentCPU = 0);
- 		osSim->MemSys_system.ProcessTick();
-       EventScheduler::advanceClock();
-      }while(stayInLoop);
-	  std::cout << "Get out of 'has-work' loop" << std::endl;
-    }
+         startProc++;
+         if (startProc >= workingList.size())
+         {
+            startProc = 0;
+         }
+
+         TMInterface::ClockTick();
+
+         IS(currentCPU = 0);
+         osSim->MemSys_system.ProcessTick();
+         EventScheduler::advanceClock();
+      } while(stayInLoop);
+	   std::cout << "Get out of 'has-work' loop" << std::endl;
+    }// while(hasWork())
   std::cout << "Finished running " << std::endl;
 }
 
