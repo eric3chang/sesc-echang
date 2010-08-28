@@ -83,7 +83,10 @@ int32_t ExecutionFlow::exeInst(void)
   }
 
   I(!thread.IsBusyWaiting());
+  cout << "ExecutionFlow::exeInst: " << endl;
+  cout << "picodePC=(picodePC->func)(picodePC, &thread);" << endl;
   picodePC=(picodePC->func)(picodePC, &thread);
+  cout << "I(picodePC);" << endl;
   I(picodePC);
   I(picodePC->addr != iAddr || thread.IsBusyWaiting());
 
