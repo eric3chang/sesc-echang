@@ -83,11 +83,12 @@ public:
     // randomize it
     cid = (cid >> 17) ^ (cid); 
 
-    std::cout << "BPred.h:BPred::calcInstID: inst->currentID()="
+    //TODO 2010/08/27 Eric
+    /*std::cout << "BPred.h:BPred::calcInstID: inst->currentID()="
       << inst->currentID()
       << " cid=" << cid
       << std::endl;
-
+*/
     return cid;
   }
 public:
