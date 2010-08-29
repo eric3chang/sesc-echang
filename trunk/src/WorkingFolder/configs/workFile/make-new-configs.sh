@@ -4,7 +4,7 @@
 #set -x   # verbose output
 OLD_BENCHMARK=cholesky # benchmark name of old config files
 OLD_SETTING=002-0001-0002  # processor and cache settings of old config files
-NEW_BENCHMARK=barnes   # benchmark name of new config files
+NEW_BENCHMARK=radix   # benchmark name of new config files
 NEW_SETTING=002-0001-0002  # processor and cache settings of new config files
 
 for file in $(ls $OLD_BENCHMARK-$OLD_SETTING-??.conf); do
