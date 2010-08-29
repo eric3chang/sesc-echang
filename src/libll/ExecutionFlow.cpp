@@ -83,13 +83,8 @@ int32_t ExecutionFlow::exeInst(void)
   }
 
   I(!thread.IsBusyWaiting());
-  cout << "ExecutionFlow::exeInst:";
-  cout << " picodePC->func=" << picodePC->func;
-  cout << " picodePC=" << picodePC;
-  cout << " thread=" << &thread << endl;
 
   picodePC=(picodePC->func)(picodePC, &thread);
-  cout << " picodePC=" << picodePC << endl;
   I(picodePC);
   I(picodePC->addr != iAddr || thread.IsBusyWaiting());
 
@@ -239,8 +234,11 @@ DInst *ExecutionFlow::executePC()
 
   // Execute the actual event (but do not time it)
   I(thread.getPid()==origPid);
+  //TODO 2010/08/28 Eric
+  /*
   cout << "ExecutionFlow::executePC: globalInstructionStampCounter="
         << globalInstructionStampCounter << endl;
+        */
   vaddr = exeInst();
   I(vaddr);
   if( ev == NoEvent ) {

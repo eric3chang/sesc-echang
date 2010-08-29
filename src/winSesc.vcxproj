@@ -1,6 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="cholesky-002-0001-0002-00|Win32">
+      <Configuration>cholesky-002-0001-0002-00</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
       <Platform>Win32</Platform>
@@ -19,6 +23,10 @@
     </ProjectConfiguration>
     <ProjectConfiguration Include="genome-directory|Win32">
       <Configuration>genome-directory</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="lu-002-0001-0002-00|Win32">
+      <Configuration>lu-002-0001-0002-00</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
     <ProjectConfiguration Include="mem-test|Win32">
@@ -59,6 +67,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='fft-002-0001-0002-00|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='cholesky-002-0001-0002-00|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='lu-002-0001-0002-00|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='genome-4-00|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
   </PropertyGroup>
@@ -89,6 +103,12 @@
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='fft-002-0001-0002-00|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='cholesky-002-0001-0002-00|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='lu-002-0001-0002-00|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='genome-4-00|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
@@ -108,6 +128,8 @@
     <OutDir Condition="'$(Configuration)|$(Platform)'=='genome-directory|Win32'">Debug\</OutDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='genome 2_00|Win32'">Debug\</OutDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='fft-002-0001-0002-00|Win32'">Debug\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='cholesky-002-0001-0002-00|Win32'">Debug\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='lu-002-0001-0002-00|Win32'">Debug\</OutDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='genome-4-00|Win32'">Debug\</OutDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='vacation-low|Win32'">Debug\</OutDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='mem-test|Win32'">Debug\</OutDir>
@@ -116,6 +138,8 @@
     <IntDir Condition="'$(Configuration)|$(Platform)'=='genome-directory|Win32'">Debug\</IntDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='genome 2_00|Win32'">Debug\</IntDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='fft-002-0001-0002-00|Win32'">Debug\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='cholesky-002-0001-0002-00|Win32'">Debug\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='lu-002-0001-0002-00|Win32'">Debug\</IntDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='genome-4-00|Win32'">Debug\</IntDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='vacation-low|Win32'">Debug\</IntDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='mem-test|Win32'">Debug\</IntDir>
@@ -124,6 +148,8 @@
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='genome-directory|Win32'">true</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='genome 2_00|Win32'">true</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='fft-002-0001-0002-00|Win32'">true</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='cholesky-002-0001-0002-00|Win32'">true</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='lu-002-0001-0002-00|Win32'">true</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='genome-4-00|Win32'">true</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='vacation-low|Win32'">true</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='mem-test|Win32'">true</LinkIncremental>
@@ -134,6 +160,8 @@
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='genome-directory|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='genome 2_00|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='fft-002-0001-0002-00|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='cholesky-002-0001-0002-00|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='lu-002-0001-0002-00|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='genome-4-00|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='vacation-low|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='mem-test|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
@@ -216,6 +244,56 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='fft-002-0001-0002-00|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <AdditionalIncludeDirectories>MemSys\Messages\;PersonalTools\includes\;libtrans\;libvmem\;libtm\;libsuperlu\;libsuc\;libsmp\;libsesctherm\;libsescspot\;librst\;libpower\;libpint\;libnet\;libmem\;libemul\;libcore\;libll\;libmint\;libapp\;libAugMem\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;HANGING_ASSERT;_DEBUG;SYSTEM_SESC;DEBUG;_CONSOLE;LENDIAN;__i386__;DEBUG_DUMP_PROGRAM;ADDRESS_CHK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <AdditionalOptions>zdll.exp zdll.lib %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalLibraryDirectories>PersonalTools\libraries\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <LinkTimeCodeGeneration>
+      </LinkTimeCodeGeneration>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='cholesky-002-0001-0002-00|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <AdditionalIncludeDirectories>MemSys\Messages\;PersonalTools\includes\;libtrans\;libvmem\;libtm\;libsuperlu\;libsuc\;libsmp\;libsesctherm\;libsescspot\;librst\;libpower\;libpint\;libnet\;libmem\;libemul\;libcore\;libll\;libmint\;libapp\;libAugMem\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;HANGING_ASSERT;_DEBUG;SYSTEM_SESC;DEBUG;_CONSOLE;LENDIAN;__i386__;DEBUG_DUMP_PROGRAM;ADDRESS_CHK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <AdditionalOptions>zdll.exp zdll.lib %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalLibraryDirectories>PersonalTools\libraries\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <LinkTimeCodeGeneration>
+      </LinkTimeCodeGeneration>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='lu-002-0001-0002-00|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
