@@ -1698,7 +1698,9 @@ OP(mint_read)
 #ifdef _MSC_VER
     err = _read(r4, (void *)(pthread->virt2real(buf)), r6);
 #else
-    err = read(r4, (void *)(pthread->virt2real(buf)), r6);
+    RAddr myRAddr = pthread->virt2real(buf);
+    I(r4);
+    err = read(r4, (void *)(myRAddr), r6);
 #endif
 #endif
 
