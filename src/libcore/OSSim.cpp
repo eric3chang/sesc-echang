@@ -1352,9 +1352,13 @@ void OSSim::RabbitModeStart()
 
 void OSSim::RabbitModeStop()
 {
+   // 2010/08/28 hack to always stop rabbit mode
+   rabbitModeCounter = 0;
+   /*
 	rabbitModeCounter--;
 	if(rabbitModeCounter < 0)
 	{
 		rabbitModeCounter = 0;
 	}
+	*/
 }
