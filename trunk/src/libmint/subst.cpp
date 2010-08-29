@@ -1554,9 +1554,9 @@ OP(mint_mmap)
 #else
   // Prefered address for mmap
   VAddr addr=pthread->getIntArg1();
-  // Size of block to mmap
-  //size_t size=pthread->getIntArg2();	//unused variable
 #ifdef DEBUG_VERBOSE
+  // Size of block to mmap
+  size_t size=pthread->getIntArg2();
   printf("mint_mmap(%d)\n", size);
 #endif
   
@@ -1696,10 +1696,12 @@ OP(mint_read)
     }
 #else
 #ifdef _MSC_VER
+    //TODO 2010/08/28 Eric
+    //I(r4);
     err = _read(r4, (void *)(pthread->virt2real(buf)), r6);
 #else
     RAddr myRAddr = pthread->virt2real(buf);
-    I(r4);
+    //I(r4);
     err = read(r4, (void *)(myRAddr), r6);
 #endif
 #endif

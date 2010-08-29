@@ -178,7 +178,6 @@ void Processor::advanceClock()
 		}
 	  }
 	  
-	  cout <<"Processor::advanceClock: ID stage" << endl;
 	  // ID Stage (insert to instQueue)
 	  if (spaceInInstQueue >= FetchWidth) {
 		IBucket *bucket = pipeQ.pipeLine.nextItem();
@@ -195,7 +194,6 @@ void Processor::advanceClock()
 		noFetch.inc();
 	  }
 
-     cout <<"Processor::advanceClock: rename stage" << endl;
 	  // RENAME Stage
 	  if ( !pipeQ.instQueue.empty() ) {
 		spaceInInstQueue += issue(pipeQ);
