@@ -76,6 +76,7 @@ OP(mint_sesc_fast_sim_begin)
   // Do the actual call (should not context-switch)
   ID(Pid_t thePid=pthread->getPid());
 //  rsesc_fast_sim_begin(pthread->getPid()); // MARK
+  SimOp_BeginRabbit(picode, pthread);
   I(pthread->getPid()==thePid);
   // Return from the call
   return pthread->getRetIcode();
@@ -86,6 +87,8 @@ OP(mint_sesc_fast_sim_end)
   // Do the actual call (should not context-switch)
   ID(Pid_t thePid=pthread->getPid());
 //  rsesc_fast_sim_end(pthread->getPid()); // MARK
+  //SimOp_TakeCheckpoint(picode, pthread);
+  SimOp_EndRabbit(picode, pthread);
   I(pthread->getPid()==thePid);
   // Return from the call
   return pthread->getRetIcode();

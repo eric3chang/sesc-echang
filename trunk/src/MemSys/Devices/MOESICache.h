@@ -18,9 +18,9 @@
 // toggles debug output
 // toggles common debug methods,
 // should be enabled if any debug flag is on
-//#define MEMORY_MOESI_CACHE_DEBUG_COMMON
+#define MEMORY_MOESI_CACHE_DEBUG_COMMON
 
-//#define MEMORY_MOESI_CACHE_DEBUG_VERBOSE
+#define MEMORY_MOESI_CACHE_DEBUG_VERBOSE
 //#define MEMORY_MOESI_CACHE_DEBUG_PENDING_EVICTION
 //#define MEMORY_MOESI_CACHE_DEBUG_PENDING_INVALIDATE
 
