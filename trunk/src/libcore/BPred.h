@@ -83,8 +83,15 @@ public:
     // randomize it
     cid = (cid >> 17) ^ (cid); 
 
-    //TODO 2010/08/27 Eric
-    /*std::cout << "BPred.h:BPred::calcInstID: inst->currentID()="
+    // This hack makes sure that cid != 0 when inst is a small number
+    // if cid===0 , it can cause libsuc/CacheCore.h::StateGeneric::setTag() to have an error when it expects the address to not be 0
+    // 2010/08/18 Eric
+    if ((cid==0) && (inst->currentID()<10))
+    {
+      cid = inst->currentID()+1;
+    }
+    /*
+    std::cout << "BPred.h:BPred::calcInstID: inst->currentID()="
       << inst->currentID()
       << " cid=" << cid
       << std::endl;
