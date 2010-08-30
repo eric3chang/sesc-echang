@@ -154,12 +154,6 @@ namespace Memory
             DebugAssert(pendingEviction.find(set[eviction].tag) == pendingEviction.end());
             pendingEviction[set[eviction].tag] = set[eviction];
 
-            // don't send invalidate message if set[eviction].tag == tag.
-            // Doesn't work, because it's supposed to be different.
-            // What it is is that PrepareFreshBlock prepares the block that we
-            // just inserted
-            //if(pendingInvalidate.find(tag) == pendingInvalidate.end()
-                  //&& set[eviction].tag != tag)
             if(pendingInvalidate.find(tag) == pendingInvalidate.end())
             {
                InvalidateMsg* im = EM().CreateInvalidateMsg(ID(),0);
@@ -168,6 +162,8 @@ namespace Memory
                localConnection->SendMsg(im,invalidateTime);
             }
 
+            // PrepareFreshBlock can sometimes
+            // prepare the block that we just inserted into pendingEviction
             PrepareFreshBlock(CalcSetFromTag(tag),eviction,tag);
          }
          return true;
@@ -687,10 +683,10 @@ namespace Memory
 		if (canceledBlockEviction.find(tag) != canceledBlockEviction.end())
 		{
 		   canceledBlockEviction.erase(tag);
-		   EM().DisposeMsg(m);
-		   return;
+		   //EM().DisposeMsg(m);
+		   //return;
 		}
-		else
+		//else (canceledBlockEviction.find(tag) == canceledBlockEviction.end())
 		{
          if(m->blockAttached)
          {
