@@ -46,7 +46,7 @@ namespace Memory
 		   connectionSet[i]->print();
 		}
 #endif
-#ifdef MEMORY_BASE_MEM_DEVICE_DEBUG_COMMON
+#if defined MEMORY_BASE_MEM_DEVICE_DEBUG_COMMON && !defined _WIN32
    #define MEMORY_BASE_MEM_DEVICE_DEBUG_ARRAY_SIZE 20
 		Connection** connectionArray;
 		connectionArray = (Connection**)malloc(sizeof(Connection*) *
