@@ -1,0 +1,9 @@
+.text Minor header aligment correction (10000040 vs 1000003c)
+.data Minor header aligment correction (10096c10 vs 10096c04)
+1.bss Minor header aligment correction 12 (10098b00 vs 10098af4)
+.bss Minor header aligment correction (10098b00 vs 10098af4)
+static[0x100814c0-0x1009964c] heap[0x1009a000-0x23f58000] stack[0x23f58000-0x24750000] -> [0x979dd008-0xac0abb48]
+Device : P(0)_DL1  Description : ProcessorInterface_0
+Device : P(0)_IL1  Description : InstSource
+Device : P(1)_DL1  Description : ProcessorInterface_1
+Device : P(1)_IL1  Description : InstSource
