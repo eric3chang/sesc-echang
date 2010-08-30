@@ -682,11 +682,15 @@ namespace Memory
 		// if a block eviction was canceled by PrepareFreshBlock()
 		if (canceledBlockEviction.find(tag) != canceledBlockEviction.end())
 		{
+		   // if the block was canceled eviction, it shouldn't be found
+		   // in pendingEviction or pendingInvalidate
+		   DebugAssert(pendingEviction.find(tag) == pendingEviction.end());
+		   DebugAssert(pendingInvalidate.find(tag)==pendingInvalidate.end());
 		   canceledBlockEviction.erase(tag);
-		   //EM().DisposeMsg(m);
-		   //return;
+		   EM().DisposeMsg(m);
+		   return;
 		}
-		//else (canceledBlockEviction.find(tag) == canceledBlockEviction.end())
+		else //(canceledBlockEviction.find(tag) == canceledBlockEviction.end())
 		{
          if(m->blockAttached)
          {
