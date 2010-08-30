@@ -656,26 +656,26 @@ namespace Memory
 	void MOESICache::OnLocalInvalidateResponse(const InvalidateResponseMsg* m)
 	{
 #ifdef MEMORY_MOESI_CACHE_DEBUG_COMMON
-#ifdef _WIN32
-      waitingOnBlockUnlock;
-      waitingOnSetUnlock;
-      waitingOnRemoteReads;
-      pendingEviction;
-      pendingInvalidate;
-#else
-      #define MEMORY_MOESI_CACHE_ARRAY_SIZE 20
-      StoredFunctionBase* waitingOnBlockUnlockArray[MEMORY_MOESI_CACHE_ARRAY_SIZE];
-      StoredFunctionBase* waitingOnSetUnlockArray[MEMORY_MOESI_CACHE_ARRAY_SIZE];
-      StoredFunctionBase* waitingOnRemoteReadsArray[MEMORY_MOESI_CACHE_ARRAY_SIZE];
-      BlockState pendingEvictionArray[MEMORY_MOESI_CACHE_ARRAY_SIZE];
-      const InvalidateMsg* pendingInvalidateArray[MEMORY_MOESI_CACHE_ARRAY_SIZE];
+   #ifdef _WIN32
+         waitingOnBlockUnlock;
+         waitingOnSetUnlock;
+         waitingOnRemoteReads;
+         pendingEviction;
+         pendingInvalidate;
+   #else
+         #define MEMORY_MOESI_CACHE_ARRAY_SIZE 20
+         StoredFunctionBase* waitingOnBlockUnlockArray[MEMORY_MOESI_CACHE_ARRAY_SIZE];
+         StoredFunctionBase* waitingOnSetUnlockArray[MEMORY_MOESI_CACHE_ARRAY_SIZE];
+         StoredFunctionBase* waitingOnRemoteReadsArray[MEMORY_MOESI_CACHE_ARRAY_SIZE];
+         BlockState pendingEvictionArray[MEMORY_MOESI_CACHE_ARRAY_SIZE];
+         const InvalidateMsg* pendingInvalidateArray[MEMORY_MOESI_CACHE_ARRAY_SIZE];
 
-      waitingOnBlockUnlock.convertToArray(waitingOnBlockUnlockArray,MEMORY_MOESI_CACHE_ARRAY_SIZE);
-      convertVectorToArray<StoredFunctionBase*>(waitingOnSetUnlock,waitingOnSetUnlockArray,MEMORY_MOESI_CACHE_ARRAY_SIZE);
-      waitingOnRemoteReads.convertToArray(waitingOnRemoteReadsArray,MEMORY_MOESI_CACHE_ARRAY_SIZE);
-      pendingEviction.convertToArray(pendingEvictionArray,MEMORY_MOESI_CACHE_ARRAY_SIZE);
-      pendingInvalidate.convertToArray(pendingInvalidateArray,MEMORY_MOESI_CACHE_ARRAY_SIZE);
-#endif
+         waitingOnBlockUnlock.convertToArray(waitingOnBlockUnlockArray,MEMORY_MOESI_CACHE_ARRAY_SIZE);
+         convertVectorToArray<StoredFunctionBase*>(waitingOnSetUnlock,waitingOnSetUnlockArray,MEMORY_MOESI_CACHE_ARRAY_SIZE);
+         waitingOnRemoteReads.convertToArray(waitingOnRemoteReadsArray,MEMORY_MOESI_CACHE_ARRAY_SIZE);
+         pendingEviction.convertToArray(pendingEvictionArray,MEMORY_MOESI_CACHE_ARRAY_SIZE);
+         pendingInvalidate.convertToArray(pendingInvalidateArray,MEMORY_MOESI_CACHE_ARRAY_SIZE);
+   #endif
 #endif
 		DebugAssert(m);
 		AddrTag tag = CalcTag(m->addr);

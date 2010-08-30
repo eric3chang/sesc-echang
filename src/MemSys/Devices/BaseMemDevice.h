@@ -9,6 +9,10 @@
 
 #include "BaseMsg.h"
 
+// toggle debug messages for this class
+#define MEMORY_BASE_MEM_DEVICE_DEBUG_COMMON
+//#define MEMORY_BASE_MEM_DEVICE_DEBUG_VERBOSE
+
 /*
 // allows one to get the variable name of n
 #ifndef GET_NAME

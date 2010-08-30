@@ -83,6 +83,10 @@ namespace Memory
 		}
 	}
 
+	/**
+	 * erase Node id as a share for Address a. If a is owned by id, check that there
+	 * are no other shares
+	 */
 	void Directory::EraseDirectoryShare(Address a, NodeID id)
 	{
 		DebugAssert(directoryData.find(a) != directoryData.end());
@@ -481,14 +485,13 @@ namespace Memory
 		DebugAssert(m);
 		DebugAssert(directoryData.find(m->addr) != directoryData.end());
 		BlockData& b = directoryData[m->addr];
-		DebugAssert(!m->blockAttached || b.owner == src);
-#ifdef MEMORY_DIRECTORY_DEBUG_DIRECTORY_DATA
-#define MEMORY_DIRECTORY_DEBUG_ARRAY_SIZE 20
-		NodeID sharers[MEMORY_DIRECTORY_DEBUG_ARRAY_SIZE];
-   #ifndef _WIN32
-		b.sharers.convertToArray(sharers,MEMORY_DIRECTORY_DEBUG_ARRAY_SIZE);
-   #endif
+#if defined MEMORY_DIRECTORY_DEBUG_DIRECTORY_DATA && !defined _WIN32
+      #define MEMORY_DIRECTORY_DEBUG_ARRAY_SIZE 20
+      NodeID sharers[MEMORY_DIRECTORY_DEBUG_ARRAY_SIZE];
+      b.sharers.convertToArray(sharers,MEMORY_DIRECTORY_DEBUG_ARRAY_SIZE);
+      m->blockAttached;
 #endif
+		DebugAssert(!m->blockAttached || b.owner == src);
 		DebugAssert(m->blockAttached || b.sharers.find(src) != b.sharers.end());
 		if(b.owner == src)
 		{

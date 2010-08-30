@@ -3,9 +3,6 @@
 #include "../Configuration.h"
 #include "../EventManager.h"
 
-// toggle debug messages for this class
-//#define MEMORY_BASE_MEM_DEVICE_DEBUG
-
 namespace Memory
 {
 	void BaseMemDevice::SendMsg(int connectionID, const BaseMsg* msg, TimeDelta delay)
@@ -41,13 +38,22 @@ namespace Memory
 	{
 		DebugAssert(index >= 0 && index < (int)connectionSet.size());
 
-#ifdef MEMORY_BASE_MEM_DEVICE_DEBUG
+#ifdef MEMORY_BASE_MEM_DEVICE_DEBUG_VERBOSE
 		std::cout << "BaseMemDevice::GetConnection: " << std::endl;
 		for (int i=0; i<(int)connectionSet.size(); i++)
 		{
 		   std::cout << "   ";
 		   connectionSet[i]->print();
 		}
+#endif
+#ifdef MEMORY_BASE_MEM_DEVICE_DEBUG_COMMON
+   #define MEMORY_BASE_MEM_DEVICE_DEBUG_ARRAY_SIZE 20
+		Connection** connectionArray;
+		connectionArray = (Connection**)malloc(sizeof(Connection*) *
+		      MEMORY_BASE_MEM_DEVICE_DEBUG_ARRAY_SIZE);
+		convertVectorToArray<Connection*>(connectionSet, connectionArray,
+		      MEMORY_BASE_MEM_DEVICE_DEBUG_ARRAY_SIZE);
+		free(connectionArray);
 #endif
 		return *(connectionSet[index]);
 	}
