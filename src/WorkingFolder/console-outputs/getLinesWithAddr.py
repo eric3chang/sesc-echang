@@ -69,7 +69,12 @@ for addr in errAddrArray:
 errfile.close()
 '''
 
-os.system('dos2unix '+newFilename)
+if os.path.exists('/usr/bin/dos2unix'):
+   os.system('dos2unix '+newFilename)
+elif os.path.exists('/usr/bin/fromdos'):
+   os.system('fromdos '+newFilename)
+else:
+   print('dos2unix and fromdos not found: not converting file from dos')
 
 # close files
 oldfile.close()

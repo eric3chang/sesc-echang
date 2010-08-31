@@ -316,11 +316,16 @@ namespace Memory
 					EM().DisposeMsg(i->second.msg);
 				}
 				pendingDirectorySharedReads.erase(pendingDirectorySharedReads.equal_range(m->addr).first,pendingDirectorySharedReads.equal_range(m->addr).second);
-			}
-			else
+			}  //if(pendingDirectorySharedReads.find(m->addr) != pendingDirectorySharedReads.end())
+			else // pendingDirectorySharedReads.find(m->addr) == pendingDirectorySharedReads.end())
 			{  // there is no pending shared read on this address
 				DebugAssert(m->exclusiveOwnership);
 				DebugAssert(m->blockAttached);
+#ifdef MEMORY_DIRECTORY_DEBUG_DIRECTORY_DATA
+				printDebugInfo("OnRemoteReadResponse", *m,
+				      ("directoryData[m->addr].owner="+to_string<NodeID>(
+				            directoryData[m->addr].owner)).c_str(), src);
+#endif
 				DebugAssert(directoryData[m->addr].owner == InvalidNodeID || directoryData[m->addr].owner == src);
 				if(directoryData[m->addr].sharers.size() == 0)
 				{//send block on now
@@ -341,7 +346,7 @@ namespace Memory
 					AddDirectoryShare(m->addr,pendingDirectoryExclusiveReads[m->addr].sourceNode,true);
 					EM().DisposeMsg(pendingDirectoryExclusiveReads[m->addr].msg);
 					pendingDirectoryExclusiveReads.erase(m->addr);
-				}
+				} // if(directoryData[m->addr].sharers.size() == 0)
 				else
 				{//hold the block, send on once all invalidations are complete
 					for(HashSet<NodeID>::iterator i = directoryData[m->addr].sharers.begin(); i != directoryData[m->addr].sharers.end(); i++)
@@ -365,18 +370,18 @@ namespace Memory
 							OnRemoteInvalidate(inv, nodeID);
 						}
 					}
-				}
-			}
+				} // else (directoryData[m->addr].sharers.size() != 0)
+			} // else pendingDirectorySharedReads.find(m->addr) == pendingDirectorySharedReads.end())
 			EM().DisposeMsg(m);
-		}
-		else
+		}// if(m->satisfied)
+		else  // !m->satisfied
 		{
 			EraseDirectoryShare(m->addr,src);
 			DebugAssert(directoryData[m->addr].owner == InvalidNodeID);
 			PerformDirectoryFetch(m->addr);
 			EM().DisposeMsg(m);
 		}
-	}
+	} // OnRemoteReadResponse
 	void Directory::OnRemoteWrite(const WriteMsg* m, NodeID src)
 	{
 		DebugAssert(m);
@@ -491,7 +496,7 @@ namespace Memory
       b.sharers.convertToArray(sharers,MEMORY_DIRECTORY_DEBUG_ARRAY_SIZE);
       m->blockAttached;
 #endif
-		DebugAssert(!m->blockAttached || b.owner == src);
+		//DebugAssert(!m->blockAttached || b.owner == src);
 		DebugAssert(m->blockAttached || b.sharers.find(src) != b.sharers.end());
 		if(b.owner == src)
 		{

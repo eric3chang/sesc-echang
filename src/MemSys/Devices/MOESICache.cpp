@@ -355,7 +355,7 @@ namespace Memory
 		}
 		else if(b == NULL && pendingEviction.find(tag) != pendingEviction.end())
 		{
-			res->blockAttached = pendingEviction[tag].state == bs_Modified || pendingEviction[tag].state == bs_Owned;
+			res->blockAttached = (pendingEviction[tag].state == bs_Modified) || (pendingEviction[tag].state == bs_Owned);
 #ifdef MEMORY_MOESI_CACHE_DEBUG_PENDING_EVICTION
 			printDebugInfo("RespondInvalidate",tag,"pendingEviction.erase");
 #endif
@@ -707,7 +707,7 @@ namespace Memory
             {
                b = Lookup(tag);
             }
-            // if blockState was not set to anything, don't do
+            // if blockState is still NULL, don't do
             // anything to it, otherwise, it would cause an error
             if (b)
             {
