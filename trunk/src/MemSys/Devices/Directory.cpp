@@ -496,7 +496,7 @@ namespace Memory
       b.sharers.convertToArray(sharers,MEMORY_DIRECTORY_DEBUG_ARRAY_SIZE);
       m->blockAttached;
 #endif
-		//DebugAssert(!m->blockAttached || b.owner == src);
+		DebugAssert(!m->blockAttached || (b.owner == src) || (b.owner==InvalidNodeID));
 		DebugAssert(m->blockAttached || b.sharers.find(src) != b.sharers.end());
 		if(b.owner == src)
 		{

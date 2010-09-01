@@ -133,7 +133,7 @@ Here I will demonstrate a simple c program. The purpose of this program is to de
 The second step to verifying whether or not the simulator is correct is to run the benchmark on a normal machine, using C code, find out what the output is, then run the program on SESC. The output produced from SESC should be
 identical to that produced by running the benchmark on a real processor. If not, then it means that the program that simulates the directory protocol is not running correctly.
 
-[[ Section 08.1 benchmarks for fft]]
+[[ Section 08.1 benchmarks for genome]]
 
 a typical parameter could be -t2 -g256 -s16 -n16384
 

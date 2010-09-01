@@ -42,6 +42,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
+#include <asm/page.h>
 MAIN_ENV
 
 #define MAXRAND                         32767.0

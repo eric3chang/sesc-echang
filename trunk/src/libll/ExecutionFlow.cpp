@@ -234,11 +234,6 @@ DInst *ExecutionFlow::executePC()
 
   // Execute the actual event (but do not time it)
   I(thread.getPid()==origPid);
-  //TODO 2010/08/28 Eric
-  /*
-  cout << "ExecutionFlow::executePC: globalInstructionStampCounter="
-        << globalInstructionStampCounter << endl;
-        */
   vaddr = exeInst();
   I(vaddr);
   if( ev == NoEvent ) {
