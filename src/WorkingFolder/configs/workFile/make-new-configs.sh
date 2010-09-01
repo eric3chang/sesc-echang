@@ -4,8 +4,8 @@
 #set -x   # verbose output
 OLD_BENCHMARK=fft  # benchmark name of old config files
 NEW_BENCHMARK=fft  # benchmark name of new config files
-OLD_PROC_CNT=16   # number of processors in old config files
-NEW_PROC_CNT=32   # number of processors in new config files
+OLD_PROC_CNT=64   # number of processors in old config files
+NEW_PROC_CNT=128   # number of processors in new config files
 
 function appendZeros
 {
