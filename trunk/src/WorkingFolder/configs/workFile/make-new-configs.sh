@@ -4,8 +4,8 @@
 #set -x   # verbose output
 OLD_BENCHMARK=fft  # benchmark name of old config files
 NEW_BENCHMARK=fft  # benchmark name of new config files
-OLD_PROC_CNT=2   # number of processors in old config files
-NEW_PROC_CNT=4   # number of processors in new config files
+OLD_PROC_CNT=4   # number of processors in old config files
+NEW_PROC_CNT=8   # number of processors in new config files
 
 function appendZeros
 {
@@ -29,6 +29,17 @@ OLD_SETTING=$OLD_PROC_CNT_APP-0001-0002
 # processor and cache settings of new config files
 NEW_SETTING=$NEW_PROC_CNT_APP-0001-0002
 
+# check for whether we can use dos2unix or fromdos
+if [[ -e '/usr/bin/dos2unix' ]]
+then
+   DOS2UNIX=dos2unix
+elif [[ -e '/usr/bin/fromdos' ]]
+then
+   DOS2UNIX=fromdos
+else
+   echo "Cannot find dos2unix or fromdos, not converting file to unix format"
+fi
+
 for file in $(ls $OLD_BENCHMARK-$OLD_SETTING-??.conf); do
    string=${file:0-7:2}
    cp $file "$NEW_BENCHMARK-$NEW_SETTING-$string".conf
@@ -47,5 +58,9 @@ for file in $(ls $NEW_BENCHMARK-$NEW_SETTING-??.conf); do
       -e "s/_$OLD_PROC_CNT_APP/_$NEW_PROC_CNT_APP/" \
       -e "s@Directory_p$OLD_PROC_CNT@Directory_p$NEW_PROC_CNT@" \
       $file
+   if [[ $DOS2UNIX != '' ]]
+   then
+      $DOS2UNIX $file
+   fi
 done
 
