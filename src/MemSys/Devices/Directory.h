@@ -126,7 +126,7 @@ namespace Memory
 
 		typedef PooledFunctionGenerator<StoredClassFunction2<Directory,const ReadMsg*, NodeID, &Directory::OnDirectoryBlockRequest> > CBOnDirectoryBlockRequest;
 		CBOnDirectoryBlockRequest cbOnDirectoryBlockRequest;
-		// TODO 2010/08/05 Eric
+		// 2010/08/05 Eric: seems to be unused
 		/*
 		typedef PooledFunctionGenerator<StoredClassFunction2<Directory,const ReadResponseMsg*, NodeID, &Directory::OnDirectoryBlockResponse> > CBOnDirectoryBlockResponse;
 		CBOnDirectoryBlockResponse cbOnDirectoryBlockResponse;

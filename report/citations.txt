@@ -1,12 +1,2 @@
-STAMP: Stanford Transactional Applications for Multi-Processing
-Chi Cao Minh, JaeWoong Chung, Christos Kozyrakis, Kunle Olukotun
-In IISWC '08: Proceedings of The IEEE International Symposium on Workload Characterization, Sept. 2008.
-
-@inproceedings{caominh:stamp:iiswc:2008,
-    title     = {{STAMP}: Stanford Transactional Applications for Multi-Processing},
-    author    = {Cao Minh, Chi and Chung, JaeWoong and Kozyrakis, Christos and Olukotun, Kunle},
-    booktitle = {IISWC '08: Proceedings of The IEEE International Symposium on Workload Characterization},
-    year      = {2008},
-    month     = {September}
-}
+SPLASH2
 
