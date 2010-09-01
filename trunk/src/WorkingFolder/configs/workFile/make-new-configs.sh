@@ -4,8 +4,8 @@
 #set -x   # verbose output
 OLD_BENCHMARK=fft  # benchmark name of old config files
 NEW_BENCHMARK=fft  # benchmark name of new config files
-OLD_PROC_CNT=4   # number of processors in old config files
-NEW_PROC_CNT=8   # number of processors in new config files
+OLD_PROC_CNT=16   # number of processors in old config files
+NEW_PROC_CNT=32   # number of processors in new config files
 
 function appendZeros
 {
@@ -13,9 +13,11 @@ function appendZeros
    myString=$1
    if [[ length -lt 3 ]]
    then
-      for i in {2..3}
+      index=$length
+      while [[ $index -lt 3 ]]
       do
          myString=0${myString}
+         let index++
       done
    fi
    echo $myString
