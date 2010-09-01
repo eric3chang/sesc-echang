@@ -1,5 +1,4 @@
-[[Title: An Implementation of the standard directory-based cache-coherence protocol on the SESC simulator]]
-[[Title: An analysis of directory-based cache-coherence protocol on symmetric multiprocessors using the SESC simulator]]
+﻿[[Title: An analysis of directory-based cache-coherence protocol on symmetric multiprocessors using the SESC simulator]]
 
 
 
@@ -21,6 +20,12 @@ Read Request      |
    |              Time
 Cache 01
 
+[[Section 01.3]]
+
+From wikipedia. We also need to talk about consistency models, which are contracts between the system and the programmer. Essentially, these models state that if the programmer follows a specific set of rules, the memory of the system would be consistent with the intentions of the programmers. However, if the programmer does not follow these rules, then the memory would be inconsistent and undeterministic. There are several levels of consistency. Certain processors allow for multiple levels of consistency. For example, Intel's Itanium processor allows for [blah] by using [blah], while using [blah], we can get a higher level of consistency, at the possible expense of a speed loss.
+
+While taking care of cache coherency, we also need to keep in mind that Amdahl's law prevents us from improving our speedup to a certain degree if our program contains sequential code. Since sequential code cannot be sped up, we can never achieve a speedup faster than the time it takes to run that sequential code.
+
 
 [[Section 02 Different Types of Cache Coherence Protocols]]
 
@@ -28,7 +33,7 @@ There are two main types of cache coherence protocols - Directory based and snoo
 
 There are several cache-coherence protocols. 
 
-When it comes to cache-coherence, there are several types. There is the directory-based cache-coherence protocl, first invented in 
+When it comes to cache-coherence, there are several types. There is the directory-based cache-coherence protocol, first invented in 
 
 In this report, I will talk about different directory-based protocols and how they compare against each other. 
 
@@ -58,14 +63,6 @@ A directory-based cache-coherence protocol can be designed several ways. One of 
 
 In this way, we can see that using bit vector to keep track of the CPU that has a specific cache block is an efficient way to implement directory-based cache-coherence protocol, but it has a certain limit on how many CPU's can be used together with the system.
 
-[[Section 05.1 Network]]
-The underlying network in use for this simulator is a simple blackbox model. It does not model a real network that has routing issues. Instead it models messages going in and out of the network using a random delay with a lower-bound of [] and an upper-bound of []. When more messages arrhive, the delay coming from the random delay generator will be shifted higher as to model the higher traffic conditions.
-
-The reason the network is not simulated in detail is because that is not the focus of this report. The focus of this report is on the various directory-based cache-coherence protocols that are able to be modeled using the SESC simulator. Although the SESC simulator has the capability to model a network, a simple network, such as the one used here, can illustrate our point.
-
-A more complicated network would be one that simulates router-router
-connection and uses routing protocols
-
 
 [[Section 06.1 SESC Simulator]]
 CPU_0
@@ -89,6 +86,31 @@ The SESC simulator supports both a regular mode, where everything is simulated, 
 
 The user-defined values could be contained in the configuration file or passed on the command-line like the other parameters. The configuration file is read through OSSim.cpp file under the libcore folder. It is read into a SescConf variable. I will design the SimpleDirectoryController in a way so that most of the common parameters will be changeable through the header file. The most obvious parameter that comes to mind is the directory size parameter, but more options will be added as necessary to increase the flexibility of the simulator. Some of the parameters that will need to be tracked are how many accesses to the directory are being made, how many reads and writes to the
 directory, and so on.
+
+
+[[Section 06.2 Network]]
+The underlying network in use for this simulator is a simple blackbox model. It does not model a real network that has routing issues. Instead it models messages going in and out of the network using a random delay with a lower-bound of [] and an upper-bound of []. When more messages arrhive, the delay coming from the random delay generator will be shifted higher as to model the higher traffic conditions.
+
+The reason the network is not simulated in detail is because that is not the focus of this report. The focus of this report is on the various directory-based cache-coherence protocols that are able to be modeled using the SESC simulator. Although the SESC simulator has the capability to model a network, a simple network, such as the one used here, can illustrate our point.
+
+A more complicated network would be one that simulates router-router
+connection and uses routing protocols
+
+[[Section 06.2 Cache]]
+Include state-transition diagrams for MOESI and for MSI
+
+The MESI protocol adds an "Exclusive" state to reduce the traffic caused by writes of blocks that only exist in one cache. The MOSI protocol adds an "Owned" state to reduce the traffic caused by write-backs of blocks that are read by other caches. The MOESI protocol does both of these things. [copied from Wikipedia]
+
+CPU1 - CPU2
+ |      |
+cache   cache
+ |         |
+memA       memA
+
+If cpu1 and cpu2 are using the same piece of memory, then when cpu1 modifies memA, cpu2 needs to know that its copy of memA is no longer valid. This is what a cache coherence protocol does. There are several cache coherence
+protocols. [list cache coherence protocols]
+
+There are also several cache coherence mechanisms that enables these cache coherence protocols to be done.
 
 [[Section 06.xx MOESI Cache]]
 The MOESI protocol was used in both L1 and L2 cache. This protocol was chosen because it contains the most states. The advantages to that is that it reduces the traffic going across the network. The "Owned" state allows dirty lines to be shared quickly (Wikipedia MOESI). The disadvantage of this protocol is that it uses the most amount of space to store this information, since it needs to store more states, compared to MESI, MOSI, or MSI protocols.
@@ -125,6 +147,7 @@ Read miss message from CPU when when block is not held in any cache line: OnLoca
 
 invalidate message comes from the network:
 
+[[Section 07 Verifying Correctness]]
 
 [[Section 07.1 Simple C Program]]
 Here I will demonstrate a simple c program. The purpose of this program is to demonstrate more clearly what is going on at the detailed directory-level. This program has a global variable that a function accesses. The main() function will split off threads of this function. We can see what goes on in the directory from this simple program.
@@ -133,33 +156,41 @@ Here I will demonstrate a simple c program. The purpose of this program is to de
 The second step to verifying whether or not the simulator is correct is to run the benchmark on a normal machine, using C code, find out what the output is, then run the program on SESC. The output produced from SESC should be
 identical to that produced by running the benchmark on a real processor. If not, then it means that the program that simulates the directory protocol is not running correctly.
 
-[[ Section 08.1 benchmarks for fft]]
+[[Section 08 SPLASH2 benchmarks]]
 
-a typical parameter could be -t2 -g256 -s16 -n16384
+[[Kernels]]
+
+[[ Section 08.1.1 benchmarks for fft]]
+
+  -mM : M = even integer; 2**M total complex data points transformed.
+  -pP : P = number of processors; Must be a power of 2.
+  -nN : N = number of cache lines.
+  -lL : L = Log base 2 of cache line length in bytes.
+  -s  : Print individual processor timing statistics.
+  -t  : Perform FFT and inverse FFT.  Test output by comparing the
+        integral of the original data to the integral of the data that
+        results from performing the FFT and inverse FFT.
+  -o  : Print out complex data points.
+  -h  : Print out command line options.
+
+a typical parameter could be -m10 -p2 -n65536 -l4
+
 
 [[ Section 09.1 problems]]
 In implementing the directory-based cache-coherence protocol, there were some problems. One was simply that debugging such a large system is inherently hard. It is useful to print out each message that pass around the system. However, often the bug surfaces after tens of thousands of messages are sent. At this point, it is useful to oknow the transistion states of what each message should cause. For example, a read miss request from the CPU when the block is not held in any cache line typically causes these for methods to be called: OnLocalRead, OnDirectoryBlockRequest, OnRemoteRead, and finally, OnDirectoryBlockResponse. If any of those four methods are not called for the same MsgID when satisfying a miss request, something might be wrong.
 
-[[Section 99]]
-Include state-transition diagrams for MOESI and for MSI
+[[Section 09.2 Problems in the cache]]
+One of the bugs that was extermely hard to find was one caused by various interactions within the system. To decrease the number of messages sent, it is possible for the block allocator in MOESICache to allocate a block as soon as it is evicted. Normally, when a block is evicted, the system will undergo this cycle: 
+1. An OnLocalRead gets called, and AllocateBlock puts tag1 into pendingEviction.
+2. OnLocalInvalidateResponse gets called, and removes tag1 from pendingEviction, doing the necessary cleanup.
 
-The MESI protocol adds an "Exclusive" state to reduce the traffic caused by writes of blocks that only exist in one cache. The MOSI protocol adds an "Owned" state to reduce the traffic caused by write-backs of blocks that are read by other caches. The MOESI protocol does both of these things. [copied from Wikipedia]
+However, it is possible for the system to undergo the following cycle, especially when faced with a larger number of invalidates and evictions:
+1. An OnLocalRead gets called, and AllocateBlock puts tag1 into pendingEviction.
+2. Another OnLocalRead gets called before OnLocalInvalidateResponse gets called, and PrepareFreshBlock finds the same tag1 inside pendingEviction. So it cancels the eviction and prepares that block for use.
+3. OnLocalInvalidateResponse gets called for tag1, but it cannot find tag1 inside pendingInvalidate or pendingEviction because pendingEviction.erase(tag1) was called during PrepareFreshBlock.
 
-CPU1 - CPU2
- |      |
-cache   cache
- |         |
-memA       memA
 
-If cpu1 and cpu2 are using the same piece of memory, then when cpu1 modifies memA, cpu2 needs to know that its copy of memA is no longer valid. This is what a cache coherence protocol does. There are several cache coherence
-protocols. [list cache coherence protocols]
-
-There are also several cache coherence mechanisms that enables these cache coherence protocols to be done.
-
-From wikipedia. We also need to talk about consistency models, which are contracts between thethe system and the programmer. Essentially, these models state that if the programmer follows a specific set of rules, the memory of the system would be consistent with the intentions of the programmers. However, if the programmer does not follow these rules, then the memory would be inconsistent and undeterministic. There are several levels of consistency. Certain processors allow for multiple levels of consistency. For example, Intel's Itanium processor allows for [blah] by using [blah], while using [blah], we can get a higher level of consistency, at the possible expense of a speed loss.
-
-While taking care of cache coherency, we also need to keep in mind that Amdahl's law prevents us from improving our speedup to a certain degree if our program contains sequential code. Since sequential code cannot be sped up, we can never achieve a speedup faster than the time it takes to run that sequential code.
-
+[[Section xx]]
 
 [Skewed Cache]
 Skewed cache is better than regular set-associative cache

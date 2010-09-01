@@ -940,3 +940,484 @@ Releasing processor 0 from barrier
 Releasing processor 1 from barrier
 Simulated 396000002 instructions so far at clock 868906177
 Simulated 396500001 instructions so far at clock 870046506
+Simulated 397000001 instructions so far at clock 871184043
+Simulated 397500005 instructions so far at clock 872322599
+Simulated 398000004 instructions so far at clock 873459160
+Simulated 398500005 instructions so far at clock 874594738
+Simulated 399000005 instructions so far at clock 875732861
+Simulated 399500005 instructions so far at clock 876869403
+Simulated 400000006 instructions so far at clock 878008021
+Simulated 400500002 instructions so far at clock 879146399
+Simulated 401000002 instructions so far at clock 880286707
+Simulated 401500001 instructions so far at clock 881424967
+Simulated 402000003 instructions so far at clock 882563188
+Simulated 402500002 instructions so far at clock 883701201
+Simulated 403000001 instructions so far at clock 884838440
+Simulated 403500003 instructions so far at clock 885973467
+Simulated 404000003 instructions so far at clock 887114196
+Simulated 404500003 instructions so far at clock 888254704
+Simulated 405000002 instructions so far at clock 889394830
+Simulated 405500004 instructions so far at clock 890535708
+Simulated 406000005 instructions so far at clock 891674310
+Simulated 406500004 instructions so far at clock 892813017
+Simulated 407000002 instructions so far at clock 893949520
+Simulated 407500003 instructions so far at clock 895087405
+Simulated 408000003 instructions so far at clock 896227104
+Simulated 408500004 instructions so far at clock 897365810
+Simulated 409000003 instructions so far at clock 898506378
+Simulated 409500001 instructions so far at clock 899647236
+Simulated 410000001 instructions so far at clock 900783368
+Simulated 410500001 instructions so far at clock 901924079
+Simulated 411000003 instructions so far at clock 903062151
+Simulated 411500004 instructions so far at clock 904198359
+Simulated 412000002 instructions so far at clock 905337270
+Simulated 412500005 instructions so far at clock 906478779
+Simulated 413000003 instructions so far at clock 907624480
+Simulated 413500003 instructions so far at clock 908762059
+Simulated 414000005 instructions so far at clock 909898453
+Simulated 414500005 instructions so far at clock 911035448
+Simulated 415000006 instructions so far at clock 912173127
+Simulated 415500004 instructions so far at clock 913313339
+Simulated 416000004 instructions so far at clock 914457779
+Simulated 416500002 instructions so far at clock 915597587
+Simulated 417000004 instructions so far at clock 916734095
+Simulated 417500004 instructions so far at clock 917872834
+Simulated 418000003 instructions so far at clock 919013433
+Simulated 418500004 instructions so far at clock 920150684
+Simulated 419000005 instructions so far at clock 921291057
+Stalling processor 0 at barrier
+Simulated 419500002 instructions so far at clock 922919041
+GProcessor::retire CPU[0] ROB empty for long time @924844032
+Simulated 420000006 instructions so far at clock 925201299
+Processor 1 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Simulated 420500006 instructions so far at clock 926206097
+Stalling processor 0 at barrier
+GProcessor::retire CPU[0] ROB empty for long time @926941184
+Simulated 421000003 instructions so far at clock 927954596
+Processor 1 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Simulated 421500002 instructions so far at clock 929215623
+Simulated 422000005 instructions so far at clock 930352606
+Simulated 422500004 instructions so far at clock 931489748
+Simulated 423000004 instructions so far at clock 932629240
+Simulated 423500001 instructions so far at clock 933769400
+Simulated 424000005 instructions so far at clock 934909487
+Simulated 424500005 instructions so far at clock 936045377
+Simulated 425000001 instructions so far at clock 937183816
+Simulated 425500004 instructions so far at clock 938318842
+Simulated 426000002 instructions so far at clock 939457918
+Simulated 426500003 instructions so far at clock 940593909
+Simulated 427000001 instructions so far at clock 941732710
+Simulated 427500004 instructions so far at clock 942872851
+Simulated 428000004 instructions so far at clock 944012876
+Simulated 428500001 instructions so far at clock 945151728
+Simulated 429000003 instructions so far at clock 946288324
+Simulated 429500004 instructions so far at clock 947428417
+Simulated 430000003 instructions so far at clock 948567829
+Simulated 430500003 instructions so far at clock 949706204
+Simulated 431000003 instructions so far at clock 950848038
+Simulated 431500005 instructions so far at clock 951988344
+Simulated 432000005 instructions so far at clock 953126674
+Simulated 432500002 instructions so far at clock 954265287
+Simulated 433000002 instructions so far at clock 955401551
+Simulated 433500004 instructions so far at clock 956539838
+Simulated 434000002 instructions so far at clock 957677266
+Simulated 434500004 instructions so far at clock 958814444
+Simulated 435000004 instructions so far at clock 959954852
+Simulated 435500004 instructions so far at clock 961092108
+Simulated 436000005 instructions so far at clock 962231302
+Simulated 436500001 instructions so far at clock 963370998
+Simulated 437000005 instructions so far at clock 964507811
+Simulated 437500006 instructions so far at clock 965645548
+Simulated 438000002 instructions so far at clock 966782216
+Simulated 438500002 instructions so far at clock 967922721
+Simulated 439000005 instructions so far at clock 969063527
+Simulated 439500003 instructions so far at clock 970205615
+Simulated 440000003 instructions so far at clock 971344168
+Simulated 440500004 instructions so far at clock 972482103
+Simulated 441000001 instructions so far at clock 973621552
+Simulated 441500006 instructions so far at clock 974759111
+Simulated 442000005 instructions so far at clock 975894220
+Simulated 442500005 instructions so far at clock 977035997
+Stalling processor 1 at barrier
+Simulated 443000001 instructions so far at clock 978960871
+Processor 0 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Simulated 443500005 instructions so far at clock 979927300
+Stalling processor 1 at barrier
+Simulated 444000006 instructions so far at clock 981610366
+Processor 0 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Simulated 444500004 instructions so far at clock 982825031
+Simulated 445000004 instructions so far at clock 983960574
+Simulated 445500003 instructions so far at clock 985097298
+Simulated 446000006 instructions so far at clock 986232288
+Simulated 446500002 instructions so far at clock 987369327
+Simulated 447000001 instructions so far at clock 988508925
+Simulated 447500003 instructions so far at clock 989648511
+Simulated 448000002 instructions so far at clock 990791329
+Simulated 448500002 instructions so far at clock 991928858
+Simulated 449000004 instructions so far at clock 993066724
+Simulated 449500003 instructions so far at clock 994207612
+Simulated 450000004 instructions so far at clock 995344225
+Simulated 450500001 instructions so far at clock 996483030
+Simulated 451000001 instructions so far at clock 997624169
+Simulated 451500001 instructions so far at clock 998762613
+Simulated 452000003 instructions so far at clock 999901736
+*** Ticker at 1000000000
+Simulated 452500003 instructions so far at clock 1001041265
+Simulated 453000003 instructions so far at clock 1002178475
+Simulated 453500001 instructions so far at clock 1003315290
+Simulated 454000005 instructions so far at clock 1004453815
+Simulated 454500001 instructions so far at clock 1005590872
+Simulated 455000006 instructions so far at clock 1006726484
+Simulated 455500001 instructions so far at clock 1007867151
+Simulated 456000005 instructions so far at clock 1009008458
+Simulated 456500006 instructions so far at clock 1010146888
+Simulated 457000005 instructions so far at clock 1011282811
+Simulated 457500004 instructions so far at clock 1012419970
+Simulated 458000003 instructions so far at clock 1013556823
+Simulated 458500001 instructions so far at clock 1014694959
+Simulated 459000005 instructions so far at clock 1015838368
+Simulated 459500001 instructions so far at clock 1016979201
+Simulated 460000003 instructions so far at clock 1018115837
+Simulated 460500001 instructions so far at clock 1019254717
+Simulated 461000005 instructions so far at clock 1020392930
+Simulated 461500003 instructions so far at clock 1021530619
+Simulated 462000003 instructions so far at clock 1022667677
+Simulated 462500002 instructions so far at clock 1023808972
+Simulated 463000002 instructions so far at clock 1024950925
+Stalling processor 0 at barrier
+Simulated 463500004 instructions so far at clock 1026413196
+Processor 1 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Simulated 464000002 instructions so far at clock 1028551508
+Simulated 464500001 instructions so far at clock 1029566890
+Stalling processor 0 at barrier
+GProcessor::retire CPU[0] ROB empty for long time @1029701632
+Processor 1 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Simulated 465000001 instructions so far at clock 1031388063
+Simulated 465500004 instructions so far at clock 1032529885
+Simulated 466000006 instructions so far at clock 1033668168
+Simulated 466500006 instructions so far at clock 1034804845
+Simulated 467000003 instructions so far at clock 1035942641
+Simulated 467500002 instructions so far at clock 1037079925
+Simulated 468000003 instructions so far at clock 1038218700
+Simulated 468500003 instructions so far at clock 1039356015
+Simulated 469000004 instructions so far at clock 1040495088
+Simulated 469500005 instructions so far at clock 1041633164
+Simulated 470000002 instructions so far at clock 1042771722
+Simulated 470500001 instructions so far at clock 1043911815
+Simulated 471000003 instructions so far at clock 1045049434
+Simulated 471500005 instructions so far at clock 1046189836
+Simulated 472000005 instructions so far at clock 1047330675
+Simulated 472500005 instructions so far at clock 1048468090
+Simulated 473000003 instructions so far at clock 1049606806
+Simulated 473500005 instructions so far at clock 1050747240
+Simulated 474000006 instructions so far at clock 1051887478
+Simulated 474500005 instructions so far at clock 1053024827
+Simulated 475000002 instructions so far at clock 1054159420
+Simulated 475500001 instructions so far at clock 1055296987
+Simulated 476000005 instructions so far at clock 1056433445
+Simulated 476500004 instructions so far at clock 1057576526
+Simulated 477000005 instructions so far at clock 1058716629
+Simulated 477500005 instructions so far at clock 1059853267
+Simulated 478000001 instructions so far at clock 1060992616
+Simulated 478500004 instructions so far at clock 1062133493
+Simulated 479000003 instructions so far at clock 1063269491
+Simulated 479500003 instructions so far at clock 1064407770
+Simulated 480000001 instructions so far at clock 1065546120
+Simulated 480500003 instructions so far at clock 1066685790
+Simulated 481000005 instructions so far at clock 1067825588
+Simulated 481500005 instructions so far at clock 1068965832
+Simulated 482000005 instructions so far at clock 1070105666
+Stalling processor 1 at barrier
+Simulated 482500002 instructions so far at clock 1071312182
+Processor 0 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Simulated 483000006 instructions so far at clock 1073184582
+Stalling processor 1 at barrier
+Simulated 483500004 instructions so far at clock 1074240780
+Processor 0 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Simulated 484000004 instructions so far at clock 1075887129
+Simulated 484500001 instructions so far at clock 1077027344
+Simulated 485000002 instructions so far at clock 1078166682
+Simulated 485500005 instructions so far at clock 1079305721
+Simulated 486000002 instructions so far at clock 1080444077
+Simulated 486500005 instructions so far at clock 1081579551
+Simulated 487000005 instructions so far at clock 1082718933
+Simulated 487500002 instructions so far at clock 1083855401
+Simulated 488000004 instructions so far at clock 1084990806
+Simulated 488500006 instructions so far at clock 1086131524
+Simulated 489000001 instructions so far at clock 1087269894
+Simulated 489500002 instructions so far at clock 1088410867
+Simulated 490000006 instructions so far at clock 1089546470
+Simulated 490500004 instructions so far at clock 1090680579
+Simulated 491000002 instructions so far at clock 1091818952
+Simulated 491500006 instructions so far at clock 1092955060
+Simulated 492000003 instructions so far at clock 1094097755
+Simulated 492500003 instructions so far at clock 1095238160
+Simulated 493000005 instructions so far at clock 1096376425
+Simulated 493500004 instructions so far at clock 1097515398
+Simulated 494000002 instructions so far at clock 1098655482
+Simulated 494500003 instructions so far at clock 1099795533
+Simulated 495000001 instructions so far at clock 1100932345
+Simulated 495500004 instructions so far at clock 1102071218
+Simulated 496000002 instructions so far at clock 1103211477
+Simulated 496500005 instructions so far at clock 1104348896
+Simulated 497000001 instructions so far at clock 1105492496
+Simulated 497500005 instructions so far at clock 1106632513
+Simulated 498000002 instructions so far at clock 1107769167
+Simulated 498500006 instructions so far at clock 1108907413
+Simulated 499000002 instructions so far at clock 1110046947
+Stalling processor 0 at barrier
+Simulated 499500001 instructions so far at clock 1111296040
+Processor 1 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Simulated 500000003 instructions so far at clock 1113387274
+Stalling processor 0 at barrier
+Simulated 500500006 instructions so far at clock 1114520871
+Processor 1 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Simulated 501000006 instructions so far at clock 1116160373
+Simulated 501500006 instructions so far at clock 1117299003
+Simulated 502000002 instructions so far at clock 1118437968
+Simulated 502500003 instructions so far at clock 1119580890
+Simulated 503000006 instructions so far at clock 1120719372
+Simulated 503500002 instructions so far at clock 1121857476
+Simulated 504000004 instructions so far at clock 1122996123
+Simulated 504500004 instructions so far at clock 1124131869
+Simulated 505000005 instructions so far at clock 1125268249
+Simulated 505500004 instructions so far at clock 1126411804
+Simulated 506000003 instructions so far at clock 1127550901
+Simulated 506500001 instructions so far at clock 1128689944
+Simulated 507000003 instructions so far at clock 1129828493
+Simulated 507500001 instructions so far at clock 1130965851
+Simulated 508000002 instructions so far at clock 1132104091
+Simulated 508500006 instructions so far at clock 1133241234
+Simulated 509000004 instructions so far at clock 1134380339
+Simulated 509500005 instructions so far at clock 1135521951
+Simulated 510000002 instructions so far at clock 1136660856
+Simulated 510500001 instructions so far at clock 1137800568
+Simulated 511000004 instructions so far at clock 1138939338
+Simulated 511500004 instructions so far at clock 1140075399
+Simulated 512000004 instructions so far at clock 1141214597
+Simulated 512500002 instructions so far at clock 1142349512
+Simulated 513000002 instructions so far at clock 1143490371
+Simulated 513500002 instructions so far at clock 1144629109
+Simulated 514000004 instructions so far at clock 1145771849
+Simulated 514500002 instructions so far at clock 1146912003
+Stalling processor 1 at barrier
+Simulated 515000003 instructions so far at clock 1148541069
+Processor 0 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Simulated 515500005 instructions so far at clock 1149922944
+Stalling processor 1 at barrier
+GProcessor::retire CPU[1] ROB empty for long time @1151336448
+Simulated 516000005 instructions so far at clock 1151513031
+Processor 0 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Simulated 516500005 instructions so far at clock 1152666603
+Simulated 517000004 instructions so far at clock 1153805400
+Simulated 517500005 instructions so far at clock 1154944809
+Simulated 518000005 instructions so far at clock 1156085833
+Simulated 518500003 instructions so far at clock 1157222966
+Simulated 519000004 instructions so far at clock 1158359844
+Simulated 519500004 instructions so far at clock 1159495670
+Simulated 520000002 instructions so far at clock 1160632788
+Simulated 520500005 instructions so far at clock 1161770938
+Simulated 521000003 instructions so far at clock 1162911113
+Simulated 521500003 instructions so far at clock 1164053937
+Simulated 522000006 instructions so far at clock 1165192183
+Simulated 522500001 instructions so far at clock 1166326893
+Simulated 523000001 instructions so far at clock 1167463598
+Simulated 523500004 instructions so far at clock 1168598909
+Simulated 524000001 instructions so far at clock 1169738420
+Simulated 524500002 instructions so far at clock 1170880737
+Simulated 525000005 instructions so far at clock 1172020524
+Simulated 525500001 instructions so far at clock 1173157664
+Simulated 526000004 instructions so far at clock 1174294926
+Simulated 526500002 instructions so far at clock 1175433613
+Simulated 527000002 instructions so far at clock 1176571710
+Simulated 527500001 instructions so far at clock 1177712459
+Simulated 528000004 instructions so far at clock 1178851509
+Stalling processor 0 at barrier
+Simulated 528500003 instructions so far at clock 1180294661
+Processor 1 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Simulated 529000004 instructions so far at clock 1181922258
+Stalling processor 0 at barrier
+GProcessor::retire CPU[0] ROB empty for long time @1182793728
+Simulated 529500005 instructions so far at clock 1183511481
+Processor 1 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Simulated 530000002 instructions so far at clock 1184679707
+Simulated 530500003 instructions so far at clock 1185819678
+Simulated 531000001 instructions so far at clock 1186959162
+Simulated 531500004 instructions so far at clock 1188096866
+Simulated 532000002 instructions so far at clock 1189236003
+Simulated 532500002 instructions so far at clock 1190372392
+Simulated 533000002 instructions so far at clock 1191509735
+Simulated 533500003 instructions so far at clock 1192651006
+Simulated 534000004 instructions so far at clock 1193788149
+Simulated 534500003 instructions so far at clock 1194929644
+Simulated 535000003 instructions so far at clock 1196069819
+Simulated 535500006 instructions so far at clock 1197206957
+Simulated 536000003 instructions so far at clock 1198344336
+Simulated 536500001 instructions so far at clock 1199484232
+Simulated 537000002 instructions so far at clock 1200621855
+Simulated 537500002 instructions so far at clock 1201765954
+Simulated 538000004 instructions so far at clock 1202908768
+Simulated 538500001 instructions so far at clock 1204047216
+Simulated 539000003 instructions so far at clock 1205183594
+Simulated 539500003 instructions so far at clock 1206322818
+Simulated 540000003 instructions so far at clock 1207459024
+Stalling processor 1 at barrier
+Simulated 540500002 instructions so far at clock 1209023160
+Processor 0 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Simulated 541000001 instructions so far at clock 1210479052
+Stalling processor 1 at barrier
+Processor 0 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Simulated 541500004 instructions so far at clock 1212030198
+Simulated 542000002 instructions so far at clock 1213172326
+Simulated 542500002 instructions so far at clock 1214309471
+Simulated 543000005 instructions so far at clock 1215448648
+Simulated 543500001 instructions so far at clock 1216584231
+Simulated 544000003 instructions so far at clock 1217719966
+Simulated 544500006 instructions so far at clock 1218859124
+Simulated 545000001 instructions so far at clock 1220000022
+Simulated 545500004 instructions so far at clock 1221140662
+Simulated 546000001 instructions so far at clock 1222276824
+Simulated 546500002 instructions so far at clock 1223416630
+Simulated 547000002 instructions so far at clock 1224554906
+Simulated 547500003 instructions so far at clock 1225692523
+Simulated 548000004 instructions so far at clock 1226829897
+Simulated 548500004 instructions so far at clock 1227971315
+Simulated 549000001 instructions so far at clock 1229110512
+Simulated 549500003 instructions so far at clock 1230250293
+Simulated 550000002 instructions so far at clock 1231393150
+Simulated 550500002 instructions so far at clock 1232530453
+Stalling processor 0 at barrier
+Simulated 551000005 instructions so far at clock 1233899890
+Processor 1 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Simulated 551500003 instructions so far at clock 1235382941
+Stalling processor 0 at barrier
+Processor 1 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Simulated 552000001 instructions so far at clock 1236949166
+Simulated 552500003 instructions so far at clock 1238086953
+Simulated 553000003 instructions so far at clock 1239222327
+Simulated 553500001 instructions so far at clock 1240358383
+Simulated 554000004 instructions so far at clock 1241501003
+Simulated 554500003 instructions so far at clock 1242639210
+Simulated 555000001 instructions so far at clock 1243782534
+Simulated 555500002 instructions so far at clock 1244923217
+Simulated 556000005 instructions so far at clock 1246061331
+Simulated 556500006 instructions so far at clock 1247200267
+Simulated 557000002 instructions so far at clock 1248336953
+Simulated 557500006 instructions so far at clock 1249476098
+Simulated 558000005 instructions so far at clock 1250615946
+Simulated 558500005 instructions so far at clock 1251759416
+Simulated 559000002 instructions so far at clock 1252898679
+Simulated 559500001 instructions so far at clock 1254035673
+Stalling processor 1 at barrier
+Simulated 560000004 instructions so far at clock 1255441128
+Processor 0 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Simulated 560500005 instructions so far at clock 1257044226
+Stalling processor 1 at barrier
+Processor 0 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Simulated 561000004 instructions so far at clock 1258525931
+Simulated 561500001 instructions so far at clock 1259665192
+Simulated 562000005 instructions so far at clock 1260804107
+Simulated 562500004 instructions so far at clock 1261943946
+Simulated 563000003 instructions so far at clock 1263087559
+Simulated 563500002 instructions so far at clock 1264223534
+Simulated 564000003 instructions so far at clock 1265362565
+Simulated 564500002 instructions so far at clock 1266499310
+Simulated 565000003 instructions so far at clock 1267635364
+Simulated 565500006 instructions so far at clock 1268778343
+Simulated 566000002 instructions so far at clock 1269921083
+Simulated 566500005 instructions so far at clock 1271061250
+Simulated 567000003 instructions so far at clock 1272198818
+Simulated 567500003 instructions so far at clock 1273335961
+Stalling processor 0 at barrier
+Simulated 568000003 instructions so far at clock 1274844358
+Processor 1 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Stalling processor 0 at barrier
+Simulated 568500001 instructions so far at clock 1276173761
+Processor 1 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Simulated 569000001 instructions so far at clock 1277536248
+Simulated 569500004 instructions so far at clock 1278673374
+Simulated 570000006 instructions so far at clock 1279811517
+Simulated 570500002 instructions so far at clock 1280950515
+Simulated 571000002 instructions so far at clock 1282089992
+Simulated 571500004 instructions so far at clock 1283227467
+Simulated 572000005 instructions so far at clock 1284369460
+Simulated 572500002 instructions so far at clock 1285512257
+Simulated 573000005 instructions so far at clock 1286652831
+Simulated 573500002 instructions so far at clock 1287793244
+Simulated 574000002 instructions so far at clock 1288934580
+Stalling processor 1 at barrier
+Simulated 574500004 instructions so far at clock 1290538782
+Processor 0 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Stalling processor 1 at barrier
+GProcessor::retire CPU[1] ROB empty for long time @1291845632
+Simulated 575000002 instructions so far at clock 1291909872
+Processor 0 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Simulated 575500004 instructions so far at clock 1293326082
+Simulated 576000001 instructions so far at clock 1294463543
+Simulated 576500001 instructions so far at clock 1295601326
+Simulated 577000003 instructions so far at clock 1296741170
+Simulated 577500006 instructions so far at clock 1297880013
+Simulated 578000005 instructions so far at clock 1299018876
+Simulated 578500002 instructions so far at clock 1300157565
+Simulated 579000001 instructions so far at clock 1301294573
+Simulated 579500003 instructions so far at clock 1302432936
+Stalling processor 0 at barrier
+Simulated 580000005 instructions so far at clock 1303575359
+Processor 1 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Stalling processor 0 at barrier
+Simulated 580500005 instructions so far at clock 1305078790
+Processor 1 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Simulated 581000002 instructions so far at clock 1306411553
+Simulated 581500002 instructions so far at clock 1307549999
