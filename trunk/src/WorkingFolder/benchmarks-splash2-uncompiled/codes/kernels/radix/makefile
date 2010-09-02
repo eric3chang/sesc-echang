@@ -1,7 +1,9 @@
 TARGET = RADIX
 OBJS = radix.o
-CFLAGS = -O2 -Olimit 2000 -w 
-LDFLAGS = -lmpc -lm
+#CFLAGS = -O2 -Olimit 2000 -w 
+CFLAGS = -O2 -w 
+#LDFLAGS = -lmpc -lm
+LDFLAGS = -lm -lpthread
 MACROS = ../../null_macros/c.m4.null
 
 x = *

@@ -663,7 +663,7 @@ namespace Memory
          pendingEviction;
          pendingInvalidate;
    #else
-         #define MEMORY_MOESI_CACHE_ARRAY_SIZE 20
+         #define MEMORY_MOESI_CACHE_ARRAY_SIZE 200
          StoredFunctionBase* waitingOnBlockUnlockArray[MEMORY_MOESI_CACHE_ARRAY_SIZE];
          StoredFunctionBase* waitingOnSetUnlockArray[MEMORY_MOESI_CACHE_ARRAY_SIZE];
          StoredFunctionBase* waitingOnRemoteReadsArray[MEMORY_MOESI_CACHE_ARRAY_SIZE];
