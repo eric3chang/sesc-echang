@@ -8,7 +8,7 @@ fi
 
 myFile=$1
 
-sed \
+sed -i\
    -e '/FastSimBeginEvent/ d' \
    -e '/has triggered a release/ d' \
    -e '/instructions so far at clock/ d' \

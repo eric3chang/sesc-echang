@@ -2,8 +2,9 @@ TARGET = CHOLESKY
 OBJS = amal.o assign.o bfac.o bksolve.o block2.o fo.o mf.o numLL.o \
      parts.o seg.o solve.o tree.o util.o malloc.o 
 
-CFLAGS = -O2 -Olimit 2000 -w 
-LDFLAGS = -lmpc -lm
+CFLAGS = -O2 -w 
+#CFLAGS = -O2 -Olimit 2000 -w 
+LDFLAGS = -lm -lpthread
 MACROS = ../../null_macros/c.m4.null
 
 
