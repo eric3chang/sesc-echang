@@ -1,6 +1,7 @@
 #pragma once
 #include "BaseMemDevice.h"
 #include "Directory.h"
+#include "ThreeStageDirectory.h"
 #include "MOESICache.h"
 #include "NetworkMemoryInterface.h"
 #include "RandomLoadNetwork.h"
