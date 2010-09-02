@@ -5,7 +5,7 @@ if (UNIX)
    # if the user specifies -DCMAKE_BUILD_TYPE on the command line, take their
    # definition and dump it in the cache, otherwise set CMAKE_BUILD_TYPE to Debug prior to calling PROJECT()
    if (NOT DEFINED CMAKE_BUILD_TYPE)
-      set (CMAKE_BUILD_TYPE Debug CACHE STRING
+      set (CMAKE_BUILD_TYPE None CACHE STRING
          "Choose the type of build, options are: None Debug Release")
    endif (NOT DEFINED CMAKE_BUILD_TYPE)
 endif(UNIX)
@@ -18,6 +18,22 @@ configure_file (
   "${PROJECT_SOURCE_DIR}/sescConfig.h.in"
   "${PROJECT_BINARY_DIR}/sescConfig.h"
   )
+
+# overwrite default DEBUG build
+set ( CMAKE_CXX_FLAGS_DEBUG "-ggdb -DDEBUG" CACHE STRING
+   "Flags used by the C++ compiler during debug builds."
+   FORCE )
+MARK_AS_ADVANCED (
+   CMAKE_CXX_FLAGS_DEBUG )
+
+# overwrite default Release build
+# using -O2 or -O3 causes program to crash unexpectedly
+set ( CMAKE_CXX_FLAGS_RELEASE "-O1" CACHE STRING
+   "Flags used by the C++ compiler during release builds."
+   FORCE )
+MARK_AS_ADVANCED (
+   CMAKE_CXX_FLAGS_RELEASE )
+
 
 # add the binary tree to the search path for include files
 # so that we will find all the header files
@@ -51,8 +67,6 @@ include_directories ("${PROJECT_SOURCE_DIR}/include")
 IF (UNIX)
    ADD_DEFINITIONS (-Wall)
    ADD_DEFINITIONS (-Wno-deprecated)
-   # made it so it permanently debugs
-   ADD_DEFINITIONS(-DDEBUG)
    # causes assertions to halt the program instead of exit the program
    ADD_DEFINITIONS (-DHANGING_ASSERT)
    ADD_DEFINITIONS (-DSYSTEM_SESC)
@@ -60,7 +74,6 @@ IF (UNIX)
    ADD_DEFINITIONS (-m32)
    #ADD_DEFINITIONS (-march=i386)
    #ADD_DEFINITIONS (-mtune=i386)
-   ADD_DEFINITIONS (-ggdb)
    # performs address alignment checks on individual memory accesses
    ADD_DEFINITIONS (-DADDRESS_CHK)
 

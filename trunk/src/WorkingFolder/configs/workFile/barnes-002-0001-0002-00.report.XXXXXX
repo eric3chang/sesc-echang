@@ -1374,3 +1374,335 @@ OSSim:beginTime=Sat Aug 28 01:27:36 2010
 
 OSSim:bench=./augSesc -k320000 -cconfigs/workFile/barnes-002-0001-0002-00.conf -dconfigs/workFile/barnes-002-0001-0002-00.report benchmarks-splash2-sesc/barnes.mips 
 OSSim:benchName=barnes.mips
+#BEGIN Configuration used. Extracted from "configs/workFile/barnes-002-0001-0002-00.conf":
+ProcessorSkew=46
+ProcessorSkew[1:1]=344
+procsPerNode=1
+pageSize  =4096
+HeapMemorySize=334217728
+technology='techParam'
+cpucore   ='ProcDesc0'
+cpucore[1:1]='ProcDesc1'
+NoMigration=true
+MemorySystemConfig='memgen/memoryConfigs/Directory_p2_c1L1-2L2.memory'
+ShouldLoadCheckpoint=0
+[ProcDesc1]
+issueWidth=3
+inorder   =false
+minTLBMissDelay=16
+instQueueSize=12
+maxIRequests=3
+itlb      ='FXITLB'
+maxBranches=22
+maxLoads  =48
+decodeDelay=3
+stForwardDelay=1
+maxStores =42
+dtlb      ='FXDTLB'
+dataSource="ProcessorInterface_1 DL1"
+OSType    ='std'
+fetchWidth=6
+bb4Cycle  =1
+retireWidth=3
+cluster[1:1]='FPClusterIssueX'
+cluster   ='FXClusterIssueX'
+bpred     ='BestBPred'
+enableICache=true
+robSize   =126
+interClusterLat=2
+fpRegs    =68
+instrSource="InstSource IL1"
+intRegs   =90
+renameDelay=3
+[BestBPred]
+BTACDelay =0
+btbReplPolicy='LRU'
+btbAssoc  =2
+tbits     =5
+rasSize   =0
+btbSize   =2048
+type      ='ogehl'
+tcbits    =7
+tsize     =2048
+mtables   =6
+btbBsize  =1
+[FXClusterIssueX]
+iBJLat    =1
+schedNumPorts=4
+iALUUnit  ='ALUIssueX'
+iLoadLat  =1
+iALULat   =1
+recycleAt ='Execute'
+iMultUnit ='ALUIssueX'
+wakeUpNumPorts=4
+winSize   =68
+iDivLat   =12
+wakeUpPortOccp=1
+iBJUnit   ='ALUIssueX'
+iDivUnit  ='ALUIssueX'
+iLoadUnit ='LDIssueX'
+iStoreLat =1
+schedPortOccp=1
+iMultLat  =4
+iStoreUnit='STIssueX'
+schedDelay=1
+wakeupDelay=3
+[FPClusterIssueX]
+fpDivUnit ='FP0IssueX'
+wakeupDelay=3
+wakeUpPortOccp=1
+wakeUpNumPorts=4
+schedDelay=1
+fpALULat  =2
+schedNumPorts=4
+fpMultLat =4
+fpDivLat  =10
+schedPortOccp=1
+fpALUUnit ='FP0IssueX'
+fpMultUnit='FP0IssueX'
+recycleAt ='Execute'
+winSize   =32
+[ProcDesc0]
+maxIRequests=3
+renameDelay=3
+fetchWidth=6
+issueWidth=3
+OSType    ='std'
+maxBranches=22
+maxStores =42
+inorder   =false
+bpred     ='BestBPred'
+interClusterLat=2
+minTLBMissDelay=16
+dtlb      ='FXDTLB'
+fpRegs    =68
+bb4Cycle  =1
+instQueueSize=12
+enableICache=true
+itlb      ='FXITLB'
+regFileDelay=3
+stForwardDelay=1
+maxLoads  =48
+decodeDelay=3
+cluster[1:1]='FPClusterIssueX'
+cluster   ='FXClusterIssueX'
+intRegs   =90
+retireWidth=3
+dataSource="ProcessorInterface_0 DL1"
+robSize   =126
+instrSource="InstSource IL1"
+[InstSource]
+MSHR      ='BigMemMSHR'
+missDelay =1600000
+hitDelay  =1
+size      =1024
+lowerLevel='voidDevice'
+assoc     =1
+numPorts  =1
+replPolicy='LRU'
+deviceType='niceCache'
+bsize     =64
+portOccp  =1
+[FXITLB]
+bsize     =8
+size      =256
+deviceType='tlb'
+replPolicy='LRU'
+assoc     =32
+[FXDTLB]
+replPolicy='LRU'
+assoc     =64
+size      =512
+deviceType='tlb'
+bsize     =8
+[ALUIssueX]
+Num       =2
+Occ       =1
+[FP0IssueX]
+Occ       =1
+Num       =2
+[LDIssueX]
+Num       =0
+Occ       =1
+[BigMemMSHR]
+type      ='none'
+size      =32
+bsize     =64
+[ProcessorInterface_0]
+deviceType='SESCProcessorInterface'
+[STIssueX]
+Occ       =1
+Num       =0
+[ProcessorInterface_1]
+deviceType='SESCProcessorInterface'
+[techParam]
+frequency =5.000000e+09
+[voidDevice]
+deviceType='void'
+#END Configuration used. Extracted from "configs/workFile/barnes-002-0001-0002-00.conf":
+#BEGIN Configuration used. Extracted from "configs/workFile/barnes-002-0001-0002-00.conf":
+ProcessorSkew=46
+ProcessorSkew[1:1]=344
+procsPerNode=1
+pageSize  =4096
+HeapMemorySize=334217728
+technology='techParam'
+cpucore   ='ProcDesc0'
+cpucore[1:1]='ProcDesc1'
+NoMigration=true
+MemorySystemConfig='memgen/memoryConfigs/Directory_p2_c1L1-2L2.memory'
+ShouldLoadCheckpoint=0
+[ProcDesc1]
+issueWidth=3
+inorder   =false
+minTLBMissDelay=16
+instQueueSize=12
+maxIRequests=3
+itlb      ='FXITLB'
+maxBranches=22
+maxLoads  =48
+decodeDelay=3
+stForwardDelay=1
+maxStores =42
+dtlb      ='FXDTLB'
+dataSource="ProcessorInterface_1 DL1"
+OSType    ='std'
+fetchWidth=6
+bb4Cycle  =1
+retireWidth=3
+cluster[1:1]='FPClusterIssueX'
+cluster   ='FXClusterIssueX'
+bpred     ='BestBPred'
+enableICache=true
+robSize   =126
+interClusterLat=2
+fpRegs    =68
+instrSource="InstSource IL1"
+intRegs   =90
+renameDelay=3
+[BestBPred]
+BTACDelay =0
+btbReplPolicy='LRU'
+btbAssoc  =2
+tbits     =5
+rasSize   =0
+btbSize   =2048
+type      ='ogehl'
+tcbits    =7
+tsize     =2048
+mtables   =6
+btbBsize  =1
+[FXClusterIssueX]
+iBJLat    =1
+schedNumPorts=4
+iALUUnit  ='ALUIssueX'
+iLoadLat  =1
+iALULat   =1
+recycleAt ='Execute'
+iMultUnit ='ALUIssueX'
+wakeUpNumPorts=4
+winSize   =68
+iDivLat   =12
+wakeUpPortOccp=1
+iBJUnit   ='ALUIssueX'
+iDivUnit  ='ALUIssueX'
+iLoadUnit ='LDIssueX'
+iStoreLat =1
+schedPortOccp=1
+iMultLat  =4
+iStoreUnit='STIssueX'
+schedDelay=1
+wakeupDelay=3
+[FPClusterIssueX]
+fpDivUnit ='FP0IssueX'
+wakeupDelay=3
+wakeUpPortOccp=1
+wakeUpNumPorts=4
+schedDelay=1
+fpALULat  =2
+schedNumPorts=4
+fpMultLat =4
+fpDivLat  =10
+schedPortOccp=1
+fpALUUnit ='FP0IssueX'
+fpMultUnit='FP0IssueX'
+recycleAt ='Execute'
+winSize   =32
+[ProcDesc0]
+maxIRequests=3
+renameDelay=3
+fetchWidth=6
+issueWidth=3
+OSType    ='std'
+maxBranches=22
+maxStores =42
+inorder   =false
+bpred     ='BestBPred'
+interClusterLat=2
+minTLBMissDelay=16
+dtlb      ='FXDTLB'
+fpRegs    =68
+bb4Cycle  =1
+instQueueSize=12
+enableICache=true
+itlb      ='FXITLB'
+regFileDelay=3
+stForwardDelay=1
+maxLoads  =48
+decodeDelay=3
+cluster[1:1]='FPClusterIssueX'
+cluster   ='FXClusterIssueX'
+intRegs   =90
+retireWidth=3
+dataSource="ProcessorInterface_0 DL1"
+robSize   =126
+instrSource="InstSource IL1"
+[InstSource]
+MSHR      ='BigMemMSHR'
+missDelay =1600000
+hitDelay  =1
+size      =1024
+lowerLevel='voidDevice'
+assoc     =1
+numPorts  =1
+replPolicy='LRU'
+deviceType='niceCache'
+bsize     =64
+portOccp  =1
+[FXITLB]
+bsize     =8
+size      =256
+deviceType='tlb'
+replPolicy='LRU'
+assoc     =32
+[FXDTLB]
+replPolicy='LRU'
+assoc     =64
+size      =512
+deviceType='tlb'
+bsize     =8
+[ALUIssueX]
+Num       =2
+Occ       =1
+[FP0IssueX]
+Occ       =1
+Num       =2
+[LDIssueX]
+Num       =0
+Occ       =1
+[BigMemMSHR]
+type      ='none'
+size      =32
+bsize     =64
+[ProcessorInterface_0]
+deviceType='SESCProcessorInterface'
+[STIssueX]
+Occ       =1
+Num       =0
+[ProcessorInterface_1]
+deviceType='SESCProcessorInterface'
+[techParam]
+frequency =5.000000e+09
+[voidDevice]
+deviceType='void'
+#END Configuration used. Extracted from "configs/workFile/barnes-002-0001-0002-00.conf":

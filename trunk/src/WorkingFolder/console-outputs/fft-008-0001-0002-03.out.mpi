@@ -1,0 +1,344 @@
+.text Minor header aligment correction (10000040 vs 1000003c)
+.data Minor header aligment correction (100816e0 vs 100816d8)
+1.bss Minor header aligment correction 12 (100834d0 vs 100834c4)
+.bss Minor header aligment correction (100834d0 vs 100834c4)
+static[0x10069a30-0x10083f84] heap[0x10084000-0x23f42000] stack[0x23f42000-0x2473a000] -> [0x97a9b008-0xac16b5d8]
+OSSim::spawn(-1,0,0x10000,0)
+Device : P(0)_DL1  Description : ProcessorInterface_0
+Device : P(0)_IL1  Description : InstSource
+Device : P(1)_DL1  Description : ProcessorInterface_1
+Device : P(1)_IL1  Description : InstSource
+Device : P(2)_DL1  Description : ProcessorInterface_2
+Device : P(2)_IL1  Description : InstSource
+Device : P(3)_DL1  Description : ProcessorInterface_3
+Device : P(3)_IL1  Description : InstSource
+Device : P(4)_DL1  Description : ProcessorInterface_4
+Device : P(4)_IL1  Description : InstSource
+Device : P(5)_DL1  Description : ProcessorInterface_5
+Device : P(5)_IL1  Description : InstSource
+Device : P(6)_DL1  Description : ProcessorInterface_6
+Device : P(6)_IL1  Description : InstSource
+Device : P(7)_DL1  Description : ProcessorInterface_7
+Device : P(7)_IL1  Description : InstSource
+Rabbit Mode Start 
+   1024 Complex Doubles
+   8 Processors
+   65536 Cache lines
+   16 Byte line size
+   4096 Bytes per page
+Leaving rabbit mode...
+OSSim::spawn(0,1,0x10000,0)
+OSSim::spawn(0,2,0x10000,0)
+OSSim::spawn(0,3,0x10000,0)
+OSSim::spawn(0,4,0x10000,0)
+OSSim::spawn(0,5,0x10000,0)
+OSSim::spawn(0,6,0x10000,0)
+sesc_spawn( 0x100013d4, 0x0, 0x0 ) pid = 0, child pid = 1, child context = 8810790
+sesc_spawn( 0x100013d4, 0x0, 0x0 ) pid = 0, child pid = 2, child context = 88108f8
+sesc_spawn( 0x100013d4, 0x0, 0x0 ) pid = 0, child pid = 3, child context = 880d980
+sesc_spawn( 0x100013d4, 0x0, 0x0 ) pid = 0, child pid = 4, child context = 880db00
+sesc_spawn( 0x100013d4, 0x0, 0x0 ) pid = 0, child pid = 5, child context = 88113b0
+sesc_spawn( 0x100013d4, 0x0, 0x0 ) pid = 0, child pid = 6, child context = 8811518
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+Stalling processor 1 at barrier
+OSSim::spawn(0,7,0x10000,0)
+sesc_spawn( 0x100013d4, 0x0, 0x0 ) pid = 0, child pid = 7, child context = 88241c0
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+Stalling processor 7 at barrier
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+Stalling processor 6 at barrier
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+Stalling processor 0 at barrier
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+Stalling processor 2 at barrier
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+Stalling processor 3 at barrier
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+Stalling processor 5 at barrier
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+Processor 4 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Releasing processor 2 from barrier
+Releasing processor 3 from barrier
+Releasing processor 4 from barrier
+Releasing processor 5 from barrier
+Releasing processor 6 from barrier
+Releasing processor 7 from barrier
+DMemRequest:pool class size grew to 256
+Stalling processor 3 at barrier
+Stalling processor 1 at barrier
+Stalling processor 6 at barrier
+Stalling processor 5 at barrier
+Stalling processor 4 at barrier
+Stalling processor 2 at barrier
+Stalling processor 7 at barrier
+Processor 0 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Releasing processor 2 from barrier
+Releasing processor 3 from barrier
+Releasing processor 4 from barrier
+Releasing processor 5 from barrier
+Releasing processor 6 from barrier
+Releasing processor 7 from barrier
+Stalling processor 0 at barrier
+Stalling processor 6 at barrier
+Stalling processor 2 at barrier
+Stalling processor 3 at barrier
+Stalling processor 7 at barrier
+Stalling processor 4 at barrier
+Stalling processor 5 at barrier
+Processor 1 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Releasing processor 2 from barrier
+Releasing processor 3 from barrier
+Releasing processor 4 from barrier
+Releasing processor 5 from barrier
+Releasing processor 6 from barrier
+Releasing processor 7 from barrier
+Stalling processor 3 at barrier
+Stalling processor 7 at barrier
+Stalling processor 4 at barrier
+Stalling processor 5 at barrier
+Stalling processor 6 at barrier
+Stalling processor 1 at barrier
+Stalling processor 2 at barrier
+Processor 0 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Releasing processor 2 from barrier
+Releasing processor 3 from barrier
+Releasing processor 4 from barrier
+Releasing processor 5 from barrier
+Releasing processor 6 from barrier
+Releasing processor 7 from barrier
+Stalling processor 7 at barrier
+Stalling processor 6 at barrier
+Stalling processor 2 at barrier
+Stalling processor 3 at barrier
+Stalling processor 4 at barrier
+Stalling processor 5 at barrier
+Stalling processor 0 at barrier
+Processor 1 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Releasing processor 2 from barrier
+Releasing processor 3 from barrier
+Releasing processor 4 from barrier
+Releasing processor 5 from barrier
+Releasing processor 6 from barrier
+Releasing processor 7 from barrier
+Stalling processor 5 at barrier
+Stalling processor 6 at barrier
+Stalling processor 0 at barrier
+Stalling processor 4 at barrier
+Stalling processor 3 at barrier
+Stalling processor 2 at barrier
+Stalling processor 7 at barrier
+Processor 1 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Releasing processor 2 from barrier
+Releasing processor 3 from barrier
+Releasing processor 4 from barrier
+Releasing processor 5 from barrier
+Releasing processor 6 from barrier
+Releasing processor 7 from barrier
+Stalling processor 0 at barrier
+Stalling processor 3 at barrier
+Stalling processor 4 at barrier
+Stalling processor 6 at barrier
+Stalling processor 5 at barrier
+Stalling processor 7 at barrier
+Stalling processor 1 at barrier
+Processor 2 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Releasing processor 2 from barrier
+Releasing processor 3 from barrier
+Releasing processor 4 from barrier
+Releasing processor 5 from barrier
+Releasing processor 6 from barrier
+Releasing processor 7 from barrier
+Stalling processor 0 at barrier
+Stalling processor 6 at barrier
+Stalling processor 7 at barrier
+Stalling processor 3 at barrier
+Stalling processor 1 at barrier
+Stalling processor 5 at barrier
+Stalling processor 4 at barrier
+Processor 2 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Releasing processor 2 from barrier
+Releasing processor 3 from barrier
+Releasing processor 4 from barrier
+Releasing processor 5 from barrier
+Releasing processor 6 from barrier
+Releasing processor 7 from barrier
+Simulated 500004 instructions so far at clock 207482
+Stalling processor 3 at barrier
+Stalling processor 7 at barrier
+Stalling processor 6 at barrier
+Stalling processor 1 at barrier
+Stalling processor 5 at barrier
+Stalling processor 4 at barrier
+Stalling processor 2 at barrier
+Processor 0 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Releasing processor 2 from barrier
+Releasing processor 3 from barrier
+Releasing processor 4 from barrier
+Releasing processor 5 from barrier
+Releasing processor 6 from barrier
+Releasing processor 7 from barrier
+Stalling processor 7 at barrier
+Stalling processor 4 at barrier
+Stalling processor 3 at barrier
+Stalling processor 5 at barrier
+Stalling processor 6 at barrier
+Stalling processor 2 at barrier
+Stalling processor 1 at barrier
+Processor 0 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Releasing processor 2 from barrier
+Releasing processor 3 from barrier
+Releasing processor 4 from barrier
+Releasing processor 5 from barrier
+Releasing processor 6 from barrier
+Releasing processor 7 from barrier
+Stalling processor 1 at barrier
+Stalling processor 5 at barrier
+Stalling processor 6 at barrier
+Stalling processor 4 at barrier
+Stalling processor 3 at barrier
+Stalling processor 0 at barrier
+Stalling processor 7 at barrier
+Processor 2 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Releasing processor 2 from barrier
+Releasing processor 3 from barrier
+Releasing processor 4 from barrier
+Releasing processor 5 from barrier
+Releasing processor 6 from barrier
+Releasing processor 7 from barrier
+Stalling processor 5 at barrier
+Stalling processor 1 at barrier
+Stalling processor 7 at barrier
+Stalling processor 4 at barrier
+Stalling processor 6 at barrier
+Stalling processor 3 at barrier
+Stalling processor 0 at barrier
+Processor 2 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Releasing processor 2 from barrier
+Releasing processor 3 from barrier
+Releasing processor 4 from barrier
+Releasing processor 5 from barrier
+Releasing processor 6 from barrier
+Releasing processor 7 from barrier
+OSSim::exit err[48] (cpid 1)
+OSSim::exit err[268976840] (cpid 4)
+OSSim::exit err[268976840] (cpid 3)
+OSSim::exit err[268976840] (cpid 5)
+OSSim::exit err[268976840] (cpid 6)
+OSSim::exit err[268976840] (cpid 7)
+OSSim::exit err[268976840] (cpid 2)
+OSSim::wait (cpid 0)
+OSSim::wait (cpid 0)
+OSSim::wait (cpid 0)
+OSSim::wait (cpid 0)
+OSSim::wait (cpid 0)
+OSSim::wait (cpid 0)
+OSSim::wait (cpid 0)
+mint_exit 1
+mint_exit 4
+mint_exit 3
+mint_exit 5
+mint_exit 6
+mint_exit 7
+mint_exit 2
+Rabbit Mode Start 
+    0                48             16       0.00000
+Start time                        :       1257550291
+Initialization finish time        :       1257550298
+Overall finish time               :       1257550346
+Total time with initialization    :               55
+Total time without initialization :               48
+Overall transpose time            :               16
+Overall transpose fraction        :          0.33333
+Checksum difference is -0.000 (0.000, 0.000)
+OSSim::exit err[0] (cpid 0)
+mint_exit 0
+Leaving rabbit mode...
+Rabbit Mode Start 
+Leaving rabbit mode...
+Rabbit Mode Start 
+Leaving rabbit mode...
+Rabbit Mode Start 
+Leaving rabbit mode...
+Rabbit Mode Start 
+Leaving rabbit mode...
+Rabbit Mode Start 
+Leaving rabbit mode...
+Rabbit Mode Start 
+Leaving rabbit mode...
+Rabbit Mode Start 
+Leaving rabbit mode...
+Rabbit Mode Start 
+Leaving rabbit mode...
+Rabbit Mode Start 
+Leaving rabbit mode...
+Rabbit Mode Start 
+Leaving rabbit mode...
+Rabbit Mode Start 
+Leaving rabbit mode...
+Rabbit Mode Start 
+Leaving rabbit mode...
+Rabbit Mode Start 
+Leaving rabbit mode...
+Rabbit Mode Start 
+Leaving rabbit mode...
+Rabbit Mode Start 
+Leaving rabbit mode...
+Rabbit Mode Start 
+Leaving rabbit mode...
+Get out of 'has-work' loop
+Finished running 
