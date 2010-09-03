@@ -181,6 +181,7 @@ namespace Memory
 		const NetworkMsg* m = (const NetworkMsg*)msg;
 		DebugAssert(nodeToConnection.find(m->sourceNode) != nodeToConnection.end());
 		DebugAssert(nodeToConnection.find(m->destinationNode) != nodeToConnection.end());
+		// if we are overriding the source node, then it's ok for nodeToConnection[m->sourceNode]!=connectionID
 		DebugAssert((nodeToConnection[m->sourceNode]==connectionID) || (m->getIsOverrideSource()));
 		TimeDelta delay = delayCalc->CalcTime(m,nodeToConnection[m->sourceNode],nodeToConnection[m->destinationNode],EM().CurrentTick());
 		delayCalc->OnMsgSend(m,nodeToConnection[m->sourceNode],nodeToConnection[m->destinationNode],EM().CurrentTick());

@@ -17,14 +17,9 @@ namespace Memory
 		virtual size_t MsgSize() const { return payloadMsg->MsgSize() + 4; }
 		virtual MsgType Type() const { return mt_Network; }
 		virtual bool getIsOverrideSource() const {return isOverrideSource;}
-		virtual NodeID getOverrideSource() const {return overrideSource;}
 		virtual void setIsOverrideSource(bool isOverrideSource)
 		{
 		   this->isOverrideSource = isOverrideSource;
-      }
-		virtual void setOverrideSource(NodeID overrideSource)
-      {
-		   this->overrideSource = overrideSource;
       }
 
    protected:
@@ -37,6 +32,5 @@ namespace Memory
 		}
    private:
 		bool isOverrideSource;
-		NodeID overrideSource;
 	};
 }
