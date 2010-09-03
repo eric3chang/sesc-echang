@@ -41,6 +41,7 @@ namespace Memory
 				m->satisfied = true;
 				m->solicitingMessage = rm->MsgID();
 				rm->SignalComplete();
+
 				reply = m;
 				break;
 			}

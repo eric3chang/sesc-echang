@@ -8,9 +8,9 @@
 // toggles debug messages
 // toggles common debugging functions
 // this should be on if any debugging is turned on
-//#define MEMORY_3_STAGE_DIRECTORY_DEBUG_COMMON
+#define MEMORY_3_STAGE_DIRECTORY_DEBUG_COMMON
 
-//#define MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
+#define MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
 //#define MEMORY_3_STAGE_DIRECTORY_DEBUG_DIRECTORY_DATA
 //#define MEMORY_3_STAGE_DIRECTORY_DEBUG_MSG_COUNT
 //#define MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_DIRECTORY_SHARED_READS
@@ -89,7 +89,8 @@ namespace Memory
 		HashSet<Address> pendingEviction;
 		HashMap<Address, BlockData> directoryData;
 
-		void PerformDirectoryFetch(Address a);
+		void PerformDirectoryFetch(Address addr);
+		void PerformDirectoryFetch(Address a, NodeID src);
 		void EraseDirectoryShare(Address a, NodeID id);
 		void AddDirectoryShare(Address a, NodeID id, bool exclusive);
 

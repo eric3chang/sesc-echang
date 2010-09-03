@@ -1,9 +1,4 @@
-.text Minor header aligment correction (10000040 vs 1000003c)
-.data Minor header aligment correction (1007a200 vs 1007a1f4)
-1.bss Minor header aligment correction 8 (1007bfe0 vs 1007bfd8)
-.bss Minor header aligment correction (1007bfe0 vs 1007bfd8)
-static[0x10064ca0-0x1007ca54] heap[0x1007e000-0x23f3c000] stack[0x23f3c000-0x24734000] -> [0x97aea008-0xac1b9368]
-OSSim::spawn(-1,0,0x10000,0)
+static[0x10064ca0-0x1007ca54] heap[0x1007e000-0x23f3c000] stack[0x23f3c000-0x24734000] -> [0x97adf008-0xac1ae368]
 Device : P(0)_DL1  Description : ProcessorInterface_0
 Device : P(0)_IL1  Description : InstSource
 Device : P(1)_DL1  Description : ProcessorInterface_1
@@ -11,61 +6,15 @@ Device : P(1)_IL1  Description : InstSource
      512 by 512 Matrix
      2 Processors
      16 by 16 Element Blocks
-OSSim::spawn(0,1,0x10000,0)
-sesc_spawn( 0x100012b4, 0x0, 0x0 ) pid = 0, child pid = 1, child context = 89c5200
-GProcessor::retire CPU[1] ROB empty for long time @4194304
-GProcessor::retire CPU[1] ROB empty for long time @6291456
-GProcessor::retire CPU[1] ROB empty for long time @8388608
-GProcessor::retire CPU[1] ROB empty for long time @10485760
-GProcessor::retire CPU[1] ROB empty for long time @12582912
-GProcessor::retire CPU[1] ROB empty for long time @14680064
-GProcessor::retire CPU[1] ROB empty for long time @16777216
-GProcessor::retire CPU[1] ROB empty for long time @18874368
-GProcessor::retire CPU[1] ROB empty for long time @20971520
-GProcessor::retire CPU[1] ROB empty for long time @23068672
-GProcessor::retire CPU[1] ROB empty for long time @25165824
-GProcessor::retire CPU[1] ROB empty for long time @27262976
-GProcessor::retire CPU[1] ROB empty for long time @29360128
-GProcessor::retire CPU[1] ROB empty for long time @31457280
-GProcessor::retire CPU[1] ROB empty for long time @33554432
-GProcessor::retire CPU[1] ROB empty for long time @35651584
-GProcessor::retire CPU[1] ROB empty for long time @37748736
-GProcessor::retire CPU[1] ROB empty for long time @39845888
-GProcessor::retire CPU[1] ROB empty for long time @41943040
-GProcessor::retire CPU[1] ROB empty for long time @44040192
-GProcessor::retire CPU[1] ROB empty for long time @46137344
-GProcessor::retire CPU[1] ROB empty for long time @48234496
-GProcessor::retire CPU[1] ROB empty for long time @50331648
-GProcessor::retire CPU[1] ROB empty for long time @52428800
-GProcessor::retire CPU[1] ROB empty for long time @54525952
-GProcessor::retire CPU[1] ROB empty for long time @56623104
-GProcessor::retire CPU[1] ROB empty for long time @58720256
-GProcessor::retire CPU[1] ROB empty for long time @60817408
-GProcessor::retire CPU[1] ROB empty for long time @62914560
-GProcessor::retire CPU[0] ROB empty for long time @289406976
-GProcessor::retire CPU[0] ROB empty for long time @484442112
-GProcessor::retire CPU[0] ROB empty for long time @486539264
-GProcessor::retire CPU[0] ROB empty for long time @488636416
-GProcessor::retire CPU[0] ROB empty for long time @654311424
-GProcessor::retire CPU[0] ROB empty for long time @801112064
-GProcessor::retire CPU[0] ROB empty for long time @803209216
-GProcessor::retire CPU[0] ROB empty for long time @924844032
-GProcessor::retire CPU[0] ROB empty for long time @926941184
+sesc_spawn( 0x100012b4, 0x0, 0x0 ) pid = 0, child pid = 1, child context = 9c75300
 *** Ticker at 1000000000
-GProcessor::retire CPU[0] ROB empty for long time @1029701632
-GProcessor::retire CPU[1] ROB empty for long time @1151336448
-GProcessor::retire CPU[0] ROB empty for long time @1182793728
-GProcessor::retire CPU[1] ROB empty for long time @1291845632
-OSSim::exit err[1706517925] (cpid 1)
-OSSim::wait (cpid 0)
 mint_exit 1
     0        255371            91    -83710292681822841534020013751822037136656146396662925679565607410253667309287001053497705272719013776655614855668922428670884703635639694884313424448945747667001399537070156857055643777153621266349976496855224186819398317816652491781524145434249878310943517782127572685859624103179275995119116877824             0             0
-Start time                        :       1706248825
-Initialization finish time        :       1706262554
-Overall finish time               :       1706517925
+Start time                        :        490453954
+Initialization finish time        :        490467683
+Overall finish time               :        490723054
 Total time with initialization    :           269100
 Total time without initialization :           255371
-OSSim::exit err[0] (cpid 0)
 mint_exit 0
 Get out of 'has-work' loop
 Finished running 

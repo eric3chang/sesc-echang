@@ -47,7 +47,7 @@ namespace Memory
 		}
 #endif
 #if defined MEMORY_BASE_MEM_DEVICE_DEBUG_COMMON && !defined _WIN32
-   #define MEMORY_BASE_MEM_DEVICE_DEBUG_ARRAY_SIZE 20
+   #define MEMORY_BASE_MEM_DEVICE_DEBUG_ARRAY_SIZE 200
 		Connection** connectionArray;
 		connectionArray = (Connection**)malloc(sizeof(Connection*) *
 		      MEMORY_BASE_MEM_DEVICE_DEBUG_ARRAY_SIZE);
