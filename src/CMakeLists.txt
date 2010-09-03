@@ -5,7 +5,7 @@ if (UNIX)
    # if the user specifies -DCMAKE_BUILD_TYPE on the command line, take their
    # definition and dump it in the cache, otherwise set CMAKE_BUILD_TYPE to Debug prior to calling PROJECT()
    if (NOT DEFINED CMAKE_BUILD_TYPE)
-      set (CMAKE_BUILD_TYPE None CACHE STRING
+      set (CMAKE_BUILD_TYPE Debug CACHE STRING
          "Choose the type of build, options are: None Debug Release")
    endif (NOT DEFINED CMAKE_BUILD_TYPE)
 endif(UNIX)
@@ -20,7 +20,8 @@ configure_file (
   )
 
 # overwrite default DEBUG build
-set ( CMAKE_CXX_FLAGS_DEBUG "-ggdb -DDEBUG" CACHE STRING
+# ADDRESS_CHK - performs address alignment checks on individual memory accesses
+set ( CMAKE_CXX_FLAGS_DEBUG "-ggdb -DDEBUG -DADDRESS_CHK" CACHE STRING
    "Flags used by the C++ compiler during debug builds."
    FORCE )
 MARK_AS_ADVANCED (
@@ -74,8 +75,6 @@ IF (UNIX)
    ADD_DEFINITIONS (-m32)
    #ADD_DEFINITIONS (-march=i386)
    #ADD_DEFINITIONS (-mtune=i386)
-   # performs address alignment checks on individual memory accesses
-   ADD_DEFINITIONS (-DADDRESS_CHK)
 
    # turned off
    # dumps program binary in a readable state upon startup
