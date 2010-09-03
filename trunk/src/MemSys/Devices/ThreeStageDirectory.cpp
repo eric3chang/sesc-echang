@@ -5,10 +5,7 @@
 #include "../Configuration.h"
 #include "../EventManager.h"
 #include "../Connection.h"
-
-#ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_COMMON
-   #include "to_string.h"
-#endif
+#include "to_string.h"
 
 using std::cerr;
 using std::cout;
@@ -910,7 +907,7 @@ namespace Memory
 			DebugFail("Connection not a valid ID");
 		}
 	}
-#ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_DIRECTORY_SHARED_READS
+
 	/**
 	 * readMsgArray in this method could be coupled with Eclipse's debugger to
 	 * see what elements are in pendingDirectorySharedReads. The reason for using
@@ -941,8 +938,7 @@ namespace Memory
       delete [] readMsgArray;
       readMsgArray = NULL;
 	}
-#endif //MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_DIRECTORY_SHARED_READS
-#ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_LOCAL_READS
+
    /**
     * readMsgArray in this method could be coupled with Eclipse's debugger to
     * see what elements are in pendingLocalReads. The reason for using
@@ -975,8 +971,7 @@ namespace Memory
       delete [] readMsgArray;
       readMsgArray = NULL;
 	}
-#endif //MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_LOCAL_READS
-#ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_COMMON
+
    void ThreeStageDirectory::printDebugInfo(const char* fromMethod, const BaseMsg &myMessage,
          const char* operation)
    {
@@ -1011,5 +1006,4 @@ namespace Memory
             << " " << operation
             << endl;
    }
-#endif
 }
