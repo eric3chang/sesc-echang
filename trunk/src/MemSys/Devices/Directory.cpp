@@ -110,6 +110,7 @@ namespace Memory
 
 	void Directory::AddDirectoryShare(Address a, NodeID id, bool exclusive)
 	{
+      DebugAssert(directoryData.find(a) != directoryData.end());
 		BlockData& b = directoryData[a];
 		DebugAssert(!exclusive || (b.sharers.size() == 0 && (b.owner == id || b.owner == InvalidNodeID)));
 		if(b.owner == id || b.owner == InvalidNodeID)

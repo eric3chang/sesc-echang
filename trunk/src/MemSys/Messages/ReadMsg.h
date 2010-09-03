@@ -20,7 +20,7 @@ namespace Memory
 
 		StoredFunctionBase* onCompletedCallback;
 
-      ReadMsg() : directoryLookup(false) {}
+      ReadMsg() {}
 		virtual bool IsResponse() const { return false; }
 		virtual size_t MsgSize() const { return sizeof(Address) + 1; }
 		virtual MsgType Type() const { return mt_Read; }
@@ -42,6 +42,5 @@ namespace Memory
 		         << " directoryLookup=" << directoryLookup
 		   ;
 		}
-
 	};
 }

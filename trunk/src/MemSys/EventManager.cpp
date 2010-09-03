@@ -18,6 +18,7 @@ namespace Memory
 	ReadMsg* EventManager::CreateReadMsg(DeviceID devID, Address generatingPC)
 	{
 		ReadMsg* m = readPool.Take();
+		m->directoryLookup = false;
 		m->SetIDInfo(currentMsgStamp++,devID,generatingPC);
 		return m;
 	}
@@ -42,6 +43,7 @@ namespace Memory
 	ReadResponseMsg* EventManager::CreateReadResponseMsg(DeviceID devID, Address generatingPC)
 	{
 		ReadResponseMsg* m = readResponsePool.Take();
+		m->directoryLookup = false;
 		m->SetIDInfo(currentMsgStamp++,devID,generatingPC);
 		return m;
 	}
@@ -66,6 +68,7 @@ namespace Memory
 	NetworkMsg* EventManager::CreateNetworkMsg(DeviceID devID, Address generatingPC)
 	{
 		NetworkMsg* m = networkPool.Take();
+		m->setIsOverrideSource(false);
 		m->SetIDInfo(currentMsgStamp++,devID,generatingPC);
 		return m;
 	}

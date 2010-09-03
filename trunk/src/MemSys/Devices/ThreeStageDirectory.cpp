@@ -34,8 +34,14 @@ namespace Memory
 			nodeSet.push_back(Config::GetInt(node,"NodeIDSet",0,i));
 		}
 	}
+
+	void ThreeStageDirectory::PerformDirectoryFetch(Address addr)
+	{
+	   PerformDirectoryFetch(addr, nodeID);
+	}
+
    // performs a directory fetch from main memory of address a
-	void ThreeStageDirectory::PerformDirectoryFetch(Address a)
+	void ThreeStageDirectory::PerformDirectoryFetch(Address a, NodeID src)
 	{
       // check that Address a is in pendingDirectorySharedReads or pendingDirectoryExclusiveReads
 		DebugAssert(pendingDirectorySharedReads.find(a) != pendingDirectorySharedReads.end()
@@ -46,7 +52,9 @@ namespace Memory
 		ReadMsg* m = (ReadMsg*)EM().ReplicateMsg(
 		      (pendingDirectorySharedReads.find(a) != pendingDirectorySharedReads.end())
 		      ?pendingDirectorySharedReads.find(a)->second.msg : pendingDirectoryExclusiveReads[a].msg);
-		m->directoryLookup = false;
+		// TODO: 2010/09/02 3-stage modification
+		//m->directoryLookup = false;
+		m->directoryLookup = true;
 		m->onCompletedCallback = NULL;
 		m->alreadyHasBlock = false;
 		BlockData& b = directoryData[m->addr];
@@ -68,13 +76,20 @@ namespace Memory
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
                printDebugInfo("OnRemoteRead",*m,"PerformDirectoryFetch:Error",nodeID);
 #endif
+         //TODO 2010/09/02 Eric, maybe change this to OnDirectoryBlockRequest
 			OnRemoteRead(m, nodeID);//ERROR
 		}
 		else
 		{
 			NetworkMsg* nm = EM().CreateNetworkMsg(getDeviceID(), m->GeneratingPC());
 			nm->destinationNode = target;
-			nm->sourceNode = nodeID;
+         // TODO: 2010/09/02 3-stage modification
+			//nm->sourceNode = nodeID;
+			nm->sourceNode = src;
+			if (src != nodeID)
+			{
+			   nm->setIsOverrideSource(true);
+			}
 			nm->payloadMsg = m;
 			SendMsg(remoteConnectionID, nm, lookupTime + remoteSendTime);
 		}
@@ -597,6 +612,7 @@ namespace Memory
 			}
 			return;
 		} // endif cannot satisfy request at this time
+		// we can satisfy the request at this time
 		LookupData<ReadMsg> ld;
 		ld.msg = m;
 		ld.sourceNode = src;
@@ -620,7 +636,7 @@ namespace Memory
 				return;
 			}
 		}
-		PerformDirectoryFetch(m->addr);
+		PerformDirectoryFetch(m->addr, src);
 	}
 	void ThreeStageDirectory::OnDirectoryBlockResponse(const ReadResponseMsg* m, NodeID src)
 	{
@@ -964,13 +980,13 @@ namespace Memory
    void ThreeStageDirectory::printDebugInfo(const char* fromMethod, const BaseMsg &myMessage,
          const char* operation)
    {
-      printBaseMemDeviceDebugInfo("Dir", fromMethod, myMessage, operation);
+      printBaseMemDeviceDebugInfo("3SDir", fromMethod, myMessage, operation);
    }
 
    void ThreeStageDirectory::printDebugInfo(const char* fromMethod, const BaseMsg &myMessage,
          const char* operation, NodeID src)
    {
-      printBaseMemDeviceDebugInfo("Dir", fromMethod, myMessage, operation, src);
+      printBaseMemDeviceDebugInfo("3SDir", fromMethod, myMessage, operation, src);
    }
 
    void ThreeStageDirectory::printDebugInfo(const char* fromMethod,Address addr,NodeID id,const char* operation)
