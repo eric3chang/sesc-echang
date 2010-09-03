@@ -5,10 +5,17 @@
 #include "../Configuration.h"
 #include "../EventManager.h"
 #include "../Connection.h"
+#include "to_string.h"
 
-#ifdef MEMORY_DIRECTORY_DEBUG_COMMON
-   #include "to_string.h"
-#endif
+// toggles debug messages
+//#define MEMORY_DIRECTORY_DEBUG_VERBOSE
+//#define MEMORY_DIRECTORY_DEBUG_DIRECTORY_DATA
+//#define MEMORY_DIRECTORY_DEBUG_MSG_COUNT
+//#define MEMORY_DIRECTORY_DEBUG_PENDING_DIRECTORY_SHARED_READS
+//#define MEMORY_DIRECTORY_DEBUG_PENDING_EVICTION
+//#define MEMORY_DIRECTORY_DEBUG_PENDING_LOCAL_READS
+//#define MEMORY_DIRECTORY_DEBUG_PENDING_REMOTE_INVALIDATES
+//#define MEMORY_DIRECTORY_DEBUG_PENDING_REMOTE_READS
 
 using std::cerr;
 using std::cout;
@@ -898,7 +905,7 @@ namespace Memory
 			DebugFail("Connection not a valid ID");
 		}
 	}
-#ifdef MEMORY_DIRECTORY_DEBUG_PENDING_DIRECTORY_SHARED_READS
+
 	/**
 	 * readMsgArray in this method could be coupled with Eclipse's debugger to
 	 * see what elements are in pendingDirectorySharedReads. The reason for using
@@ -929,8 +936,7 @@ namespace Memory
       delete [] readMsgArray;
       readMsgArray = NULL;
 	}
-#endif //MEMORY_DIRECTORY_DEBUG_PENDING_DIRECTORY_SHARED_READS
-#ifdef MEMORY_DIRECTORY_DEBUG_PENDING_LOCAL_READS
+
    /**
     * readMsgArray in this method could be coupled with Eclipse's debugger to
     * see what elements are in pendingLocalReads. The reason for using
@@ -963,8 +969,7 @@ namespace Memory
       delete [] readMsgArray;
       readMsgArray = NULL;
 	}
-#endif //MEMORY_DIRECTORY_DEBUG_PENDING_LOCAL_READS
-#ifdef MEMORY_DIRECTORY_DEBUG_COMMON
+
    void Directory::printDebugInfo(const char* fromMethod, const BaseMsg &myMessage,
          const char* operation)
    {
@@ -999,5 +1004,4 @@ namespace Memory
             << " " << operation
             << endl;
    }
-#endif
 }

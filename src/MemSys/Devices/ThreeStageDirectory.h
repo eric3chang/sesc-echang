@@ -112,18 +112,13 @@ namespace Memory
 		void OnDirectoryBlockRequest(const ReadMsg* m, NodeID src);
 		void OnDirectoryBlockResponse(const ReadResponseMsg* m, NodeID src);
 
-#ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_COMMON
 		void printDebugInfo(const char* fromMethod, const BaseMsg &myMessage, const char* operation);
 		void printDebugInfo(const char* fromMethod, const BaseMsg &myMessage, const char* operation,NodeID src);
 	   void printDebugInfo(const char* fromMethod,Address addr,NodeID id,const char* operation);
 	   void printEraseOwner(const char* fromMethod,Address addr,NodeID id,const char* operation);
-#endif
-#ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_DIRECTORY_SHARED_READS
+
 		void printPendingDirectorySharedReads();
-#endif
-#ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_LOCAL_READS
 	   void printPendingLocalReads();
-#endif
 
 		typedef PooledFunctionGenerator<StoredClassFunction2<ThreeStageDirectory,const ReadMsg*, NodeID, &ThreeStageDirectory::OnDirectoryBlockRequest> > CBOnDirectoryBlockRequest;
 		CBOnDirectoryBlockRequest cbOnDirectoryBlockRequest;

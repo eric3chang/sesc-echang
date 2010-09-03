@@ -5,20 +5,6 @@
 #include "NetworkMsg.h"
 #include <vector>
 
-// toggles debug messages
-// toggles common debugging functions
-// this should be on if any debugging is turned on
-#define MEMORY_DIRECTORY_DEBUG_COMMON
-
-#define MEMORY_DIRECTORY_DEBUG_VERBOSE
-//#define MEMORY_DIRECTORY_DEBUG_DIRECTORY_DATA
-//#define MEMORY_DIRECTORY_DEBUG_MSG_COUNT
-//#define MEMORY_DIRECTORY_DEBUG_PENDING_DIRECTORY_SHARED_READS
-//#define MEMORY_DIRECTORY_DEBUG_PENDING_EVICTION
-//#define MEMORY_DIRECTORY_DEBUG_PENDING_LOCAL_READS
-//#define MEMORY_DIRECTORY_DEBUG_PENDING_REMOTE_INVALIDATES
-//#define MEMORY_DIRECTORY_DEBUG_PENDING_REMOTE_READS
-
 namespace Memory
 {
 	class ReadMsg;
@@ -111,18 +97,12 @@ namespace Memory
 		void OnDirectoryBlockRequest(const ReadMsg* m, NodeID src);
 		void OnDirectoryBlockResponse(const ReadResponseMsg* m, NodeID src);
 
-#ifdef MEMORY_DIRECTORY_DEBUG_COMMON
 		void printDebugInfo(const char* fromMethod, const BaseMsg &myMessage, const char* operation);
 		void printDebugInfo(const char* fromMethod, const BaseMsg &myMessage, const char* operation,NodeID src);
 	   void printDebugInfo(const char* fromMethod,Address addr,NodeID id,const char* operation);
 	   void printEraseOwner(const char* fromMethod,Address addr,NodeID id,const char* operation);
-#endif
-#ifdef MEMORY_DIRECTORY_DEBUG_PENDING_DIRECTORY_SHARED_READS
 		void printPendingDirectorySharedReads();
-#endif
-#ifdef MEMORY_DIRECTORY_DEBUG_PENDING_LOCAL_READS
 	   void printPendingLocalReads();
-#endif
 
 		typedef PooledFunctionGenerator<StoredClassFunction2<Directory,const ReadMsg*, NodeID, &Directory::OnDirectoryBlockRequest> > CBOnDirectoryBlockRequest;
 		CBOnDirectoryBlockRequest cbOnDirectoryBlockRequest;
