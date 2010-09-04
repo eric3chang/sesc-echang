@@ -678,11 +678,59 @@ namespace Memory
 		*/
 		if(m->requestingExclusive)
 		{
-		   // send invalidate messages to all sharers if necessary
-		   if (directoryData[m->addr].owner != src)
+		   // send invalidate messages to all sharers and owners if necessary
+		   if ((directoryData[m->addr].owner!=src) && (directoryData[m->addr].owner!=InvalidNodeID))
 		   {
-		      // TODO: invalidate all sharers
-
+		      // invalidate owner
+		      if (directoryData[m->addr].owner != InvalidNodeID)
+		      {
+		         InvalidateMsg* inv = EM().CreateInvalidateMsg(getDeviceID(),m->GeneratingPC());
+		         inv->addr = m->addr;
+               inv->size = m->size;
+               if (directoryData[m->addr].owner != nodeID)
+               {
+                  NetworkMsg* net = EM().CreateNetworkMsg(getDeviceID(),m->GeneratingPC());
+                  net->destinationNode = directoryData[m->addr].owner;
+                  net->sourceNode = nodeID;
+                  net->payloadMsg = inv;
+                  SendMsg(remoteConnectionID, net, lookupTime + remoteSendTime);
+               }
+               else
+               {
+   #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
+                  printDebugInfo("OnRemoteInvalidate", *inv, "OnDirectoryBlockRequest", nodeID);
+   #endif
+                  OnRemoteInvalidate(inv, nodeID);
+               }
+               //DO NOT call eraseDirectoryShare. It will be called in OnRemoteInvalidResponse
+               // EraseDirectoryShare(m->addr, directoryData[m->addr].owner);
+		      } //if ((directoryData[m->addr].owner!=src) && (directoryData[m->addr].owner!=InvalidNodeID))
+		      // invalidate all sharers
+		      if(directoryData[m->addr].sharers.size() != 0)
+		      {
+	            for(HashSet<NodeID>::iterator i = directoryData[m->addr].sharers.begin(); i != directoryData[m->addr].sharers.end(); i++)
+	            {
+	               InvalidateMsg* inv = EM().CreateInvalidateMsg(getDeviceID(),m->GeneratingPC());
+	               inv->addr = m->addr;
+	               inv->size = m->size;
+	               if(*i != nodeID)
+	               {
+	                  NetworkMsg* net = EM().CreateNetworkMsg(getDeviceID(),m->GeneratingPC());
+	                  net->destinationNode = *i;
+	                  net->sourceNode = nodeID;
+	                  net->payloadMsg = inv;
+	                  SendMsg(remoteConnectionID, net, lookupTime + remoteSendTime);
+	               }
+	               else
+	               {
+	#ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
+	            printDebugInfo("OnRemoteInvalidate",*inv,"OnRemoteReadResponse",nodeID);
+	#endif
+	                  OnRemoteInvalidate(inv, nodeID);
+	               }
+                  EraseDirectoryShare(m->addr, *i);
+	            }
+		      } // if(directoryData[m->addr].sharers.size() != 0)
 		   }
 		   else // owner is source
 		   {
@@ -710,7 +758,9 @@ namespace Memory
 			*/
 		}
       PerformDirectoryFetch(m, src);
-		AddDirectoryShare(m->addr, src, m->requestingExclusive);
+		//TODO fix this motherfucker AddDirectoryShare(m->addr, src, m->requestingExclusive);
+      // how to make sure that owner of the original block gets invalidated while
+      // still keeping a record of which node the new owner is
 	}
 
 	void ThreeStageDirectory::OnDirectoryBlockResponse(const ReadResponseMsg* m, NodeID src)
