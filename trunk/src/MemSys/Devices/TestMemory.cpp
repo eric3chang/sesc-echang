@@ -36,7 +36,7 @@ namespace Memory
 				m->addr = rm->addr;
 				m->size = rm->size;
 				m->blockAttached = true;
-				m->directoryLookup = false;
+				m->directoryLookup = rm->directoryLookup;
 				m->exclusiveOwnership = true;
 				m->satisfied = true;
 				m->solicitingMessage = rm->MsgID();

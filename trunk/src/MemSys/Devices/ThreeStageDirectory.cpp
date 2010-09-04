@@ -582,6 +582,7 @@ namespace Memory
 		DebugAssert(m);
       // if the address is in pendingDirectoryExclusiveReads or
 		// we are requesting for exclusive access and the address is in pendingDirectorySharedReads
+		/* TODO 2010/09/03 Eric
 		if(pendingDirectoryExclusiveReads.find(m->addr) != pendingDirectoryExclusiveReads.end() ||
 		      (m->requestingExclusive && pendingDirectorySharedReads.find(m->addr) != pendingDirectorySharedReads.end()))
 		{//cannot complete the request at this time
@@ -609,6 +610,7 @@ namespace Memory
 			}
 			return;
 		} // endif cannot satisfy request at this time
+		*/
 		// we can satisfy the request at this time
 		LookupData<ReadMsg> ld;
 		ld.msg = m;
