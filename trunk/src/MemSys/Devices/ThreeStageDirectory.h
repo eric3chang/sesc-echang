@@ -89,8 +89,7 @@ namespace Memory
 		HashSet<Address> pendingEviction;
 		HashMap<Address, BlockData> directoryData;
 
-		void PerformDirectoryFetch(Address addr);
-		void PerformDirectoryFetch(Address a, NodeID src);
+		void PerformDirectoryFetch(const ReadMsg *msgIn, NodeID src);
 		void EraseDirectoryShare(Address a, NodeID id);
 		void AddDirectoryShare(Address a, NodeID id, bool exclusive);
 
