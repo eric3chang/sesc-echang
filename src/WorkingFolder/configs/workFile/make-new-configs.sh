@@ -2,10 +2,10 @@
 # create more config files from old ones
 
 #set -x   # verbose output
-OLD_BENCHMARK=fft  # benchmark name of old config files
-NEW_BENCHMARK=fft  # benchmark name of new config files
-OLD_PROC_CNT=64   # number of processors in old config files
-NEW_PROC_CNT=128   # number of processors in new config files
+OLD_BENCHMARK=fft-3sd-moesi  # benchmark name of old config files
+NEW_BENCHMARK=fft-3sd-moesi  # benchmark name of new config files
+OLD_PROC_CNT=4   # number of processors in old config files
+NEW_PROC_CNT=8   # number of processors in new config files
 
 function appendZeros
 {
@@ -58,7 +58,7 @@ for file in $(ls $NEW_BENCHMARK-$NEW_SETTING-??.conf); do
       -e "s@$OLD_BENCHMARK@$NEW_BENCHMARK@" \
       -e "s/-$OLD_PROC_CNT_APP/-$NEW_PROC_CNT_APP/" \
       -e "s/_$OLD_PROC_CNT_APP/_$NEW_PROC_CNT_APP/" \
-      -e "s@Directory_p$OLD_PROC_CNT@Directory_p$NEW_PROC_CNT@" \
+      -e "s@_p$OLD_PROC_CNT@_p$NEW_PROC_CNT@" \
       $file
    if [[ $DOS2UNIX != '' ]]
    then
