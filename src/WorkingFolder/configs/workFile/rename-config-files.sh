@@ -3,19 +3,12 @@
 
 #set -x   # verbose output
 
-#for file in $(ls yada__64_1_8_2_Perfect.conf_*); do
-#   string=${file:0-2}
-   # if length of string is 1, append 0 in front of it
-   #if [[ ${string:0:1} == _ ]]
-#   then
-#      string=0${string:1:1}
-#   fi
-#   cp $file "fft-02cpu-$string".conf
-#done
+OLD_FILENAME=fft-002-0001-0002-??.conf
+NEW_FILENAME_PREFIX=fft-3sd-moesi-002-0001-0002
 
-for file in $(ls fft-02cpu-??.conf); do
+for file in $(ls $OLD_FILENAME); do
    string=${file:0-7:2}
-   cp $file "cholesky-02cpu-$string".conf
+   cp $file "${NEW_FILENAME_PREFIX}-${string}".conf
 done
 
 
