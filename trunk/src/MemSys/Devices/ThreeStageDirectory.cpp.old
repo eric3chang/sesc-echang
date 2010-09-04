@@ -7,16 +7,6 @@
 #include "../Connection.h"
 #include "to_string.h"
 
-// toggles debug messages
-//#define MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-//#define MEMORY_3_STAGE_DIRECTORY_DEBUG_DIRECTORY_DATA
-//#define MEMORY_3_STAGE_DIRECTORY_DEBUG_MSG_COUNT
-//#define MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_DIRECTORY_SHARED_READS
-//#define MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_EVICTION
-//#define MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_LOCAL_READS
-//#define MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_REMOTE_INVALIDATES
-//#define MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_REMOTE_READS
-
 using std::cerr;
 using std::cout;
 using std::endl;
@@ -157,9 +147,7 @@ namespace Memory
 		forward->directoryLookup = true;
 		if(remoteNode == nodeID)
 		{
-#ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
 		   printDebugInfo("OnDirectoryBlockRequest",*m,"OnLocalRead");
-#endif
 			CBOnDirectoryBlockRequest::FunctionType* f = cbOnDirectoryBlockRequest.Create();
 			f->Initialize(this,forward,nodeID);
 			EM().ScheduleEvent(f, localSendTime);
@@ -542,7 +530,6 @@ namespace Memory
 			nm->payloadMsg = wm;
 			SendMsg(remoteConnectionID, nm, remoteSendTime);
 		}
-		/*
 		if(pendingDirectoryExclusiveReads.find(m->addr) != pendingDirectoryExclusiveReads.end())
 		{
 			if( (b.owner == InvalidNodeID && b.sharers.size() == 0) ||
@@ -582,7 +569,6 @@ namespace Memory
 				pendingDirectoryExclusiveReads.erase(m->addr);
 			} //        if( (b.owner == InvalidNodeID && b.sharers.size() == 0) ||
 		} // if(pendingDirectoryExclusiveReads.find(m->addr) != pendingDirectoryExclusiveReads.end())
-		*/
 		EM().DisposeMsg(m);
 	}
 
@@ -716,7 +702,6 @@ namespace Memory
    #endif
                   OnRemoteInvalidate(inv, nodeID);
                }
-               //TODO 2010/09/04 Eric
                //DO NOT call eraseDirectoryShare. It will be called in OnRemoteInvalidResponse
                // EraseDirectoryShare(m->addr, directoryData[m->addr].owner);
 		      } //if ((directoryData[m->addr].owner!=src) && (directoryData[m->addr].owner!=InvalidNodeID))
