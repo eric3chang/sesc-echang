@@ -1,8 +1,10 @@
 ﻿[[Title: An analysis of directory-based cache-coherence protocol on symmetric multiprocessors using the SESC simulator]]
 
 
-
 [[Section 1 Comparing different directory-based cache coherence protocols.]]
+Processors today are getting more and more multi-core. As such, it is important to find out the performance impact of various cache-coherence schemes. This report will focus on directory-based cache-coherence protocol, because it is a widely used cache-coherence protocol that has been proven in the past to be able to scale up compared to the other major cache-coherence protocol, the snoopy-based cache-coherence protocol.
+
+[[Section 1]] There are many cache-coherence protocols, one of which is the directory-based cache-coherence protocol.
 
 [[Section 01-2]]
 
@@ -112,12 +114,12 @@ protocols. [list cache coherence protocols]
 
 There are also several cache coherence mechanisms that enables these cache coherence protocols to be done.
 
-[[Section 06.xx MOESI Cache]]
+[[Section 06.3 MOESI Cache]]
 The MOESI protocol was used in both L1 and L2 cache. This protocol was chosen because it contains the most states. The advantages to that is that it reduces the traffic going across the network. The "Owned" state allows dirty lines to be shared quickly (Wikipedia MOESI). The disadvantage of this protocol is that it uses the most amount of space to store this information, since it needs to store more states, compared to MESI, MOSI, or MSI protocols.
 
 The cache size can be determined by associativity * number of sets * width. For example, in my system, this could be 4 * 4 * 64, in the case of the L1 cache. This gives it 16 blocks of 64-bit data to have a 1kB L1 cache. In the case of the L2 cache, I used an assotiativity of 4 with 8 sets to get 32 blocks. this equates to a 2kB cache.
 
-[[Section 06.xx Directory]]
+[[Section 06.4 Directory]]
 In a directory-based cache-coherence protocol, lookups will always go to the directory. However, data replies can either go through the directory, first, or it can go straight to the requester. In my implementation of the directory, the data reply go to the directory first, and the directory decides who the original requester is and forwards the data to the original requester.
 
 The directory needs to keep track of which CPU has which cache line. This is necessary because the directory acts as the communication between each CPU. In a snoopy system, we have no way of keeping track of which CPU has which cache block. This is the advantage in the directory-based cache-coherence procotol that allows lesser traffic to be sent.
@@ -142,7 +144,10 @@ The (remoteNode == nodeID) check in these places [and you'll see a similar check
 
 For example, given if processor 1 requests a block A, where processor 1 is block A's home node, the pattern I described to you earlier would be to send a network message from processor 1 [requester] to processor 1 [home node].  Since this is pretty pointless, and just results in needless network traffic, I perform a check to see if the destination for a message is the same as the source of the message, previous to sending the network msg.  If this is the case, it just forwards it straight on to the function that would handle it on the local directory node [with a delay added for lookup or whatever], rather than emitting something on the network.
 
-[[Section 06.xx.2 Scenarios for the Directory]]
+[[Section 06.4.3 Variations in the Directory]]
+A variation that we can get on the directory is that we can make it 3-stage instead of the standard 4-stage directory. The advantage of a 3-stage directory is that in a 3-stage directory, we save bandwidth by allowing the data packet retrieved to go directly to the requester instead of going to the directory first.
+
+[[Section 06.4.x Scenarios for the Directory]]
 Read miss message from CPU when when block is not held in any cache line: OnLocalRead, OnDirectoryBlockRequest, OnRemoteRead, OnDirectoryBlockResponse
 
 invalidate message comes from the network:
@@ -189,6 +194,13 @@ However, it is possible for the system to undergo the following cycle, especiall
 2. Another OnLocalRead gets called before OnLocalInvalidateResponse gets called, and PrepareFreshBlock finds the same tag1 inside pendingEviction. So it cancels the eviction and prepares that block for use.
 3. OnLocalInvalidateResponse gets called for tag1, but it cannot find tag1 inside pendingInvalidate or pendingEviction because pendingEviction.erase(tag1) was called during PrepareFreshBlock.
 
+
+[[Section 10 Future Thoughts]]
+
+[[Section 10.1 Memory System]]
+The memory system in the current sesc system is implemented in a way such that it is in one location. In the future, we could modify the the simulator such that the memory system is distributed just like the directory system. With a distributed memory system, there would be much more issue with coherence, scaling, performance, and correctness.
+
+In addition, another thing we could do for the future is implement a timing scheme for the system.
 
 [[Section xx]]
 
