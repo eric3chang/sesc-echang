@@ -92,7 +92,7 @@ String EvictionPolicy LRU
 End
 Root MemoryDevice Begin
 Int DeviceID 7
-String DeviceType Directory
+String DeviceType ThreeStageDirectory
 String DeviceName Directory_0
 Int LocalSendTime 4
 Int RemoteSendTime 4
@@ -170,7 +170,7 @@ String EvictionPolicy LRU
 End
 Root MemoryDevice Begin
 Int DeviceID 11
-String DeviceType Directory
+String DeviceType ThreeStageDirectory
 String DeviceName Directory_1
 Int LocalSendTime 4
 Int RemoteSendTime 4
@@ -248,7 +248,7 @@ String EvictionPolicy LRU
 End
 Root MemoryDevice Begin
 Int DeviceID 15
-String DeviceType Directory
+String DeviceType ThreeStageDirectory
 String DeviceName Directory_2
 Int LocalSendTime 4
 Int RemoteSendTime 4
@@ -326,7 +326,7 @@ String EvictionPolicy LRU
 End
 Root MemoryDevice Begin
 Int DeviceID 19
-String DeviceType Directory
+String DeviceType ThreeStageDirectory
 String DeviceName Directory_3
 Int LocalSendTime 4
 Int RemoteSendTime 4
@@ -404,7 +404,7 @@ String EvictionPolicy LRU
 End
 Root MemoryDevice Begin
 Int DeviceID 23
-String DeviceType Directory
+String DeviceType ThreeStageDirectory
 String DeviceName Directory_4
 Int LocalSendTime 4
 Int RemoteSendTime 4
@@ -482,7 +482,7 @@ String EvictionPolicy LRU
 End
 Root MemoryDevice Begin
 Int DeviceID 27
-String DeviceType Directory
+String DeviceType ThreeStageDirectory
 String DeviceName Directory_5
 Int LocalSendTime 4
 Int RemoteSendTime 4
@@ -560,7 +560,7 @@ String EvictionPolicy LRU
 End
 Root MemoryDevice Begin
 Int DeviceID 31
-String DeviceType Directory
+String DeviceType ThreeStageDirectory
 String DeviceName Directory_6
 Int LocalSendTime 4
 Int RemoteSendTime 4
@@ -638,7 +638,7 @@ String EvictionPolicy LRU
 End
 Root MemoryDevice Begin
 Int DeviceID 35
-String DeviceType Directory
+String DeviceType ThreeStageDirectory
 String DeviceName Directory_7
 Int LocalSendTime 4
 Int RemoteSendTime 4
