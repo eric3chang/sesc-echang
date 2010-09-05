@@ -2,10 +2,9 @@
 # create more config files from old ones
 
 #set -x   # verbose output
-OLD_BENCHMARK=fft-3sd-moesi  # benchmark name of old config files
-NEW_BENCHMARK=fft-3sd-moesi  # benchmark name of new config files
-OLD_PROC_CNT=4   # number of processors in old config files
-NEW_PROC_CNT=8   # number of processors in new config files
+FILENAME=cholesky-3sd-moesi  # filename of config file we're trying to make
+OLD_PROC_CNT=2   # number of processors in old config files
+NEW_PROC_CNT=2   # number of processors in new config files
 
 function appendZeros
 {
@@ -42,20 +41,19 @@ else
    echo "Cannot find dos2unix or fromdos, not converting file to unix format"
 fi
 
-for file in $(ls $OLD_BENCHMARK-$OLD_SETTING-??.conf); do
+for file in $(ls $FILENAME-$OLD_SETTING-??.conf); do
    string=${file:0-7:2}
-   cp $file "$NEW_BENCHMARK-$NEW_SETTING-$string".conf
+   cp $file "$FILENAME-$NEW_SETTING-$string".conf
 done
 
-for file in $(ls $NEW_BENCHMARK-$NEW_SETTING-??.conf); do
+for file in $(ls $FILENAME-$NEW_SETTING-??.conf); do
    truncatedFile=${file%.*}
 #      -e 's/134217728/334217728/' \
 #      -e 's/CheckpointName/#CheckpointName/' \
 #      -e 's/ReportFile/#ReportFile/' \
-#      -e "s@results/genome-02cpu@results/$NEW_BENCHMARK@" \
+#      -e "s@results/genome-02cpu@results/$FILENAME@" \
 #      -e "s/BenchName = 'fft'/BenchName = 'cholesky'/" \
    sed -i\
-      -e "s@$OLD_BENCHMARK@$NEW_BENCHMARK@" \
       -e "s/-$OLD_PROC_CNT_APP/-$NEW_PROC_CNT_APP/" \
       -e "s/_$OLD_PROC_CNT_APP/_$NEW_PROC_CNT_APP/" \
       -e "s@_p$OLD_PROC_CNT@_p$NEW_PROC_CNT@" \
