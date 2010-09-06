@@ -8,7 +8,7 @@
 #include "to_string.h"
 
 // toggles debug messages
-//#define MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
+#define MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
 //#define MEMORY_3_STAGE_DIRECTORY_DEBUG_DIRECTORY_DATA
 //#define MEMORY_3_STAGE_DIRECTORY_DEBUG_MSG_COUNT
 //#define MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_DIRECTORY_SHARED_READS
@@ -287,7 +287,8 @@ namespace Memory
 	}
 	void ThreeStageDirectory::OnRemoteReadResponse(const ReadResponseMsg* m, NodeID src)
 	{
-	   DebugFail("OnRemoteReadResponse reached");
+	   DebugFail("ThreeStageDirectory::OnRemoteReadResponse reached");
+	   /*
 		DebugAssert(m);
 		DebugAssert(!m->directoryLookup);
 		DebugAssert(pendingDirectorySharedReads.find(m->addr) != pendingDirectorySharedReads.end() || pendingDirectoryExclusiveReads.find(m->addr) != pendingDirectoryExclusiveReads.end());
@@ -397,6 +398,7 @@ namespace Memory
 			//PerformDirectoryFetch(m->addr);
 			EM().DisposeMsg(m);
 		}
+		*/
 	} // OnRemoteReadResponse
 	void ThreeStageDirectory::OnRemoteWrite(const WriteMsg* m, NodeID src)
 	{
@@ -503,6 +505,7 @@ namespace Memory
 
 	void ThreeStageDirectory::OnRemoteInvalidateResponse(const InvalidateResponseMsg* m, NodeID src)
 	{
+	   //DebugFail("ThreeStageDirectory::OnRemoteInvalidateResponse reached");
 		DebugAssert(m);
 		DebugAssert(directoryData.find(m->addr) != directoryData.end());
 		BlockData& b = directoryData[m->addr];
@@ -512,6 +515,8 @@ namespace Memory
       b.sharers.convertToArray(sharers,MEMORY_3_STAGE_DIRECTORY_DEBUG_ARRAY_SIZE);
       m->blockAttached;
 #endif
+      /*
+       * TODO did all the directoryData operations in OnDirectoryBlockRequest
 		DebugAssert(!m->blockAttached || (b.owner == src) || (b.owner==InvalidNodeID));
 		DebugAssert(m->blockAttached || b.sharers.find(src) != b.sharers.end());
 		if(b.owner == src)
@@ -530,6 +535,7 @@ namespace Memory
 #endif
 			b.sharers.erase(src);
 		}
+		*/
 		if(m->blockAttached)
 		{
 			WriteMsg* wm = EM().CreateWriteMsg(getDeviceID(), m->GeneratingPC());
@@ -717,40 +723,36 @@ namespace Memory
                   OnRemoteInvalidate(inv, nodeID);
                }
                //TODO 2010/09/04 Eric
-               //DO NOT call eraseDirectoryShare. It will be called in OnRemoteInvalidResponse
-               // EraseDirectoryShare(m->addr, directoryData[m->addr].owner);
+               //EraseDirectoryShare should be called here because EraseDirectoryShare was removed from OnRemoteInvalidateResponse
+               EraseDirectoryShare(m->addr, directoryData[m->addr].owner);
 		      } //if ((directoryData[m->addr].owner!=src) && (directoryData[m->addr].owner!=InvalidNodeID))
-		      // invalidate all sharers
-		      if(directoryData[m->addr].sharers.size() != 0)
-		      {
-	            for(HashSet<NodeID>::iterator i = directoryData[m->addr].sharers.begin(); i != directoryData[m->addr].sharers.end(); i++)
-	            {
-	               InvalidateMsg* inv = EM().CreateInvalidateMsg(getDeviceID(),m->GeneratingPC());
-	               inv->addr = m->addr;
-	               inv->size = m->size;
-	               if(*i != nodeID)
-	               {
-	                  NetworkMsg* net = EM().CreateNetworkMsg(getDeviceID(),m->GeneratingPC());
-	                  net->destinationNode = *i;
-	                  net->sourceNode = nodeID;
-	                  net->payloadMsg = inv;
-	                  SendMsg(remoteConnectionID, net, lookupTime + remoteSendTime);
-	               }
-	               else
-	               {
-	#ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-	            printDebugInfo("OnRemoteInvalidate",*inv,"OnRemoteReadResponse",nodeID);
-	#endif
-	                  OnRemoteInvalidate(inv, nodeID);
-	               }
-                  EraseDirectoryShare(m->addr, *i);
-	            }
-		      } // if(directoryData[m->addr].sharers.size() != 0)
 		   }
-		   else // owner is source
-		   {
-		      // do nothing
-		   }
+         // invalidate all sharers
+         if(directoryData[m->addr].sharers.size() != 0)
+         {
+            for(HashSet<NodeID>::iterator i = directoryData[m->addr].sharers.begin(); i != directoryData[m->addr].sharers.end(); i++)
+            {
+               InvalidateMsg* inv = EM().CreateInvalidateMsg(getDeviceID(),m->GeneratingPC());
+               inv->addr = m->addr;
+               inv->size = m->size;
+               if(*i != nodeID)
+               {
+                  NetworkMsg* net = EM().CreateNetworkMsg(getDeviceID(),m->GeneratingPC());
+                  net->destinationNode = *i;
+                  net->sourceNode = nodeID;
+                  net->payloadMsg = inv;
+                  SendMsg(remoteConnectionID, net, lookupTime + remoteSendTime);
+               }
+               else
+               {
+#ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
+            printDebugInfo("OnRemoteInvalidate",*inv,"OnRemoteReadResponse",nodeID);
+#endif
+                  OnRemoteInvalidate(inv, nodeID);
+               }
+               EraseDirectoryShare(m->addr, *i);
+            }
+         } // if(directoryData[m->addr].sharers.size() != 0)
 			//DebugAssert(pendingDirectoryExclusiveReads.find(m->addr) == pendingDirectoryExclusiveReads.end());
 			//pendingDirectoryExclusiveReads[m->addr] = ld;
 		}
@@ -773,7 +775,8 @@ namespace Memory
 			*/
 		}
       PerformDirectoryFetch(m, src);
-		//TODO fix this motherfucker AddDirectoryShare(m->addr, src, m->requestingExclusive);
+		//TODO fix this
+      AddDirectoryShare(m->addr, src, m->requestingExclusive);
       // how to make sure that owner of the original block gets invalidated while
       // still keeping a record of which node the new owner is
 	}

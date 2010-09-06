@@ -1,9 +1,9 @@
 #!/bin/bash
 # add more processor skews to config files
 
-NEW_FILENAME_PREFIX="fft-3sd-moesi"
-OLD_CPU_CNT=4
-NEW_CPU_CNT=8
+NEW_FILENAME_PREFIX="cholesky-3sd-moesi"
+OLD_CPU_CNT=2
+NEW_CPU_CNT=4
 
 # check for whether we can use dos2unix or fromdos
 if [[ -e '/usr/bin/dos2unix' ]]

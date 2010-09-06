@@ -4,7 +4,7 @@
 #set -x   # verbose output
 FILENAME=cholesky-3sd-moesi  # filename of config file we're trying to make
 OLD_PROC_CNT=2   # number of processors in old config files
-NEW_PROC_CNT=2   # number of processors in new config files
+NEW_PROC_CNT=4   # number of processors in new config files
 
 function appendZeros
 {
