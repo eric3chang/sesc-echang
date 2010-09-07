@@ -9,6 +9,7 @@
 
 // toggles debug messages
 #define MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
+//#define MEMORY_3_STAGE_DIRECTORY_DEBUG_COUNTERS
 //#define MEMORY_3_STAGE_DIRECTORY_DEBUG_DIRECTORY_DATA
 //#define MEMORY_3_STAGE_DIRECTORY_DEBUG_MSG_COUNT
 //#define MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_DIRECTORY_SHARED_READS
@@ -23,6 +24,10 @@ using std::endl;
 
 namespace Memory
 {
+#ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_COUNTERS
+   int threeStageDirectoryEraseDirectoryShareCounter = 0;
+#endif
+
 	NodeID ThreeStageDirectory::HashedPageCalculator::CalcNodeID(Address addr) const
 	{
 		int index = ((int)(addr / pageSize) % elementCount);
@@ -58,14 +63,17 @@ namespace Memory
 		NodeID target;
 		if(b.owner != InvalidNodeID)
 		{
+		   m->directoryLookup = false;
 			target = b.owner;
 		}
 		else if(b.sharers.begin() != b.sharers.end())
 		{
+		   m->directoryLookup = false;
 			target = *(b.sharers.begin());
 		}
 		else
 		{
+		   m->directoryLookup = true;
 			target = memoryNodeCalc->CalcNodeID(m->addr);
 		}
 		if(target == nodeID)
@@ -99,6 +107,9 @@ namespace Memory
 	 */
 	void ThreeStageDirectory::EraseDirectoryShare(Address a, NodeID id)
 	{
+#ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_COUNTERS
+	   threeStageDirectoryEraseDirectoryShareCounter++;
+#endif
 		DebugAssert(directoryData.find(a) != directoryData.end());
 		BlockData& b = directoryData[a];
 		if(b.owner == id)
@@ -127,6 +138,8 @@ namespace Memory
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_DIRECTORY_DATA
          printDebugInfo("AddDirectoryShare",a, id, "b.owner=");
 #endif
+         // unnecessary because owner is allowed to change when there are sharers
+         //DebugAssert(b.sharers.find(id)==b.sharers.end());
 			b.owner = id;
 		}
 		else if(b.sharers.find(id) == b.sharers.end())
@@ -899,6 +912,9 @@ namespace Memory
 	 */
 	void ThreeStageDirectory::RecvMsg(const BaseMsg* msg, int connectionID)
 	{
+#ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_COUNTERS
+	   cout << threeStageDirectoryEraseDirectoryShareCounter << endl;
+#endif
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_MSG_COUNT
 	   cout << "ThreeStageDirectory::RecvMsg: " << memoryDirectoryGlobalInt++ << ' ' << endl;
 #endif
