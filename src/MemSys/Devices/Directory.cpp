@@ -405,6 +405,7 @@ namespace Memory
 			nm->sourceNode = nodeID;
 			nm->destinationNode = memoryNode;
 			nm->payloadMsg = m;
+			SendMsg(remoteConnectionID, nm, remoteSendTime);
 			nm = EM().CreateNetworkMsg(getDeviceID(), m->GeneratingPC());
 			nm->sourceNode = nodeID;
 			nm->destinationNode = src;

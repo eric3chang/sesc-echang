@@ -38,16 +38,14 @@ namespace Memory
 		class BlockData
 		{
 		public:
+         HashSet<NodeID> sharers;
+         NodeID owner;
+
 			BlockData()
 			{
 				owner = InvalidNodeID;
 			}
-			void setOwner (NodeID owner) { this->owner = owner;}
-			NodeID getOwner () const {return owner;}
-			HashSet <NodeID> & getSharers () {return sharers;}
 		private:
-         HashSet<NodeID> sharers;
-         NodeID owner;
 		};
 		template <class T>
 		class LookupData
