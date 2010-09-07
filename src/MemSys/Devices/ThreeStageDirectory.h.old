@@ -38,13 +38,14 @@ namespace Memory
 		class BlockData
 		{
 		public:
-			HashSet<NodeID> sharers;
-			NodeID owner;
+         HashSet<NodeID> sharers;
+         NodeID owner;
 
 			BlockData()
 			{
 				owner = InvalidNodeID;
 			}
+		private:
 		};
 		template <class T>
 		class LookupData
@@ -53,6 +54,8 @@ namespace Memory
 			const T* msg;
 			NodeID sourceNode;
 		};
+
+		private:
 
 		TimeDelta localSendTime;
 		TimeDelta remoteSendTime;
@@ -75,7 +78,7 @@ namespace Memory
 		HashSet<Address> pendingEviction;
 		HashMap<Address, BlockData> directoryData;
 
-		void PerformDirectoryFetch(Address a);
+		void PerformDirectoryFetch(const ReadMsg *msgIn, NodeID src);
 		void EraseDirectoryShare(Address a, NodeID id);
 		void AddDirectoryShare(Address a, NodeID id, bool exclusive);
 
@@ -101,6 +104,7 @@ namespace Memory
 		void printDebugInfo(const char* fromMethod, const BaseMsg &myMessage, const char* operation,NodeID src);
 	   void printDebugInfo(const char* fromMethod,Address addr,NodeID id,const char* operation);
 	   void printEraseOwner(const char* fromMethod,Address addr,NodeID id,const char* operation);
+
 		void printPendingDirectorySharedReads();
 	   void printPendingLocalReads();
 

@@ -474,6 +474,9 @@
     <ClInclude Include="include\to_string.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MemSys\Devices\ThreeStageDirectory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="libmem\AddressPrefetcher.cpp">
@@ -776,6 +779,9 @@
     <ClCompile Include="MemSys\Devices\RandomLoadNetwork.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MemSys\Devices\ThreeStageDirectory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="libpint\PPCInsts.def">
@@ -828,5 +834,6 @@
     <None Include="libtrans\TMProcessor.cpp~" />
     <None Include="libll\TraceFlow.cpp~" />
     <None Include="libsuc\TraceGen.cpp~" />
+    <None Include="MemSys\Devices\ThreeStageDirectory.cpp.old" />
   </ItemGroup>
 </Project>
