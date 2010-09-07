@@ -50,7 +50,7 @@ namespace Memory
 		   cout
             << " msgSrc=" << setw(2) << deviceID
 		      << " dst=" << setw(2) << destinationDeviceID
-		      << " msg=" << setw(5) << msgID
+		      << " msg=" << setw(6) << msgID
 		      // generatingPC doesn't seem to be used
 		      //<< " generatingPC=" << generatingPC
 		   ;

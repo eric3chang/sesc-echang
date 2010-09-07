@@ -11,10 +11,10 @@ namespace Memory
 		size_t size;
 		bool satisfied;
 		bool blockAttached;
+      bool directoryLookup;
 		bool exclusiveOwnership;
 		MessageID solicitingMessage;
-
-		bool directoryLookup;
+		NodeID originalSender;
 
 		// making directoryLookup false here is not enough,
 		// because ReadResponseMsg can get reused from
