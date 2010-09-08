@@ -1,4 +1,4 @@
-﻿[[Title: An analysis of directory-based cache-coherence protocol on symmetric multiprocessors using the SESC simulator]]
+[[Title: An analysis of directory-based cache-coherence protocol on symmetric multiprocessors using the SESC simulator]]
 
 
 [[Section 1 Comparing different directory-based cache coherence protocols.]]
