@@ -2,12 +2,277 @@
 .data Minor header aligment correction (100816e0 vs 100816d8)
 1.bss Minor header aligment correction 12 (100834d0 vs 100834c4)
 .bss Minor header aligment correction (100834d0 vs 100834c4)
-static[0x10069a30-0x10083f84] heap[0x10084000-0x23f42000] stack[0x23f42000-0x2473a000] -> [0x97a8d008-0xac15d5d8]
-OSSim::spawn(-1,0,0x10000,0)
+static[0x10069a30-0x10083f84] heap[0x10084000-0x23f42000] stack[0x23f42000-0x2473a000] -> [0x97a2c008-0xac0fc5d8]
 Device : P(0)_DL1  Description : ProcessorInterface_0
 Device : P(0)_IL1  Description : InstSource
 Device : P(1)_DL1  Description : ProcessorInterface_1
 Device : P(1)_IL1  Description : InstSource
+OSSim::spawn(-1,0,0x10000,0)
+        msgSrc= 6 dst= 7 msg=     3 addr=603233984 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg=     3 addr=603233984 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead pendingLocalReads.insert(3)
+        msgSrc= 6 dst=11 msg=     3 addr=603233984 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 3SDir::OnDirectoryBlockRequest RecvMsg
+        msgSrc= 6 dst= 7 msg=    14 addr=268967552 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg=    14 addr=268967552 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead pendingLocalReads.insert(14)
+        msgSrc= 6 dst= 7 msg=    14 addr=268967552 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnDirectoryBlockRequest OnLocalRead
+ src=12 msgSrc= 1 dst= 7 msg=    11 addr=603233984 satis=1 blkAtt=1 excluOwn=1 solicMsg=3 3SDir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 1 dst= 7 msg=    11 addr=603233984 satis=1 blkAtt=1 excluOwn=1 solicMsg=3 3SDir::OnDirectoryBlockResponse pendingLocalReads.erase(3)
+        msgSrc= 6 dst= 7 msg=    44 addr=603233920 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg=    44 addr=603233920 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead pendingLocalReads.insert(44)
+        msgSrc= 6 dst= 7 msg=    44 addr=603233920 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 3SDir::OnDirectoryBlockRequest OnLocalRead
+        msgSrc= 6 dst= 7 msg=    56 addr=603234048 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg=    56 addr=603234048 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead pendingLocalReads.insert(56)
+        msgSrc= 6 dst= 7 msg=    56 addr=603234048 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnDirectoryBlockRequest OnLocalRead
+ src=12 msgSrc= 1 dst= 7 msg=    18 addr=268967552 satis=1 blkAtt=1 excluOwn=1 solicMsg=14 3SDir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 1 dst= 7 msg=    18 addr=268967552 satis=1 blkAtt=1 excluOwn=1 solicMsg=14 3SDir::OnDirectoryBlockResponse pendingLocalReads.erase(14)
+        msgSrc= 6 dst= 7 msg=    70 addr=268973056 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg=    70 addr=268973056 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead pendingLocalReads.insert(70)
+        msgSrc= 6 dst= 7 msg=    70 addr=268973056 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 3SDir::OnDirectoryBlockRequest OnLocalRead
+ src=12 msgSrc= 1 dst= 7 msg=    63 addr=603233920 satis=1 blkAtt=1 excluOwn=1 solicMsg=44 3SDir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 1 dst= 7 msg=    63 addr=603233920 satis=1 blkAtt=1 excluOwn=1 solicMsg=44 3SDir::OnDirectoryBlockResponse pendingLocalReads.erase(44)
+ src=12 msgSrc= 1 dst= 7 msg=    64 addr=603234048 satis=1 blkAtt=1 excluOwn=1 solicMsg=56 3SDir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 1 dst= 7 msg=    64 addr=603234048 satis=1 blkAtt=1 excluOwn=1 solicMsg=56 3SDir::OnDirectoryBlockResponse pendingLocalReads.erase(56)
+        msgSrc= 6 dst= 7 msg=    92 addr=268967616 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg=    92 addr=268967616 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead pendingLocalReads.insert(92)
+        msgSrc= 6 dst= 7 msg=    93 addr=268975104 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg=    93 addr=268975104 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead pendingLocalReads.insert(93)
+        msgSrc= 6 dst= 7 msg=    93 addr=268975104 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 3SDir::OnDirectoryBlockRequest OnLocalRead
+        msgSrc= 6 dst= 7 msg=   101 addr=268973184 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg=   101 addr=268973184 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead pendingLocalReads.insert(101)
+        msgSrc= 6 dst= 7 msg=   101 addr=268973184 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnDirectoryBlockRequest OnLocalRead
+        msgSrc= 6 dst= 7 msg=   106 addr=268973120 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg=   106 addr=268973120 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead pendingLocalReads.insert(106)
+        msgSrc= 6 dst=11 msg=    92 addr=268967616 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=1 3SDir::OnDirectoryBlockRequest RecvMsg
+ src=12 msgSrc= 1 dst= 7 msg=    74 addr=268973056 satis=1 blkAtt=1 excluOwn=1 solicMsg=70 3SDir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 1 dst= 7 msg=    74 addr=268973056 satis=1 blkAtt=1 excluOwn=1 solicMsg=70 3SDir::OnDirectoryBlockResponse pendingLocalReads.erase(70)
+        msgSrc= 6 dst=11 msg=   106 addr=268973120 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 3SDir::OnDirectoryBlockRequest RecvMsg
+        msgSrc= 6 dst= 7 msg=   131 addr=603234112 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg=   131 addr=603234112 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead pendingLocalReads.insert(131)
+        msgSrc= 6 dst=11 msg=   131 addr=603234112 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 3SDir::OnDirectoryBlockRequest RecvMsg
+ src=12 msgSrc= 1 dst= 7 msg=   112 addr=268975104 satis=1 blkAtt=1 excluOwn=1 solicMsg=93 3SDir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 1 dst= 7 msg=   112 addr=268975104 satis=1 blkAtt=1 excluOwn=1 solicMsg=93 3SDir::OnDirectoryBlockResponse pendingLocalReads.erase(93)
+ src=12 msgSrc= 1 dst= 7 msg=   120 addr=268973184 satis=1 blkAtt=1 excluOwn=1 solicMsg=101 3SDir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 1 dst= 7 msg=   120 addr=268973184 satis=1 blkAtt=1 excluOwn=1 solicMsg=101 3SDir::OnDirectoryBlockResponse pendingLocalReads.erase(101)
+ src=12 msgSrc= 1 dst= 7 msg=   121 addr=268967616 satis=1 blkAtt=1 excluOwn=1 solicMsg=92 3SDir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 1 dst= 7 msg=   121 addr=268967616 satis=1 blkAtt=1 excluOwn=1 solicMsg=92 3SDir::OnDirectoryBlockResponse pendingLocalReads.erase(92)
+ src=12 msgSrc= 1 dst= 7 msg=   122 addr=268973120 satis=1 blkAtt=1 excluOwn=1 solicMsg=106 3SDir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 1 dst= 7 msg=   122 addr=268973120 satis=1 blkAtt=1 excluOwn=1 solicMsg=106 3SDir::OnDirectoryBlockResponse pendingLocalReads.erase(106)
+ src=12 msgSrc= 1 dst= 7 msg=   136 addr=603234112 satis=1 blkAtt=1 excluOwn=1 solicMsg=131 3SDir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 1 dst= 7 msg=   136 addr=603234112 satis=1 blkAtt=1 excluOwn=1 solicMsg=131 3SDir::OnDirectoryBlockResponse pendingLocalReads.erase(131)
+        msgSrc= 6 dst= 7 msg=   171 addr=603233664 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg=   171 addr=603233664 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead pendingLocalReads.insert(171)
+        msgSrc= 6 dst= 7 msg=   171 addr=603233664 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnDirectoryBlockRequest OnLocalRead
+ src=12 msgSrc= 1 dst= 7 msg=   175 addr=603233664 satis=1 blkAtt=1 excluOwn=1 solicMsg=171 3SDir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 1 dst= 7 msg=   175 addr=603233664 satis=1 blkAtt=1 excluOwn=1 solicMsg=171 3SDir::OnDirectoryBlockResponse pendingLocalReads.erase(171)
+        msgSrc= 6 dst= 7 msg=   203 addr=603233472 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg=   203 addr=603233472 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead pendingLocalReads.insert(203)
+        msgSrc= 6 dst= 7 msg=   206 addr=603233408 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg=   206 addr=603233408 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead pendingLocalReads.insert(206)
+        msgSrc= 6 dst= 7 msg=   206 addr=603233408 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 3SDir::OnDirectoryBlockRequest OnLocalRead
+        msgSrc= 6 dst=11 msg=   203 addr=603233472 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=1 3SDir::OnDirectoryBlockRequest RecvMsg
+        msgSrc= 6 dst= 7 msg=   236 addr=268975488 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg=   236 addr=268975488 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead pendingLocalReads.insert(236)
+        msgSrc= 6 dst= 7 msg=   236 addr=268975488 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnDirectoryBlockRequest OnLocalRead
+ src=12 msgSrc= 1 dst= 7 msg=   217 addr=603233408 satis=1 blkAtt=1 excluOwn=1 solicMsg=206 3SDir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 1 dst= 7 msg=   217 addr=603233408 satis=1 blkAtt=1 excluOwn=1 solicMsg=206 3SDir::OnDirectoryBlockResponse pendingLocalReads.erase(206)
+ src=12 msgSrc= 1 dst= 7 msg=   219 addr=603233472 satis=1 blkAtt=1 excluOwn=1 solicMsg=203 3SDir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 1 dst= 7 msg=   219 addr=603233472 satis=1 blkAtt=1 excluOwn=1 solicMsg=203 3SDir::OnDirectoryBlockResponse pendingLocalReads.erase(203)
+        msgSrc= 6 dst= 7 msg=   308 addr=268884800 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg=   308 addr=268884800 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead pendingLocalReads.insert(308)
+        msgSrc= 6 dst=11 msg=   308 addr=268884800 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 3SDir::OnDirectoryBlockRequest RecvMsg
+ src=12 msgSrc= 1 dst= 7 msg=   240 addr=268975488 satis=1 blkAtt=1 excluOwn=1 solicMsg=236 3SDir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 1 dst= 7 msg=   240 addr=268975488 satis=1 blkAtt=1 excluOwn=1 solicMsg=236 3SDir::OnDirectoryBlockResponse pendingLocalReads.erase(236)
+        msgSrc= 6 dst= 7 msg=   354 addr=603233344 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg=   354 addr=603233344 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead pendingLocalReads.insert(354)
+        msgSrc= 6 dst=11 msg=   354 addr=603233344 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=1 3SDir::OnDirectoryBlockRequest RecvMsg
+ src=12 msgSrc= 1 dst= 7 msg=   313 addr=268884800 satis=1 blkAtt=1 excluOwn=1 solicMsg=308 3SDir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 1 dst= 7 msg=   313 addr=268884800 satis=1 blkAtt=1 excluOwn=1 solicMsg=308 3SDir::OnDirectoryBlockResponse pendingLocalReads.erase(308)
+ src=12 msgSrc= 1 dst= 7 msg=   359 addr=603233344 satis=1 blkAtt=1 excluOwn=1 solicMsg=354 3SDir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 1 dst= 7 msg=   359 addr=603233344 satis=1 blkAtt=1 excluOwn=1 solicMsg=354 3SDir::OnDirectoryBlockResponse pendingLocalReads.erase(354)
+        msgSrc= 6 dst= 7 msg=   406 addr=268883712 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg=   406 addr=268883712 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead pendingLocalReads.insert(406)
+        msgSrc= 6 dst= 7 msg=   406 addr=268883712 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnDirectoryBlockRequest OnLocalRead
+        msgSrc= 6 dst= 7 msg=   414 addr=268884736 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg=   414 addr=268884736 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead pendingLocalReads.insert(414)
+        msgSrc= 6 dst= 7 msg=   414 addr=268884736 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnDirectoryBlockRequest OnLocalRead
+ src=12 msgSrc= 1 dst= 7 msg=   421 addr=268883712 satis=1 blkAtt=1 excluOwn=1 solicMsg=406 3SDir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 1 dst= 7 msg=   421 addr=268883712 satis=1 blkAtt=1 excluOwn=1 solicMsg=406 3SDir::OnDirectoryBlockResponse pendingLocalReads.erase(406)
+ src=12 msgSrc= 1 dst= 7 msg=   422 addr=268884736 satis=1 blkAtt=1 excluOwn=1 solicMsg=414 3SDir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 1 dst= 7 msg=   422 addr=268884736 satis=1 blkAtt=1 excluOwn=1 solicMsg=414 3SDir::OnDirectoryBlockResponse pendingLocalReads.erase(414)
+        msgSrc= 6 dst= 7 msg=   518 addr=268972608 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg=   518 addr=268972608 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead pendingLocalReads.insert(518)
+        msgSrc= 6 dst= 7 msg=   519 addr=268972800 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg=   519 addr=268972800 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead pendingLocalReads.insert(519)
+        msgSrc= 6 dst= 7 msg=   519 addr=268972800 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 3SDir::OnDirectoryBlockRequest OnLocalRead
+        msgSrc= 6 dst=11 msg=   518 addr=268972608 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=1 3SDir::OnDirectoryBlockRequest RecvMsg
+ src=12 msgSrc= 1 dst= 7 msg=   529 addr=268972800 satis=1 blkAtt=1 excluOwn=1 solicMsg=519 3SDir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 1 dst= 7 msg=   529 addr=268972800 satis=1 blkAtt=1 excluOwn=1 solicMsg=519 3SDir::OnDirectoryBlockResponse pendingLocalReads.erase(519)
+ src=12 msgSrc= 1 dst= 7 msg=   531 addr=268972608 satis=1 blkAtt=1 excluOwn=1 solicMsg=518 3SDir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 1 dst= 7 msg=   531 addr=268972608 satis=1 blkAtt=1 excluOwn=1 solicMsg=518 3SDir::OnDirectoryBlockResponse pendingLocalReads.erase(518)
+        msgSrc= 6 dst= 7 msg=   550 addr=268976128 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg=   550 addr=268976128 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead pendingLocalReads.insert(550)
+        msgSrc= 6 dst= 7 msg=   550 addr=268976128 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnDirectoryBlockRequest OnLocalRead
+ src=12 msgSrc= 1 dst= 7 msg=   554 addr=268976128 satis=1 blkAtt=1 excluOwn=1 solicMsg=550 3SDir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 1 dst= 7 msg=   554 addr=268976128 satis=1 blkAtt=1 excluOwn=1 solicMsg=550 3SDir::OnDirectoryBlockResponse pendingLocalReads.erase(550)
+        msgSrc= 6 dst= 7 msg=   569 addr=268952384 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg=   569 addr=268952384 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead pendingLocalReads.insert(569)
+        msgSrc= 6 dst=11 msg=   569 addr=268952384 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 3SDir::OnDirectoryBlockRequest RecvMsg
+ src=12 msgSrc= 1 dst= 7 msg=   574 addr=268952384 satis=1 blkAtt=1 excluOwn=1 solicMsg=569 3SDir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 1 dst= 7 msg=   574 addr=268952384 satis=1 blkAtt=1 excluOwn=1 solicMsg=569 3SDir::OnDirectoryBlockResponse pendingLocalReads.erase(569)
+        msgSrc= 6 dst= 7 msg=   586 addr=268976192 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg=   586 addr=268976192 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead pendingLocalReads.insert(586)
+        msgSrc= 6 dst=11 msg=   586 addr=268976192 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=1 3SDir::OnDirectoryBlockRequest RecvMsg
+ src=12 msgSrc= 1 dst= 7 msg=   596 addr=268976192 satis=1 blkAtt=1 excluOwn=1 solicMsg=586 3SDir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 1 dst= 7 msg=   596 addr=268976192 satis=1 blkAtt=1 excluOwn=1 solicMsg=586 3SDir::OnDirectoryBlockResponse pendingLocalReads.erase(586)
+        msgSrc= 6 dst= 7 msg=   993 addr=268972800 blockAttached=1 3SDir::OnLocalEviction RecvMsg
+        msgSrc= 6 dst= 7 msg=   993 addr=268972800 blockAttached=1 3SDir::OnLocalEviction EraseDirectoryShare
+        msgSrc= 6 dst= 7 msg=   991 addr=268969216 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg=   991 addr=268969216 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead pendingLocalReads.insert(991)
+        msgSrc= 6 dst= 7 msg=   991 addr=268969216 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 3SDir::OnDirectoryBlockRequest OnLocalRead
+        msgSrc= 6 dst= 7 msg=  1014 addr=268884736 blockAttached=0 3SDir::OnLocalEviction RecvMsg
+        msgSrc= 6 dst= 7 msg=  1014 addr=268884736 blockAttached=0 3SDir::OnLocalEviction EraseDirectoryShare
+        msgSrc= 6 dst= 7 msg=  1012 addr=268965632 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg=  1012 addr=268965632 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead pendingLocalReads.insert(1012)
+        msgSrc= 6 dst= 7 msg=  1012 addr=268965632 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnDirectoryBlockRequest OnLocalRead
+ src=12 msgSrc= 1 dst= 7 msg=   998 addr=268969216 satis=1 blkAtt=1 excluOwn=1 solicMsg=991 3SDir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 1 dst= 7 msg=   998 addr=268969216 satis=1 blkAtt=1 excluOwn=1 solicMsg=991 3SDir::OnDirectoryBlockResponse pendingLocalReads.erase(991)
+ src=12 msgSrc= 1 dst= 7 msg=  1020 addr=268965632 satis=1 blkAtt=1 excluOwn=1 solicMsg=1012 3SDir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 1 dst= 7 msg=  1020 addr=268965632 satis=1 blkAtt=1 excluOwn=1 solicMsg=1012 3SDir::OnDirectoryBlockResponse pendingLocalReads.erase(1012)
+        msgSrc= 6 dst= 7 msg=  1034 addr=268973376 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg=  1034 addr=268973376 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead pendingLocalReads.insert(1034)
+        msgSrc= 6 dst=11 msg=  1034 addr=268973376 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 3SDir::OnDirectoryBlockRequest RecvMsg
+ src=12 msgSrc= 1 dst= 7 msg=  1039 addr=268973376 satis=1 blkAtt=1 excluOwn=1 solicMsg=1034 3SDir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 1 dst= 7 msg=  1039 addr=268973376 satis=1 blkAtt=1 excluOwn=1 solicMsg=1034 3SDir::OnDirectoryBlockResponse pendingLocalReads.erase(1034)
+        msgSrc= 6 dst= 7 msg=  1085 addr=268972544 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg=  1085 addr=268972544 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead pendingLocalReads.insert(1085)
+        msgSrc= 6 dst= 7 msg=  1085 addr=268972544 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnDirectoryBlockRequest OnLocalRead
+        msgSrc= 6 dst= 7 msg=  1117 addr=268972992 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg=  1117 addr=268972992 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead pendingLocalReads.insert(1117)
+        msgSrc= 6 dst=11 msg=  1117 addr=268972992 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 3SDir::OnDirectoryBlockRequest RecvMsg
+        msgSrc= 6 dst= 7 msg=  1137 addr=603233920 blockAttached=1 3SDir::OnLocalEviction RecvMsg
+        msgSrc= 6 dst= 7 msg=  1137 addr=603233920 blockAttached=1 3SDir::OnLocalEviction EraseDirectoryShare
+        msgSrc= 6 dst= 7 msg=  1131 addr=268868224 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg=  1131 addr=268868224 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead pendingLocalReads.insert(1131)
+        msgSrc= 6 dst= 7 msg=  1131 addr=268868224 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnDirectoryBlockRequest OnLocalRead
+ src=12 msgSrc= 1 dst= 7 msg=  1090 addr=268972544 satis=1 blkAtt=1 excluOwn=1 solicMsg=1085 3SDir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 1 dst= 7 msg=  1090 addr=268972544 satis=1 blkAtt=1 excluOwn=1 solicMsg=1085 3SDir::OnDirectoryBlockResponse pendingLocalReads.erase(1085)
+        msgSrc= 6 dst= 7 msg=  1181 addr=268884416 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg=  1181 addr=268884416 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead pendingLocalReads.insert(1181)
+        msgSrc= 6 dst= 7 msg=  1193 addr=268976128 blockAttached=1 3SDir::OnLocalEviction RecvMsg
+        msgSrc= 6 dst= 7 msg=  1193 addr=268976128 blockAttached=1 3SDir::OnLocalEviction EraseDirectoryShare
+        msgSrc= 6 dst= 7 msg=  1190 addr=268884480 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg=  1190 addr=268884480 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead pendingLocalReads.insert(1190)
+        msgSrc= 6 dst= 7 msg=  1190 addr=268884480 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnDirectoryBlockRequest OnLocalRead
+        msgSrc= 6 dst=11 msg=  1181 addr=268884416 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 3SDir::OnDirectoryBlockRequest RecvMsg
+ src=12 msgSrc= 1 dst= 7 msg=  1122 addr=268972992 satis=1 blkAtt=1 excluOwn=1 solicMsg=1117 3SDir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 1 dst= 7 msg=  1122 addr=268972992 satis=1 blkAtt=1 excluOwn=1 solicMsg=1117 3SDir::OnDirectoryBlockResponse pendingLocalReads.erase(1117)
+        msgSrc= 6 dst= 7 msg=  1240 addr=268975104 blockAttached=1 3SDir::OnLocalEviction RecvMsg
+        msgSrc= 6 dst= 7 msg=  1240 addr=268975104 blockAttached=1 3SDir::OnLocalEviction EraseDirectoryShare
+        msgSrc= 6 dst= 7 msg=  1238 addr=603233280 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg=  1238 addr=603233280 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead pendingLocalReads.insert(1238)
+        msgSrc= 6 dst= 7 msg=  1238 addr=603233280 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 3SDir::OnDirectoryBlockRequest OnLocalRead
+ src=12 msgSrc= 1 dst= 7 msg=  1145 addr=268868224 satis=1 blkAtt=1 excluOwn=1 solicMsg=1131 3SDir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 1 dst= 7 msg=  1145 addr=268868224 satis=1 blkAtt=1 excluOwn=1 solicMsg=1131 3SDir::OnDirectoryBlockResponse pendingLocalReads.erase(1131)
+        msgSrc= 6 dst= 7 msg=  1274 addr=603233152 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg=  1274 addr=603233152 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead pendingLocalReads.insert(1274)
+        msgSrc= 6 dst= 7 msg=  1274 addr=603233152 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 3SDir::OnDirectoryBlockRequest OnLocalRead
+        msgSrc= 6 dst= 7 msg=  1278 addr=603233216 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg=  1278 addr=603233216 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead pendingLocalReads.insert(1278)
+        msgSrc= 6 dst=11 msg=  1278 addr=603233216 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=1 3SDir::OnDirectoryBlockRequest RecvMsg
+ src=12 msgSrc= 1 dst= 7 msg=  1200 addr=268884416 satis=1 blkAtt=1 excluOwn=1 solicMsg=1181 3SDir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 1 dst= 7 msg=  1200 addr=268884416 satis=1 blkAtt=1 excluOwn=1 solicMsg=1181 3SDir::OnDirectoryBlockResponse pendingLocalReads.erase(1181)
+ src=12 msgSrc= 1 dst= 7 msg=  1201 addr=268884480 satis=1 blkAtt=1 excluOwn=1 solicMsg=1190 3SDir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 1 dst= 7 msg=  1201 addr=268884480 satis=1 blkAtt=1 excluOwn=1 solicMsg=1190 3SDir::OnDirectoryBlockResponse pendingLocalReads.erase(1190)
+        msgSrc= 6 dst= 7 msg=  1326 addr=268973056 blockAttached=1 3SDir::OnLocalEviction RecvMsg
+        msgSrc= 6 dst= 7 msg=  1326 addr=268973056 blockAttached=1 3SDir::OnLocalEviction EraseDirectoryShare
+        msgSrc= 6 dst= 7 msg=  1322 addr=268975104 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg=  1322 addr=268975104 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead pendingLocalReads.insert(1322)
+        msgSrc= 6 dst= 7 msg=  1322 addr=268975104 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnDirectoryBlockRequest OnLocalRead
+ src=12 msgSrc= 1 dst= 7 msg=  1248 addr=603233280 satis=1 blkAtt=1 excluOwn=1 solicMsg=1238 3SDir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 1 dst= 7 msg=  1248 addr=603233280 satis=1 blkAtt=1 excluOwn=1 solicMsg=1238 3SDir::OnDirectoryBlockResponse pendingLocalReads.erase(1238)
+ src=12 msgSrc= 1 dst= 7 msg=  1286 addr=603233152 satis=1 blkAtt=1 excluOwn=1 solicMsg=1274 3SDir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 1 dst= 7 msg=  1286 addr=603233152 satis=1 blkAtt=1 excluOwn=1 solicMsg=1274 3SDir::OnDirectoryBlockResponse pendingLocalReads.erase(1274)
+ src=12 msgSrc= 1 dst= 7 msg=  1287 addr=603233216 satis=1 blkAtt=1 excluOwn=1 solicMsg=1278 3SDir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 1 dst= 7 msg=  1287 addr=603233216 satis=1 blkAtt=1 excluOwn=1 solicMsg=1278 3SDir::OnDirectoryBlockResponse pendingLocalReads.erase(1278)
+ src=12 msgSrc= 1 dst= 7 msg=  1332 addr=268975104 satis=1 blkAtt=1 excluOwn=1 solicMsg=1322 3SDir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 1 dst= 7 msg=  1332 addr=268975104 satis=1 blkAtt=1 excluOwn=1 solicMsg=1322 3SDir::OnDirectoryBlockResponse pendingLocalReads.erase(1322)
+        msgSrc= 6 dst= 7 msg=  1433 addr=268972544 blockAttached=0 3SDir::OnLocalEviction RecvMsg
+        msgSrc= 6 dst= 7 msg=  1433 addr=268972544 blockAttached=0 3SDir::OnLocalEviction EraseDirectoryShare
+        msgSrc= 6 dst= 7 msg=  1431 addr=268973056 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg=  1431 addr=268973056 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead pendingLocalReads.insert(1431)
+        msgSrc= 6 dst= 7 msg=  1431 addr=268973056 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 3SDir::OnDirectoryBlockRequest OnLocalRead
+        msgSrc= 6 dst= 7 msg=  1496 addr=268870528 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg=  1496 addr=268870528 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead pendingLocalReads.insert(1496)
+        msgSrc= 6 dst= 7 msg=  1496 addr=268870528 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnDirectoryBlockRequest OnLocalRead
+ src=12 msgSrc= 1 dst= 7 msg=  1444 addr=268973056 satis=1 blkAtt=1 excluOwn=1 solicMsg=1431 3SDir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 1 dst= 7 msg=  1444 addr=268973056 satis=1 blkAtt=1 excluOwn=1 solicMsg=1431 3SDir::OnDirectoryBlockResponse pendingLocalReads.erase(1431)
+ src=12 msgSrc= 1 dst= 7 msg=  1500 addr=268870528 satis=1 blkAtt=1 excluOwn=1 solicMsg=1496 3SDir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 1 dst= 7 msg=  1500 addr=268870528 satis=1 blkAtt=1 excluOwn=1 solicMsg=1496 3SDir::OnDirectoryBlockResponse pendingLocalReads.erase(1496)
+        msgSrc= 6 dst= 7 msg=  1558 addr=268883712 blockAttached=0 3SDir::OnLocalEviction RecvMsg
+        msgSrc= 6 dst= 7 msg=  1558 addr=268883712 blockAttached=0 3SDir::OnLocalEviction EraseDirectoryShare
+        msgSrc= 6 dst= 7 msg=  1554 addr=268968704 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg=  1554 addr=268968704 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead pendingLocalReads.insert(1554)
+        msgSrc= 6 dst= 7 msg=  1554 addr=268968704 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnDirectoryBlockRequest OnLocalRead
+ src=12 msgSrc= 1 dst= 7 msg=  1566 addr=268968704 satis=1 blkAtt=1 excluOwn=1 solicMsg=1554 3SDir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 1 dst= 7 msg=  1566 addr=268968704 satis=1 blkAtt=1 excluOwn=1 solicMsg=1554 3SDir::OnDirectoryBlockResponse pendingLocalReads.erase(1554)
+        msgSrc= 6 dst= 7 msg=  1620 addr=268967552 blockAttached=1 3SDir::OnLocalEviction RecvMsg
+        msgSrc= 6 dst= 7 msg=  1620 addr=268967552 blockAttached=1 3SDir::OnLocalEviction EraseDirectoryShare
+        msgSrc= 6 dst= 7 msg=  1618 addr=268889728 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg=  1618 addr=268889728 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead pendingLocalReads.insert(1618)
+        msgSrc= 6 dst= 7 msg=  1618 addr=268889728 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnDirectoryBlockRequest OnLocalRead
+ src=12 msgSrc= 1 dst= 7 msg=  1625 addr=268889728 satis=1 blkAtt=1 excluOwn=1 solicMsg=1618 3SDir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 1 dst= 7 msg=  1625 addr=268889728 satis=1 blkAtt=1 excluOwn=1 solicMsg=1618 3SDir::OnDirectoryBlockResponse pendingLocalReads.erase(1618)
+        msgSrc= 6 dst= 7 msg=  1636 addr=268936640 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg=  1636 addr=268936640 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead pendingLocalReads.insert(1636)
+        msgSrc= 6 dst=11 msg=  1636 addr=268936640 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 3SDir::OnDirectoryBlockRequest RecvMsg
+ src=12 msgSrc= 1 dst= 7 msg=  1641 addr=268936640 satis=1 blkAtt=1 excluOwn=1 solicMsg=1636 3SDir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 1 dst= 7 msg=  1641 addr=268936640 satis=1 blkAtt=1 excluOwn=1 solicMsg=1636 3SDir::OnDirectoryBlockResponse pendingLocalReads.erase(1636)
+        msgSrc= 6 dst= 7 msg=  1667 addr=603233408 blockAttached=1 3SDir::OnLocalEviction RecvMsg
+        msgSrc= 6 dst= 7 msg=  1667 addr=603233408 blockAttached=1 3SDir::OnLocalEviction EraseDirectoryShare
+        msgSrc= 6 dst= 7 msg=  1665 addr=268967552 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg=  1665 addr=268967552 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead pendingLocalReads.insert(1665)
+        msgSrc= 6 dst= 7 msg=  1665 addr=268967552 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnDirectoryBlockRequest OnLocalRead
+ src=12 msgSrc= 1 dst= 7 msg=  1719 addr=268967552 satis=1 blkAtt=1 excluOwn=1 solicMsg=1665 3SDir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 1 dst= 7 msg=  1719 addr=268967552 satis=1 blkAtt=1 excluOwn=1 solicMsg=1665 3SDir::OnDirectoryBlockResponse pendingLocalReads.erase(1665)
+        msgSrc= 6 dst= 7 msg=  1757 addr=603233664 blockAttached=0 3SDir::OnLocalEviction RecvMsg
+        msgSrc= 6 dst= 7 msg=  1757 addr=603233664 blockAttached=0 3SDir::OnLocalEviction EraseDirectoryShare
+        msgSrc= 6 dst= 7 msg=  1755 addr=603234176 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg=  1755 addr=603234176 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead pendingLocalReads.insert(1755)
+        msgSrc= 6 dst= 7 msg=  1755 addr=603234176 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnDirectoryBlockRequest OnLocalRead
+ src=12 msgSrc= 1 dst= 7 msg=  1768 addr=603234176 satis=1 blkAtt=1 excluOwn=1 solicMsg=1755 3SDir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 1 dst= 7 msg=  1768 addr=603234176 satis=1 blkAtt=1 excluOwn=1 solicMsg=1755 3SDir::OnDirectoryBlockResponse pendingLocalReads.erase(1755)
+        msgSrc= 6 dst= 7 msg=  1884 addr=268973184 blockAttached=1 3SDir::OnLocalEviction RecvMsg
+        msgSrc= 6 dst= 7 msg=  1884 addr=268973184 blockAttached=1 3SDir::OnLocalEviction EraseDirectoryShare
+        msgSrc= 6 dst= 7 msg=  1882 addr=603233408 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg=  1882 addr=603233408 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead pendingLocalReads.insert(1882)
+        msgSrc= 6 dst= 7 msg=  1882 addr=603233408 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 3SDir::OnDirectoryBlockRequest OnLocalRead
+        msgSrc= 6 dst= 7 msg=  1898 addr=268889728 blockAttached=0 3SDir::OnLocalEviction RecvMsg
+        msgSrc= 6 dst= 7 msg=  1898 addr=268889728 blockAttached=0 3SDir::OnLocalEviction EraseDirectoryShare
+        msgSrc= 6 dst= 7 msg=  1896 addr=268973184 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg=  1896 addr=268973184 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead pendingLocalReads.insert(1896)
+        msgSrc= 6 dst= 7 msg=  1896 addr=268973184 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnDirectoryBlockRequest OnLocalRead
+ src=12 msgSrc= 1 dst= 7 msg=  1890 addr=603233408 satis=1 blkAtt=1 excluOwn=1 solicMsg=1882 3SDir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 1 dst= 7 msg=  1890 addr=603233408 satis=1 blkAtt=1 excluOwn=1 solicMsg=1882 3SDir::OnDirectoryBlockResponse pendingLocalReads.erase(1882)
+ src=12 msgSrc= 1 dst= 7 msg=  1903 addr=268973184 satis=1 blkAtt=1 excluOwn=1 solicMsg=1896 3SDir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 1 dst= 7 msg=  1903 addr=268973184 satis=1 blkAtt=1 excluOwn=1 solicMsg=1896 3SDir::OnDirectoryBlockResponse pendingLocalReads.erase(1896)
+        msgSrc= 6 dst= 7 msg=  2348 addr=268972992 blockAttached=0 3SDir::OnLocalEviction RecvMsg
+        msgSrc= 6 dst= 7 msg=  2344 addr=603234240 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg=  2344 addr=603234240 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead pendingLocalReads.insert(2344)
+        msgSrc= 6 dst=11 msg=  2348 addr=268972992 blockAttached=0 3SDir::OnRemoteEviction RecvMsg
+        msgSrc= 6 dst=11 msg=  2344 addr=603234240 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 3SDir::OnDirectoryBlockRequest RecvMsg
+ src=12 msgSrc= 1 dst= 7 msg=  2360 addr=603234240 satis=1 blkAtt=1 excluOwn=1 solicMsg=2344 3SDir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 1 dst= 7 msg=  2360 addr=603234240 satis=1 blkAtt=1 excluOwn=1 solicMsg=2344 3SDir::OnDirectoryBlockResponse pendingLocalReads.erase(2344)
+        msgSrc= 6 dst= 7 msg=  2680 addr=268884416 blockAttached=0 3SDir::OnLocalEviction RecvMsg
+        msgSrc= 6 dst= 7 msg=  2678 addr=268870592 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg=  2678 addr=268870592 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead pendingLocalReads.insert(2678)
+        msgSrc= 6 dst=11 msg=  2678 addr=268870592 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 3SDir::OnDirectoryBlockRequest RecvMsg
+        msgSrc= 6 dst=11 msg=  2680 addr=268884416 blockAttached=0 3SDir::OnRemoteEviction RecvMsg
+ src=12 msgSrc= 1 dst= 7 msg=  2687 addr=268870592 satis=1 blkAtt=1 excluOwn=1 solicMsg=2678 3SDir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 1 dst= 7 msg=  2687 addr=268870592 satis=1 blkAtt=1 excluOwn=1 solicMsg=2678 3SDir::OnDirectoryBlockResponse pendingLocalReads.erase(2678)
+        msgSrc= 6 dst= 7 msg=  2701 addr=268969216 blockAttached=1 3SDir::OnLocalEviction RecvMsg
+        msgSrc= 6 dst= 7 msg=  2701 addr=268969216 blockAttached=1 3SDir::OnLocalEviction EraseDirectoryShare
+        msgSrc= 6 dst= 7 msg=  2699 addr=268973312 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg=  2699 addr=268973312 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead pendingLocalReads.insert(2699)
+        msgSrc= 6 dst= 7 msg=  2699 addr=268973312 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnDirectoryBlockRequest OnLocalRead
 Rabbit Mode Start 
    1024 Complex Doubles
    2 Processors
@@ -15,13 +280,32 @@ Rabbit Mode Start
    16 Byte line size
    4096 Bytes per page
 Leaving rabbit mode...
+sesc_spawn( 0x100013d4, 0x0, 0x0 ) pid = 0, child pid = 1, child context = 9953d18
 OSSim::spawn(0,1,0x10000,0)
-sesc_spawn( 0x100013d4, 0x0, 0x0 ) pid = 0, child pid = 1, child context = 99c7cf0
 FastSimBeginEvent
 FastSimBeginEvent
 FastSimBeginEvent
 FastSimBeginEvent
 Stalling processor 1 at barrier
+        msgSrc=10 dst=11 msg=  2771 addr=603266944 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead RecvMsg
+        msgSrc=10 dst=11 msg=  2771 addr=603266944 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead pendingLocalReads.insert(2771)
+ src= 1 msgSrc=10 dst= 7 msg=  2771 addr=603266944 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=1 3SDir::OnDirectoryBlockRequest RecvMsg
+        msgSrc=10 dst=11 msg=  2778 addr=268972992 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead RecvMsg
+        msgSrc=10 dst=11 msg=  2778 addr=268972992 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead pendingLocalReads.insert(2778)
+        msgSrc=10 dst=11 msg=  2778 addr=268972992 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnDirectoryBlockRequest OnLocalRead
+        msgSrc=10 dst=11 msg=  2792 addr=603266880 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead RecvMsg
+        msgSrc=10 dst=11 msg=  2792 addr=603266880 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead pendingLocalReads.insert(2792)
+        msgSrc=10 dst=11 msg=  2792 addr=603266880 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnDirectoryBlockRequest OnLocalRead
+        msgSrc=10 dst=11 msg=  2793 addr=603266816 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead RecvMsg
+        msgSrc=10 dst=11 msg=  2793 addr=603266816 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead pendingLocalReads.insert(2793)
+ src= 1 msgSrc=10 dst= 7 msg=  2793 addr=603266816 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 3SDir::OnDirectoryBlockRequest RecvMsg
+        msgSrc=10 dst=11 msg=  2807 addr=268965632 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead RecvMsg
+        msgSrc=10 dst=11 msg=  2807 addr=268965632 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead pendingLocalReads.insert(2807)
+ src=12 msgSrc= 1 dst= 7 msg=  2714 addr=268973312 satis=1 blkAtt=1 excluOwn=1 solicMsg=2699 3SDir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 1 dst= 7 msg=  2714 addr=268973312 satis=1 blkAtt=1 excluOwn=1 solicMsg=2699 3SDir::OnDirectoryBlockResponse pendingLocalReads.erase(2699)
+ src= 1 msgSrc=10 dst= 7 msg=  2807 addr=268965632 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 3SDir::OnDirectoryBlockRequest RecvMsg
+        msgSrc=10 dst= 7 msg=  2807 addr=268965632 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 3SDir::OnRemoteRead PerformDirectoryFetch:Error
+        msgSrc= 6 dst= 7 msg=  2837 addr=268965632 satis=1 blkAtt=1 excluOwn=0 solicMsg=2807 3SDir::OnLocalReadResponse RecvMsg
 FastSimBeginEvent
 FastSimBeginEvent
 FastSimBeginEvent
@@ -29,98 +313,43 @@ FastSimBeginEvent
 Processor 0 has triggered a release
 Releasing processor 0 from barrier
 Releasing processor 1 from barrier
-Stalling processor 0 at barrier
-Processor 1 has triggered a release
-Releasing processor 0 from barrier
-Releasing processor 1 from barrier
-Stalling processor 1 at barrier
-Processor 0 has triggered a release
-Releasing processor 0 from barrier
-Releasing processor 1 from barrier
-Stalling processor 0 at barrier
-Processor 1 has triggered a release
-Releasing processor 0 from barrier
-Releasing processor 1 from barrier
-Stalling processor 0 at barrier
-Processor 1 has triggered a release
-Releasing processor 0 from barrier
-Releasing processor 1 from barrier
-Stalling processor 0 at barrier
-Processor 1 has triggered a release
-Releasing processor 0 from barrier
-Releasing processor 1 from barrier
-Stalling processor 0 at barrier
-Processor 1 has triggered a release
-Releasing processor 0 from barrier
-Releasing processor 1 from barrier
-Stalling processor 0 at barrier
-Processor 1 has triggered a release
-Releasing processor 0 from barrier
-Releasing processor 1 from barrier
-Simulated 500003 instructions so far at clock 712544
-Stalling processor 0 at barrier
-Processor 1 has triggered a release
-Releasing processor 0 from barrier
-Releasing processor 1 from barrier
-Stalling processor 0 at barrier
-Processor 1 has triggered a release
-Releasing processor 0 from barrier
-Releasing processor 1 from barrier
-Stalling processor 1 at barrier
-Processor 0 has triggered a release
-Releasing processor 0 from barrier
-Releasing processor 1 from barrier
-Stalling processor 0 at barrier
-Processor 1 has triggered a release
-Releasing processor 0 from barrier
-Releasing processor 1 from barrier
-OSSim::exit err[188] (cpid 1)
-OSSim::wait (cpid 0)
-mint_exit 1
-Rabbit Mode Start 
-    0               188             94       0.00000
-Start time                        :       1934828441
-Initialization finish time        :       1934828454
-Overall finish time               :       1934828642
-Total time with initialization    :              201
-Total time without initialization :              188
-Overall transpose time            :               94
-Overall transpose fraction        :          0.50000
-Checksum difference is -0.000 (0.000, 0.000)
-OSSim::exit err[0] (cpid 0)
-mint_exit 0
-Leaving rabbit mode...
-Rabbit Mode Start 
-Leaving rabbit mode...
-Rabbit Mode Start 
-Leaving rabbit mode...
-Rabbit Mode Start 
-Leaving rabbit mode...
-Rabbit Mode Start 
-Leaving rabbit mode...
-Rabbit Mode Start 
-Leaving rabbit mode...
-Rabbit Mode Start 
-Leaving rabbit mode...
-Rabbit Mode Start 
-Leaving rabbit mode...
-Rabbit Mode Start 
-Leaving rabbit mode...
-Rabbit Mode Start 
-Leaving rabbit mode...
-Rabbit Mode Start 
-Leaving rabbit mode...
-Rabbit Mode Start 
-Leaving rabbit mode...
-Rabbit Mode Start 
-Leaving rabbit mode...
-Rabbit Mode Start 
-Leaving rabbit mode...
-Rabbit Mode Start 
-Leaving rabbit mode...
-Rabbit Mode Start 
-Leaving rabbit mode...
-Rabbit Mode Start 
-Leaving rabbit mode...
-Get out of 'has-work' loop
-Finished running 
+        msgSrc= 6 dst= 7 msg=  2870 addr=603233216 blockAttached=1 3SDir::OnLocalEviction RecvMsg
+        msgSrc= 6 dst= 7 msg=  2867 addr=268972992 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg=  2867 addr=268972992 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead pendingLocalReads.insert(2867)
+        msgSrc= 6 dst= 7 msg=  2889 addr=268936640 blockAttached=0 3SDir::OnLocalEviction RecvMsg
+        msgSrc= 6 dst= 7 msg=  2887 addr=603233216 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg=  2887 addr=603233216 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead pendingLocalReads.insert(2887)
+        msgSrc= 6 dst=11 msg=  2837 addr=268965632 satis=1 blkAtt=1 excluOwn=0 solicMsg=2807 3SDir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 6 dst=11 msg=  2837 addr=268965632 satis=1 blkAtt=1 excluOwn=0 solicMsg=2807 3SDir::OnDirectoryBlockResponse pendingLocalReads.erase(2807)
+        msgSrc= 6 dst=11 msg=  2889 addr=268936640 blockAttached=0 3SDir::OnRemoteEviction RecvMsg
+        msgSrc= 6 dst=11 msg=  2887 addr=603233216 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 3SDir::OnDirectoryBlockRequest RecvMsg
+        msgSrc= 6 dst=11 msg=  2867 addr=268972992 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 3SDir::OnDirectoryBlockRequest RecvMsg
+ src= 1 msgSrc= 6 dst=11 msg=  2867 addr=268972992 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 3SDir::OnRemoteRead PerformDirectoryFetch:Error
+        msgSrc= 6 dst=11 msg=  2870 addr=603233216 blockAttached=1 3SDir::OnRemoteEviction RecvMsg
+        msgSrc=10 dst=11 msg=  2905 addr=268972992 satis=0 blkAtt=0 excluOwn=0 solicMsg=2867 3SDir::OnLocalReadResponse RecvMsg
+ src= 1 msgSrc= 6 dst= 7 msg=  2887 addr=603233216 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 3SDir::OnDirectoryBlockRequest RecvMsg
+ src= 1 msgSrc=10 dst=11 msg=  2905 addr=268972992 satis=0 blkAtt=0 excluOwn=0 solicMsg=2867 3SDir::OnRemoteReadResponse RecvMsg
+ src=12 msgSrc= 1 dst=11 msg=  2783 addr=603266944 satis=1 blkAtt=1 excluOwn=1 solicMsg=2771 3SDir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 1 dst=11 msg=  2783 addr=603266944 satis=1 blkAtt=1 excluOwn=1 solicMsg=2771 3SDir::OnDirectoryBlockResponse pendingLocalReads.erase(2771)
+ src=12 msgSrc= 1 dst=11 msg=  2784 addr=268972992 satis=1 blkAtt=1 excluOwn=1 solicMsg=2778 3SDir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 1 dst=11 msg=  2784 addr=268972992 satis=1 blkAtt=1 excluOwn=1 solicMsg=2778 3SDir::OnDirectoryBlockResponse pendingLocalReads.erase(2778)
+        msgSrc=10 dst=11 msg=  2929 addr=603267008 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead RecvMsg
+        msgSrc=10 dst=11 msg=  2929 addr=603267008 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead pendingLocalReads.insert(2929)
+        msgSrc=10 dst=11 msg=  2929 addr=603267008 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 3SDir::OnDirectoryBlockRequest OnLocalRead
+        msgSrc=10 dst=11 msg=  2954 addr=268976832 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead RecvMsg
+        msgSrc=10 dst=11 msg=  2954 addr=268976832 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead pendingLocalReads.insert(2954)
+        msgSrc=10 dst=11 msg=  2954 addr=268976832 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnDirectoryBlockRequest OnLocalRead
+ src=12 msgSrc= 1 dst=11 msg=  2802 addr=603266880 satis=1 blkAtt=1 excluOwn=1 solicMsg=2792 3SDir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 1 dst=11 msg=  2802 addr=603266880 satis=1 blkAtt=1 excluOwn=1 solicMsg=2792 3SDir::OnDirectoryBlockResponse pendingLocalReads.erase(2792)
+        msgSrc=10 dst=11 msg=  2970 addr=268973056 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead RecvMsg
+        msgSrc=10 dst=11 msg=  2970 addr=268973056 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 3SDir::OnLocalRead pendingLocalReads.insert(2970)
+ src= 1 msgSrc=10 dst= 7 msg=  2970 addr=268973056 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 3SDir::OnDirectoryBlockRequest RecvMsg
+        msgSrc=10 dst= 7 msg=  2970 addr=268973056 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 3SDir::OnRemoteRead PerformDirectoryFetch:Error
+        msgSrc= 6 dst= 7 msg=  2979 addr=268973056 satis=1 blkAtt=1 excluOwn=0 solicMsg=2970 3SDir::OnLocalReadResponse RecvMsg
+ src=12 msgSrc= 1 dst=11 msg=  2813 addr=603266816 satis=1 blkAtt=1 excluOwn=1 solicMsg=2793 3SDir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 1 dst=11 msg=  2813 addr=603266816 satis=1 blkAtt=1 excluOwn=1 solicMsg=2793 3SDir::OnDirectoryBlockResponse pendingLocalReads.erase(2793)
+ src=12 msgSrc= 1 dst=11 msg=  2912 addr=603233216 solicitingMessage=2903 3SDir::OnRemoteWriteResponse RecvMsg
+        msgSrc= 6 dst=11 msg=  2979 addr=268973056 satis=1 blkAtt=1 excluOwn=0 solicMsg=2970 3SDir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 6 dst=11 msg=  2979 addr=268973056 satis=1 blkAtt=1 excluOwn=0 solicMsg=2970 3SDir::OnDirectoryBlockResponse pendingLocalReads.erase(2970)
+ src=12 msgSrc= 1 dst=11 msg=  2913 addr=603233216 satis=1 blkAtt=1 excluOwn=1 solicMsg=2887 3SDir::OnDirectoryBlockResponse RecvMsg
+augSesc: /r/cslr21/erichang/sesc-echang/src/MemSys/Devices/ThreeStageDirectory.cpp:941: void Memory::ThreeStageDirectory::OnDirectoryBlockResponse(const Memory::ReadResponseMsg*, Memory::NodeID): Assertion `pendingLocalReads.find(m->solicitingMessage) != pendingLocalReads.end()' failed.

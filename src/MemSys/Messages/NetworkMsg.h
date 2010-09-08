@@ -10,17 +10,13 @@ namespace Memory
 	public:
 		NodeID sourceNode;
 		NodeID destinationNode;
+		bool isOverrideSource;
 
 		const BaseMsg* payloadMsg;
 
 		virtual bool IsResponse() const { return payloadMsg->IsResponse(); }
 		virtual size_t MsgSize() const { return payloadMsg->MsgSize() + 4; }
 		virtual MsgType Type() const { return mt_Network; }
-		virtual bool getIsOverrideSource() const {return isOverrideSource;}
-		virtual void setIsOverrideSource(bool isOverrideSource)
-		{
-		   this->isOverrideSource = isOverrideSource;
-      }
 
    protected:
 		virtual void print(DeviceID destinationDeviceID) const
@@ -30,7 +26,5 @@ namespace Memory
             << " destNode=" << destinationNode
 		   ;
 		}
-   private:
-		bool isOverrideSource;
 	};
 }
