@@ -19,7 +19,7 @@ namespace Memory
 	{
 		ReadMsg* m = readPool.Take();
 		m->directoryLookup = false;
-		m->directoryNode = InvalidNodeID;
+		m->requestingNode = InvalidNodeID;
 		m->SetIDInfo(currentMsgStamp++,devID,generatingPC);
 		return m;
 	}
@@ -70,7 +70,7 @@ namespace Memory
 	NetworkMsg* EventManager::CreateNetworkMsg(DeviceID devID, Address generatingPC)
 	{
 		NetworkMsg* m = networkPool.Take();
-		m->setIsOverrideSource(false);
+		m->isOverrideSource = false;
 		m->SetIDInfo(currentMsgStamp++,devID,generatingPC);
 		return m;
 	}

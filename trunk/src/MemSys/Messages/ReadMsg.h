@@ -17,7 +17,8 @@ namespace Memory
 		bool requestingExclusive;
 		bool alreadyHasBlock;
 		bool directoryLookup;
-		NodeID directoryNode;
+		//NodeID directoryNode;
+		NodeID requestingNode;
 
 		StoredFunctionBase* onCompletedCallback;
 
