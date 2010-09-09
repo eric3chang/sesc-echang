@@ -8,7 +8,7 @@
 #include "to_string.h"
 
 // toggles debug messages
-//#define MEMORY_DIRECTORY_DEBUG_VERBOSE
+#define MEMORY_DIRECTORY_DEBUG_VERBOSE
 //#define MEMORY_DIRECTORY_DEBUG_DIRECTORY_DATA
 //#define MEMORY_DIRECTORY_DEBUG_MSG_COUNT
 //#define MEMORY_DIRECTORY_DEBUG_PENDING_DIRECTORY_SHARED_READS
@@ -218,6 +218,10 @@ namespace Memory
 	void Directory::OnLocalEviction(const EvictionMsg* m)
 	{
 		DebugAssert(m);
+#ifdef MEMORY_DIRECTORY_DEBUG_PENDING_EVICTION
+      printDebugInfo("OnLocalEviction", *m,
+         ("pendingEviction.insert("+to_string<Address>(m->addr)+")").c_str());
+#endif
 		DebugAssert(pendingEviction.find(m->addr) == pendingEviction.end())
 		pendingEviction.insert(m->addr);
 		EvictionResponseMsg* erm = EM().CreateEvictionResponseMsg(getDeviceID(),m->GeneratingPC());
@@ -441,6 +445,10 @@ namespace Memory
 		}
 		if(src == nodeID)
 		{
+#ifdef MEMORY_DIRECTORY_DEBUG_PENDING_EVICTION
+      printDebugInfo("OnRemoteEviction", *m,
+         ("pendingEviction.erase("+to_string<Address>(m->addr)+")").c_str(),src);
+#endif
 			DebugAssert(pendingEviction.find(m->addr) != pendingEviction.end());
 			pendingEviction.erase(m->addr);
 		}
@@ -475,7 +483,7 @@ namespace Memory
 		DebugAssert(m);
 #ifdef MEMORY_DIRECTORY_DEBUG_PENDING_EVICTION
       printDebugInfo("OnRemoteEvictionResponse", *m,
-            ("pendingEviction.erase("+to_string<Address>(m->addr)+")").c_str());
+         ("pendingEviction.erase("+to_string<Address>(m->addr)+")").c_str(),src);
 #endif
 		DebugAssert(pendingEviction.find(m->addr) != pendingEviction.end());
 		pendingEviction.erase(m->addr);

@@ -6,10 +6,12 @@
 #include "../Configuration.h"
 #include <cstdlib>
 #include <algorithm>
+#include "to_string.h"
 
-#ifdef MEMORY_MOESI_CACHE_DEBUG_COMMON
-   #include "to_string.h"
-#endif
+// toggles debug output
+#define MEMORY_MOESI_CACHE_DEBUG_VERBOSE
+//#define MEMORY_MOESI_CACHE_DEBUG_PENDING_EVICTION
+//#define MEMORY_MOESI_CACHE_DEBUG_PENDING_INVALIDATE
 
 namespace Memory
 {
@@ -989,7 +991,6 @@ namespace Memory
 		}
 	} // MOESICache::RecvMsg
 
-#ifdef MEMORY_MOESI_CACHE_DEBUG_COMMON
    void MOESICache::printDebugInfo(const char* fromMethod, const BaseMsg &myMessage, const char* operation)
    {
       printBaseMemDeviceDebugInfo("MOESICache", fromMethod, myMessage, operation);
@@ -1003,5 +1004,4 @@ namespace Memory
             << " " << operation << "(" << tag << ")"
             << endl;
    }
-#endif
 }
