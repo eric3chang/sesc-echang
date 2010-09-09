@@ -11,13 +11,12 @@
 #define MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
 //#define MEMORY_3_STAGE_DIRECTORY_DEBUG_COUNTERS
 //#define MEMORY_3_STAGE_DIRECTORY_DEBUG_DIRECTORY_DATA
-//#define MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_DIRECTORY_EXCLUSIVE_READS
+//#define MEMORY_3_STAGE_DIRECTORY_DEBUG_MSG_COUNT
 //#define MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_DIRECTORY_SHARED_READS
-#define MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_EVICTION
+//#define MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_EVICTION
 //#define MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_LOCAL_READS
 //#define MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_REMOTE_INVALIDATES
 //#define MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_REMOTE_READS
-//#define MEMORY_3_STAGE_DIRECTORY_DEBUG_READ_MSG
 
 using std::cerr;
 using std::cout;
@@ -48,105 +47,20 @@ namespace Memory
 		}
 	}
 
-   /** performs a directory fetch from main memory of address a
-    * this version of PerformDirectoryFetch should only be called
-    * from OnRemoteInvalidateResponse
-	*/
-   void ThreeStageDirectory::PerformDirectoryFetch(Address a)
-   {
-      bool isTargetMemory = false;
-      // check that Address a is in pendingDirectoryExclusiveReads
-      DebugAssert(pendingDirectoryExclusiveReads.find(a) != pendingDirectoryExclusiveReads.end());
-#ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_READ_MSG
-      printDebugInfo("PerformDirectoryFetch",a,nodeID,"CreateReadMsg,Address");
-#endif
-      ReadMsg* m = (ReadMsg*)EM().ReplicateMsg(pendingDirectoryExclusiveReads[a].msg);
-      //TODO 2010/09/08 Eric should be true because of 3-stage
-      //m->directoryLookup = false;
-      m->onCompletedCallback = NULL;
-      m->alreadyHasBlock = false;
-      BlockData& b = directoryData[m->addr];
-      NodeID target;
-
-      // only when we are returning from memory do we set
-      // directory lookup to true, because we want the memory
-      // to return directly to the requester
-      if(b.owner != InvalidNodeID)
-      {
-         m->directoryLookup = false;
-         target = b.owner;
-      }
-      else if(b.sharers.begin() != b.sharers.end())
-      {
-         m->directoryLookup = false;
-         target = *(b.sharers.begin());
-      }
-      else
-      {
-         // if we are fetching from memory, it is always satisfied,
-         // so we assume that it's been satisfied
-         target = memoryNodeCalc->CalcNodeID(m->addr);
-         isTargetMemory = true;
-         m->directoryLookup = true;
-      }
-      if(target == nodeID)
-      {
-#ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE
-               printDebugInfo("OnRemoteRead",*m,"PerformDirectoryFetch:Error",nodeID);
-#endif
-         OnRemoteRead(m, nodeID);//ERROR
-      }
-      else
-      {
-         NetworkMsg* nm = EM().CreateNetworkMsg(getDeviceID(), m->GeneratingPC());
-         nm->destinationNode = target;
-         if (isTargetMemory)
-         {
-            nm->isOverrideSource = true;
-            nm->sourceNode = pendingDirectoryExclusiveReads[a].sourceNode;
-         }
-         else
-         {
-            nm->sourceNode = nodeID;
-         }
-         nm->payloadMsg = m;
-         SendMsg(remoteConnectionID, nm, lookupTime + remoteSendTime);
-      }
-   } // PerformDirectoryFetch(Address a)
-
    // performs a directory fetch from main memory of address a
 	void ThreeStageDirectory::PerformDirectoryFetch(const ReadMsg* msgIn, NodeID src)
 	{
 	   // commented out because of 3-stage
 		// TODO: 2010/09/02 3-stage modification
 		//m->directoryLookup = false;
-#ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_READ_MSG
-	   printDebugInfo("PerformDirectoryFetch",*msgIn,"CreateReadMsg,ReadMsg*",src);
-#endif
-
 	   ReadMsg* m = (ReadMsg*)EM().ReplicateMsg(msgIn);
-
-	   bool isTargetMemory = false;
-	   // msgIn should get destroyed with OnDirectoryBlockResponse
-	   //EM().DisposeMsg(msgIn);
-	   // controls whether the fetch message returns a OnRemoteReadResponse or OnDirectoryBlockResponse
-	   /*
-      if (m->requestingExclusive)
-      {
-         m->directoryLookup = false;
-      }
-      else
-      {  // if we are not requesting exclusive, return block directly to requester
-         m->directoryLookup = true;
-      }*/
-
+	   EM().DisposeMsg(msgIn);
 		m->onCompletedCallback = NULL;
 		m->alreadyHasBlock = false;
 		BlockData& b = directoryData[m->addr];
 		NodeID target;
-      // only when we are returning from memory do we set
-      // directory lookup to true, because we want the memory
-      // to return directly to the requester
+		// directoryLookup is true only for memory because we want to return a
+		   // OnDirectoryBlockResponse from memory
 		if(b.owner != InvalidNodeID)
 		{
 		   m->directoryLookup = false;
@@ -159,31 +73,28 @@ namespace Memory
 		}
 		else
 		{
-		   // if we are fetching from memory, it is always satisfied,
-		   // so we assume that it's been satisfied
+		   m->directoryLookup = true;
 			target = memoryNodeCalc->CalcNodeID(m->addr);
-			isTargetMemory = true;
-			m->directoryLookup = true;
 		}
 		if(target == nodeID)
 		{
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
                printDebugInfo("OnRemoteRead",*m,"PerformDirectoryFetch:Error",nodeID);
 #endif
-			OnRemoteRead(m, nodeID);//ERROR
+         //TODO 2010/09/02 Eric, change this because of 3-stage directory
+			//OnRemoteRead(m, nodeID);//ERROR
+         OnRemoteRead(m, src);//ERROR
 		}
 		else
 		{
 			NetworkMsg* nm = EM().CreateNetworkMsg(getDeviceID(), m->GeneratingPC());
 			nm->destinationNode = target;
-			if (isTargetMemory)
+         // TODO: 2010/09/02 3-stage modification
+			//nm->sourceNode = nodeID;
+			nm->sourceNode = src;
+			if (src != nodeID)
 			{
 			   nm->isOverrideSource = true;
-			   nm->sourceNode = src;
-			}
-			else
-			{
-	         nm->sourceNode = nodeID;
 			}
 			nm->payloadMsg = m;
 			SendMsg(remoteConnectionID, nm, lookupTime + remoteSendTime);
@@ -216,58 +127,19 @@ namespace Memory
 #endif
 			b.sharers.erase(id);
 		}
-		/*
-		else
-		{
-		   DebugFail("erasing nodeID that doesn't exist in blockData");
-		}
-		*/
 	}
 
 	void ThreeStageDirectory::AddDirectoryShare(Address a, NodeID id, bool exclusive)
 	{
 		BlockData& b = directoryData[a];
-#ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_DIRECTORY_DATA
-#define MEMORY_3_STAGE_DIRECTORY_DEBUG_SIZE 200
-		int sharersArray[MEMORY_3_STAGE_DIRECTORY_DEBUG_SIZE];
-		b.sharers.convertToArray(sharersArray,MEMORY_3_STAGE_DIRECTORY_DEBUG_SIZE);
-#endif
-		//TODO 2010/09/06 Eric
-		//DebugAssert(!exclusive || (b.sharers.size() == 0 && (b.owner == id || b.owner == InvalidNodeID)));
-		//if(b.owner == id || b.owner == InvalidNodeID)
-		DebugAssert(!exclusive || (b.sharers.size() == 0 && (b.owner==id || b.owner==InvalidNodeID)));
-
-      // if owner is not invalid, then owner cannot be source
-      //DebugAssert(b.owner==InvalidNodeID || b.owner!=id);
-      // if we are not requestingExclusive, then src cannot be in sharers
-      //DebugAssert(exclusive || b.sharers.find(id)==b.sharers.end());
-
-		/*
-		if (exclusive)
+		DebugAssert(!exclusive || (b.sharers.size() == 0 && (b.owner == id || b.owner == InvalidNodeID)));
+		if(b.owner == id || b.owner == InvalidNodeID)
 		{
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_DIRECTORY_DATA
          printDebugInfo("AddDirectoryShare",a, id, "b.owner=");
 #endif
-         DebugAssert(b.sharers.size()==0);
-         DebugAssert(b.owner==id || b.owner==InvalidNodeID);
-		   b.owner = id;
-		}
-		else // !exclusive
-		{
-#ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_DIRECTORY_DATA
-         printDebugInfo("AddDirectoryShare",a, id,
-            ("exclusive="+to_string<bool>(exclusive)+" b.sharers.insert").c_str());
-#endif
-         //DebugAssert(b.owner==InvalidNodeID);
-		   b.sharers.insert(id);
-		}
-		*/
-		if( (b.owner == id || b.owner == InvalidNodeID) && exclusive)
-		      //&& (b.sharers.find(id)!=b.sharers.end()))
-		{
-#ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_DIRECTORY_DATA
-         printDebugInfo("AddDirectoryShare",a, id, "b.owner=");
-#endif
+         // unnecessary because owner is allowed to change when there are sharers
+         //DebugAssert(b.sharers.find(id)==b.sharers.end());
 			b.owner = id;
 		}
 		else if(b.sharers.find(id) == b.sharers.end())
@@ -287,43 +159,34 @@ namespace Memory
 	{
 		DebugAssert(m);
 		NodeID remoteNode = directoryNodeCalc->CalcNodeID(m->addr);
-#ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_DIRECTORY_DATA
-		BlockData &b = directoryData[m->addr];
-#endif
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_LOCAL_READS
 		printDebugInfo("OnLocalRead", *m,
 		      ("pendingLocalReads.insert("+to_string<MessageID>(m->MsgID())+")").c_str());
 #endif
 		DebugAssert(pendingLocalReads.find(m->MsgID()) == pendingLocalReads.end());
 		pendingLocalReads[m->MsgID()] = m;
-
-#ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_READ_MSG
-		printDebugInfo("OnLocalRead", *m, "CreateReadMsg");
-#endif
-      ReadMsg* forward = (ReadMsg*)EM().ReplicateMsg(m);
-      forward->onCompletedCallback = NULL;
-      forward->directoryLookup = true;
-      forward->requestingNode = nodeID;
-      if(remoteNode == nodeID)
-      {
+		ReadMsg* forward = (ReadMsg*)EM().ReplicateMsg(m);
+		forward->onCompletedCallback = NULL;
+		forward->directoryLookup = true;
+		if(remoteNode == nodeID)
+		{
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-         printDebugInfo("OnDirectoryBlockRequest",*m,"OnLocalRead");
+		   printDebugInfo("OnDirectoryBlockRequest",*m,"OnLocalRead");
 #endif
-         CBOnDirectoryBlockRequest::FunctionType* f = cbOnDirectoryBlockRequest.Create();
-         f->Initialize(this,forward,nodeID);
-         EM().ScheduleEvent(f, localSendTime);
-      }
-      else
-      {
-         NetworkMsg* nm = EM().CreateNetworkMsg(getDeviceID(), m->GeneratingPC());
-         DebugAssert(nm);
-         nm->destinationNode = remoteNode;
-         nm->sourceNode = nodeID;
-         nm->payloadMsg = forward;
-         SendMsg(remoteConnectionID, nm, remoteSendTime);
-      }
+			CBOnDirectoryBlockRequest::FunctionType* f = cbOnDirectoryBlockRequest.Create();
+			f->Initialize(this,forward,nodeID);
+			EM().ScheduleEvent(f, localSendTime);
+		}
+		else
+		{
+			NetworkMsg* nm = EM().CreateNetworkMsg(getDeviceID(), m->GeneratingPC());
+			DebugAssert(nm);
+			nm->destinationNode = remoteNode;
+			nm->sourceNode = nodeID;
+			nm->payloadMsg = forward;
+			SendMsg(remoteConnectionID, nm, remoteSendTime);
+		}
 	}
-
 	void ThreeStageDirectory::OnLocalReadResponse(const ReadResponseMsg* m)
 	{
 		DebugAssert(m);
@@ -333,24 +196,10 @@ namespace Memory
 		NetworkMsg* nm = EM().CreateNetworkMsg(getDeviceID(),d.msg->GeneratingPC());
 		ReadResponseMsg* forward = (ReadResponseMsg*)EM().ReplicateMsg(m);
 		nm->sourceNode = nodeID;
+		nm->destinationNode = d.sourceNode;
 		nm->payloadMsg = forward;
-
-		if (m->satisfied)
-		{
-		   // changed this to true because of 3-stage directory
-		   forward->directoryLookup = true;
-		   // send to original node if satisfied
-		   DebugAssert(d.msg->requestingNode != InvalidNodeID);
-		   nm->destinationNode = d.msg->requestingNode;
-		}
-		else
-		{
-		   // Send to directory because request was unsatisfied
-	      nm->destinationNode = d.sourceNode;
-		   forward->directoryLookup = false;
-		   forward->originalSender = d.msg->requestingNode;
-		}
-
+		// changed this to true because of 3-stage directory
+		forward->directoryLookup = true;
 		EM().DisposeMsg(d.msg);
 		EM().DisposeMsg(m);
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_REMOTE_READS
@@ -387,10 +236,6 @@ namespace Memory
 	void ThreeStageDirectory::OnLocalEviction(const EvictionMsg* m)
 	{
 		DebugAssert(m);
-#ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_EVICTION
-		printDebugInfo("OnLocalEviction",*m,("pendingEviction.insert("
-		      +to_string<Address>(m->addr)+")").c_str());
-#endif
 		DebugAssert(pendingEviction.find(m->addr) == pendingEviction.end())
 		pendingEviction.insert(m->addr);
 		EvictionResponseMsg* erm = EM().CreateEvictionResponseMsg(getDeviceID(),m->GeneratingPC());
@@ -399,13 +244,12 @@ namespace Memory
 		erm->solicitingMessage = m->MsgID();
 		SendMsg(localConnectionID, erm, localSendTime);
 		NodeID id = directoryNodeCalc->CalcNodeID(m->addr);
-
 		if(id == nodeID)
 		{
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
                printDebugInfo("OnRemoteEviction",*m,"OnLocalEviction",nodeID);
 #endif
-         OnRemoteEviction(m,nodeID);
+			OnRemoteEviction(m,nodeID);
 		}
 		else
 		{
@@ -456,19 +300,13 @@ namespace Memory
 	}
 	void ThreeStageDirectory::OnRemoteReadResponse(const ReadResponseMsg* m, NodeID src)
 	{
-	   //DebugFail("ThreeStageDirectory::OnRemoteReadResponse reached");
+	   DebugFail("ThreeStageDirectory::OnRemoteReadResponse reached");
+	   /*
 		DebugAssert(m);
 		DebugAssert(!m->directoryLookup);
-		//DebugAssert(pendingDirectorySharedReads.find(m->addr) != pendingDirectorySharedReads.end() || pendingDirectoryExclusiveReads.find(m->addr) != pendingDirectoryExclusiveReads.end());
-		//DebugAssert(pendingDirectorySharedReads.find(m->addr) == pendingDirectorySharedReads.end() || pendingDirectoryExclusiveReads.find(m->addr) == pendingDirectoryExclusiveReads.end());
-		DebugAssert(pendingDirectorySharedReads.find(m->addr)==pendingDirectorySharedReads.end());
-      // we could have inserted something in here while ReadResponse msg is in transit
-		//DebugAssert(pendingDirectoryExclusiveReads.find(m->addr)==pendingDirectoryExclusiveReads.end());
+		DebugAssert(pendingDirectorySharedReads.find(m->addr) != pendingDirectorySharedReads.end() || pendingDirectoryExclusiveReads.find(m->addr) != pendingDirectoryExclusiveReads.end());
+		DebugAssert(pendingDirectorySharedReads.find(m->addr) == pendingDirectorySharedReads.end() || pendingDirectoryExclusiveReads.find(m->addr) == pendingDirectoryExclusiveReads.end());
 		DebugAssert(directoryData.find(m->addr) != directoryData.end());
-		// if request is satisfied, then the reply must have came from memory
-		DebugAssert(!m->satisfied || (src==memoryNodeCalc->CalcNodeID(m->addr)));
-		//DebugAssert(m->originalSender != InvalidNodeID);
-
 		if(m->satisfied)
 		{
 			if(m->exclusiveOwnership)
@@ -476,7 +314,6 @@ namespace Memory
 				EraseDirectoryShare(m->addr,src);
 			}
 			// if there is some pending shared read on this address
-			/*
 			if(pendingDirectorySharedReads.find(m->addr) != pendingDirectorySharedReads.end())
 			{
 			   // for all the elements in pendingDirectorySharedReads where key is in the range of m->addr
@@ -510,10 +347,8 @@ namespace Memory
 				}
 				pendingDirectorySharedReads.erase(pendingDirectorySharedReads.equal_range(m->addr).first,pendingDirectorySharedReads.equal_range(m->addr).second);
 			}  //if(pendingDirectorySharedReads.find(m->addr) != pendingDirectorySharedReads.end())
-			*/
-			//else // pendingDirectorySharedReads.find(m->addr) == pendingDirectorySharedReads.end())
+			else // pendingDirectorySharedReads.find(m->addr) == pendingDirectorySharedReads.end())
 			{  // there is no pending shared read on this address
-			   //TODO maybe don't need this part, and put it in OnDirectoryBlockRequest
 				DebugAssert(m->exclusiveOwnership);
 				DebugAssert(m->blockAttached);
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_DIRECTORY_DATA
@@ -521,9 +356,7 @@ namespace Memory
 				      ("directoryData[m->addr].owner="+to_string<NodeID>(
 				            directoryData[m->addr].owner)).c_str(), src);
 #endif
-				DebugAssert(directoryData[m->addr].owner == InvalidNodeID
-				      || directoryData[m->addr].owner == src
-				      || (src==memoryNodeCalc->CalcNodeID(m->addr)));
+				DebugAssert(directoryData[m->addr].owner == InvalidNodeID || directoryData[m->addr].owner == src);
 				if(directoryData[m->addr].sharers.size() == 0)
 				{//send block on now
 					ReadResponseMsg* response = (ReadResponseMsg*)EM().ReplicateMsg(m);
@@ -571,32 +404,14 @@ namespace Memory
 			} // else pendingDirectorySharedReads.find(m->addr) == pendingDirectorySharedReads.end())
 			EM().DisposeMsg(m);
 		}// if(m->satisfied)
-		else  //!m->satisfied
+		else  // !m->satisfied
 		{
-		   EraseDirectoryShare(m->addr,src);
-			//TODO 2010/09/06 Eric DebugAssert(directoryData[m->addr].owner == InvalidNodeID);
-			//PerformDirectoryFetch(*m, src);
-
-		   // if we get to here, it means request was unsatisfied, so
-		   // undo the previous modifications to directoryData
-		   if (m->originalSender==nodeID)
-		   {
-#ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-		      printDebugInfo("OnDirectoryBlockResponse", *m, "OnRemoteReadResponse", src);
-#endif
-		      OnDirectoryBlockResponse(m,nodeID);
-		   }
-		   else
-		   {  // send on directory block responses
-		      ReadResponseMsg* rrm = (ReadResponseMsg*)EM().ReplicateMsg(m);
-		      rrm->directoryLookup = true;
-	         NetworkMsg* nm = EM().CreateNetworkMsg(getDeviceID(), m->GeneratingPC());
-	         nm->sourceNode = nodeID;
-	         nm->destinationNode = m->originalSender;
-	         nm->payloadMsg = rrm;
-	         EM().DisposeMsg(m);
-		   }
-		}  // else !m->satisfied
+			EraseDirectoryShare(m->addr,src);
+			DebugAssert(directoryData[m->addr].owner == InvalidNodeID);
+			//PerformDirectoryFetch(m->addr);
+			EM().DisposeMsg(m);
+		}
+		*/
 	} // OnRemoteReadResponse
 	void ThreeStageDirectory::OnRemoteWrite(const WriteMsg* m, NodeID src)
 	{
@@ -613,7 +428,6 @@ namespace Memory
 			nm->sourceNode = nodeID;
 			nm->destinationNode = memoryNode;
 			nm->payloadMsg = m;
-         SendMsg(remoteConnectionID, nm, remoteSendTime);
 			nm = EM().CreateNetworkMsg(getDeviceID(), m->GeneratingPC());
 			nm->sourceNode = nodeID;
 			nm->destinationNode = src;
@@ -631,7 +445,6 @@ namespace Memory
 		DebugAssert(m);
 		DebugAssert(directoryData.find(m->addr) != directoryData.end());
 		BlockData& b = directoryData[m->addr];
-
 		if(b.owner == src)
 		{
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_DIRECTORY_DATA
@@ -647,16 +460,8 @@ namespace Memory
 #endif
 			b.sharers.erase(src);
 		}
-
-		// we erased directory share above
-		//EraseDirectoryShare(m->addr,src);
-
 		if(src == nodeID)
 		{
-#ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_EVICTION
-      printDebugInfo("OnRemoteEviction",*m,("pendingEviction.erase("
-            +to_string<Address>(m->addr)+")").c_str(),src);
-#endif
 			DebugAssert(pendingEviction.find(m->addr) != pendingEviction.end());
 			pendingEviction.erase(m->addr);
 		}
@@ -672,7 +477,6 @@ namespace Memory
 			nm->payloadMsg = rm;
 			SendMsg(remoteConnectionID, nm, remoteSendTime);
 		}
-
 		if(m->blockAttached)
 		{
 			WriteMsg* wm = EM().CreateWriteMsg(getDeviceID(), m->GeneratingPC());
@@ -689,7 +493,6 @@ namespace Memory
 
 	void ThreeStageDirectory::OnRemoteEvictionResponse(const EvictionResponseMsg* m, NodeID src)
 	{
-	   //DebugFail("OnRemoteEvictionResponse reached");
 		DebugAssert(m);
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_EVICTION
       printDebugInfo("OnRemoteEvictionResponse", *m,
@@ -725,10 +528,8 @@ namespace Memory
       b.sharers.convertToArray(sharers,MEMORY_3_STAGE_DIRECTORY_DEBUG_ARRAY_SIZE);
       m->blockAttached;
 #endif
-      DebugAssert(pendingDirectoryExclusiveReads.find(m->addr) !=
-            pendingDirectoryExclusiveReads.end());
-      // Although some directoryData operations are handled in OnDirectoryBlockRequest,
-      //    others should be handled in here
+      /*
+       * TODO did all the directoryData operations in OnDirectoryBlockRequest
 		DebugAssert(!m->blockAttached || (b.owner == src) || (b.owner==InvalidNodeID));
 		DebugAssert(m->blockAttached || b.sharers.find(src) != b.sharers.end());
 		if(b.owner == src)
@@ -747,7 +548,7 @@ namespace Memory
 #endif
 			b.sharers.erase(src);
 		}
-
+		*/
 		if(m->blockAttached)
 		{
 			WriteMsg* wm = EM().CreateWriteMsg(getDeviceID(), m->GeneratingPC());
@@ -760,11 +561,9 @@ namespace Memory
 			nm->payloadMsg = wm;
 			SendMsg(remoteConnectionID, nm, remoteSendTime);
 		}
-
-		if(b.owner==InvalidNodeID && b.sharers.size()==0
-		      && pendingDirectoryExclusiveReads.find(m->addr) != pendingDirectoryExclusiveReads.end())
+		/*
+		if(pendingDirectoryExclusiveReads.find(m->addr) != pendingDirectoryExclusiveReads.end())
 		{
-		   // if blockData contains nothing, OR owner==requester and no sharer OR no owner and requester==sharer
 			if( (b.owner == InvalidNodeID && b.sharers.size() == 0) ||
 				(b.owner == pendingDirectoryExclusiveReads[m->addr].sourceNode && b.sharers.size() == 0) ||
 				(b.owner == InvalidNodeID && b.sharers.size() == 1 && b.sharers.find(pendingDirectoryExclusiveReads[m->addr].sourceNode) != b.sharers.end()))
@@ -798,27 +597,24 @@ namespace Memory
 					SendMsg(remoteConnectionID, n, remoteSendTime + satisfyTime);
 				}
 				AddDirectoryShare(m->addr,pendingDirectoryExclusiveReads[m->addr].sourceNode,true);
-				PerformDirectoryFetch(m->addr);
 				EM().DisposeMsg(pendingDirectoryExclusiveReads[m->addr].msg);
 				pendingDirectoryExclusiveReads.erase(m->addr);
-			}
-		}
+			} //        if( (b.owner == InvalidNodeID && b.sharers.size() == 0) ||
+		} // if(pendingDirectoryExclusiveReads.find(m->addr) != pendingDirectoryExclusiveReads.end())
+		*/
 		EM().DisposeMsg(m);
 	}
 
 	void ThreeStageDirectory::OnDirectoryBlockRequest(const ReadMsg* m, NodeID src)
 	{
 		DebugAssert(m);
-		//DebugAssert(pendingDirectoryExclusiveReads.find(m->addr) == pendingDirectoryExclusiveReads.end());
+		DebugAssert(pendingDirectoryExclusiveReads.find(m->addr) == pendingDirectoryExclusiveReads.end());
 		DebugAssert(pendingDirectorySharedReads.find(m->addr) == pendingDirectorySharedReads.end());
-		DebugAssert(directoryNodeCalc->CalcNodeID(m->addr) == nodeID);
       // if the address is in pendingDirectoryExclusiveReads or
 		// we are requesting for exclusive access and the address is in pendingDirectorySharedReads
-		//TODO 2010/09/03 Eric
-		bool hasSentInvalidates = false;
-
-		if(pendingDirectoryExclusiveReads.find(m->addr) != pendingDirectoryExclusiveReads.end())
-		//     || (m->requestingExclusive && pendingDirectorySharedReads.find(m->addr) != pendingDirectorySharedReads.end()))
+		/* TODO 2010/09/03 Eric
+		if(pendingDirectoryExclusiveReads.find(m->addr) != pendingDirectoryExclusiveReads.end() ||
+		      (m->requestingExclusive && pendingDirectorySharedReads.find(m->addr) != pendingDirectorySharedReads.end()))
 		{//cannot complete the request at this time
 			if(src == nodeID)
 			{
@@ -844,7 +640,7 @@ namespace Memory
 			}
 			return;
 		} // endif cannot satisfy request at this time
-
+		*/
 		// assume we can satisfy request always
 		/////////////////////////// FROM OnRemoteReadResponse ////////////////////
 		/*
@@ -908,51 +704,42 @@ namespace Memory
 */
       /////////////////// END FROM OnRemoteReadResponse ////////////////
 
-		// determine if we can satisfy this request
-
+      /*
 		LookupData<ReadMsg> ld;
 		ld.msg = m;
 		ld.sourceNode = src;
-
-		/*
-      if(m->requestingExclusive)
-		{
-			DebugAssert(pendingDirectoryExclusiveReads.find(m->addr) == pendingDirectoryExclusiveReads.end());
-			//pendingDirectoryExclusiveReads[m->addr] = ld;
-			PerformDirectoryFetch(m, src);
-		}
 		*/
-
 		if(m->requestingExclusive)
 		{
 		   // send invalidate messages to all sharers and owners if necessary
 		   if ((directoryData[m->addr].owner!=src) && (directoryData[m->addr].owner!=InvalidNodeID))
 		   {
 		      // invalidate owner
-            InvalidateMsg* inv = EM().CreateInvalidateMsg(getDeviceID(),m->GeneratingPC());
-            inv->addr = m->addr;
-            inv->size = m->size;
-            if (directoryData[m->addr].owner != nodeID)
-            {
-               NetworkMsg* net = EM().CreateNetworkMsg(getDeviceID(),m->GeneratingPC());
-               net->destinationNode = directoryData[m->addr].owner;
-               net->sourceNode = nodeID;
-               net->payloadMsg = inv;
-               SendMsg(remoteConnectionID, net, lookupTime + remoteSendTime);
-            }
-            else
-            {
-#ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-               printDebugInfo("OnRemoteInvalidate", *inv, "OnDirectoryBlockRequest", nodeID);
-#endif
-               OnRemoteInvalidate(inv, nodeID);
-            }
-            hasSentInvalidates = true;
-            //TODO 2010/09/04 Eric
-            //EraseDirectoryShare should not be called here because EraseDirectoryShare
-               // will be called in OnRemoteInvalidateResponse
-            //EraseDirectoryShare(m->addr, directoryData[m->addr].owner);
-		   } // if ((directoryData[m->addr].owner!=src) && (directoryData[m->addr].owner!=InvalidNodeID))
+		      if (directoryData[m->addr].owner != InvalidNodeID)
+		      {
+		         InvalidateMsg* inv = EM().CreateInvalidateMsg(getDeviceID(),m->GeneratingPC());
+		         inv->addr = m->addr;
+               inv->size = m->size;
+               if (directoryData[m->addr].owner != nodeID)
+               {
+                  NetworkMsg* net = EM().CreateNetworkMsg(getDeviceID(),m->GeneratingPC());
+                  net->destinationNode = directoryData[m->addr].owner;
+                  net->sourceNode = nodeID;
+                  net->payloadMsg = inv;
+                  SendMsg(remoteConnectionID, net, lookupTime + remoteSendTime);
+               }
+               else
+               {
+   #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
+                  printDebugInfo("OnRemoteInvalidate", *inv, "OnDirectoryBlockRequest", nodeID);
+   #endif
+                  OnRemoteInvalidate(inv, nodeID);
+               }
+               //TODO 2010/09/04 Eric
+               //EraseDirectoryShare should be called here because EraseDirectoryShare was removed from OnRemoteInvalidateResponse
+               EraseDirectoryShare(m->addr, directoryData[m->addr].owner);
+		      } //if ((directoryData[m->addr].owner!=src) && (directoryData[m->addr].owner!=InvalidNodeID))
+		   }
          // invalidate all sharers
          if(directoryData[m->addr].sharers.size() != 0)
          {
@@ -976,25 +763,11 @@ namespace Memory
 #endif
                   OnRemoteInvalidate(inv, nodeID);
                }
-               //EraseDirectoryShare(m->addr, *i);
-            } // for loop through all sharers
-            hasSentInvalidates = true;
+               EraseDirectoryShare(m->addr, *i);
+            }
          } // if(directoryData[m->addr].sharers.size() != 0)
 			//DebugAssert(pendingDirectoryExclusiveReads.find(m->addr) == pendingDirectoryExclusiveReads.end());
 			//pendingDirectoryExclusiveReads[m->addr] = ld;
-
-         // if we sent invalidates, put read into pending queue so
-            // that OnRemoteInvalidateResponse can do its job
-         if (hasSentInvalidates)
-         {
-            pendingDirectoryExclusiveReads[m->addr] = ld;
-         }
-         else
-         {  // no invalidates sent, so we are free to use this block
-            PerformDirectoryFetch(m,src);
-            AddDirectoryShare(m->addr,src,m->requestingExclusive);
-         }
-         return;
 		}
 		else // not requesting Exclusive access
 		{
@@ -1013,18 +786,12 @@ namespace Memory
 				return;
 			}
 			*/
-
-
-	      //TODO fix this. PerformDirectoryFetch has to be done before AddDirectoryShare
-	      // because PerformDirectoryFetch uses directoryData, which AddDirectoryShare modifies
-
-	      // how to make sure that owner of the original block gets invalidated while
-	      // still keeping a record of which node the new owner is
-
-		   PerformDirectoryFetch(m, src);
-		   AddDirectoryShare(m->addr, src, m->requestingExclusive);
 		}
-      // should put all the code inside if-else clause and not here
+      PerformDirectoryFetch(m, src);
+		//TODO fix this
+      AddDirectoryShare(m->addr, src, m->requestingExclusive);
+      // how to make sure that owner of the original block gets invalidated while
+      // still keeping a record of which node the new owner is
 	}
 
 	void ThreeStageDirectory::OnDirectoryBlockResponse(const ReadResponseMsg* m, NodeID src)
@@ -1034,11 +801,9 @@ namespace Memory
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_DIRECTORY_SHARED_READS
 		printPendingDirectorySharedReads();
 #endif
-/*
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_LOCAL_READS
 		printPendingLocalReads();
 #endif
-*/
 		// check that m->solicitingMessage is in pendingLocalReads before accessing it
 		// error here means that we expect there to be a message in pendingLocalReads,
 		// but the message is not there
@@ -1058,7 +823,6 @@ namespace Memory
 			OnLocalRead(ref);
 			return;
 		}
-
 		ReadResponseMsg* r = EM().CreateReadResponseMsg(getDeviceID(),ref->GeneratingPC());
 		r->addr = ref->addr;
 		r->blockAttached = m->blockAttached;
@@ -1070,8 +834,7 @@ namespace Memory
 		EM().DisposeMsg(ref);
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_LOCAL_READS
 		printDebugInfo("OnDirectoryBlockResponse", *m,
-		   ("pendingLocalReads.erase("
-		         +to_string<MessageID>(m->solicitingMessage)+")").c_str());
+		   ("pendingLocalReads.erase("+m->solicitingMessage+")").c_str());
 #endif
 		pendingLocalReads.erase(m->solicitingMessage);
 
@@ -1150,16 +913,12 @@ namespace Memory
 	void ThreeStageDirectory::RecvMsg(const BaseMsg* msg, int connectionID)
 	{
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_COUNTERS
-	   cout << " ThreeStageDirectory::RecvMsg: "
-	         << threeStageDirectoryEraseDirectoryShareCounter++ << ' ' << endl;
+	   cout << threeStageDirectoryEraseDirectoryShareCounter << endl;
+#endif
+#ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_MSG_COUNT
+	   cout << "ThreeStageDirectory::RecvMsg: " << memoryDirectoryGlobalInt++ << ' ' << endl;
 #endif
 		DebugAssert(msg);
-
-		ReadMsg* myReadMsg = (ReadMsg*)msg;
-#ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_DIRECTORY_DATA
-		BlockData &blockData = directoryData[((ReadMsg*)msg)->addr];
-#endif
-
 		if(connectionID == localConnectionID)
 		{
 			switch(msg->Type())
@@ -1370,7 +1129,6 @@ namespace Memory
          readMsgArray[i] = myIterator->second;
          i++;
       }
-      cout << endl;
       
       delete [] readMsgArray;
       readMsgArray = NULL;
@@ -1392,7 +1150,7 @@ namespace Memory
    {
       cout << setw(17) << " " // account for spacing from src and msgSrc
             << " dst=" << setw(2) << getDeviceID()
-            << setw(11) << " "   // account for spacing from msgID
+            << setw(10) << " "   // account for spacing from msgID
             << " addr=" << addr
             << " 3SDir:" << fromMethod
             << " " << operation << "(" << id << ")"

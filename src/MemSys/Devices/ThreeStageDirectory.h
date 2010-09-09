@@ -75,8 +75,7 @@ namespace Memory
 		HashSet<Address> pendingEviction;
 		HashMap<Address, BlockData> directoryData;
 
-		void PerformDirectoryFetch(Address a);
-      void PerformDirectoryFetch(const ReadMsg* msgIn, NodeID src);
+		void PerformDirectoryFetch(const ReadMsg *msgIn, NodeID src);
 		void EraseDirectoryShare(Address a, NodeID id);
 		void AddDirectoryShare(Address a, NodeID id, bool exclusive);
 
@@ -102,15 +101,12 @@ namespace Memory
 		void printDebugInfo(const char* fromMethod, const BaseMsg &myMessage, const char* operation,NodeID src);
 	   void printDebugInfo(const char* fromMethod,Address addr,NodeID id,const char* operation);
 	   void printEraseOwner(const char* fromMethod,Address addr,NodeID id,const char* operation);
+
 		void printPendingDirectorySharedReads();
 	   void printPendingLocalReads();
 
-		typedef PooledFunctionGenerator<StoredClassFunction2<ThreeStageDirectory,const ReadMsg*, NodeID,
-		      &ThreeStageDirectory::OnDirectoryBlockRequest> > CBOnDirectoryBlockRequest;
+		typedef PooledFunctionGenerator<StoredClassFunction2<ThreeStageDirectory,const ReadMsg*, NodeID, &ThreeStageDirectory::OnDirectoryBlockRequest> > CBOnDirectoryBlockRequest;
 		CBOnDirectoryBlockRequest cbOnDirectoryBlockRequest;
-		typedef PooledFunctionGenerator<StoredClassFunction1<ThreeStageDirectory,const ReadMsg*,
-		      &ThreeStageDirectory::OnLocalRead> > CBOnLocalRead;
-		CBOnLocalRead cbOnLocalRead;
 		// 2010/08/05 Eric: seems to be unused
 		/*
 		typedef PooledFunctionGenerator<StoredClassFunction2<Directory,const ReadResponseMsg*, NodeID, &Directory::OnDirectoryBlockResponse> > CBOnDirectoryBlockResponse;
