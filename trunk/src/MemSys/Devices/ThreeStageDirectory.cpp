@@ -381,7 +381,8 @@ namespace Memory
 		//DebugAssert(pendingDirectorySharedReads.find(m->addr) != pendingDirectorySharedReads.end() || pendingDirectoryExclusiveReads.find(m->addr) != pendingDirectoryExclusiveReads.end());
 		//DebugAssert(pendingDirectorySharedReads.find(m->addr) == pendingDirectorySharedReads.end() || pendingDirectoryExclusiveReads.find(m->addr) == pendingDirectoryExclusiveReads.end());
 		DebugAssert(pendingDirectorySharedReads.find(m->addr)==pendingDirectorySharedReads.end());
-		DebugAssert(pendingDirectoryExclusiveReads.find(m->addr)==pendingDirectoryExclusiveReads.end());
+      // we could have inserted something in here while ReadResponse msg is in transit
+		//DebugAssert(pendingDirectoryExclusiveReads.find(m->addr)==pendingDirectoryExclusiveReads.end());
 		DebugAssert(directoryData.find(m->addr) != directoryData.end());
 		// if request is satisfied, then the reply must have came from memory
 		DebugAssert(!m->satisfied || (src==memoryNodeCalc->CalcNodeID(m->addr)));
@@ -717,7 +718,7 @@ namespace Memory
 	void ThreeStageDirectory::OnDirectoryBlockRequest(const ReadMsg* m, NodeID src)
 	{
 		DebugAssert(m);
-		DebugAssert(pendingDirectoryExclusiveReads.find(m->addr) == pendingDirectoryExclusiveReads.end());
+		//DebugAssert(pendingDirectoryExclusiveReads.find(m->addr) == pendingDirectoryExclusiveReads.end());
 		DebugAssert(pendingDirectorySharedReads.find(m->addr) == pendingDirectorySharedReads.end());
       // if the address is in pendingDirectoryExclusiveReads or
 		// we are requesting for exclusive access and the address is in pendingDirectorySharedReads
