@@ -44,6 +44,7 @@ namespace Memory
 			nodeSet.push_back(Config::GetInt(node,"NodeIDSet",0,i));
 		}
 	}
+
    // performs a directory fetch from main memory of address a
 	void Directory::PerformDirectoryFetch(Address a)
 	{
@@ -88,7 +89,7 @@ namespace Memory
 			nm->payloadMsg = m;
 			SendMsg(remoteConnectionID, nm, lookupTime + remoteSendTime);
 		}
-	}
+	} // PerformDirectoryFetch(Address a)
 
 	/**
 	 * erase Node id as a share for Address a. If a is owned by id, check that there
