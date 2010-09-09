@@ -561,12 +561,29 @@ namespace Memory
 			nm->payloadMsg = wm;
 			SendMsg(remoteConnectionID, nm, remoteSendTime);
 		}
+//TODO 2010/09/09 Eric
 		/*
 		if(pendingDirectoryExclusiveReads.find(m->addr) != pendingDirectoryExclusiveReads.end())
 		{
-			if( (b.owner == InvalidNodeID && b.sharers.size() == 0) ||
-				(b.owner == pendingDirectoryExclusiveReads[m->addr].sourceNode && b.sharers.size() == 0) ||
-				(b.owner == InvalidNodeID && b.sharers.size() == 1 && b.sharers.find(pendingDirectoryExclusiveReads[m->addr].sourceNode) != b.sharers.end()))
+		   DebugAssert(pendingDirectoryExclusiveReadsDirectoryData.find(m->addr)
+		      != pendingDirectoryExclusiveReadsDirectoryData.end());
+		   BlockData &b = pendingDirectoryExclusiveReadsDirectoryData[m->addr];
+		   if (b.owner == src)
+		   {
+		      b.owner = InvalidNodeID;
+		   }
+		   else if (b.sharers.find(src) != b.sharers.end())
+		   {
+		      b.sharers.erase(src);
+		   }
+		   else
+		   {
+		      DebugFail("failed at erasing blockData");
+		   }
+		   if ( (b.owner == InvalidNodeID) && (b.sharers.size()==0))
+			//if( (b.owner == InvalidNodeID && b.sharers.size() == 0) ||
+				//(b.owner == pendingDirectoryExclusiveReads[m->addr].sourceNode && b.sharers.size() == 0) ||
+				//(b.owner == InvalidNodeID && b.sharers.size() == 1 && b.sharers.find(pendingDirectoryExclusiveReads[m->addr].sourceNode) != b.sharers.end()))
 			{
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_DIRECTORY_DATA
 			   printDebugInfo("OnRemoteInvalidateResponse",*m,"b.sharers.clear()",src);
@@ -574,8 +591,9 @@ namespace Memory
                ("b.owner="+to_string<NodeID>(pendingDirectoryExclusiveReads[m->addr].sourceNode)).c_str(),
                src);
 #endif
-				b.sharers.clear();
-				b.owner = pendingDirectoryExclusiveReads[m->addr].sourceNode;
+				//b.sharers.clear();
+				//b.owner = pendingDirectoryExclusiveReads[m->addr].sourceNode;
+				/*
 				ReadResponseMsg* rm = EM().CreateReadResponseMsg(getDeviceID(),pendingDirectoryExclusiveReads[m->addr].msg->GeneratingPC());
 				rm->addr = m->addr;
 				rm->size = m->size;
@@ -596,11 +614,16 @@ namespace Memory
 					n->payloadMsg = rm;
 					SendMsg(remoteConnectionID, n, remoteSendTime + satisfyTime);
 				}
+				*/
+		/* //TODO 2010/09/09 Eric
+            PerformDirectoryFetch(pendingDirectoryExclusiveReads[m->addr].msg,
+                  pendingDirectoryExclusiveReads[m->addr].sourceNode);
 				AddDirectoryShare(m->addr,pendingDirectoryExclusiveReads[m->addr].sourceNode,true);
 				EM().DisposeMsg(pendingDirectoryExclusiveReads[m->addr].msg);
 				pendingDirectoryExclusiveReads.erase(m->addr);
-			} //        if( (b.owner == InvalidNodeID && b.sharers.size() == 0) ||
-		} // if(pendingDirectoryExclusiveReads.find(m->addr) != pendingDirectoryExclusiveReads.end())
+				pendingDirectoryExclusiveReadsDirectoryData.erase(m->addr);
+			}
+		}
 		*/
 		EM().DisposeMsg(m);
 	}
@@ -608,15 +631,17 @@ namespace Memory
 	void ThreeStageDirectory::OnDirectoryBlockRequest(const ReadMsg* m, NodeID src)
 	{
 		DebugAssert(m);
-		DebugAssert(pendingDirectoryExclusiveReads.find(m->addr) == pendingDirectoryExclusiveReads.end());
+		//DebugAssert(pendingDirectoryExclusiveReads.find(m->addr) == pendingDirectoryExclusiveReads.end());
 		DebugAssert(pendingDirectorySharedReads.find(m->addr) == pendingDirectorySharedReads.end());
 		DebugAssert(directoryNodeCalc->CalcNodeID(m->addr)==nodeID);
       // if the address is in pendingDirectoryExclusiveReads or
 		// we are requesting for exclusive access and the address is in pendingDirectorySharedReads
-		/* TODO 2010/09/03 Eric
-		if(pendingDirectoryExclusiveReads.find(m->addr) != pendingDirectoryExclusiveReads.end() ||
-		      (m->requestingExclusive && pendingDirectorySharedReads.find(m->addr) != pendingDirectorySharedReads.end()))
+		//TODO 2010/09/09 Eric
+		/*
+		if(pendingDirectoryExclusiveReads.find(m->addr) != pendingDirectoryExclusiveReads.end())
+		   //(m->requestingExclusive && pendingDirectorySharedReads.find(m->addr) != pendingDirectorySharedReads.end()))
 		{//cannot complete the request at this time
+		   /*
 			if(src == nodeID)
 			{
 				CBOnDirectoryBlockRequest::FunctionType* f = cbOnDirectoryBlockRequest.Create();
@@ -641,8 +666,7 @@ namespace Memory
 			}
 			return;
 		} // endif cannot satisfy request at this time
-		*/
-		// assume we can satisfy request always
+*/
 		/////////////////////////// FROM OnRemoteReadResponse ////////////////////
 		/*
       {
@@ -704,17 +728,21 @@ namespace Memory
       //EM().DisposeMsg(m);
 */
       /////////////////// END FROM OnRemoteReadResponse ////////////////
-
-      /*
+		bool hasInvalidates = false;
 		LookupData<ReadMsg> ld;
 		ld.msg = m;
 		ld.sourceNode = src;
-		*/
+
 		if(m->requestingExclusive)
 		{
+		   pendingDirectoryExclusiveReads[m->addr] = ld;
+		   //DebugAssert(pendingDirectoryExclusiveReadsDirectoryData.find(m->addr)
+		     //    == pendingDirectoryExclusiveReadsDirectoryData.end());
+		   pendingDirectoryExclusiveReadsDirectoryData[m->addr] = directoryData[m->addr];
 		   // send invalidate messages to all sharers and owners if necessary
 		   if ((directoryData[m->addr].owner!=src) && (directoryData[m->addr].owner!=InvalidNodeID))
 		   {
+		      hasInvalidates = true;
 		      // invalidate owner
 		      if (directoryData[m->addr].owner != InvalidNodeID)
 		      {
@@ -744,6 +772,7 @@ namespace Memory
          // invalidate all sharers
          if(directoryData[m->addr].sharers.size() != 0)
          {
+            hasInvalidates = true;
             for(HashSet<NodeID>::iterator i = directoryData[m->addr].sharers.begin(); i != directoryData[m->addr].sharers.end(); i++)
             {
                InvalidateMsg* inv = EM().CreateInvalidateMsg(getDeviceID(),m->GeneratingPC());
@@ -769,8 +798,12 @@ namespace Memory
          } // if(directoryData[m->addr].sharers.size() != 0)
 			//DebugAssert(pendingDirectoryExclusiveReads.find(m->addr) == pendingDirectoryExclusiveReads.end());
 			//pendingDirectoryExclusiveReads[m->addr] = ld;
-         PerformDirectoryFetch(m, src);
-         AddDirectoryShare(m->addr, src, m->requestingExclusive);
+         //TODO 2010/09/09 Eric
+         // if (!hasInvalidates)
+         {
+            PerformDirectoryFetch(m, src);
+            AddDirectoryShare(m->addr, src, m->requestingExclusive);
+         }
 		}
 		else // not requesting Exclusive access
 		{

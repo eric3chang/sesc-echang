@@ -74,6 +74,7 @@ namespace Memory
 		HashMap<Address, LookupData<ReadMsg> > pendingDirectoryExclusiveReads;
 		HashSet<Address> pendingEviction;
 		HashMap<Address, BlockData> directoryData;
+		HashMap<Address, BlockData> pendingDirectoryExclusiveReadsDirectoryData;
 
 		void PerformDirectoryFetch(const ReadMsg *msgIn, NodeID src);
 		void EraseDirectoryShare(Address a, NodeID id);
