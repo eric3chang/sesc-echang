@@ -610,6 +610,7 @@ namespace Memory
 		DebugAssert(m);
 		DebugAssert(pendingDirectoryExclusiveReads.find(m->addr) == pendingDirectoryExclusiveReads.end());
 		DebugAssert(pendingDirectorySharedReads.find(m->addr) == pendingDirectorySharedReads.end());
+		DebugAssert(directoryNodeCalc->CalcNodeID(m->addr)==nodeID);
       // if the address is in pendingDirectoryExclusiveReads or
 		// we are requesting for exclusive access and the address is in pendingDirectorySharedReads
 		/* TODO 2010/09/03 Eric
@@ -768,9 +769,16 @@ namespace Memory
          } // if(directoryData[m->addr].sharers.size() != 0)
 			//DebugAssert(pendingDirectoryExclusiveReads.find(m->addr) == pendingDirectoryExclusiveReads.end());
 			//pendingDirectoryExclusiveReads[m->addr] = ld;
+         PerformDirectoryFetch(m, src);
+         AddDirectoryShare(m->addr, src, m->requestingExclusive);
 		}
 		else // not requesting Exclusive access
 		{
+	      PerformDirectoryFetch(m, src);
+	      //TODO fix this
+	      AddDirectoryShare(m->addr, src, m->requestingExclusive);
+	      // how to make sure that owner of the original block gets invalidated while
+	      // still keeping a record of which node the new owner is
 		   // do nothing
 		   /*
 			bool existingRequest = false;
@@ -787,11 +795,6 @@ namespace Memory
 			}
 			*/
 		}
-      PerformDirectoryFetch(m, src);
-		//TODO fix this
-      AddDirectoryShare(m->addr, src, m->requestingExclusive);
-      // how to make sure that owner of the original block gets invalidated while
-      // still keeping a record of which node the new owner is
 	}
 
 	void ThreeStageDirectory::OnDirectoryBlockResponse(const ReadResponseMsg* m, NodeID src)
