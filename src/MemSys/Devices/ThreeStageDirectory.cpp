@@ -13,11 +13,11 @@
 //#define MEMORY_3_STAGE_DIRECTORY_DEBUG_DIRECTORY_DATA
 //#define MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_DIRECTORY_EXCLUSIVE_READS
 //#define MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_DIRECTORY_SHARED_READS
-//#define MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_EVICTION
-#define MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_LOCAL_READS
+#define MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_EVICTION
+//#define MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_LOCAL_READS
 //#define MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_REMOTE_INVALIDATES
 //#define MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_REMOTE_READS
-#define MEMORY_3_STAGE_DIRECTORY_DEBUG_READ_MSG
+//#define MEMORY_3_STAGE_DIRECTORY_DEBUG_READ_MSG
 
 using std::cerr;
 using std::cout;
@@ -240,7 +240,7 @@ namespace Memory
       // if owner is not invalid, then owner cannot be source
       //DebugAssert(b.owner==InvalidNodeID || b.owner!=id);
       // if we are not requestingExclusive, then src cannot be in sharers
-      DebugAssert(exclusive || b.sharers.find(id)==b.sharers.end());
+      //DebugAssert(exclusive || b.sharers.find(id)==b.sharers.end());
 
 		/*
 		if (exclusive)
@@ -262,13 +262,12 @@ namespace Memory
 		   b.sharers.insert(id);
 		}
 		*/
-		if( (b.owner == id || b.owner == InvalidNodeID) )
+		if( (b.owner == id || b.owner == InvalidNodeID) && exclusive)
 		      //&& (b.sharers.find(id)!=b.sharers.end()))
 		{
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_DIRECTORY_DATA
          printDebugInfo("AddDirectoryShare",a, id, "b.owner=");
 #endif
-         // might be unnecessary if owner is allowed to change when there are sharers
 			b.owner = id;
 		}
 		else if(b.sharers.find(id) == b.sharers.end())
@@ -388,6 +387,10 @@ namespace Memory
 	void ThreeStageDirectory::OnLocalEviction(const EvictionMsg* m)
 	{
 		DebugAssert(m);
+#ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_EVICTION
+		printDebugInfo("OnLocalEviction",*m,("pendingEviction.insert("
+		      +to_string<Address>(m->addr)+")").c_str());
+#endif
 		DebugAssert(pendingEviction.find(m->addr) == pendingEviction.end())
 		pendingEviction.insert(m->addr);
 		EvictionResponseMsg* erm = EM().CreateEvictionResponseMsg(getDeviceID(),m->GeneratingPC());
@@ -400,9 +403,9 @@ namespace Memory
 		if(id == nodeID)
 		{
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-               printDebugInfo("OnLocalEviction",*m,"EraseDirectoryShare",id);
+               printDebugInfo("OnRemoteEviction",*m,"OnLocalEviction",nodeID);
 #endif
-         EraseDirectoryShare(m->addr,id);
+         OnRemoteEviction(m,nodeID);
 		}
 		else
 		{
@@ -645,10 +648,15 @@ namespace Memory
 			b.sharers.erase(src);
 		}
 
+		// we erased directory share above
 		//EraseDirectoryShare(m->addr,src);
 
 		if(src == nodeID)
 		{
+#ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_EVICTION
+      printDebugInfo("OnRemoteEviction",*m,("pendingEviction.erase("
+            +to_string<Address>(m->addr)+")").c_str(),src);
+#endif
 			DebugAssert(pendingEviction.find(m->addr) != pendingEviction.end());
 			pendingEviction.erase(m->addr);
 		}
@@ -793,8 +801,8 @@ namespace Memory
 				PerformDirectoryFetch(m->addr);
 				EM().DisposeMsg(pendingDirectoryExclusiveReads[m->addr].msg);
 				pendingDirectoryExclusiveReads.erase(m->addr);
-			} //        if( (b.owner == InvalidNodeID && b.sharers.size() == 0) ||
-		} // if(pendingDirectoryExclusiveReads.find(m->addr) != pendingDirectoryExclusiveReads.end())
+			}
+		}
 		EM().DisposeMsg(m);
 	}
 
