@@ -19,7 +19,7 @@ namespace Memory
 	{
 		ReadMsg* m = readPool.Take();
 		m->directoryLookup = false;
-		m->requestingNode = InvalidNodeID;
+		m->originalRequestingNode = InvalidNodeID;
 		m->SetIDInfo(currentMsgStamp++,devID,generatingPC);
 		return m;
 	}
@@ -45,7 +45,7 @@ namespace Memory
 	{
 		ReadResponseMsg* m = readResponsePool.Take();
 		m->directoryLookup = false;
-		m->originalSender = InvalidNodeID;
+		m->originalRequestingNode = InvalidNodeID;
 		m->SetIDInfo(currentMsgStamp++,devID,generatingPC);
 		return m;
 	}
