@@ -14,7 +14,7 @@ namespace Memory
       bool directoryLookup;
 		bool exclusiveOwnership;
 		MessageID solicitingMessage;
-		NodeID originalSender;
+		NodeID originalRequestingNode;
 
 		// making directoryLookup false here is not enough,
 		// because ReadResponseMsg can get reused from
