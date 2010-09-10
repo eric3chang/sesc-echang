@@ -12,6 +12,7 @@
 //#define MEMORY_3_STAGE_DIRECTORY_DEBUG_COUNTERS
 //#define MEMORY_3_STAGE_DIRECTORY_DEBUG_DIRECTORY_DATA
 //#define MEMORY_3_STAGE_DIRECTORY_DEBUG_MSG_COUNT
+#define MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_DIRECTORY_EXCLUSIVE_READS
 //#define MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_DIRECTORY_SHARED_READS
 //#define MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_EVICTION
 //#define MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_LOCAL_READS
@@ -158,6 +159,7 @@ namespace Memory
 	void ThreeStageDirectory::OnLocalRead(const ReadMsg* m)
 	{
 		DebugAssert(m);
+      MessageID tempMessageID = m->MsgID();
 		NodeID remoteNode = directoryNodeCalc->CalcNodeID(m->addr);
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_LOCAL_READS
 		printDebugInfo("OnLocalRead", *m,
@@ -562,7 +564,7 @@ namespace Memory
 			SendMsg(remoteConnectionID, nm, remoteSendTime);
 		}
 //TODO 2010/09/09 Eric
-		/*
+
 		if(pendingDirectoryExclusiveReads.find(m->addr) != pendingDirectoryExclusiveReads.end())
 		{
 		   DebugAssert(pendingDirectoryExclusiveReadsDirectoryData.find(m->addr)
@@ -593,7 +595,7 @@ namespace Memory
 #endif
 				//b.sharers.clear();
 				//b.owner = pendingDirectoryExclusiveReads[m->addr].sourceNode;
-				/*
+
 				ReadResponseMsg* rm = EM().CreateReadResponseMsg(getDeviceID(),pendingDirectoryExclusiveReads[m->addr].msg->GeneratingPC());
 				rm->addr = m->addr;
 				rm->size = m->size;
@@ -614,34 +616,38 @@ namespace Memory
 					n->payloadMsg = rm;
 					SendMsg(remoteConnectionID, n, remoteSendTime + satisfyTime);
 				}
-				*/
-		/* //TODO 2010/09/09 Eric
+
+            //TODO 2010/09/09 Eric
             PerformDirectoryFetch(pendingDirectoryExclusiveReads[m->addr].msg,
                   pendingDirectoryExclusiveReads[m->addr].sourceNode);
 				AddDirectoryShare(m->addr,pendingDirectoryExclusiveReads[m->addr].sourceNode,true);
 				EM().DisposeMsg(pendingDirectoryExclusiveReads[m->addr].msg);
+#ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_DIRECTORY_EXCLUSIVE_READS
+            printDebugInfo("OnRemoteInvalidateResponse",*m,("pendingDirectoryExclusiveReads.erase("
+               +to_string<Address>(m->addr)+")").c_str(),src);
+#endif
 				pendingDirectoryExclusiveReads.erase(m->addr);
 				pendingDirectoryExclusiveReadsDirectoryData.erase(m->addr);
 			}
-		}
-		*/
+		}//if(pendingDirectoryExclusiveReads.find(m->addr) != pendingDirectoryExclusiveReads.end())
+
 		EM().DisposeMsg(m);
 	}
 
 	void ThreeStageDirectory::OnDirectoryBlockRequest(const ReadMsg* m, NodeID src)
 	{
 		DebugAssert(m);
+      MessageID tempMessageID = m->MsgID();
 		//DebugAssert(pendingDirectoryExclusiveReads.find(m->addr) == pendingDirectoryExclusiveReads.end());
 		DebugAssert(pendingDirectorySharedReads.find(m->addr) == pendingDirectorySharedReads.end());
 		DebugAssert(directoryNodeCalc->CalcNodeID(m->addr)==nodeID);
       // if the address is in pendingDirectoryExclusiveReads or
 		// we are requesting for exclusive access and the address is in pendingDirectorySharedReads
 		//TODO 2010/09/09 Eric
-		/*
+
 		if(pendingDirectoryExclusiveReads.find(m->addr) != pendingDirectoryExclusiveReads.end())
 		   //(m->requestingExclusive && pendingDirectorySharedReads.find(m->addr) != pendingDirectorySharedReads.end()))
 		{//cannot complete the request at this time
-		   /*
 			if(src == nodeID)
 			{
 				CBOnDirectoryBlockRequest::FunctionType* f = cbOnDirectoryBlockRequest.Create();
@@ -666,7 +672,7 @@ namespace Memory
 			}
 			return;
 		} // endif cannot satisfy request at this time
-*/
+
 		/////////////////////////// FROM OnRemoteReadResponse ////////////////////
 		/*
       {
@@ -735,6 +741,10 @@ namespace Memory
 
 		if(m->requestingExclusive)
 		{
+#ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_DIRECTORY_EXCLUSIVE_READS
+            printDebugInfo("OnDirectoryBlockRequest",*m,("pendingDirectoryExclusiveReads.insert("
+               +to_string<Address>(m->addr)+")").c_str(),src);
+#endif
 		   pendingDirectoryExclusiveReads[m->addr] = ld;
 		   //DebugAssert(pendingDirectoryExclusiveReadsDirectoryData.find(m->addr)
 		     //    == pendingDirectoryExclusiveReadsDirectoryData.end());
@@ -773,7 +783,9 @@ namespace Memory
          if(directoryData[m->addr].sharers.size() != 0)
          {
             hasInvalidates = true;
-            for(HashSet<NodeID>::iterator i = directoryData[m->addr].sharers.begin(); i != directoryData[m->addr].sharers.end(); i++)
+            HashSet<NodeID> &temp = directoryData[m->addr].sharers;
+            HashSet<NodeID> toBeErased;
+            for(HashSet<NodeID>::iterator i = temp.begin(); i != temp.end(); i++)
             {
                InvalidateMsg* inv = EM().CreateInvalidateMsg(getDeviceID(),m->GeneratingPC());
                inv->addr = m->addr;
@@ -793,14 +805,25 @@ namespace Memory
 #endif
                   OnRemoteInvalidate(inv, nodeID);
                }
+               toBeErased.insert(*i);
+            }
+            // has to erase outside because erasing in iterator might cause
+               // iterator pointer to go off the end
+            for (HashSet<NodeID>::iterator i = toBeErased.begin(); i != toBeErased.end(); i++)
+            {
                EraseDirectoryShare(m->addr, *i);
             }
          } // if(directoryData[m->addr].sharers.size() != 0)
 			//DebugAssert(pendingDirectoryExclusiveReads.find(m->addr) == pendingDirectoryExclusiveReads.end());
 			//pendingDirectoryExclusiveReads[m->addr] = ld;
          //TODO 2010/09/09 Eric
-         // if (!hasInvalidates)
+         if (!hasInvalidates)
          {
+#ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_DIRECTORY_EXCLUSIVE_READS
+            printDebugInfo("OnDirectoryBlockRequest",*m,("pendingDirectoryExclusiveReads.erase("
+               +to_string<Address>(m->addr)+")").c_str(),src);
+#endif
+            pendingDirectoryExclusiveReads.erase(m->addr);
             PerformDirectoryFetch(m, src);
             AddDirectoryShare(m->addr, src, m->requestingExclusive);
          }
@@ -833,7 +856,7 @@ namespace Memory
 	void ThreeStageDirectory::OnDirectoryBlockResponse(const ReadResponseMsg* m, NodeID src)
 	{
 		DebugAssert(m);
-
+      MessageID tempMessageID = m->MsgID();
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_DIRECTORY_SHARED_READS
 		printPendingDirectorySharedReads();
 #endif
