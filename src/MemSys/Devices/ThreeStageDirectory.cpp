@@ -8,7 +8,7 @@
 #include "to_string.h"
 
 // toggles debug messages
-//#define MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
+#define MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
 //#define MEMORY_3_STAGE_DIRECTORY_DEBUG_COUNTERS
 //#define MEMORY_3_STAGE_DIRECTORY_DEBUG_DIRECTORY_DATA
 //#define MEMORY_3_STAGE_DIRECTORY_DEBUG_MSG_COUNT
@@ -301,7 +301,9 @@ namespace Memory
 	void ThreeStageDirectory::OnLocalRead(const ReadMsg* m)
 	{
 		DebugAssert(m);
+#if defined DEBUG && defined _WIN32
       MessageID tempMessageID = m->MsgID();
+#endif
 		NodeID remoteNode = directoryNodeCalc->CalcNodeID(m->addr);
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_LOCAL_READS
 		printDebugInfo("OnLocalRead", *m,
@@ -736,9 +738,9 @@ namespace Memory
 	   //DebugFail("ThreeStageDirectory::OnRemoteInvalidateResponse reached");
 		DebugAssert(m);
 		DebugAssert(directoryData.find(m->addr) != directoryData.end());
-		BlockData& b = directoryData[m->addr];
 #if defined MEMORY_3_STAGE_DIRECTORY_DEBUG_DIRECTORY_DATA && !defined _WIN32
       #define MEMORY_3_STAGE_DIRECTORY_DEBUG_ARRAY_SIZE 20
+      BlockData& b = directoryData[m->addr];
       NodeID sharers[MEMORY_3_STAGE_DIRECTORY_DEBUG_ARRAY_SIZE];
       b.sharers.convertToArray(sharers,MEMORY_3_STAGE_DIRECTORY_DEBUG_ARRAY_SIZE);
       m->blockAttached;
@@ -851,7 +853,9 @@ namespace Memory
 	void ThreeStageDirectory::OnDirectoryBlockRequest(const ReadMsg* m, NodeID src)
 	{
 		DebugAssert(m);
+#if defined DEBUG && defined _WIN32
       MessageID tempMessageID = m->MsgID();
+#endif
 		//DebugAssert(pendingDirectoryExclusiveReads.find(m->addr) == pendingDirectoryExclusiveReads.end());
 		DebugAssert(pendingDirectorySharedReads.find(m->addr) == pendingDirectorySharedReads.end());
 		DebugAssert(directoryNodeCalc->CalcNodeID(m->addr)==nodeID);
@@ -998,7 +1002,8 @@ namespace Memory
                m->directoryLookup = true;
                target = memoryNodeCalc->CalcNodeID(m->addr);
             }
-            DebugAssert(target==b.owner==src);
+            DebugAssert(target==b.owner);
+            DebugAssert(b.owner==src);
             if(target == nodeID)
             {
       #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
@@ -1132,7 +1137,9 @@ namespace Memory
 	void ThreeStageDirectory::OnDirectoryBlockResponse(const ReadResponseMsg* m, NodeID src)
 	{
 		DebugAssert(m);
+#if defined DEBUG && defined _WIN32
       MessageID tempMessageID = m->MsgID();
+#endif
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_DIRECTORY_SHARED_READS
 		printPendingDirectorySharedReads();
 #endif
