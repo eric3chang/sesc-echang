@@ -3,6 +3,7 @@
 #include "ReadMsg.h"
 #include "WriteMsg.h"
 #include "InvalidateMsg.h"
+#include "InvalidateSharerMsg.h"
 #include "EvictionMsg.h"
 #include "ReadResponseMsg.h"
 #include "WriteResponseMsg.h"
