@@ -7,6 +7,8 @@
 #include "../Connection.h"
 #include "to_string.h"
 
+#define CALL_MEMBER_FN(object,ptrToMember)  ((object).*(ptrToMember))
+
 // toggles debug messages
 #define MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
 //#define MEMORY_3_STAGE_DIRECTORY_DEBUG_COUNTERS
@@ -354,12 +356,38 @@ namespace Memory
 		}
 	}
 
+   /**
+   Automatically determines whether to send to local or remote node
+   */
+   void ThreeStageDirectory::AutoDetermineDestSendMsg(const BaseMsg* msg, NodeID dest, TimeDelta sendTime,
+      ThreeStageDirectoryMemFn func, const char* fromMethod, const char* toMethod)
+   {
+      if (dest==nodeID)
+      {
+#ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
+         printDebugInfo(toMethod,*msg,fromMethod,nodeID);
+#endif
+         CALL_MEMBER_FN(*this,func) (msg,dest);
+         return;
+      }
+      else
+      {
+         NetworkMsg* nm = EM().CreateNetworkMsg(getDeviceID(),msg->GeneratingPC());
+         nm->payloadMsg = msg;
+         nm->sourceNode = nodeID;
+         nm->destinationNode = dest;
+         SendMsg(remoteConnectionID, nm, sendTime);
+      }
+   }
+
 	/**
 	 * the message came from the local (cpu) side. It is a read msg
 	 */
-	void ThreeStageDirectory::OnLocalRead(const ReadMsg* m)
+	void ThreeStageDirectory::OnLocalRead(const BaseMsg* msgIn)
 	{
-		DebugAssert(m);
+		DebugAssert(msgIn);
+      DebugAssert(msgIn->Type()==mt_Read);
+      ReadMsg* m = (ReadMsg*)msgIn;
 #if defined DEBUG && defined _WIN32
       MessageID tempMessageID = m->MsgID();
 #endif
@@ -393,9 +421,11 @@ namespace Memory
 			SendMsg(remoteConnectionID, nm, remoteSendTime);
 		}
 	}
-	void ThreeStageDirectory::OnLocalReadResponse(const ReadResponseMsg* m)
+	void ThreeStageDirectory::OnLocalReadResponse(const BaseMsg* msgIn)
 	{
-		DebugAssert(m);
+		DebugAssert(msgIn);
+      DebugAssert(msgIn->Type()==mt_ReadResponse);
+      ReadResponseMsg* m = (ReadResponseMsg*)msgIn;
 #if defined DEBUG && defined _WIN32
       MessageID tempMsgID = m->MsgID();
 #endif
@@ -474,9 +504,11 @@ namespace Memory
 		   //EM().DisposeMsg(m);
 		}
 	}
-	void ThreeStageDirectory::OnLocalWrite(const WriteMsg* m)
+	void ThreeStageDirectory::OnLocalWrite(const BaseMsg* msgIn)
 	{
-		DebugAssert(m);
+		DebugAssert(msgIn);
+      DebugAssert(msgIn->Type()==mt_Write);
+      WriteMsg* m = (WriteMsg*)msgIn;
 		NodeID id = directoryNodeCalc->CalcNodeID(m->addr);
 		WriteResponseMsg* wrm = EM().CreateWriteResponseMsg(getDeviceID(),m->GeneratingPC());
 		wrm->addr = m->addr;
@@ -497,9 +529,11 @@ namespace Memory
 			SendMsg(remoteConnectionID, nm, remoteSendTime);
 		}
 	}
-	void ThreeStageDirectory::OnLocalEviction(const EvictionMsg* m)
+	void ThreeStageDirectory::OnLocalEviction(const BaseMsg* msgIn)
 	{
-		DebugAssert(m);
+		DebugAssert(msgIn);
+      DebugAssert(msgIn->Type()==mt_Eviction);
+      EvictionMsg* m = (EvictionMsg*)msgIn;
 		DebugAssert(pendingEviction.find(m->addr) == pendingEviction.end())
 		pendingEviction.insert(m->addr);
 		EvictionResponseMsg* erm = EM().CreateEvictionResponseMsg(getDeviceID(),m->GeneratingPC());
@@ -524,9 +558,11 @@ namespace Memory
 			SendMsg(remoteConnectionID, nm, remoteSendTime);
 		}
 	}
-	void ThreeStageDirectory::OnLocalInvalidateResponse(const InvalidateResponseMsg* m)
+	void ThreeStageDirectory::OnLocalInvalidateResponse(const BaseMsg* msgIn)
 	{
-		DebugAssert(m);
+		DebugAssert(msgIn);
+      DebugAssert(msgIn->Type()==mt_InvalidateResponse);
+      InvalidateResponseMsg* m = (InvalidateResponseMsg*)msgIn;
 		DebugAssert(pendingRemoteInvalidates.find(m->addr) != pendingRemoteInvalidates.end());
 		LookupData<InvalidateMsg>& d = pendingRemoteInvalidates[m->addr];
 		DebugAssert(d.msg->MsgID() == m->solicitingMessage);
@@ -552,9 +588,11 @@ namespace Memory
 #endif
 		pendingRemoteInvalidates.erase(d.msg->addr);
 	}
-	void ThreeStageDirectory::OnRemoteRead(const ReadMsg* m, NodeID src)
+	void ThreeStageDirectory::OnRemoteRead(const BaseMsg* msgIn, NodeID src)
 	{
-		DebugAssert(m);
+		DebugAssert(msgIn);
+      DebugAssert(msgIn->Type()==mt_Read);
+      ReadMsg* m = (ReadMsg*)msgIn;
 		// no longer valid because we want OnRemoteReadResponse to change to OnDirBlkResponse
 		//DebugAssert(!m->directoryLookup);
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_REMOTE_READS
@@ -567,11 +605,11 @@ namespace Memory
 		pendingRemoteReads[m->MsgID()].sourceNode = src;
 		SendMsg(localConnectionID, EM().ReplicateMsg(m), localSendTime);
 	}
-	void ThreeStageDirectory::OnRemoteReadResponse(const ReadResponseMsg* m, NodeID src)
+	void ThreeStageDirectory::OnRemoteReadResponse(const BaseMsg* msgIn, NodeID src)
 	{
-	   //DebugFail("ThreeStageDirectory::OnRemoteReadResponse reached");
-
-		DebugAssert(m);
+		DebugAssert(msgIn);
+      DebugAssert(msgIn->Type()==mt_ReadResponse);
+      ReadResponseMsg* m = (ReadResponseMsg*)msgIn;
 		DebugAssert(!m->directoryLookup);
 		//DebugAssert(pendingDirectorySharedReads.find(m->addr) != pendingDirectorySharedReads.end() || pendingDirectoryExclusiveReads.find(m->addr) != pendingDirectoryExclusiveReads.end());
 		//DebugAssert(pendingDirectorySharedReads.find(m->addr) == pendingDirectorySharedReads.end() || pendingDirectoryExclusiveReads.find(m->addr) == pendingDirectoryExclusiveReads.end());
@@ -702,9 +740,20 @@ namespace Memory
 			}
 		}
 	} // OnRemoteReadResponse
-	void ThreeStageDirectory::OnRemoteWrite(const WriteMsg* m, NodeID src)
+
+   void ThreeStageDirectory::OnRemoteSpeculativeReadResponse(const BaseMsg* msgIn, NodeID src)
+   {
+      DebugAssert(msgIn);
+      DebugAssert(msgIn->Type()==mt_SpeculativeReadResponse);
+      SpeculativeReadResponseMsg* m = (SpeculativeReadResponseMsg*)msgIn;
+      EM().DisposeMsg(m);
+   }
+
+	void ThreeStageDirectory::OnRemoteWrite(const BaseMsg* msgIn, NodeID src)
 	{
-		DebugAssert(m);
+		DebugAssert(msgIn);
+      DebugAssert(msgIn->Type()==mt_Write);
+      WriteMsg* m = (WriteMsg*)msgIn;
 		DebugAssert(nodeID == directoryNodeCalc->CalcNodeID(m->addr));
 		NodeID memoryNode = memoryNodeCalc->CalcNodeID(m->addr);
 		if(src != nodeID)
@@ -724,14 +773,18 @@ namespace Memory
 			SendMsg(remoteConnectionID, nm, remoteSendTime);
 		}
 	}
-	void ThreeStageDirectory::OnRemoteWriteResponse(const WriteResponseMsg* m, NodeID src)
+	void ThreeStageDirectory::OnRemoteWriteResponse(const BaseMsg* msgIn, NodeID src)
 	{
-		DebugAssert(m);
+		DebugAssert(msgIn);
+      DebugAssert(msgIn->Type()==mt_WriteResponse);
+      WriteResponseMsg* m = (WriteResponseMsg*)msgIn;
 		EM().DisposeMsg(m);
 	}
-	void ThreeStageDirectory::OnRemoteEviction(const EvictionMsg* m, NodeID src)
+	void ThreeStageDirectory::OnRemoteEviction(const BaseMsg* msgIn, NodeID src)
 	{
-		DebugAssert(m);
+		DebugAssert(msgIn);
+      DebugAssert(msgIn->Type()==mt_Eviction);
+      EvictionMsg* m = (EvictionMsg*)msgIn;
 		DebugAssert(directoryData.find(m->addr) != directoryData.end());
 		BlockData& b = directoryData[m->addr];
 		if(b.owner == src)
@@ -780,9 +833,11 @@ namespace Memory
 		}
 	}
 
-	void ThreeStageDirectory::OnRemoteEvictionResponse(const EvictionResponseMsg* m, NodeID src)
+	void ThreeStageDirectory::OnRemoteEvictionResponse(const BaseMsg* msgIn, NodeID src)
 	{
-		DebugAssert(m);
+		DebugAssert(msgIn);
+      DebugAssert(msgIn->Type()==mt_EvictionResponse);
+      EvictionResponseMsg* m = (EvictionResponseMsg*)msgIn;
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_EVICTION
       printDebugInfo("OnRemoteEvictionResponse", *m,
             ("pendingEviction.erase("+to_string<Address>(m->addr)+")").c_str());
@@ -792,9 +847,11 @@ namespace Memory
 		SendMsg(localConnectionID, m, localSendTime);
 	}
 
-	void ThreeStageDirectory::OnRemoteInvalidate(const InvalidateMsg* m, NodeID src)
+	void ThreeStageDirectory::OnRemoteInvalidate(const BaseMsg* msgIn, NodeID src)
 	{
-		DebugAssert(m);
+		DebugAssert(msgIn);
+      DebugAssert(msgIn->Type()==mt_Invalidate);
+      InvalidateMsg* m = (InvalidateMsg*)msgIn;
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_REMOTE_INVALIDATES
       printDebugInfo("OnRemoteInvalidate", *m,
             ("PRI.insert("+to_string<Address>(m->addr)+")").c_str());
@@ -805,10 +862,11 @@ namespace Memory
 		SendMsg(localConnectionID, EM().ReplicateMsg(m), localSendTime);
 	}
 
-	void ThreeStageDirectory::OnRemoteInvalidateResponse(const InvalidateResponseMsg* m, NodeID src)
+	void ThreeStageDirectory::OnRemoteInvalidateResponse(const BaseMsg* msgIn, NodeID src)
 	{
-	   //DebugFail("ThreeStageDirectory::OnRemoteInvalidateResponse reached");
-		DebugAssert(m);
+		DebugAssert(msgIn);
+      DebugAssert(msgIn->Type()==mt_InvalidateResponse);
+      InvalidateResponseMsg* m = (InvalidateResponseMsg*)msgIn;
 		DebugAssert(directoryData.find(m->addr) != directoryData.end());
 #if defined MEMORY_3_STAGE_DIRECTORY_DEBUG_DIRECTORY_DATA && !defined _WIN32
       #define MEMORY_3_STAGE_DIRECTORY_DEBUG_ARRAY_SIZE 20
@@ -922,9 +980,11 @@ namespace Memory
 		EM().DisposeMsg(m);
 	}  // OnRemoteInvalidateResponse
 
-	void ThreeStageDirectory::OnRemoteInvalidateSharer(const InvalidateSharerMsg* m, NodeID src)
+	void ThreeStageDirectory::OnRemoteInvalidateSharer(const BaseMsg* msgIn, NodeID src)
 	{
-	   DebugAssert(m);
+		DebugAssert(msgIn);
+      DebugAssert(msgIn->Type()==mt_InvalidateSharer);
+      InvalidateSharerMsg* m = (InvalidateSharerMsg*)msgIn;
 	   DebugAssert(directoryData.find(m->addr) != directoryData.end());
 	   BlockData &b = directoryData[m->addr];
 	   //if ( (b.owner==src) || (b.sharers.find(src)==b.sharers.end()))
@@ -953,9 +1013,12 @@ namespace Memory
 	   EM().DisposeMsg(m);
 	}
 
-	void ThreeStageDirectory::OnDirectoryBlockRequest(const ReadMsg* m, NodeID src)
+	void ThreeStageDirectory::OnDirectoryBlockRequest(const BaseMsg* msgIn, NodeID src)
 	{
-		DebugAssert(m);
+		DebugAssert(msgIn);
+      DebugAssert(msgIn->Type()==mt_Read);
+      ReadMsg* m = (ReadMsg*)msgIn;
+      DebugAssert(m->directoryLookup==true);
 #if defined DEBUG && defined _WIN32
       MessageID tempMessageID = m->MsgID();
 #endif
@@ -1242,8 +1305,12 @@ namespace Memory
       }
 	}
 
-   void ThreeStageDirectory::OnDirectoryBlockRequestSharedRead(const ReadMsg *m, NodeID src)
+   void ThreeStageDirectory::OnDirectoryBlockRequestSharedRead(const BaseMsg *msgIn, NodeID src)
    {
+      DebugAssert(msgIn);
+      DebugAssert(msgIn->Type()==mt_Read);
+      ReadMsg* m = (ReadMsg*)msgIn;
+
       BlockData &b = directoryData[m->addr];
       // if directory state is Unowned or Exclusive with requester as owner,
       // transitions to Exclusive and returns an exclusive reply to the requester
@@ -1266,19 +1333,9 @@ namespace Memory
             forward->satisfied = true;
             forward->size = m->size;
             forward->solicitingMessage = m->MsgID();
-            if (src==nodeID)
-            {
-               OnDirectoryBlockResponse(forward,nodeID);
-            }
-            else
-            {
-               NetworkMsg* nm = EM().CreateNetworkMsg(getDeviceID());
-               nm->destinationNode = src;
-               nm->payloadMsg = forward;
-               nm->sourceNode = nodeID;
-				   SendMsg(remoteConnectionID, nm, lookupTime + remoteSendTime);
-            }
-            EM().DisposeMsg(m);
+
+            AutoDetermineDestSendMsg(forward,src,lookupTime+remoteSendTime,
+               &ThreeStageDirectory::OnDirectoryBlockResponse,"OnDirBlkRequestSharedRead","OnDirBlkResponse");
          } // else if (b.owner==src)
          else
          {
@@ -1308,7 +1365,11 @@ namespace Memory
          // send intervention shared request to the previous owner
 
          // send speculative reply to the requestor
-
+         SpeculativeReadResponseMsg* speculativeReply = EM().CreateSpeculativeReadResponseMsg(getDeviceID());
+         speculativeReply->addr = m->addr;
+         speculativeReply->solicitingMessage = m->MsgID();
+         AutoDetermineDestSendMsg(speculativeReply,src,localSendTime,&ThreeStageDirectory::OnRemoteSpeculativeReadResponse,
+            "OnDirBlkReqShRead","OnRemoteSpecReadRes");
          b.owner = src;
          return;
       } // else if (b.owner!=InvalidNodeID&&b.owner!=src)
@@ -1319,9 +1380,12 @@ namespace Memory
       }
    } // OnDirectoryBlockRequestSharedRead()
 
-	void ThreeStageDirectory::OnDirectoryBlockResponse(const ReadResponseMsg* m, NodeID src)
+	void ThreeStageDirectory::OnDirectoryBlockResponse(const BaseMsg* msgIn, NodeID src)
 	{
-		DebugAssert(m);
+		DebugAssert(msgIn);
+      DebugAssert(msgIn->Type()==mt_ReadResponse);
+      ReadResponseMsg* m = (ReadResponseMsg*)msgIn;
+      DebugAssert(m->directoryLookup==true);
 #if defined DEBUG && defined _WIN32
       MessageID tempMessageID = m->MsgID();
 #endif
@@ -1455,7 +1519,7 @@ namespace Memory
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
 			      printDebugInfo("OnLocalRead",*msg,"RecvMsg");
 #endif
-					OnLocalRead((ReadMsg*)msg);
+					OnLocalRead(msg);
 					break;
 				}
 			case(mt_ReadResponse):
@@ -1463,7 +1527,7 @@ namespace Memory
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
                printDebugInfo("OnLocalReadResponse",*msg,"RecvMsg");
 #endif
-					OnLocalReadResponse((ReadResponseMsg*)msg);
+					OnLocalReadResponse(msg);
 					break;
 				}
 			case(mt_Write):
@@ -1471,7 +1535,7 @@ namespace Memory
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
                printDebugInfo("OnLocalWrite",*msg,"RecvMsg");
 #endif
-					OnLocalWrite((WriteMsg*)msg);
+					OnLocalWrite(msg);
 					break;
 				}
 			case(mt_Eviction):
@@ -1479,7 +1543,7 @@ namespace Memory
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
                printDebugInfo("OnLocalEviction",*msg,"RecvMsg");
 #endif
-					OnLocalEviction((EvictionMsg*)msg);
+					OnLocalEviction(msg);
 					break;
 				}
 			case(mt_InvalidateResponse):
@@ -1487,7 +1551,7 @@ namespace Memory
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
                printDebugInfo("OnLocalInvalidateResponse",*msg,"RecvMsg");
 #endif
-					OnLocalInvalidateResponse((InvalidateResponseMsg*)msg);
+					OnLocalInvalidateResponse(msg);
 					break;
 				}
 			default:
@@ -1542,58 +1606,60 @@ namespace Memory
 					}
 					break;
 				}
+         case(mt_SpeculativeReadResponse):
+            {
+#ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
+               printDebugInfo("OnRemoteSpeculativeReadResponse",*payload,"RecvMsg",src);
+#endif
+			      OnRemoteSpeculativeReadResponse(payload,src);
+               break;
+            }
 			case(mt_WriteResponse):
 				{
-               WriteResponseMsg* m = (WriteResponseMsg*)payload;
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-               printDebugInfo("OnRemoteWriteResponse",*m,"RecvMsg",src);
+               printDebugInfo("OnRemoteWriteResponse",*payload,"RecvMsg",src);
 #endif
-					OnRemoteWriteResponse(m,src);
+					OnRemoteWriteResponse(payload,src);
 					break;
 				}
 			case(mt_Eviction):
 				{
-               EvictionMsg* m = (EvictionMsg*)payload;
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-               printDebugInfo("OnRemoteEviction",*m,"RecvMsg",src);
+               printDebugInfo("OnRemoteEviction",*payload,"RecvMsg",src);
 #endif
-					OnRemoteEviction(m,src);
+					OnRemoteEviction(payload,src);
 					break;
 				}
 			case(mt_EvictionResponse):
 				{
-               EvictionResponseMsg* m = (EvictionResponseMsg*)payload;
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-               printDebugInfo("OnRemoteEvictionResponse",*m,"RecvMsg",src);
+               printDebugInfo("OnRemoteEvictionResponse",*payload,"RecvMsg",src);
 #endif
-					OnRemoteEvictionResponse(m,src);
+					OnRemoteEvictionResponse(payload,src);
 					break;
 				}
 			case(mt_Invalidate):
             {
-               InvalidateMsg* m = (InvalidateMsg*)payload;
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-               printDebugInfo("OnRemoteInvalidate",*m,"RecvMsg",src);
+               printDebugInfo("OnRemoteInvalidate",*payload,"RecvMsg",src);
 #endif
-					OnRemoteInvalidate(m,src);
+					OnRemoteInvalidate(payload,src);
 					break;
 				}
          case(mt_InvalidateSharer):
             {
-               InvalidateSharerMsg* m = (InvalidateSharerMsg*)payload;
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-               printDebugInfo("OnRemoteInvalidateSharer",*m,"RecvMsg",src);
+               printDebugInfo("OnRemoteInvalidateSharer",*payload,"RecvMsg",src);
 #endif
-               OnRemoteInvalidateSharer(m,src);
+               OnRemoteInvalidateSharer(payload,src);
                break;
             }
 			case(mt_InvalidateResponse):
 				{
-			      InvalidateResponseMsg* m = (InvalidateResponseMsg*)payload;
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-               printDebugInfo("OnRemoteInvalidateResponse",*m,"RecvMsg",src);
+               printDebugInfo("OnRemoteInvalidateResponse",*payload,"RecvMsg",src);
 #endif
-					OnRemoteInvalidateResponse(m,src);
+					OnRemoteInvalidateResponse(payload,src);
 					break;
 				}
 			default:

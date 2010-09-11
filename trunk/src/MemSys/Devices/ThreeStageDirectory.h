@@ -20,6 +20,8 @@ namespace Memory
 	class ThreeStageDirectory : public BaseMemDevice
 	{
 		typedef Address AddrTag;
+      typedef void (ThreeStageDirectory::*ThreeStageDirectoryMemFn)(const BaseMsg* msg, NodeID id);
+
 		class NodeIDCalculator
 		{
 		public:
@@ -85,25 +87,29 @@ namespace Memory
 		void EraseDirectoryShare(Address a, NodeID id);
 		void AddDirectoryShare(Address a, NodeID id, bool exclusive);
 
-		void OnLocalRead(const ReadMsg* m);
-		void OnLocalReadResponse(const ReadResponseMsg* m);
-		void OnLocalWrite(const WriteMsg* m);
-		void OnLocalEviction(const EvictionMsg* m);
-		void OnLocalInvalidateResponse(const InvalidateResponseMsg* m);
+		void OnLocalRead(const BaseMsg* msgIn);
+		void OnLocalReadResponse(const BaseMsg* msgIn);
+		void OnLocalWrite(const BaseMsg* msgIn);
+		void OnLocalEviction(const BaseMsg* msgIn);
+		void OnLocalInvalidateResponse(const BaseMsg* msgIn);
 
-		void OnRemoteRead(const ReadMsg* m, NodeID src);
-		void OnRemoteReadResponse(const ReadResponseMsg* m, NodeID src);
-		void OnRemoteWrite(const WriteMsg* m, NodeID src);
-		void OnRemoteWriteResponse(const WriteResponseMsg* m, NodeID src);
-		void OnRemoteEviction(const EvictionMsg* m, NodeID src);
-		void OnRemoteEvictionResponse(const EvictionResponseMsg* m, NodeID src);
-		void OnRemoteInvalidate(const InvalidateMsg* m, NodeID src);
-      void OnRemoteInvalidateSharer(const InvalidateSharerMsg* m, NodeID src);
-		void OnRemoteInvalidateResponse(const InvalidateResponseMsg* m, NodeID src);
+		void OnRemoteRead(const BaseMsg* msgIn, NodeID src);
+		void OnRemoteReadResponse(const BaseMsg* msgIn, NodeID src);
+      void OnRemoteSpeculativeReadResponse(const BaseMsg* msgIn, NodeID src);
+		void OnRemoteWrite(const BaseMsg* msgIn, NodeID src);
+		void OnRemoteWriteResponse(const BaseMsg* msgIn, NodeID src);
+		void OnRemoteEviction(const BaseMsg* msgIn, NodeID src);
+		void OnRemoteEvictionResponse(const BaseMsg* msgIn, NodeID src);
+		void OnRemoteInvalidate(const BaseMsg* msgIn, NodeID src);
+      void OnRemoteInvalidateSharer(const BaseMsg* msgIn, NodeID src);
+		void OnRemoteInvalidateResponse(const BaseMsg* msgIn, NodeID src);
 
-		void OnDirectoryBlockRequest(const ReadMsg* m, NodeID src);
-      void OnDirectoryBlockRequestSharedRead(const ReadMsg *m, NodeID src);
-		void OnDirectoryBlockResponse(const ReadResponseMsg* m, NodeID src);
+		void OnDirectoryBlockRequest(const BaseMsg* msgIn, NodeID src);
+      void OnDirectoryBlockRequestSharedRead(const BaseMsg* msgIn, NodeID src);
+		void OnDirectoryBlockResponse(const BaseMsg* msgIn, NodeID src);
+
+      void AutoDetermineDestSendMsg(const BaseMsg* msg, NodeID dest, TimeDelta sendTime,
+         ThreeStageDirectoryMemFn func, const char* fromMethod, const char* toMethod);
 
 		void printDebugInfo(const char* fromMethod, const BaseMsg &myMessage, const char* operation);
 		void printDebugInfo(const char* fromMethod, const BaseMsg &myMessage, const char* operation,NodeID src);
@@ -113,7 +119,7 @@ namespace Memory
 		void printPendingDirectorySharedReads();
 	   void printPendingLocalReads();
 
-		typedef PooledFunctionGenerator<StoredClassFunction2<ThreeStageDirectory,const ReadMsg*, NodeID, &ThreeStageDirectory::OnDirectoryBlockRequest> > CBOnDirectoryBlockRequest;
+		typedef PooledFunctionGenerator<StoredClassFunction2<ThreeStageDirectory,const BaseMsg*, NodeID, &ThreeStageDirectory::OnDirectoryBlockRequest> > CBOnDirectoryBlockRequest;
 		CBOnDirectoryBlockRequest cbOnDirectoryBlockRequest;
 		// 2010/08/05 Eric: seems to be unused
 		/*
