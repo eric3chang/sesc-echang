@@ -477,6 +477,12 @@
     <ClInclude Include="MemSys\Devices\ThreeStageDirectory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MemSys\Messages\InvalidateSharerMsg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MemSys\Messages\SpeculativeReadResponseMsg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="libmem\AddressPrefetcher.cpp">

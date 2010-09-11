@@ -56,6 +56,14 @@ namespace Memory
 		m->SetIDInfo(currentMsgStamp++,devID,generatingPC);
 		return m;
 	}
+   SpeculativeReadResponseMsg* EventManager::CreateSpeculativeReadResponseMsg(DeviceID devID, Address generatingPC)
+   {
+		SpeculativeReadResponseMsg* m = speculativeReadResponsePool.Take();
+		m->SetIDInfo(currentMsgStamp++,devID,generatingPC);
+      m->addr = 0;
+      m->solicitingMessage = 0;
+		return m;
+   }
 	WriteResponseMsg* EventManager::CreateWriteResponseMsg(DeviceID devID, Address generatingPC)
 	{
 		WriteResponseMsg* m = writeResponsePool.Take();
@@ -129,6 +137,13 @@ namespace Memory
 				ret = m;
 				break;
 			}
+       case(mt_SpeculativeReadResponse):
+			{
+				SpeculativeReadResponseMsg* m = CreateSpeculativeReadResponseMsg(msg->GeneratingDeviceID(),msg->GeneratingPC());
+				*m = *((SpeculativeReadResponseMsg*)msg);
+				ret = m;
+				break;
+			}
 		case(mt_WriteResponse):
 			{
 				WriteResponseMsg* m = CreateWriteResponseMsg(msg->GeneratingDeviceID(),msg->GeneratingPC());
@@ -175,6 +190,7 @@ namespace Memory
 			case(mt_InvalidateSharer): invalidateSharerPool.Return((InvalidateSharerMsg*)msg); break;
 			case(mt_Eviction): evictionPool.Return((EvictionMsg*)msg); break;
 			case(mt_ReadResponse): readResponsePool.Return((ReadResponseMsg*)msg); break;
+         case(mt_SpeculativeReadResponse): speculativeReadResponsePool.Return((SpeculativeReadResponseMsg*)msg);break;
 			case(mt_WriteResponse): writeResponsePool.Return((WriteResponseMsg*)msg); break;
 			case(mt_InvalidateResponse): invalidateResponsePool.Return((InvalidateResponseMsg*)msg); break;
 			case(mt_EvictionResponse): evictionResponsePool.Return((EvictionResponseMsg*)msg); break;
