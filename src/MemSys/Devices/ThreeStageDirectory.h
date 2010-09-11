@@ -10,6 +10,7 @@ namespace Memory
 	class ReadMsg;
 	class WriteMsg;
 	class InvalidateMsg;
+	class InvalidateSharerMsg;
 	class EvictionMsg;
 	class ReadResponseMsg;
 	class WriteResponseMsg;
@@ -95,6 +96,7 @@ namespace Memory
 		void OnRemoteEviction(const EvictionMsg* m, NodeID src);
 		void OnRemoteEvictionResponse(const EvictionResponseMsg* m, NodeID src);
 		void OnRemoteInvalidate(const InvalidateMsg* m, NodeID src);
+      void OnRemoteInvalidateSharer(const InvalidateSharerMsg* m, NodeID src);
 		void OnRemoteInvalidateResponse(const InvalidateResponseMsg* m, NodeID src);
 
 		void OnDirectoryBlockRequest(const ReadMsg* m, NodeID src);

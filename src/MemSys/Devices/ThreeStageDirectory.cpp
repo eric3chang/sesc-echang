@@ -53,7 +53,7 @@ namespace Memory
       // commented out because of 3-stage
       // TODO: 2010/09/02 3-stage modification
       //m->directoryLookup = false;
-	   ReadMsg* m = EM().CreateReadMsg(getDeviceID(),NULL);
+	   ReadMsg* m = EM().CreateReadMsg(getDeviceID());
       //EM().DisposeMsg(msgIn);
       m->onCompletedCallback = NULL;
       m->alreadyHasBlock = false;
@@ -378,29 +378,32 @@ namespace Memory
          // d.msg might be the same as m
 		   //EM().DisposeMsg(m);
 		}
-      // do not send it back to the directory, we want to send it back
-      // to the original requester
-      /*
-		else
+
+		// if unsatisfied, send invalidateSharer back to directory
+		if (!m->satisfied)
 		{
-		   // send it back to the directory if not satisfied
+         InvalidateSharerMsg *forward = EM().CreateInvalidateSharerMsg(getDeviceID());
+         forward->addr = d.msg->addr;
+         NodeID dirNodeID = directoryNodeCalc->CalcNodeID(d.msg->addr);
+
 		   //TODO 2010/09/09 Eric
-		   forward->directoryLookup = false;
-         nm->destinationNode = directoryNodeCalc->CalcNodeID(d.msg->addr);
-         //forward->directoryLookup = true;
-         //DebugAssert(d.msg->requestingNode != InvalidNodeID);
-         //nm->destinationNode = d.msg->requestingNode;
-         if (nm->destinationNode==nodeID)
+         if (dirNodeID==nodeID)
          {
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-            printDebugInfo("OnRemoteReadResponse",*forward,"OnLocalReadResponse",nodeID);
+            printDebugInfo("OnInvalidateSharerMsg",*forward,"OnLocalReadResponse",nodeID);
 #endif
-            OnRemoteReadResponse(forward,nm->sourceNode);
-            EM().DisposeMsg(nm);
+            OnRemoteInvalidateSharer(forward,nodeID);
             return;
          }
+         else
+         {
+            NetworkMsg* nmToDir = EM().CreateNetworkMsg(getDeviceID(),m->GeneratingPC());
+            nmToDir->payloadMsg = forward;
+            nmToDir->sourceNode = nodeID;
+            nmToDir->destinationNode = dirNodeID;
+            SendMsg(remoteConnectionID, nmToDir, remoteSendTime);
+         }
 		}
-      */
 	}
 	void ThreeStageDirectory::OnLocalWrite(const WriteMsg* m)
 	{
@@ -848,6 +851,19 @@ namespace Memory
 		}//if(pendingDirectoryExclusiveReads.find(m->addr) != pendingDirectoryExclusiveReads.end())
 
 		EM().DisposeMsg(m);
+	}  // OnRemoteInvalidateResponse
+
+	void ThreeStageDirectory::OnRemoteInvalidateSharer(const InvalidateSharerMsg* m, NodeID src)
+	{
+	   DebugAssert(m);
+	   DebugAssert(directoryData.find(m->addr) != directoryData.end());
+	   BlockData &b = directoryData[m->addr];
+	   //if ( (b.owner==src) || (b.sharers.find(src)==b.sharers.end()))
+	   if (b.sharers.find(src) != b.sharers.end())
+	   {
+	      EraseDirectoryShare(m->addr,src);
+	   }
+	   EM().DisposeMsg(m);
 	}
 
 	void ThreeStageDirectory::OnDirectoryBlockRequest(const ReadMsg* m, NodeID src)
@@ -1393,6 +1409,15 @@ namespace Memory
 					OnRemoteInvalidate(m,src);
 					break;
 				}
+         case(mt_InvalidateSharer):
+            {
+               InvalidateSharerMsg* m = (InvalidateSharerMsg*)payload;
+#ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
+               printDebugInfo("OnRemoteInvalidateSharer",*m,"RecvMsg",src);
+#endif
+               OnRemoteInvalidateSharer(m,src);
+               break;
+            }
 			case(mt_InvalidateResponse):
 				{
 			      InvalidateResponseMsg* m = (InvalidateResponseMsg*)payload;
