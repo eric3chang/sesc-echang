@@ -23,6 +23,7 @@ namespace Memory
 		mt_InvalidateSharer,
 
 		mt_ReadResponse,
+      mt_SpeculativeReadResponse,
 		mt_WriteResponse,
 		mt_InvalidateResponse,
 		mt_EvictionResponse,

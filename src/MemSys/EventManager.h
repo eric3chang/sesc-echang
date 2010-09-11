@@ -15,6 +15,7 @@ namespace Memory
 	class InvalidateSharerMsg;
 	class EvictionMsg;
 	class ReadResponseMsg;
+   class SpeculativeReadResponseMsg;
 	class WriteResponseMsg;
 	class InvalidateResponseMsg;
 	class EvictionResponseMsg;
@@ -39,6 +40,7 @@ namespace Memory
 		Pool<InvalidateSharerMsg> invalidateSharerPool;
 		Pool<EvictionMsg> evictionPool;
 		Pool<ReadResponseMsg> readResponsePool;
+      Pool<SpeculativeReadResponseMsg> speculativeReadResponsePool;
 		Pool<WriteResponseMsg> writeResponsePool;
 		Pool<InvalidateResponseMsg> invalidateResponsePool;
 		Pool<EvictionResponseMsg> evictionResponsePool;
@@ -50,6 +52,7 @@ namespace Memory
 		InvalidateSharerMsg* CreateInvalidateSharerMsg(DeviceID devID, Address generatingPC = 0);
 		EvictionMsg* CreateEvictionMsg(DeviceID devID, Address generatingPC = 0);
 		ReadResponseMsg* CreateReadResponseMsg(DeviceID devID, Address generatingPC = 0);
+      SpeculativeReadResponseMsg* CreateSpeculativeReadResponseMsg(DeviceID devID, Address generatingPC = 0);
 		WriteResponseMsg* CreateWriteResponseMsg(DeviceID devID, Address generatingPC = 0);
 		InvalidateResponseMsg* CreateInvalidateResponseMsg(DeviceID devID, Address generatingPC = 0);
 		EvictionResponseMsg* CreateEvictionResponseMsg(DeviceID devID, Address generatingPC = 0);

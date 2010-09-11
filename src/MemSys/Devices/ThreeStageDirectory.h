@@ -71,14 +71,16 @@ namespace Memory
 		HashMap<MessageID, const ReadMsg*> pendingLocalReads;
 		HashMap<MessageID, LookupData<ReadMsg> > pendingRemoteReads;
 		HashMap<MessageID, LookupData<InvalidateMsg> > pendingRemoteInvalidates;
-		HashMultiMap<Address, LookupData<ReadMsg> > pendingDirectorySharedReads;
+		HashMap<Address, LookupData<ReadMsg> > pendingDirectorySharedReads;
 		HashMap<Address, LookupData<ReadMsg> > pendingDirectoryExclusiveReads;
 		HashSet<Address> pendingEviction;
 		HashMap<Address, BlockData> directoryData;
 		HashMap<Address, BlockData> pendingDirectoryExclusiveReadsDirectoryData;
+      HashMap<MessageID, int> unsatisfiedRequests;
 
 		void PerformDirectoryFetch(Address a, NodeID src);
 		void PerformDirectoryFetch(const ReadMsg *msgIn, NodeID src);
+      void PerformDirectoryFetch(const ReadMsg *msgIn,NodeID src,bool isExclusive,NodeID target);
 		void PerformDirectoryFetchOwner(const ReadMsg *msgIn, NodeID src);
 		void EraseDirectoryShare(Address a, NodeID id);
 		void AddDirectoryShare(Address a, NodeID id, bool exclusive);
@@ -100,6 +102,7 @@ namespace Memory
 		void OnRemoteInvalidateResponse(const InvalidateResponseMsg* m, NodeID src);
 
 		void OnDirectoryBlockRequest(const ReadMsg* m, NodeID src);
+      void OnDirectoryBlockRequestSharedRead(const ReadMsg *m, NodeID src);
 		void OnDirectoryBlockResponse(const ReadResponseMsg* m, NodeID src);
 
 		void printDebugInfo(const char* fromMethod, const BaseMsg &myMessage, const char* operation);
