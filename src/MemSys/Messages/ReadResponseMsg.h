@@ -14,7 +14,7 @@ namespace Memory
       bool directoryLookup;
 		bool exclusiveOwnership;
       bool isInterventionShared;
-      bool isSpeculative;
+      //bool isSpeculative;   // not implementing speculative right now
 		MessageID solicitingMessage;
 		NodeID originalRequestingNode;
 
@@ -35,7 +35,7 @@ namespace Memory
             << " excluOwn=" << exclusiveOwnership
             << " solicMsg=" << solicitingMessage
             << " intShd=" << isInterventionShared
-            << " spec=" << isSpeculative
+            //<< " spec=" << isSpeculative
 		   ;
 		}
 

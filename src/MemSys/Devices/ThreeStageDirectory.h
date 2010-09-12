@@ -79,8 +79,8 @@ namespace Memory
 		HashSet<Address> pendingEviction;
 		HashMap<Address, BlockData> directoryData;
 		HashMap<Address, BlockData> pendingDirectoryExclusiveReadsDirectoryData;
-      HashMap<MessageID, LookupData<ReadMsg> > pendingSpeculativeReads;
-      HashMap<Address, const ReadResponseMsg* > pendingSpeculativeReadResponses;
+      //HashMap<MessageID, LookupData<ReadMsg> > pendingSpeculativeReads;
+      //HashMap<Address, const ReadResponseMsg* > pendingSpeculativeReadResponses;
       //HashMap<MessageID, int> unsatisfiedRequests;
 
 		//void PerformDirectoryFetch(Address a, NodeID src);
@@ -99,7 +99,7 @@ namespace Memory
 
 		void OnRemoteRead(const BaseMsg* msgIn, NodeID src);
 		void OnRemoteReadResponse(const BaseMsg* msgIn, NodeID src);
-      void OnRemoteSpeculativeReadResponse(const BaseMsg* msgIn, NodeID src);
+      //void OnRemoteSpeculativeReadResponse(const BaseMsg* msgIn, NodeID src);
 		void OnRemoteWrite(const BaseMsg* msgIn, NodeID src);
 		void OnRemoteWriteResponse(const BaseMsg* msgIn, NodeID src);
 		void OnRemoteEviction(const BaseMsg* msgIn, NodeID src);

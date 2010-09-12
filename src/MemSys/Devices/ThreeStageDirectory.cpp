@@ -459,7 +459,7 @@ namespace Memory
          // changed this to true because of 3-stage directory
          forward->directoryLookup = true;
          forward->isInterventionShared = true;
-         forward->isSpeculative = d.msg->isSpeculative;
+         //forward->isSpeculative = d.msg->isSpeculative;
          AutoDetermineDestSendMsg(forward,d.msg->originalRequestingNode,remoteSendTime+lookupTime,
                &ThreeStageDirectory::OnDirectoryBlockResponse,"OnLocalReadResponse","OnDirBlkResponse");
 
@@ -469,7 +469,7 @@ namespace Memory
          dirResponse->originalRequestingNode = d.msg->originalRequestingNode;
          dirResponse->directoryLookup = false;
          dirResponse->isInterventionShared = true;
-         forward->isSpeculative = d.msg->isSpeculative;
+         //forward->isSpeculative = d.msg->isSpeculative;
          AutoDetermineDestSendMsg(dirResponse,d.sourceNode,remoteSendTime,
                &ThreeStageDirectory::OnRemoteReadResponse,"OnLocalReadResponse","OnRemoteReadResponse");
 
@@ -478,6 +478,8 @@ namespace Memory
          pendingRemoteReads.erase(m->solicitingMessage);
          return;
 		} // if (d.msg->isInterventionShared)
+      // not doing speculative replies right now
+      /*
       else if (d.msg->isSpeculative)
 		{
          // send response back to the requester
@@ -493,6 +495,7 @@ namespace Memory
          pendingRemoteReads.erase(m->solicitingMessage);
          return;
 		}
+      */
       else
       {
          DebugFail("not supposed to be here");
@@ -791,6 +794,7 @@ namespace Memory
    Assume that speculative reply will arrive faster than shared response or ack because
    the shared response or ack takes two hops as opposed to one hop
    */
+   /*
    void ThreeStageDirectory::OnRemoteSpeculativeReadResponse(const BaseMsg* msgIn, NodeID src)
    {
       DebugAssert(msgIn);
@@ -801,6 +805,7 @@ namespace Memory
 
       pendingSpeculativeReadResponses[m->addr] = m;
    }
+   */
 
 	void ThreeStageDirectory::OnRemoteWrite(const BaseMsg* msgIn, NodeID src)
 	{
@@ -1429,7 +1434,9 @@ namespace Memory
          AutoDetermineDestSendMsg(read,previousOwner,localSendTime,
             &ThreeStageDirectory::OnRemoteRead,"OnDirBlkReqShRead","OnRemoteRead");
 
+         // not doing speculative replies right now
          // request speculative reply from a sharer
+         /*
          ReadMsg* speculativeRequest = (ReadMsg*)EM().ReplicateMsg(m);
          speculativeRequest->alreadyHasBlock = false;
          speculativeRequest->directoryLookup = false;
@@ -1439,6 +1446,8 @@ namespace Memory
          speculativeRequest->isSpeculative = true;
          AutoDetermineDestSendMsg(speculativeRequest,src,localSendTime,
             &ThreeStageDirectory::OnRemoteSpeculativeReadResponse,"OnDirBlkReqShRead","OnRemoteSpecReadRes");
+            */
+
          b.owner = src;
          EM().DisposeMsg(m);
          return;
@@ -1667,6 +1676,8 @@ namespace Memory
 #endif
 						OnDirectoryBlockResponse(m,src);
 					}
+               // not doing speculative replies right now
+               /*
                else if (m->isSpeculative)
                {
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
@@ -1674,6 +1685,7 @@ namespace Memory
 #endif
 			      OnRemoteSpeculativeReadResponse(m,src);
                }
+               */
 					else
 					{
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
