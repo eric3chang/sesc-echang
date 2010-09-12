@@ -10,6 +10,7 @@ namespace Memory
 {
 	class BaseMsg;
 	class ReadMsg;
+   class InterventionSharedRequestMsg;
 	class WriteMsg;
 	class InvalidateMsg;
 	class InvalidateSharerMsg;
@@ -35,6 +36,7 @@ namespace Memory
 		CBDeliverMsg cbDeliverMsg;
 	protected:
 		Pool<ReadMsg> readPool;
+		Pool<InterventionSharedRequestMsg> interventionSharedReadPool;
 		Pool<WriteMsg> writePool;
 		Pool<InvalidateMsg> invalidatePool;
 		Pool<InvalidateSharerMsg> invalidateSharerPool;
@@ -47,6 +49,7 @@ namespace Memory
 		Pool<NetworkMsg> networkPool;
 	public:
 		ReadMsg* CreateReadMsg(DeviceID devID, Address generatingPC = 0);
+		InterventionSharedRequestMsg* CreateInterventionSharedRequestMsg(DeviceID devID, Address generatingPC = 0);
 		WriteMsg* CreateWriteMsg(DeviceID devID, Address generatingPC = 0);
 		InvalidateMsg* CreateInvalidateMsg(DeviceID devID, Address generatingPC = 0);
 		InvalidateSharerMsg* CreateInvalidateSharerMsg(DeviceID devID, Address generatingPC = 0);

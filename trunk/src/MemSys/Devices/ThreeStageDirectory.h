@@ -8,11 +8,13 @@
 namespace Memory
 {
 	class ReadMsg;
+	class InterventionSharedRequestMsg;
 	class WriteMsg;
 	class InvalidateMsg;
 	class InvalidateSharerMsg;
 	class EvictionMsg;
 	class ReadResponseMsg;
+	class SpeculativeReadResponseMsg;
 	class WriteResponseMsg;
 	class InvalidateResponseMsg;
 	class EvictionResponseMsg;
@@ -78,12 +80,13 @@ namespace Memory
 		HashSet<Address> pendingEviction;
 		HashMap<Address, BlockData> directoryData;
 		HashMap<Address, BlockData> pendingDirectoryExclusiveReadsDirectoryData;
+		HashMap<MessageID, LookupData<InterventionSharedRequestMsg> > pendingInterventionSharedRequests;
       HashMap<MessageID, int> unsatisfiedRequests;
 
-		void PerformDirectoryFetch(Address a, NodeID src);
+		//void PerformDirectoryFetch(Address a, NodeID src);
 		void PerformDirectoryFetch(const ReadMsg *msgIn, NodeID src);
       void PerformDirectoryFetch(const ReadMsg *msgIn,NodeID src,bool isExclusive,NodeID target);
-		void PerformDirectoryFetchOwner(const ReadMsg *msgIn, NodeID src);
+		//void PerformDirectoryFetchOwner(const ReadMsg *msgIn, NodeID src);
 		void EraseDirectoryShare(Address a, NodeID id);
 		void AddDirectoryShare(Address a, NodeID id, bool exclusive);
 
@@ -94,6 +97,7 @@ namespace Memory
 		void OnLocalInvalidateResponse(const BaseMsg* msgIn);
 
 		void OnRemoteRead(const BaseMsg* msgIn, NodeID src);
+		void OnRemoteInterventionSharedRequest(const BaseMsg* msgIn, NodeID src);
 		void OnRemoteReadResponse(const BaseMsg* msgIn, NodeID src);
       void OnRemoteSpeculativeReadResponse(const BaseMsg* msgIn, NodeID src);
 		void OnRemoteWrite(const BaseMsg* msgIn, NodeID src);
