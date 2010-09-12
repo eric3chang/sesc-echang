@@ -17,7 +17,6 @@ namespace Memory
 	enum MsgType
 	{
 		mt_Read,
-		mt_InterventionSharedRequest,
 		mt_Write,
 		mt_Invalidate,
 		mt_Eviction,
