@@ -193,18 +193,13 @@ namespace Memory
       DebugAssert(target != InvalidNodeID);
 	   ReadMsg* m = (ReadMsg*)EM().ReplicateMsg(msgIn);
 		m->alreadyHasBlock = false;
-      m->addr = msgIn->addr;
-      m->onCompletedCallback = NULL;
       m->originalRequestingNode = src;
       m->requestingExclusive = isExclusive;
-      m->size = msgIn->size;
-		bool isTargetMemory = false;
       NodeID memoryNode = memoryNodeCalc->CalcNodeID(m->addr);
 		// directoryLookup is true only for memory because we want to return a
 		   // OnDirectoryBlockResponse from memory
 		if(target==memoryNode)
 		{
-         isTargetMemory = true;
 		   m->directoryLookup = true;
 		}
 		else
@@ -223,7 +218,7 @@ namespace Memory
 		{
 			NetworkMsg* nm = EM().CreateNetworkMsg(getDeviceID(), m->GeneratingPC());
 			nm->destinationNode = target;
-			if (isTargetMemory)
+			if (target==memoryNode)
 			{
 			   // change the source due to 3-stage
             nm->sourceNode = src;
@@ -239,6 +234,8 @@ namespace Memory
 			nm->payloadMsg = m;
 			SendMsg(remoteConnectionID, nm, lookupTime + remoteSendTime);
 		}
+      // do not dispose message here, because the original OnLocalRead might still need it
+      //EM().DisposeMsg(msgIn);
 	}
 
 	/*
@@ -450,19 +447,20 @@ namespace Memory
       LookupData<ReadMsg> &d = pendingRemoteReads[m->solicitingMessage];
       DebugAssert(d.msg->originalRequestingNode != InvalidNodeID);
       //DebugAssert(m->satisfied);
+ 
+      // send response back to the requester
+      ReadResponseMsg* forward = (ReadResponseMsg*)EM().ReplicateMsg(m);
+      forward->originalRequestingNode = d.msg->originalRequestingNode;
+      // changed this to true because of 3-stage directory
+      forward->directoryLookup = true;
+      forward->isInterventionShared = true;
+      //forward->isSpeculative = d.msg->isSpeculative;
+      // the destination node is the original requesting node, and not the directory
+      AutoDetermineDestSendMsg(forward,d.msg->originalRequestingNode,remoteSendTime+lookupTime,
+            &ThreeStageDirectory::OnDirectoryBlockResponse,"OnLocalReadResponse","OnDirBlkResponse");
 
 		if (d.msg->isInterventionShared)
 		{
-         // send response back to the requester
-         ReadResponseMsg* forward = (ReadResponseMsg*)EM().ReplicateMsg(m);
-         forward->originalRequestingNode = d.msg->originalRequestingNode;
-         // changed this to true because of 3-stage directory
-         forward->directoryLookup = true;
-         forward->isInterventionShared = true;
-         //forward->isSpeculative = d.msg->isSpeculative;
-         AutoDetermineDestSendMsg(forward,d.msg->originalRequestingNode,remoteSendTime+lookupTime,
-               &ThreeStageDirectory::OnDirectoryBlockResponse,"OnLocalReadResponse","OnDirBlkResponse");
-
          // send response back to the directory
          ReadResponseMsg* dirResponse = (ReadResponseMsg*)EM().ReplicateMsg(m);
          DebugAssert(d.msg->originalRequestingNode != InvalidNodeID);
@@ -472,11 +470,6 @@ namespace Memory
          //forward->isSpeculative = d.msg->isSpeculative;
          AutoDetermineDestSendMsg(dirResponse,d.sourceNode,remoteSendTime,
                &ThreeStageDirectory::OnRemoteReadResponse,"OnLocalReadResponse","OnRemoteReadResponse");
-
-         //EM().DisposeMsg(pendingRemoteReads[m->solicitingMessage].msg);
-         EM().DisposeMsg(m);
-         pendingRemoteReads.erase(m->solicitingMessage);
-         return;
 		} // if (d.msg->isInterventionShared)
       // not doing speculative replies right now
       /*
@@ -490,16 +483,15 @@ namespace Memory
          forward->originalRequestingNode = d.msg->originalRequestingNode;
          AutoDetermineDestSendMsg(forward,d.msg->originalRequestingNode,remoteSendTime,
                &ThreeStageDirectory::OnDirectoryBlockResponse,"OnLocalReadResponse","OnDirBlkResponse");
-         EM().DisposeMsg(pendingRemoteReads[m->solicitingMessage].msg);
-         EM().DisposeMsg(m);
-         pendingRemoteReads.erase(m->solicitingMessage);
-         return;
 		}
       */
-      else
-      {
-         DebugFail("not supposed to be here");
-      }
+
+      //EM().DisposeMsg(pendingRemoteReads[m->solicitingMessage].msg);
+      EM().DisposeMsg(m);
+      pendingRemoteReads.erase(m->solicitingMessage);
+      return;
+
+
 
 		/*(
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_REMOTE_READS
@@ -1401,15 +1393,17 @@ namespace Memory
             DebugFail("b.owner has to be src or InvalidNodeID");
          }
          b.owner = src;
-         EM().DisposeMsg(m);
+         // do not dispose m here, because the original OnLocalRead still has it
+         //EM().DisposeMsg(m);
          return;
       } // if ((b.owner==InvalidNodeID&&b.sharers.size()==0) || (b.owner==src&&b.sharers.size()==0))
       else if (b.owner==InvalidNodeID && b.sharers.size()!=0)
-      {// if directory state is shared, add requesting node to sharer and return shared reply
+      {// if directory state is shared, add requesting node to sharer and request reply from any sharer
          // perform directory fetch before modifying directoryData
          PerformDirectoryFetch(m,src,false,*(b.sharers.begin()));
          b.sharers.insert(src);
-         EM().DisposeMsg(m);
+         // do not dispose msg here, because we are forwarding it
+         //EM().DisposeMsg(m);
          return;
       }// else if (b.owner==InvalidNodeID && b.sharers.size()!=0)
       else if (b.owner!=InvalidNodeID&&b.owner!=src)
@@ -1449,7 +1443,8 @@ namespace Memory
             */
 
          b.owner = src;
-         EM().DisposeMsg(m);
+         // do not dispose m here, because the original OnLocalRead still has it
+         //EM().DisposeMsg(m);
          return;
       } // else if (b.owner!=InvalidNodeID&&b.owner!=src)
       else
