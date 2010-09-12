@@ -39,8 +39,8 @@ namespace Memory
 		{
 		   BaseMsg::print(destinationDeviceID);
 		   cout << " addr=" << addr
-		         << " requestingEx=" << requestingExclusive
-		         << " alreadyHasBlk=" << alreadyHasBlock
+		         << " requestEx=" << requestingExclusive
+		         << " hasBlk=" << alreadyHasBlock
 		         << " dirLookup=" << directoryLookup
                << " intShd=" << isInterventionShared
                //<< " spec=" << isSpeculative
