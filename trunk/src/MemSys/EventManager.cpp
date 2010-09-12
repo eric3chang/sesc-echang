@@ -21,7 +21,7 @@ namespace Memory
 		m->directoryLookup = false;
 		m->originalRequestingNode = InvalidNodeID;
 		m->isInterventionShared = false;
-      m->isSpeculative = false;
+      //m->isSpeculative = false;
 		m->SetIDInfo(currentMsgStamp++,devID,generatingPC);
 		return m;
 	}
@@ -55,7 +55,7 @@ namespace Memory
 		ReadResponseMsg* m = readResponsePool.Take();
 		m->directoryLookup = false;
       m->isInterventionShared = false;
-      m->isSpeculative = false;
+      //m->isSpeculative = false;
 		m->originalRequestingNode = InvalidNodeID;
 		m->SetIDInfo(currentMsgStamp++,devID,generatingPC);
 		return m;
