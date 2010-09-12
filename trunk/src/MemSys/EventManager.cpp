@@ -20,15 +20,10 @@ namespace Memory
 		ReadMsg* m = readPool.Take();
 		m->directoryLookup = false;
 		m->originalRequestingNode = InvalidNodeID;
+		m->isInterventionShared = false;
 		m->SetIDInfo(currentMsgStamp++,devID,generatingPC);
 		return m;
 	}
-   InterventionSharedRequestMsg* EventManager::CreateInterventionSharedRequestMsg(DeviceID devID, Address generatingPC)
-   {
-      InterventionSharedRequestMsg* m = interventionSharedReadPool.Take();
-      m->SetIDInfo(currentMsgStamp++,devID,generatingPC);
-      return m;
-   }
 	WriteMsg* EventManager::CreateWriteMsg(DeviceID devID, Address generatingPC)
 	{
 		WriteMsg* m = writePool.Take();
@@ -108,13 +103,6 @@ namespace Memory
 				ret = m;
 				break;
 			}
-      case(mt_InterventionSharedRequest):
-         {
-            InterventionSharedRequestMsg* m = CreateInterventionSharedRequestMsg(msg->GeneratingDeviceID(),msg->GeneratingPC());
-            *m = *((InterventionSharedRequestMsg*)msg);
-            ret = m;
-            break;
-         }
 		case(mt_Write):
 			{
 				WriteMsg* m = CreateWriteMsg(msg->GeneratingDeviceID(),msg->GeneratingPC());
@@ -198,7 +186,6 @@ namespace Memory
 		switch(msg->Type())
 		{
 			case(mt_Read): readPool.Return((ReadMsg*)msg); break;
-			case(mt_InterventionSharedRequest): interventionSharedReadPool.Return((InterventionSharedRequestMsg*)msg); break;
 			case(mt_Write): writePool.Return((WriteMsg*)msg); break;
 			case(mt_Invalidate): invalidatePool.Return((InvalidateMsg*)msg); break;
 			case(mt_InvalidateSharer): invalidateSharerPool.Return((InvalidateSharerMsg*)msg); break;

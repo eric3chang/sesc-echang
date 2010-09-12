@@ -3,18 +3,17 @@
 #include "../StoredFunctionCall.h"
 #include "../HashContainers.h"
 #include "NetworkMsg.h"
+#include "InvalidateSharerMsg.h"
+#include "SpeculativeReadResponseMsg.h"
 #include <vector>
 
 namespace Memory
 {
 	class ReadMsg;
-	class InterventionSharedRequestMsg;
 	class WriteMsg;
 	class InvalidateMsg;
-	class InvalidateSharerMsg;
 	class EvictionMsg;
 	class ReadResponseMsg;
-	class SpeculativeReadResponseMsg;
 	class WriteResponseMsg;
 	class InvalidateResponseMsg;
 	class EvictionResponseMsg;
@@ -22,6 +21,7 @@ namespace Memory
 	class ThreeStageDirectory : public BaseMemDevice
 	{
 		typedef Address AddrTag;
+		// used for creating function pointers for OnRemote* methods
       typedef void (ThreeStageDirectory::*ThreeStageDirectoryMemFn)(const BaseMsg* msg, NodeID id);
 
 		class NodeIDCalculator
@@ -80,8 +80,7 @@ namespace Memory
 		HashSet<Address> pendingEviction;
 		HashMap<Address, BlockData> directoryData;
 		HashMap<Address, BlockData> pendingDirectoryExclusiveReadsDirectoryData;
-		HashMap<MessageID, LookupData<InterventionSharedRequestMsg> > pendingInterventionSharedRequests;
-      HashMap<MessageID, int> unsatisfiedRequests;
+      //HashMap<MessageID, int> unsatisfiedRequests;
 
 		//void PerformDirectoryFetch(Address a, NodeID src);
 		void PerformDirectoryFetch(const ReadMsg *msgIn, NodeID src);
@@ -97,7 +96,6 @@ namespace Memory
 		void OnLocalInvalidateResponse(const BaseMsg* msgIn);
 
 		void OnRemoteRead(const BaseMsg* msgIn, NodeID src);
-		void OnRemoteInterventionSharedRequest(const BaseMsg* msgIn, NodeID src);
 		void OnRemoteReadResponse(const BaseMsg* msgIn, NodeID src);
       void OnRemoteSpeculativeReadResponse(const BaseMsg* msgIn, NodeID src);
 		void OnRemoteWrite(const BaseMsg* msgIn, NodeID src);

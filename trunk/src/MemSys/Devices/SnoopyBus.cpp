@@ -147,7 +147,31 @@ namespace Memory
 					pendingTransfers[addr].satisfied = true;
 				}
 				break;
-			}
+			case(mt_Read):
+			   DebugFail("Should not be here");
+			   break;
+         case(mt_Eviction):
+            DebugFail("Should not be here");
+            break;
+         case(mt_InterventionSharedRead):
+            DebugFail("Should not be here");
+            break;
+         case(mt_Invalidate):
+            DebugFail("Should not be here");
+            break;
+         case(mt_InvalidateSharer):
+            DebugFail("Should not be here");
+            break;
+         case(mt_Network):
+            DebugFail("Should not be here");
+            break;
+         case(mt_SpeculativeReadResponse):
+            DebugFail("Should not be here");
+            break;
+         case(mt_Write):
+            DebugFail("Should not be here");
+            break;
+			} // switch(msg->Type())
 			pendingTransfers[addr].pendingResponses--;
 			if(pendingTransfers[addr].satisfied)
 			{
