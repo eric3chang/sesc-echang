@@ -1,6 +1,7 @@
 #pragma once
 #include "BaseMsg.h"
 #include "ReadMsg.h"
+#include "InterventionSharedRequestMsg.h"
 #include "WriteMsg.h"
 #include "InvalidateMsg.h"
 #include "InvalidateSharerMsg.h"
