@@ -431,7 +431,8 @@ namespace Memory
 #if defined DEBUG && defined _WIN32
       MessageID tempMsgID = m->MsgID();
 #endif
-		DebugAssert(pendingRemoteReads.find(m->solicitingMessage) != pendingRemoteReads.end());
+		DebugAssert(pendingRemoteReads.find(m->solicitingMessage)!=pendingRemoteReads.end()
+         || pendingInterventionSharedRequests.find(m->solicitingMessage)!=pendingInterventionSharedRequests.end());
 		LookupData<ReadMsg>& d = pendingRemoteReads[m->solicitingMessage];
 		DebugAssert(d.msg->MsgID() == m->solicitingMessage);
 
@@ -614,7 +615,8 @@ namespace Memory
       ld.sourceNode = src;
       ld.msg = m;
       pendingInterventionSharedRequests[m->MsgID()] = ld;
-	} // ThreeStageDirectory::OnRemoteInterventionSharedRead
+		SendMsg(localConnectionID, EM().ReplicateMsg(m), localSendTime);
+	} // ThreeStageDirectory::OnRemoteInterventionSharedRequest
 
 	void ThreeStageDirectory::OnRemoteReadResponse(const BaseMsg* msgIn, NodeID src)
 	{
@@ -1377,7 +1379,7 @@ namespace Memory
 
          // send intervention shared request to the previous owner
          NodeID previousOwner = b.owner;
-         ReadMsg* interventionSharedRequest = EM().CreateReadMsg(getDeviceID());
+         InterventionSharedRequestMsg* interventionSharedRequest = EM().CreateInterventionSharedRequestMsg(getDeviceID());
          interventionSharedRequest->addr = m->addr;
          interventionSharedRequest->alreadyHasBlock = false;
          interventionSharedRequest->directoryLookup = false;

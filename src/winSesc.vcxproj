@@ -399,6 +399,7 @@
     <ClInclude Include="libmint\icode.h" />
     <ClInclude Include="libll\Instruction.h" />
     <ClInclude Include="libll\InstType.h" />
+    <ClInclude Include="memsys\messages\interventionsharedrequestmsg.h" />
     <ClInclude Include="MemSys\Messages\InvalidateMsg.h" />
     <ClInclude Include="MemSys\Messages\InvalidateResponseMsg.h" />
     <ClInclude Include="libtrans\ITMCollisionDetection.h" />
