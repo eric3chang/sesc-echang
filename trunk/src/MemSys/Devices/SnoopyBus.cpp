@@ -153,9 +153,6 @@ namespace Memory
          case(mt_Eviction):
             DebugFail("Should not be here");
             break;
-         case(mt_InterventionSharedRead):
-            DebugFail("Should not be here");
-            break;
          case(mt_Invalidate):
             DebugFail("Should not be here");
             break;
@@ -163,9 +160,6 @@ namespace Memory
             DebugFail("Should not be here");
             break;
          case(mt_Network):
-            DebugFail("Should not be here");
-            break;
-         case(mt_SpeculativeReadResponse):
             DebugFail("Should not be here");
             break;
          case(mt_Write):

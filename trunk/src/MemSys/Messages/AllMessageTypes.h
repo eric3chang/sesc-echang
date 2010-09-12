@@ -6,7 +6,6 @@
 #include "InvalidateSharerMsg.h"
 #include "EvictionMsg.h"
 #include "ReadResponseMsg.h"
-#include "SpeculativeReadResponseMsg.h"
 #include "WriteResponseMsg.h"
 #include "InvalidateResponseMsg.h"
 #include "EvictionResponseMsg.h"

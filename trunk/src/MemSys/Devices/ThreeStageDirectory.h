@@ -4,7 +4,6 @@
 #include "../HashContainers.h"
 #include "NetworkMsg.h"
 #include "InvalidateSharerMsg.h"
-#include "SpeculativeReadResponseMsg.h"
 #include <vector>
 
 namespace Memory
@@ -80,6 +79,8 @@ namespace Memory
 		HashSet<Address> pendingEviction;
 		HashMap<Address, BlockData> directoryData;
 		HashMap<Address, BlockData> pendingDirectoryExclusiveReadsDirectoryData;
+      HashMap<MessageID, LookupData<ReadMsg> > pendingSpeculativeReads;
+      HashMap<Address, const ReadResponseMsg* > pendingSpeculativeReadResponses;
       //HashMap<MessageID, int> unsatisfiedRequests;
 
 		//void PerformDirectoryFetch(Address a, NodeID src);
@@ -88,6 +89,7 @@ namespace Memory
 		//void PerformDirectoryFetchOwner(const ReadMsg *msgIn, NodeID src);
 		void EraseDirectoryShare(Address a, NodeID id);
 		void AddDirectoryShare(Address a, NodeID id, bool exclusive);
+      void ChangeOwnerToShare(Address a, NodeID id);
 
 		void OnLocalRead(const BaseMsg* msgIn);
 		void OnLocalReadResponse(const BaseMsg* msgIn);
@@ -115,7 +117,7 @@ namespace Memory
 
 		void printDebugInfo(const char* fromMethod, const BaseMsg &myMessage, const char* operation);
 		void printDebugInfo(const char* fromMethod, const BaseMsg &myMessage, const char* operation,NodeID src);
-	   void printDebugInfo(const char* fromMethod,Address addr,NodeID id,const char* operation);
+	   void printDebugInfo(const char* fromMethod,Address addr,NodeID id,const char* operation="");
 	   void printEraseOwner(const char* fromMethod,Address addr,NodeID id,const char* operation);
 
 		void printPendingDirectorySharedReads();

@@ -13,6 +13,8 @@ namespace Memory
 		bool blockAttached;
       bool directoryLookup;
 		bool exclusiveOwnership;
+      bool isInterventionShared;
+      bool isSpeculative;
 		MessageID solicitingMessage;
 		NodeID originalRequestingNode;
 
@@ -32,6 +34,8 @@ namespace Memory
 		      << " blkAtt=" << blockAttached
             << " excluOwn=" << exclusiveOwnership
             << " solicMsg=" << solicitingMessage
+            << " intShd=" << isInterventionShared
+            << " spec=" << isSpeculative
 		   ;
 		}
 
