@@ -16,7 +16,7 @@
 //#define MEMORY_3_STAGE_DIRECTORY_DEBUG_DIRECTORY_DATA
 //#define MEMORY_3_STAGE_DIRECTORY_DEBUG_MSG_COUNT
 //#define MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_DIRECTORY_EXCLUSIVE_READS
-//#define MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_DIRECTORY_SHARED_READS
+#define MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_DIRECTORY_SHARED_READS
 //#define MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_EVICTION
 //#define MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_LOCAL_READS
 //#define MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_REMOTE_INVALIDATES
@@ -338,6 +338,7 @@ namespace Memory
 
 	void ThreeStageDirectory::AddDirectoryShare(Address a, NodeID id, bool exclusive)
 	{
+      DebugAssert(directoryNodeCalc->CalcNodeID(a)==nodeID);
 		BlockData& b = directoryData[a];
 		DebugAssert(!exclusive || (b.sharers.size() == 0 && (b.owner == id || b.owner == InvalidNodeID)));
 		if(b.owner == id || b.owner == InvalidNodeID)
@@ -357,6 +358,19 @@ namespace Memory
 #endif
 			b.sharers.insert(id);
 		}
+	}
+
+   void ThreeStageDirectory::ChangeOwnerToShare(Address a, NodeID id)
+	{
+      DebugAssert(directoryNodeCalc->CalcNodeID(a)==nodeID);
+		BlockData& b = directoryData[a];
+#ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_DIRECTORY_DATA
+         printDebugInfo("ChangeOwnerToShare",a, id);
+#endif
+		DebugAssert(b.owner==id);
+      DebugAssert(b.sharers.find(nodeID)==b.sharers.end());
+      b.owner = InvalidNodeID;
+      b.sharers.insert(id);
 	}
 
    /**
@@ -435,6 +449,7 @@ namespace Memory
 		DebugAssert(pendingRemoteReads.find(m->solicitingMessage)!=pendingRemoteReads.end());
       LookupData<ReadMsg> &d = pendingRemoteReads[m->solicitingMessage];
       DebugAssert(d.msg->originalRequestingNode != InvalidNodeID);
+      //DebugAssert(m->satisfied);
 
 		if (d.msg->isInterventionShared)
 		{
@@ -443,6 +458,8 @@ namespace Memory
          forward->originalRequestingNode = d.msg->originalRequestingNode;
          // changed this to true because of 3-stage directory
          forward->directoryLookup = true;
+         forward->isInterventionShared = true;
+         forward->isSpeculative = d.msg->isSpeculative;
          AutoDetermineDestSendMsg(forward,d.msg->originalRequestingNode,remoteSendTime+lookupTime,
                &ThreeStageDirectory::OnDirectoryBlockResponse,"OnLocalReadResponse","OnDirBlkResponse");
 
@@ -451,28 +468,35 @@ namespace Memory
          DebugAssert(d.msg->originalRequestingNode != InvalidNodeID);
          dirResponse->originalRequestingNode = d.msg->originalRequestingNode;
          dirResponse->directoryLookup = false;
-         AutoDetermineDestSendMsg(dirResponse,d.sourceNode,remoteSendTime+lookupTime,
+         dirResponse->isInterventionShared = true;
+         forward->isSpeculative = d.msg->isSpeculative;
+         AutoDetermineDestSendMsg(dirResponse,d.sourceNode,remoteSendTime,
                &ThreeStageDirectory::OnRemoteReadResponse,"OnLocalReadResponse","OnRemoteReadResponse");
 
-         EM().DisposeMsg(pendingRemoteReads[m->solicitingMessage].msg);
+         //EM().DisposeMsg(pendingRemoteReads[m->solicitingMessage].msg);
          EM().DisposeMsg(m);
          pendingRemoteReads.erase(m->solicitingMessage);
          return;
 		} // if (d.msg->isInterventionShared)
-		else
+      else if (d.msg->isSpeculative)
 		{
          // send response back to the requester
          ReadResponseMsg* forward = (ReadResponseMsg*)EM().ReplicateMsg(m);
-         forward->originalRequestingNode = d.msg->originalRequestingNode;
          // changed this to true because of 3-stage directory
          forward->directoryLookup = true;
-         AutoDetermineDestSendMsg(forward,d.msg->originalRequestingNode,remoteSendTime+lookupTime,
+         forward->isSpeculative = true;
+         forward->originalRequestingNode = d.msg->originalRequestingNode;
+         AutoDetermineDestSendMsg(forward,d.msg->originalRequestingNode,remoteSendTime,
                &ThreeStageDirectory::OnDirectoryBlockResponse,"OnLocalReadResponse","OnDirBlkResponse");
          EM().DisposeMsg(pendingRemoteReads[m->solicitingMessage].msg);
          EM().DisposeMsg(m);
          pendingRemoteReads.erase(m->solicitingMessage);
          return;
 		}
+      else
+      {
+         DebugFail("not supposed to be here");
+      }
 
 		/*(
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_REMOTE_READS
@@ -734,54 +758,48 @@ namespace Memory
 			} // else pendingDirectorySharedReads.find(m->addr) == pendingDirectorySharedReads.end())
 			EM().DisposeMsg(m);
 		}// if(m->satisfied)
-		else  // !m->satisfied
-		*/
-		{
-			//EraseDirectoryShare(m->addr,src);
-			//DebugAssert(directoryData[m->addr].owner == InvalidNodeID);
-         // DO NOT redo the fetch from OnRemoteReadResponse. We need to send it back to
-         // the original requester. Otherwise, it will mess up the m->solicitingMsg that
-         // is used in pendingLocalReads
-			DebugAssert(m->originalRequestingNode!=InvalidNodeID);
-			//PerformDirectoryFetch(m->addr,m->originalRequestingNode);
-			/*
-         if(m->originalRequestingNode == nodeID)
-         {
-#ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-            printDebugInfo("OnDirectoryBlockResponse",*m,"OnRemoteReadResponse",src);
-#endif
-            OnDirectoryBlockResponse(m,nodeID);
-         }
-         else
-			{
-				NetworkMsg* net = EM().CreateNetworkMsg(getDeviceID(),m->GeneratingPC());
-            net->destinationNode = m->originalRequestingNode;
-				net->sourceNode = nodeID;
-				net->payloadMsg = m;
-				SendMsg(remoteConnectionID, net, lookupTime + remoteSendTime);
-			}
-			*/
-		}
-      if(m->blockAttached)
+	   */
+      DebugAssert(m->originalRequestingNode!=InvalidNodeID);
+      if (m->isInterventionShared)
       {
-         WriteMsg* wm = EM().CreateWriteMsg(getDeviceID(), m->GeneratingPC());
-         wm->addr = m->addr;
-         wm->size = m->size;
-         wm->onCompletedCallback = NULL;
-         NetworkMsg* nm = EM().CreateNetworkMsg(getDeviceID(), m->GeneratingPC());
-         nm->sourceNode = nodeID;
-         nm->destinationNode = memoryNodeCalc->CalcNodeID(m->addr);
-         nm->payloadMsg = wm;
-         SendMsg(remoteConnectionID, nm, remoteSendTime);
+         DebugAssert(pendingDirectorySharedReads.find(m->addr)!=pendingDirectorySharedReads.end());
+         if(m->blockAttached)
+         {
+            WriteMsg* wm = EM().CreateWriteMsg(getDeviceID(), m->GeneratingPC());
+            wm->addr = m->addr;
+            wm->size = m->size;
+            wm->onCompletedCallback = NULL;
+            NetworkMsg* nm = EM().CreateNetworkMsg(getDeviceID(), m->GeneratingPC());
+            nm->sourceNode = nodeID;
+            nm->destinationNode = memoryNodeCalc->CalcNodeID(m->addr);
+            nm->payloadMsg = wm;
+            SendMsg(remoteConnectionID, nm, remoteSendTime);
+         }
+         LookupData<ReadMsg> &ld = pendingDirectorySharedReads[m->addr];
+         ChangeOwnerToShare(m->addr,ld.sourceNode);
+#ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_DIRECTORY_SHARED_READS
+         printDebugInfo("OnRemoteReadResponse",*m,("pendDirShRead.erase("
+            +to_string<Address>(m->addr)+")").c_str(),src);
+#endif
+         EM().DisposeMsg(pendingDirectorySharedReads[m->addr].msg);
+         pendingDirectorySharedReads.erase(m->addr);
+         EM().DisposeMsg(m);
       }
 	} // OnRemoteReadResponse
 
+   /**
+   Assume that speculative reply will arrive faster than shared response or ack because
+   the shared response or ack takes two hops as opposed to one hop
+   */
    void ThreeStageDirectory::OnRemoteSpeculativeReadResponse(const BaseMsg* msgIn, NodeID src)
    {
       DebugAssert(msgIn);
-      DebugAssert(msgIn->Type()==mt_SpeculativeReadResponse);
-      SpeculativeReadResponseMsg* m = (SpeculativeReadResponseMsg*)msgIn;
-      EM().DisposeMsg(m);
+      DebugAssert(msgIn->Type()==mt_ReadResponse);
+      ReadResponseMsg* m = (ReadResponseMsg*)msgIn;
+      DebugAssert(m->isSpeculative);
+      DebugAssert(pendingSpeculativeReadResponses.find(m->addr)==pendingSpeculativeReadResponses.end());
+
+      pendingSpeculativeReadResponses[m->addr] = m;
    }
 
 	void ThreeStageDirectory::OnRemoteWrite(const BaseMsg* msgIn, NodeID src)
@@ -1381,41 +1399,46 @@ namespace Memory
          EM().DisposeMsg(m);
          return;
       } // if ((b.owner==InvalidNodeID&&b.sharers.size()==0) || (b.owner==src&&b.sharers.size()==0))
-      else if (b.owner==InvalidNodeID && b.sharers.find(src)!=b.sharers.end())
+      else if (b.owner==InvalidNodeID && b.sharers.size()!=0)
       {// if directory state is shared, add requesting node to sharer and return shared reply
          // perform directory fetch before modifying directoryData
          PerformDirectoryFetch(m,src,false,*(b.sharers.begin()));
          b.sharers.insert(src);
          EM().DisposeMsg(m);
          return;
-      }
+      }// else if (b.owner==InvalidNodeID && b.sharers.size()!=0)
       else if (b.owner!=InvalidNodeID&&b.owner!=src)
       {// if directory state is Exclusive with another owner, transitions to Busy-shared with
          // requestor as owner and send out an intervention shared request to the previous
          // owner and a speculative reply to the requestor
+         DebugAssert(pendingDirectorySharedReads.find(m->addr)==pendingDirectorySharedReads.end());
 
          // send intervention shared request to the previous owner
          NodeID previousOwner = b.owner;
-         ReadMsg* read = EM().CreateReadMsg(getDeviceID());
-         read->addr = m->addr;
+         ReadMsg* read = (ReadMsg*)EM().ReplicateMsg(m);
          read->alreadyHasBlock = false;
          read->directoryLookup = false;
          read->isInterventionShared = true;
-         read->onCompletedCallback = NULL;
-         read->originalRequestingNode = m->originalRequestingNode;
          read->requestingExclusive = true;
-         read->size = m->size;
+#ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_DIRECTORY_SHARED_READS
+         printDebugInfo("OnDirBlkReqShRead",*m,("pendDirShRead.insert("
+            +to_string<Address>(m->addr)+")").c_str(),src);
+#endif
          pendingDirectorySharedReads[m->addr].sourceNode = src;
          pendingDirectorySharedReads[m->addr].msg = read;
          AutoDetermineDestSendMsg(read,previousOwner,localSendTime,
             &ThreeStageDirectory::OnRemoteRead,"OnDirBlkReqShRead","OnRemoteRead");
 
-         // send speculative reply to the requestor
-         SpeculativeReadResponseMsg* speculativeReply = EM().CreateSpeculativeReadResponseMsg(getDeviceID());
-         speculativeReply->addr = m->addr;
-         speculativeReply->solicitingMessage = m->MsgID();
-         AutoDetermineDestSendMsg(speculativeReply,src,localSendTime,&ThreeStageDirectory::OnRemoteSpeculativeReadResponse,
-            "OnDirBlkReqShRead","OnRemoteSpecReadRes");
+         // request speculative reply from a sharer
+         ReadMsg* speculativeRequest = (ReadMsg*)EM().ReplicateMsg(m);
+         speculativeRequest->alreadyHasBlock = false;
+         speculativeRequest->directoryLookup = false;
+         speculativeRequest->isInterventionShared = true;
+         speculativeRequest->requestingExclusive = false;
+         speculativeRequest->isInterventionShared = true;
+         speculativeRequest->isSpeculative = true;
+         AutoDetermineDestSendMsg(speculativeRequest,src,localSendTime,
+            &ThreeStageDirectory::OnRemoteSpeculativeReadResponse,"OnDirBlkReqShRead","OnRemoteSpecReadRes");
          b.owner = src;
          EM().DisposeMsg(m);
          return;
@@ -1644,6 +1667,13 @@ namespace Memory
 #endif
 						OnDirectoryBlockResponse(m,src);
 					}
+               else if (m->isSpeculative)
+               {
+#ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
+               printDebugInfo("OnRemoteSpeculativeReadResponse",*m,"RecvMsg",src);
+#endif
+			      OnRemoteSpeculativeReadResponse(m,src);
+               }
 					else
 					{
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
@@ -1653,14 +1683,6 @@ namespace Memory
 					}
 					break;
 				}
-         case(mt_SpeculativeReadResponse):
-            {
-#ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-               printDebugInfo("OnRemoteSpeculativeReadResponse",*payload,"RecvMsg",src);
-#endif
-			      OnRemoteSpeculativeReadResponse(payload,src);
-               break;
-            }
 			case(mt_WriteResponse):
 				{
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE

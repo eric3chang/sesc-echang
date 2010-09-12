@@ -18,6 +18,7 @@ namespace Memory
 		bool alreadyHasBlock;
 		bool directoryLookup;
 		bool isInterventionShared;
+      bool isSpeculative;
 		NodeID originalRequestingNode;
 
 		StoredFunctionBase* onCompletedCallback;
@@ -41,6 +42,8 @@ namespace Memory
 		         << " requestingEx=" << requestingExclusive
 		         << " alreadyHasBlk=" << alreadyHasBlock
 		         << " dirLookup=" << directoryLookup
+               << " intShd=" << isInterventionShared
+               << " spec=" << isSpeculative
 		   ;
 		}
 	};
