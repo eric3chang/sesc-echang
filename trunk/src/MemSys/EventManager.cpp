@@ -20,8 +20,7 @@ namespace Memory
 		ReadMsg* m = readPool.Take();
 		m->directoryLookup = false;
 		m->originalRequestingNode = InvalidNodeID;
-		m->isInterventionShared = false;
-      m->isInterventionExclusive = false;
+		m->isIntervention = false;
       //m->isSpeculative = false;
 		m->SetIDInfo(currentMsgStamp++,devID,generatingPC);
 		return m;
@@ -36,7 +35,6 @@ namespace Memory
 	{
 		InvalidateMsg* m = invalidatePool.Take();
 		m->SetIDInfo(currentMsgStamp++,devID,generatingPC);
-      m->expectedAcksCount = InvalidAckCount;
       m->newOwner = InvalidNodeID;
 		return m;
 	}
@@ -57,10 +55,9 @@ namespace Memory
 	{
 		ReadResponseMsg* m = readResponsePool.Take();
 		m->directoryLookup = false;
-      m->isInterventionShared = false;
-      m->isInterventionExclusive = false;
+      m->isIntervention = false;
       //m->isSpeculative = false;
-      m->hasInvalidatesPending = false;
+      m->pendingInvalidates = INVALID_PENDING_INVALIDATES;
 		m->originalRequestingNode = InvalidNodeID;
 		m->SetIDInfo(currentMsgStamp++,devID,generatingPC);
 		return m;
