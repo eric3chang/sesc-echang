@@ -486,6 +486,9 @@
     <ClInclude Include="memsys\messages\interventionsharedrequestmsg.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MemSys\Messages\EvictionBusyAckMsg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="libmem\AddressPrefetcher.cpp">

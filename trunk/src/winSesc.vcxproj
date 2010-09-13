@@ -298,6 +298,7 @@
     <ClInclude Include="libmint\event.h" />
     <ClInclude Include="MemSys\EventManager.h" />
     <ClInclude Include="libll\Events.h" />
+    <ClInclude Include="MemSys\Messages\EvictionBusyAckMsg.h" />
     <ClInclude Include="MemSys\Messages\EvictionMsg.h" />
     <ClInclude Include="MemSys\Messages\EvictionResponseMsg.h" />
     <ClInclude Include="libll\ExecutionFlow.h" />
