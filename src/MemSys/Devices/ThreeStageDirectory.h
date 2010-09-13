@@ -57,6 +57,12 @@ namespace Memory
 			const T* msg;
 			NodeID sourceNode;
 		};
+      class InvalidateData
+      {
+      public:
+         const ReadResponseMsg* msg;
+         int count;
+      };
 
 		TimeDelta localSendTime;
 		TimeDelta remoteSendTime;
@@ -76,9 +82,10 @@ namespace Memory
 		HashMap<MessageID, LookupData<InvalidateMsg> > pendingRemoteInvalidates;
 		HashMap<Address, LookupData<ReadMsg> > pendingDirectorySharedReads;
 		HashMap<Address, LookupData<ReadMsg> > pendingDirectoryExclusiveReads;
+      HashMap<MessageID, InvalidateData> waitingForInvalidates;
 		HashSet<Address> pendingEviction;
 		HashMap<Address, BlockData> directoryData;
-		HashMap<Address, BlockData> pendingDirectoryExclusiveReadsDirectoryData;
+		//HashMap<Address, BlockData> pendingDirectoryExclusiveReadsDirectoryData;
       //HashMap<MessageID, LookupData<ReadMsg> > pendingSpeculativeReads;
       //HashMap<Address, const ReadResponseMsg* > pendingSpeculativeReadResponses;
       //HashMap<MessageID, int> unsatisfiedRequests;
@@ -87,6 +94,7 @@ namespace Memory
 		void PerformDirectoryFetch(const ReadMsg *msgIn, NodeID src);
       void PerformDirectoryFetch(const ReadMsg *msgIn,NodeID src,bool isExclusive,NodeID target);
 		//void PerformDirectoryFetchOwner(const ReadMsg *msgIn, NodeID src);
+      void SendLocalReadResponse(const ReadResponseMsg *msgIn);
 		void EraseDirectoryShare(Address a, NodeID id);
 		void AddDirectoryShare(Address a, NodeID id, bool exclusive);
       void ChangeOwnerToShare(Address a, NodeID id);

@@ -4,6 +4,8 @@
 
 namespace Memory
 {
+   const int INVALID_PENDING_INVALIDATES = -1;
+
 	class ReadResponseMsg : public BaseMsg
 	{
 	public:
@@ -13,17 +15,12 @@ namespace Memory
 		bool blockAttached;
       bool directoryLookup;
 		bool exclusiveOwnership;
-      bool hasInvalidatesPending;
-      bool isInterventionShared;
-      bool isInterventionExclusive;
+      bool isIntervention;
+      int pendingInvalidates;
       //bool isSpeculative;   // not implementing speculative right now
 		MessageID solicitingMessage;
 		NodeID originalRequestingNode;
 
-		// making directoryLookup false here is not enough,
-		// because ReadResponseMsg can get reused from
-		// Memsys/Pool::Take()
-      ReadResponseMsg() : directoryLookup(false) {}
 		virtual bool IsResponse() const { return true; }
 		virtual size_t MsgSize() const { return 1 + sizeof(Address) + (blockAttached ? size : 0); }
 		virtual MsgType Type() const { return mt_ReadResponse; }
@@ -36,9 +33,8 @@ namespace Memory
 		      << " blkAtt=" << blockAttached
             << " excluOwn=" << exclusiveOwnership
             << " solicMsg=" << solicitingMessage
-            << " intShd=" << isInterventionShared
-            << " intEx=" << isInterventionExclusive
-            << " hasInvPend=" << hasInvalidatesPending
+            << " interv=" << isIntervention
+            << " pendInv=" << pendingInvalidates
             //<< " spec=" << isSpeculative
 		   ;
 		}
