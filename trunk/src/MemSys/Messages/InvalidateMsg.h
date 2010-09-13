@@ -3,10 +3,14 @@
 
 namespace Memory
 {
+   const int InvalidAckCount = -1;
+
 	class InvalidateMsg : public BaseMsg
 	{
 	public:
 		Address addr;
+      int expectedAcksCount;
+      NodeID newOwner;
 		size_t size;
 
 		virtual bool IsResponse() const { return false; }
@@ -17,6 +21,8 @@ namespace Memory
 		{
 		   BaseMsg::print(destinationDeviceID);
 		   cout << " addr=" << addr
+            << " acksCnt=" << expectedAcksCount
+            << " newOwner=" << newOwner
 		   ;
 		}
 	};

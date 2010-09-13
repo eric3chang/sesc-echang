@@ -13,7 +13,9 @@ namespace Memory
 		bool blockAttached;
       bool directoryLookup;
 		bool exclusiveOwnership;
+      bool hasInvalidatesPending;
       bool isInterventionShared;
+      bool isInterventionExclusive;
       //bool isSpeculative;   // not implementing speculative right now
 		MessageID solicitingMessage;
 		NodeID originalRequestingNode;
@@ -35,6 +37,8 @@ namespace Memory
             << " excluOwn=" << exclusiveOwnership
             << " solicMsg=" << solicitingMessage
             << " intShd=" << isInterventionShared
+            << " intEx=" << isInterventionExclusive
+            << " hasInvPend=" << hasInvalidatesPending
             //<< " spec=" << isSpeculative
 		   ;
 		}

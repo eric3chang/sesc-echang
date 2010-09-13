@@ -110,6 +110,7 @@ namespace Memory
 
 		void OnDirectoryBlockRequest(const BaseMsg* msgIn, NodeID src);
       void OnDirectoryBlockRequestSharedRead(const BaseMsg* msgIn, NodeID src);
+      void OnDirectoryBlockRequestExclusiveRead(const BaseMsg* msgIn, NodeID src);
 		void OnDirectoryBlockResponse(const BaseMsg* msgIn, NodeID src);
 
       void AutoDetermineDestSendMsg(const BaseMsg* msg, NodeID dest, TimeDelta sendTime,

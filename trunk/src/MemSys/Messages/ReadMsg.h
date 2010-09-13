@@ -18,6 +18,7 @@ namespace Memory
 		bool alreadyHasBlock;
 		bool directoryLookup;
 		bool isInterventionShared;
+      bool isInterventionExclusive;
       //bool isSpeculative;
 		NodeID originalRequestingNode;
 
@@ -43,6 +44,7 @@ namespace Memory
 		         << " hasBlk=" << alreadyHasBlock
 		         << " dirLookup=" << directoryLookup
                << " intShd=" << isInterventionShared
+               << " intEx=" << isInterventionExclusive
                //<< " spec=" << isSpeculative
 		   ;
 		}
