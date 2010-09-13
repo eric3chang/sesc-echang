@@ -477,6 +477,7 @@ namespace Memory
 
 		if (d.msg->isIntervention)
 		{
+         DebugAssert(m->blockAttached);
          // send response back to the requester
          ReadResponseMsg* forward = (ReadResponseMsg*)EM().ReplicateMsg(m);
          forward->originalRequestingNode = d.msg->originalRequestingNode;
@@ -495,7 +496,7 @@ namespace Memory
          dirResponse->directoryLookup = false;
          dirResponse->isIntervention = true;
          //forward->isSpeculative = d.msg->isSpeculative;
-         AutoDetermineDestSendMsg(dirResponse,d.sourceNode,remoteSendTime,
+         AutoDetermineDestSendMsg(dirResponse,d.sourceNode,remoteSendTime+lookupTime,
                &ThreeStageDirectory::OnRemoteReadResponse,"OnLocalReadResponse","OnRemoteReadResponse");
 		} // if (d.msg->isInterventionShared)
       // not doing speculative replies right now
@@ -693,11 +694,10 @@ namespace Memory
       DebugAssert(msgIn->Type()==mt_ReadResponse);
       ReadResponseMsg* m = (ReadResponseMsg*)msgIn;
 		DebugAssert(!m->directoryLookup);
-		//DebugAssert(pendingDirectorySharedReads.find(m->addr) != pendingDirectorySharedReads.end() || pendingDirectoryExclusiveReads.find(m->addr) != pendingDirectoryExclusiveReads.end());
-		//DebugAssert(pendingDirectorySharedReads.find(m->addr) == pendingDirectorySharedReads.end() || pendingDirectoryExclusiveReads.find(m->addr) == pendingDirectoryExclusiveReads.end());
+		DebugAssert(pendingDirectorySharedReads.find(m->addr) != pendingDirectorySharedReads.end() || pendingDirectoryExclusiveReads.find(m->addr) != pendingDirectoryExclusiveReads.end());
+		DebugAssert(pendingDirectorySharedReads.find(m->addr) == pendingDirectorySharedReads.end() || pendingDirectoryExclusiveReads.find(m->addr) == pendingDirectoryExclusiveReads.end());
 		DebugAssert(directoryData.find(m->addr) != directoryData.end());
 		DebugAssert(m->satisfied);
-      DebugAssert(m->isIntervention);
 		/*
 		if(m->satisfied)
 		{
@@ -800,9 +800,9 @@ namespace Memory
       DebugAssert(m->originalRequestingNode!=InvalidNodeID);
       // directory receives shared writeback/transfer, updates memory if it is shared writeback,
          // then transitions to the shared state
-      if (m->isIntervention)
+      DebugAssert(m->isIntervention);
+      if (m->isIntervention && pendingDirectorySharedReads.find(m->addr)!=pendingDirectorySharedReads.end())
       {
-         DebugAssert(pendingDirectorySharedReads.find(m->addr)!=pendingDirectorySharedReads.end());
          if(m->blockAttached)
          {
             WriteMsg* wm = EM().CreateWriteMsg(getDeviceID(), m->GeneratingPC());
@@ -823,8 +823,41 @@ namespace Memory
 #endif
          EM().DisposeMsg(pendingDirectorySharedReads[m->addr].msg);
          pendingDirectorySharedReads.erase(m->addr);
-         EM().DisposeMsg(m);
       }
+      else if (m->isIntervention && pendingDirectoryExclusiveReads.find(m->addr)!=pendingDirectoryExclusiveReads.end())
+      {
+         // block should be attached no matter what because we requested from previous owner
+         DebugAssert(m->blockAttached);
+         if(m->blockAttached)
+         {
+            WriteMsg* wm = EM().CreateWriteMsg(getDeviceID(), m->GeneratingPC());
+            wm->addr = m->addr;
+            wm->size = m->size;
+            wm->onCompletedCallback = NULL;
+            NetworkMsg* nm = EM().CreateNetworkMsg(getDeviceID(), m->GeneratingPC());
+            nm->sourceNode = nodeID;
+            nm->destinationNode = memoryNodeCalc->CalcNodeID(m->addr);
+            nm->payloadMsg = wm;
+            SendMsg(remoteConnectionID, nm, remoteSendTime);
+         }
+         LookupData<ReadMsg> &ld = pendingDirectoryExclusiveReads[m->addr];
+         BlockData &b = directoryData[m->addr];
+         // transition to exclusive state with new owner
+         b.sharers.clear();
+         b.owner = ld.sourceNode;
+#ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_DIRECTORY_SHARED_READS
+         printDebugInfo("OnRemoteReadResponse",*m,("pendDirExRead.erase("
+            +to_string<Address>(m->addr)+")").c_str(),src);
+#endif
+         EM().DisposeMsg(pendingDirectoryExclusiveReads[m->addr].msg);
+         pendingDirectoryExclusiveReads.erase(m->addr);
+      }
+      else
+      {
+         DebugFail("should not be here");
+      }
+      
+      EM().DisposeMsg(m);
 	} // OnRemoteReadResponse
 
    /**
@@ -1427,7 +1460,7 @@ namespace Memory
          // requestor as owner and send out an intervention exclusive request to the previous
          // owner and a speculative reply to the requestor
 
-         // size should be if we don't allow the owner state
+         // size should be 0 if we don't allow the owner state?
          DebugAssert(b.sharers.size()==0);
          DebugAssert(pendingDirectoryExclusiveReads.find(m->addr)==pendingDirectoryExclusiveReads.end());
 
