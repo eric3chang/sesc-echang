@@ -12,12 +12,12 @@ namespace Memory
 	class ReadMsg;
 	class WriteMsg;
 	class InvalidateMsg;
-	class InvalidateSharerMsg;
 	class EvictionMsg;
 	class ReadResponseMsg;
 	class WriteResponseMsg;
 	class InvalidateResponseMsg;
 	class EvictionResponseMsg;
+   class EvictionBusyAckMsg;
 	class BaseMemDevice;
 	class EventManager
 	{
@@ -36,23 +36,23 @@ namespace Memory
 		Pool<ReadMsg> readPool;
 		Pool<WriteMsg> writePool;
 		Pool<InvalidateMsg> invalidatePool;
-		Pool<InvalidateSharerMsg> invalidateSharerPool;
 		Pool<EvictionMsg> evictionPool;
 		Pool<ReadResponseMsg> readResponsePool;
 		Pool<WriteResponseMsg> writeResponsePool;
 		Pool<InvalidateResponseMsg> invalidateResponsePool;
 		Pool<EvictionResponseMsg> evictionResponsePool;
+		Pool<EvictionBusyAckMsg> evictionBusyAckPool;
 		Pool<NetworkMsg> networkPool;
 	public:
 		ReadMsg* CreateReadMsg(DeviceID devID, Address generatingPC = 0);
 		WriteMsg* CreateWriteMsg(DeviceID devID, Address generatingPC = 0);
 		InvalidateMsg* CreateInvalidateMsg(DeviceID devID, Address generatingPC = 0);
-		InvalidateSharerMsg* CreateInvalidateSharerMsg(DeviceID devID, Address generatingPC = 0);
 		EvictionMsg* CreateEvictionMsg(DeviceID devID, Address generatingPC = 0);
 		ReadResponseMsg* CreateReadResponseMsg(DeviceID devID, Address generatingPC = 0);
 		WriteResponseMsg* CreateWriteResponseMsg(DeviceID devID, Address generatingPC = 0);
 		InvalidateResponseMsg* CreateInvalidateResponseMsg(DeviceID devID, Address generatingPC = 0);
 		EvictionResponseMsg* CreateEvictionResponseMsg(DeviceID devID, Address generatingPC = 0);
+		EvictionBusyAckMsg* CreateEvictionBusyAckMsg(DeviceID devID, Address generatingPC = 0);
 		NetworkMsg* CreateNetworkMsg(DeviceID devID, Address generatingPC = 0);
 
 		BaseMsg* ReplicateMsg(const BaseMsg* msg);

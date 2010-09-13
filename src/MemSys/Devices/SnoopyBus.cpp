@@ -153,10 +153,10 @@ namespace Memory
          case(mt_Eviction):
             DebugFail("Should not be here");
             break;
-         case(mt_Invalidate):
+         case(mt_EvictionBusyAck):
             DebugFail("Should not be here");
             break;
-         case(mt_InvalidateSharer):
+         case(mt_Invalidate):
             DebugFail("Should not be here");
             break;
          case(mt_Network):

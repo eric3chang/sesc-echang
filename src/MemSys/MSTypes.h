@@ -20,12 +20,12 @@ namespace Memory
 		mt_Write,
 		mt_Invalidate,
 		mt_Eviction,
-		mt_InvalidateSharer,
 
 		mt_ReadResponse,
 		mt_WriteResponse,
 		mt_InvalidateResponse,
 		mt_EvictionResponse,
+      mt_EvictionBusyAck,
 
 		mt_Network,
 	};

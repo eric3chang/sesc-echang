@@ -3,7 +3,6 @@
 #include "../StoredFunctionCall.h"
 #include "../HashContainers.h"
 #include "NetworkMsg.h"
-#include "InvalidateSharerMsg.h"
 #include <vector>
 
 namespace Memory
@@ -82,6 +81,7 @@ namespace Memory
 		HashMap<MessageID, LookupData<InvalidateMsg> > pendingRemoteInvalidates;
 		HashMap<Address, LookupData<ReadMsg> > pendingDirectorySharedReads;
 		HashMap<Address, LookupData<ReadMsg> > pendingDirectoryExclusiveReads;
+      HashSet<Address> pendingIgnoreInterventions;
       HashMap<MessageID, InvalidateData> waitingForInvalidates;
 		HashSet<Address> pendingEviction;
 		HashMap<Address, BlockData> directoryData;
@@ -112,8 +112,8 @@ namespace Memory
 		void OnRemoteWriteResponse(const BaseMsg* msgIn, NodeID src);
 		void OnRemoteEviction(const BaseMsg* msgIn, NodeID src);
 		void OnRemoteEvictionResponse(const BaseMsg* msgIn, NodeID src);
+		void OnRemoteEvictionBusyAck(const BaseMsg* msgIn, NodeID src);
 		void OnRemoteInvalidate(const BaseMsg* msgIn, NodeID src);
-      void OnRemoteInvalidateSharer(const BaseMsg* msgIn, NodeID src);
 		void OnRemoteInvalidateResponse(const BaseMsg* msgIn, NodeID src);
 
 		void OnDirectoryBlockRequest(const BaseMsg* msgIn, NodeID src);
