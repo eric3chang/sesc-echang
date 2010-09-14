@@ -116,7 +116,7 @@ Only having three states, however, does simplify the implementation somewhat.
 [[Section 06.3.2 MOESI Cache]]
 The MOESI protocol was used in both L1 and L2 cache. This protocol was chosen because it contains the most states. The advantages to that is that it reduces the traffic going across the network. The "Owned" state allows dirty lines to be shared quickly (Wikipedia MOESI). The disadvantage of this protocol is that it uses the most amount of space to store this information, since it needs to store more states, compared to MESI, MOSI, or MSI protocols.
 
-The cache size can be determined by associativity * number of sets * width. For example, in my system, this could be 4 * 4 * 64, in the case of the L1 cache. This gives it 16 blocks of 64-bit data to have a 1kB L1 cache. In the case of the L2 cache, I used an assotiativity of 4 with 8 sets to get 32 blocks. this equates to a 2kB cache.
+The cache size can be determined by associativity * number of sets * width. For example, in my system, this could be 4 * 4 * 64, in the case of the L1 cache. This gives it 16 blocks of 64-bit data to have a 1kB L1 cache. In the case of the L2 cache, I used an associativity of 4 with 8 sets to get 32 blocks. this equates to a 2kB cache.
 
 [[Section 06.4 Four-Stage Directory]]
 In a directory-based cache-coherence protocol, lookups will always go to the directory. However, data replies can either go through the directory, first, or it can go straight to the requester. In my implementation of the directory, the data reply go to the directory first, and the directory decides who the original requester is and forwards the data to the original requester.
