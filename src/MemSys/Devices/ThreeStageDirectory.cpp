@@ -953,7 +953,7 @@ namespace Memory
          AutoDetermineDestSendMsg(rm,src,remoteSendTime,&ThreeStageDirectory::OnRemoteEvictionResponse
             ,"OnRemoteEviction","OnRemoteEvictionResponse");
 
-         b.owner==InvalidNodeID;
+         b.owner=InvalidNodeID;
       }
       else if (pendingDirectorySharedReads.find(m->addr)!=pendingDirectorySharedReads.end())
       {// if directory state is Busy-shared, transitions to shared, a shared response is returned to
@@ -1155,7 +1155,7 @@ namespace Memory
 
 		if(pendingDirectoryExclusiveReads.find(m->addr) != pendingDirectoryExclusiveReads.end())
 		{
-		   BlockData &b = BlockData();
+		   BlockData b = BlockData();
 		   if (b.owner == src)
 		   {
 		      b.owner = InvalidNodeID;
