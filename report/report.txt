@@ -56,6 +56,9 @@ increasing cache size increases coherence misses because more invalidates occur 
 
 Increasing block size means capacity miss decreases and compulsory miss decreases for certain applications. When this happens, it most likely means that there is a lot of spatial locality in the code, such as when running kernel code. Because increasing block size grabs more of the code in the same area together, which directly reduces compulsory misses. The capacity miss is reduced because we're storing more of the necessary code in the cache (Hennessey 228).
 
+[[Section 04.1 Snoopy-based cache-coherence protocol]]
+The snoopy-based cache-coherence protocol relies on the bus to transfer necessary information.
+
 [[Section 04]]
 Section 04 Table. What MOESI means to each memory unit
 
