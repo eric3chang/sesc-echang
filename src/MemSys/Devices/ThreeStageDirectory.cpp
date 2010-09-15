@@ -362,6 +362,7 @@ namespace Memory
 
 	void ThreeStageDirectory::AddDirectoryShare(Address a, NodeID id, bool exclusive)
 	{
+	   /*
       DebugAssert(directoryNodeCalc->CalcNodeID(a)==nodeID);
 		BlockData& b = directoryData[a];
 		DebugAssert(!exclusive || (b.sharers.size() == 0 && (b.owner == id || b.owner == InvalidNodeID)));
@@ -382,6 +383,7 @@ namespace Memory
 #endif
 			b.sharers.insert(id);
 		}
+		*/
 	}
 
    void ThreeStageDirectory::ChangeOwnerToShare(Address a, NodeID id)
@@ -394,7 +396,8 @@ namespace Memory
 		DebugAssert(b.owner==id);
       DebugAssert(b.sharers.find(nodeID)==b.sharers.end());
       b.owner = InvalidNodeID;
-      b.sharers.insert(id);
+      //TODO 2010/09/15 Eric
+      //b.sharers.insert(id);
 	}
 
    /**
@@ -473,11 +476,13 @@ namespace Memory
 		DebugAssert(pendingRemoteReads.find(m->solicitingMessage)!=pendingRemoteReads.end());
       LookupData<ReadMsg> &d = pendingRemoteReads[m->solicitingMessage];
       DebugAssert(d.msg->originalRequestingNode != InvalidNodeID);
-      DebugAssert(m->satisfied);
+      //TODO 2010/09/15 Eric
+      //DebugAssert(m->satisfied);
 
 		if (d.msg->isIntervention)
 		{
-         DebugAssert(m->blockAttached);
+		   //TODO 2010/09/15 Eric
+         //DebugAssert(m->blockAttached);
          // send response back to the requester
          ReadResponseMsg* forward = (ReadResponseMsg*)EM().ReplicateMsg(m);
          forward->originalRequestingNode = d.msg->originalRequestingNode;
@@ -821,7 +826,8 @@ namespace Memory
       }
 
       DebugAssert(m->isIntervention);
-		DebugAssert(m->satisfied);
+      //TODO 2010/09/15 Eric
+		//DebugAssert(m->satisfied);
       if (m->isIntervention && pendingDirectorySharedReads.find(m->addr)!=pendingDirectorySharedReads.end())
       {
          if(m->blockAttached)
@@ -1016,10 +1022,13 @@ namespace Memory
          EM().DisposeMsg(pendingDirectoryExclusiveReads[m->addr].msg);
          pendingDirectoryExclusiveReads.erase(m->addr);
       }
+      //TODO 2010/09/15 Eric
+      /*
       else
       {
          DebugFail("should not reach here");
       }
+      */
 
       // if block is attached, write back to memory
 		if(m->blockAttached)
@@ -1385,7 +1394,9 @@ namespace Memory
          // perform directory fetch before modifying directoryData
          PerformDirectoryFetch(m,src,false,*(b.sharers.begin()));
          DebugAssert(b.sharers.find(src)==b.sharers.end());
-         b.sharers.insert(src);
+         //TODO 2010/09/15 Eric
+         //b.sharers.insert(src);
+
          // do not dispose msg here, because we are forwarding it
          //EM().DisposeMsg(m);
          return;
@@ -1669,6 +1680,8 @@ namespace Memory
 		}
 		directoryNodeCalc->Initialize(dirCalc);
 		memoryNodeCalc->Initialize(memCalc);
+
+		messagesReceived = 0;
 	}
 	/**
 	 * this is used for checkpoint purposes
@@ -1676,12 +1689,11 @@ namespace Memory
 	void ThreeStageDirectory::DumpRunningState(RootConfigNode& node)
 	{}
 	/**
-	 * put anything here that you might want to output to the terminal
+	 * put anything here that you might want to output to the report file
 	 */
 	void ThreeStageDirectory::DumpStats(std::ostream& out)
 	{
-	   std::cout << "My name is Eric" << std::endl;
-	   out << "My name is Eric" << std::endl;
+	   out << "messagesReceived:" << messagesReceived << std::endl;
 	}
 	/**
 	 * Handles all the incoming messages from outside of the directory.
@@ -1689,6 +1701,7 @@ namespace Memory
 	 */
 	void ThreeStageDirectory::RecvMsg(const BaseMsg* msg, int connectionID)
 	{
+	   messagesReceived++;
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_COUNTERS
 	   cout << threeStageDirectoryEraseDirectoryShareCounter << endl;
 #endif

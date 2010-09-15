@@ -63,6 +63,8 @@ namespace Memory
          int count;
       };
 
+      unsigned int messagesReceived;
+
 		TimeDelta localSendTime;
 		TimeDelta remoteSendTime;
 		TimeDelta lookupTime;
