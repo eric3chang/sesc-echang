@@ -43,8 +43,7 @@ namespace Memory
 		int ConnectionCount();
 		Connection& GetConnection(int index);
 		EventManager& EM();
-		DeviceID ID() const;
-		// added this because compiler sometimes think ID() is #define from nanassert
+		// changed this because compiler sometimes think ID() is #define from nanassert
 	   DeviceID getDeviceID() const;
 		const std::string& DeviceName();
 

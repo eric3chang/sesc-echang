@@ -72,13 +72,9 @@ namespace Memory
 	{
 		return *em;
 	}
-	DeviceID BaseMemDevice::ID() const
-	{
-	   return deviceID;
-	}
 	DeviceID BaseMemDevice::getDeviceID() const
 	{
-		return ID();
+		return deviceID;
 	}
 	const std::string& BaseMemDevice::DeviceName()
 	{

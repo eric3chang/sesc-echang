@@ -59,6 +59,7 @@ Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #include "ThreadContext.h"
 #include "OSSim.h"
 
+#include "Devices/AllDeviceTypes.h"
 
 OSSim   *osSim=0;
 uint64_t globalInstructionStampCounter = 1;
@@ -974,6 +975,45 @@ void OSSim::simFinish()
   Report::field("OSSim:endTime=%s", ctime(&t));
 
   Report::close();
+
+  if(SescConf->checkCharPtr("","MemDeviceReportFile"))
+  {
+     std::ofstream out(SescConf->getCharPtr("","MemDeviceReportFile"),std::ios::out);
+     out << "Group string ReportFileName " << SescConf->getCharPtr("","MemDeviceReportFile");
+     if(SescConf->checkCharPtr("","BenchName"))
+     {
+        out << " string BenchName " << SescConf->getCharPtr("","BenchName");
+     }
+     for(unsigned int i = 0; i < cpus.size(); i++)
+     {
+        if(SescConf->checkInt("","ProcessorSkew",i))
+        {
+           out << " int ProcessorSkew" << i << " " << SescConf->getInt("","ProcessorSkew",i);
+        }
+        else
+        {
+           out << " int ProcessorSkew" << i << " 0";
+        }
+     }
+     out << " #" << std::endl;
+     out << "int TotalRunTime " << globalClock << " #" << std::endl;
+     std::cout << "Dumping stats" << std::endl;
+
+     using Memory::BaseMemDevice;
+     std::vector<BaseMemDevice*>deviceSet = MemSys_system.getDeviceSet();
+
+     for (std::vector<BaseMemDevice*>::iterator i=deviceSet.begin(); i!=deviceSet.end(); i++)
+     {
+        BaseMemDevice* ptr = *i;
+        out << ptr->DeviceName() << std::endl;
+        ptr->DumpStats(out);
+        out << std::endl;
+     }
+
+     //TMInterface::DumpStats(out);
+     out << "EndGroup #" << std::endl;
+     out.close();
+  }
 
   if(SescConf->checkCharPtr("","ReportFile"))
   {

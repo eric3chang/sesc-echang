@@ -175,4 +175,8 @@ namespace Memory
 			eventManagerSet[i]->ProcessTick();
 		}
 	}
+	std::vector<BaseMemDevice*> & MemorySystem::getDeviceSet()
+   {
+	   return deviceSet;
+   }
 }

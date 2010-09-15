@@ -61,7 +61,8 @@ namespace Memory
 		{
 		case MemRead:
 			{
-				ReadMsg* r = EM().CreateReadMsg(this->ID(),(Address)(mreq->dinst->getInst()->addr));
+			   readCount++;
+				ReadMsg* r = EM().CreateReadMsg(this->getDeviceID(),(Address)(mreq->dinst->getInst()->addr));
 				r->addr = (Address)mreq->getPAddr();
 				r->size = 1;
 				r->alreadyHasBlock = false;
@@ -72,7 +73,8 @@ namespace Memory
 			}
 		case MemWrite:
 			{
-				WriteMsg* w = EM().CreateWriteMsg(this->ID(),(Address)(mreq->dinst->getInst()->addr));
+			   writeCount++;
+				WriteMsg* w = EM().CreateWriteMsg(this->getDeviceID(),(Address)(mreq->dinst->getInst()->addr));
 				msg = w;
 				w->addr = (Address)mreq->getPAddr();
 				w->size = 1;
@@ -118,9 +120,16 @@ namespace Memory
 		toDevice = connectionSet[0];
 		maxTransferCount = 32;
 #endif
+		readCount = 0;
+		writeCount = 0;
 	}
 	void SESCProcessorInterface::DumpRunningState(RootConfigNode& node){}
-	void SESCProcessorInterface::DumpStats(std::ostream& out){}
+	void SESCProcessorInterface::DumpStats(std::ostream& out)
+	{
+	   out << "readCount:" << readCount << std::endl;
+	   out << "writeCount:" << writeCount << std::endl;
+	   out << "totalOperations:" << readCount+writeCount << std::endl;
+	}
 	void SESCProcessorInterface::RecvMsg(const BaseMsg* msg, int connectionID)
 	{
 #ifdef SYSTEM_SESC

@@ -741,19 +741,20 @@ namespace Memory
 		}
 		directoryNodeCalc->Initialize(dirCalc);
 		memoryNodeCalc->Initialize(memCalc);
-	}
+
+      messagesReceived = 0;
+	}  // Directory::Initialize()
 	/**
 	 * this is used for checkpoint purposes
 	 */
 	void Directory::DumpRunningState(RootConfigNode& node)
 	{}
 	/**
-	 * put anything here that you might want to output to the terminal
+	 * put anything here that you might want to output to the report file
 	 */
 	void Directory::DumpStats(std::ostream& out)
 	{
-	   std::cout << "My name is Eric" << std::endl;
-	   out << "My name is Eric" << std::endl;
+	   out << "messagesReceived:" << messagesReceived << std::endl;
 	}
 	/**
 	 * Handles all the incoming messages from outside of the directory.
@@ -761,6 +762,7 @@ namespace Memory
 	 */
 	void Directory::RecvMsg(const BaseMsg* msg, int connectionID)
 	{
+	   messagesReceived++;
 #ifdef MEMORY_DIRECTORY_DEBUG_MSG_COUNT
 	   cout << "Directory::RecvMsg: " << memoryDirectoryGlobalInt++ << ' ' << endl;
 #endif

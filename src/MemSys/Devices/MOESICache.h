@@ -68,6 +68,12 @@ namespace Memory
 		public:
 			virtual int Evict(BlockState* set, int setSize);
 		};
+		unsigned int messagesReceived;
+		unsigned int readHits;
+		unsigned int readMisses;
+		unsigned int writeHits;
+		unsigned int writeMisses;
+
 		TimeDelta hitTime;
 		TimeDelta missTime;
 		TimeDelta evictionTime;

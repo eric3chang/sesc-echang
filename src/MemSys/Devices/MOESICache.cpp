@@ -158,7 +158,7 @@ namespace Memory
 
             if(pendingInvalidate.find(tag) == pendingInvalidate.end())
             {
-               InvalidateMsg* im = EM().CreateInvalidateMsg(ID(),0);
+               InvalidateMsg* im = EM().CreateInvalidateMsg(getDeviceID(),0);
                im->addr = CalcAddr(set[eviction].tag);
                im->size = lineSize;
                localConnection->SendMsg(im,invalidateTime);
@@ -208,7 +208,7 @@ namespace Memory
 		DebugAssert(b->valid);
 		DebugAssert(!b->locked);
 		DebugAssert(b->state != bs_Invalid);
-		EvictionMsg* m = EM().CreateEvictionMsg(ID(),0);
+		EvictionMsg* m = EM().CreateEvictionMsg(getDeviceID(),0);
 		DebugAssert(m);
 		m->addr = CalcAddr(b->tag);
 		m->size = lineSize;
@@ -227,7 +227,8 @@ namespace Memory
 			if(!b->locked)
 			{
 				LockBlock(tag);
-				ReadMsg* forward = EM().CreateReadMsg(ID(),m->GeneratingPC());
+				readMisses++;
+				ReadMsg* forward = EM().CreateReadMsg(getDeviceID(),m->GeneratingPC());
 				forward->addr = CalcAddr(tag);
 				forward->size = lineSize;
 				forward->alreadyHasBlock = (b->state != bs_Invalid);
@@ -241,7 +242,8 @@ namespace Memory
 		}
 		else
 		{  //hit
-			ReadResponseMsg* res = EM().CreateReadResponseMsg(ID(),m->GeneratingPC());
+		   readHits++;
+			ReadResponseMsg* res = EM().CreateReadResponseMsg(getDeviceID(),m->GeneratingPC());
 			m->SignalComplete();
 			res->addr = m->addr;
 			res->size = m->size;
@@ -259,7 +261,7 @@ namespace Memory
 		DebugAssert(m);
 		AddrTag tag = CalcTag(m->addr);
 		BlockState* b = Lookup(tag);
-		ReadResponseMsg* res = EM().CreateReadResponseMsg(ID(),m->GeneratingPC());
+		ReadResponseMsg* res = EM().CreateReadResponseMsg(getDeviceID(),m->GeneratingPC());
 		res->addr = m->addr;
 		res->size = m->size;
 		m->SignalComplete();
@@ -314,7 +316,8 @@ namespace Memory
 			if(!b->locked)
 			{
 				LockBlock(tag);
-				ReadMsg* forward = EM().CreateReadMsg(ID(),m->GeneratingPC());
+				writeMisses++;
+				ReadMsg* forward = EM().CreateReadMsg(getDeviceID(),m->GeneratingPC());
 				forward->addr = CalcAddr(tag);
 				forward->size = lineSize;
 				forward->alreadyHasBlock = (b->state != bs_Invalid);
@@ -328,8 +331,9 @@ namespace Memory
 		}
 		else
 		{
+		   writeHits++;
 			b->state = bs_Modified;
-			WriteResponseMsg* res = EM().CreateWriteResponseMsg(ID(),m->GeneratingPC());
+			WriteResponseMsg* res = EM().CreateWriteResponseMsg(getDeviceID(),m->GeneratingPC());
 			res->addr = m->addr;
 			res->size = m->size;
 			res->solicitingMessage = m->MsgID();
@@ -343,7 +347,7 @@ namespace Memory
 	{
 		DebugAssert(pendingInvalidate.find(tag) != pendingInvalidate.end())
 		BlockState* b = Lookup(tag);
-		InvalidateResponseMsg* res = EM().CreateInvalidateResponseMsg(ID(),0);
+		InvalidateResponseMsg* res = EM().CreateInvalidateResponseMsg(getDeviceID(),0);
 		res->addr = CalcAddr(tag);
 		res->size = lineSize;
 		res->solicitingMessage = pendingInvalidate[tag]->MsgID();
@@ -373,7 +377,7 @@ namespace Memory
 			DebugAssert(b);
 			DebugAssert(b->locked);
 			b->state = bs_Invalid;
-			ReadMsg* forward = EM().CreateReadMsg(ID(),pendingInvalidate[tag]->GeneratingPC());
+			ReadMsg* forward = EM().CreateReadMsg(getDeviceID(),pendingInvalidate[tag]->GeneratingPC());
 			forward->addr = pendingInvalidate[tag]->addr;
 			forward->size = lineSize;
 			forward->alreadyHasBlock = false;
@@ -493,7 +497,7 @@ namespace Memory
 			}
 			else
 			{
-				ReadMsg* forward = EM().CreateReadMsg(ID(),m->GeneratingPC());
+				ReadMsg* forward = EM().CreateReadMsg(getDeviceID(),m->GeneratingPC());
 				forward->addr = m->addr;
 				forward->alreadyHasBlock = true;
 				forward->onCompletedCallback = NULL;
@@ -535,7 +539,7 @@ namespace Memory
 	}
 	void MOESICache::OnRemoteWrite(const WriteMsg* m)
 	{
-		WriteResponseMsg* res = EM().CreateWriteResponseMsg(ID(),m->GeneratingPC());
+		WriteResponseMsg* res = EM().CreateWriteResponseMsg(getDeviceID(),m->GeneratingPC());
 		res->addr = m->addr;
 		res->size = m->size;
 		res->solicitingMessage = m->MsgID();
@@ -596,7 +600,7 @@ namespace Memory
 				b->state = bs_Owned;
 			}
 		}
-		EvictionResponseMsg* res = EM().CreateEvictionResponseMsg(ID(),m->GeneratingPC());
+		EvictionResponseMsg* res = EM().CreateEvictionResponseMsg(getDeviceID(),m->GeneratingPC());
 		res->addr = m->addr;
 		res->size = m->size;
 		res->solicitingMessage = m->MsgID();
@@ -606,7 +610,7 @@ namespace Memory
 	void MOESICache::OnRemoteEviction(const EvictionMsg* m)
 	{
 		DebugAssert(m);
-		EvictionResponseMsg* res = EM().CreateEvictionResponseMsg(ID(),m->GeneratingPC());
+		EvictionResponseMsg* res = EM().CreateEvictionResponseMsg(getDeviceID(),m->GeneratingPC());
 		res->addr = m->addr;
 		res->size = m->size;
 		res->solicitingMessage = m->MsgID();
@@ -729,7 +733,7 @@ namespace Memory
          }
          if(pendingEviction.find(tag) != pendingEviction.end())
          {
-            EvictionMsg* forward = EM().CreateEvictionMsg(ID(),m->GeneratingPC());
+            EvictionMsg* forward = EM().CreateEvictionMsg(getDeviceID(),m->GeneratingPC());
             forward->addr = CalcAddr(CalcTag(m->addr));
             forward->size = lineSize;
             forward->blockAttached = pendingEviction[tag].state == bs_Modified || pendingEviction[tag].state == bs_Owned;
@@ -868,11 +872,21 @@ namespace Memory
 		{
 			DebugFail("Bad eviction policy specified");
 		}
+
+      messagesReceived = readHits = readMisses = writeHits = writeMisses = 0;
 	}
 	void MOESICache::DumpRunningState(RootConfigNode& node){}
-	void MOESICache::DumpStats(std::ostream& out){}
+	void MOESICache::DumpStats(std::ostream& out)
+	{
+	   out << "messagesReceived:" << messagesReceived << std::endl;
+	   out << "readHits:" << readHits << std::endl;
+	   out << "readMisses:" << readMisses << std::endl;
+	   out << "writeHits:" << writeHits << std::endl;
+	   out << "writeMisses:" << writeMisses << std::endl;
+	}
 	void MOESICache::RecvMsg(const BaseMsg* msg, int connectionID)
 	{
+	   messagesReceived++;
 		if(connectionID == localConnectionID)
 		{
 			switch(msg->Type())

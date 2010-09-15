@@ -54,6 +54,8 @@ namespace Memory
 			NodeID sourceNode;
 		};
 
+		unsigned int messagesReceived;
+
 		TimeDelta localSendTime;
 		TimeDelta remoteSendTime;
 		TimeDelta lookupTime;

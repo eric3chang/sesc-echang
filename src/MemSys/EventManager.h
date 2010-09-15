@@ -5,6 +5,7 @@
 #include "StoredFunctionCall.h"
 #include "NetworkMsg.h"
 #include <vector>
+#include "EvictionBusyAckMsg.h"
 
 namespace Memory
 {
@@ -17,7 +18,6 @@ namespace Memory
 	class WriteResponseMsg;
 	class InvalidateResponseMsg;
 	class EvictionResponseMsg;
-   class EvictionBusyAckMsg;
 	class BaseMemDevice;
 	class EventManager
 	{
