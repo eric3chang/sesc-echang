@@ -1,12 +1,11 @@
-[[Title: An analysis of directory-based cache-coherence protocol on symmetric multiprocessors using the SESC simulator]]
+﻿[[Title: An analysis of directory-based cache-coherence protocol on symmetric multiprocessors using the SESC simulator]]
 
 
 [[Section 1 Comparing different directory-based cache coherence protocols.]]
-Processors today are getting more and more multi-core. As such, it is important to find out the performance impact of various cache-coherence schemes. This report will focus on directory-based cache-coherence protocol, because it is a widely used cache-coherence protocol that has been proven in the past to be able to scale up compared to the other major cache-coherence protocol, the snoopy-based cache-coherence protocol.
+Computers today are moving increasingly towards multi-core architectures because we have reached a thermal barrier in increasing transistor switching speeds. As such, it is important to figure out ways to implement multi-core architectures and how different schemes offer different tradeoffs between speed and memory consistency. In particular, the cache-coherence schemes used by multi-core processors have a huge impact on the performance of a multi-core architecture. This report will focus on directory-based cache-coherence protocols. Directory-based cache-coherence protocols are a class of widely used cache-coherence protocols that has been proven in the past to be able to scale up compared to the other major cache-coherence protocol, the snoopy-based cache-coherence protocol.
 
 [[Section 01-2]]
-
-"In a coherent multiprocessor, the caches provide both migration and replication of shared data items" (Hennessey 207). It is important for the architect of the processor to design these features into the processor as to allow the programmer to take advantage of the speedup available in having multiple data. Having multiple data allows for multiple reads at the same time.
+Since directories are basically a way for multiple caches to communicate with each other, it is important to understand what caches are and what kind of requests they can send to each directory. "In a coherent multiprocessor, the caches provide both migration and replication of shared data items" (Hennessey 207). It is important for the architect of the processor to design these features into the processor as to allow the programmer to take advantage of the speedup available in having multiple data. Having multiple data allows for multiple reads at the same time.
 
 Read Request   Read Request
    |              |           Time
@@ -22,42 +21,60 @@ Cache 01
 
 [[Section 01.3]]
 
-[From wikipedia] We also need to talk about consistency models, which are contracts between the system and the programmer. Essentially, these models state that if the programmer follows a specific set of rules, the memory of the system would be consistent with the intentions of the programmers. However, if the programmer does not follow these rules, then the memory would be inconsistent and undeterministic. There are several levels of consistency. Certain processors allow for multiple levels of consistency. For example, Intel's Itanium processor allows for changing to a higher level of consistency at the possible expense of speed loss.[Intel Itanium]
+[From wikipedia] However, by replicating the same data across independent caches, we introduce the possibility of inconsistency in the system. The inconsistencies can be inhibited by a good consistency model. Consistency models are contracts between the system and the programmer. Essentially, these models state that if the programmer follows a specific set of rules, the memory of the system would be consistent with the intentions of the programmers. However, if the programmer does not follow these rules, then the memory would be inconsistent and undeterministic. There are several levels of consistency. Certain processors allow for multiple levels of consistency. For example, Intel's Itanium processor allows for changing to a higher level of consistency at the possible expense of speed loss.[Intel Itanium]
 
-The directory-based protocol is interesting because it can achieve higher speeds than a snoopy-based protocol. A snoopy-based protocol achieves very high consistency because all messages are broadcasted on a bus, meaning all processors know whatever changes are happening in the system. However, in a directory-based protocol, it is possible for the directory to be in an inconsistent state for a longer time. For example, when we are evicting a block from a processor, this is broadcasted across the bus in a snoopy-protocol, and the directory knows right away to change the directory state. In a directory-based cache-coherence protocol, there is some time between when the eviction message is sent from the owner to when the message arrives at the directory. In this time, it is possible for some other request to come in to the directory, allowing the directory to possibly fetch the invalidated data from the owner that just evicted its data.
+[[Section 2.1 Different Types of Cache Coherence Protocols]]
 
-While taking care of cache coherency, we also need to keep in mind that Amdahl's law prevents us from improving our speedup to a certain degree if our program contains sequential code. Since sequential code cannot be sped up, we can never achieve a speedup faster than the time it takes to run that sequential code.
-
-
-[[Section 02 Different Types of Cache Coherence Protocols]]
-
-There are a couple of types of cache coherence protocols: directory, snooping, and snarfing. In my report, we will focuson directory-based cache coherence protocols and what they bring to the table. The directory-based cache-coherence protocol was first invented in 
+There are a couple of types of cache coherence protocols: directory, snooping, and snarfing. In my report, we will focus on directory-based cache coherence protocols and what they bring to the table. The directory-based cache-coherence protocol was a good way of dealing with the increasing number of processors available in today's computers.
 
 Snoopy-based protocols have an advantage when it comes to manufacturing because they can use the existing bus to memory as the broadcast medium for communicating information about cache coherence (Hennessey 208). However, from the results in the following table, we can see that a snoopy-based protocol is not as scalable as a directory-based protocol. So in my report, we will focus on various directory-based protocols.
+
+Directory-based protocols are interesting because it can achieve higher speeds than snoopy-based protocols. A snoopy-based protocol achieves very high consistency because all messages are broadcasted on a bus, meaning all processors know whatever changes are happening in the system. However, in a directory-based protocol, it is possible for the directory to be in an inconsistent state for a longer time. For example, when we are evicting a block from a processor, this is broadcasted across the bus in a snoopy-protocol, and the directory knows right away to change the directory state. In a directory-based cache-coherence protocol, there is some time between when the eviction message is sent from the owner to when the message arrives at the directory. In this time, it is possible for some other request to come in to the directory, allowing the directory to possibly fetch the invalidated data from the owner that just evicted its data. 
+"As processor speeds and the number of cores per processor increase, more designers are likely to opt for [directory-based cache coherence] protocols to avoid the broadcase limit of a snoopy protocol (217 Hennessey).
 
 [Figure comparing snoopy-based protocol vs directory-based protocol]
 # of processors
 % speedup
 # of collisions
 
-[[Section01.3 Why Directory-based cache coherence protocols is advantageous for the future]]
+Snarfing is where a cache controller watches both address and data in an attempt to update its own copy of a memory location when a second master modifies a location in main memory. When a write operation is observed to a location that a cache has a copy of, the cache controller updates its own copy of the snarfed memory location with the new data. [http://en.wikipedia.org/wiki/Cache_coherence]
 
-"As processor speeds and the number of cores per processor increase, more designers are likely to opt for [directory-based cache coherence] protocols to avoid the broadcase limit of a snoopy protocol (217 Hennessey).
+While taking care of cache coherency, we also need to keep in mind that Amdahl's law prevents us from improving our speedup to a certain degree if our program contains sequential code. Since sequential code cannot be sped up, we can never achieve a speedup faster than the time it takes to run that sequential code.
 
-[[Section 03.1 Changing Cache Size]]
+[[Section 03 Cache]]
+While this report is mainly about directory-based protocols, since directory behavior is directly related to the messages emitted by the cache, it is important to show the protocol used in the cache. The two protocols that I will introduce here serves as an example of some of the protocols that can be used to achieve cache coherency.
+
+[[Section 03.1 MSI]]
+The MSI protocol is the most basic of the cache-coherence protocols, having the minimum three states necessary to ensure cache coherency. The three states stand for Modified(M), Shared(S), and Invalid(I). The Modified state signifies that the cache block is modified and that no other cache contains the entry. This state is necessary whenever the processor needs to perform a write operation. The Shared state means that the cache block can exist in caches other than the current one, and Invalid means that there is nothing usable in this particular cache block.
+
+[[Section 03.2 MOESI]]
+The MOESI protocol is an improved protocol upon the MSI protocol in that it adds both an Owned(O) state and an Exclusive(E) state to the protocol. The Exclusive state is advantageous in that it reduces the traffic caused by writes of blocks that only exist in one cache. The inclusion of the Owned state is beneficial in that it reduces the traffic caused by write-backs of blocks that are read by other caches. These two added states allow the protocol to send fewer messages and achieve a lower latency in certain operations.
+
+[[Section 03.x Changing Cache Size]]
 
 increasing cache size increases coherence misses because more invalidates occur because fewer blocks are bumped due to capacity misses. Of course, capacity misses decrease because the cache has more spaces to put blocks (Hennessey 229).
 
-Increasing blocksize means capacity miss decreases and compulsory miss decreases for certain applications. When this happens, it most likely means that there is a lot of spatial locality in the code, such as when running kernel code. Because increasing blocksize grabs more of the code in the same area together, which directly reduces compulsory misses. The capacity miss is reduced because we're storing more of the necessary code in the cache (Hennessey 228).
+Increasing block size means capacity miss decreases and compulsory miss decreases for certain applications. When this happens, it most likely means that there is a lot of spatial locality in the code, such as when running kernel code. Because increasing block size grabs more of the code in the same area together, which directly reduces compulsory misses. The capacity miss is reduced because we're storing more of the necessary code in the cache (Hennessey 228).
 
 [[Section 04]]
 Section 04 Table. What MOESI means to each memory unit
 
 [[Section 04.1 Directory-Based Cache-Coherence Protocol]]
+
+In any directory-based cache-coherence protocol, there are three logical nodes in any request: the requesting node, the directory node, and the data node. Of course, these logical nodes can all be the same physical nodes or they can all be different, but it is easier to think of them logically as three separate nodes. The Requesting node is the original requestor, this is the node that sends out the original read or write request. Since this is a directory-based protocol, it is necessary to send the request to the directory in order to find out where the data actually is, what state the directory block is in, and whether or not the request can be satisfied immediately.
+
 A directory-based cache-coherence protocol can be designed several ways. One of the easiest ways to keep track of the directories is to keep a bit vector in each distributed directory about which CPU has which cache block. Another way would be to keep track of the nodeID. The advantage of using a nodeID is that it can potentially take up less space in the directory. However, there is a disadvantage to keeping track of the nodeID. Usually, in a nodeID-based directory-based cache-coherence system, we do not keep track of all the nodeID's because that would defeat the primary purpose of using the nodeID to keep track of which CPU's contain a specific cache block, which is to save space. So usually, when we have a system that keeps track of the cache block using nodeID, we are unable to keep track of all the CPU's that might potentially request for a cache block. In which case, we would have to tell a CPU that have a cache block to mark their copy as invalid so we can free up a space in the directory.
 
 In this way, we can see that using bit vector to keep track of the CPU that has a specific cache block is an efficient way to implement directory-based cache-coherence protocol, but it has a certain limit on how many CPU's can be used together with the system.
 
+[[Section 04.1 Four-Stage Directory Protocol]]
+
+This is the basic directory protocol. It is easier to implement than some of the more advanced and newer version of the protocol, but it is also unoptimized. This protocol makes sure that each request has a corresponding reply and that no operations can proceed until the responding message has been received.
+
+In essence, no assumptions are made when deciding the directory state because we wait for the owner or shared block to return to the directory before we forward it back to the requester.
+
+[[Section 04.2 Three-Stage Directory Protocol]]
+This is an optimized version of the basic directory protocol mentioned in the previous section. The SGI Origin implemented this protocol, which is based on an altered version of the protocol used in the Stanford DASH multiprocessor. This protocol tries to be more optimized by attempting to eliminate any unnecessary communication between the data node and the directory node. It achieves this by assuming that all read requests to the directory can be satisfied, and if it cannot, it is up to the owner of the data to send an additional invalidate back to the directory as well as the data response to the original requesting node.
 
 [[Section 06.1 SESC Simulator]]
 CPU_0
@@ -82,16 +99,21 @@ The SESC simulator supports both a regular mode, where everything is simulated, 
 The user-defined values could be contained in the configuration file or passed on the command-line like the other parameters. The configuration file is read through OSSim.cpp file under the libcore folder. It is read into a SescConf variable. I will design the SimpleDirectoryController in a way so that most of the common parameters will be changeable through the header file. The most obvious parameter that comes to mind is the directory size parameter, but more options will be added as necessary to increase the flexibility of the simulator. Some of the parameters that will need to be tracked are how many accesses to the directory are being made, how many reads and writes to the
 directory, and so on.
 
-
 [[Section 06.2 Network]]
-The underlying network in use for this simulator is a simple blackbox model. It does not model a real network that has routing issues. Instead it models messages going in and out of the network using a random delay with a lower-bound of [] and an upper-bound of []. When more messages arrhive, the delay coming from the random delay generator will be shifted higher as to model the higher traffic conditions.
+
+[[Figure node-random-load-network.png]]
+
+The underlying network in use for this simulator is a simple blackbox model. It does not model a real network that has routing issues. Instead it models messages going in and out of the network using a random delay with a lower-bound of 4 and an upper-bound of 20. When more messages arrhive, the delay coming from the random delay generator will be shifted higher as to model the higher traffic conditions.
+
+We could have used a more complicated network, one that simulates router-router connection and uses routing protocols, but such a network was not available at the time in the simulator, and the blackbox network serves its purpose for delivering messages to and from all the directories, as well as the main memory.
 
 The reason the network is not simulated in detail is because that is not the focus of this report. The focus of this report is on the various directory-based cache-coherence protocols that are able to be modeled using the SESC simulator. Although the SESC simulator has the capability to model a network, a simple network, such as the one used here, can illustrate our point.
 
-A more complicated network would be one that simulates router-router
-connection and uses routing protocols
+[[Section 06.2.1 Main Memory]]
 
-[[Section 06.2 Cache]]
+In the simulator, the main memory is simulated as a node in the network. Therefore, when a directory wants to request something from main memory, it sends a messages across the network to the main memory. This design simplifies the design of the memory while still keeping the protocol intact.
+
+[[Section 06.3 Cache]]
 Include state-transition diagrams for MOESI and for MSI
 
 The MESI protocol adds an "Exclusive" state to reduce the traffic caused by writes of blocks that only exist in one cache. The MOSI protocol adds an "Owned" state to reduce the traffic caused by write-backs of blocks that are read by other caches. The MOESI protocol does both of these things. [copied from Wikipedia]
@@ -117,6 +139,8 @@ Only having three states, however, does simplify the implementation somewhat.
 The MOESI protocol was used in both L1 and L2 cache. This protocol was chosen because it contains the most states. The advantages to that is that it reduces the traffic going across the network. The "Owned" state allows dirty lines to be shared quickly (Wikipedia MOESI). The disadvantage of this protocol is that it uses the most amount of space to store this information, since it needs to store more states, compared to MESI, MOSI, or MSI protocols.
 
 The cache size can be determined by associativity * number of sets * width. For example, in my system, this could be 4 * 4 * 64, in the case of the L1 cache. This gives it 16 blocks of 64-bit data to have a 1kB L1 cache. In the case of the L2 cache, I used an associativity of 4 with 8 sets to get 32 blocks. this equates to a 2kB cache.
+
+
 
 [[Section 06.4 Four-Stage Directory]]
 In a directory-based cache-coherence protocol, lookups will always go to the directory. However, data replies can either go through the directory, first, or it can go straight to the requester. In my implementation of the directory, the data reply go to the directory first, and the directory decides who the original requester is and forwards the data to the original requester.
@@ -187,6 +211,7 @@ In addition, the SPLASH2 benchmarks' kernel programs provide self-test that we c
 
 a typical parameter could be -m10 -p2 -n65536 -l4
 
+We expect the results to show that the three-stage directory achieves a faster rate of completion. According to the results, we can see that the four-stage directory does take longer to complete. This is a result of its faster latancy, which results from the four-stage directory having to wait for 
 
 [[ Section 09.1 problems]]
 In implementing the directory-based cache-coherence protocol, there were some problems. One was simply that debugging such a large system is inherently hard. It is useful to print out each message that pass around the system. However, often the bug surfaces after tens of thousands of messages are sent. At this point, it is useful to oknow the transistion states of what each message should cause. For example, a read miss request from the CPU when the block is not held in any cache line typically causes these for methods to be called: OnLocalRead, OnDirectoryBlockRequest, OnRemoteRead, and finally, OnDirectoryBlockResponse. If any of those four methods are not called for the same MsgID when satisfying a miss request, something might be wrong.
