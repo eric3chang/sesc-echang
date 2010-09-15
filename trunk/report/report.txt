@@ -214,7 +214,7 @@ In addition, the SPLASH2 benchmarks' kernel programs provide self-test that we c
 
 a typical parameter could be -m10 -p2 -n65536 -l4
 
-We expect the results to show that the three-stage directory achieves a faster rate of completion. According to the results, we can see that the four-stage directory does take longer to complete. This is a result of its faster latancy, which results from the four-stage directory having to wait for 
+We expect the results to show that the three-stage directory achieves a faster rate of completion. According to the results, we can see that the four-stage directory does take longer to complete. This is a result of its faster latancy, which results from the four-stage directory having to wait for any requests to come back to the home node before the results can be sent to the requester. In a three-stage directory, the request goes directly from the data node to the requesting node without stopping by the directory, resulting in a lower latency.
 
 [[ Section 09.1 problems]]
 In implementing the directory-based cache-coherence protocol, there were some problems. One was simply that debugging such a large system is inherently hard. It is useful to print out each message that pass around the system. However, often the bug surfaces after tens of thousands of messages are sent. At this point, it is useful to oknow the transistion states of what each message should cause. For example, a read miss request from the CPU when the block is not held in any cache line typically causes these for methods to be called: OnLocalRead, OnDirectoryBlockRequest, OnRemoteRead, and finally, OnDirectoryBlockResponse. If any of those four methods are not called for the same MsgID when satisfying a miss request, something might be wrong.
@@ -236,10 +236,3 @@ However, it is possible for the system to undergo the following cycle, especiall
 The memory system in the current sesc system is implemented in a way such that it is in one location. In the future, we could modify the the simulator such that the memory system is distributed just like the directory system. With a distributed memory system, there would be much more issue with coherence, scaling, performance, and correctness.
 
 In addition, another thing we could do for the future is implement a timing scheme for the system.
-
-[[Section xx]]
-
-[Skewed Cache]
-Skewed cache is better than regular set-associative cache
-(A case for two-way skewed-associative caches)
-(Andre Seznec page 4) 
