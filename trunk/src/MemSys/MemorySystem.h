@@ -40,6 +40,8 @@ namespace Memory
 		void SubmitInterfaceDevice(const std::string& name,BaseMemDevice* device);
 
 		void ProcessTick();
+
+		std::vector<BaseMemDevice*> & getDeviceSet();
 	};
 }
 

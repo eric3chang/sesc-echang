@@ -15,6 +15,9 @@ namespace Memory
 	class SESCProcessorInterface : public BaseMemDevice
 #endif
 	{
+	   unsigned int readCount;
+	   unsigned int writeCount;
+
 #ifdef SYSTEM_SESC
 		HashMap<MessageID,MemRequest*> pendingRequests;
 		Connection* toDevice;
