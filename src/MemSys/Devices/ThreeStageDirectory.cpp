@@ -362,7 +362,6 @@ namespace Memory
 
 	void ThreeStageDirectory::AddDirectoryShare(Address a, NodeID id, bool exclusive)
 	{
-	   /*
       DebugAssert(directoryNodeCalc->CalcNodeID(a)==nodeID);
 		BlockData& b = directoryData[a];
 		DebugAssert(!exclusive || (b.sharers.size() == 0 && (b.owner == id || b.owner == InvalidNodeID)));
@@ -383,7 +382,6 @@ namespace Memory
 #endif
 			b.sharers.insert(id);
 		}
-		*/
 	}
 
    void ThreeStageDirectory::ChangeOwnerToShare(Address a, NodeID id)
@@ -396,8 +394,7 @@ namespace Memory
 		DebugAssert(b.owner==id);
       DebugAssert(b.sharers.find(nodeID)==b.sharers.end());
       b.owner = InvalidNodeID;
-      //TODO 2010/09/15 Eric
-      //b.sharers.insert(id);
+      b.sharers.insert(id);
 	}
 
    /**
@@ -476,13 +473,11 @@ namespace Memory
 		DebugAssert(pendingRemoteReads.find(m->solicitingMessage)!=pendingRemoteReads.end());
       LookupData<ReadMsg> &d = pendingRemoteReads[m->solicitingMessage];
       DebugAssert(d.msg->originalRequestingNode != InvalidNodeID);
-      //TODO 2010/09/15 Eric
-      //DebugAssert(m->satisfied);
+      DebugAssert(m->satisfied);
 
 		if (d.msg->isIntervention)
 		{
-		   //TODO 2010/09/15 Eric
-         //DebugAssert(m->blockAttached);
+         DebugAssert(m->blockAttached);
          // send response back to the requester
          ReadResponseMsg* forward = (ReadResponseMsg*)EM().ReplicateMsg(m);
          forward->originalRequestingNode = d.msg->originalRequestingNode;
@@ -826,8 +821,7 @@ namespace Memory
       }
 
       DebugAssert(m->isIntervention);
-      //TODO 2010/09/15 Eric
-		//DebugAssert(m->satisfied);
+		DebugAssert(m->satisfied);
       if (m->isIntervention && pendingDirectorySharedReads.find(m->addr)!=pendingDirectorySharedReads.end())
       {
          if(m->blockAttached)
@@ -1022,13 +1016,10 @@ namespace Memory
          EM().DisposeMsg(pendingDirectoryExclusiveReads[m->addr].msg);
          pendingDirectoryExclusiveReads.erase(m->addr);
       }
-      //TODO 2010/09/15 Eric
-      /*
       else
       {
          DebugFail("should not reach here");
       }
-      */
 
       // if block is attached, write back to memory
 		if(m->blockAttached)
@@ -1394,9 +1385,7 @@ namespace Memory
          // perform directory fetch before modifying directoryData
          PerformDirectoryFetch(m,src,false,*(b.sharers.begin()));
          DebugAssert(b.sharers.find(src)==b.sharers.end());
-         //TODO 2010/09/15 Eric
-         //b.sharers.insert(src);
-
+         b.sharers.insert(src);
          // do not dispose msg here, because we are forwarding it
          //EM().DisposeMsg(m);
          return;
