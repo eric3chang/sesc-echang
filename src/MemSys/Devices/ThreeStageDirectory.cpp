@@ -50,80 +50,10 @@ namespace Memory
 			nodeSet.push_back(Config::GetInt(node,"NodeIDSet",0,i));
 		}
 	}
-/*
-	void ThreeStageDirectory::PerformDirectoryFetch(Address a, NodeID src)
-	{
-      // commented out because of 3-stage
-      // TODO: 2010/09/02 3-stage modification
-      //m->directoryLookup = false;
-	   ReadMsg* m = EM().CreateReadMsg(getDeviceID());
-      //EM().DisposeMsg(msgIn);
-      m->onCompletedCallback = NULL;
-      m->alreadyHasBlock = false;
-      m->originalRequestingNode = src;
-      m->addr = a;
-      m->onCompletedCallback = NULL;
-      m->size = 64;
-      m->requestingExclusive = false;
-      BlockData& b = directoryData[a];
-      NodeID target;
-      bool isTargetMemory = false;
-      // directoryLookup is true only for memory because we want to return a
-         // OnDirectoryBlockResponse from memory
-      if(b.owner != InvalidNodeID)
-      {
-         m->directoryLookup = false;
-         target = b.owner;
-      }
-      else if(b.sharers.begin() != b.sharers.end())
-      {
-         m->directoryLookup = false;
-         target = *(b.sharers.begin());
-      }
-      else
-      {
-         isTargetMemory = true;
-         m->directoryLookup = true;
-         target = memoryNodeCalc->CalcNodeID(a);
-      }
-      if(target == nodeID)
-      {
-   #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-               printDebugInfo("OnRemoteRead",*m,"PerformDirectoryFetch(addr,node)",nodeID);
-   #endif
-         //TODO 2010/09/02 Eric, change this because of 3-stage directory
-         //OnRemoteRead should know to use m->requestingNode
-         OnRemoteRead(m, nodeID);//ERROR
-         //OnRemoteRead(m, src);//ERROR
-      }
-      else
-      {
-         NetworkMsg* nm = EM().CreateNetworkMsg(getDeviceID(), m->GeneratingPC());
-         nm->destinationNode = target;
-         if (isTargetMemory)
-         {
-            // change the source due to 3-stage
-            nm->sourceNode = src;
-            if (src != nodeID)
-            {
-               nm->isOverrideSource = true;
-            }
-         }
-         else
-         {
-            nm->sourceNode = nodeID;
-         }
-         nm->payloadMsg = m;
-         SendMsg(remoteConnectionID, nm, lookupTime + remoteSendTime);
-      }
-   }
-*/
+
    // performs a directory fetch
 	void ThreeStageDirectory::PerformDirectoryFetch(const ReadMsg* msgIn, NodeID src)
 	{
-	   // commented out because of 3-stage
-		// TODO: 2010/09/02 3-stage modification
-		//m->directoryLookup = false;
 	   ReadMsg* m = (ReadMsg*)EM().ReplicateMsg(msgIn);
 	   //EM().DisposeMsg(msgIn);
 		m->onCompletedCallback = NULL;
@@ -237,73 +167,6 @@ namespace Memory
       // do not dispose message here, because the original OnLocalRead might still need it
       //EM().DisposeMsg(msgIn);
 	}
-
-	/*
-   void ThreeStageDirectory::PerformDirectoryFetchOwner(const ReadMsg* msgIn, NodeID src)
-   {
-      // commented out because of 3-stage
-      // TODO: 2010/09/02 3-stage modification
-      //m->directoryLookup = false;
-      ReadMsg* m = (ReadMsg*)EM().ReplicateMsg(msgIn);
-      EM().DisposeMsg(msgIn);
-      m->onCompletedCallback = NULL;
-      m->alreadyHasBlock = false;
-      m->originalRequestingNode = src;
-      BlockData& b = directoryData[m->addr];
-      NodeID target;
-      bool isTargetMemory = false;
-      // directoryLookup is true only for memory because we want to return a
-         // OnDirectoryBlockResponse from memory
-      if(b.owner != InvalidNodeID)
-      {
-         m->directoryLookup = false;
-         target = b.owner;
-      }
-      else if(b.sharers.begin() != b.sharers.end())
-      {
-         m->directoryLookup = false;
-         target = *(b.sharers.begin());
-      }
-      else
-      {
-         isTargetMemory = true;
-         m->directoryLookup = true;
-         target = memoryNodeCalc->CalcNodeID(m->addr);
-      }
-      // TODO added this because we want to fetch from memory only for owner
-      DebugAssert(target == memoryNodeCalc->CalcNodeID(m->addr));
-      if(target == nodeID)
-      {
-#ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-               printDebugInfo("OnRemoteRead",*m,"PerformDirectoryFetchOwner(ReadMsg,node)",nodeID);
-#endif
-         //TODO 2010/09/02 Eric, change this because of 3-stage directory
-         OnRemoteRead(m, nodeID);//ERROR
-         // on remoteRead should know to use m->requestingNode
-         //OnRemoteRead(m, src);//ERROR
-      }
-      else
-      {
-         NetworkMsg* nm = EM().CreateNetworkMsg(getDeviceID(), m->GeneratingPC());
-         nm->destinationNode = target;
-         if (isTargetMemory)
-         {
-            // change the source due to 3-stage
-            nm->sourceNode = src;
-            if (src != nodeID)
-            {
-               nm->isOverrideSource = true;
-            }
-         }
-         else
-         {
-            nm->sourceNode = nodeID;
-         }
-         nm->payloadMsg = m;
-         SendMsg(remoteConnectionID, nm, lookupTime + remoteSendTime);
-      }
-   }  // performDirectoryFetchOwner
-*/
 
    /**
    send local read response to the cache above
@@ -468,15 +331,19 @@ namespace Memory
       DebugAssert(msgIn->Type()==mt_ReadResponse);
       ReadResponseMsg* m = (ReadResponseMsg*)msgIn;
 #if defined DEBUG && defined _WIN32
-      MessageID tempMsgID = m->MsgID();
+      MessageID tempMessageID = m->MsgID();
 #endif
 		DebugAssert(pendingRemoteReads.find(m->solicitingMessage)!=pendingRemoteReads.end());
       LookupData<ReadMsg> &d = pendingRemoteReads[m->solicitingMessage];
       DebugAssert(d.msg->originalRequestingNode != InvalidNodeID);
+      //TODO 2010/09/23 Eric
+      // can be unsatisfied if the owner is still waiting for response from memory
       DebugAssert(m->satisfied);
 
 		if (d.msg->isIntervention)
 		{
+         //TODO 2010/09/23 Eric
+         // block doesn't have to be attached if owner is still waiting for response from memory
          DebugAssert(m->blockAttached);
          // send response back to the requester
          ReadResponseMsg* forward = (ReadResponseMsg*)EM().ReplicateMsg(m);
@@ -676,6 +543,9 @@ namespace Memory
 		DebugAssert(msgIn);
       DebugAssert(msgIn->Type()==mt_Read);
       ReadMsg* m = (ReadMsg*)msgIn;
+#ifdef _WIN32
+      MessageID tempMessageID = m->MsgID();
+#endif
 		DebugAssert(!m->directoryLookup);
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_REMOTE_READS
 		printDebugInfo("OnRemoteRead", *m,
@@ -821,6 +691,8 @@ namespace Memory
       }
 
       DebugAssert(m->isIntervention);
+      // TODO 2010/09/23 Eric
+      // can be unsatisfied if owner is still waiting for response from memory
 		DebugAssert(m->satisfied);
       if (m->isIntervention && pendingDirectorySharedReads.find(m->addr)!=pendingDirectorySharedReads.end())
       {
@@ -1016,6 +888,19 @@ namespace Memory
          EM().DisposeMsg(pendingDirectoryExclusiveReads[m->addr].msg);
          pendingDirectoryExclusiveReads.erase(m->addr);
       }
+      /*
+      // TODO 2010/09/23 Eric
+      // need this because shared blocks can be evicted, too
+      // if src is in sharer, remove src from sharer
+      else if(b.sharers.find(src) != b.sharers.end())
+		{
+#ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_DIRECTORY_DATA
+         printDebugInfo("OnRemoteEviction",*m,
+            ("b.sharers.erase("+to_string<NodeID>(src)+")").c_str(),src);
+#endif
+			b.sharers.erase(src);
+		}
+      */
       else
       {
          DebugFail("should not reach here");
@@ -1384,6 +1269,8 @@ namespace Memory
       {// if directory state is shared, add requesting node to sharer and request reply from any sharer
          // perform directory fetch before modifying directoryData
          PerformDirectoryFetch(m,src,false,*(b.sharers.begin()));
+         //TODO 2010/09/23 Eric
+         // src can be added again if it is a retried read request
          DebugAssert(b.sharers.find(src)==b.sharers.end());
          b.sharers.insert(src);
          // do not dispose msg here, because we are forwarding it
