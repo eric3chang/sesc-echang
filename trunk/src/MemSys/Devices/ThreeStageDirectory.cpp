@@ -1238,6 +1238,10 @@ namespace Memory
          if (b.owner==InvalidNodeID || (b.owner==src&&!m->alreadyHasBlock))
          {// if directory is unowned OR it is owned by src but it doesn't have the block
             // fetch from memory
+            LookupData<ReadMsg> ld;
+            ld.msg = m;
+            ld.sourceNode = src;
+            pendingMainMemAccesses.insert(HashMultiMap<Address,LookupData<ReadMsg> >::value_type(m->addr,ld));
             PerformDirectoryFetch(m,src,true,memoryNodeCalc->CalcNodeID(m->addr));
          }
          else if (b.owner==src)
@@ -1407,7 +1411,7 @@ namespace Memory
          return;
       }// else if (b.owner==InvalidNodeID && b.sharers.size()!=0)
       else if (b.owner!=InvalidNodeID&&b.owner!=src)
-      {// if directory state is Exclusive with another owner, transitions to Exclusive-shared with
+      {// if directory state is Exclusive with another owner, transitions to Busy-exclusive with
          // requestor as owner and send out an intervention exclusive request to the previous
          // owner and a speculative reply to the requestor
 
@@ -1463,6 +1467,8 @@ namespace Memory
       DebugAssert(msgIn->Type()==mt_ReadResponse);
       ReadResponseMsg* m = (ReadResponseMsg*)msgIn;
       DebugAssert(m->directoryLookup==true);
+      // message must not come from memory, because we want all messages coming from memory to return to directory first
+      DebugAssert(src != memoryNodeCalc->CalcNodeID(m->addr));
 #if defined DEBUG && defined _WIN32
       MessageID tempMessageID = m->MsgID();
 #endif
