@@ -126,6 +126,9 @@ namespace Memory
       m->originalRequestingNode = src;
       m->requestingExclusive = isExclusive;
       NodeID memoryNode = memoryNodeCalc->CalcNodeID(m->addr);
+      //TODO 2010/09/24 Eric
+      // changed the block to return to directory first before doing anything else
+      /*
 		// directoryLookup is true only for memory because we want to return a
 		   // OnDirectoryBlockResponse from memory
 		if(target==memoryNode)
@@ -133,6 +136,7 @@ namespace Memory
 		   m->directoryLookup = true;
 		}
 		else
+      */
 		{
 		   m->directoryLookup = false;
 		}
@@ -140,7 +144,7 @@ namespace Memory
 		{
          DebugAssert(m->directoryLookup==false);
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-               printDebugInfo("OnRemoteRead",*m,"PerformDirectoryFetch(msgIn,src,isExclusive,target)",nodeID);
+               printDebugInfo("OnRemoteRead",*m,"PerformDirectoryFetch(m,src,isEx,targ)",nodeID);
 #endif
 			OnRemoteRead(m, nodeID);
 		}
@@ -148,6 +152,9 @@ namespace Memory
 		{
 			NetworkMsg* nm = EM().CreateNetworkMsg(getDeviceID(), m->GeneratingPC());
 			nm->destinationNode = target;
+         /*
+         //TODO 2010/09/24 Eric
+         // changed it to not do 3-stage for memory
 			if (target==memoryNode)
 			{
 			   // change the source due to 3-stage
@@ -158,6 +165,7 @@ namespace Memory
             }
 			}
 			else
+         */
 			{
 			   nm->sourceNode = nodeID;
 			}
@@ -338,13 +346,15 @@ namespace Memory
       DebugAssert(d.msg->originalRequestingNode != InvalidNodeID);
       //TODO 2010/09/23 Eric
       // can be unsatisfied if the owner is still waiting for response from memory
-      DebugAssert(m->satisfied);
+         // or if the intervention message arrived before data arrived from memory
+      //DebugAssert(m->satisfied);
 
 		if (d.msg->isIntervention)
 		{
          //TODO 2010/09/23 Eric
          // block doesn't have to be attached if owner is still waiting for response from memory
-         DebugAssert(m->blockAttached);
+            // or if the intervention message arrived before data arrived from memory
+         //DebugAssert(m->blockAttached);
          // send response back to the requester
          ReadResponseMsg* forward = (ReadResponseMsg*)EM().ReplicateMsg(m);
          forward->originalRequestingNode = d.msg->originalRequestingNode;
@@ -508,8 +518,8 @@ namespace Memory
 		DebugAssert(msgIn);
       DebugAssert(msgIn->Type()==mt_InvalidateResponse);
       InvalidateResponseMsg* m = (InvalidateResponseMsg*)msgIn;
-		DebugAssert(pendingRemoteInvalidates.find(m->addr) != pendingRemoteInvalidates.end());
-		LookupData<InvalidateMsg>& d = pendingRemoteInvalidates[m->addr];
+      DebugAssert(pendingRemoteInvalidates.find(m->solicitingMessage) != pendingRemoteInvalidates.end());
+      LookupData<InvalidateMsg>& d = pendingRemoteInvalidates[m->solicitingMessage];
 		DebugAssert(d.msg->MsgID() == m->solicitingMessage);
       //TODO 2010/09/13 Eric
       //if(nodeID != d.sourceNode)
@@ -535,7 +545,7 @@ namespace Memory
 		printDebugInfo("OnLocalInvalidateResponse",*m,
 		   ("PRI.erase("+to_string<Address>(d.msg->addr)+")").c_str());
 #endif
-		pendingRemoteInvalidates.erase(d.msg->addr);
+      pendingRemoteInvalidates.erase(m->solicitingMessage);
 	}
 
 	void ThreeStageDirectory::OnRemoteRead(const BaseMsg* msgIn, NodeID src)
@@ -563,11 +573,18 @@ namespace Memory
 		DebugAssert(msgIn);
       DebugAssert(msgIn->Type()==mt_ReadResponse);
       ReadResponseMsg* m = (ReadResponseMsg*)msgIn;
+#ifdef _WIN32
+      MessageID tempMessageID = m->MsgID();
+#endif
 		DebugAssert(!m->directoryLookup);
 		DebugAssert(pendingDirectorySharedReads.find(m->addr) != pendingDirectorySharedReads.end()
-         || pendingDirectoryExclusiveReads.find(m->addr) != pendingDirectoryExclusiveReads.end());
-		DebugAssert(pendingDirectorySharedReads.find(m->addr) == pendingDirectorySharedReads.end()
-         || pendingDirectoryExclusiveReads.find(m->addr) == pendingDirectoryExclusiveReads.end());
+         || pendingDirectoryExclusiveReads.find(m->addr) != pendingDirectoryExclusiveReads.end()
+         || pendingMainMemAccesses.find(m->addr) != pendingMainMemAccesses.end());
+      // m->addr should only exist in one of the 3 HashMaps
+		DebugAssert(
+         ((pendingDirectorySharedReads.find(m->addr) == pendingDirectorySharedReads.end())
+         + (pendingDirectoryExclusiveReads.find(m->addr) == pendingDirectoryExclusiveReads.end())
+         + (pendingMainMemAccesses.find(m->addr) == pendingMainMemAccesses.end())) == 2);
 		DebugAssert(directoryData.find(m->addr) != directoryData.end());
 		/*
 		if(m->satisfied)
@@ -668,13 +685,45 @@ namespace Memory
 			EM().DisposeMsg(m);
 		}// if(m->satisfied)
 	   */
-      DebugAssert(m->originalRequestingNode!=InvalidNodeID);
       // directory receives shared writeback/transfer, updates memory if it is shared writeback,
          // then transitions to the shared state
 
+
+      if (src == memoryNodeCalc->CalcNodeID(m->addr))
+      {
+         // if it came from memory
+         DebugAssert(pendingIgnoreInterventions.find(m->addr)==pendingIgnoreInterventions.end());
+         DebugAssert(pendingMainMemAccesses.find(m->addr)!=pendingMainMemAccesses.end());
+
+         // send message back to the original requester
+         ReadResponseMsg* newMsg = (ReadResponseMsg*)EM().ReplicateMsg(m);
+         newMsg->directoryLookup = true;
+
+         std::pair<HashMultiMap<Address,LookupData<ReadMsg> >::iterator,
+            HashMultiMap<Address,LookupData<ReadMsg> >::iterator> p
+            = pendingMainMemAccesses.equal_range(m->addr);
+
+         for (HashMultiMap<Address,LookupData<ReadMsg> >::iterator i = p.first;
+            i != p.second; ++i)
+         {
+            AutoDetermineDestSendMsg(newMsg,i->second.sourceNode,remoteSendTime,
+            &ThreeStageDirectory::OnDirectoryBlockResponse,"OnRemoteReadResponse","OnDirBlkResponse");
+         }
+         // this message might still be in use in OnLocalRead
+         //EM().DisposeMsg(pendingMainMemAccesses[m->addr].msg);
+         pendingMainMemAccesses.erase(m->addr);
+         EM().DisposeMsg(m);
+
+         return;
+      }
+   
+      DebugAssert(m->originalRequestingNode!=InvalidNodeID);
       // if we should ignore this intervention
       if (pendingIgnoreInterventions.find(m->addr)!=pendingIgnoreInterventions.end())
       {
+#ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
+         printDebugInfo("OnRemoteReadResp",*m,"ignoring intervention",src);
+#endif
          pendingIgnoreInterventions.erase(m->addr);
          if (pendingDirectorySharedReads.find(m->addr)!=pendingDirectorySharedReads.end())
          {
@@ -693,7 +742,8 @@ namespace Memory
       DebugAssert(m->isIntervention);
       // TODO 2010/09/23 Eric
       // can be unsatisfied if owner is still waiting for response from memory
-		DebugAssert(m->satisfied);
+         // or if intervention message arrived before data arrived from memory
+		//DebugAssert(m->satisfied);
       if (m->isIntervention && pendingDirectorySharedReads.find(m->addr)!=pendingDirectorySharedReads.end())
       {
          if(m->blockAttached)
@@ -968,9 +1018,9 @@ namespace Memory
       printDebugInfo("OnRemoteInvalidate", *m,
             ("PRI.insert("+to_string<Address>(m->addr)+")").c_str());
 #endif
-		DebugAssert(pendingRemoteInvalidates.find(m->addr) == pendingRemoteInvalidates.end());
-		pendingRemoteInvalidates[m->addr].sourceNode = src;
-		pendingRemoteInvalidates[m->addr].msg = m;
+      DebugAssert(pendingRemoteInvalidates.find(m->MsgID()) == pendingRemoteInvalidates.end());
+		pendingRemoteInvalidates[m->MsgID()].sourceNode = src;
+		pendingRemoteInvalidates[m->MsgID()].msg = m;
 		SendMsg(localConnectionID, EM().ReplicateMsg(m), localSendTime);
 	}
 
@@ -989,18 +1039,18 @@ namespace Memory
       b.sharers.convertToArray(sharers,MEMORY_3_STAGE_DIRECTORY_DEBUG_ARRAY_SIZE);
       m->blockAttached;
 #endif
-      DebugAssert(waitingForInvalidates.find(m->solicitingMessage)!=waitingForInvalidates.end());
-      DebugAssert(waitingForInvalidates[m->solicitingMessage].count > 0);
+      DebugAssert(waitingForInvalidates.find(m->addr)!=waitingForInvalidates.end());
+      DebugAssert(waitingForInvalidates[m->addr].count > 0);
 
       // subtract the pending invalidates counter. If it reaches 0, it means all
          // invalidates have been accounted for, so we can do the read now.
-      waitingForInvalidates[m->solicitingMessage].count--;
-      if (waitingForInvalidates[m->solicitingMessage].count==0)
+      waitingForInvalidates[m->addr].count--;
+      if (waitingForInvalidates[m->addr].count==0)
       {
-         const ReadResponseMsg* rrm = waitingForInvalidates[m->solicitingMessage].msg;
+         const ReadResponseMsg* rrm = waitingForInvalidates[m->addr].msg;
          SendLocalReadResponse(rrm);
       }
-      waitingForInvalidates.erase(m->solicitingMessage);
+      waitingForInvalidates.erase(m->addr);
       EM().DisposeMsg(m);
       /*
        * TODO did all the directoryData operations in OnDirectoryBlockRequest
@@ -1023,7 +1073,9 @@ namespace Memory
 			b.sharers.erase(src);
 		}
 		*/
-      DebugFail("should not reach here");
+      DebugAssert(!m->blockAttached);
+      return;
+      //DebugFail("should not reach here");
 		if(m->blockAttached)
 		{
 			WriteMsg* wm = EM().CreateWriteMsg(getDeviceID(), m->GeneratingPC());
@@ -1147,6 +1199,15 @@ namespace Memory
 			return;
 		} // endif cannot satisfy request at this time
 
+      if (pendingMainMemAccesses.find(m->addr)!=pendingMainMemAccesses.end())
+      {
+         LookupData<ReadMsg> ld;
+         ld.msg = m;
+         ld.sourceNode = src;
+         pendingMainMemAccesses.insert(HashMap<Address,LookupData<ReadMsg> >::value_type(m->addr,ld));
+         return;
+      }
+
       // if we are doing a shared read request
       if (!m->requestingExclusive)
       {
@@ -1238,13 +1299,14 @@ namespace Memory
          if (b.owner==InvalidNodeID || (b.owner==src&&!m->alreadyHasBlock))
          {// if directory is unowned OR it is owned by src but it doesn't have the block
             // fetch from memory
+            // add to pendingMainMemAccesses to prevent other accesses while memory access is in place
             LookupData<ReadMsg> ld;
             ld.msg = m;
             ld.sourceNode = src;
-            pendingMainMemAccesses.insert(HashMultiMap<Address,LookupData<ReadMsg> >::value_type(m->addr,ld));
+            pendingMainMemAccesses.insert(HashMap<Address,LookupData<ReadMsg> >::value_type(m->addr,ld));
             PerformDirectoryFetch(m,src,true,memoryNodeCalc->CalcNodeID(m->addr));
          }
-         else if (b.owner==src)
+         else if (b.owner==src && m->alreadyHasBlock)
          {// if owner is src and it already has block, then just send exclusive reply
             DebugAssert(m->alreadyHasBlock);
             // send directoryBlockResponse
@@ -1275,7 +1337,7 @@ namespace Memory
          PerformDirectoryFetch(m,src,false,*(b.sharers.begin()));
          //TODO 2010/09/23 Eric
          // src can be added again if it is a retried read request
-         DebugAssert(b.sharers.find(src)==b.sharers.end());
+         //DebugAssert(b.sharers.find(src)==b.sharers.end());
          b.sharers.insert(src);
          // do not dispose msg here, because we are forwarding it
          //EM().DisposeMsg(m);
@@ -1345,6 +1407,12 @@ namespace Memory
          if (b.owner==InvalidNodeID || (b.owner==src&&!m->alreadyHasBlock))
          {// if directory is unowned OR it is owned by src but it doesn't have the block
             // fetch from memory
+            // add to pendingMainMemAccesses to prevent other accesses while memory access is in place
+            LookupData<ReadMsg> ld;
+            ld.msg = m;
+            ld.sourceNode = src;
+            DebugAssert(pendingMainMemAccesses.find(m->addr)!=pendingMainMemAccesses.end());
+            pendingMainMemAccesses.insert(HashMap<Address,LookupData<ReadMsg> >::value_type(m->addr,ld));
             PerformDirectoryFetch(m,src,true,memoryNodeCalc->CalcNodeID(m->addr));
          }
          else if (b.owner==src)
@@ -1375,7 +1443,12 @@ namespace Memory
       else if (b.owner==InvalidNodeID && b.sharers.size()!=0)
       {// if directory state is shared, transition to Exclusive and a exclusive reply with invalidates pending
          // is returned to the requestor. Invalidations are sent to the sharers.
-         DebugAssert(b.sharers.find(src)==b.sharers.end());
+         //DebugAssert(b.sharers.find(src)==b.sharers.end());
+         if (b.sharers.find(src)!=b.sharers.end())
+         {
+            // erase src here so we don't end up sending invalidation to it
+            b.sharers.erase(src);
+         }
 
          // send exclusive reply with invalidates pending
          ReadResponseMsg* reply = EM().CreateReadResponseMsg(getDeviceID());
@@ -1389,6 +1462,7 @@ namespace Memory
          reply->satisfied = true;
          reply->size = m->size;
          reply->solicitingMessage = m->MsgID();
+         
          //PerformDirectoryFetch(m,src,false,*(b.sharers.begin()));
          AutoDetermineDestSendMsg(reply,src,lookupTime+remoteSendTime,
             &ThreeStageDirectory::OnDirectoryBlockResponse,"OnDirBlkReqExRead","OnDirBlkResponse");
@@ -1468,7 +1542,9 @@ namespace Memory
       ReadResponseMsg* m = (ReadResponseMsg*)msgIn;
       DebugAssert(m->directoryLookup==true);
       // message must not come from memory, because we want all messages coming from memory to return to directory first
-      DebugAssert(src != memoryNodeCalc->CalcNodeID(m->addr));
+      //2010/09/24 Eric
+      // don't do this because we are changing the message coming from memory to go to directory first
+      //DebugAssert(src != memoryNodeCalc->CalcNodeID(m->addr));
 #if defined DEBUG && defined _WIN32
       MessageID tempMessageID = m->MsgID();
 #endif
@@ -1502,9 +1578,9 @@ namespace Memory
       // check if we have to wait for invalidates
       if (m->pendingInvalidates != INVALID_PENDING_INVALIDATES)
       {// there are pending invalidates, so put this reply into a queue
-         DebugAssert(waitingForInvalidates.find(m->MsgID())==waitingForInvalidates.end());
-         waitingForInvalidates[m->MsgID()].msg = m;
-         waitingForInvalidates[m->MsgID()].count = m->pendingInvalidates;
+         DebugAssert(waitingForInvalidates.find(m->addr)==waitingForInvalidates.end());
+         waitingForInvalidates[m->addr].msg = m;
+         waitingForInvalidates[m->addr].count = m->pendingInvalidates;
          return;
       }
 

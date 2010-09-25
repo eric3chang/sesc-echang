@@ -4,7 +4,7 @@
 
 namespace Memory
 {
-   const int INVALID_PENDING_INVALIDATES = -1;
+   const int INVALID_PENDING_INVALIDATES = -2;
 
 	class ReadResponseMsg : public BaseMsg
 	{
