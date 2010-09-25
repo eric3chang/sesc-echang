@@ -85,7 +85,7 @@ namespace Memory
 		HashMap<Address, LookupData<ReadMsg> > pendingDirectoryExclusiveReads;
       HashMultiMap<Address,LookupData<ReadMsg> > pendingMainMemAccesses;
       HashSet<Address> pendingIgnoreInterventions;
-      HashMap<MessageID, InvalidateData> waitingForInvalidates;
+      HashMap<Address, InvalidateData> waitingForInvalidates;
 		HashSet<Address> pendingEviction;
 		HashMap<Address, BlockData> directoryData;
 		//HashMap<Address, BlockData> pendingDirectoryExclusiveReadsDirectoryData;

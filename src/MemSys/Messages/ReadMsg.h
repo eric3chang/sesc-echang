@@ -43,6 +43,7 @@ namespace Memory
 		         << " hasBlk=" << alreadyHasBlock
 		         << " dirLookup=" << directoryLookup
                << " interv=" << isIntervention
+               << " ogReqNode=" << originalRequestingNode
                //<< " spec=" << isSpeculative
 		   ;
 		}

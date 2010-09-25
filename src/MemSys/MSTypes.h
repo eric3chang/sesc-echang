@@ -10,7 +10,7 @@ namespace Memory
 	typedef unsigned int ProcessorID;
 	typedef unsigned int DeviceID;
 	typedef int NodeID;
-	const NodeID InvalidNodeID = -1;
+	const NodeID InvalidNodeID = -2;
 	typedef unsigned long long MessageID;
 	typedef unsigned long long TickTime;
 	typedef unsigned long long TimeDelta;
