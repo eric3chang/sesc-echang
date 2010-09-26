@@ -286,6 +286,38 @@ namespace Memory
       }
    }
 
+   void ThreeStageDirectory::writeToMainMemory(const EvictionMsg *m)
+   {
+      writeToMainMemory(m->addr, m->GeneratingPC(), m->size);
+   }
+
+   void ThreeStageDirectory::writeToMainMemory(const InvalidateResponseMsg *m)
+   {
+      writeToMainMemory(m->addr, m->GeneratingPC(), m->size);
+   }
+
+   void ThreeStageDirectory::writeToMainMemory(const ReadResponseMsg *m)
+   {
+      writeToMainMemory(m->addr, m->GeneratingPC(), m->size);
+   }
+
+   /**
+   write block to main memory
+   */
+   void ThreeStageDirectory::writeToMainMemory(Address addr, Address generatingPC, size_t size)
+   {
+      DebugAssert(addr && size);
+      WriteMsg* wm = EM().CreateWriteMsg(getDeviceID(), generatingPC);
+      wm->addr = addr;
+      wm->size = size;
+      wm->onCompletedCallback = NULL;
+      NetworkMsg* nm = EM().CreateNetworkMsg(getDeviceID(), generatingPC);
+      nm->sourceNode = nodeID;
+      nm->destinationNode = memoryNodeCalc->CalcNodeID(addr);
+      nm->payloadMsg = wm;
+      SendMsg(remoteConnectionID, nm, remoteSendTime);
+   } // void ThreeStageDirectory::writeToMainMemory(const BaseMsg* msgIn)
+
 	/**
 	 * the message came from the local (cpu) side. It is a read msg
 	 */
@@ -767,15 +799,7 @@ namespace Memory
       {
          if(m->blockAttached)
          {
-            WriteMsg* wm = EM().CreateWriteMsg(getDeviceID(), m->GeneratingPC());
-            wm->addr = m->addr;
-            wm->size = m->size;
-            wm->onCompletedCallback = NULL;
-            NetworkMsg* nm = EM().CreateNetworkMsg(getDeviceID(), m->GeneratingPC());
-            nm->sourceNode = nodeID;
-            nm->destinationNode = memoryNodeCalc->CalcNodeID(m->addr);
-            nm->payloadMsg = wm;
-            SendMsg(remoteConnectionID, nm, remoteSendTime);
+            writeToMainMemory(m);
          }
          LookupData<ReadMsg> &ld = pendingDirectorySharedReads[m->addr];
          // should add previous owner to sharer
@@ -797,15 +821,7 @@ namespace Memory
          DebugAssert(m->blockAttached);
          if(m->blockAttached)
          {
-            WriteMsg* wm = EM().CreateWriteMsg(getDeviceID(), m->GeneratingPC());
-            wm->addr = m->addr;
-            wm->size = m->size;
-            wm->onCompletedCallback = NULL;
-            NetworkMsg* nm = EM().CreateNetworkMsg(getDeviceID(), m->GeneratingPC());
-            nm->sourceNode = nodeID;
-            nm->destinationNode = memoryNodeCalc->CalcNodeID(m->addr);
-            nm->payloadMsg = wm;
-            SendMsg(remoteConnectionID, nm, remoteSendTime);
+            writeToMainMemory(m);
          }
          LookupData<ReadMsg> &ld = pendingDirectoryExclusiveReads[m->addr];
          BlockData &b = directoryData[m->addr];
@@ -972,6 +988,7 @@ namespace Memory
       // TODO 2010/09/23 Eric
       // need this because shared blocks can be evicted, too
       // if src is in sharer, remove src from sharer
+      /*
       else if(b.sharers.find(src) != b.sharers.end())
 		{
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_DIRECTORY_DATA
@@ -980,6 +997,7 @@ namespace Memory
 #endif
 			b.sharers.erase(src);
 		}
+      */
       else
       {
          DebugFail("should not reach here");
@@ -988,15 +1006,7 @@ namespace Memory
       // if block is attached, write back to memory
 		if(m->blockAttached)
 		{
-			WriteMsg* wm = EM().CreateWriteMsg(getDeviceID(), m->GeneratingPC());
-			wm->addr = m->addr;
-			wm->size = m->size;
-			wm->onCompletedCallback = NULL;
-			NetworkMsg* nm = EM().CreateNetworkMsg(getDeviceID(), m->GeneratingPC());
-			nm->sourceNode = nodeID;
-			nm->destinationNode = memoryNodeCalc->CalcNodeID(m->addr);
-			nm->payloadMsg = wm;
-			SendMsg(remoteConnectionID, nm, remoteSendTime);
+			writeToMainMemory(m);
 		}
       EM().DisposeMsg(m);
 	}
@@ -1105,21 +1115,16 @@ namespace Memory
 			b.sharers.erase(src);
 		}
 		*/
-      DebugAssert(!m->blockAttached);
-      return;
-      //DebugFail("should not reach here");
+      //DebugAssert(!m->blockAttached);
+      
 		if(m->blockAttached)
 		{
-			WriteMsg* wm = EM().CreateWriteMsg(getDeviceID(), m->GeneratingPC());
-			wm->addr = m->addr;
-			wm->size = m->size;
-			wm->onCompletedCallback = NULL;
-			NetworkMsg* nm = EM().CreateNetworkMsg(getDeviceID(), m->GeneratingPC());
-			nm->sourceNode = nodeID;
-			nm->destinationNode = memoryNodeCalc->CalcNodeID(m->addr);
-			nm->payloadMsg = wm;
-			SendMsg(remoteConnectionID, nm, remoteSendTime);
+			writeToMainMemory(m);
 		}
+      DebugAssert(pendingDirectoryExclusiveReads.find(m->addr)==pendingDirectoryExclusiveReads.end());
+      DebugAssert(pendingDirectorySharedReads.find(m->addr)==pendingDirectorySharedReads.end());
+      return;
+      //DebugFail("should not reach here");
 //TODO 2010/09/09 Eric
 
 		if(pendingDirectoryExclusiveReads.find(m->addr) != pendingDirectoryExclusiveReads.end())
