@@ -307,6 +307,7 @@ namespace Memory
    void ThreeStageDirectory::writeToMainMemory(Address addr, Address generatingPC, size_t size)
    {
       DebugAssert(addr && size);
+      DebugAssert(pendingMemoryWrites.find(addr)==pendingMemoryWrites.end());
       WriteMsg* wm = EM().CreateWriteMsg(getDeviceID(), generatingPC);
       wm->addr = addr;
       wm->size = size;
@@ -316,6 +317,7 @@ namespace Memory
       nm->destinationNode = memoryNodeCalc->CalcNodeID(addr);
       nm->payloadMsg = wm;
       SendMsg(remoteConnectionID, nm, remoteSendTime);
+      pendingMemoryWrites.insert(addr);
    } // void ThreeStageDirectory::writeToMainMemory(const BaseMsg* msgIn)
 
 	/**
@@ -893,6 +895,8 @@ namespace Memory
 #if defined _WIN32 && defined MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
       MessageID tempMessageID = m->MsgID();
 #endif
+      DebugAssert(pendingMemoryWrites.find(m->addr)!=pendingMemoryWrites.end());
+      pendingMemoryWrites.erase(m->addr);
 		EM().DisposeMsg(m);
 	}
 	void ThreeStageDirectory::OnRemoteEviction(const BaseMsg* msgIn, NodeID src)
@@ -988,7 +992,6 @@ namespace Memory
       // TODO 2010/09/23 Eric
       // need this because shared blocks can be evicted, too
       // if src is in sharer, remove src from sharer
-      /*
       else if(b.sharers.find(src) != b.sharers.end())
 		{
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_DIRECTORY_DATA
@@ -997,11 +1000,12 @@ namespace Memory
 #endif
 			b.sharers.erase(src);
 		}
-      */
+      /*
       else
       {
          DebugFail("should not reach here");
       }
+      */
 
       // if block is attached, write back to memory
 		if(m->blockAttached)
