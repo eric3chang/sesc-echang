@@ -86,6 +86,7 @@ namespace Memory
 		HashMap<Address, LookupData<ReadMsg> > pendingDirectorySharedReads;
 		HashMap<Address, LookupData<ReadMsg> > pendingDirectoryExclusiveReads;
       HashMap<Address, std::vector<LookupData<ReadMsg> > > pendingMainMemAccesses;
+      HashSet<Address> pendingMemoryWrites;
       HashSet<Address> pendingIgnoreInterventions;
       HashMap<Address, InvalidateData> waitingForInvalidates;
 		HashSet<Address> pendingEviction;
@@ -103,6 +104,10 @@ namespace Memory
 		void EraseDirectoryShare(Address a, NodeID id);
 		void AddDirectoryShare(Address a, NodeID id, bool exclusive);
       void ChangeOwnerToShare(Address a, NodeID id);
+      void writeToMainMemory(const EvictionMsg *m);
+      void writeToMainMemory(const InvalidateResponseMsg *m);
+      void writeToMainMemory(const ReadResponseMsg *m);
+      void writeToMainMemory(Address addr, Address generatingPC, size_t size);
 
 		void OnLocalRead(const BaseMsg* msgIn);
 		void OnLocalReadResponse(const BaseMsg* msgIn);
