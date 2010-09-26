@@ -489,6 +489,9 @@ namespace Memory
 		DebugAssert(msgIn);
       DebugAssert(msgIn->Type()==mt_Eviction);
       EvictionMsg* m = (EvictionMsg*)msgIn;
+#ifdef _WIN32 && defined MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
+      MessageID tempMessageID = m->MsgID();
+#endif
 		DebugAssert(pendingEviction.find(m->addr) == pendingEviction.end())
 		pendingEviction.insert(m->addr);
 		EvictionResponseMsg* erm = EM().CreateEvictionResponseMsg(getDeviceID(),m->GeneratingPC());
@@ -573,7 +576,7 @@ namespace Memory
 		DebugAssert(msgIn);
       DebugAssert(msgIn->Type()==mt_ReadResponse);
       ReadResponseMsg* m = (ReadResponseMsg*)msgIn;
-#ifdef _WIN32
+#ifdef _WIN32 && defined MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
       MessageID tempMessageID = m->MsgID();
 #endif
 		DebugAssert(!m->directoryLookup);
@@ -698,7 +701,13 @@ namespace Memory
          // send message back to the original requester
          ReadResponseMsg* newMsg = (ReadResponseMsg*)EM().ReplicateMsg(m);
          newMsg->directoryLookup = true;
+         std::vector<LookupData<ReadMsg> > tempVector = pendingMainMemAccesses[m->addr];
+         std::vector<LookupData<ReadMsg> >::iterator i = tempVector.begin();
 
+         // the first message should be taken care of first
+         AutoDetermineDestSendMsg(newMsg,i->sourceNode,remoteSendTime,
+            &ThreeStageDirectory::OnDirectoryBlockResponse,"OnRemoteReadResponse","OnDirBlkResponse");
+         /*
          std::pair<HashMultiMap<Address,LookupData<ReadMsg> >::iterator,
             HashMultiMap<Address,LookupData<ReadMsg> >::iterator> p
             = pendingMainMemAccesses.equal_range(m->addr);
@@ -709,8 +718,18 @@ namespace Memory
             AutoDetermineDestSendMsg(newMsg,i->second.sourceNode,remoteSendTime,
             &ThreeStageDirectory::OnDirectoryBlockResponse,"OnRemoteReadResponse","OnDirBlkResponse");
          }
+         */
+         
+         // do not restart i, because we already sent the first message out
+         // received data from memory, so allow previously queued up messages to go through
+         for (i++; i < tempVector.end(); i++)
+         {
+            OnDirectoryBlockRequest(i->msg,i->sourceNode);
+         }
+
          // this message might still be in use in OnLocalRead
          //EM().DisposeMsg(pendingMainMemAccesses[m->addr].msg);
+         pendingMainMemAccesses[m->addr].clear();
          pendingMainMemAccesses.erase(m->addr);
          EM().DisposeMsg(m);
 
@@ -856,6 +875,9 @@ namespace Memory
 		DebugAssert(msgIn);
       DebugAssert(msgIn->Type()==mt_Eviction);
       EvictionMsg* m = (EvictionMsg*)msgIn;
+#ifdef _WIN32 && defined MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
+      MessageID tempMessageID = m->MsgID();
+#endif
 		DebugAssert(directoryData.find(m->addr) != directoryData.end());
 		BlockData& b = directoryData[m->addr];
 
@@ -938,7 +960,6 @@ namespace Memory
          EM().DisposeMsg(pendingDirectoryExclusiveReads[m->addr].msg);
          pendingDirectoryExclusiveReads.erase(m->addr);
       }
-      /*
       // TODO 2010/09/23 Eric
       // need this because shared blocks can be evicted, too
       // if src is in sharer, remove src from sharer
@@ -950,7 +971,6 @@ namespace Memory
 #endif
 			b.sharers.erase(src);
 		}
-      */
       else
       {
          DebugFail("should not reach here");
@@ -977,6 +997,9 @@ namespace Memory
 		DebugAssert(msgIn);
       DebugAssert(msgIn->Type()==mt_EvictionResponse);
       EvictionResponseMsg* m = (EvictionResponseMsg*)msgIn;
+#ifdef _WIN32 && defined MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
+      MessageID tempMessageID = m->MsgID();
+#endif
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_EVICTION
       printDebugInfo("OnRemoteEvictionResponse", *m,
             ("pendingEviction.erase("+to_string<Address>(m->addr)+")").c_str());
@@ -1199,12 +1222,13 @@ namespace Memory
 			return;
 		} // endif cannot satisfy request at this time
 
+      // if we are waiting for memory access to come back
       if (pendingMainMemAccesses.find(m->addr)!=pendingMainMemAccesses.end())
       {
          LookupData<ReadMsg> ld;
          ld.msg = m;
          ld.sourceNode = src;
-         pendingMainMemAccesses.insert(HashMap<Address,LookupData<ReadMsg> >::value_type(m->addr,ld));
+         pendingMainMemAccesses[m->addr].push_back(ld);
          return;
       }
 
@@ -1303,7 +1327,9 @@ namespace Memory
             LookupData<ReadMsg> ld;
             ld.msg = m;
             ld.sourceNode = src;
-            pendingMainMemAccesses.insert(HashMap<Address,LookupData<ReadMsg> >::value_type(m->addr,ld));
+            DebugAssert(pendingMainMemAccesses.find(m->addr)==pendingMainMemAccesses.end());
+            pendingMainMemAccesses[m->addr].push_back(ld);
+            //pendingMainMemAccesses.insert(HashMap<Address,LookupData<ReadMsg> >::value_type(m->addr,ld));
             PerformDirectoryFetch(m,src,true,memoryNodeCalc->CalcNodeID(m->addr));
          }
          else if (b.owner==src && m->alreadyHasBlock)
@@ -1411,8 +1437,8 @@ namespace Memory
             LookupData<ReadMsg> ld;
             ld.msg = m;
             ld.sourceNode = src;
-            DebugAssert(pendingMainMemAccesses.find(m->addr)!=pendingMainMemAccesses.end());
-            pendingMainMemAccesses.insert(HashMap<Address,LookupData<ReadMsg> >::value_type(m->addr,ld));
+            DebugAssert(pendingMainMemAccesses.find(m->addr)==pendingMainMemAccesses.end());
+            pendingMainMemAccesses[m->addr].push_back(ld);
             PerformDirectoryFetch(m,src,true,memoryNodeCalc->CalcNodeID(m->addr));
          }
          else if (b.owner==src)
@@ -1667,6 +1693,10 @@ namespace Memory
 	   cout << "ThreeStageDirectory::RecvMsg: " << memoryDirectoryGlobalInt++ << ' ' << endl;
 #endif
 		DebugAssert(msg);
+#if defined _WIN32 && defined MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
+      MessageID tempMessageID = msg->MsgID();
+#endif
+
 		if(connectionID == localConnectionID)
 		{
 			switch(msg->Type())

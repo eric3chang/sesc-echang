@@ -83,7 +83,7 @@ namespace Memory
 		HashMap<MessageID, LookupData<InvalidateMsg> > pendingRemoteInvalidates;
 		HashMap<Address, LookupData<ReadMsg> > pendingDirectorySharedReads;
 		HashMap<Address, LookupData<ReadMsg> > pendingDirectoryExclusiveReads;
-      HashMultiMap<Address,LookupData<ReadMsg> > pendingMainMemAccesses;
+      HashMap<Address, std::vector<LookupData<ReadMsg> > > pendingMainMemAccesses;
       HashSet<Address> pendingIgnoreInterventions;
       HashMap<Address, InvalidateData> waitingForInvalidates;
 		HashSet<Address> pendingEviction;
