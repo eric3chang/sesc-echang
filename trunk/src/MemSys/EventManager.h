@@ -6,6 +6,7 @@
 #include "NetworkMsg.h"
 #include <vector>
 #include "EvictionBusyAckMsg.h"
+#include "MemAccessCompleteMsg.h"
 
 namespace Memory
 {
@@ -42,6 +43,7 @@ namespace Memory
 		Pool<InvalidateResponseMsg> invalidateResponsePool;
 		Pool<EvictionResponseMsg> evictionResponsePool;
 		Pool<EvictionBusyAckMsg> evictionBusyAckPool;
+		Pool<MemAccessCompleteMsg> memAccessCompletePool;
 		Pool<NetworkMsg> networkPool;
 	public:
 		ReadMsg* CreateReadMsg(DeviceID devID, Address generatingPC = 0);
@@ -53,6 +55,7 @@ namespace Memory
 		InvalidateResponseMsg* CreateInvalidateResponseMsg(DeviceID devID, Address generatingPC = 0);
 		EvictionResponseMsg* CreateEvictionResponseMsg(DeviceID devID, Address generatingPC = 0);
 		EvictionBusyAckMsg* CreateEvictionBusyAckMsg(DeviceID devID, Address generatingPC = 0);
+		MemAccessCompleteMsg* CreateMemAccessCompleteMsg(DeviceID devID, Address generatingPC = 0);
 		NetworkMsg* CreateNetworkMsg(DeviceID devID, Address generatingPC = 0);
 
 		BaseMsg* ReplicateMsg(const BaseMsg* msg);

@@ -4,8 +4,6 @@
 
 namespace Memory
 {
-   const int INVALID_PENDING_INVALIDATES = -2;
-
 	class ReadResponseMsg : public BaseMsg
 	{
 	public:
@@ -15,6 +13,7 @@ namespace Memory
 		bool blockAttached;
       bool directoryLookup;
 		bool exclusiveOwnership;
+      bool hasPendingMemAccesses;
       bool isIntervention;
       int pendingInvalidates;
       //bool isSpeculative;   // not implementing speculative right now
@@ -29,10 +28,11 @@ namespace Memory
 		{
 		   BaseMsg::print(destinationDeviceID);
 		   cout << " addr=" << addr
-            << " satis=" << satisfied
+            <<" satis=" << satisfied
 		      << " blkAtt=" << blockAttached
             << " excluOwn=" << exclusiveOwnership
             << " solicMsg=" << solicitingMessage
+            << " memAcc=" << hasPendingMemAccesses
             << " interv=" << isIntervention
             << " pendInv=" << pendingInvalidates
             //<< " spec=" << isSpeculative

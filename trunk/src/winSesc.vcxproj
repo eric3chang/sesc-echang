@@ -346,6 +346,7 @@
     <ClInclude Include="MemSys\Devices\MOESICache.h" />
     <ClInclude Include="libsuc\MSHR.h" />
     <ClInclude Include="MemSys\Messages\InvalidateSharerMsg.h" />
+    <ClInclude Include="MemSys\Messages\MemAccessCompleteMsg.h" />
     <ClInclude Include="memsys\messages\networkmsg.h" />
     <ClInclude Include="MemSys\Messages\SpeculativeReadResponseMsg.h" />
     <ClInclude Include="MemSys\MSTypes.h" />

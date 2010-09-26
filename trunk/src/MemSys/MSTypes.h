@@ -26,6 +26,7 @@ namespace Memory
 		mt_InvalidateResponse,
 		mt_EvictionResponse,
       mt_EvictionBusyAck,
+      mt_MemAccessComplete,
 
 		mt_Network,
 	};

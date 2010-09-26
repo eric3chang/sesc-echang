@@ -53,8 +53,10 @@ namespace Memory
 		class LookupData
 		{
 		public:
+         LookupData() : previousOwner(InvalidNodeID) {}
 			const T* msg;
 			NodeID sourceNode;
+         NodeID previousOwner;
 		};
       class InvalidateData
       {
@@ -118,6 +120,7 @@ namespace Memory
 		void OnRemoteEvictionBusyAck(const BaseMsg* msgIn, NodeID src);
 		void OnRemoteInvalidate(const BaseMsg* msgIn, NodeID src);
 		void OnRemoteInvalidateResponse(const BaseMsg* msgIn, NodeID src);
+		void OnRemoteMemAccessComplete(const BaseMsg* msgIn, NodeID src);
 
 		void OnDirectoryBlockRequest(const BaseMsg* msgIn, NodeID src);
       void OnDirectoryBlockRequestSharedRead(const BaseMsg* msgIn, NodeID src);

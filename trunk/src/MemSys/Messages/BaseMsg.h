@@ -47,7 +47,7 @@ namespace Memory
 
 		virtual void print(DeviceID destinationDeviceID) const
 		{
-		   cout
+         cout
             << " msgSrc=" << setw(2) << deviceID
 		      << " dst=" << setw(2) << destinationDeviceID
 		      << " msg=" << setw(6) << msgID
