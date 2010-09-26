@@ -9,3 +9,4 @@
 #include "InvalidateResponseMsg.h"
 #include "EvictionResponseMsg.h"
 #include "EvictionBusyAckMsg.h"
+#include "MemAccessCompleteMsg.h"

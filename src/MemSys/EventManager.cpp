@@ -50,7 +50,8 @@ namespace Memory
 		m->directoryLookup = false;
       m->isIntervention = false;
       //m->isSpeculative = false;
-      m->pendingInvalidates = INVALID_PENDING_INVALIDATES;
+      m->hasPendingMemAccesses = false;
+      m->pendingInvalidates = 0;
 		m->originalRequestingNode = InvalidNodeID;
 		m->SetIDInfo(currentMsgStamp++,devID,generatingPC);
 		return m;
@@ -79,6 +80,12 @@ namespace Memory
 		EvictionBusyAckMsg* m = evictionBusyAckPool.Take();
 		m->SetIDInfo(currentMsgStamp++,devID,generatingPC);
       m->isExclusive = false;
+		return m;
+	}
+   MemAccessCompleteMsg* EventManager::CreateMemAccessCompleteMsg(DeviceID devID, Address generatingPC)
+	{
+		MemAccessCompleteMsg* m = memAccessCompletePool.Take();
+		m->SetIDInfo(currentMsgStamp++,devID,generatingPC);
 		return m;
 	}
 	NetworkMsg* EventManager::CreateNetworkMsg(DeviceID devID, Address generatingPC)
@@ -157,6 +164,13 @@ namespace Memory
 				ret = m;
 				break;
 			}
+      case(mt_MemAccessComplete):
+			{
+				MemAccessCompleteMsg* m = CreateMemAccessCompleteMsg(msg->GeneratingDeviceID(),msg->GeneratingPC());
+				*m = *((MemAccessCompleteMsg*)msg);
+				ret = m;
+				break;
+			}
 		case(mt_Network):
 			{
 				NetworkMsg* m = CreateNetworkMsg(msg->GeneratingDeviceID(),msg->GeneratingPC());
@@ -185,6 +199,7 @@ namespace Memory
 			case(mt_InvalidateResponse): invalidateResponsePool.Return((InvalidateResponseMsg*)msg); break;
 			case(mt_EvictionResponse): evictionResponsePool.Return((EvictionResponseMsg*)msg); break;
 			case(mt_EvictionBusyAck): evictionBusyAckPool.Return((EvictionBusyAckMsg*)msg); break;
+			case(mt_MemAccessComplete): memAccessCompletePool.Return((MemAccessCompleteMsg*)msg); break;
 			case(mt_Network): networkPool.Return((NetworkMsg*)msg); break;
 			default: DebugFail("Unknown Msg Type");
 		}
