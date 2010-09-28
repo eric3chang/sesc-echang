@@ -89,6 +89,7 @@ namespace Memory
       HashSet<Address> pendingMemoryWrites;
       //HashSet<Address> pendingIgnoreInterventions;
       HashMap<Address, const ReadResponseMsg* >waitingForEvictionBusyAck;
+      HashMap<Address, const ReadMsg*>waitingForEvictionResponse;
       HashMap<Address, InvalidateData> waitingForInvalidates;
 		HashSet<Address> pendingEviction;
 		HashMap<Address, BlockData> directoryData;
@@ -102,6 +103,7 @@ namespace Memory
       void PerformDirectoryFetch(const ReadMsg *msgIn,NodeID src,bool isExclusive,NodeID target);
 		//void PerformDirectoryFetchOwner(const ReadMsg *msgIn, NodeID src);
       void SendLocalReadResponse(const ReadResponseMsg *msgIn);
+      void SendDirectoryBlockRequest(const ReadMsg *msgIn);
 		void EraseDirectoryShare(Address a, NodeID id);
 		void AddDirectoryShare(Address a, NodeID id, bool exclusive);
       void ChangeOwnerToShare(Address a, NodeID id);
