@@ -177,6 +177,33 @@ namespace Memory
 	}
 
    /**
+   send directory block request
+   */
+   void ThreeStageDirectory::SendDirectoryBlockRequest(const ReadMsg *forward)
+   {
+		NodeID remoteNode = directoryNodeCalc->CalcNodeID(forward->addr);
+
+		if(remoteNode == nodeID)
+		{
+#ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
+		   printDebugInfo("OnDirectoryBlockRequest",*forward,"SendDirBlkReq");
+#endif
+			CBOnDirectoryBlockRequest::FunctionType* f = cbOnDirectoryBlockRequest.Create();
+			f->Initialize(this,forward,nodeID);
+			EM().ScheduleEvent(f, localSendTime);
+		}
+		else
+		{
+			NetworkMsg* nm = EM().CreateNetworkMsg(getDeviceID(), forward->GeneratingPC());
+			DebugAssert(nm);
+			nm->destinationNode = remoteNode;
+			nm->sourceNode = nodeID;
+			nm->payloadMsg = forward;
+			SendMsg(remoteConnectionID, nm, remoteSendTime);
+		}
+   }
+
+   /**
    send local read response to the cache above
    */
    void ThreeStageDirectory::SendLocalReadResponse(const ReadResponseMsg* m)
@@ -328,7 +355,6 @@ namespace Memory
 		DebugAssert(msgIn);
       DebugAssert(msgIn->Type()==mt_Read);
       ReadMsg* m = (ReadMsg*)msgIn;
-		NodeID remoteNode = directoryNodeCalc->CalcNodeID(m->addr);
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_LOCAL_READS
 		printDebugInfo("OnLocalRead", *m,
 		      ("pendingLocalReads.insert("+to_string<MessageID>(m->MsgID())+")").c_str());
@@ -339,24 +365,16 @@ namespace Memory
 		forward->onCompletedCallback = NULL;
 		forward->directoryLookup = true;
 		forward->originalRequestingNode = nodeID;
-		if(remoteNode == nodeID)
-		{
-#ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-		   printDebugInfo("OnDirectoryBlockRequest",*m,"OnLocalRead");
-#endif
-			CBOnDirectoryBlockRequest::FunctionType* f = cbOnDirectoryBlockRequest.Create();
-			f->Initialize(this,forward,nodeID);
-			EM().ScheduleEvent(f, localSendTime);
-		}
-		else
-		{
-			NetworkMsg* nm = EM().CreateNetworkMsg(getDeviceID(), m->GeneratingPC());
-			DebugAssert(nm);
-			nm->destinationNode = remoteNode;
-			nm->sourceNode = nodeID;
-			nm->payloadMsg = forward;
-			SendMsg(remoteConnectionID, nm, remoteSendTime);
-		}
+
+      // if this address is being evicted, send read when evictionResponse is received
+      if (pendingEviction.find(m->addr)!=pendingEviction.end())
+      {
+         DebugAssert(waitingForEvictionResponse.find(m->addr)==waitingForEvictionResponse.end());
+         waitingForEvictionResponse[m->addr] = forward;
+         return;
+      }
+
+      SendDirectoryBlockRequest(forward);
 	}
 	void ThreeStageDirectory::OnLocalReadResponse(const BaseMsg* msgIn)
 	{
@@ -1025,6 +1043,12 @@ namespace Memory
       printDebugInfo("OnRemoteEvictionResponse", *m,
             ("pendingEviction.erase("+to_string<Address>(m->addr)+")").c_str());
 #endif
+      // if we have OnLocalReads waiting for this evictionResponse
+      if (waitingForEvictionResponse.find(m->addr)!=waitingForEvictionResponse.end())
+      {
+         SendDirectoryBlockRequest(waitingForEvictionResponse[m->addr]);
+         waitingForEvictionResponse.erase(m->addr);
+      }
 		DebugAssert(pendingEviction.find(m->addr) != pendingEviction.end());
 		pendingEviction.erase(m->addr);
 		SendMsg(localConnectionID, m, localSendTime);
