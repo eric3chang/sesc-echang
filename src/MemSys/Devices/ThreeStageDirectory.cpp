@@ -328,9 +328,6 @@ namespace Memory
 		DebugAssert(msgIn);
       DebugAssert(msgIn->Type()==mt_Read);
       ReadMsg* m = (ReadMsg*)msgIn;
-#if defined DEBUG && defined _WIN32
-      MessageID tempMessageID = m->MsgID();
-#endif
 		NodeID remoteNode = directoryNodeCalc->CalcNodeID(m->addr);
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_LOCAL_READS
 		printDebugInfo("OnLocalRead", *m,
@@ -366,9 +363,6 @@ namespace Memory
 		DebugAssert(msgIn);
       DebugAssert(msgIn->Type()==mt_ReadResponse);
       ReadResponseMsg* m = (ReadResponseMsg*)msgIn;
-#if defined DEBUG && defined _WIN32
-      MessageID tempMessageID = m->MsgID();
-#endif
 		DebugAssert(pendingRemoteReads.find(m->solicitingMessage)!=pendingRemoteReads.end());
       LookupData<ReadMsg> &d = pendingRemoteReads[m->solicitingMessage];
       DebugAssert(d.msg->originalRequestingNode != InvalidNodeID);
@@ -525,9 +519,6 @@ namespace Memory
 		DebugAssert(msgIn);
       DebugAssert(msgIn->Type()==mt_Eviction);
       EvictionMsg* m = (EvictionMsg*)msgIn;
-#ifdef _WIN32 && defined MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-      MessageID tempMessageID = m->MsgID();
-#endif
 		DebugAssert(pendingEviction.find(m->addr) == pendingEviction.end())
 		pendingEviction.insert(m->addr);
 		EvictionResponseMsg* erm = EM().CreateEvictionResponseMsg(getDeviceID(),m->GeneratingPC());
@@ -593,9 +584,6 @@ namespace Memory
 		DebugAssert(msgIn);
       DebugAssert(msgIn->Type()==mt_Read);
       ReadMsg* m = (ReadMsg*)msgIn;
-#ifdef _WIN32
-      MessageID tempMessageID = m->MsgID();
-#endif
 		DebugAssert(!m->directoryLookup);
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_REMOTE_READS
 		printDebugInfo("OnRemoteRead", *m,
@@ -613,9 +601,6 @@ namespace Memory
 		DebugAssert(msgIn);
       DebugAssert(msgIn->Type()==mt_ReadResponse);
       ReadResponseMsg* m = (ReadResponseMsg*)msgIn;
-#ifdef _WIN32 && defined MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-      MessageID tempMessageID = m->MsgID();
-#endif
 		DebugAssert(!m->directoryLookup);
 		DebugAssert(pendingDirectorySharedReads.find(m->addr) != pendingDirectorySharedReads.end()
          || pendingDirectoryExclusiveReads.find(m->addr) != pendingDirectoryExclusiveReads.end()
@@ -901,9 +886,6 @@ namespace Memory
 		DebugAssert(msgIn);
       DebugAssert(msgIn->Type()==mt_WriteResponse);
       WriteResponseMsg* m = (WriteResponseMsg*)msgIn;
-#if defined _WIN32 && defined MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-      MessageID tempMessageID = m->MsgID();
-#endif
       DebugAssert(pendingMemoryWrites.find(m->addr)!=pendingMemoryWrites.end());
       pendingMemoryWrites.erase(m->addr);
 		EM().DisposeMsg(m);
@@ -913,9 +895,6 @@ namespace Memory
 		DebugAssert(msgIn);
       DebugAssert(msgIn->Type()==mt_Eviction);
       EvictionMsg* m = (EvictionMsg*)msgIn;
-#ifdef _WIN32 && defined MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-      MessageID tempMessageID = m->MsgID();
-#endif
 		DebugAssert(directoryData.find(m->addr) != directoryData.end());
 		BlockData& b = directoryData[m->addr];
 
@@ -1016,12 +995,17 @@ namespace Memory
 #endif
          if (b.owner==src)
          {
-            //TODO finish this
-            b.owner = InvalidNodeID;
+            // remove src and move the top of sharers into owner
+            DebugAssert(b.sharers.size()>0);
             HashSet<NodeID>::iterator myIterator = b.sharers.begin();
-            NodeID myInt = *myIterator;
+            b.owner = *myIterator;
+            b.sharers.erase(b.owner);
          }
-         b.sharers.erase(src);
+         else
+         {
+            DebugAssert(b.sharers.find(src)!=b.sharers.end());
+            b.sharers.erase(src);
+         }
 		}
 
       // if block is attached, write back to memory
@@ -1037,9 +1021,6 @@ namespace Memory
 		DebugAssert(msgIn);
       DebugAssert(msgIn->Type()==mt_EvictionResponse);
       EvictionResponseMsg* m = (EvictionResponseMsg*)msgIn;
-#ifdef _WIN32 && defined MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-      MessageID tempMessageID = m->MsgID();
-#endif
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_EVICTION
       printDebugInfo("OnRemoteEvictionResponse", *m,
             ("pendingEviction.erase("+to_string<Address>(m->addr)+")").c_str());
@@ -1218,9 +1199,6 @@ namespace Memory
       DebugAssert(msgIn->Type()==mt_MemAccessComplete);
       MemAccessCompleteMsg* m = (MemAccessCompleteMsg*) msgIn;
       DebugAssert(m->addr != 0);
-#ifdef _WIN32 && defined MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-      MessageID tempMessageID = m->MsgID();
-#endif
 
       BlockData &b = directoryData[m->addr];
 
@@ -1271,9 +1249,6 @@ namespace Memory
       DebugAssert(msgIn->Type()==mt_Read);
       ReadMsg* m = (ReadMsg*)msgIn;
       DebugAssert(m->directoryLookup==true);
-#if defined DEBUG && defined _WIN32
-      MessageID tempMessageID = m->MsgID();
-#endif
 		DebugAssert(directoryNodeCalc->CalcNodeID(m->addr)==nodeID);
       
       bool isDirectoryBusy = (pendingDirectorySharedReads.find(m->addr)!=pendingDirectorySharedReads.end()
@@ -1678,9 +1653,6 @@ namespace Memory
       //2010/09/24 Eric
       // don't do this because we are changing the message coming from memory to go to directory first
       //DebugAssert(src != memoryNodeCalc->CalcNodeID(m->addr));
-#if defined DEBUG && defined _WIN32
-      MessageID tempMessageID = m->MsgID();
-#endif
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_DIRECTORY_SHARED_READS
 		printPendingDirectorySharedReads();
 #endif
@@ -1810,9 +1782,6 @@ namespace Memory
 	   cout << "ThreeStageDirectory::RecvMsg: " << memoryDirectoryGlobalInt++ << ' ' << endl;
 #endif
 		DebugAssert(msg);
-#if defined _WIN32 && defined MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-      MessageID tempMessageID = msg->MsgID();
-#endif
 
 		if(connectionID == localConnectionID)
 		{
