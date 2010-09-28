@@ -379,30 +379,38 @@ namespace Memory
 
 		if (d.msg->isIntervention)
 		{
-         //TODO 2010/09/23 Eric
-         // block doesn't have to be attached if owner is still waiting for response from memory
-            // or if the intervention message arrived before data arrived from memory
-         //DebugAssert(m->blockAttached);
-         // send response back to the requester
-         ReadResponseMsg* forward = (ReadResponseMsg*)EM().ReplicateMsg(m);
-         forward->originalRequestingNode = d.msg->originalRequestingNode;
-         // changed this to true because of 3-stage directory
-         forward->directoryLookup = true;
-         forward->isIntervention = true;
-         //forward->isSpeculative = d.msg->isSpeculative;
-         // the destination node is the original requesting node, and not the directory
-         AutoDetermineDestSendMsg(forward,d.msg->originalRequestingNode,remoteSendTime+lookupTime,
-               &ThreeStageDirectory::OnDirectoryBlockResponse,"OnLocalReadResponse","OnDirBlkResponse");
+         if (m->satisfied)
+         {
+            //TODO 2010/09/23 Eric
+            // block doesn't have to be attached if owner is still waiting for response from memory
+               // or if the intervention message arrived before data arrived from memory
+            //DebugAssert(m->blockAttached);
+            // send response back to the requester
+            ReadResponseMsg* forward = (ReadResponseMsg*)EM().ReplicateMsg(m);
+            forward->originalRequestingNode = d.msg->originalRequestingNode;
+            // changed this to true because of 3-stage directory
+            forward->directoryLookup = true;
+            forward->isIntervention = true;
+            //forward->isSpeculative = d.msg->isSpeculative;
+            // the destination node is the original requesting node, and not the directory
+            AutoDetermineDestSendMsg(forward,d.msg->originalRequestingNode,remoteSendTime+lookupTime,
+                  &ThreeStageDirectory::OnDirectoryBlockResponse,"OnLocalReadResponse","OnDirBlkResponse");
 
-         // send response back to the directory
-         ReadResponseMsg* dirResponse = (ReadResponseMsg*)EM().ReplicateMsg(m);
-         DebugAssert(d.msg->originalRequestingNode != InvalidNodeID);
-         dirResponse->originalRequestingNode = d.msg->originalRequestingNode;
-         dirResponse->directoryLookup = false;
-         dirResponse->isIntervention = true;
-         //forward->isSpeculative = d.msg->isSpeculative;
-         AutoDetermineDestSendMsg(dirResponse,d.sourceNode,remoteSendTime+lookupTime,
-               &ThreeStageDirectory::OnRemoteReadResponse,"OnLocalReadResponse","OnRemoteReadResponse");
+            // send response back to the directory
+            ReadResponseMsg* dirResponse = (ReadResponseMsg*)EM().ReplicateMsg(m);
+            DebugAssert(d.msg->originalRequestingNode != InvalidNodeID);
+            dirResponse->originalRequestingNode = d.msg->originalRequestingNode;
+            dirResponse->directoryLookup = false;
+            dirResponse->isIntervention = true;
+            //forward->isSpeculative = d.msg->isSpeculative;
+            AutoDetermineDestSendMsg(dirResponse,d.sourceNode,remoteSendTime+lookupTime,
+                  &ThreeStageDirectory::OnRemoteReadResponse,"OnLocalReadResponse","OnRemoteReadResponse");
+         } // if satisfied
+         else  // unsatisfied, meaning block was evicted before intervention message was received by this node
+         {  // wait for special eviction response to arrive, ignore intervention message
+            DebugAssert(waitingForEvictionBusyAck.find(m->addr)==waitingForEvictionBusyAck.end());
+            waitingForEvictionBusyAck[m->addr] = m;
+         }
 		} // if (d.msg->isInterventionShared)
       // not doing speculative replies right now
       /*
@@ -527,6 +535,7 @@ namespace Memory
 		erm->size = m->size;
 		erm->solicitingMessage = m->MsgID();
 		SendMsg(localConnectionID, erm, localSendTime);
+      // send eviction message to directory
 		NodeID id = directoryNodeCalc->CalcNodeID(m->addr);
 		if(id == nodeID)
 		{
@@ -723,7 +732,7 @@ namespace Memory
       if (src == memoryNodeCalc->CalcNodeID(m->addr))
       {
          // if it came from memory
-         DebugAssert(pendingIgnoreInterventions.find(m->addr)==pendingIgnoreInterventions.end());
+         //DebugAssert(pendingIgnoreInterventions.find(m->addr)==pendingIgnoreInterventions.end());
          DebugAssert(pendingMainMemAccesses.find(m->addr)!=pendingMainMemAccesses.end());
 
          // send message back to the original requester
@@ -771,6 +780,7 @@ namespace Memory
       }
    
       DebugAssert(m->originalRequestingNode!=InvalidNodeID);
+      /*
       // if we should ignore this intervention
       if (pendingIgnoreInterventions.find(m->addr)!=pendingIgnoreInterventions.end())
       {
@@ -791,12 +801,11 @@ namespace Memory
          EM().DisposeMsg(m);
          return;
       }
+      */
 
       DebugAssert(m->isIntervention);
-      // TODO 2010/09/23 Eric
-      // can be unsatisfied if owner is still waiting for response from memory
-         // or if intervention message arrived before data arrived from memory
-		//DebugAssert(m->satisfied);
+      // has to be satisfied, because unsatisfied intervention messages are caught at the old owner node that evicted the block
+      DebugAssert(m->satisfied);
       if (m->isIntervention && pendingDirectorySharedReads.find(m->addr)!=pendingDirectorySharedReads.end())
       {
          if(m->blockAttached)
@@ -910,28 +919,13 @@ namespace Memory
 		DebugAssert(directoryData.find(m->addr) != directoryData.end());
 		BlockData& b = directoryData[m->addr];
 
-      // if directory state is Exclusive with requestor as owner,
-         // transitions to Unowned and returns a writeback exclusive acklowledge
-         // to the requestor
-      if (b.owner==src && b.sharers.size()==0)
-      {
-         DebugAssert(pendingDirectorySharedReads.find(m->addr)==pendingDirectorySharedReads.end());
-         DebugAssert(pendingDirectoryExclusiveReads.find(m->addr)==pendingDirectoryExclusiveReads.end());
-         EvictionResponseMsg* rm = EM().CreateEvictionResponseMsg(getDeviceID(),m->GeneratingPC());
-			rm->addr = m->addr;
-         rm->isExclusive = true;
-			rm->size = m->size;
-			rm->solicitingMessage = m->MsgID();
-
-         AutoDetermineDestSendMsg(rm,src,remoteSendTime,&ThreeStageDirectory::OnRemoteEvictionResponse
-            ,"OnRemoteEviction","OnRemoteEvictionResponse");
-
-         b.owner=InvalidNodeID;
-      }
-      else if (pendingDirectorySharedReads.find(m->addr)!=pendingDirectorySharedReads.end())
+      if (pendingDirectorySharedReads.find(m->addr)!=pendingDirectorySharedReads.end())
       {// if directory state is Busy-shared, transitions to shared, a shared response is returned to
          // the owner marked in the directory. A writeback busy acknowledgement is also sent to the requestor
+         
          DebugAssert(pendingDirectoryExclusiveReads.find(m->addr)==pendingDirectoryExclusiveReads.end());
+         // block should be attached because there should have been only one owner to cause busy-Share
+         DebugAssert(m->blockAttached);
 
          // send shared response to the owner marked in the directory
          DebugAssert(b.owner!=InvalidNodeID);
@@ -943,7 +937,7 @@ namespace Memory
          AutoDetermineDestSendMsg(sharedResponse,b.owner,remoteSendTime,
             &ThreeStageDirectory::OnRemoteEvictionResponse,"OnRemoteEviction","OnRemoteEvictionRes");
 
-         // send writeback busy acknowledgement to the requestor
+         // send writeback busy acknowledgement to eviction requestor
          EvictionBusyAckMsg *busyAck = EM().CreateEvictionBusyAckMsg(getDeviceID());
          busyAck->addr = m->addr;
          busyAck->isExclusive = false;
@@ -963,6 +957,8 @@ namespace Memory
          // A writeback busy acknowledgement is also sent to the requestor
          DebugAssert(pendingDirectorySharedReads.find(m->addr)==pendingDirectorySharedReads.end());
          DebugAssert(b.sharers.size()==0);
+         // block should be attached because there should have been only one owner to cause exclusive-Share
+         DebugAssert(m->blockAttached);
 
          // send exclusive response back to owner marked in the directory
          DebugAssert(b.owner!=InvalidNodeID);
@@ -974,7 +970,7 @@ namespace Memory
          AutoDetermineDestSendMsg(response,b.owner,remoteSendTime,
             &ThreeStageDirectory::OnRemoteEvictionResponse,"OnRemoteEviction","OnRemoteEvictionRes");
 
-         // send writeback busy acknowledgement to requestor
+         // send writeback busy acknowledgement to eviction requestor
          EvictionBusyAckMsg *busyAck = EM().CreateEvictionBusyAckMsg(getDeviceID());
          busyAck->addr = m->addr;
          busyAck->isExclusive = true;
@@ -989,23 +985,44 @@ namespace Memory
          EM().DisposeMsg(pendingDirectoryExclusiveReads[m->addr].msg);
          pendingDirectoryExclusiveReads.erase(m->addr);
       }
+      // if directory state is Exclusive with requestor as owner,
+         // transitions to Unowned and returns a writeback exclusive acklowledge
+         // to the requestor
+      else if (b.owner==src && b.sharers.size()==0)
+      {
+         DebugAssert(pendingDirectorySharedReads.find(m->addr)==pendingDirectorySharedReads.end());
+         DebugAssert(pendingDirectoryExclusiveReads.find(m->addr)==pendingDirectoryExclusiveReads.end());
+         EvictionResponseMsg* rm = EM().CreateEvictionResponseMsg(getDeviceID(),m->GeneratingPC());
+			rm->addr = m->addr;
+         rm->isExclusive = true;
+			rm->size = m->size;
+			rm->solicitingMessage = m->MsgID();
+
+         AutoDetermineDestSendMsg(rm,src,remoteSendTime,&ThreeStageDirectory::OnRemoteEvictionResponse
+            ,"OnRemoteEviction","OnRemoteEvictionResponse");
+
+         b.owner=InvalidNodeID;
+      }
       // TODO 2010/09/23 Eric
       // need this because shared blocks can be evicted, too
       // if src is in sharer, remove src from sharer
-      else if(b.sharers.find(src) != b.sharers.end())
+      else
 		{
+         // check that src is actually in directoryData
+         DebugAssert(b.owner==src || b.sharers.find(src)!=b.sharers.end());
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_DIRECTORY_DATA
          printDebugInfo("OnRemoteEviction",*m,
             ("b.sharers.erase("+to_string<NodeID>(src)+")").c_str(),src);
 #endif
-			b.sharers.erase(src);
+         if (b.owner==src)
+         {
+            //TODO finish this
+            b.owner = InvalidNodeID;
+            HashSet<NodeID>::iterator myIterator = b.sharers.begin();
+            NodeID myInt = *myIterator;
+         }
+         b.sharers.erase(src);
 		}
-      /*
-      else
-      {
-         DebugFail("should not reach here");
-      }
-      */
 
       // if block is attached, write back to memory
 		if(m->blockAttached)
@@ -1037,21 +1054,17 @@ namespace Memory
 		DebugAssert(msgIn);
       DebugAssert(msgIn->Type()==mt_EvictionBusyAck);
       EvictionBusyAckMsg* m = (EvictionBusyAckMsg*)msgIn;
+      // the following should not be true because this node should not be the directory
+      DebugAssert(pendingDirectorySharedReads.find(m->addr)==pendingDirectorySharedReads.end());
+      DebugAssert(pendingDirectoryExclusiveReads.find(m->addr)==pendingDirectoryExclusiveReads.end());
 
-      DebugAssert(pendingDirectorySharedReads.find(m->addr) != pendingDirectorySharedReads.end()
-         || pendingDirectoryExclusiveReads.find(m->addr) != pendingDirectoryExclusiveReads.end());
-      DebugAssert(pendingDirectorySharedReads.find(m->addr) == pendingDirectorySharedReads.end()
-         || pendingDirectoryExclusiveReads.find(m->addr) == pendingDirectoryExclusiveReads.end());
-      pendingIgnoreInterventions.insert(m->addr);
-      /*
-#ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_EVICTION
-      printDebugInfo("OnRemoteEvictionBusyAck", *m,
-            ("pendingEviction.erase("+to_string<Address>(m->addr)+")").c_str());
-#endif
-		DebugAssert(pendingEviction.find(m->addr) != pendingEviction.end());
+      DebugAssert(pendingEviction.find(m->addr) != pendingEviction.end());
 		pendingEviction.erase(m->addr);
-		SendMsg(localConnectionID, m, localSendTime);
-      */
+
+      DebugAssert(waitingForEvictionBusyAck.find(m->addr)!=waitingForEvictionBusyAck.end());
+      EM().DisposeMsg(waitingForEvictionBusyAck[m->addr]);
+      waitingForEvictionBusyAck.erase(m->addr);
+      EM().DisposeMsg(m);
 	}
 
 	void ThreeStageDirectory::OnRemoteInvalidate(const BaseMsg* msgIn, NodeID src)
