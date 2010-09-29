@@ -8,8 +8,15 @@
 #endif
 #undef ID
 
+// enable to show debug outputs
+//#define MEMORY_SESC_PROCESSOR_INTERFACE_DEBUG_COUNTER
+
 namespace Memory
 {
+#ifdef MEMORY_SESC_PROCESSOR_INTERFACE_DEBUG_COUNTER
+   unsigned int memorySescProcessorInterfaceDebugCounter = 0;
+#endif
+
 	SESCProcessorInterface::SESCProcessorInterface()
 #ifdef SYSTEM_SESC
 		: MemObj("","")//required for compilation, because SESC didn't implement MemObj(void), but stupidly defined it
@@ -132,6 +139,10 @@ namespace Memory
 	}
 	void SESCProcessorInterface::RecvMsg(const BaseMsg* msg, int connectionID)
 	{
+#ifdef MEMORY_SESC_PROCESSOR_INTERFACE_DEBUG_COUNTER
+      std::cout << "SESCProcessorInterface::RecvMsg: memorySescProcessorInterfaceDebugCounter="
+         << memorySescProcessorInterfaceDebugCounter++ << std::endl;
+#endif
 #ifdef SYSTEM_SESC
 		DebugAssert(msg);
 		MessageID id;
