@@ -11,7 +11,7 @@
 #define CALL_MEMBER_FN(object,ptrToMember)  ((object).*(ptrToMember))
 
 // toggles debug messages
-#define MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
+//#define MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
 //#define MEMORY_3_STAGE_DIRECTORY_DEBUG_COUNTERS
 //#define MEMORY_3_STAGE_DIRECTORY_DEBUG_DIRECTORY_DATA
 //#define MEMORY_3_STAGE_DIRECTORY_DEBUG_MSG_COUNT
@@ -537,8 +537,9 @@ namespace Memory
 		DebugAssert(msgIn);
       DebugAssert(msgIn->Type()==mt_Eviction);
       EvictionMsg* m = (EvictionMsg*)msgIn;
-		DebugAssert(pendingEviction.find(m->addr) == pendingEviction.end())
-		pendingEviction.insert(m->addr);
+		DebugAssert(pendingEviction.find(m->addr) == pendingEviction.end());
+      EvictionMsg* myEvictionMsg = (EvictionMsg*)EM().ReplicateMsg(m);
+      pendingEviction[m->addr] = myEvictionMsg;
 		EvictionResponseMsg* erm = EM().CreateEvictionResponseMsg(getDeviceID(),m->GeneratingPC());
 		erm->addr = m->addr;
 		erm->size = m->size;
@@ -1010,7 +1011,7 @@ namespace Memory
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_DIRECTORY_DATA
          printDebugInfo("OnRemoteEviction",*m,
             ("b.sharers.erase("+to_string<NodeID>(src)+")").c_str(),src);
-#endif
+#endif         
          if (b.owner==src)
          {
             // remove src and move the top of sharers into owner
@@ -1024,6 +1025,16 @@ namespace Memory
             DebugAssert(b.sharers.find(src)!=b.sharers.end());
             b.sharers.erase(src);
          }
+
+         // send regular eviction response msg
+         EvictionResponseMsg *evictionResponse = EM().CreateEvictionResponseMsg(getDeviceID());
+         evictionResponse->addr = m->addr;
+         // I think exclusivity doesn't matter in a regular eviction 2010/09/28 Eric
+         //evictionResponse->isExclusive = 
+         evictionResponse->size = m->size;
+         evictionResponse->solicitingMessage = m->MsgID();
+         AutoDetermineDestSendMsg(evictionResponse,src,remoteSendTime,
+            &ThreeStageDirectory::OnRemoteEvictionResponse,"OnRemoteEviction","OnRemoteEvictionRes");
 		}
 
       // if block is attached, write back to memory
@@ -1050,6 +1061,7 @@ namespace Memory
          waitingForEvictionResponse.erase(m->addr);
       }
 		DebugAssert(pendingEviction.find(m->addr) != pendingEviction.end());
+      EM().DisposeMsg(pendingEviction[m->addr]);
 		pendingEviction.erase(m->addr);
 		SendMsg(localConnectionID, m, localSendTime);
 	}
