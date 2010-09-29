@@ -2,7 +2,7 @@
 .data Minor header aligment correction (100816e0 vs 100816d8)
 1.bss Minor header aligment correction 12 (100834d0 vs 100834c4)
 .bss Minor header aligment correction (100834d0 vs 100834c4)
-static[0x10069a30-0x10083f84] heap[0x10084000-0x23f42000] stack[0x23f42000-0x2473a000] -> [0x97ac4008-0xac1945d8]
+static[0x10069a30-0x10083f84] heap[0x10084000-0x23f42000] stack[0x23f42000-0x2473a000] -> [0x97ac2008-0xac1925d8]
 OSSim::spawn(-1,0,0x10000,0)
 Device : P(0)_DL1  Description : ProcessorInterface_0
 Device : P(0)_IL1  Description : InstSource
@@ -22,9 +22,9 @@ Leaving rabbit mode...
 OSSim::spawn(0,1,0x10000,0)
 OSSim::spawn(0,2,0x10000,0)
 OSSim::spawn(0,3,0x10000,0)
-sesc_spawn( 0x100013d4, 0x0, 0x0 ) pid = 0, child pid = 1, child context = 93bfe50
-sesc_spawn( 0x100013d4, 0x0, 0x0 ) pid = 0, child pid = 2, child context = 93c1e70
-sesc_spawn( 0x100013d4, 0x0, 0x0 ) pid = 0, child pid = 3, child context = 93c2788
+sesc_spawn( 0x100013d4, 0x0, 0x0 ) pid = 0, child pid = 1, child context = 8cd4430
+sesc_spawn( 0x100013d4, 0x0, 0x0 ) pid = 0, child pid = 2, child context = 8cd48f0
+sesc_spawn( 0x100013d4, 0x0, 0x0 ) pid = 0, child pid = 3, child context = 8cd1c88
 FastSimBeginEvent
 FastSimBeginEvent
 FastSimBeginEvent
@@ -151,9 +151,9 @@ mint_exit 3
 mint_exit 1
 Rabbit Mode Start 
     0                89             32       0.00000
-Start time                        :       1724921112
-Initialization finish time        :       1724921120
-Overall finish time               :       1724921209
+Start time                        :       2047534607
+Initialization finish time        :       2047534615
+Overall finish time               :       2047534704
 Total time with initialization    :               97
 Total time without initialization :               89
 Overall transpose time            :               32
@@ -196,4 +196,5 @@ Rabbit Mode Start
 Leaving rabbit mode...
 Get out of 'has-work' loop
 Finished running 
+Dumping stats
 Destroying TQueue 1 with pending nodes
