@@ -73,6 +73,7 @@ namespace Memory
 	{
 		EvictionResponseMsg* m = evictionResponsePool.Take();
 		m->SetIDInfo(currentMsgStamp++,devID,generatingPC);
+      m->isBusyAck = false;
       m->isExclusive = false;
 		return m;
 	}
