@@ -571,9 +571,6 @@ namespace Memory
       DebugAssert(pendingRemoteInvalidates.find(m->solicitingMessage) != pendingRemoteInvalidates.end());
       LookupData<InvalidateMsg>& d = pendingRemoteInvalidates[m->solicitingMessage];
 		DebugAssert(d.msg->MsgID() == m->solicitingMessage);
-      // change solicitingMessage to point to the newOwner message that was sent along with the invalidate
-      InvalidateResponseMsg* newInvalidateResponse = (InvalidateResponseMsg*)EM().ReplicateMsg(m);
-      newInvalidateResponse->solicitingMessage = d.msg->solicitingMessage;
 
       //TODO 2010/09/13 Eric
       //if(nodeID != d.sourceNode)
@@ -584,7 +581,7 @@ namespace Memory
          //TODO 2010/09/13 Eric
          //nm->destinationNode = d.sourceNode;
          nm->destinationNode = d.msg->newOwner;
-			nm->payloadMsg = newInvalidateResponse;
+			nm->payloadMsg = m;
 			SendMsg(remoteConnectionID, nm, remoteSendTime);
 		}
 		else
@@ -592,10 +589,11 @@ namespace Memory
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
                printDebugInfo("OnRemoteInvalidateResponse",*m,"OnLocalInvalidateResponse",nodeID);
 #endif
-			OnRemoteInvalidateResponse(newInvalidateResponse,nodeID);
+			OnRemoteInvalidateResponse(m,nodeID);
 		}
 		EM().DisposeMsg(d.msg);
-      EM().DisposeMsg(m);
+      // do not delete m here, it will be deleted in OnRemoteInvalidateResponse
+      //EM().DisposeMsg(m);
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_REMOTE_INVALIDATES
 		printDebugInfo("OnLocalInvalidateResponse",*m,
 		   ("PRI.erase("+to_string<Address>(d.msg->addr)+")").c_str());
@@ -613,6 +611,16 @@ namespace Memory
 		printDebugInfo("OnRemoteRead", *m,
 		      ("pendingRemoteReads.insert("+to_string<MessageID>(m->MsgID())+")").c_str());
 #endif
+      // if we are still waiting for invalidates, put it in a queue
+      if (waitingForInvalidates.find(m->addr)!=waitingForInvalidates.end())
+      {
+         LookupData <ReadMsg> ld;
+         ld.msg = m;
+         ld.sourceNode = src;
+         waitingForInvalidates[m->addr].pendingReads.push_back(ld);
+         return;
+      }
+
 		DebugAssert(pendingRemoteReads.find(m->MsgID()) == pendingRemoteReads.end());
       DebugAssert(m->originalRequestingNode != InvalidNodeID);
 		pendingRemoteReads[m->MsgID()].msg = m;
@@ -1120,18 +1128,28 @@ namespace Memory
       b.sharers.convertToArray(sharers,MEMORY_3_STAGE_DIRECTORY_DEBUG_ARRAY_SIZE);
       m->blockAttached;
 #endif
-      DebugAssert(waitingForInvalidates.find(m->solicitingMessage)!=waitingForInvalidates.end());
-      DebugAssert(waitingForInvalidates[m->solicitingMessage].count > 0);
+      DebugAssert(waitingForInvalidates.find(m->addr)!=waitingForInvalidates.end());
+      DebugAssert(waitingForInvalidates[m->addr].count > 0);
 
       // subtract the pending invalidates counter. If it reaches 0, it means all
-         // invalidates have been accounted for, so we can do the read now.
-      waitingForInvalidates[m->solicitingMessage].count--;
-      if (waitingForInvalidates[m->solicitingMessage].count==0)
+         // invalidates have been accounted for, so we can send the read response now.
+      waitingForInvalidates[m->addr].count--;
+      if (waitingForInvalidates[m->addr].count==0)
       {
-         const ReadResponseMsg* rrm = waitingForInvalidates[m->solicitingMessage].msg;
+         const ReadResponseMsg* rrm = waitingForInvalidates[m->addr].msg;
          SendLocalReadResponse(rrm);
+         std::vector<LookupData<ReadMsg> > pendingReads = waitingForInvalidates[m->addr].pendingReads;
+         waitingForInvalidates.erase(m->addr);
+         // do not delete read response because it was sent to local
+         if (pendingReads.size() != 0)
+         {
+            for (std::vector<LookupData<ReadMsg> >::iterator i = pendingReads.begin();
+               i < pendingReads.end(); i++)
+            {
+               OnRemoteRead(i->msg,i->sourceNode);
+            }
+         }
       }
-      waitingForInvalidates.erase(m->solicitingMessage);
       EM().DisposeMsg(m);
       /*
        * TODO did all the directoryData operations in OnDirectoryBlockRequest
@@ -1581,11 +1599,14 @@ namespace Memory
       else if (b.sharers.size()!=0)
       {// if directory state is shared, transition to Exclusive and a exclusive reply with invalidates pending
          // is returned to the requestor. Invalidations are sent to the sharers.
-         //DebugAssert(b.sharers.find(src)==b.sharers.end());
-         if (b.sharers.find(src)!=b.sharers.end())
+         int pendingInvalidates = 0;
+         if (b.owner==src || b.sharers.find(src)!=b.sharers.end())
+         {// if new owner is already in the directory
+            pendingInvalidates = b.sharers.size();
+         }
+         else
          {
-            // erase src here so we don't end up sending invalidation to it
-            b.sharers.erase(src);
+            pendingInvalidates = b.sharers.size()+1;
          }
 
          // send exclusive reply as directory block response with invalidates pending
@@ -1594,7 +1615,7 @@ namespace Memory
          reply->blockAttached = false;
          reply->directoryLookup = true;
          reply->exclusiveOwnership = true;
-         reply->pendingInvalidates = b.sharers.size();
+         reply->pendingInvalidates = pendingInvalidates;
          reply->isIntervention = false;
          reply->originalRequestingNode = m->originalRequestingNode;
          reply->satisfied = true;
@@ -1608,23 +1629,25 @@ namespace Memory
          // send invalidations to the sharers
          for (HashSet<NodeID>::iterator i = b.sharers.begin(); i!=b.sharers.end(); i++)
          {
+            if (*i==src)
+            {// skip new owner
+               continue;
+            }
             InvalidateMsg* invalidation = EM().CreateInvalidateMsg(getDeviceID());
             invalidation->addr = m->addr;
             invalidation->newOwner = src;
             invalidation->size = m->size;
-            invalidation->solicitingMessage = reply->MsgID();
             AutoDetermineDestSendMsg(invalidation,*i,lookupTime+remoteSendTime,
                &ThreeStageDirectory::OnRemoteInvalidate,"OnDirBlkReqExRead","OnRemoteInv");
          }
 
-         // send invalidation to owner if necessary
+         // send invalidation to owner if it is not the new owner
          if (b.owner != src)
          {
             InvalidateMsg* invalidation = EM().CreateInvalidateMsg(getDeviceID());
             invalidation->addr = m->addr;
             invalidation->newOwner = src;
             invalidation->size = m->size;
-            invalidation->solicitingMessage = reply->MsgID();
             AutoDetermineDestSendMsg(invalidation,b.owner,lookupTime+remoteSendTime,
                &ThreeStageDirectory::OnRemoteInvalidate,"OnDirBlkReqExRead","OnRemoteInv");
          }
@@ -1727,9 +1750,9 @@ namespace Memory
       // check if we have to wait for invalidates
       if (m->pendingInvalidates > 0)
       {// there are pending invalidates, so put this reply into a queue
-         DebugAssert(waitingForInvalidates.find(m->MsgID())==waitingForInvalidates.end());
-         waitingForInvalidates[m->MsgID()].msg = m;
-         waitingForInvalidates[m->MsgID()].count = m->pendingInvalidates;
+         DebugAssert(waitingForInvalidates.find(m->addr)==waitingForInvalidates.end());
+         waitingForInvalidates[m->addr].msg = m;
+         waitingForInvalidates[m->addr].count = m->pendingInvalidates;
          return;
       }
 

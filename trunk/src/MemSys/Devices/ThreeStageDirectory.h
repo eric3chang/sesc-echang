@@ -63,6 +63,7 @@ namespace Memory
       public:
          const ReadResponseMsg* msg;
          int count;
+         std::vector<LookupData<ReadMsg> > pendingReads;
       };
 
       unsigned int messagesReceived;
@@ -90,7 +91,7 @@ namespace Memory
       //HashSet<Address> pendingIgnoreInterventions;
       HashMap<Address, const ReadResponseMsg* >waitingForEvictionBusyAck;
       HashMap<Address, const ReadMsg*>waitingForEvictionResponse;
-      HashMap<MessageID, InvalidateData> waitingForInvalidates;
+      HashMap<Address, InvalidateData> waitingForInvalidates;
 		HashMap<Address, const EvictionMsg*> pendingEviction;
 		HashMap<Address, BlockData> directoryData;
 		//HashMap<Address, BlockData> pendingDirectoryExclusiveReadsDirectoryData;
