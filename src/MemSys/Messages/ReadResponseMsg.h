@@ -14,6 +14,7 @@ namespace Memory
       bool directoryLookup;
 		bool exclusiveOwnership;
       bool hasPendingMemAccesses;
+      bool isFromEviction;
       bool isIntervention;
       int pendingInvalidates;
       //bool isSpeculative;   // not implementing speculative right now
@@ -33,6 +34,7 @@ namespace Memory
             << " excluOwn=" << exclusiveOwnership
             << " solicMsg=" << solicitingMessage
             << " memAcc=" << hasPendingMemAccesses
+            << " evic=" << isFromEviction
             << " interv=" << isIntervention
             << " pendInv=" << pendingInvalidates
             //<< " spec=" << isSpeculative
