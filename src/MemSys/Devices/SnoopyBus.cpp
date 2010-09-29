@@ -165,6 +165,9 @@ namespace Memory
          case(mt_Write):
             DebugFail("Should not be here");
             break;
+         case(mt_MemAccessComplete):
+            DebugFail("Should not be here");
+            break;
 			} // switch(msg->Type())
 			pendingTransfers[addr].pendingResponses--;
 			if(pendingTransfers[addr].satisfied)

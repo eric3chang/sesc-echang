@@ -125,7 +125,6 @@ namespace Memory
 		m->alreadyHasBlock = false;
       m->originalRequestingNode = src;
       m->requestingExclusive = isExclusive;
-      NodeID memoryNode = memoryNodeCalc->CalcNodeID(m->addr);
       //TODO 2010/09/24 Eric
       // changed the block to return to directory first before doing anything else
       /*
@@ -334,17 +333,18 @@ namespace Memory
    void ThreeStageDirectory::writeToMainMemory(Address addr, Address generatingPC, size_t size)
    {
       DebugAssert(addr && size);
-      DebugAssert(pendingMemoryWrites.find(addr)==pendingMemoryWrites.end());
       WriteMsg* wm = EM().CreateWriteMsg(getDeviceID(), generatingPC);
       wm->addr = addr;
       wm->size = size;
       wm->onCompletedCallback = NULL;
+      DebugAssert(pendingMemoryWrites.find(wm->MsgID())==pendingMemoryWrites.end());
+      pendingMemoryWrites.insert(wm->MsgID());
+
       NetworkMsg* nm = EM().CreateNetworkMsg(getDeviceID(), generatingPC);
       nm->sourceNode = nodeID;
       nm->destinationNode = memoryNodeCalc->CalcNodeID(addr);
       nm->payloadMsg = wm;
       SendMsg(remoteConnectionID, nm, remoteSendTime);
-      pendingMemoryWrites.insert(addr);
    } // void ThreeStageDirectory::writeToMainMemory(const BaseMsg* msgIn)
 
 	/**
@@ -905,8 +905,8 @@ namespace Memory
 		DebugAssert(msgIn);
       DebugAssert(msgIn->Type()==mt_WriteResponse);
       WriteResponseMsg* m = (WriteResponseMsg*)msgIn;
-      DebugAssert(pendingMemoryWrites.find(m->addr)!=pendingMemoryWrites.end());
-      pendingMemoryWrites.erase(m->addr);
+      DebugAssert(pendingMemoryWrites.find(m->solicitingMessage)!=pendingMemoryWrites.end());
+      pendingMemoryWrites.erase(m->solicitingMessage);
 		EM().DisposeMsg(m);
 	}
 	void ThreeStageDirectory::OnRemoteEviction(const BaseMsg* msgIn, NodeID src)
@@ -1455,7 +1455,7 @@ namespace Memory
          //EM().DisposeMsg(m);
          return;
       } // if ((b.owner==InvalidNodeID&&b.sharers.size()==0) || (b.owner==src&&b.sharers.size()==0))
-      else if (b.owner==InvalidNodeID && b.sharers.size()!=0)
+      else if (b.sharers.size()!=0)
       {// if directory state is shared, add requesting node to sharer and request reply from any sharer
          // perform directory fetch before modifying directoryData
          PerformDirectoryFetch(m,src,false,*(b.sharers.begin()));
@@ -1466,12 +1466,13 @@ namespace Memory
          // do not dispose msg here, because we are forwarding it
          //EM().DisposeMsg(m);
          return;
-      }// else if (b.owner==InvalidNodeID && b.sharers.size()!=0)
+      }// else if (b.sharers.size()!=0)
       else if (b.owner!=InvalidNodeID&&b.owner!=src)
       {// if directory state is Exclusive with another owner, transitions to Busy-shared with
          // requestor as owner and send out an intervention shared request to the previous
          // owner and a speculative reply to the requestor
          DebugAssert(pendingDirectorySharedReads.find(m->addr)==pendingDirectorySharedReads.end());
+         DebugAssert(b.sharers.size()==0);
 
          // send intervention shared request to the previous owner
          NodeID previousOwner = b.owner;

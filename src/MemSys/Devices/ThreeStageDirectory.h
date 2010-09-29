@@ -86,7 +86,7 @@ namespace Memory
 		HashMap<Address, LookupData<ReadMsg> > pendingDirectorySharedReads;
 		HashMap<Address, LookupData<ReadMsg> > pendingDirectoryExclusiveReads;
       HashMap<Address, std::vector<LookupData<ReadMsg> > > pendingMainMemAccesses;
-      HashSet<Address> pendingMemoryWrites;
+      HashSet<MessageID> pendingMemoryWrites;
       //HashSet<Address> pendingIgnoreInterventions;
       HashMap<Address, const ReadResponseMsg* >waitingForEvictionBusyAck;
       HashMap<Address, const ReadMsg*>waitingForEvictionResponse;
