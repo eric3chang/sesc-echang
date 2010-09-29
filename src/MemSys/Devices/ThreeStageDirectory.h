@@ -90,7 +90,7 @@ namespace Memory
       //HashSet<Address> pendingIgnoreInterventions;
       HashMap<Address, const ReadResponseMsg* >waitingForEvictionBusyAck;
       HashMap<Address, const ReadMsg*>waitingForEvictionResponse;
-      HashMap<Address, InvalidateData> waitingForInvalidates;
+      HashMap<MessageID, InvalidateData> waitingForInvalidates;
 		HashMap<Address, const EvictionMsg*> pendingEviction;
 		HashMap<Address, BlockData> directoryData;
 		//HashMap<Address, BlockData> pendingDirectoryExclusiveReadsDirectoryData;

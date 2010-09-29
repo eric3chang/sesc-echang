@@ -9,6 +9,7 @@ namespace Memory
 		Address addr;
       NodeID newOwner;
 		size_t size;
+      MessageID solicitingMessage;
 
 		virtual bool IsResponse() const { return false; }
 		virtual size_t MsgSize() const { return 1 + sizeof(Address); }
@@ -19,6 +20,7 @@ namespace Memory
 		   BaseMsg::print(destinationDeviceID);
 		   cout << " addr=" << addr
             << " newOwner=" << newOwner
+            << " solitMsg=" << solicitingMessage
 		   ;
 		}
 	};
