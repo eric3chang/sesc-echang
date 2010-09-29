@@ -8,6 +8,7 @@ namespace Memory
 	{
 	public:
 		Address addr;
+      bool isBusyAck;
       bool isExclusive;
 		size_t size;
 		MessageID solicitingMessage;
@@ -20,6 +21,7 @@ namespace Memory
       {
          BaseMsg::print(destinationDeviceID);
          cout << " addr=" << addr
+            << " isBusyAck=" << isBusyAck
             << " isExclusive=" << isExclusive
             << " solicitMsg=" << solicitingMessage
          ;
