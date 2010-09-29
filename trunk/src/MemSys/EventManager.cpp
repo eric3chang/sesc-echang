@@ -36,6 +36,7 @@ namespace Memory
 		InvalidateMsg* m = invalidatePool.Take();
 		m->SetIDInfo(currentMsgStamp++,devID,generatingPC);
       m->newOwner = InvalidNodeID;
+      m->solicitingMessage = 0;
 		return m;
 	}
 	EvictionMsg* EventManager::CreateEvictionMsg(DeviceID devID, Address generatingPC)

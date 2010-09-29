@@ -571,6 +571,10 @@ namespace Memory
       DebugAssert(pendingRemoteInvalidates.find(m->solicitingMessage) != pendingRemoteInvalidates.end());
       LookupData<InvalidateMsg>& d = pendingRemoteInvalidates[m->solicitingMessage];
 		DebugAssert(d.msg->MsgID() == m->solicitingMessage);
+      // change solicitingMessage to point to the newOwner message that was sent along with the invalidate
+      InvalidateResponseMsg* newInvalidateResponse = (InvalidateResponseMsg*)EM().ReplicateMsg(m);
+      newInvalidateResponse->solicitingMessage = d.msg->solicitingMessage;
+
       //TODO 2010/09/13 Eric
       //if(nodeID != d.sourceNode)
       if (nodeID != d.msg->newOwner)
@@ -580,7 +584,7 @@ namespace Memory
          //TODO 2010/09/13 Eric
          //nm->destinationNode = d.sourceNode;
          nm->destinationNode = d.msg->newOwner;
-			nm->payloadMsg = m;
+			nm->payloadMsg = newInvalidateResponse;
 			SendMsg(remoteConnectionID, nm, remoteSendTime);
 		}
 		else
@@ -588,9 +592,10 @@ namespace Memory
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
                printDebugInfo("OnRemoteInvalidateResponse",*m,"OnLocalInvalidateResponse",nodeID);
 #endif
-			OnRemoteInvalidateResponse(m,nodeID);
+			OnRemoteInvalidateResponse(newInvalidateResponse,nodeID);
 		}
 		EM().DisposeMsg(d.msg);
+      EM().DisposeMsg(m);
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_REMOTE_INVALIDATES
 		printDebugInfo("OnLocalInvalidateResponse",*m,
 		   ("PRI.erase("+to_string<Address>(d.msg->addr)+")").c_str());
@@ -1115,18 +1120,18 @@ namespace Memory
       b.sharers.convertToArray(sharers,MEMORY_3_STAGE_DIRECTORY_DEBUG_ARRAY_SIZE);
       m->blockAttached;
 #endif
-      DebugAssert(waitingForInvalidates.find(m->addr)!=waitingForInvalidates.end());
-      DebugAssert(waitingForInvalidates[m->addr].count > 0);
+      DebugAssert(waitingForInvalidates.find(m->solicitingMessage)!=waitingForInvalidates.end());
+      DebugAssert(waitingForInvalidates[m->solicitingMessage].count > 0);
 
       // subtract the pending invalidates counter. If it reaches 0, it means all
          // invalidates have been accounted for, so we can do the read now.
-      waitingForInvalidates[m->addr].count--;
-      if (waitingForInvalidates[m->addr].count==0)
+      waitingForInvalidates[m->solicitingMessage].count--;
+      if (waitingForInvalidates[m->solicitingMessage].count==0)
       {
-         const ReadResponseMsg* rrm = waitingForInvalidates[m->addr].msg;
+         const ReadResponseMsg* rrm = waitingForInvalidates[m->solicitingMessage].msg;
          SendLocalReadResponse(rrm);
       }
-      waitingForInvalidates.erase(m->addr);
+      waitingForInvalidates.erase(m->solicitingMessage);
       EM().DisposeMsg(m);
       /*
        * TODO did all the directoryData operations in OnDirectoryBlockRequest
@@ -1583,7 +1588,7 @@ namespace Memory
             b.sharers.erase(src);
          }
 
-         // send exclusive reply with invalidates pending
+         // send exclusive reply as directory block response with invalidates pending
          ReadResponseMsg* reply = EM().CreateReadResponseMsg(getDeviceID());
          reply->addr = m->addr;
          reply->blockAttached = false;
@@ -1607,6 +1612,7 @@ namespace Memory
             invalidation->addr = m->addr;
             invalidation->newOwner = src;
             invalidation->size = m->size;
+            invalidation->solicitingMessage = reply->MsgID();
             AutoDetermineDestSendMsg(invalidation,*i,lookupTime+remoteSendTime,
                &ThreeStageDirectory::OnRemoteInvalidate,"OnDirBlkReqExRead","OnRemoteInv");
          }
@@ -1618,6 +1624,7 @@ namespace Memory
             invalidation->addr = m->addr;
             invalidation->newOwner = src;
             invalidation->size = m->size;
+            invalidation->solicitingMessage = reply->MsgID();
             AutoDetermineDestSendMsg(invalidation,b.owner,lookupTime+remoteSendTime,
                &ThreeStageDirectory::OnRemoteInvalidate,"OnDirBlkReqExRead","OnRemoteInv");
          }
@@ -1720,9 +1727,9 @@ namespace Memory
       // check if we have to wait for invalidates
       if (m->pendingInvalidates > 0)
       {// there are pending invalidates, so put this reply into a queue
-         DebugAssert(waitingForInvalidates.find(m->addr)==waitingForInvalidates.end());
-         waitingForInvalidates[m->addr].msg = m;
-         waitingForInvalidates[m->addr].count = m->pendingInvalidates;
+         DebugAssert(waitingForInvalidates.find(m->MsgID())==waitingForInvalidates.end());
+         waitingForInvalidates[m->MsgID()].msg = m;
+         waitingForInvalidates[m->MsgID()].count = m->pendingInvalidates;
          return;
       }
 
