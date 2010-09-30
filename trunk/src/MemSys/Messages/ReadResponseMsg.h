@@ -29,13 +29,14 @@ namespace Memory
 		{
 		   BaseMsg::print(destinationDeviceID);
 		   cout << " addr=" << addr
-            <<" satis=" << satisfied
-		      << " blkAtt=" << blockAttached
-            << " excluOwn=" << exclusiveOwnership
-            << " solicMsg=" << solicitingMessage
+            <<" sat=" << satisfied
+		      << " att=" << blockAttached
+            << " exOwn=" << exclusiveOwnership
+            << " sMsg=" << solicitingMessage
             << " memAcc=" << hasPendingMemAccesses
             << " evic=" << isFromEviction
-            << " interv=" << isIntervention
+            << " intv=" << isIntervention
+            << " ogNode=" << convertDirectoryNetworkIDToDeviceNodeID(originalRequestingNode)
             << " pendInv=" << pendingInvalidates
             //<< " spec=" << isSpeculative
 		   ;

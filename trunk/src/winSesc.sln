@@ -9,6 +9,7 @@ Global
 		fft-002-0001-0002-00|Win32 = fft-002-0001-0002-00|Win32
 		fft-3sd-moesi-002-0001-0002-00|Win32 = fft-3sd-moesi-002-0001-0002-00|Win32
 		fft-3sd-moesi-004-0001-0002-00|Win32 = fft-3sd-moesi-004-0001-0002-00|Win32
+		fft-dir-moesi-004-0001-0002-00|Win32 = fft-dir-moesi-004-0001-0002-00|Win32
 		memtest-002-3sd-moesi|Win32 = memtest-002-3sd-moesi|Win32
 		Release|Win32 = Release|Win32
 	EndGlobalSection
@@ -21,6 +22,8 @@ Global
 		{A54864F1-6C99-4165-A176-888B5427ADC2}.fft-3sd-moesi-002-0001-0002-00|Win32.Build.0 = fft-3sd-moesi-002-0001-0002-00|Win32
 		{A54864F1-6C99-4165-A176-888B5427ADC2}.fft-3sd-moesi-004-0001-0002-00|Win32.ActiveCfg = fft-3sd-moesi-004-0001-0002-00|Win32
 		{A54864F1-6C99-4165-A176-888B5427ADC2}.fft-3sd-moesi-004-0001-0002-00|Win32.Build.0 = fft-3sd-moesi-004-0001-0002-00|Win32
+		{A54864F1-6C99-4165-A176-888B5427ADC2}.fft-dir-moesi-004-0001-0002-00|Win32.ActiveCfg = fft-dir-moesi-004-0001-0002-00|Win32
+		{A54864F1-6C99-4165-A176-888B5427ADC2}.fft-dir-moesi-004-0001-0002-00|Win32.Build.0 = fft-dir-moesi-004-0001-0002-00|Win32
 		{A54864F1-6C99-4165-A176-888B5427ADC2}.memtest-002-3sd-moesi|Win32.ActiveCfg = memtest-002-3sd-moesi|Win32
 		{A54864F1-6C99-4165-A176-888B5427ADC2}.memtest-002-3sd-moesi|Win32.Build.0 = memtest-002-3sd-moesi|Win32
 		{A54864F1-6C99-4165-A176-888B5427ADC2}.Release|Win32.ActiveCfg = Release|Win32
