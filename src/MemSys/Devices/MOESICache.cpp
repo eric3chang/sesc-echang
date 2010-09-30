@@ -887,6 +887,8 @@ namespace Memory
 	void MOESICache::RecvMsg(const BaseMsg* msg, int connectionID)
 	{
 	   messagesReceived++;
+      ReadMsg* debugMsg = (ReadMsg*)msg;
+
 		if(connectionID == localConnectionID)
 		{
 			switch(msg->Type())
