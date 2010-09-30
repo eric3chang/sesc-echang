@@ -39,11 +39,11 @@ namespace Memory
 		{
 		   BaseMsg::print(destinationDeviceID);
 		   cout << " addr=" << addr
-		         << " requestEx=" << requestingExclusive
+		         << " reqEx=" << requestingExclusive
 		         << " hasBlk=" << alreadyHasBlock
-		         << " dirLookup=" << directoryLookup
+		         << " dirLook=" << directoryLookup
                << " interv=" << isIntervention
-               << " ogReqNode=" << originalRequestingNode
+               << " ogReqNode=" << convertDirectoryNetworkIDToDeviceNodeID(originalRequestingNode)
                //<< " spec=" << isSpeculative
 		   ;
 		}

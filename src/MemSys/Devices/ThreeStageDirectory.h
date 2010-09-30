@@ -44,10 +44,22 @@ namespace Memory
 			HashSet<NodeID> sharers;
 			NodeID owner;
 
-			BlockData()
-			{
-				owner = InvalidNodeID;
-			}
+         BlockData() : owner(InvalidNodeID) {}
+         void print(Address myAddress, bool isSharedBusy, bool isExclusiveBusy, bool hasPendingMemAccess)
+         {
+            cout << setw(10) << " ";
+            cout << " addr=" << myAddress;
+            cout << " own=" << convertDirectoryNetworkIDToDeviceNodeID(owner);
+            cout << " sh=";
+            for (HashSet<NodeID>::iterator i = sharers.begin(); i != sharers.end(); i++)
+            {
+               cout << convertDirectoryNetworkIDToDeviceNodeID(*i) << " ";
+            }
+            cout << " isSharedBusy=" << isSharedBusy
+               << " isExclusiveBusy=" << isExclusiveBusy
+               << " hasPendingMemAccess=" << hasPendingMemAccess
+               << endl;
+         }
 		};
 		template <class T>
 		class LookupData
@@ -144,11 +156,14 @@ namespace Memory
 	   void printDebugInfo(const char* fromMethod,Address addr,NodeID id,const char* operation="");
 	   void printEraseOwner(const char* fromMethod,Address addr,NodeID id,const char* operation);
 
+      void printDirectoryData(Address myAddress);
 		void printPendingDirectorySharedReads();
 	   void printPendingLocalReads();
 
 		typedef PooledFunctionGenerator<StoredClassFunction2<ThreeStageDirectory,const BaseMsg*, NodeID, &ThreeStageDirectory::OnDirectoryBlockRequest> > CBOnDirectoryBlockRequest;
 		CBOnDirectoryBlockRequest cbOnDirectoryBlockRequest;
+      typedef PooledFunctionGenerator<StoredClassFunction2<ThreeStageDirectory,const BaseMsg*, NodeID, &ThreeStageDirectory::OnRemoteRead> > CBOnRemoteRead;
+		CBOnRemoteRead cbOnRemoteRead;
 		// 2010/08/05 Eric: seems to be unused
 		/*
 		typedef PooledFunctionGenerator<StoredClassFunction2<Directory,const ReadResponseMsg*, NodeID, &Directory::OnDirectoryBlockResponse> > CBOnDirectoryBlockResponse;
