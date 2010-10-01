@@ -593,6 +593,7 @@ namespace Memory
 
       //TODO 2010/09/13 Eric
       //if(nodeID != d.sourceNode)
+      // send message to newOwner instead of sourceNode/directory
       if (nodeID != d.msg->newOwner)
 		{
 			NetworkMsg* nm = EM().CreateNetworkMsg(getDeviceID(),d.msg->GeneratingPC());
@@ -1227,8 +1228,9 @@ namespace Memory
 		{
 			writeToMainMemory(m);
 		}
-      DebugAssert(pendingDirectoryExclusiveReads.find(m->addr)==pendingDirectoryExclusiveReads.end());
-      DebugAssert(pendingDirectorySharedReads.find(m->addr)==pendingDirectorySharedReads.end());
+      // the following are no longer true because we should be in requester, not directory
+      //DebugAssert(pendingDirectoryExclusiveReads.find(m->addr)==pendingDirectoryExclusiveReads.end());
+      //DebugAssert(pendingDirectorySharedReads.find(m->addr)==pendingDirectorySharedReads.end());
       return;
       //DebugFail("should not reach here");
 //TODO 2010/09/09 Eric
@@ -1318,20 +1320,34 @@ namespace Memory
       std::vector<LookupData<ReadMsg> > pendingMainMemAccessesVector = pendingMainMemAccesses[m->addr];
       DebugAssert(pendingMainMemAccessesVector.size()>1);
          
+      // used for indexing which message inside pendingMainMemAccessesVector we are in
+      int messageIndex = 0;
       // do not start at begin, because we already sent the first message out
       // received data from memory, so allow previously queued up messages to go through
       for (std::vector<LookupData<ReadMsg> >::iterator i = pendingMainMemAccessesVector.begin()+1;
          i < pendingMainMemAccessesVector.end(); i++)
       {
-         // erase them from directory
          DebugAssert(b.owner!=i->sourceNode);
          // check if sourceNode is in sharers. It might not be in sharers if it is first request
+         DebugAssert(b.sharers.find(i->sourceNode)==b.sharers.end());
+         /*
          if (b.sharers.find(i->sourceNode)!=b.sharers.end())
          {
             b.sharers.erase(i->sourceNode);
          }
+         */
+
+         CBOnDirectoryBlockRequest::FunctionType* f = cbOnDirectoryBlockRequest.Create();
+         f->Initialize(this,i->msg,i->sourceNode);
+         // stagger the events so they don't all try to request at the same time
+         //EM().ScheduleEvent(f, (satisfyTime+localSendTime) * messageIndex);
+         // call request immediately
+         EM().ScheduleEvent(f, 0);
 
          //OnDirectoryBlockRequest(i->msg,i->sourceNode);
+         /*
+         //2010/09/30 Eric
+         // switch from sending unsatisfied to forwarding OnLocalRead messages
          // create unsatisfied to make them resend the message
          ReadResponseMsg* response = EM().CreateReadResponseMsg(getDeviceID());
          response->addr = i->msg->addr;
@@ -1343,9 +1359,9 @@ namespace Memory
          response->satisfied = false;
          response->size = i->msg->size;
          response->solicitingMessage = i->msg->MsgID();
-
          AutoDetermineDestSendMsg(response,i->sourceNode,remoteSendTime+lookupTime,
             &ThreeStageDirectory::OnDirectoryBlockResponse,"OnRemMemAccCom","OnDirBlkResp");
+         */
       }
 
 
