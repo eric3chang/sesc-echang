@@ -48,6 +48,7 @@ namespace Memory
 	{
 		ReadResponseMsg* m = readResponsePool.Take();
 		m->directoryLookup = false;
+      m->exclusiveOwnership = false;
       m->isFromEviction = false;
       m->isIntervention = false;
       //m->isSpeculative = false;
