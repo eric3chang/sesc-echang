@@ -229,6 +229,19 @@ namespace Memory
       }
    }
 
+   /**
+   send a memory access complete message
+   */
+   void ThreeStageDirectory::SendMemAccessComplete(Address addr, NodeID directoryNode)
+   {
+      MemAccessCompleteMsg* reply = EM().CreateMemAccessCompleteMsg(getDeviceID());
+      reply->addr = addr;
+
+      // send to src, which should be the directory
+      AutoDetermineDestSendMsg(reply,directoryNode,remoteSendTime,
+         &ThreeStageDirectory::OnRemoteMemAccessComplete,"OnDirBlkResp","OnRemoteMemAccCom");
+   }
+
 	/**
 	 * erase Node id as a share for Address a. If a is owned by id, check that there
 	 * are no other shares
@@ -1826,13 +1839,12 @@ namespace Memory
          SendLocalReadResponse(m);
 
          if (m->hasPendingMemAccesses)
-         {
-            MemAccessCompleteMsg* reply = EM().CreateMemAccessCompleteMsg(getDeviceID());
-            reply->addr = m->addr;
-
-            // send to src, which should be the directory
-            AutoDetermineDestSendMsg(reply,src,remoteSendTime,
-               &ThreeStageDirectory::OnRemoteMemAccessComplete,"OnDirBlkResp","OnRemoteMemAccCom");
+         {// schedule memAccessComplete to be sent after we give enough time
+            // for readResponse to go through
+				CBSendMemAccessComplete::FunctionType* f = cbSendMemAccessComplete.Create();
+            // src should be the directory
+            f->Initialize(this,m->addr,src);
+				EM().ScheduleEvent(f,satisfyTime + localSendTime);
          }
 		} // else m is not from eviction
 	} //ThreeStageDirectory::OnDirectoryBlockResponse

@@ -117,6 +117,7 @@ namespace Memory
 		//void PerformDirectoryFetchOwner(const ReadMsg *msgIn, NodeID src);
       void SendLocalReadResponse(const ReadResponseMsg *msgIn);
       void SendDirectoryBlockRequest(const ReadMsg *msgIn);
+      void SendMemAccessComplete(Address addr, NodeID directoryNode);
 		void EraseDirectoryShare(Address a, NodeID id);
 		void AddDirectoryShare(Address a, NodeID id, bool exclusive);
       void ChangeOwnerToShare(Address a, NodeID id);
@@ -164,6 +165,9 @@ namespace Memory
 		CBOnDirectoryBlockRequest cbOnDirectoryBlockRequest;
       typedef PooledFunctionGenerator<StoredClassFunction2<ThreeStageDirectory,const BaseMsg*, NodeID, &ThreeStageDirectory::OnRemoteRead> > CBOnRemoteRead;
 		CBOnRemoteRead cbOnRemoteRead;
+      typedef PooledFunctionGenerator<StoredClassFunction2<ThreeStageDirectory,Address, NodeID, &ThreeStageDirectory::SendMemAccessComplete> > CBSendMemAccessComplete;
+		CBSendMemAccessComplete cbSendMemAccessComplete;
+
 		// 2010/08/05 Eric: seems to be unused
 		/*
 		typedef PooledFunctionGenerator<StoredClassFunction2<Directory,const ReadResponseMsg*, NodeID, &Directory::OnDirectoryBlockResponse> > CBOnDirectoryBlockResponse;
