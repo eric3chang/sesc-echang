@@ -15,6 +15,7 @@ namespace Memory
 	class WriteResponseMsg;
 	class InvalidateResponseMsg;
 	class EvictionResponseMsg;
+   class InterventionCompleteMsg;
 	//class NetworkMsg;
 	class ThreeStageDirectory : public BaseMemDevice
 	{
@@ -77,6 +78,13 @@ namespace Memory
          int count;
          std::vector<LookupData<ReadMsg> > pendingReads;
       };
+      class InterventionCompleteData
+      {
+      public:
+         const ReadResponseMsg* rrm;
+         const InterventionCompleteMsg* icm;
+         InterventionCompleteData() : rrm(NULL), icm(NULL) {}
+      };
 
       unsigned int messagesReceived;
 
@@ -104,6 +112,8 @@ namespace Memory
       HashMap<Address, const ReadResponseMsg* >waitingForEvictionBusyAck;
       HashMap<Address, const ReadMsg*>waitingForEvictionResponse;
       HashMap<Address, InvalidateData> waitingForInvalidates;
+      HashMap<MessageID, InterventionCompleteData >waitingForInterventionComplete;
+      HashMap<Address, const EvictionMsg* >waitingForReadResponse;
 		HashMap<Address, const EvictionMsg*> pendingEviction;
 		HashMap<Address, BlockData> directoryData;
 		//HashMap<Address, BlockData> pendingDirectoryExclusiveReadsDirectoryData;
@@ -111,6 +121,7 @@ namespace Memory
       //HashMap<Address, const ReadResponseMsg* > pendingSpeculativeReadResponses;
       //HashMap<MessageID, int> unsatisfiedRequests;
 
+      void HandleInterventionComplete(const BaseMsg *msgIn, bool isPendingExclusive);
 		//void PerformDirectoryFetch(Address a, NodeID src);
 		void PerformDirectoryFetch(const ReadMsg *msgIn, NodeID src);
       void PerformDirectoryFetch(const ReadMsg *msgIn,NodeID src,bool isExclusive,NodeID target);
@@ -143,6 +154,7 @@ namespace Memory
 		void OnRemoteInvalidate(const BaseMsg* msgIn, NodeID src);
 		void OnRemoteInvalidateResponse(const BaseMsg* msgIn, NodeID src);
 		void OnRemoteMemAccessComplete(const BaseMsg* msgIn, NodeID src);
+      void OnRemoteInterventionComplete(const BaseMsg* msgIn, NodeID src);
 
 		void OnDirectoryBlockRequest(const BaseMsg* msgIn, NodeID src);
       void OnDirectoryBlockRequestSharedRead(const BaseMsg* msgIn, NodeID src);
