@@ -3,8 +3,8 @@
 
 #set -x   # verbose output
 
-OLD_FILENAME=fft-002-0001-0002-??.conf
-NEW_FILENAME_PREFIX=fft-3sd-moesi-002-0001-0002
+OLD_FILENAME=lu-002-0001-0002-??.conf
+NEW_FILENAME_PREFIX=lu-3sd-moesi-002-0001-0002
 
 for file in $(ls $OLD_FILENAME); do
    string=${file:0-7:2}
