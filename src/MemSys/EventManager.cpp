@@ -42,6 +42,9 @@ namespace Memory
 	{
 		EvictionMsg* m = evictionPool.Take();
 		m->SetIDInfo(currentMsgStamp++,devID,generatingPC);
+      m->addr = 0;
+      m->blockAttached = false;
+      m->size = 0;
 		return m;
 	}
 	ReadResponseMsg* EventManager::CreateReadResponseMsg(DeviceID devID, Address generatingPC)
@@ -89,6 +92,14 @@ namespace Memory
 	{
 		MemAccessCompleteMsg* m = memAccessCompletePool.Take();
 		m->SetIDInfo(currentMsgStamp++,devID,generatingPC);
+		return m;
+	}
+   InterventionCompleteMsg* EventManager::CreateInterventionCompleteMsg(DeviceID devID, Address generatingPC)
+	{
+		InterventionCompleteMsg* m = interventionCompletePool.Take();
+		m->SetIDInfo(currentMsgStamp++,devID,generatingPC);
+      m->addr = 0;
+      m->solicitingMessage = 0;
 		return m;
 	}
 	NetworkMsg* EventManager::CreateNetworkMsg(DeviceID devID, Address generatingPC)
@@ -174,6 +185,13 @@ namespace Memory
 				ret = m;
 				break;
 			}
+      case(mt_InterventionComplete):
+			{
+				InterventionCompleteMsg* m = CreateInterventionCompleteMsg(msg->GeneratingDeviceID(),msg->GeneratingPC());
+				*m = *((InterventionCompleteMsg*)msg);
+				ret = m;
+				break;
+			}
 		case(mt_Network):
 			{
 				NetworkMsg* m = CreateNetworkMsg(msg->GeneratingDeviceID(),msg->GeneratingPC());
@@ -203,6 +221,7 @@ namespace Memory
 			case(mt_EvictionResponse): evictionResponsePool.Return((EvictionResponseMsg*)msg); break;
 			case(mt_EvictionBusyAck): evictionBusyAckPool.Return((EvictionBusyAckMsg*)msg); break;
 			case(mt_MemAccessComplete): memAccessCompletePool.Return((MemAccessCompleteMsg*)msg); break;
+			case(mt_InterventionComplete): interventionCompletePool.Return((InterventionCompleteMsg*)msg); break;
 			case(mt_Network): networkPool.Return((NetworkMsg*)msg); break;
 			default: DebugFail("Unknown Msg Type");
 		}
