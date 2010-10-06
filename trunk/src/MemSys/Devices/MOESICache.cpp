@@ -75,7 +75,8 @@ namespace Memory
 	MOESICache::BlockState* MOESICache::GetSet(int i)
 	{
 		DebugAssert(i >= 0 && i < setCount);
-		return &(cacheContents[i * associativity]);
+      BlockState *myBlockState = &(cacheContents[i * associativity]);
+      return myBlockState;
 	}
 	void MOESICache::InvalidateBlock(MOESICache::BlockState& block)
 	{
