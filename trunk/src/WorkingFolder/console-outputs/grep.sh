@@ -7,5 +7,6 @@ then
    echo 'not enough arguments'
 else
    cat $1 | grep -w "$2" > "$2.temp"
+   tail -n 1 "$1" >> "$2.temp"
 fi
 

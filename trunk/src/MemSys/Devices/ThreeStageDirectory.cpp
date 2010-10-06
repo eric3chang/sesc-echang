@@ -11,7 +11,7 @@
 #define CALL_MEMBER_FN(object,ptrToMember)  ((object).*(ptrToMember))
 
 // toggles debug messages
-//#define MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
+#define MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
 //#define MEMORY_3_STAGE_DIRECTORY_DEBUG_COUNTERS
 #define MEMORY_3_STAGE_DIRECTORY_DEBUG_DIRECTORY_DATA
 //#define MEMORY_3_STAGE_DIRECTORY_DEBUG_MSG_COUNT
@@ -810,7 +810,8 @@ namespace Memory
          HandleInterventionComplete(m,true);
       }
       else if (isWaitingForReadResponse)
-      {// don't do anything, because a read response is already on the way
+      {// don't do anything, because a read response is already on the way,
+         // caused by a OnLocalEviction
          DebugAssert(!m->satisfied);
          BlockData &b = directoryData[m->addr];
 
@@ -1325,15 +1326,19 @@ namespace Memory
       bool isPendingDirectorySharedReads = (pendingDirectorySharedReads.find(m->addr)!=pendingDirectorySharedReads.end());
       bool isPendingDirectoryExclusiveReads = (pendingDirectoryExclusiveReads.find(m->addr)!=pendingDirectoryExclusiveReads.end());
       bool isBusy = (isPendingDirectorySharedReads || isPendingDirectoryExclusiveReads);
+      DebugAssert(!isPendingDirectorySharedReads || !isPendingDirectoryExclusiveReads);
 
       if (isBusy)
       {
          HandleInterventionComplete(m,isPendingDirectoryExclusiveReads);
       }
-      // else no message in waitingForInterventionComplete means that message to directory arrived before message to newOwner
-   #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_DIRECTORY_DATA
+      else
+      {// else no message in waitingForInterventionComplete means that message to directory arrived before message to newOwner
+         DebugAssert(waitingForInterventionComplete.find(m->solicitingMessage)==waitingForInterventionComplete.end());
+      }
+#ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_DIRECTORY_DATA
          printDirectoryData(m->addr);
-   #endif
+#endif
    }
 
 	void ThreeStageDirectory::OnDirectoryBlockRequest(const BaseMsg* msgIn, NodeID src)
@@ -1412,7 +1417,6 @@ namespace Memory
          if (b.owner==InvalidNodeID || (b.owner==src&&!m->alreadyHasBlock))
          {// if directory is unowned OR it is owned by src but it doesn't have the block
             // fetch from memory
-            // add to pendingMainMemAccesses to prevent other accesses while memory access is in place
             LookupData<ReadMsg> ld;
             ld.msg = m;
             ld.sourceNode = src;
@@ -1531,7 +1535,6 @@ namespace Memory
          if (b.owner==InvalidNodeID || (b.owner==src&&!m->alreadyHasBlock))
          {// if directory is unowned OR it is owned by src but it doesn't have the block
             // fetch from memory
-            // add to pendingMainMemAccesses to prevent other accesses while memory access is in place
             LookupData<ReadMsg> ld;
             ld.msg = m;
             ld.sourceNode = src;
@@ -1607,6 +1610,7 @@ namespace Memory
             invalidation->addr = m->addr;
             invalidation->newOwner = src;
             invalidation->size = m->size;
+            invalidation->solicitingMessage = m->MsgID();
             AutoDetermineDestSendMsg(invalidation,*i,lookupTime+remoteSendTime,
                &ThreeStageDirectory::OnRemoteInvalidate,"OnDirBlkReqExRead","OnRemoteInv");
          }
@@ -1618,6 +1622,7 @@ namespace Memory
             invalidation->addr = m->addr;
             invalidation->newOwner = src;
             invalidation->size = m->size;
+            invalidation->solicitingMessage = m->MsgID();
             AutoDetermineDestSendMsg(invalidation,b.owner,lookupTime+remoteSendTime,
                &ThreeStageDirectory::OnRemoteInvalidate,"OnDirBlkReqExRead","OnRemoteInv");
          }
