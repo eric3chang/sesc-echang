@@ -46,10 +46,12 @@ namespace Memory
 			NodeID owner;
 
          BlockData() : owner(InvalidNodeID) {}
-         void print(Address myAddress, bool isSharedBusy, bool isExclusiveBusy, bool hasPendingMemAccess)
+         void print(Address myAddress, MessageID myMessageID,
+            bool isSharedBusy, bool isExclusiveBusy, bool hasPendingMemAccess, bool isWaitingForInvalidationComplete)
          {
             cout << setw(10) << " ";
             cout << " addr=" << myAddress;
+            cout << " msgID=" << myMessageID;
             cout << " own=" << convertDirectoryNetworkIDToDeviceNodeID(owner);
             cout << " sh=";
             for (HashSet<NodeID>::iterator i = sharers.begin(); i != sharers.end(); i++)
@@ -59,6 +61,7 @@ namespace Memory
             cout << " isSharedBusy=" << isSharedBusy
                << " isExclusiveBusy=" << isExclusiveBusy
                << " hasPendingMemAccess=" << hasPendingMemAccess
+               << " isWaitForInvCom=" << isWaitingForInvalidationComplete
                << endl;
          }
 		};
@@ -113,6 +116,7 @@ namespace Memory
       HashMap<Address, const ReadMsg*>waitingForEvictionResponse;
       HashMap<Address, InvalidateData> waitingForInvalidates;
       HashMap<MessageID, InterventionCompleteData >waitingForInterventionComplete;
+      HashMap<Address, LookupData<ReadMsg> >waitingForInvalidationComplete;
       HashMap<Address, const EvictionMsg* >waitingForReadResponse;
 		HashMap<Address, const EvictionMsg*> pendingEviction;
 		HashMap<Address, BlockData> directoryData;
@@ -155,6 +159,7 @@ namespace Memory
 		void OnRemoteInvalidateResponse(const BaseMsg* msgIn, NodeID src);
 		void OnRemoteMemAccessComplete(const BaseMsg* msgIn, NodeID src);
       void OnRemoteInterventionComplete(const BaseMsg* msgIn, NodeID src);
+      void OnRemoteInvalidationComplete(const BaseMsg* msgIn, NodeID src);
 
 		void OnDirectoryBlockRequest(const BaseMsg* msgIn, NodeID src);
       void OnDirectoryBlockRequestSharedRead(const BaseMsg* msgIn, NodeID src);
@@ -169,7 +174,7 @@ namespace Memory
 	   void printDebugInfo(const char* fromMethod,Address addr,NodeID id,const char* operation="");
 	   void printEraseOwner(const char* fromMethod,Address addr,NodeID id,const char* operation);
 
-      void printDirectoryData(Address myAddress);
+      void printDirectoryData(Address myAddress, MessageID myMessageID);
 		void printPendingDirectorySharedReads();
 	   void printPendingLocalReads();
 
