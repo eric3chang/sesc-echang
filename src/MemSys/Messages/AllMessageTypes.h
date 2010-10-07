@@ -11,3 +11,4 @@
 #include "EvictionBusyAckMsg.h"
 #include "MemAccessCompleteMsg.h"
 #include "InterventionCompleteMsg.h"
+#include "InvalidationCompleteMsg.h"

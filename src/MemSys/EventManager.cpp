@@ -103,6 +103,14 @@ namespace Memory
       m->solicitingMessage = 0;
 		return m;
 	}
+   InvalidationCompleteMsg* EventManager::CreateInvalidationCompleteMsg(DeviceID devID, Address generatingPC)
+	{
+		InvalidationCompleteMsg* m = invalidationCompletePool.Take();
+		m->SetIDInfo(currentMsgStamp++,devID,generatingPC);
+      m->addr = 0;
+      m->solicitingMessage = 0;
+		return m;
+	}
 	NetworkMsg* EventManager::CreateNetworkMsg(DeviceID devID, Address generatingPC)
 	{
 		NetworkMsg* m = networkPool.Take();
@@ -193,6 +201,13 @@ namespace Memory
 				ret = m;
 				break;
 			}
+      case(mt_InvalidationComplete):
+			{
+				InvalidationCompleteMsg* m = CreateInvalidationCompleteMsg(msg->GeneratingDeviceID(),msg->GeneratingPC());
+				*m = *((InvalidationCompleteMsg*)msg);
+				ret = m;
+				break;
+			}
 		case(mt_Network):
 			{
 				NetworkMsg* m = CreateNetworkMsg(msg->GeneratingDeviceID(),msg->GeneratingPC());
@@ -223,6 +238,7 @@ namespace Memory
 			case(mt_EvictionBusyAck): evictionBusyAckPool.Return((EvictionBusyAckMsg*)msg); break;
 			case(mt_MemAccessComplete): memAccessCompletePool.Return((MemAccessCompleteMsg*)msg); break;
 			case(mt_InterventionComplete): interventionCompletePool.Return((InterventionCompleteMsg*)msg); break;
+			case(mt_InvalidationComplete): invalidationCompletePool.Return((InvalidationCompleteMsg*)msg); break;
 			case(mt_Network): networkPool.Return((NetworkMsg*)msg); break;
 			default: DebugFail("Unknown Msg Type");
 		}

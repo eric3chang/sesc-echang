@@ -28,6 +28,7 @@ namespace Memory
       mt_EvictionBusyAck,
       mt_MemAccessComplete,
       mt_InterventionComplete,
+      mt_InvalidationComplete,
 
 		mt_Network,
 	};

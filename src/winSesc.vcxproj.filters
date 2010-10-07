@@ -495,6 +495,9 @@
     <ClInclude Include="MemSys\Messages\InterventionCompleteMsg.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MemSys\Messages\InvalidationCompleteMsg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="libmem\AddressPrefetcher.cpp">
