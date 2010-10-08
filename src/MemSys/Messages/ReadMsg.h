@@ -18,6 +18,7 @@ namespace Memory
 		bool alreadyHasBlock;
 		bool directoryLookup;
 		bool isIntervention;
+      bool isWaitingForInvalidateUnlock;
       //bool isSpeculative;
 		NodeID originalRequestingNode;
 
@@ -43,6 +44,7 @@ namespace Memory
 		         << " hasBlk=" << alreadyHasBlock
 		         << " dirLook=" << directoryLookup
                << " interv=" << isIntervention
+               << " invUnlock=" << isWaitingForInvalidateUnlock
                << " ogReqNode=" << convertDirectoryNetworkIDToDeviceNodeID(originalRequestingNode)
                //<< " spec=" << isSpeculative
 		   ;

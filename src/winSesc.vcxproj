@@ -584,6 +584,7 @@
     <ClInclude Include="MemSys\Messages\InvalidateSharerMsg.h" />
     <ClInclude Include="MemSys\Messages\MemAccessCompleteMsg.h" />
     <ClInclude Include="memsys\messages\networkmsg.h" />
+    <ClInclude Include="MemSys\Messages\ReadCompleteMsg.h" />
     <ClInclude Include="MemSys\Messages\SpeculativeReadResponseMsg.h" />
     <ClInclude Include="MemSys\MSTypes.h" />
     <ClInclude Include="libmem\mtst1.h" />
