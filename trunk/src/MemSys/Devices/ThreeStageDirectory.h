@@ -119,6 +119,7 @@ namespace Memory
       HashMap<Address, LookupData<ReadMsg> >waitingForInvalidationComplete;
       HashMap<Address, const EvictionMsg* >waitingForReadResponse;
 		HashMap<Address, const EvictionMsg*> pendingEviction;
+      HashMap<Address, std::vector<ReadMsg> >invalidateLock;
 		HashMap<Address, BlockData> directoryData;
 		//HashMap<Address, BlockData> pendingDirectoryExclusiveReadsDirectoryData;
       //HashMap<MessageID, LookupData<ReadMsg> > pendingSpeculativeReads;
@@ -157,9 +158,11 @@ namespace Memory
 		void OnRemoteEvictionBusyAck(const BaseMsg* msgIn, NodeID src);
 		void OnRemoteInvalidate(const BaseMsg* msgIn, NodeID src);
 		void OnRemoteInvalidateResponse(const BaseMsg* msgIn, NodeID src);
+
 		void OnRemoteMemAccessComplete(const BaseMsg* msgIn, NodeID src);
       void OnRemoteInterventionComplete(const BaseMsg* msgIn, NodeID src);
       void OnRemoteInvalidationComplete(const BaseMsg* msgIn, NodeID src);
+      void OnRemoteReadComplete(const BaseMsg* msgIn, NodeID src);
 
 		void OnDirectoryBlockRequest(const BaseMsg* msgIn, NodeID src);
       void OnDirectoryBlockRequestSharedRead(const BaseMsg* msgIn, NodeID src);

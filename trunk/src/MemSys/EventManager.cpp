@@ -21,6 +21,7 @@ namespace Memory
 		m->directoryLookup = false;
 		m->originalRequestingNode = InvalidNodeID;
 		m->isIntervention = false;
+      m->isWaitingForInvalidateUnlock = false;
       //m->isSpeculative = false;
 		m->SetIDInfo(currentMsgStamp++,devID,generatingPC);
 		return m;
@@ -55,6 +56,7 @@ namespace Memory
       m->exclusiveOwnership = false;
       m->isFromEviction = false;
       m->isIntervention = false;
+      m->isWaitingForInvalidateUnblock = false;
       //m->isSpeculative = false;
       m->hasPendingMemAccesses = false;
       m->pendingInvalidates = 0;
@@ -106,6 +108,14 @@ namespace Memory
    InvalidationCompleteMsg* EventManager::CreateInvalidationCompleteMsg(DeviceID devID, Address generatingPC)
 	{
 		InvalidationCompleteMsg* m = invalidationCompletePool.Take();
+		m->SetIDInfo(currentMsgStamp++,devID,generatingPC);
+      m->addr = 0;
+      m->solicitingMessage = 0;
+		return m;
+	}
+   ReadCompleteMsg* EventManager::CreateReadCompleteMsg(DeviceID devID, Address generatingPC)
+	{
+		ReadCompleteMsg* m = readCompletePool.Take();
 		m->SetIDInfo(currentMsgStamp++,devID,generatingPC);
       m->addr = 0;
       m->solicitingMessage = 0;
@@ -208,6 +218,13 @@ namespace Memory
 				ret = m;
 				break;
 			}
+      case(mt_ReadComplete):
+			{
+				ReadCompleteMsg* m = CreateReadCompleteMsg(msg->GeneratingDeviceID(),msg->GeneratingPC());
+				*m = *((ReadCompleteMsg*)msg);
+				ret = m;
+				break;
+			}
 		case(mt_Network):
 			{
 				NetworkMsg* m = CreateNetworkMsg(msg->GeneratingDeviceID(),msg->GeneratingPC());
@@ -224,7 +241,6 @@ namespace Memory
 	void EventManager::DisposeMsg(const BaseMsg* msg)
 	{
 		DebugAssert(msg);
-		delete new ReadResponseMsg();
 		switch(msg->Type())
 		{
 			case(mt_Read): readPool.Return((ReadMsg*)msg); break;
@@ -239,6 +255,7 @@ namespace Memory
 			case(mt_MemAccessComplete): memAccessCompletePool.Return((MemAccessCompleteMsg*)msg); break;
 			case(mt_InterventionComplete): interventionCompletePool.Return((InterventionCompleteMsg*)msg); break;
 			case(mt_InvalidationComplete): invalidationCompletePool.Return((InvalidationCompleteMsg*)msg); break;
+			case(mt_ReadComplete): readCompletePool.Return((ReadCompleteMsg*)msg); break;
 			case(mt_Network): networkPool.Return((NetworkMsg*)msg); break;
 			default: DebugFail("Unknown Msg Type");
 		}
