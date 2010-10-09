@@ -1026,6 +1026,7 @@ namespace Memory
             sharedResponse->isIntervention = false;
             sharedResponse->originalRequestingNode = src;
             sharedResponse->size = m->size;
+            sharedResponse->satisfied = true;
             sharedResponse->solicitingMessage = m->MsgID();
             AutoDetermineDestSendMsg(sharedResponse,b.owner,remoteSendTime,
                &ThreeStageDirectory::OnDirectoryBlockResponse,"OnRemoteEviction","OnDirBlkResp");
