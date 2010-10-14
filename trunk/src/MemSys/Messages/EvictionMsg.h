@@ -9,6 +9,7 @@ namespace Memory
 		Address addr;
 		size_t size;
 		bool blockAttached;
+      bool isBlockNotFound;
 
 		virtual bool IsResponse() const { return false; }
 		virtual size_t MsgSize() const { return 1 + sizeof(Address) + (blockAttached?size:0); }
@@ -19,6 +20,7 @@ namespace Memory
 		   BaseMsg::print(destinationDeviceID);
 		   cout << " addr=" << addr
 		         << " blockAttached=" << blockAttached
+               << " blkNotFnd=" << isBlockNotFound
 		   ;
 		}
 	};

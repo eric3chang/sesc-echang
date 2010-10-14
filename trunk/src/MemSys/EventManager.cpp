@@ -46,6 +46,7 @@ namespace Memory
 		m->SetIDInfo(currentMsgStamp++,devID,generatingPC);
       m->addr = 0;
       m->blockAttached = false;
+      m->isBlockNotFound = false;
       m->size = 0;
 		return m;
 	}

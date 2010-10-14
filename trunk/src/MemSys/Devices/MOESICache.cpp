@@ -643,6 +643,7 @@ namespace Memory
          forward->addr = m->addr;
          forward->blockAttached = false;
          forward->size = m->size;
+         forward->isBlockNotFound = true;
          DebugAssert(pendingEviction.find(tag)==pendingEviction.end());
          remoteConnection->SendMsg(forward,evictionTime);
       }
