@@ -936,12 +936,13 @@ namespace Memory
          BlockData &b = directoryData[m->addr];
          
          // previous owner should have been moved to sharers
-         DebugAssert(b.sharers.find(src)!=b.sharers.end());
+         //DebugAssert(b.sharers.find(src)!=b.sharers.end());
          //DebugAssert(isPendingDirectoryExclusiveReads || isPendingDirectorySharedReads);
-         DebugAssert(isPendingDirectorySharedReads);
+         //DebugAssert(isPendingDirectorySharedReads);
          // b.owner can be src when m is unsatisfied since this change is made during request
          //DebugAssert(b.owner != src);
          const ReadMsg* read;
+         DebugFail("TODO");
          if (isPendingDirectoryExclusiveReads)
          {
             DebugAssert(src == pendingDirectoryExclusiveReads[m->addr].previousOwner);
@@ -973,7 +974,8 @@ namespace Memory
          rrm->solicitingMessage = read->MsgID();
          rrm->size = read->size;
          
-         NodeID sourceNode = pendingDirectorySharedReads[m->addr].sourceNode;
+         NodeID sourceNode = isPendingDirectoryExclusiveReads?
+            pendingDirectoryExclusiveReads[m->addr].sourceNode : pendingDirectorySharedReads[m->addr].sourceNode;
          AutoDetermineDestSendMsg(rrm,sourceNode,remoteSendTime,
             &ThreeStageDirectory::OnDirectoryBlockResponse,"OnRemoteReadResponse","OnDirBlkResp");
          DebugAssert(b.owner==sourceNode || b.sharers.find(sourceNode)!=b.sharers.end());
@@ -1077,7 +1079,28 @@ namespace Memory
 		DebugAssert(directoryData.find(m->addr) != directoryData.end());
 		BlockData& b = directoryData[m->addr];
 
-      if (pendingDirectorySharedReads.find(m->addr)!=pendingDirectorySharedReads.end())
+      if (m->isBlockNotFound)
+      {// if block could not be found in the node for some reason
+         if (b.owner==src)
+         {
+            DebugAssert(b.sharers.find(src)==b.sharers.end());
+            if (b.sharers.size()==0)
+            {
+               b.owner = InvalidNodeID;
+            }
+            else
+            {
+               NodeID newOwner = *b.sharers.begin();
+               b.sharers.erase(newOwner);
+               b.owner = newOwner;
+            }
+         }
+         else if (b.sharers.find(src)!=b.sharers.end())
+         {
+            b.sharers.erase(src);
+         }
+      }
+      else if (pendingDirectorySharedReads.find(m->addr)!=pendingDirectorySharedReads.end())
       {// if directory state is Busy-shared, transitions to shared, a shared response is returned to
          // the owner marked in the directory. A writeback busy acknowledgement is also sent to the requestor
          
