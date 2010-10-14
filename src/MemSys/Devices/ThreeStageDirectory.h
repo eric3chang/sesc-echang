@@ -46,8 +46,8 @@ namespace Memory
 			NodeID owner;
 
          BlockData() : owner(InvalidNodeID) {}
-         void print(Address myAddress, MessageID myMessageID,
-            bool isSharedBusy, bool isExclusiveBusy, bool hasPendingMemAccess, bool isWaitingForInvalidationComplete)
+         void print(Address myAddress, MessageID myMessageID,bool isSharedBusy, bool isExclusiveBusy,
+            bool hasPendingMemAccess, bool isWaitingForInvalidationComplete,bool isWaitingForReadResponse)
          {
             cout << setw(10) << " ";
             cout << " addr=" << myAddress;
@@ -62,6 +62,7 @@ namespace Memory
                << " isExclusiveBusy=" << isExclusiveBusy
                << " hasPendingMemAccess=" << hasPendingMemAccess
                << " isWaitForInvCom=" << isWaitingForInvalidationComplete
+               << " isWaitForReadRes=" << isWaitingForReadResponse
                << endl;
          }
 		};
@@ -88,16 +89,6 @@ namespace Memory
          const InterventionCompleteMsg* icm;
          InterventionCompleteData() : rrm(NULL), icm(NULL) {}
       };
-      class ReversePendingLocalReadsData
-      {
-      public:
-         bool isCancelRead;
-         MessageID cancelMessageID;
-         ReadMsg *sharedRead;
-         ReadMsg *exclusiveRead;
-         ReversePendingLocalReadsData() : isCancelRead(false), sharedRead(NULL), exclusiveRead(NULL),
-            cancelMessageID(0) {}
-      };
 
       unsigned int messagesReceived;
 
@@ -115,7 +106,6 @@ namespace Memory
 		NodeID nodeID;
 
 		HashMap<MessageID, const ReadMsg*> pendingLocalReads;
-      HashMap<Address, ReversePendingLocalReadsData> reversePendingLocalReads;
 		HashMap<MessageID, LookupData<ReadMsg> > pendingRemoteReads;
 		HashMap<MessageID, LookupData<InvalidateMsg> > pendingRemoteInvalidates;
 		HashMap<Address, LookupData<ReadMsg> > pendingDirectorySharedReads;
@@ -146,7 +136,6 @@ namespace Memory
       void SendDirectoryBlockRequest(const ReadMsg *msgIn);
       void SendMemAccessComplete(Address addr, NodeID directoryNode);
 		void EraseDirectoryShare(Address a, NodeID id);
-      void EraseReversePendingLocalReads(const ReadResponseMsg *m);
 		void AddDirectoryShare(Address a, NodeID id, bool exclusive);
       void ChangeOwnerToShare(Address a, NodeID id);
       void writeToMainMemory(const EvictionMsg *m);

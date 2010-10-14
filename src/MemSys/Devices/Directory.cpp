@@ -185,7 +185,7 @@ namespace Memory
 		EM().DisposeMsg(d.msg);
 		EM().DisposeMsg(m);
 #ifdef MEMORY_DIRECTORY_DEBUG_PENDING_REMOTE_READS
-		printDebugInfo("OnLocalReadResponse",*m,
+		printDebugInfo("OnLocReadRes",*m,
 		      ("pendingRemoteReads.erase("+to_string<MessageID>(d.msg->MsgID())+")").c_str());
 
 #endif
@@ -782,7 +782,7 @@ namespace Memory
 			case(mt_ReadResponse):
 				{
 #ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE
-               printDebugInfo("OnLocalReadResponse",*msg,"RecvMsg");
+               printDebugInfo("OnLocReadRes",*msg,"RecvMsg");
 #endif
 					OnLocalReadResponse((ReadResponseMsg*)msg);
 					break;
