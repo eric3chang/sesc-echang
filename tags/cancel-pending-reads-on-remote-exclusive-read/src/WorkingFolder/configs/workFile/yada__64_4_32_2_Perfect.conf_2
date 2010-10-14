@@ -1,0 +1,13 @@
+ShouldLoadCheckpoint = 1
+CheckpointName = "checkpoints\chk_yada_2.checkpoint"
+DieAfterCheckpointTaken = 1
+HeapMemorySize = 134217728
+FilterSize = 64
+ReportFile = 'results\yada__64_4_32_2_Perfect_2.txt'
+CompositionResultFile = 'results\yada__64_4_32_2_Perfect_composition_2.dat'
+ProcessorSkew[0] = 37
+ProcessorSkew[1] = 63
+BenchName = 'yada'
+<base.conf>
+<memSysConfigs/MemConfig_4_32_2.conf>
+

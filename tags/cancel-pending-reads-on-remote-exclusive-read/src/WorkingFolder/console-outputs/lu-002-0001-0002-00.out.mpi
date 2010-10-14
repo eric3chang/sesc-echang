@@ -1,0 +1,20 @@
+static[0x10064ca0-0x1007ca54] heap[0x1007e000-0x23f3c000] stack[0x23f3c000-0x24734000] -> [0x97adf008-0xac1ae368]
+Device : P(0)_DL1  Description : ProcessorInterface_0
+Device : P(0)_IL1  Description : InstSource
+Device : P(1)_DL1  Description : ProcessorInterface_1
+Device : P(1)_IL1  Description : InstSource
+     512 by 512 Matrix
+     2 Processors
+     16 by 16 Element Blocks
+sesc_spawn( 0x100012b4, 0x0, 0x0 ) pid = 0, child pid = 1, child context = 9c75300
+*** Ticker at 1000000000
+mint_exit 1
+    0        255371            91    -83710292681822841534020013751822037136656146396662925679565607410253667309287001053497705272719013776655614855668922428670884703635639694884313424448945747667001399537070156857055643777153621266349976496855224186819398317816652491781524145434249878310943517782127572685859624103179275995119116877824             0             0
+Start time                        :        490453954
+Initialization finish time        :        490467683
+Overall finish time               :        490723054
+Total time with initialization    :           269100
+Total time without initialization :           255371
+mint_exit 0
+Get out of 'has-work' loop
+Finished running 

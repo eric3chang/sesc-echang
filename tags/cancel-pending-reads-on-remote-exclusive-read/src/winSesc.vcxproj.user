@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ShowAllFiles>true</ShowAllFiles>
+    <LocalDebuggerWorkingDirectory Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)\WorkingFolder</LocalDebuggerWorkingDirectory>
+    <LocalDebuggerWorkingDirectory Condition="'$(Configuration)|$(Platform)'=='fft-002-0001-0002-00|Win32'">$(ProjectDir)\WorkingFolder</LocalDebuggerWorkingDirectory>
+    <LocalDebuggerWorkingDirectory Condition="'$(Configuration)|$(Platform)'=='fft-dir-moesi-004-0001-0002-00|Win32'">$(ProjectDir)\WorkingFolder</LocalDebuggerWorkingDirectory>
+    <LocalDebuggerWorkingDirectory Condition="'$(Configuration)|$(Platform)'=='fft-dir-moesi-008-0001-0002-00|Win32'">$(ProjectDir)\WorkingFolder</LocalDebuggerWorkingDirectory>
+    <LocalDebuggerWorkingDirectory Condition="'$(Configuration)|$(Platform)'=='fft-3sd-moesi-002-0001-0002-00|Win32'">$(ProjectDir)\WorkingFolder</LocalDebuggerWorkingDirectory>
+    <LocalDebuggerWorkingDirectory Condition="'$(Configuration)|$(Platform)'=='memtest-002-3sd-moesi|Win32'">$(ProjectDir)\WorkingFolder</LocalDebuggerWorkingDirectory>
+    <LocalDebuggerWorkingDirectory Condition="'$(Configuration)|$(Platform)'=='fft-3sd-moesi-004-0001-0002-00|Win32'">$(ProjectDir)\WorkingFolder</LocalDebuggerWorkingDirectory>
+    <LocalDebuggerWorkingDirectory Condition="'$(Configuration)|$(Platform)'=='fft-3sd-moesi-008-0001-0002-00|Win32'">$(ProjectDir)\WorkingFolder</LocalDebuggerWorkingDirectory>
+    <LocalDebuggerWorkingDirectory Condition="'$(Configuration)|$(Platform)'=='fft-3sd-moesi-016-0001-0002-00|Win32'">$(ProjectDir)\WorkingFolder</LocalDebuggerWorkingDirectory>
+    <LocalDebuggerWorkingDirectory Condition="'$(Configuration)|$(Platform)'=='fft-dir-moesi-016-0001-0002-00|Win32'">$(ProjectDir)\WorkingFolder</LocalDebuggerWorkingDirectory>
+    <LocalDebuggerWorkingDirectory Condition="'$(Configuration)|$(Platform)'=='fft-dir-moesi-032-0001-0002-00|Win32'">$(ProjectDir)\WorkingFolder</LocalDebuggerWorkingDirectory>
+    <LocalDebuggerWorkingDirectory Condition="'$(Configuration)|$(Platform)'=='fft-snoopy-moesi-032-0001-0002-00|Win32'">$(ProjectDir)\WorkingFolder</LocalDebuggerWorkingDirectory>
+    <LocalDebuggerWorkingDirectory Condition="'$(Configuration)|$(Platform)'=='fft-3sd-moesi-032-0001-0002-00|Win32'">$(ProjectDir)\WorkingFolder</LocalDebuggerWorkingDirectory>
+    <DebuggerFlavor Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">WindowsLocalDebugger</DebuggerFlavor>
+    <DebuggerFlavor Condition="'$(Configuration)|$(Platform)'=='fft-002-0001-0002-00|Win32'">WindowsLocalDebugger</DebuggerFlavor>
+    <DebuggerFlavor Condition="'$(Configuration)|$(Platform)'=='fft-dir-moesi-004-0001-0002-00|Win32'">WindowsLocalDebugger</DebuggerFlavor>
+    <DebuggerFlavor Condition="'$(Configuration)|$(Platform)'=='fft-dir-moesi-008-0001-0002-00|Win32'">WindowsLocalDebugger</DebuggerFlavor>
+    <DebuggerFlavor Condition="'$(Configuration)|$(Platform)'=='fft-3sd-moesi-002-0001-0002-00|Win32'">WindowsLocalDebugger</DebuggerFlavor>
+    <DebuggerFlavor Condition="'$(Configuration)|$(Platform)'=='memtest-002-3sd-moesi|Win32'">WindowsLocalDebugger</DebuggerFlavor>
+    <DebuggerFlavor Condition="'$(Configuration)|$(Platform)'=='fft-3sd-moesi-004-0001-0002-00|Win32'">WindowsLocalDebugger</DebuggerFlavor>
+    <DebuggerFlavor Condition="'$(Configuration)|$(Platform)'=='fft-3sd-moesi-008-0001-0002-00|Win32'">WindowsLocalDebugger</DebuggerFlavor>
+    <DebuggerFlavor Condition="'$(Configuration)|$(Platform)'=='fft-3sd-moesi-016-0001-0002-00|Win32'">WindowsLocalDebugger</DebuggerFlavor>
+    <DebuggerFlavor Condition="'$(Configuration)|$(Platform)'=='fft-dir-moesi-016-0001-0002-00|Win32'">WindowsLocalDebugger</DebuggerFlavor>
+    <DebuggerFlavor Condition="'$(Configuration)|$(Platform)'=='fft-dir-moesi-032-0001-0002-00|Win32'">WindowsLocalDebugger</DebuggerFlavor>
+    <DebuggerFlavor Condition="'$(Configuration)|$(Platform)'=='fft-snoopy-moesi-032-0001-0002-00|Win32'">WindowsLocalDebugger</DebuggerFlavor>
+    <DebuggerFlavor Condition="'$(Configuration)|$(Platform)'=='fft-3sd-moesi-032-0001-0002-00|Win32'">WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerCommandArguments Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">-w1 -cconfigs\workFile\genome-02cpu-00.conf -dconfigs\workFile\genome-02cpu-00.report benchmarks\genome -t2 -g256 -s16 -n16384</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments Condition="'$(Configuration)|$(Platform)'=='fft-002-0001-0002-00|Win32'">-cconfigs\workFile\fft-002-0001-0002-00.conf -dconfigs\workFile\fft-002-0001-0002-00.report benchmarks-splash2-sesc\fft.mips  -m10 -p2 -n65536 -l4 -t</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments Condition="'$(Configuration)|$(Platform)'=='fft-dir-moesi-004-0001-0002-00|Win32'">-cconfigs\workFile\fft-004-0001-0002-00.conf -dconfigs\workFile\fft-004-0001-0002-00.report benchmarks-splash2-sesc\fft.mips  -m10 -p4 -n65536 -l4 -t &gt; console-outputs\fft-004-0001-0002-00.out</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments Condition="'$(Configuration)|$(Platform)'=='fft-dir-moesi-008-0001-0002-00|Win32'">-cconfigs\workFile\fft-008-0001-0002-00.conf -dconfigs\workFile\fft-008-0001-0002-00.report benchmarks-splash2-sesc\fft.mips  -m10 -p8 -n65536 -l4 -t &gt; console-outputs\fft-008-0001-0002-00.out</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments Condition="'$(Configuration)|$(Platform)'=='fft-3sd-moesi-002-0001-0002-00|Win32'">-cconfigs\workFile\fft-3sd-moesi-002-0001-0002-00.conf -dconfigs\workFile\fft-3sd-moesi-002-0001-0002-00.report benchmarks-splash2-sesc\fft.mips  -m10 -p2 -n65536 -l4 -t &gt; console-outputs\fft-3sd-moesi-002-0001-0002-00.out</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments Condition="'$(Configuration)|$(Platform)'=='memtest-002-3sd-moesi|Win32'">-cconfigs/workFile/memtest-3sd-moesi-002.conf -dconfigs/workFile/memtest-3sd-moesi-002.report ..\libapp\memtest.sesc</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments Condition="'$(Configuration)|$(Platform)'=='fft-3sd-moesi-004-0001-0002-00|Win32'">-cconfigs\workFile\fft-3sd-moesi-004-0001-0002-00.conf -dconfigs\workFile\fft-3sd-moesi-004-0001-0002-00.report benchmarks-splash2-sesc\fft.mips  -m10 -p4 -n65536 -l4 -t &gt; console-outputs\fft-3sd-moesi-004-0001-0002-00.out</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments Condition="'$(Configuration)|$(Platform)'=='fft-3sd-moesi-008-0001-0002-00|Win32'">-cconfigs\workFile\fft-3sd-moesi-008-0001-0002-00.conf -dconfigs\workFile\fft-3sd-moesi-008-0001-0002-00.report benchmarks-splash2-sesc\fft.mips  -m10 -p8 -n65536 -l4 -t &gt; console-outputs\fft-3sd-moesi-008-0001-0002-00.out</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments Condition="'$(Configuration)|$(Platform)'=='fft-3sd-moesi-016-0001-0002-00|Win32'">-cconfigs\workFile\fft-3sd-moesi-016-0001-0002-00.conf -dconfigs\workFile\fft-3sd-moesi-016-0001-0002-00.report benchmarks-splash2-sesc\fft.mips  -m10 -p16 -n65536 -l4 -t &gt; console-outputs\fft-3sd-moesi-016-0001-0002-00.out</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments Condition="'$(Configuration)|$(Platform)'=='fft-dir-moesi-016-0001-0002-00|Win32'">-cconfigs\workFile\fft-016-0001-0002-00.conf -dconfigs\workFile\fft-dir-moesi-016-0001-0002-00.report benchmarks-splash2-sesc\fft.mips  -m10 -p16 -n65536 -l4 -t &gt; console-outputs\fft-dir-moesi-016-0001-0002-00.out</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments Condition="'$(Configuration)|$(Platform)'=='fft-dir-moesi-032-0001-0002-00|Win32'">-cconfigs\workFile\fft-032-0001-0002-00.conf -dconfigs\workFile\fft-dir-moesi-032-0001-0002-00.report benchmarks-splash2-sesc\fft.mips  -m10 -p32 -n65536 -l4 -t &gt; console-outputs\fft-dir-moesi-032-0001-0002-00.out</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments Condition="'$(Configuration)|$(Platform)'=='fft-snoopy-moesi-032-0001-0002-00|Win32'">-cconfigs\workFile\fft-snoopy-moesi-032-0001-0002-00.conf -dconfigs\workFile\fft-snoopy-moesi-032-0001-0002-00.report benchmarks-splash2-sesc\fft.mips  -m10 -p32 -n65536 -l4 -t &gt; console-outputs\fft-snoopy-moesi-032-0001-0002-00.out</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments Condition="'$(Configuration)|$(Platform)'=='fft-3sd-moesi-032-0001-0002-00|Win32'">-cconfigs\workFile\fft-3sd-moesi-032-0001-0002-00.conf -dconfigs\workFile\fft-3sd-moesi-032-0001-0002-00.report benchmarks-splash2-sesc\fft.mips  -m10 -p32 -n65536 -l4 -t &gt; console-outputs\fft-3sd-moesi-032-0001-0002-00.out</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments Condition="'$(Configuration)|$(Platform)'=='genome 02 cpu 00|Win32'">-w1 -cconfigs\workFile\genome-02cpu-00.conf -dconfigs\workFile\genome-02cpu-00.report benchmarks\genome -t2 -g256 -s16 -n16384</LocalDebuggerCommandArguments>
+    <DebuggerFlavor Condition="'$(Configuration)|$(Platform)'=='genome 02 cpu 00|Win32'">WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerWorkingDirectory Condition="'$(Configuration)|$(Platform)'=='genome 02 cpu 00|Win32'">$(ProjectDir)\WorkingFolder</LocalDebuggerWorkingDirectory>
+    <LocalDebuggerCommandArguments Condition="'$(Configuration)|$(Platform)'=='memtest|Win32'">-cconfigs/workFile/memtest-3sd-moesi-002.conf -dconfigs/workFile/memtest-3sd-moesi-002.report ..\libapp\memtest.mips</LocalDebuggerCommandArguments>
+    <DebuggerFlavor Condition="'$(Configuration)|$(Platform)'=='memtest|Win32'">WindowsLocalDebugger</DebuggerFlavor>
+  </PropertyGroup>
+</Project>

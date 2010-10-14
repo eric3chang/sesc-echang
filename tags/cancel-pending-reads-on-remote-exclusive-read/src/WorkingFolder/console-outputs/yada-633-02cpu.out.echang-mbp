@@ -1,0 +1,3358 @@
+.text Minor header aligment correction (400130 vs 400128)
+.data Minor header aligment correction (49e110 vs 49e108)
+static[0x47cea0-0x1000523c] heap[0x10006000-0x18006000] stack[0x18006000-0x187fe000] -> [0x96fdc008-0xaf35d168]
+Device : P(0)_DL1  Description : ProcessorInterface_0
+Device : P(0)_IL1  Description : InstSource
+Device : P(1)_DL1  Description : ProcessorInterface_1
+Device : P(1)_IL1  Description : InstSource
+Loading checkpoint...
+Pid: 0
+OSSim::spawn(-1,0,0x30000,0)
+Pid: 1
+OSSim::spawn(0,1,0x30001,0)
+Reading memory...
+Checkpoint loaded
+Start rabbit mode forever...
+Rabbit Mode Start 
+checkpointing...
+Leaving rabbit mode...
+Processor 0 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+[0] Transaction 1 started at 1584
+[1] Transaction 2 started at 2217
+Stall triggered
+Abort triggered
+[1] Transaction 2 ended at 3604 [aborted]
+[1] Transaction 3 started at 3660
+Stall triggered
+[0] Transaction 1 ended at 7199 [committed]
+[0] Transaction 4 started at 7200
+[0] Transaction 4 ended at 7200 [committed]
+[0] Transaction 5 started at 7203
+[1] Transaction 3 ended at 10753 [committed]
+Race ahead mode entered on 1
+Race ahead mode ended
+[1] Transaction 8 started at 10796
+[1] Transaction 8 ended at 10796 [committed]
+[1] Transaction 9 started at 10810
+Stall triggered
+[1] Transaction 9 ended at 373703 [committed]
+[1] Transaction 10 started at 373723
+[1] Transaction 10 ended at 373739 [committed]
+[1] Transaction 11 started at 373759
+[1] Transaction 11 ended at 376932 [committed]
+[1] Transaction 12 started at 376953
+[1] Transaction 12 ended at 379094 [committed]
+[1] Transaction 13 started at 379094
+[1] Transaction 13 ended at 379103 [committed]
+[1] Transaction 14 started at 379104
+[1] Transaction 14 ended at 616269 [committed]
+[1] Transaction 15 started at 616289
+[1] Transaction 15 ended at 616305 [committed]
+[1] Transaction 16 started at 616325
+[1] Transaction 16 ended at 617705 [committed]
+[1] Transaction 17 started at 617726
+[1] Transaction 17 ended at 620997 [committed]
+[1] Transaction 18 started at 620998
+[1] Transaction 18 ended at 621000 [committed]
+[1] Transaction 19 started at 621005
+Stall triggered
+[0] Transaction 5 ended at 903612 [committed]
+Race ahead mode entered on 0
+[0] Transaction 22 started at 903612
+Race ahead mode ended
+[0] Transaction 22 ended at 904391 [committed]
+[0] Transaction 23 started at 904396
+[0] Transaction 23 ended at 913736 [committed]
+[0] Transaction 24 started at 913738
+[0] Transaction 24 ended at 915767 [committed]
+[0] Transaction 25 started at 915803
+[0] Transaction 25 ended at 915803 [committed]
+[0] Transaction 26 started at 915821
+Stall triggered
+[1] Transaction 19 ended at 1329985 [committed]
+Race ahead mode entered on 1
+[1] Transaction 29 started at 1329985
+Race ahead mode ended
+[1] Transaction 29 ended at 1330022 [committed]
+[1] Transaction 30 started at 1330042
+[1] Transaction 30 ended at 1337854 [committed]
+[1] Transaction 31 started at 1337854
+[1] Transaction 31 ended at 1340888 [committed]
+[1] Transaction 32 started at 1340888
+[1] Transaction 32 ended at 1340888 [committed]
+[1] Transaction 33 started at 1340888
+Stall triggered
+[0] Transaction 26 ended at 1766299 [committed]
+Race ahead mode entered on 0
+[0] Transaction 36 started at 1766299
+Race ahead mode ended
+[0] Transaction 36 ended at 1766992 [committed]
+[0] Transaction 37 started at 1766997
+[0] Transaction 37 ended at 1774521 [committed]
+[0] Transaction 38 started at 1774521
+[0] Transaction 38 ended at 1777376 [committed]
+[0] Transaction 39 started at 1777415
+[0] Transaction 39 ended at 1777434 [committed]
+[0] Transaction 40 started at 1777434
+[1] Transaction 33 ended at 2040385 [committed]
+Race ahead mode entered on 1
+[1] Transaction 43 started at 2040385
+Race ahead mode ended
+[1] Transaction 43 ended at 2040422 [committed]
+[1] Transaction 44 started at 2040442
+[1] Transaction 44 ended at 2046086 [committed]
+[1] Transaction 45 started at 2046107
+[1] Transaction 45 ended at 2047895 [committed]
+[1] Transaction 46 started at 2047943
+[1] Transaction 46 ended at 2047943 [committed]
+[1] Transaction 47 started at 2047943
+[0] Transaction 40 ended at 2716429 [committed]
+Race ahead mode entered on 0
+[0] Transaction 50 started at 2716429
+Race ahead mode ended
+[0] Transaction 50 ended at 2717083 [committed]
+[0] Transaction 51 started at 2717088
+[0] Transaction 51 ended at 2725365 [committed]
+[0] Transaction 52 started at 2725365
+[0] Transaction 52 ended at 2728825 [committed]
+[0] Transaction 53 started at 2728825
+[0] Transaction 53 ended at 2728834 [committed]
+[0] Transaction 54 started at 2728834
+Stall triggered
+[1] Transaction 47 ended at 2864693 [committed]
+Race ahead mode entered on 1
+[1] Transaction 57 started at 2864693
+Race ahead mode ended
+[1] Transaction 57 ended at 2864730 [committed]
+[1] Transaction 58 started at 2864750
+[1] Transaction 58 ended at 2872263 [committed]
+[1] Transaction 59 started at 2872267
+[1] Transaction 59 ended at 2877363 [committed]
+[1] Transaction 60 started at 2877367
+[1] Transaction 60 ended at 2877367 [committed]
+[1] Transaction 61 started at 2877367
+Stall triggered
+[0] Transaction 54 ended at 3122939 [committed]
+Race ahead mode entered on 0
+[0] Transaction 64 started at 3122939
+Race ahead mode ended
+[0] Transaction 64 ended at 3123595 [committed]
+[0] Transaction 65 started at 3123600
+[0] Transaction 65 ended at 3128329 [committed]
+[0] Transaction 66 started at 3128331
+[0] Transaction 66 ended at 3131875 [committed]
+[0] Transaction 67 started at 3131876
+[0] Transaction 67 ended at 3131879 [committed]
+[0] Transaction 68 started at 3131882
+Simulated 500004 instructions so far at clock 3178604
+[1] Transaction 61 ended at 3359625 [committed]
+Race ahead mode entered on 1
+[1] Transaction 71 started at 3359625
+Race ahead mode ended
+[1] Transaction 71 ended at 3359662 [committed]
+[1] Transaction 72 started at 3359682
+[1] Transaction 72 ended at 3363318 [committed]
+[1] Transaction 73 started at 3363318
+[1] Transaction 73 ended at 3364197 [committed]
+[1] Transaction 74 started at 3364251
+[1] Transaction 74 ended at 3364270 [committed]
+[1] Transaction 75 started at 3364270
+Stall triggered
+[0] Transaction 68 ended at 4028633 [committed]
+Race ahead mode entered on 0
+[0] Transaction 78 started at 4028633
+Race ahead mode ended
+[0] Transaction 78 ended at 4029308 [committed]
+[0] Transaction 79 started at 4029313
+[0] Transaction 79 ended at 4036403 [committed]
+[0] Transaction 80 started at 4036403
+[0] Transaction 80 ended at 4039376 [committed]
+[0] Transaction 81 started at 4039395
+[0] Transaction 81 ended at 4039395 [committed]
+[0] Transaction 82 started at 4039413
+[1] Transaction 75 ended at 4223545 [committed]
+Race ahead mode entered on 1
+[1] Transaction 85 started at 4223545
+Race ahead mode ended
+[1] Transaction 85 ended at 4223582 [committed]
+[1] Transaction 86 started at 4223602
+[1] Transaction 86 ended at 4226678 [committed]
+[1] Transaction 87 started at 4226699
+[1] Transaction 87 ended at 4229389 [committed]
+[1] Transaction 88 started at 4229390
+[1] Transaction 88 ended at 4229392 [committed]
+[1] Transaction 89 started at 4229397
+[0] Transaction 82 ended at 4401339 [committed]
+Race ahead mode entered on 0
+[0] Transaction 92 started at 4401339
+Race ahead mode ended
+[0] Transaction 92 ended at 4402023 [committed]
+[0] Transaction 93 started at 4402028
+[0] Transaction 93 ended at 4407234 [committed]
+[0] Transaction 94 started at 4407255
+[0] Transaction 94 ended at 4409897 [committed]
+[0] Transaction 95 started at 4409916
+[0] Transaction 95 ended at 4409916 [committed]
+[0] Transaction 96 started at 4409934
+Stall triggered
+[1] Transaction 89 ended at 4788033 [committed]
+Race ahead mode entered on 1
+[1] Transaction 99 started at 4788033
+Race ahead mode ended
+[1] Transaction 99 ended at 4788070 [committed]
+[1] Transaction 100 started at 4788090
+[1] Transaction 100 ended at 4792410 [committed]
+[1] Transaction 101 started at 4792431
+[1] Transaction 101 ended at 4794247 [committed]
+[1] Transaction 102 started at 4794247
+[1] Transaction 102 ended at 4794247 [committed]
+[1] Transaction 103 started at 4794249
+Stall triggered
+[0] Transaction 96 ended at 5188191 [committed]
+Race ahead mode entered on 0
+[0] Transaction 106 started at 5188191
+Race ahead mode ended
+[0] Transaction 106 ended at 5188835 [committed]
+[0] Transaction 107 started at 5188840
+[0] Transaction 107 ended at 5195824 [committed]
+[0] Transaction 108 started at 5195824
+[0] Transaction 108 ended at 5198690 [committed]
+[0] Transaction 109 started at 5198690
+[0] Transaction 109 ended at 5198690 [committed]
+[0] Transaction 110 started at 5198690
+Stall triggered
+[1] Transaction 103 ended at 5390227 [committed]
+Race ahead mode entered on 1
+[1] Transaction 113 started at 5390227
+Race ahead mode ended
+[1] Transaction 113 ended at 5390264 [committed]
+[1] Transaction 114 started at 5390284
+[1] Transaction 114 ended at 5394155 [committed]
+[1] Transaction 115 started at 5394176
+[1] Transaction 115 ended at 5397806 [committed]
+[1] Transaction 116 started at 5397807
+[1] Transaction 116 ended at 5397809 [committed]
+[1] Transaction 117 started at 5397811
+Stall triggered
+[0] Transaction 110 ended at 5828241 [committed]
+Race ahead mode entered on 0
+[0] Transaction 120 started at 5828241
+Race ahead mode ended
+[0] Transaction 120 ended at 5828909 [committed]
+[0] Transaction 121 started at 5828914
+[0] Transaction 121 ended at 5834462 [committed]
+[0] Transaction 122 started at 5834462
+[0] Transaction 122 ended at 5837567 [committed]
+[0] Transaction 123 started at 5837567
+[0] Transaction 123 ended at 5837567 [committed]
+[0] Transaction 124 started at 5837569
+Stall triggered
+[1] Transaction 117 ended at 6097151 [committed]
+Race ahead mode entered on 1
+[1] Transaction 127 started at 6097151
+Race ahead mode ended
+[1] Transaction 127 ended at 6097188 [committed]
+[1] Transaction 128 started at 6097208
+[1] Transaction 128 ended at 6100138 [committed]
+[1] Transaction 129 started at 6100159
+[1] Transaction 129 ended at 6103164 [committed]
+[1] Transaction 130 started at 6103169
+[1] Transaction 130 ended at 6103169 [committed]
+[1] Transaction 131 started at 6103200
+Stall triggered
+[0] Transaction 124 ended at 6275312 [committed]
+Race ahead mode entered on 0
+[0] Transaction 134 started at 6275312
+Race ahead mode ended
+[0] Transaction 134 ended at 6275969 [committed]
+[0] Transaction 135 started at 6275974
+[0] Transaction 135 ended at 6280057 [committed]
+[0] Transaction 136 started at 6280057
+[0] Transaction 136 ended at 6285103 [committed]
+[0] Transaction 137 started at 6285104
+[0] Transaction 137 ended at 6285106 [committed]
+[0] Transaction 138 started at 6285108
+Stall triggered
+[1] Transaction 131 ended at 6658203 [committed]
+Race ahead mode entered on 1
+[1] Transaction 141 started at 6658203
+Race ahead mode ended
+[1] Transaction 141 ended at 6658240 [committed]
+[1] Transaction 142 started at 6658260
+[1] Transaction 142 ended at 6661178 [committed]
+[1] Transaction 143 started at 6661179
+[1] Transaction 143 ended at 6665647 [committed]
+[1] Transaction 144 started at 6665652
+[1] Transaction 144 ended at 6665654 [committed]
+[1] Transaction 145 started at 6665655
+Stall triggered
+Simulated 1000002 instructions so far at clock 6856670
+[0] Transaction 138 ended at 6931954 [committed]
+Race ahead mode entered on 0
+[0] Transaction 148 started at 6931954
+Race ahead mode ended
+[0] Transaction 148 ended at 6932686 [committed]
+[0] Transaction 149 started at 6932691
+[0] Transaction 149 ended at 6936591 [committed]
+[0] Transaction 150 started at 6936591
+[0] Transaction 150 ended at 6937280 [committed]
+[0] Transaction 151 started at 6937283
+[0] Transaction 151 ended at 6937285 [committed]
+[0] Transaction 152 started at 6937293
+[1] Transaction 145 ended at 7198369 [committed]
+Race ahead mode entered on 1
+[1] Transaction 155 started at 7198369
+Race ahead mode ended
+[1] Transaction 155 ended at 7198406 [committed]
+[1] Transaction 156 started at 7198426
+[1] Transaction 156 ended at 7201863 [committed]
+[1] Transaction 157 started at 7201867
+[1] Transaction 157 ended at 7205678 [committed]
+[1] Transaction 158 started at 7205681
+[1] Transaction 158 ended at 7205685 [committed]
+[1] Transaction 159 started at 7205686
+Stall triggered
+[0] Transaction 152 ended at 7868458 [committed]
+Race ahead mode entered on 0
+[0] Transaction 162 started at 7868458
+Race ahead mode ended
+[0] Transaction 162 ended at 7869132 [committed]
+[0] Transaction 163 started at 7869137
+[0] Transaction 163 ended at 7877248 [committed]
+[0] Transaction 164 started at 7877250
+[0] Transaction 164 ended at 7880300 [committed]
+[0] Transaction 165 started at 7880301
+[0] Transaction 165 ended at 7880302 [committed]
+[0] Transaction 166 started at 7880310
+[1] Transaction 159 ended at 8036669 [committed]
+Race ahead mode entered on 1
+[1] Transaction 169 started at 8036669
+Race ahead mode ended
+[1] Transaction 169 ended at 8036706 [committed]
+[1] Transaction 170 started at 8036726
+[1] Transaction 170 ended at 8041105 [committed]
+[1] Transaction 171 started at 8041108
+[1] Transaction 171 ended at 8043363 [committed]
+[1] Transaction 172 started at 8043363
+[1] Transaction 172 ended at 8043372 [committed]
+[1] Transaction 173 started at 8043373
+[1] Transaction 173 ended at 8457569 [committed]
+[1] Transaction 174 started at 8457589
+[1] Transaction 174 ended at 8457605 [committed]
+[1] Transaction 175 started at 8457625
+[1] Transaction 175 ended at 8462146 [committed]
+[1] Transaction 176 started at 8462148
+[1] Transaction 176 ended at 8466843 [committed]
+[1] Transaction 177 started at 8466844
+[1] Transaction 177 ended at 8466853 [committed]
+[1] Transaction 178 started at 8466854
+[0] Transaction 166 ended at 8494005 [committed]
+Race ahead mode entered on 0
+[0] Transaction 181 started at 8494005
+Race ahead mode ended
+[0] Transaction 181 ended at 8494688 [committed]
+[0] Transaction 182 started at 8494693
+[0] Transaction 182 ended at 8501114 [committed]
+[0] Transaction 183 started at 8501114
+[0] Transaction 183 ended at 8505984 [committed]
+[0] Transaction 184 started at 8505987
+[0] Transaction 184 ended at 8505991 [committed]
+[0] Transaction 185 started at 8505991
+Stall triggered
+[0] Transaction 185 ended at 8697189 [committed]
+[0] Transaction 186 started at 8697844
+[0] Transaction 186 ended at 8697846 [committed]
+[0] Transaction 187 started at 8697851
+[0] Transaction 187 ended at 8701056 [committed]
+[0] Transaction 188 started at 8701056
+[0] Transaction 188 ended at 8705505 [committed]
+[0] Transaction 189 started at 8705506
+[0] Transaction 189 ended at 8705510 [committed]
+[0] Transaction 190 started at 8705516
+Stall triggered
+[1] Transaction 178 ended at 9006337 [committed]
+Race ahead mode entered on 1
+[1] Transaction 193 started at 9006337
+Race ahead mode ended
+[1] Transaction 193 ended at 9006374 [committed]
+[1] Transaction 194 started at 9006394
+[1] Transaction 194 ended at 9011505 [committed]
+[1] Transaction 195 started at 9011526
+[1] Transaction 195 ended at 9015350 [committed]
+[1] Transaction 196 started at 9015351
+[1] Transaction 196 ended at 9015351 [committed]
+[1] Transaction 197 started at 9015351
+[0] Transaction 190 ended at 9159084 [committed]
+Race ahead mode entered on 0
+[0] Transaction 200 started at 9159084
+Race ahead mode ended
+[0] Transaction 200 ended at 9159808 [committed]
+[0] Transaction 201 started at 9159813
+[0] Transaction 201 ended at 9160931 [committed]
+[0] Transaction 202 started at 9160952
+[0] Transaction 202 ended at 9165224 [committed]
+[0] Transaction 203 started at 9165227
+[0] Transaction 203 ended at 9165229 [committed]
+[0] Transaction 204 started at 9165230
+Stall triggered
+[1] Transaction 197 ended at 9620474 [committed]
+Race ahead mode entered on 1
+[1] Transaction 207 started at 9620474
+Race ahead mode ended
+[1] Transaction 207 ended at 9620511 [committed]
+[1] Transaction 208 started at 9620531
+[1] Transaction 208 ended at 9626408 [committed]
+[1] Transaction 209 started at 9626411
+[1] Transaction 209 ended at 9630610 [committed]
+[1] Transaction 210 started at 9630610
+[1] Transaction 210 ended at 9630615 [committed]
+[1] Transaction 211 started at 9630617
+[1] Transaction 211 ended at 9914923 [committed]
+[1] Transaction 212 started at 9914943
+[1] Transaction 212 ended at 9914959 [committed]
+[1] Transaction 213 started at 9914979
+[1] Transaction 213 ended at 9916318 [committed]
+[1] Transaction 214 started at 9916339
+[1] Transaction 214 ended at 9921441 [committed]
+[1] Transaction 215 started at 9921444
+[1] Transaction 215 ended at 9921444 [committed]
+[1] Transaction 216 started at 9921444
+[0] Transaction 204 ended at 10041815 [committed]
+Race ahead mode entered on 0
+[0] Transaction 219 started at 10041815
+Race ahead mode ended
+[0] Transaction 219 ended at 10042489 [committed]
+[0] Transaction 220 started at 10042494
+[0] Transaction 220 ended at 10046407 [committed]
+[0] Transaction 221 started at 10046407
+[0] Transaction 221 ended at 10047096 [committed]
+[0] Transaction 222 started at 10047099
+[0] Transaction 222 ended at 10047106 [committed]
+[0] Transaction 223 started at 10047109
+[1] Transaction 216 ended at 10185675 [committed]
+Race ahead mode entered on 1
+[1] Transaction 226 started at 10185675
+Race ahead mode ended
+[1] Transaction 226 ended at 10185712 [committed]
+[1] Transaction 227 started at 10185732
+[1] Transaction 227 ended at 10189599 [committed]
+[1] Transaction 228 started at 10189604
+[1] Transaction 228 ended at 10193836 [committed]
+[1] Transaction 229 started at 10193837
+[1] Transaction 229 ended at 10193837 [committed]
+[1] Transaction 230 started at 10193840
+Simulated 1500001 instructions so far at clock 10212460
+Stall triggered
+[0] Transaction 223 ended at 10546895 [committed]
+Race ahead mode entered on 0
+[0] Transaction 233 started at 10546895
+Race ahead mode ended
+[0] Transaction 233 ended at 10547551 [committed]
+[0] Transaction 234 started at 10547556
+[0] Transaction 234 ended at 10554828 [committed]
+[0] Transaction 235 started at 10554831
+[0] Transaction 235 ended at 10558424 [committed]
+[0] Transaction 236 started at 10558424
+[0] Transaction 236 ended at 10558426 [committed]
+[0] Transaction 237 started at 10558432
+Stall triggered
+[1] Transaction 230 ended at 10777344 [committed]
+Race ahead mode entered on 1
+[1] Transaction 240 started at 10777344
+Race ahead mode ended
+[1] Transaction 240 ended at 10777381 [committed]
+[1] Transaction 241 started at 10777401
+[1] Transaction 241 ended at 10781796 [committed]
+[1] Transaction 242 started at 10781802
+[1] Transaction 242 ended at 10785527 [committed]
+[1] Transaction 243 started at 10785528
+[1] Transaction 243 ended at 10785530 [committed]
+[1] Transaction 244 started at 10785531
+Stall triggered
+[0] Transaction 237 ended at 11134680 [committed]
+Race ahead mode entered on 0
+[0] Transaction 247 started at 11134680
+Race ahead mode ended
+[0] Transaction 247 ended at 11135452 [committed]
+[0] Transaction 248 started at 11135457
+[0] Transaction 248 ended at 11140361 [committed]
+[0] Transaction 249 started at 11140361
+[0] Transaction 249 ended at 11144751 [committed]
+[0] Transaction 250 started at 11144756
+[0] Transaction 250 ended at 11144757 [committed]
+[0] Transaction 251 started at 11144758
+Stall triggered
+[1] Transaction 244 ended at 11674227 [committed]
+Race ahead mode entered on 1
+[1] Transaction 254 started at 11674227
+Race ahead mode ended
+[1] Transaction 254 ended at 11674264 [committed]
+[1] Transaction 255 started at 11674284
+[1] Transaction 255 ended at 11680184 [committed]
+[1] Transaction 256 started at 11680186
+[1] Transaction 256 ended at 11684117 [committed]
+[1] Transaction 257 started at 11684121
+[1] Transaction 257 ended at 11684123 [committed]
+[1] Transaction 258 started at 11684123
+Stall triggered
+[0] Transaction 251 ended at 12168496 [committed]
+Race ahead mode entered on 0
+[0] Transaction 261 started at 12168496
+Race ahead mode ended
+[0] Transaction 261 ended at 12169215 [committed]
+[0] Transaction 262 started at 12169220
+[0] Transaction 262 ended at 12174985 [committed]
+[0] Transaction 263 started at 12175006
+[0] Transaction 263 ended at 12179430 [committed]
+[0] Transaction 264 started at 12179434
+[0] Transaction 264 ended at 12179434 [committed]
+[0] Transaction 265 started at 12179442
+Stall triggered
+[1] Transaction 258 ended at 12326118 [committed]
+Race ahead mode entered on 1
+[1] Transaction 268 started at 12326118
+Race ahead mode ended
+[1] Transaction 268 ended at 12326155 [committed]
+[1] Transaction 269 started at 12326175
+[1] Transaction 269 ended at 12330457 [committed]
+[1] Transaction 270 started at 12330462
+[1] Transaction 270 ended at 12334507 [committed]
+[1] Transaction 271 started at 12334510
+[1] Transaction 271 ended at 12334515 [committed]
+[1] Transaction 272 started at 12334520
+Stall triggered
+[0] Transaction 265 ended at 12512683 [committed]
+Race ahead mode entered on 0
+[0] Transaction 275 started at 12512683
+Race ahead mode ended
+[0] Transaction 275 ended at 12513557 [committed]
+[0] Transaction 276 started at 12513562
+[0] Transaction 276 ended at 12514836 [committed]
+[0] Transaction 277 started at 12514857
+[0] Transaction 277 ended at 12519427 [committed]
+[0] Transaction 278 started at 12519427
+[0] Transaction 278 ended at 12519429 [committed]
+[0] Transaction 279 started at 12519435
+Stall triggered
+[1] Transaction 272 ended at 12712715 [committed]
+Race ahead mode entered on 1
+[1] Transaction 282 started at 12712715
+Race ahead mode ended
+[1] Transaction 282 ended at 12712752 [committed]
+[1] Transaction 283 started at 12712772
+[1] Transaction 283 ended at 12716488 [committed]
+[1] Transaction 284 started at 12716509
+[1] Transaction 284 ended at 12719446 [committed]
+[1] Transaction 285 started at 12719450
+[1] Transaction 285 ended at 12719453 [committed]
+[1] Transaction 286 started at 12719455
+Stall triggered
+[0] Transaction 279 ended at 12975437 [committed]
+Race ahead mode entered on 0
+[0] Transaction 289 started at 12975437
+Race ahead mode ended
+[0] Transaction 289 ended at 12976182 [committed]
+[0] Transaction 290 started at 12976187
+[0] Transaction 290 ended at 12979669 [committed]
+[0] Transaction 291 started at 12979674
+[0] Transaction 291 ended at 12982158 [committed]
+[0] Transaction 292 started at 12982158
+[0] Transaction 292 ended at 12982158 [committed]
+[0] Transaction 293 started at 12982166
+Stall triggered
+[1] Transaction 286 ended at 13117769 [committed]
+Race ahead mode entered on 1
+[1] Transaction 296 started at 13117769
+Race ahead mode ended
+[1] Transaction 296 ended at 13117806 [committed]
+[1] Transaction 297 started at 13117826
+[1] Transaction 297 ended at 13119137 [committed]
+[1] Transaction 298 started at 13119158
+[1] Transaction 298 ended at 13121401 [committed]
+[1] Transaction 299 started at 13121420
+[1] Transaction 299 ended at 13121420 [committed]
+[1] Transaction 300 started at 13121438
+Stall triggered
+[0] Transaction 293 ended at 13260916 [committed]
+Race ahead mode entered on 0
+[0] Transaction 303 started at 13260916
+Race ahead mode ended
+[0] Transaction 303 ended at 13261583 [committed]
+[0] Transaction 304 started at 13261588
+[0] Transaction 304 ended at 13264868 [committed]
+[0] Transaction 305 started at 13264889
+[0] Transaction 305 ended at 13265573 [committed]
+[0] Transaction 306 started at 13265575
+[0] Transaction 306 ended at 13265594 [committed]
+[0] Transaction 307 started at 13265594
+Stall triggered
+[1] Transaction 300 ended at 13421240 [committed]
+Race ahead mode entered on 1
+[1] Transaction 310 started at 13421240
+Race ahead mode ended
+[1] Transaction 310 ended at 13421277 [committed]
+[1] Transaction 311 started at 13421297
+[1] Transaction 311 ended at 13424076 [committed]
+[1] Transaction 312 started at 13424082
+[1] Transaction 312 ended at 13424960 [committed]
+[1] Transaction 313 started at 13424997
+[1] Transaction 313 ended at 13425016 [committed]
+[1] Transaction 314 started at 13425016
+[0] Transaction 307 ended at 13551043 [committed]
+Race ahead mode entered on 0
+[0] Transaction 317 started at 13551043
+Race ahead mode ended
+[0] Transaction 317 ended at 13551833 [committed]
+[0] Transaction 318 started at 13551838
+[0] Transaction 318 ended at 13552939 [committed]
+[0] Transaction 319 started at 13552960
+[0] Transaction 319 ended at 13555789 [committed]
+[0] Transaction 320 started at 13555791
+[0] Transaction 320 ended at 13555791 [committed]
+[0] Transaction 321 started at 13555791
+Stall triggered
+[1] Transaction 314 ended at 13770556 [committed]
+Race ahead mode entered on 1
+[1] Transaction 324 started at 13770556
+Race ahead mode ended
+[1] Transaction 324 ended at 13770593 [committed]
+[1] Transaction 325 started at 13770613
+[1] Transaction 325 ended at 13773422 [committed]
+[1] Transaction 326 started at 13773422
+[1] Transaction 326 ended at 13777856 [committed]
+[1] Transaction 327 started at 13777856
+[1] Transaction 327 ended at 13777856 [committed]
+[1] Transaction 328 started at 13777860
+Simulated 2000006 instructions so far at clock 13890533
+[0] Transaction 321 ended at 14013222 [committed]
+Race ahead mode entered on 0
+[0] Transaction 331 started at 14013222
+Race ahead mode ended
+[0] Transaction 331 ended at 14013926 [committed]
+[0] Transaction 332 started at 14013931
+[0] Transaction 332 ended at 14015045 [committed]
+[0] Transaction 333 started at 14015066
+[0] Transaction 333 ended at 14020002 [committed]
+[0] Transaction 334 started at 14020006
+[0] Transaction 334 ended at 14020009 [committed]
+[0] Transaction 335 started at 14020010
+[1] Transaction 328 ended at 14035403 [committed]
+Race ahead mode entered on 1
+[1] Transaction 338 started at 14035403
+Race ahead mode ended
+[1] Transaction 338 ended at 14035440 [committed]
+[1] Transaction 339 started at 14035460
+[1] Transaction 339 ended at 14036869 [committed]
+[1] Transaction 340 started at 14036890
+[1] Transaction 340 ended at 14042119 [committed]
+[1] Transaction 341 started at 14042120
+[1] Transaction 341 ended at 14042122 [committed]
+[1] Transaction 342 started at 14042127
+[0] Transaction 335 ended at 14379347 [committed]
+Race ahead mode entered on 0
+[0] Transaction 345 started at 14379347
+Race ahead mode ended
+[0] Transaction 345 ended at 14380055 [committed]
+[0] Transaction 346 started at 14380060
+[0] Transaction 346 ended at 14382626 [committed]
+[0] Transaction 347 started at 14382628
+[0] Transaction 347 ended at 14383359 [committed]
+[0] Transaction 348 started at 14383365
+[0] Transaction 348 ended at 14383367 [committed]
+[0] Transaction 349 started at 14383370
+[1] Transaction 342 ended at 14493598 [committed]
+Race ahead mode entered on 1
+[1] Transaction 352 started at 14493598
+Race ahead mode ended
+[1] Transaction 352 ended at 14493635 [committed]
+[1] Transaction 353 started at 14493655
+[1] Transaction 353 ended at 14497936 [committed]
+[1] Transaction 354 started at 14497940
+[1] Transaction 354 ended at 14501421 [committed]
+[1] Transaction 355 started at 14501424
+[1] Transaction 355 ended at 14501426 [committed]
+[1] Transaction 356 started at 14501427
+[0] Transaction 349 ended at 14656407 [committed]
+Race ahead mode entered on 0
+[0] Transaction 359 started at 14656407
+Race ahead mode ended
+[0] Transaction 359 ended at 14657072 [committed]
+[0] Transaction 360 started at 14657077
+[0] Transaction 360 ended at 14659701 [committed]
+[0] Transaction 361 started at 14659707
+[0] Transaction 361 ended at 14660418 [committed]
+[0] Transaction 362 started at 14660420
+[0] Transaction 362 ended at 14660420 [committed]
+[0] Transaction 363 started at 14660428
+[1] Transaction 356 ended at 14790434 [committed]
+Race ahead mode entered on 1
+[1] Transaction 366 started at 14790434
+Race ahead mode ended
+[1] Transaction 366 ended at 14790471 [committed]
+[1] Transaction 367 started at 14790491
+[1] Transaction 367 ended at 14794586 [committed]
+[1] Transaction 368 started at 14794590
+[1] Transaction 368 ended at 14797463 [committed]
+[1] Transaction 369 started at 14797479
+[1] Transaction 369 ended at 14797498 [committed]
+[1] Transaction 370 started at 14797498
+Stall triggered
+[0] Transaction 363 ended at 15015556 [committed]
+Race ahead mode entered on 0
+[0] Transaction 373 started at 15015556
+Race ahead mode ended
+[0] Transaction 373 ended at 15016290 [committed]
+[0] Transaction 374 started at 15016295
+[0] Transaction 374 ended at 15019334 [committed]
+[0] Transaction 375 started at 15019334
+[0] Transaction 375 ended at 15020061 [committed]
+[0] Transaction 376 started at 15020065
+[0] Transaction 376 ended at 15020067 [committed]
+[0] Transaction 377 started at 15020069
+[1] Transaction 370 ended at 15174700 [committed]
+Race ahead mode entered on 1
+[1] Transaction 380 started at 15174700
+Race ahead mode ended
+[1] Transaction 380 ended at 15174737 [committed]
+[1] Transaction 381 started at 15174757
+[1] Transaction 381 ended at 15175980 [committed]
+[1] Transaction 382 started at 15176001
+[1] Transaction 382 ended at 15178293 [committed]
+[1] Transaction 383 started at 15178312
+[1] Transaction 383 ended at 15178312 [committed]
+[1] Transaction 384 started at 15178330
+[0] Transaction 377 ended at 15191559 [committed]
+Race ahead mode entered on 0
+[0] Transaction 387 started at 15191559
+Race ahead mode ended
+[0] Transaction 387 ended at 15192370 [committed]
+[0] Transaction 388 started at 15192375
+[0] Transaction 388 ended at 15193506 [committed]
+[0] Transaction 389 started at 15193527
+[0] Transaction 389 ended at 15199013 [committed]
+[0] Transaction 390 started at 15199014
+[0] Transaction 390 ended at 15199016 [committed]
+[0] Transaction 391 started at 15199017
+Stall triggered
+[0] Transaction 391 ended at 15457652 [committed]
+[0] Transaction 392 started at 15458414
+[0] Transaction 392 ended at 15458416 [committed]
+[0] Transaction 393 started at 15458421
+[0] Transaction 393 ended at 15461176 [committed]
+[0] Transaction 394 started at 15461181
+[0] Transaction 394 ended at 15461971 [committed]
+[0] Transaction 395 started at 15461974
+[0] Transaction 395 ended at 15461976 [committed]
+[0] Transaction 396 started at 15461984
+[1] Transaction 384 ended at 15729903 [committed]
+Race ahead mode entered on 1
+[1] Transaction 399 started at 15729903
+Race ahead mode ended
+[1] Transaction 399 ended at 15729940 [committed]
+[1] Transaction 400 started at 15729960
+[1] Transaction 400 ended at 15732724 [committed]
+[1] Transaction 401 started at 15732726
+[1] Transaction 401 ended at 15733719 [committed]
+[1] Transaction 402 started at 15733738
+[1] Transaction 402 ended at 15733738 [committed]
+[1] Transaction 403 started at 15733756
+[0] Transaction 396 ended at 15740458 [committed]
+Race ahead mode entered on 0
+[0] Transaction 406 started at 15740458
+Race ahead mode ended
+[0] Transaction 406 ended at 15741252 [committed]
+[0] Transaction 407 started at 15741257
+[0] Transaction 407 ended at 15742420 [committed]
+[0] Transaction 408 started at 15742441
+[0] Transaction 408 ended at 15747062 [committed]
+[0] Transaction 409 started at 15747063
+[0] Transaction 409 ended at 15747072 [committed]
+[0] Transaction 410 started at 15747072
+Stall triggered
+[1] Transaction 403 ended at 15897220 [committed]
+Race ahead mode entered on 1
+[1] Transaction 413 started at 15897220
+Race ahead mode ended
+[1] Transaction 413 ended at 15897257 [committed]
+[1] Transaction 414 started at 15897277
+[1] Transaction 414 ended at 15898493 [committed]
+[1] Transaction 415 started at 15898514
+[1] Transaction 415 ended at 15900559 [committed]
+[1] Transaction 416 started at 15900578
+[1] Transaction 416 ended at 15900578 [committed]
+[1] Transaction 417 started at 15900596
+Stall triggered
+[0] Transaction 410 ended at 16102170 [committed]
+Race ahead mode entered on 0
+[0] Transaction 420 started at 16102170
+Race ahead mode ended
+[0] Transaction 420 ended at 16102851 [committed]
+[0] Transaction 421 started at 16102856
+[0] Transaction 421 ended at 16105381 [committed]
+[0] Transaction 422 started at 16105381
+[0] Transaction 422 ended at 16109695 [committed]
+[0] Transaction 423 started at 16109699
+[0] Transaction 423 ended at 16109701 [committed]
+[0] Transaction 424 started at 16109701
+Stall triggered
+[1] Transaction 417 ended at 16381965 [committed]
+Race ahead mode entered on 1
+[1] Transaction 427 started at 16381965
+Race ahead mode ended
+[1] Transaction 427 ended at 16382002 [committed]
+[1] Transaction 428 started at 16382022
+[1] Transaction 428 ended at 16383387 [committed]
+[1] Transaction 429 started at 16383408
+[1] Transaction 429 ended at 16385529 [committed]
+[1] Transaction 430 started at 16385539
+[1] Transaction 430 ended at 16385539 [committed]
+[1] Transaction 431 started at 16385557
+Stall triggered
+[0] Transaction 424 ended at 16505528 [committed]
+Race ahead mode entered on 0
+[0] Transaction 434 started at 16505528
+Race ahead mode ended
+[0] Transaction 434 ended at 16506324 [committed]
+[0] Transaction 435 started at 16506329
+[0] Transaction 435 ended at 16507467 [committed]
+[0] Transaction 436 started at 16507488
+[0] Transaction 436 ended at 16509348 [committed]
+[0] Transaction 437 started at 16509367
+[0] Transaction 437 ended at 16509367 [committed]
+[0] Transaction 438 started at 16509385
+Stall triggered
+[1] Transaction 431 ended at 16767739 [committed]
+Race ahead mode entered on 1
+[1] Transaction 441 started at 16767739
+Race ahead mode ended
+[1] Transaction 441 ended at 16767776 [committed]
+[1] Transaction 442 started at 16767796
+[1] Transaction 442 ended at 16771319 [committed]
+[1] Transaction 443 started at 16771319
+[1] Transaction 443 ended at 16772207 [committed]
+[1] Transaction 444 started at 16772226
+[1] Transaction 444 ended at 16772226 [committed]
+[1] Transaction 445 started at 16772244
+[0] Transaction 438 ended at 16896021 [committed]
+Race ahead mode entered on 0
+[0] Transaction 448 started at 16896021
+Race ahead mode ended
+[0] Transaction 448 ended at 16896814 [committed]
+[0] Transaction 449 started at 16896819
+[0] Transaction 449 ended at 16899392 [committed]
+[0] Transaction 450 started at 16899392
+[0] Transaction 450 ended at 16903991 [committed]
+[0] Transaction 451 started at 16903991
+[0] Transaction 451 ended at 16903999 [committed]
+[0] Transaction 452 started at 16904001
+Simulated 2500001 instructions so far at clock 17002316
+[1] Transaction 445 ended at 17036615 [committed]
+Race ahead mode entered on 1
+[1] Transaction 455 started at 17036615
+Race ahead mode ended
+[1] Transaction 455 ended at 17036652 [committed]
+[1] Transaction 456 started at 17036672
+[1] Transaction 456 ended at 17040375 [committed]
+[1] Transaction 457 started at 17040375
+[1] Transaction 457 ended at 17041336 [committed]
+[1] Transaction 458 started at 17041338
+[1] Transaction 458 ended at 17041338 [committed]
+[1] Transaction 459 started at 17041340
+[0] Transaction 452 ended at 17158064 [committed]
+Race ahead mode entered on 0
+[0] Transaction 462 started at 17158064
+Race ahead mode ended
+[0] Transaction 462 ended at 17158863 [committed]
+[0] Transaction 463 started at 17158868
+[0] Transaction 463 ended at 17161989 [committed]
+[0] Transaction 464 started at 17161989
+[0] Transaction 464 ended at 17166361 [committed]
+[0] Transaction 465 started at 17166361
+[0] Transaction 465 ended at 17166361 [committed]
+[0] Transaction 466 started at 17166365
+[1] Transaction 459 ended at 17334815 [committed]
+Race ahead mode entered on 1
+[1] Transaction 469 started at 17334815
+Race ahead mode ended
+[1] Transaction 469 ended at 17334852 [committed]
+[1] Transaction 470 started at 17334872
+[1] Transaction 470 ended at 17364065 [committed]
+[1] Transaction 471 started at 17364086
+[1] Transaction 471 ended at 17366131 [committed]
+[1] Transaction 472 started at 17366132
+[1] Transaction 472 ended at 17366132 [committed]
+[1] Transaction 473 started at 17366134
+[0] Transaction 466 ended at 17412426 [committed]
+Race ahead mode entered on 0
+[0] Transaction 476 started at 17412426
+Race ahead mode ended
+[0] Transaction 476 ended at 17413212 [committed]
+[0] Transaction 477 started at 17413217
+[0] Transaction 477 ended at 17414379 [committed]
+[0] Transaction 478 started at 17414400
+[0] Transaction 478 ended at 17419012 [committed]
+[0] Transaction 479 started at 17419013
+[0] Transaction 479 ended at 17419013 [committed]
+[0] Transaction 480 started at 17419020
+Stall triggered
+[1] Transaction 473 ended at 17823185 [committed]
+Race ahead mode entered on 1
+[1] Transaction 483 started at 17823185
+Race ahead mode ended
+[1] Transaction 483 ended at 17823222 [committed]
+[1] Transaction 484 started at 17823242
+[1] Transaction 484 ended at 17826227 [committed]
+[1] Transaction 485 started at 17826227
+Stall triggered
+[0] Transaction 480 ended at 18082232 [committed]
+Race ahead mode entered on 0
+[0] Transaction 490 started at 18082232
+Race ahead mode ended
+[1] Transaction 485 ended at 18082236 [committed]
+[1] Transaction 486 started at 18082239
+[1] Transaction 486 ended at 18082241 [committed]
+[1] Transaction 487 started at 18082242
+[0] Transaction 490 ended at 18082933 [committed]
+[0] Transaction 491 started at 18082938
+[0] Transaction 491 ended at 18088471 [committed]
+Race ahead mode entered on 0
+Race ahead mode ended
+[0] Transaction 494 started at 18089233
+[0] Transaction 494 ended at 18090646 [committed]
+[0] Transaction 495 started at 18090665
+[0] Transaction 495 ended at 18090665 [committed]
+[0] Transaction 496 started at 18090683
+[1] Transaction 487 ended at 18445718 [committed]
+Race ahead mode entered on 1
+[1] Transaction 499 started at 18445718
+Race ahead mode ended
+[1] Transaction 499 ended at 18445755 [committed]
+[1] Transaction 500 started at 18445775
+[1] Transaction 500 ended at 18453069 [committed]
+[1] Transaction 501 started at 18453090
+[1] Transaction 501 ended at 18455602 [committed]
+[1] Transaction 502 started at 18455606
+[1] Transaction 502 ended at 18455608 [committed]
+[1] Transaction 503 started at 18455610
+[0] Transaction 496 ended at 18519681 [committed]
+Race ahead mode entered on 0
+[0] Transaction 506 started at 18519681
+Race ahead mode ended
+[0] Transaction 506 ended at 18520344 [committed]
+[0] Transaction 507 started at 18520349
+[0] Transaction 507 ended at 18527726 [committed]
+[0] Transaction 508 started at 18527727
+[0] Transaction 508 ended at 18529283 [committed]
+[0] Transaction 509 started at 18529284
+[0] Transaction 509 ended at 18529284 [committed]
+[0] Transaction 510 started at 18529286
+Stall triggered
+[1] Transaction 503 ended at 18651069 [committed]
+Race ahead mode entered on 1
+[1] Transaction 513 started at 18651069
+Race ahead mode ended
+[1] Transaction 513 ended at 18651106 [committed]
+[1] Transaction 514 started at 18651126
+[1] Transaction 514 ended at 18656476 [committed]
+[1] Transaction 515 started at 18656476
+[1] Transaction 515 ended at 18657342 [committed]
+[1] Transaction 516 started at 18657345
+[1] Transaction 516 ended at 18657347 [committed]
+[1] Transaction 517 started at 18657347
+Stall triggered
+[0] Transaction 510 ended at 18834744 [committed]
+Race ahead mode entered on 0
+[0] Transaction 520 started at 18834744
+Race ahead mode ended
+[0] Transaction 520 ended at 18835426 [committed]
+[0] Transaction 521 started at 18835431
+[0] Transaction 521 ended at 18836652 [committed]
+[0] Transaction 522 started at 18836673
+[0] Transaction 522 ended at 18839364 [committed]
+[0] Transaction 523 started at 18839368
+[0] Transaction 523 ended at 18839370 [committed]
+[0] Transaction 524 started at 18839372
+Stall triggered
+[1] Transaction 517 ended at 19226332 [committed]
+Race ahead mode entered on 1
+[1] Transaction 527 started at 19226332
+Race ahead mode ended
+[1] Transaction 527 ended at 19226369 [committed]
+[1] Transaction 528 started at 19226389
+[1] Transaction 528 ended at 19233116 [committed]
+[1] Transaction 529 started at 19233137
+[1] Transaction 529 ended at 19234073 [committed]
+[1] Transaction 530 started at 19234092
+[1] Transaction 530 ended at 19234092 [committed]
+[1] Transaction 531 started at 19234110
+Stall triggered
+[0] Transaction 524 ended at 19458229 [committed]
+Race ahead mode entered on 0
+[0] Transaction 534 started at 19458229
+Race ahead mode ended
+[0] Transaction 534 ended at 19459002 [committed]
+[0] Transaction 535 started at 19459007
+[0] Transaction 535 ended at 19464033 [committed]
+[0] Transaction 536 started at 19464369
+[0] Transaction 536 ended at 19465839 [committed]
+[0] Transaction 537 started at 19465842
+[0] Transaction 537 ended at 19465844 [committed]
+[0] Transaction 538 started at 19465844
+[1] Transaction 531 ended at 19592935 [committed]
+Race ahead mode entered on 1
+[1] Transaction 541 started at 19592935
+Race ahead mode ended
+[1] Transaction 541 ended at 19592972 [committed]
+[1] Transaction 542 started at 19592992
+[1] Transaction 542 ended at 19598020 [committed]
+[1] Transaction 543 started at 19598026
+[1] Transaction 543 ended at 19598828 [committed]
+[1] Transaction 544 started at 19598828
+[1] Transaction 544 ended at 19598828 [committed]
+[1] Transaction 545 started at 19598830
+[0] Transaction 538 ended at 19628381 [committed]
+Race ahead mode entered on 0
+[0] Transaction 548 started at 19628381
+Race ahead mode ended
+[0] Transaction 548 ended at 19629034 [committed]
+[0] Transaction 549 started at 19629039
+[0] Transaction 549 ended at 19630160 [committed]
+[0] Transaction 550 started at 19630181
+[0] Transaction 550 ended at 19632215 [committed]
+[0] Transaction 551 started at 19632234
+[0] Transaction 551 ended at 19632234 [committed]
+[0] Transaction 552 started at 19632252
+[1] Transaction 545 ended at 19847362 [committed]
+Race ahead mode entered on 1
+[1] Transaction 555 started at 19847362
+Race ahead mode ended
+[1] Transaction 555 ended at 19847399 [committed]
+[1] Transaction 556 started at 19847419
+[1] Transaction 556 ended at 19851986 [committed]
+[1] Transaction 557 started at 19851987
+[1] Transaction 557 ended at 19852688 [committed]
+[1] Transaction 558 started at 19852689
+[1] Transaction 558 ended at 19852697 [committed]
+[1] Transaction 559 started at 19852699
+[0] Transaction 552 ended at 20014081 [committed]
+Race ahead mode entered on 0
+[0] Transaction 562 started at 20014081
+Race ahead mode ended
+[0] Transaction 562 ended at 20014733 [committed]
+[0] Transaction 563 started at 20014738
+[0] Transaction 563 ended at 20020453 [committed]
+[0] Transaction 564 started at 20020797
+[0] Transaction 564 ended at 20022123 [committed]
+[0] Transaction 565 started at 20022127
+[0] Transaction 565 ended at 20022129 [committed]
+[0] Transaction 566 started at 20022131
+[1] Transaction 559 ended at 20045182 [committed]
+Race ahead mode entered on 1
+[1] Transaction 569 started at 20045182
+Race ahead mode ended
+[1] Transaction 569 ended at 20045219 [committed]
+[1] Transaction 570 started at 20045239
+[1] Transaction 570 ended at 20049819 [committed]
+[1] Transaction 571 started at 20049819
+[1] Transaction 571 ended at 20050643 [committed]
+[1] Transaction 572 started at 20050647
+[1] Transaction 572 ended at 20050650 [committed]
+[1] Transaction 573 started at 20050652
+[0] Transaction 566 ended at 20182384 [committed]
+Race ahead mode entered on 0
+[0] Transaction 576 started at 20182384
+Race ahead mode ended
+[0] Transaction 576 ended at 20183094 [committed]
+[0] Transaction 577 started at 20183099
+[0] Transaction 577 ended at 20185977 [committed]
+[0] Transaction 578 started at 20185977
+[0] Transaction 578 ended at 20188816 [committed]
+[0] Transaction 579 started at 20188820
+[0] Transaction 579 ended at 20188824 [committed]
+[0] Transaction 580 started at 20188825
+Simulated 3000001 instructions so far at clock 20202070
+[1] Transaction 573 ended at 20243557 [committed]
+Race ahead mode entered on 1
+[1] Transaction 583 started at 20243557
+Race ahead mode ended
+[1] Transaction 583 ended at 20243594 [committed]
+[1] Transaction 584 started at 20243614
+[1] Transaction 584 ended at 20244870 [committed]
+[1] Transaction 585 started at 20244891
+[1] Transaction 585 ended at 20250112 [committed]
+[1] Transaction 586 started at 20250114
+[1] Transaction 586 ended at 20250116 [committed]
+[1] Transaction 587 started at 20250116
+[0] Transaction 580 ended at 20379863 [committed]
+Race ahead mode entered on 0
+[0] Transaction 590 started at 20379863
+Race ahead mode ended
+[0] Transaction 590 ended at 20380545 [committed]
+[0] Transaction 591 started at 20380550
+[0] Transaction 591 ended at 20381770 [committed]
+[0] Transaction 592 started at 20381791
+[0] Transaction 592 ended at 20386150 [committed]
+[0] Transaction 593 started at 20386150
+[0] Transaction 593 ended at 20386159 [committed]
+[0] Transaction 594 started at 20386160
+Stall triggered
+[1] Transaction 587 ended at 20742085 [committed]
+Race ahead mode entered on 1
+[1] Transaction 597 started at 20742085
+Race ahead mode ended
+[1] Transaction 597 ended at 20742122 [committed]
+[1] Transaction 598 started at 20742142
+[1] Transaction 598 ended at 20747801 [committed]
+[1] Transaction 599 started at 20747822
+[1] Transaction 599 ended at 20748548 [committed]
+[1] Transaction 600 started at 20748549
+[1] Transaction 600 ended at 20748551 [committed]
+[1] Transaction 601 started at 20748552
+[0] Transaction 594 ended at 20992765 [committed]
+Race ahead mode entered on 0
+[0] Transaction 604 started at 20992765
+Race ahead mode ended
+[0] Transaction 604 ended at 20993423 [committed]
+[0] Transaction 605 started at 20993428
+[0] Transaction 605 ended at 21001652 [committed]
+[0] Transaction 606 started at 21002388
+[0] Transaction 606 ended at 21003260 [committed]
+[0] Transaction 607 started at 21003271
+[0] Transaction 607 ended at 21003271 [committed]
+[0] Transaction 608 started at 21003289
+[1] Transaction 601 ended at 21039140 [committed]
+Race ahead mode entered on 1
+[1] Transaction 611 started at 21039140
+Race ahead mode ended
+[1] Transaction 611 ended at 21039177 [committed]
+[1] Transaction 612 started at 21039197
+[1] Transaction 612 ended at 21043409 [committed]
+[1] Transaction 613 started at 21043409
+[1] Transaction 613 ended at 21044768 [committed]
+[1] Transaction 614 started at 21044770
+[1] Transaction 614 ended at 21044772 [committed]
+[1] Transaction 615 started at 21044772
+Stall triggered
+[0] Transaction 608 ended at 21246499 [committed]
+Race ahead mode entered on 0
+[0] Transaction 618 started at 21246499
+Race ahead mode ended
+[0] Transaction 618 ended at 21247162 [committed]
+[0] Transaction 619 started at 21247167
+[0] Transaction 619 ended at 21252050 [committed]
+[0] Transaction 620 started at 21252243
+[0] Transaction 620 ended at 21253936 [committed]
+[0] Transaction 621 started at 21253955
+[0] Transaction 621 ended at 21253955 [committed]
+[0] Transaction 622 started at 21253973
+Stall triggered
+[1] Transaction 615 ended at 21375050 [committed]
+Race ahead mode entered on 1
+[1] Transaction 625 started at 21375050
+Race ahead mode ended
+[1] Transaction 625 ended at 21375087 [committed]
+[1] Transaction 626 started at 21375107
+[1] Transaction 626 ended at 21376492 [committed]
+[1] Transaction 627 started at 21376513
+[1] Transaction 627 ended at 21379350 [committed]
+[1] Transaction 628 started at 21379350
+[1] Transaction 628 ended at 21379350 [committed]
+[1] Transaction 629 started at 21379352
+[1] Transaction 629 ended at 21538553 [committed]
+[1] Transaction 630 started at 21538573
+[1] Transaction 630 ended at 21538589 [committed]
+[1] Transaction 631 started at 21538609
+[1] Transaction 631 ended at 21539823 [committed]
+[1] Transaction 632 started at 21539844
+[1] Transaction 632 ended at 21546170 [committed]
+[1] Transaction 633 started at 21546175
+[1] Transaction 633 ended at 21546177 [committed]
+[1] Transaction 634 started at 21546177
+[0] Transaction 622 ended at 21605022 [committed]
+Race ahead mode entered on 0
+[0] Transaction 637 started at 21605022
+Race ahead mode ended
+[0] Transaction 637 ended at 21605739 [committed]
+[0] Transaction 638 started at 21605744
+[0] Transaction 638 ended at 21610972 [committed]
+[0] Transaction 639 started at 21611666
+[0] Transaction 639 ended at 21613052 [committed]
+[0] Transaction 640 started at 21613071
+[0] Transaction 640 ended at 21613071 [committed]
+[0] Transaction 641 started at 21613089
+[1] Transaction 634 ended at 21927163 [committed]
+Race ahead mode entered on 1
+[1] Transaction 644 started at 21927163
+Race ahead mode ended
+[1] Transaction 644 ended at 21927200 [committed]
+[1] Transaction 645 started at 21927220
+[1] Transaction 645 ended at 21931918 [committed]
+[1] Transaction 646 started at 21931924
+[1] Transaction 646 ended at 21932736 [committed]
+[1] Transaction 647 started at 21932736
+[1] Transaction 647 ended at 21932744 [committed]
+[1] Transaction 648 started at 21932746
+[1] Transaction 648 ended at 22100292 [committed]
+[1] Transaction 649 started at 22100312
+[1] Transaction 649 ended at 22100328 [committed]
+[1] Transaction 650 started at 22100348
+[1] Transaction 650 ended at 22102997 [committed]
+[1] Transaction 651 started at 22102997
+[1] Transaction 651 ended at 22107269 [committed]
+[1] Transaction 652 started at 22107270
+[1] Transaction 652 ended at 22107272 [committed]
+[1] Transaction 653 started at 22107277
+[0] Transaction 641 ended at 22196240 [committed]
+Race ahead mode entered on 0
+[0] Transaction 656 started at 22196240
+Race ahead mode ended
+[0] Transaction 656 ended at 22196903 [committed]
+[0] Transaction 657 started at 22196908
+[0] Transaction 657 ended at 22204816 [committed]
+[0] Transaction 658 started at 22205267
+[0] Transaction 658 ended at 22206014 [committed]
+[0] Transaction 659 started at 22206015
+[0] Transaction 659 ended at 22206015 [committed]
+[0] Transaction 660 started at 22206017
+[1] Transaction 653 ended at 22307660 [committed]
+Race ahead mode entered on 1
+[1] Transaction 663 started at 22307660
+Race ahead mode ended
+[1] Transaction 663 ended at 22307697 [committed]
+[1] Transaction 664 started at 22307717
+[1] Transaction 664 ended at 22309100 [committed]
+[1] Transaction 665 started at 22309121
+[1] Transaction 665 ended at 22311371 [committed]
+[1] Transaction 666 started at 22311390
+[1] Transaction 666 ended at 22311390 [committed]
+[1] Transaction 667 started at 22311408
+Stall triggered
+[0] Transaction 660 ended at 22668491 [committed]
+Race ahead mode entered on 0
+[0] Transaction 670 started at 22668491
+Race ahead mode ended
+[0] Transaction 670 ended at 22669264 [committed]
+[0] Transaction 671 started at 22669269
+Stall triggered
+[1] Transaction 667 ended at 22894590 [committed]
+Race ahead mode entered on 1
+[1] Transaction 674 started at 22894590
+Race ahead mode ended
+[1] Transaction 674 ended at 22894627 [committed]
+[1] Transaction 675 started at 22894647
+[0] Transaction 671 ended at 22895300 [committed]
+[0] Transaction 676 started at 22895995
+Stall triggered
+Abort triggered
+[0] Transaction 676 ended at 22897657 [aborted]
+[0] Transaction 677 started at 22897700
+Stall triggered
+[1] Transaction 675 ended at 22899838 [committed]
+Race ahead mode entered on 1
+Race ahead mode ended
+[1] Transaction 680 started at 22899887
+Stall triggered
+Abort triggered
+[1] Transaction 680 ended at 22900896 [aborted]
+[1] Transaction 681 started at 22900941
+Stall triggered
+[0] Transaction 677 ended at 22901100 [committed]
+Race ahead mode entered on 0
+Race ahead mode ended
+[0] Transaction 684 started at 22901125
+[0] Transaction 684 ended at 22901125 [committed]
+[0] Transaction 685 started at 22901139
+[1] Transaction 681 ended at 22903312 [committed]
+Race ahead mode entered on 1
+Race ahead mode ended
+[1] Transaction 689 started at 22903368
+[1] Transaction 689 ended at 22903368 [committed]
+[1] Transaction 690 started at 22903386
+[1] Transaction 690 ended at 23074234 [committed]
+[1] Transaction 691 started at 23074254
+[1] Transaction 691 ended at 23074270 [committed]
+[1] Transaction 692 started at 23074290
+[1] Transaction 692 ended at 23075519 [committed]
+[1] Transaction 693 started at 23075540
+[1] Transaction 693 ended at 23080643 [committed]
+[1] Transaction 694 started at 23080647
+[1] Transaction 694 ended at 23080650 [committed]
+[1] Transaction 695 started at 23080651
+Simulated 3500006 instructions so far at clock 23219424
+[0] Transaction 685 ended at 23293980 [committed]
+[0] Transaction 696 started at 23294643
+[0] Transaction 696 ended at 23294645 [committed]
+[0] Transaction 697 started at 23294650
+Stall triggered
+[1] Transaction 695 ended at 23327317 [committed]
+[1] Transaction 698 started at 23327337
+Stall triggered
+[0] Transaction 697 ended at 23328040 [committed]
+Race ahead mode entered on 0
+Race ahead mode ended
+[1] Transaction 698 ended at 23328041 [committed]
+Race ahead mode entered on 1
+Race ahead mode ended
+[1] Transaction 703 started at 23328079
+[0] Transaction 704 started at 23328174
+[1] Transaction 703 ended at 23329452 [committed]
+[1] Transaction 705 started at 23329473
+Stall triggered
+[0] Transaction 704 ended at 23330191 [committed]
+[0] Transaction 706 started at 23330191
+[0] Transaction 706 ended at 23330199 [committed]
+[0] Transaction 707 started at 23330201
+[1] Transaction 705 ended at 23331135 [committed]
+Race ahead mode entered on 1
+Race ahead mode ended
+[1] Transaction 711 started at 23331176
+[1] Transaction 711 ended at 23331176 [committed]
+[1] Transaction 712 started at 23331194
+[0] Transaction 707 ended at 23574018 [committed]
+Race ahead mode entered on 0
+[0] Transaction 715 started at 23574018
+Race ahead mode ended
+[0] Transaction 715 ended at 23574750 [committed]
+[0] Transaction 716 started at 23574755
+[0] Transaction 716 ended at 23575918 [committed]
+[0] Transaction 717 started at 23575939
+[0] Transaction 717 ended at 23581791 [committed]
+[0] Transaction 718 started at 23581791
+[0] Transaction 718 ended at 23581791 [committed]
+[0] Transaction 719 started at 23581794
+[1] Transaction 712 ended at 23594816 [committed]
+[1] Transaction 720 started at 23594836
+[1] Transaction 720 ended at 23594852 [committed]
+[1] Transaction 721 started at 23594872
+[1] Transaction 721 ended at 23599221 [committed]
+Race ahead mode entered on 1
+Race ahead mode ended
+[1] Transaction 724 started at 23599265
+[1] Transaction 724 ended at 23601247 [committed]
+[1] Transaction 725 started at 23601248
+[1] Transaction 725 ended at 23601256 [committed]
+[1] Transaction 726 started at 23601258
+Stall triggered
+[1] Transaction 726 ended at 23854628 [committed]
+[1] Transaction 727 started at 23854648
+[1] Transaction 727 ended at 23854664 [committed]
+[1] Transaction 728 started at 23854684
+[1] Transaction 728 ended at 23860867 [committed]
+[1] Transaction 729 started at 23860888
+[1] Transaction 729 ended at 23862824 [committed]
+[1] Transaction 730 started at 23862825
+[1] Transaction 730 ended at 23862825 [committed]
+[1] Transaction 731 started at 23862827
+Stall triggered
+[0] Transaction 719 ended at 24240854 [committed]
+Race ahead mode entered on 0
+[0] Transaction 734 started at 24240854
+Race ahead mode ended
+[0] Transaction 734 ended at 24241556 [committed]
+[0] Transaction 735 started at 24241561
+[0] Transaction 735 ended at 24247937 [committed]
+[0] Transaction 736 started at 24248181
+[0] Transaction 736 ended at 24249592 [committed]
+[0] Transaction 737 started at 24249593
+[0] Transaction 737 ended at 24249595 [committed]
+[0] Transaction 738 started at 24249596
+[1] Transaction 731 ended at 24387728 [committed]
+Race ahead mode entered on 1
+[1] Transaction 741 started at 24387728
+Race ahead mode ended
+[1] Transaction 741 ended at 24387765 [committed]
+[1] Transaction 742 started at 24387785
+[1] Transaction 742 ended at 24389117 [committed]
+[1] Transaction 743 started at 24389138
+[1] Transaction 743 ended at 24391431 [committed]
+[1] Transaction 744 started at 24391450
+[1] Transaction 744 ended at 24391450 [committed]
+[1] Transaction 745 started at 24391468
+Stall triggered
+[0] Transaction 738 ended at 24584928 [committed]
+Race ahead mode entered on 0
+[0] Transaction 748 started at 24584928
+Race ahead mode ended
+[0] Transaction 748 ended at 24585609 [committed]
+[0] Transaction 749 started at 24585614
+[0] Transaction 749 ended at 24588976 [committed]
+[0] Transaction 750 started at 24588997
+[0] Transaction 750 ended at 24592995 [committed]
+[0] Transaction 751 started at 24592995
+[0] Transaction 751 ended at 24593004 [committed]
+[0] Transaction 752 started at 24593005
+[0] Transaction 752 ended at 24884950 [committed]
+[0] Transaction 753 started at 24885618
+[0] Transaction 753 ended at 24885620 [committed]
+[0] Transaction 754 started at 24885625
+[0] Transaction 754 ended at 24890943 [committed]
+[0] Transaction 755 started at 24891096
+[0] Transaction 755 ended at 24891930 [committed]
+[0] Transaction 756 started at 24891941
+[0] Transaction 756 ended at 24891941 [committed]
+[0] Transaction 757 started at 24891959
+Stall triggered
+[1] Transaction 745 ended at 25059352 [committed]
+Race ahead mode entered on 1
+[1] Transaction 760 started at 25059352
+Race ahead mode ended
+[1] Transaction 760 ended at 25059389 [committed]
+[1] Transaction 761 started at 25059409
+[1] Transaction 761 ended at 25064063 [committed]
+[1] Transaction 762 started at 25064084
+[1] Transaction 762 ended at 25065173 [committed]
+[1] Transaction 763 started at 25065192
+[1] Transaction 763 ended at 25065192 [committed]
+[1] Transaction 764 started at 25065210
+Stall triggered
+[1] Transaction 764 ended at 25256892 [committed]
+[1] Transaction 765 started at 25256912
+[1] Transaction 765 ended at 25256928 [committed]
+[1] Transaction 766 started at 25256948
+[1] Transaction 766 ended at 25261883 [committed]
+[1] Transaction 767 started at 25261885
+[1] Transaction 767 ended at 25262652 [committed]
+[1] Transaction 768 started at 25262671
+[1] Transaction 768 ended at 25262671 [committed]
+[1] Transaction 769 started at 25262689
+Stall triggered
+[0] Transaction 757 ended at 25545091 [committed]
+Race ahead mode entered on 0
+[0] Transaction 772 started at 25545091
+Race ahead mode ended
+[0] Transaction 772 ended at 25545909 [committed]
+[0] Transaction 773 started at 25545914
+[0] Transaction 773 ended at 25552471 [committed]
+[0] Transaction 774 started at 25552745
+[0] Transaction 774 ended at 25553382 [committed]
+[0] Transaction 775 started at 25553386
+[0] Transaction 775 ended at 25553386 [committed]
+[0] Transaction 776 started at 25553386
+[0] Transaction 776 ended at 25735801 [committed]
+[0] Transaction 777 started at 25736450
+[0] Transaction 777 ended at 25736452 [committed]
+[0] Transaction 778 started at 25736457
+[0] Transaction 778 ended at 25739384 [committed]
+[0] Transaction 779 started at 25739405
+[0] Transaction 779 ended at 25743492 [committed]
+[0] Transaction 780 started at 25743493
+[0] Transaction 780 ended at 25743495 [committed]
+[0] Transaction 781 started at 25743496
+[1] Transaction 769 ended at 25848308 [committed]
+Race ahead mode entered on 1
+[1] Transaction 784 started at 25848308
+Race ahead mode ended
+[1] Transaction 784 ended at 25848345 [committed]
+[1] Transaction 785 started at 25848365
+[1] Transaction 785 ended at 25855287 [committed]
+[1] Transaction 786 started at 25855289
+[1] Transaction 786 ended at 25856059 [committed]
+[1] Transaction 787 started at 25856078
+[1] Transaction 787 ended at 25856078 [committed]
+[1] Transaction 788 started at 25856096
+[0] Transaction 781 ended at 25962212 [committed]
+Race ahead mode entered on 0
+[0] Transaction 791 started at 25962212
+Race ahead mode ended
+[0] Transaction 791 ended at 25962958 [committed]
+[0] Transaction 792 started at 25962963
+[0] Transaction 792 ended at 25964081 [committed]
+[0] Transaction 793 started at 25964102
+[0] Transaction 793 ended at 25968647 [committed]
+[0] Transaction 794 started at 25968649
+[0] Transaction 794 ended at 25968656 [committed]
+[0] Transaction 795 started at 25968656
+[1] Transaction 788 ended at 26248050 [committed]
+Race ahead mode entered on 1
+[1] Transaction 798 started at 26248050
+Race ahead mode ended
+[1] Transaction 798 ended at 26248087 [committed]
+[1] Transaction 799 started at 26248107
+[1] Transaction 799 ended at 26254387 [committed]
+[1] Transaction 800 started at 26254408
+[1] Transaction 800 ended at 26255314 [committed]
+[1] Transaction 801 started at 26255317
+[1] Transaction 801 ended at 26255319 [committed]
+[1] Transaction 802 started at 26255319
+[0] Transaction 795 ended at 26255689 [committed]
+Race ahead mode entered on 0
+[0] Transaction 805 started at 26255689
+Race ahead mode ended
+[0] Transaction 805 ended at 26256471 [committed]
+[0] Transaction 806 started at 26256476
+[0] Transaction 806 ended at 26259260 [committed]
+[0] Transaction 807 started at 26259260
+[0] Transaction 807 ended at 26260572 [committed]
+[0] Transaction 808 started at 26260583
+[0] Transaction 808 ended at 26260583 [committed]
+[0] Transaction 809 started at 26260601
+Simulated 4000001 instructions so far at clock 26419930
+[1] Transaction 802 ended at 26449504 [committed]
+Race ahead mode entered on 1
+[1] Transaction 812 started at 26449504
+Race ahead mode ended
+[1] Transaction 812 ended at 26449541 [committed]
+[1] Transaction 813 started at 26449561
+[1] Transaction 813 ended at 26450843 [committed]
+[1] Transaction 814 started at 26450864
+[1] Transaction 814 ended at 26455290 [committed]
+[1] Transaction 815 started at 26455290
+[1] Transaction 815 ended at 26455298 [committed]
+[1] Transaction 816 started at 26455300
+Stall triggered
+[0] Transaction 809 ended at 26591066 [committed]
+Race ahead mode entered on 0
+[0] Transaction 819 started at 26591066
+Race ahead mode ended
+[0] Transaction 819 ended at 26591750 [committed]
+[0] Transaction 820 started at 26591755
+[0] Transaction 820 ended at 26592928 [committed]
+[0] Transaction 821 started at 26592949
+[0] Transaction 821 ended at 26596578 [committed]
+[0] Transaction 822 started at 26596579
+[0] Transaction 822 ended at 26596581 [committed]
+[0] Transaction 823 started at 26596586
+[1] Transaction 816 ended at 26730912 [committed]
+Race ahead mode entered on 1
+[1] Transaction 826 started at 26730912
+Race ahead mode ended
+[1] Transaction 826 ended at 26730949 [committed]
+[1] Transaction 827 started at 26730969
+[1] Transaction 827 ended at 26733863 [committed]
+[1] Transaction 828 started at 26733884
+[1] Transaction 828 ended at 26735975 [committed]
+[1] Transaction 829 started at 26735977
+[1] Transaction 829 ended at 26735977 [committed]
+[1] Transaction 830 started at 26735979
+[0] Transaction 823 ended at 26765650 [committed]
+Race ahead mode entered on 0
+[0] Transaction 833 started at 26765650
+Race ahead mode ended
+[0] Transaction 833 ended at 26766343 [committed]
+[0] Transaction 834 started at 26766348
+[0] Transaction 834 ended at 26767527 [committed]
+[0] Transaction 835 started at 26767548
+[0] Transaction 835 ended at 26770108 [committed]
+[0] Transaction 836 started at 26770113
+[0] Transaction 836 ended at 26770115 [committed]
+[0] Transaction 837 started at 26770116
+[1] Transaction 830 ended at 26915953 [committed]
+Race ahead mode entered on 1
+[1] Transaction 840 started at 26915953
+Race ahead mode ended
+[1] Transaction 840 ended at 26915990 [committed]
+[1] Transaction 841 started at 26916010
+[1] Transaction 841 ended at 26921748 [committed]
+[1] Transaction 842 started at 26921749
+[1] Transaction 842 ended at 26923248 [committed]
+[1] Transaction 843 started at 26923267
+[1] Transaction 843 ended at 26923267 [committed]
+[1] Transaction 844 started at 26923285
+[0] Transaction 837 ended at 27078307 [committed]
+Race ahead mode entered on 0
+[0] Transaction 847 started at 27078307
+Race ahead mode ended
+[0] Transaction 847 ended at 27078996 [committed]
+[0] Transaction 848 started at 27079001
+[0] Transaction 848 ended at 27083683 [committed]
+[0] Transaction 849 started at 27084163
+[0] Transaction 849 ended at 27084748 [committed]
+[0] Transaction 850 started at 27084752
+[0] Transaction 850 ended at 27084756 [committed]
+[0] Transaction 851 started at 27084757
+[1] Transaction 844 ended at 27085808 [committed]
+Race ahead mode entered on 1
+[1] Transaction 854 started at 27085808
+Race ahead mode ended
+[1] Transaction 854 ended at 27085845 [committed]
+[1] Transaction 855 started at 27085865
+[1] Transaction 855 ended at 27089065 [committed]
+[1] Transaction 856 started at 27089065
+[1] Transaction 856 ended at 27089902 [committed]
+[1] Transaction 857 started at 27089903
+[1] Transaction 857 ended at 27089903 [committed]
+[1] Transaction 858 started at 27089910
+[1] Transaction 858 ended at 27337295 [committed]
+[1] Transaction 859 started at 27337315
+[1] Transaction 859 ended at 27337331 [committed]
+[1] Transaction 860 started at 27337351
+[1] Transaction 860 ended at 27338645 [committed]
+[1] Transaction 861 started at 27338666
+[1] Transaction 861 ended at 27340688 [committed]
+[1] Transaction 862 started at 27340707
+[1] Transaction 862 ended at 27340707 [committed]
+[1] Transaction 863 started at 27340725
+[0] Transaction 851 ended at 27362063 [committed]
+Race ahead mode entered on 0
+[0] Transaction 866 started at 27362063
+Race ahead mode ended
+[0] Transaction 866 ended at 27362724 [committed]
+[0] Transaction 867 started at 27362729
+[0] Transaction 867 ended at 27367831 [committed]
+[0] Transaction 868 started at 27368062
+[0] Transaction 868 ended at 27368208 [committed]
+[0] Transaction 869 started at 27368227
+[0] Transaction 869 ended at 27368227 [committed]
+[0] Transaction 870 started at 27368258
+[1] Transaction 863 ended at 27517896 [committed]
+Race ahead mode entered on 1
+[1] Transaction 873 started at 27517896
+Race ahead mode ended
+[1] Transaction 873 ended at 27517933 [committed]
+[1] Transaction 874 started at 27517953
+[1] Transaction 874 ended at 27519240 [committed]
+[1] Transaction 875 started at 27519261
+[1] Transaction 875 ended at 27521657 [committed]
+[1] Transaction 876 started at 27521676
+[1] Transaction 876 ended at 27521676 [committed]
+[1] Transaction 877 started at 27521694
+[0] Transaction 870 ended at 27606265 [committed]
+Race ahead mode entered on 0
+[0] Transaction 880 started at 27606265
+Race ahead mode ended
+[0] Transaction 880 ended at 27607036 [committed]
+[0] Transaction 881 started at 27607041
+[0] Transaction 881 ended at 27613568 [committed]
+[0] Transaction 882 started at 27613589
+[0] Transaction 882 ended at 27613729 [committed]
+[0] Transaction 883 started at 27613748
+[0] Transaction 883 ended at 27613748 [committed]
+[0] Transaction 884 started at 27613779
+[1] Transaction 877 ended at 27790203 [committed]
+Race ahead mode entered on 1
+[1] Transaction 887 started at 27790203
+Race ahead mode ended
+[1] Transaction 887 ended at 27790240 [committed]
+[1] Transaction 888 started at 27790260
+[1] Transaction 888 ended at 27793520 [committed]
+[1] Transaction 889 started at 27793541
+[1] Transaction 889 ended at 27794300 [committed]
+[1] Transaction 890 started at 27794319
+[1] Transaction 890 ended at 27794319 [committed]
+[1] Transaction 891 started at 27794337
+[0] Transaction 884 ended at 27800069 [committed]
+Race ahead mode entered on 0
+[0] Transaction 894 started at 27800069
+Race ahead mode ended
+[0] Transaction 894 ended at 27800795 [committed]
+[0] Transaction 895 started at 27800800
+[0] Transaction 895 ended at 27803284 [committed]
+[0] Transaction 896 started at 27803290
+[0] Transaction 896 ended at 27804053 [committed]
+[0] Transaction 897 started at 27804090
+[0] Transaction 897 ended at 27804109 [committed]
+[0] Transaction 898 started at 27804109
+[1] Transaction 891 ended at 28239408 [committed]
+Race ahead mode entered on 1
+[1] Transaction 901 started at 28239408
+Race ahead mode ended
+[1] Transaction 901 ended at 28239963 [committed]
+[1] Transaction 902 started at 28239969
+[1] Transaction 902 ended at 28242230 [committed]
+[1] Transaction 903 started at 28242251
+[1] Transaction 903 ended at 28242996 [committed]
+[1] Transaction 904 started at 28242998
+[1] Transaction 904 ended at 28243006 [committed]
+[1] Transaction 905 started at 28243008
+[0] Transaction 898 ended at 28365124 [committed]
+Race ahead mode entered on 0
+[0] Transaction 908 started at 28365124
+Race ahead mode ended
+[0] Transaction 908 ended at 28365896 [committed]
+[0] Transaction 909 started at 28365903
+[0] Transaction 909 ended at 28367055 [committed]
+[0] Transaction 910 started at 28367076
+[0] Transaction 910 ended at 28369237 [committed]
+[0] Transaction 911 started at 28369274
+[0] Transaction 911 ended at 28369293 [committed]
+[0] Transaction 912 started at 28369293
+Stall triggered
+[1] Transaction 905 ended at 28695275 [committed]
+Race ahead mode entered on 1
+[1] Transaction 915 started at 28695275
+Race ahead mode ended
+[1] Transaction 915 ended at 28695834 [committed]
+[1] Transaction 916 started at 28695836
+[1] Transaction 916 ended at 28698863 [committed]
+[1] Transaction 917 started at 28698884
+[1] Transaction 917 ended at 28699654 [committed]
+[1] Transaction 918 started at 28699656
+[1] Transaction 918 ended at 28699656 [committed]
+[1] Transaction 919 started at 28699894
+[1] Transaction 919 ended at 28700091 [committed]
+[1] Transaction 920 started at 28700101
+[1] Transaction 920 ended at 28700101 [committed]
+[1] Transaction 921 started at 28700147
+Stall triggered
+Abort triggered
+[1] Transaction 921 ended at 28834206 [aborted]
+[1] Transaction 922 started at 28834228
+Stall triggered
+Dominating Abort triggered
+[1] Transaction 922 ended at 29204676 [aborted]
+[1] Transaction 923 started at 29204712
+Stall triggered
+[0] Transaction 912 ended at 29457949 [committed]
+Race ahead mode entered on 0
+[0] Transaction 926 started at 29457949
+Race ahead mode ended
+Stall triggered
+Simulated 4500002 instructions so far at clock 29638384
+[1] Transaction 923 ended at 30008394 [committed]
+Race ahead mode entered on 1
+[1] Transaction 930 started at 30008394
+Race ahead mode ended
+[0] Transaction 926 ended at 30008396 [committed]
+[0] Transaction 927 started at 30008399
+[1] Transaction 930 ended at 30009097 [committed]
+[1] Transaction 931 started at 30009101
+Stall triggered
+[0] Transaction 927 ended at 30010985 [committed]
+[0] Transaction 932 started at 30010990
+Stall triggered
+Abort triggered
+[0] Transaction 932 ended at 30011923 [aborted]
+[0] Transaction 933 started at 30011973
+Stall triggered
+[1] Transaction 931 ended at 30013588 [committed]
+Race ahead mode entered on 1
+Race ahead mode ended
+[1] Transaction 936 started at 30013622
+Stall triggered
+Abort triggered
+[1] Transaction 936 ended at 30013930 [aborted]
+[1] Transaction 937 started at 30013980
+Stall triggered
+[0] Transaction 933 ended at 30014024 [committed]
+Race ahead mode entered on 0
+Race ahead mode ended
+[0] Transaction 940 started at 30014086
+[0] Transaction 940 ended at 30014086 [committed]
+[1] Transaction 937 ended at 30014520 [committed]
+Race ahead mode entered on 1
+Race ahead mode ended
+[1] Transaction 943 started at 30014545
+[1] Transaction 943 ended at 30014545 [committed]
+[1] Transaction 944 started at 30014559
+[0] Transaction 945 started at 30014819
+[0] Transaction 945 ended at 30015793 [committed]
+[0] Transaction 946 started at 30015866
+[0] Transaction 946 ended at 30015866 [committed]
+[0] Transaction 947 started at 30016061
+Stall triggered
+Abort triggered
+[0] Transaction 947 ended at 30145429 [aborted]
+[0] Transaction 948 started at 30145451
+Dominating Abort triggered
+[0] Transaction 948 ended at 30158445 [aborted]
+[0] Transaction 949 started at 30158642
+Stall triggered
+Dominating Abort triggered
+[0] Transaction 949 ended at 30166018 [aborted]
+[0] Transaction 950 started at 30166108
+Stall triggered
+[1] Transaction 944 ended at 30576042 [committed]
+[1] Transaction 951 started at 30576062
+[1] Transaction 951 ended at 30576078 [committed]
+[1] Transaction 952 started at 30576098
+[1] Transaction 952 ended at 30577568 [committed]
+[1] Transaction 953 started at 30577589
+[1] Transaction 953 ended at 30579856 [committed]
+Race ahead mode entered on 1
+Race ahead mode ended
+[1] Transaction 956 started at 30579881
+[1] Transaction 956 ended at 30579881 [committed]
+[1] Transaction 957 started at 30579895
+Stall triggered
+Abort triggered
+[1] Transaction 957 ended at 30739744 [aborted]
+[1] Transaction 958 started at 30739765
+Stall triggered
+[0] Transaction 950 ended at 31139159 [committed]
+Race ahead mode entered on 0
+[0] Transaction 961 started at 31139159
+Race ahead mode ended
+[0] Transaction 961 ended at 31139957 [committed]
+[0] Transaction 962 started at 31139958
+[0] Transaction 962 ended at 31141071 [committed]
+[0] Transaction 963 started at 31141092
+[0] Transaction 963 ended at 31143011 [committed]
+[0] Transaction 964 started at 31143048
+[0] Transaction 964 ended at 31143067 [committed]
+[0] Transaction 965 started at 31143067
+[0] Transaction 965 ended at 31456024 [committed]
+[0] Transaction 966 started at 31456743
+[0] Transaction 966 ended at 31456745 [committed]
+[0] Transaction 967 started at 31456750
+[0] Transaction 967 ended at 31458679 [committed]
+[0] Transaction 968 started at 31458683
+[0] Transaction 968 ended at 31459482 [committed]
+[0] Transaction 969 started at 31459501
+[0] Transaction 969 ended at 31459501 [committed]
+[0] Transaction 970 started at 31459519
+[1] Transaction 958 ended at 31638947 [committed]
+[1] Transaction 971 started at 31638967
+[1] Transaction 971 ended at 31638983 [committed]
+[1] Transaction 972 started at 31639003
+[1] Transaction 972 ended at 31639719 [committed]
+[1] Transaction 973 started at 31639720
+Stall triggered
+[0] Transaction 970 ended at 31724158 [committed]
+[0] Transaction 974 started at 31724719
+Stall triggered
+[1] Transaction 973 ended at 31725026 [committed]
+Race ahead mode entered on 1
+Race ahead mode ended
+[0] Transaction 974 ended at 31725027 [committed]
+Race ahead mode entered on 0
+Race ahead mode ended
+[1] Transaction 979 started at 31725051
+[1] Transaction 979 ended at 31725051 [committed]
+[1] Transaction 980 started at 31725065
+[0] Transaction 981 started at 31725065
+[0] Transaction 981 ended at 31728416 [committed]
+[0] Transaction 982 started at 31728416
+[0] Transaction 982 ended at 31728764 [committed]
+[0] Transaction 983 started at 31728820
+[0] Transaction 983 ended at 31728820 [committed]
+[0] Transaction 984 started at 31729539
+[0] Transaction 984 ended at 31729670 [committed]
+[0] Transaction 985 started at 31729689
+[0] Transaction 985 ended at 31729689 [committed]
+[0] Transaction 986 started at 31729728
+[0] Transaction 986 ended at 32179931 [committed]
+[0] Transaction 987 started at 32180583
+[0] Transaction 987 ended at 32180660 [committed]
+[0] Transaction 988 started at 32180663
+[0] Transaction 988 ended at 32184261 [committed]
+[0] Transaction 989 started at 32184265
+[0] Transaction 989 ended at 32185138 [committed]
+[0] Transaction 990 started at 32185157
+[0] Transaction 990 ended at 32185157 [committed]
+[0] Transaction 991 started at 32185855
+[0] Transaction 991 ended at 32185970 [committed]
+[0] Transaction 992 started at 32185989
+[0] Transaction 992 ended at 32185989 [committed]
+[0] Transaction 993 started at 32186028
+[1] Transaction 980 ended at 32266028 [committed]
+[1] Transaction 994 started at 32266046
+[1] Transaction 994 ended at 32266064 [committed]
+[1] Transaction 995 started at 32266084
+[1] Transaction 995 ended at 32269885 [committed]
+Race ahead mode entered on 1
+Race ahead mode ended
+[1] Transaction 998 started at 32269914
+[1] Transaction 998 ended at 32270597 [committed]
+[1] Transaction 999 started at 32270599
+Stall triggered
+[0] Transaction 993 ended at 32568769 [committed]
+[1] Transaction 999 ended at 32568773 [committed]
+Race ahead mode entered on 1
+Race ahead mode ended
+[1] Transaction 1004 started at 32568849
+[0] Transaction 1001 started at 32569427
+[0] Transaction 1001 ended at 32569434 [committed]
+[0] Transaction 1003 started at 32569437
+[1] Transaction 1004 ended at 32569590 [committed]
+[1] Transaction 1005 started at 32569609
+[1] Transaction 1005 ended at 32569609 [committed]
+[1] Transaction 1006 started at 32569627
+[0] Transaction 1003 ended at 32572134 [committed]
+Race ahead mode entered on 0
+Race ahead mode ended
+[0] Transaction 1009 started at 32572171
+[0] Transaction 1009 ended at 32572735 [committed]
+[0] Transaction 1010 started at 32572754
+[0] Transaction 1010 ended at 32572754 [committed]
+[0] Transaction 1011 started at 32573086
+Stall triggered
+Abort triggered
+[0] Transaction 1011 ended at 32659164 [aborted]
+[0] Transaction 1012 started at 32659186
+Stall triggered
+Dominating Abort triggered
+[0] Transaction 1012 ended at 32729877 [aborted]
+[0] Transaction 1013 started at 32729908
+Stall triggered
+Dominating Abort triggered
+[0] Transaction 1013 ended at 32763829 [aborted]
+[0] Transaction 1014 started at 32763903
+Stall triggered
+[1] Transaction 1006 ended at 33166902 [committed]
+Race ahead mode entered on 1
+[1] Transaction 1017 started at 33166902
+Race ahead mode ended
+[1] Transaction 1017 ended at 33167161 [committed]
+[1] Transaction 1018 started at 33167165
+[1] Transaction 1018 ended at 33171190 [committed]
+[1] Transaction 1019 started at 33171192
+[1] Transaction 1019 ended at 33171861 [committed]
+[1] Transaction 1020 started at 33171868
+[1] Transaction 1020 ended at 33171868 [committed]
+[1] Transaction 1021 started at 33171868
+Simulated 5000002 instructions so far at clock 33369260
+[1] Transaction 1021 ended at 33604503 [committed]
+[1] Transaction 1022 started at 33605098
+[1] Transaction 1022 ended at 33605100 [committed]
+[1] Transaction 1023 started at 33605108
+[1] Transaction 1023 ended at 33608592 [committed]
+[1] Transaction 1024 started at 33608613
+[1] Transaction 1024 ended at 33609293 [committed]
+[1] Transaction 1025 started at 33609295
+[1] Transaction 1025 ended at 33609295 [committed]
+[1] Transaction 1026 started at 33609297
+[0] Transaction 1014 ended at 33623397 [committed]
+Race ahead mode entered on 0
+[0] Transaction 1029 started at 33623397
+Race ahead mode ended
+[0] Transaction 1029 ended at 33624111 [committed]
+[0] Transaction 1030 started at 33624116
+[0] Transaction 1030 ended at 33625288 [committed]
+[0] Transaction 1031 started at 33625309
+[0] Transaction 1031 ended at 33627274 [committed]
+[0] Transaction 1032 started at 33627293
+[0] Transaction 1032 ended at 33627293 [committed]
+[0] Transaction 1033 started at 33627311
+[1] Transaction 1026 ended at 34046071 [committed]
+Race ahead mode entered on 1
+[1] Transaction 1036 started at 34046071
+Race ahead mode ended
+[1] Transaction 1036 ended at 34046108 [committed]
+[1] Transaction 1037 started at 34046128
+[1] Transaction 1037 ended at 34049588 [committed]
+[1] Transaction 1038 started at 34049589
+[1] Transaction 1038 ended at 34050284 [committed]
+[1] Transaction 1039 started at 34050294
+[1] Transaction 1039 ended at 34050294 [committed]
+[1] Transaction 1040 started at 34051070
+[1] Transaction 1040 ended at 34051201 [committed]
+[1] Transaction 1041 started at 34051220
+[1] Transaction 1041 ended at 34051220 [committed]
+[1] Transaction 1042 started at 34051259
+[0] Transaction 1033 ended at 34188571 [committed]
+Race ahead mode entered on 0
+[0] Transaction 1045 started at 34188571
+Race ahead mode ended
+[0] Transaction 1045 ended at 34189303 [committed]
+[0] Transaction 1046 started at 34189304
+[0] Transaction 1046 ended at 34192603 [committed]
+[0] Transaction 1047 started at 34192624
+[0] Transaction 1047 ended at 34193359 [committed]
+[0] Transaction 1048 started at 34193378
+Stall triggered
+[1] Transaction 1042 ended at 34354993 [committed]
+[0] Transaction 1048 ended at 34354994 [committed]
+Race ahead mode entered on 0
+Race ahead mode ended
+[1] Transaction 1050 started at 34355013
+[1] Transaction 1050 ended at 34355029 [committed]
+[1] Transaction 1052 started at 34355049
+[0] Transaction 1053 started at 34355106
+[0] Transaction 1053 ended at 34356360 [committed]
+[0] Transaction 1054 started at 34356379
+[0] Transaction 1054 ended at 34356379 [committed]
+[0] Transaction 1055 started at 34356397
+[1] Transaction 1052 ended at 34358373 [committed]
+Race ahead mode entered on 1
+Race ahead mode ended
+[1] Transaction 1058 started at 34358406
+[1] Transaction 1058 ended at 34358643 [committed]
+[1] Transaction 1059 started at 34358662
+[1] Transaction 1059 ended at 34358662 [committed]
+[1] Transaction 1060 started at 34358680
+[0] Transaction 1055 ended at 34874497 [committed]
+Race ahead mode entered on 0
+[0] Transaction 1064 started at 34874497
+Race ahead mode ended
+[0] Transaction 1064 ended at 34875208 [committed]
+[0] Transaction 1065 started at 34875228
+[0] Transaction 1065 ended at 34876406 [committed]
+[0] Transaction 1066 started at 34876427
+[0] Transaction 1066 ended at 34878476 [committed]
+[0] Transaction 1067 started at 34878495
+[0] Transaction 1067 ended at 34878495 [committed]
+[0] Transaction 1068 started at 34878513
+Stall triggered
+[1] Transaction 1060 ended at 34936720 [committed]
+Race ahead mode entered on 1
+[1] Transaction 1071 started at 34936720
+Race ahead mode ended
+[1] Transaction 1071 ended at 34937337 [committed]
+[1] Transaction 1072 started at 34937337
+[1] Transaction 1072 ended at 34938749 [committed]
+[1] Transaction 1073 started at 34938770
+[1] Transaction 1073 ended at 34940825 [committed]
+[1] Transaction 1074 started at 34940844
+[1] Transaction 1074 ended at 34940844 [committed]
+[1] Transaction 1075 started at 34940862
+Stall triggered
+Abort triggered
+[1] Transaction 1075 ended at 35075070 [aborted]
+[1] Transaction 1076 started at 35075092
+Stall triggered
+Dominating Abort triggered
+[1] Transaction 1076 ended at 35127217 [aborted]
+[1] Transaction 1077 started at 35127291
+Stall triggered
+[0] Transaction 1068 ended at 35661425 [committed]
+Race ahead mode entered on 0
+[0] Transaction 1080 started at 35661425
+Race ahead mode ended
+[0] Transaction 1080 ended at 35662273 [committed]
+[0] Transaction 1081 started at 35662280
+[0] Transaction 1081 ended at 35663451 [committed]
+[0] Transaction 1082 started at 35663472
+[0] Transaction 1082 ended at 35665521 [committed]
+[0] Transaction 1083 started at 35665540
+[0] Transaction 1083 ended at 35665540 [committed]
+[0] Transaction 1084 started at 35666394
+[0] Transaction 1084 ended at 35667228 [committed]
+[0] Transaction 1085 started at 35667247
+[0] Transaction 1085 ended at 35667247 [committed]
+[0] Transaction 1086 started at 35667286
+[0] Transaction 1086 ended at 36199485 [committed]
+[0] Transaction 1087 started at 36200273
+[0] Transaction 1087 ended at 36200275 [committed]
+[0] Transaction 1088 started at 36200283
+[0] Transaction 1088 ended at 36203557 [committed]
+[0] Transaction 1089 started at 36203578
+[0] Transaction 1089 ended at 36204423 [committed]
+[0] Transaction 1090 started at 36204442
+[0] Transaction 1090 ended at 36204442 [committed]
+[0] Transaction 1091 started at 36205263
+[1] Transaction 1077 ended at 36205316 [committed]
+Race ahead mode entered on 1
+[1] Transaction 1094 started at 36205316
+Race ahead mode ended
+[1] Transaction 1094 ended at 36205353 [committed]
+[1] Transaction 1095 started at 36205373
+[0] Transaction 1091 ended at 36206004 [committed]
+[0] Transaction 1097 started at 36206023
+[0] Transaction 1097 ended at 36206023 [committed]
+[1] Transaction 1095 ended at 36206098 [committed]
+[1] Transaction 1096 started at 36206100
+[0] Transaction 1098 started at 36206738
+[1] Transaction 1096 ended at 36207183 [committed]
+Race ahead mode entered on 1
+Race ahead mode ended
+[1] Transaction 1101 started at 36207208
+[1] Transaction 1101 ended at 36207208 [committed]
+[1] Transaction 1102 started at 36207222
+Simulated 5500003 instructions so far at clock 36441320
+[0] Transaction 1098 ended at 36616312 [committed]
+[0] Transaction 1103 started at 36616969
+[0] Transaction 1103 ended at 36616971 [committed]
+[0] Transaction 1104 started at 36616979
+[0] Transaction 1104 ended at 36618197 [committed]
+[0] Transaction 1105 started at 36618218
+[0] Transaction 1105 ended at 36620383 [committed]
+Race ahead mode entered on 0
+Race ahead mode ended
+[0] Transaction 1108 started at 36620408
+[0] Transaction 1108 ended at 36620408 [committed]
+[0] Transaction 1109 started at 36620447
+Stall triggered
+[1] Transaction 1102 ended at 36889291 [committed]
+[1] Transaction 1110 started at 36889294
+[1] Transaction 1110 ended at 36890195 [committed]
+[1] Transaction 1111 started at 36890199
+[1] Transaction 1111 ended at 36892242 [committed]
+Race ahead mode entered on 1
+Race ahead mode ended
+[1] Transaction 1114 started at 36892275
+[1] Transaction 1114 ended at 36893030 [committed]
+[1] Transaction 1115 started at 36893037
+[1] Transaction 1115 ended at 36893037 [committed]
+[1] Transaction 1116 started at 36893037
+[0] Transaction 1109 ended at 37150457 [committed]
+Race ahead mode entered on 0
+[0] Transaction 1120 started at 37150457
+Race ahead mode ended
+[0] Transaction 1120 ended at 37151127 [committed]
+[0] Transaction 1121 started at 37151131
+[0] Transaction 1121 ended at 37155261 [committed]
+[0] Transaction 1122 started at 37155261
+[0] Transaction 1122 ended at 37156008 [committed]
+[0] Transaction 1123 started at 37156027
+[0] Transaction 1123 ended at 37156027 [committed]
+[0] Transaction 1124 started at 37156045
+[1] Transaction 1116 ended at 37277751 [committed]
+Race ahead mode entered on 1
+[1] Transaction 1127 started at 37277751
+Race ahead mode ended
+[1] Transaction 1127 ended at 37277788 [committed]
+[1] Transaction 1128 started at 37277808
+[1] Transaction 1128 ended at 37280655 [committed]
+[1] Transaction 1129 started at 37280676
+[1] Transaction 1129 ended at 37281351 [committed]
+[1] Transaction 1130 started at 37281355
+[1] Transaction 1130 ended at 37281355 [committed]
+[1] Transaction 1131 started at 37281355
+[0] Transaction 1124 ended at 37655861 [committed]
+Race ahead mode entered on 0
+[0] Transaction 1134 started at 37655861
+Race ahead mode ended
+[0] Transaction 1134 ended at 37656541 [committed]
+[0] Transaction 1135 started at 37656543
+[0] Transaction 1135 ended at 37657216 [committed]
+[0] Transaction 1136 started at 37657221
+[0] Transaction 1136 ended at 37659184 [committed]
+[0] Transaction 1137 started at 37659221
+[0] Transaction 1137 ended at 37659240 [committed]
+[0] Transaction 1138 started at 37659240
+[1] Transaction 1131 ended at 37730095 [committed]
+Race ahead mode entered on 1
+[1] Transaction 1141 started at 37730095
+Race ahead mode ended
+[1] Transaction 1141 ended at 37730132 [committed]
+[1] Transaction 1142 started at 37730152
+[1] Transaction 1142 ended at 37730895 [committed]
+[1] Transaction 1143 started at 37730897
+[1] Transaction 1143 ended at 37732949 [committed]
+[1] Transaction 1144 started at 37732968
+[1] Transaction 1144 ended at 37732968 [committed]
+[1] Transaction 1145 started at 37732986
+[0] Transaction 1138 ended at 37951435 [committed]
+Race ahead mode entered on 0
+[0] Transaction 1148 started at 37951435
+Race ahead mode ended
+[0] Transaction 1148 ended at 37952094 [committed]
+[0] Transaction 1149 started at 37952099
+[0] Transaction 1149 ended at 37954789 [committed]
+[0] Transaction 1150 started at 37954796
+[0] Transaction 1150 ended at 37955610 [committed]
+[0] Transaction 1151 started at 37955629
+[0] Transaction 1151 ended at 37955629 [committed]
+[0] Transaction 1152 started at 37956360
+Stall triggered
+[1] Transaction 1145 ended at 38197646 [committed]
+Race ahead mode entered on 1
+[1] Transaction 1155 started at 38197646
+Race ahead mode ended
+[1] Transaction 1155 ended at 38197683 [committed]
+[1] Transaction 1156 started at 38197703
+[0] Transaction 1152 ended at 38198301 [committed]
+[0] Transaction 1157 started at 38198320
+[0] Transaction 1157 ended at 38198320 [committed]
+[0] Transaction 1158 started at 38199026
+[1] Transaction 1156 ended at 38202060 [committed]
+Race ahead mode entered on 1
+Race ahead mode ended
+[1] Transaction 1161 started at 38202097
+[1] Transaction 1161 ended at 38202839 [committed]
+[1] Transaction 1162 started at 38202844
+[1] Transaction 1162 ended at 38202844 [committed]
+[1] Transaction 1163 started at 38203129
+[1] Transaction 1163 ended at 38203603 [committed]
+[1] Transaction 1164 started at 38203606
+[1] Transaction 1164 ended at 38203606 [committed]
+[1] Transaction 1165 started at 38203645
+[1] Transaction 1165 ended at 38682512 [committed]
+[1] Transaction 1166 started at 38682530
+[1] Transaction 1166 ended at 38683077 [committed]
+[1] Transaction 1167 started at 38683080
+[1] Transaction 1167 ended at 38686086 [committed]
+[1] Transaction 1168 started at 38686107
+[1] Transaction 1168 ended at 38686842 [committed]
+[1] Transaction 1169 started at 38686843
+[1] Transaction 1169 ended at 38686843 [committed]
+[1] Transaction 1170 started at 38687457
+[1] Transaction 1170 ended at 38688266 [committed]
+[1] Transaction 1171 started at 38688285
+[1] Transaction 1171 ended at 38688285 [committed]
+[1] Transaction 1172 started at 38688324
+[0] Transaction 1158 ended at 39034461 [committed]
+[0] Transaction 1173 started at 39035187
+[0] Transaction 1173 ended at 39035189 [committed]
+[0] Transaction 1174 started at 39035197
+[0] Transaction 1174 ended at 39038587 [committed]
+Race ahead mode entered on 0
+Race ahead mode ended
+[0] Transaction 1177 started at 39038629
+[0] Transaction 1177 ended at 39039554 [committed]
+[0] Transaction 1178 started at 39039610
+[0] Transaction 1178 ended at 39039610 [committed]
+[1] Transaction 1172 ended at 39039845 [committed]
+[1] Transaction 1179 started at 39039865
+[1] Transaction 1179 ended at 39039881 [committed]
+[1] Transaction 1180 started at 39039901
+[0] Transaction 1181 started at 39040236
+[0] Transaction 1181 ended at 39040374 [committed]
+[0] Transaction 1182 started at 39040393
+[0] Transaction 1182 ended at 39040393 [committed]
+[0] Transaction 1183 started at 39040439
+[1] Transaction 1180 ended at 39041176 [committed]
+[1] Transaction 1184 started at 39041197
+[1] Transaction 1184 ended at 39042866 [committed]
+Race ahead mode entered on 1
+Race ahead mode ended
+[1] Transaction 1187 started at 39042891
+[1] Transaction 1187 ended at 39042891 [committed]
+[1] Transaction 1188 started at 39043084
+Stall triggered
+Abort triggered
+[1] Transaction 1188 ended at 39213895 [aborted]
+[1] Transaction 1189 started at 39213926
+Stall triggered
+Dominating Abort triggered
+[1] Transaction 1189 ended at 39224034 [aborted]
+[1] Transaction 1190 started at 39224112
+Stall triggered
+Simulated 6000002 instructions so far at clock 39373251
+[0] Transaction 1183 ended at 39856648 [committed]
+[0] Transaction 1191 started at 39857347
+[0] Transaction 1191 ended at 39857349 [committed]
+[0] Transaction 1192 started at 39857357
+[0] Transaction 1192 ended at 39860572 [committed]
+Race ahead mode entered on 0
+Race ahead mode ended
+[0] Transaction 1195 started at 39860595
+[0] Transaction 1195 ended at 39861466 [committed]
+[0] Transaction 1196 started at 39861522
+[0] Transaction 1196 ended at 39861522 [committed]
+[0] Transaction 1197 started at 39862347
+[0] Transaction 1197 ended at 40281416 [committed]
+[0] Transaction 1198 started at 40282124
+[0] Transaction 1198 ended at 40282126 [committed]
+[0] Transaction 1199 started at 40282134
+[0] Transaction 1199 ended at 40283297 [committed]
+[0] Transaction 1200 started at 40283318
+[0] Transaction 1200 ended at 40285640 [committed]
+[0] Transaction 1201 started at 40285659
+[0] Transaction 1201 ended at 40285659 [committed]
+[0] Transaction 1202 started at 40285677
+Stall triggered
+[1] Transaction 1190 ended at 40660164 [committed]
+Race ahead mode entered on 1
+[1] Transaction 1205 started at 40660164
+Race ahead mode ended
+[1] Transaction 1205 ended at 40660201 [committed]
+[1] Transaction 1206 started at 40660221
+[1] Transaction 1206 ended at 40661592 [committed]
+[1] Transaction 1207 started at 40661613
+[1] Transaction 1207 ended at 40663755 [committed]
+[1] Transaction 1208 started at 40663811
+[1] Transaction 1208 ended at 40663811 [committed]
+[1] Transaction 1209 started at 40664426
+[1] Transaction 1209 ended at 40665185 [committed]
+[1] Transaction 1210 started at 40665204
+[1] Transaction 1210 ended at 40665204 [committed]
+[1] Transaction 1211 started at 40665243
+[0] Transaction 1202 ended at 41004862 [committed]
+Race ahead mode entered on 0
+[0] Transaction 1214 started at 41004862
+Race ahead mode ended
+[0] Transaction 1214 ended at 41005636 [committed]
+[0] Transaction 1215 started at 41005643
+[0] Transaction 1215 ended at 41006770 [committed]
+[0] Transaction 1216 started at 41006791
+[0] Transaction 1216 ended at 41008831 [committed]
+[0] Transaction 1217 started at 41008887
+[0] Transaction 1217 ended at 41008887 [committed]
+[0] Transaction 1218 started at 41009693
+[0] Transaction 1218 ended at 41010388 [committed]
+[0] Transaction 1219 started at 41010407
+[0] Transaction 1219 ended at 41010407 [committed]
+[0] Transaction 1220 started at 41010446
+[1] Transaction 1211 ended at 41300296 [committed]
+[1] Transaction 1221 started at 41300332
+[1] Transaction 1221 ended at 41300853 [committed]
+[1] Transaction 1222 started at 41300862
+[1] Transaction 1222 ended at 41303986 [committed]
+Race ahead mode entered on 1
+Race ahead mode ended
+[1] Transaction 1225 started at 41304009
+[1] Transaction 1225 ended at 41304696 [committed]
+[1] Transaction 1226 started at 41304715
+[1] Transaction 1226 ended at 41304715 [committed]
+[1] Transaction 1227 started at 41305440
+[0] Transaction 1220 ended at 41555751 [committed]
+[0] Transaction 1228 started at 41556408
+[0] Transaction 1228 ended at 41556410 [committed]
+[0] Transaction 1229 started at 41556418
+[0] Transaction 1229 ended at 41557635 [committed]
+[0] Transaction 1230 started at 41557656
+[0] Transaction 1230 ended at 41560008 [committed]
+Race ahead mode entered on 0
+Race ahead mode ended
+[0] Transaction 1233 started at 41560033
+[0] Transaction 1233 ended at 41560033 [committed]
+[0] Transaction 1234 started at 41560047
+[1] Transaction 1227 ended at 41570823 [committed]
+[1] Transaction 1235 started at 41570843
+[1] Transaction 1235 ended at 41570859 [committed]
+[1] Transaction 1236 started at 41570879
+[1] Transaction 1236 ended at 41572255 [committed]
+[1] Transaction 1237 started at 41572276
+[1] Transaction 1237 ended at 41574301 [committed]
+Race ahead mode entered on 1
+Race ahead mode ended
+[1] Transaction 1240 started at 41574326
+[1] Transaction 1240 ended at 41574326 [committed]
+[1] Transaction 1241 started at 41574340
+Stall triggered
+[1] Transaction 1241 ended at 41885027 [committed]
+[1] Transaction 1242 started at 41885047
+[1] Transaction 1242 ended at 41885063 [committed]
+[1] Transaction 1243 started at 41885083
+[1] Transaction 1243 ended at 41886313 [committed]
+[1] Transaction 1244 started at 41886334
+[1] Transaction 1244 ended at 41888573 [committed]
+[1] Transaction 1245 started at 41888629
+[1] Transaction 1245 ended at 41888629 [committed]
+[1] Transaction 1246 started at 41889187
+[1] Transaction 1246 ended at 41889924 [committed]
+[1] Transaction 1247 started at 41889943
+[1] Transaction 1247 ended at 41889943 [committed]
+[1] Transaction 1248 started at 41889982
+[0] Transaction 1234 ended at 42151169 [committed]
+[0] Transaction 1249 started at 42151842
+[0] Transaction 1249 ended at 42151844 [committed]
+[0] Transaction 1250 started at 42151852
+[0] Transaction 1250 ended at 42155054 [committed]
+Race ahead mode entered on 0
+Race ahead mode ended
+[0] Transaction 1253 started at 42155737
+[0] Transaction 1253 ended at 42156498 [committed]
+[0] Transaction 1254 started at 42156554
+[0] Transaction 1254 ended at 42156554 [committed]
+[0] Transaction 1255 started at 42157354
+[0] Transaction 1255 ended at 42158682 [committed]
+[0] Transaction 1256 started at 42158701
+[0] Transaction 1256 ended at 42158701 [committed]
+[0] Transaction 1257 started at 42158747
+[1] Transaction 1248 ended at 42436292 [committed]
+[1] Transaction 1258 started at 42436901
+[1] Transaction 1258 ended at 42436903 [committed]
+[1] Transaction 1259 started at 42436911
+Simulated 6500001 instructions so far at clock 42438737
+[1] Transaction 1259 ended at 42439896 [committed]
+Race ahead mode entered on 1
+Race ahead mode ended
+[1] Transaction 1262 started at 42439919
+[1] Transaction 1262 ended at 42440659 [committed]
+[1] Transaction 1263 started at 42440666
+[1] Transaction 1263 ended at 42440666 [committed]
+[1] Transaction 1264 started at 42441442
+[1] Transaction 1264 ended at 42442373 [committed]
+[1] Transaction 1265 started at 42442392
+[1] Transaction 1265 ended at 42442392 [committed]
+[1] Transaction 1266 started at 42442431
+[1] Transaction 1266 ended at 42803319 [committed]
+[1] Transaction 1267 started at 42803337
+[1] Transaction 1267 ended at 42803978 [committed]
+[1] Transaction 1268 started at 42803982
+[1] Transaction 1268 ended at 42807779 [committed]
+[1] Transaction 1269 started at 42807800
+[1] Transaction 1269 ended at 42808500 [committed]
+[1] Transaction 1270 started at 42808505
+[1] Transaction 1270 ended at 42808505 [committed]
+[1] Transaction 1271 started at 42809245
+[0] Transaction 1257 ended at 42943723 [committed]
+[0] Transaction 1272 started at 42944511
+[0] Transaction 1272 ended at 42944513 [committed]
+[0] Transaction 1273 started at 42944521
+[0] Transaction 1273 ended at 42947670 [committed]
+Race ahead mode entered on 0
+Race ahead mode ended
+[0] Transaction 1276 started at 42947697
+[0] Transaction 1276 ended at 42948463 [committed]
+[0] Transaction 1277 started at 42948482
+[0] Transaction 1277 ended at 42948482 [committed]
+[0] Transaction 1278 started at 42948500
+[0] Transaction 1278 ended at 43533376 [committed]
+[0] Transaction 1279 started at 43534189
+[0] Transaction 1279 ended at 43534191 [committed]
+[0] Transaction 1280 started at 43534199
+[0] Transaction 1280 ended at 43535340 [committed]
+[0] Transaction 1281 started at 43535361
+[0] Transaction 1281 ended at 43537294 [committed]
+[0] Transaction 1282 started at 43537313
+[0] Transaction 1282 ended at 43537313 [committed]
+[0] Transaction 1283 started at 43537331
+[1] Transaction 1271 ended at 43780269 [committed]
+[1] Transaction 1284 started at 43780882
+[1] Transaction 1284 ended at 43780884 [committed]
+[1] Transaction 1285 started at 43780892
+[1] Transaction 1285 ended at 43787173 [committed]
+Race ahead mode entered on 1
+Race ahead mode ended
+[1] Transaction 1288 started at 43787207
+[1] Transaction 1288 ended at 43787940 [committed]
+[1] Transaction 1289 started at 43787944
+[1] Transaction 1289 ended at 43787946 [committed]
+[1] Transaction 1290 started at 43787948
+Stall triggered
+[0] Transaction 1283 ended at 44208295 [committed]
+Race ahead mode entered on 0
+[0] Transaction 1293 started at 44208295
+Race ahead mode ended
+[0] Transaction 1293 ended at 44209073 [committed]
+[0] Transaction 1294 started at 44209080
+[0] Transaction 1294 ended at 44213639 [committed]
+[0] Transaction 1295 started at 44213642
+[0] Transaction 1295 ended at 44214498 [committed]
+[0] Transaction 1296 started at 44214517
+[0] Transaction 1296 ended at 44214517 [committed]
+[0] Transaction 1297 started at 44214535
+[1] Transaction 1290 ended at 44596010 [committed]
+Race ahead mode entered on 1
+[1] Transaction 1300 started at 44596010
+Race ahead mode ended
+[1] Transaction 1300 ended at 44596556 [committed]
+[1] Transaction 1301 started at 44596561
+[1] Transaction 1301 ended at 44597776 [committed]
+[1] Transaction 1302 started at 44597797
+[1] Transaction 1302 ended at 44599758 [committed]
+[1] Transaction 1303 started at 44599777
+[1] Transaction 1303 ended at 44599777 [committed]
+[1] Transaction 1304 started at 44599795
+[0] Transaction 1297 ended at 45161222 [committed]
+Race ahead mode entered on 0
+[0] Transaction 1307 started at 45161222
+Race ahead mode ended
+[0] Transaction 1307 ended at 45161943 [committed]
+[0] Transaction 1308 started at 45161952
+[0] Transaction 1308 ended at 45169684 [committed]
+[0] Transaction 1309 started at 45169686
+[0] Transaction 1309 ended at 45170490 [committed]
+[0] Transaction 1310 started at 45170509
+Stall triggered
+[1] Transaction 1304 ended at 45203669 [committed]
+Race ahead mode entered on 1
+[1] Transaction 1314 started at 45203669
+Race ahead mode ended
+[0] Transaction 1310 ended at 45203673 [committed]
+Race ahead mode entered on 0
+Race ahead mode ended
+[0] Transaction 1317 started at 45204350
+[1] Transaction 1314 ended at 45204458 [committed]
+[1] Transaction 1316 started at 45204462
+[0] Transaction 1317 ended at 45205533 [committed]
+[0] Transaction 1318 started at 45205552
+[0] Transaction 1318 ended at 45205552 [committed]
+[0] Transaction 1319 started at 45205570
+[1] Transaction 1316 ended at 45209225 [committed]
+Race ahead mode entered on 1
+Race ahead mode ended
+[1] Transaction 1322 started at 45209258
+[1] Transaction 1322 ended at 45209501 [committed]
+[1] Transaction 1323 started at 45209538
+[1] Transaction 1323 ended at 45209557 [committed]
+[1] Transaction 1324 started at 45209557
+Stall triggered
+Abort triggered
+[1] Transaction 1324 ended at 45388693 [aborted]
+[1] Transaction 1325 started at 45388715
+Dominating Abort triggered
+[1] Transaction 1325 ended at 45401695 [aborted]
+[1] Transaction 1326 started at 45401716
+Stall triggered
+Dominating Abort triggered
+[1] Transaction 1326 ended at 45410821 [aborted]
+[1] Transaction 1327 started at 45410874
+Stall triggered
+Simulated 7000004 instructions so far at clock 45474057
+[0] Transaction 1319 ended at 45779262 [committed]
+Race ahead mode entered on 0
+[0] Transaction 1330 started at 45779262
+Race ahead mode ended
+[0] Transaction 1330 ended at 45779925 [committed]
+[0] Transaction 1331 started at 45779934
+[0] Transaction 1331 ended at 45785391 [committed]
+[0] Transaction 1332 started at 45785397
+[0] Transaction 1332 ended at 45786191 [committed]
+[0] Transaction 1333 started at 45786228
+[0] Transaction 1333 ended at 45786247 [committed]
+[0] Transaction 1334 started at 45786247
+[0] Transaction 1334 ended at 46119136 [committed]
+[0] Transaction 1335 started at 46119812
+[0] Transaction 1335 ended at 46119814 [committed]
+[0] Transaction 1336 started at 46119822
+[0] Transaction 1336 ended at 46121008 [committed]
+[0] Transaction 1337 started at 46121029
+[0] Transaction 1337 ended at 46123128 [committed]
+[0] Transaction 1338 started at 46123147
+[0] Transaction 1338 ended at 46123147 [committed]
+[0] Transaction 1339 started at 46123165
+Stall triggered
+[1] Transaction 1327 ended at 46566669 [committed]
+Race ahead mode entered on 1
+[1] Transaction 1342 started at 46566669
+Race ahead mode ended
+[1] Transaction 1342 ended at 46567278 [committed]
+[1] Transaction 1343 started at 46567280
+[1] Transaction 1343 ended at 46568063 [committed]
+[1] Transaction 1344 started at 46568068
+[1] Transaction 1344 ended at 46569834 [committed]
+[1] Transaction 1345 started at 46569853
+[1] Transaction 1345 ended at 46569853 [committed]
+[1] Transaction 1346 started at 46569871
+Stall triggered
+Abort triggered
+[1] Transaction 1346 ended at 46699648 [aborted]
+[1] Transaction 1347 started at 46699695
+Dominating Abort triggered
+[1] Transaction 1347 ended at 46723999 [aborted]
+[1] Transaction 1348 started at 46724047
+Stall triggered
+[0] Transaction 1339 ended at 47220115 [committed]
+Race ahead mode entered on 0
+[0] Transaction 1351 started at 47220115
+Race ahead mode ended
+[0] Transaction 1351 ended at 47220908 [committed]
+[0] Transaction 1352 started at 47220917
+[0] Transaction 1352 ended at 47224062 [committed]
+[0] Transaction 1353 started at 47224083
+[0] Transaction 1353 ended at 47224954 [committed]
+[0] Transaction 1354 started at 47224973
+[0] Transaction 1354 ended at 47224973 [committed]
+[0] Transaction 1355 started at 47224991
+Stall triggered
+Abort triggered
+[0] Transaction 1355 ended at 47324061 [aborted]
+[0] Transaction 1356 started at 47324138
+Dominating Abort triggered
+[0] Transaction 1356 ended at 47327818 [aborted]
+[0] Transaction 1357 started at 47328074
+Stall triggered
+[1] Transaction 1348 ended at 47686325 [committed]
+Race ahead mode entered on 1
+[1] Transaction 1360 started at 47686325
+Race ahead mode ended
+[1] Transaction 1360 ended at 47686362 [committed]
+[1] Transaction 1361 started at 47686382
+[1] Transaction 1361 ended at 47687174 [committed]
+[1] Transaction 1362 started at 47687179
+[1] Transaction 1362 ended at 47689156 [committed]
+[1] Transaction 1363 started at 47689193
+[1] Transaction 1363 ended at 47689212 [committed]
+[1] Transaction 1364 started at 47689212
+Stall triggered
+[0] Transaction 1357 ended at 48367559 [committed]
+Race ahead mode entered on 0
+[0] Transaction 1367 started at 48367559
+Race ahead mode ended
+[0] Transaction 1367 ended at 48368342 [committed]
+[0] Transaction 1368 started at 48368351
+[0] Transaction 1368 ended at 48369618 [committed]
+[0] Transaction 1369 started at 48369639
+[0] Transaction 1369 ended at 48371848 [committed]
+[0] Transaction 1370 started at 48371867
+[0] Transaction 1370 ended at 48371867 [committed]
+[0] Transaction 1371 started at 48371885
+[1] Transaction 1364 ended at 48906533 [committed]
+Race ahead mode entered on 1
+[1] Transaction 1374 started at 48906533
+Race ahead mode ended
+[1] Transaction 1374 ended at 48907159 [committed]
+[1] Transaction 1375 started at 48907168
+[1] Transaction 1375 ended at 48912038 [committed]
+[1] Transaction 1376 started at 48912039
+[1] Transaction 1376 ended at 48912733 [committed]
+[1] Transaction 1377 started at 48912734
+[1] Transaction 1377 ended at 48912743 [committed]
+[1] Transaction 1378 started at 48912743
+[0] Transaction 1371 ended at 49211304 [committed]
+Race ahead mode entered on 0
+[0] Transaction 1381 started at 49211304
+Race ahead mode ended
+[0] Transaction 1381 ended at 49212031 [committed]
+[0] Transaction 1382 started at 49212040
+[0] Transaction 1382 ended at 49216991 [committed]
+[0] Transaction 1383 started at 49216991
+[0] Transaction 1383 ended at 49217905 [committed]
+[0] Transaction 1384 started at 49217934
+[0] Transaction 1384 ended at 49217953 [committed]
+[0] Transaction 1385 started at 49217953
+Simulated 7500004 instructions so far at clock 49273740
+[1] Transaction 1378 ended at 49488310 [committed]
+Race ahead mode entered on 1
+[1] Transaction 1388 started at 49488310
+Race ahead mode ended
+[1] Transaction 1388 ended at 49488347 [committed]
+[1] Transaction 1389 started at 49488367
+[1] Transaction 1389 ended at 49489690 [committed]
+[1] Transaction 1390 started at 49489711
+[1] Transaction 1390 ended at 49492215 [committed]
+[1] Transaction 1391 started at 49492234
+[1] Transaction 1391 ended at 49492234 [committed]
+[1] Transaction 1392 started at 49492252
+[0] Transaction 1385 ended at 49697601 [committed]
+Race ahead mode entered on 0
+[0] Transaction 1395 started at 49697601
+Race ahead mode ended
+[0] Transaction 1395 ended at 49698275 [committed]
+[0] Transaction 1396 started at 49698284
+[0] Transaction 1396 ended at 49702312 [committed]
+[0] Transaction 1397 started at 49702333
+[0] Transaction 1397 ended at 49703084 [committed]
+[0] Transaction 1398 started at 49703103
+[0] Transaction 1398 ended at 49703103 [committed]
+[0] Transaction 1399 started at 49703121
+Stall triggered
+[1] Transaction 1392 ended at 50285756 [committed]
+Race ahead mode entered on 1
+[1] Transaction 1402 started at 50285756
+Race ahead mode ended
+[1] Transaction 1402 ended at 50286458 [committed]
+[1] Transaction 1403 started at 50286463
+[1] Transaction 1403 ended at 50290609 [committed]
+[1] Transaction 1404 started at 50290630
+[1] Transaction 1404 ended at 50291364 [committed]
+[1] Transaction 1405 started at 50291368
+[1] Transaction 1405 ended at 50291373 [committed]
+[1] Transaction 1406 started at 50291373
+[0] Transaction 1399 ended at 50677373 [committed]
+Race ahead mode entered on 0
+[0] Transaction 1409 started at 50677373
+Race ahead mode ended
+[0] Transaction 1409 ended at 50678153 [committed]
+[0] Transaction 1410 started at 50678162
+[0] Transaction 1410 ended at 50681374 [committed]
+[0] Transaction 1411 started at 50681395
+[0] Transaction 1411 ended at 50682265 [committed]
+[0] Transaction 1412 started at 50682302
+[0] Transaction 1412 ended at 50682321 [committed]
+[0] Transaction 1413 started at 50682321
+[1] Transaction 1406 ended at 50897612 [committed]
+Race ahead mode entered on 1
+[1] Transaction 1416 started at 50897612
+Race ahead mode ended
+[1] Transaction 1416 ended at 50897649 [committed]
+[1] Transaction 1417 started at 50897669
+[1] Transaction 1417 ended at 50898907 [committed]
+[1] Transaction 1418 started at 50898928
+[1] Transaction 1418 ended at 50901343 [committed]
+[1] Transaction 1419 started at 50901362
+[1] Transaction 1419 ended at 50901362 [committed]
+[1] Transaction 1420 started at 50901380
+Stall triggered
+[0] Transaction 1413 ended at 51195332 [committed]
+Race ahead mode entered on 0
+[0] Transaction 1423 started at 51195332
+Race ahead mode ended
+[0] Transaction 1423 ended at 51196166 [committed]
+[0] Transaction 1424 started at 51196175
+[0] Transaction 1424 ended at 51199401 [committed]
+[0] Transaction 1425 started at 51199422
+[0] Transaction 1425 ended at 51200228 [committed]
+[0] Transaction 1426 started at 51200247
+[0] Transaction 1426 ended at 51200247 [committed]
+[0] Transaction 1427 started at 51200265
+Stall triggered
+Abort triggered
+[0] Transaction 1427 ended at 51232861 [aborted]
+[0] Transaction 1428 started at 51232941
+Stall triggered
+[1] Transaction 1420 ended at 51620665 [committed]
+Race ahead mode entered on 1
+[1] Transaction 1431 started at 51620665
+Race ahead mode ended
+[1] Transaction 1431 ended at 51620702 [committed]
+[1] Transaction 1432 started at 51620722
+[1] Transaction 1432 ended at 51623164 [committed]
+[1] Transaction 1433 started at 51623185
+[1] Transaction 1433 ended at 51623857 [committed]
+[1] Transaction 1434 started at 51623864
+[1] Transaction 1434 ended at 51623864 [committed]
+[1] Transaction 1435 started at 51623864
+Stall triggered
+[1] Transaction 1435 ended at 52011017 [committed]
+[1] Transaction 1436 started at 52011037
+[1] Transaction 1436 ended at 52011053 [committed]
+[1] Transaction 1437 started at 52011073
+[1] Transaction 1437 ended at 52015910 [committed]
+[1] Transaction 1438 started at 52015913
+[1] Transaction 1438 ended at 52016612 [committed]
+[1] Transaction 1439 started at 52016614
+[1] Transaction 1439 ended at 52016621 [committed]
+[1] Transaction 1440 started at 52016623
+Stall triggered
+Abort triggered
+[1] Transaction 1440 ended at 52100218 [aborted]
+[1] Transaction 1441 started at 52100268
+Stall triggered
+[0] Transaction 1428 ended at 52553148 [committed]
+Race ahead mode entered on 0
+[0] Transaction 1444 started at 52553148
+Race ahead mode ended
+[0] Transaction 1444 ended at 52553811 [committed]
+[0] Transaction 1445 started at 52553818
+[0] Transaction 1445 ended at 52555089 [committed]
+[0] Transaction 1446 started at 52555110
+[0] Transaction 1446 ended at 52557166 [committed]
+[0] Transaction 1447 started at 52557185
+[0] Transaction 1447 ended at 52557185 [committed]
+[0] Transaction 1448 started at 52557203
+Simulated 8000004 instructions so far at clock 52866538
+[0] Transaction 1448 ended at 52920951 [committed]
+[0] Transaction 1449 started at 52921739
+[0] Transaction 1449 ended at 52921741 [committed]
+[0] Transaction 1450 started at 52921749
+[0] Transaction 1450 ended at 52925252 [committed]
+[0] Transaction 1451 started at 52925259
+[0] Transaction 1451 ended at 52926145 [committed]
+[0] Transaction 1452 started at 52926164
+[0] Transaction 1452 ended at 52926164 [committed]
+[0] Transaction 1453 started at 52926873
+[0] Transaction 1453 ended at 52928123 [committed]
+[0] Transaction 1454 started at 52928142
+[0] Transaction 1454 ended at 52928142 [committed]
+[0] Transaction 1455 started at 52928181
+Stall triggered
+[1] Transaction 1441 ended at 53123622 [committed]
+[1] Transaction 1456 started at 53123652
+[1] Transaction 1456 ended at 53124295 [committed]
+[1] Transaction 1457 started at 53124302
+[1] Transaction 1457 ended at 53128681 [committed]
+Race ahead mode entered on 1
+Race ahead mode ended
+[1] Transaction 1460 started at 53128704
+[1] Transaction 1460 ended at 53129402 [committed]
+[1] Transaction 1461 started at 53129405
+[1] Transaction 1461 ended at 53129407 [committed]
+[1] Transaction 1462 started at 53129409
+Stall triggered
+Abort triggered
+[1] Transaction 1462 ended at 53138640 [aborted]
+[1] Transaction 1463 started at 53138678
+Stall triggered
+[0] Transaction 1455 ended at 53540409 [committed]
+Race ahead mode entered on 0
+[0] Transaction 1466 started at 53540409
+Race ahead mode ended
+[0] Transaction 1466 ended at 53541073 [committed]
+[0] Transaction 1467 started at 53541082
+[0] Transaction 1467 ended at 53542246 [committed]
+[0] Transaction 1468 started at 53542267
+[0] Transaction 1468 ended at 53543432 [committed]
+[0] Transaction 1469 started at 53543434
+[0] Transaction 1469 ended at 53543436 [committed]
+[0] Transaction 1470 started at 53543437
+Stall triggered
+Abort triggered
+[0] Transaction 1470 ended at 53758555 [aborted]
+[0] Transaction 1471 started at 53758577
+Stall triggered
+[1] Transaction 1463 ended at 54100254 [committed]
+Race ahead mode entered on 1
+[1] Transaction 1474 started at 54100254
+Race ahead mode ended
+[1] Transaction 1474 ended at 54100291 [committed]
+[1] Transaction 1475 started at 54100311
+[1] Transaction 1475 ended at 54101619 [committed]
+[1] Transaction 1476 started at 54101640
+[1] Transaction 1476 ended at 54103875 [committed]
+[1] Transaction 1477 started at 54103894
+[1] Transaction 1477 ended at 54103894 [committed]
+[1] Transaction 1478 started at 54103912
+Stall triggered
+Abort triggered
+[1] Transaction 1478 ended at 54255155 [aborted]
+[1] Transaction 1479 started at 54255204
+Dominating Abort triggered
+[1] Transaction 1479 ended at 54272114 [aborted]
+[1] Transaction 1480 started at 54272661
+Stall triggered
+Dominating Abort triggered
+[1] Transaction 1480 ended at 54292980 [aborted]
+[1] Transaction 1481 started at 54293057
+Stall triggered
+[0] Transaction 1471 ended at 54900859 [committed]
+[0] Transaction 1482 started at 54901696
+[0] Transaction 1482 ended at 54901698 [committed]
+[0] Transaction 1483 started at 54901706
+[0] Transaction 1483 ended at 54905826 [committed]
+Race ahead mode entered on 0
+Race ahead mode ended
+[0] Transaction 1486 started at 54905861
+[0] Transaction 1486 ended at 54906614 [committed]
+[0] Transaction 1487 started at 54906633
+[0] Transaction 1487 ended at 54906633 [committed]
+[0] Transaction 1488 started at 54906651
+Stall triggered
+Abort triggered
+[0] Transaction 1488 ended at 55059270 [aborted]
+[0] Transaction 1489 started at 55059291
+Stall triggered
+[1] Transaction 1481 ended at 55682561 [committed]
+Race ahead mode entered on 1
+[1] Transaction 1492 started at 55682561
+Race ahead mode ended
+[1] Transaction 1492 ended at 55682598 [committed]
+[1] Transaction 1493 started at 55682618
+[1] Transaction 1493 ended at 55683923 [committed]
+[1] Transaction 1494 started at 55683944
+[1] Transaction 1494 ended at 55685987 [committed]
+[1] Transaction 1495 started at 55686024
+[1] Transaction 1495 ended at 55686043 [committed]
+[1] Transaction 1496 started at 55686043
+Stall triggered
+Abort triggered
+[1] Transaction 1496 ended at 55876803 [aborted]
+[1] Transaction 1497 started at 55876825
+Stall triggered
+Dominating Abort triggered
+[1] Transaction 1497 ended at 55890155 [aborted]
+[1] Transaction 1498 started at 55890232
+Stall triggered
+[0] Transaction 1489 ended at 56423780 [committed]
+[0] Transaction 1499 started at 56424534
+[0] Transaction 1499 ended at 56424536 [committed]
+[0] Transaction 1500 started at 56424544
+[0] Transaction 1500 ended at 56429508 [committed]
+Race ahead mode entered on 0
+Race ahead mode ended
+[0] Transaction 1503 started at 56429541
+[0] Transaction 1503 ended at 56430348 [committed]
+[0] Transaction 1504 started at 56430367
+[0] Transaction 1504 ended at 56430367 [committed]
+[0] Transaction 1505 started at 56430385
+Stall triggered
+Abort triggered
+[0] Transaction 1505 ended at 56690519 [aborted]
+[0] Transaction 1506 started at 56690541
+Dominating Abort triggered
+[0] Transaction 1506 ended at 56705750 [aborted]
+[0] Transaction 1507 started at 56706298
+Stall triggered
+Dominating Abort triggered
+[0] Transaction 1507 ended at 56716595 [aborted]
+[0] Transaction 1508 started at 56716686
+Stall triggered
+Simulated 8500004 instructions so far at clock 57311305
+[1] Transaction 1498 ended at 57433621 [committed]
+Race ahead mode entered on 1
+[1] Transaction 1511 started at 57433621
+Race ahead mode ended
+[1] Transaction 1511 ended at 57433658 [committed]
+[1] Transaction 1512 started at 57433678
+[1] Transaction 1512 ended at 57435062 [committed]
+[1] Transaction 1513 started at 57435083
+[1] Transaction 1513 ended at 57437277 [committed]
+[1] Transaction 1514 started at 57437296
+[1] Transaction 1514 ended at 57437296 [committed]
+[1] Transaction 1515 started at 57437314
+Stall triggered
+[1] Transaction 1515 ended at 58026165 [committed]
+[1] Transaction 1516 started at 58026195
+[1] Transaction 1516 ended at 58026956 [committed]
+[1] Transaction 1517 started at 58026960
+[1] Transaction 1517 ended at 58029953 [committed]
+[1] Transaction 1518 started at 58029974
+[1] Transaction 1518 ended at 58030708 [committed]
+[1] Transaction 1519 started at 58030717
+[1] Transaction 1519 ended at 58030717 [committed]
+[1] Transaction 1520 started at 58031433
+[1] Transaction 1520 ended at 58031564 [committed]
+[1] Transaction 1521 started at 58031583
+[1] Transaction 1521 ended at 58031583 [committed]
+[1] Transaction 1522 started at 58031622
+Stall triggered
+Abort triggered
+[1] Transaction 1522 ended at 58174974 [aborted]
+[1] Transaction 1523 started at 58175005
+Stall triggered
+[0] Transaction 1508 ended at 59008875 [committed]
+Race ahead mode entered on 0
+[0] Transaction 1526 started at 59008875
+Race ahead mode ended
+[0] Transaction 1526 ended at 59009637 [committed]
+[0] Transaction 1527 started at 59009646
+[0] Transaction 1527 ended at 59015140 [committed]
+[0] Transaction 1528 started at 59015140
+[0] Transaction 1528 ended at 59016013 [committed]
+[0] Transaction 1529 started at 59016024
+[0] Transaction 1529 ended at 59016024 [committed]
+[0] Transaction 1530 started at 59016042
+Stall triggered
+Abort triggered
+[0] Transaction 1530 ended at 59135766 [aborted]
+[0] Transaction 1531 started at 59135788
+Dominating Abort triggered
+[0] Transaction 1531 ended at 59139940 [aborted]
+[0] Transaction 1532 started at 59140156
+Stall triggered
+[1] Transaction 1523 ended at 59612451 [committed]
+Race ahead mode entered on 1
+[1] Transaction 1535 started at 59612451
+Race ahead mode ended
+[1] Transaction 1535 ended at 59613049 [committed]
+[1] Transaction 1536 started at 59613058
+[1] Transaction 1536 ended at 59616720 [committed]
+[1] Transaction 1537 started at 59616741
+[1] Transaction 1537 ended at 59617427 [committed]
+[1] Transaction 1538 started at 59617430
+[1] Transaction 1538 ended at 59617432 [committed]
+[1] Transaction 1539 started at 59617434
+Stall triggered
+Abort triggered
+[1] Transaction 1539 ended at 59807167 [aborted]
+[1] Transaction 1540 started at 59807189
+Stall triggered
+[0] Transaction 1532 ended at 60309295 [committed]
+Race ahead mode entered on 0
+[0] Transaction 1543 started at 60309295
+Race ahead mode ended
+[0] Transaction 1543 ended at 60310067 [committed]
+[0] Transaction 1544 started at 60310076
+[0] Transaction 1544 ended at 60311250 [committed]
+[0] Transaction 1545 started at 60311271
+[0] Transaction 1545 ended at 60312990 [committed]
+[0] Transaction 1546 started at 60313009
+[0] Transaction 1546 ended at 60313009 [committed]
+[0] Transaction 1547 started at 60313027
+[0] Transaction 1547 ended at 60890745 [committed]
+[0] Transaction 1548 started at 60891466
+[0] Transaction 1548 ended at 60891528 [committed]
+[0] Transaction 1549 started at 60891536
+[0] Transaction 1549 ended at 60894929 [committed]
+[0] Transaction 1550 started at 60894950
+[0] Transaction 1550 ended at 60895817 [committed]
+[0] Transaction 1551 started at 60895836
+Stall triggered
+[1] Transaction 1540 ended at 61102832 [committed]
+[0] Transaction 1551 ended at 61102836 [committed]
+Race ahead mode entered on 0
+Race ahead mode ended
+[1] Transaction 1553 started at 61102850
+[1] Transaction 1553 ended at 61102868 [committed]
+[1] Transaction 1555 started at 61102888
+[0] Transaction 1556 started at 61102891
+[0] Transaction 1556 ended at 61103746 [committed]
+[0] Transaction 1557 started at 61103765
+[0] Transaction 1557 ended at 61103765 [committed]
+[0] Transaction 1558 started at 61103783
+[1] Transaction 1555 ended at 61107312 [committed]
+Race ahead mode entered on 1
+Race ahead mode ended
+[1] Transaction 1561 started at 61107342
+[1] Transaction 1561 ended at 61107591 [committed]
+[1] Transaction 1562 started at 61107610
+[1] Transaction 1562 ended at 61107610 [committed]
+[1] Transaction 1563 started at 61107950
+[1] Transaction 1563 ended at 61108322 [committed]
+[1] Transaction 1564 started at 61108330
+[1] Transaction 1564 ended at 61108330 [committed]
+[1] Transaction 1565 started at 61108369
+Simulated 9000006 instructions so far at clock 61342437
+[0] Transaction 1558 ended at 61463964 [committed]
+Race ahead mode entered on 0
+[0] Transaction 1568 started at 61463964
+Race ahead mode ended
+[0] Transaction 1568 ended at 61464627 [committed]
+[0] Transaction 1569 started at 61464636
+[0] Transaction 1569 ended at 61467198 [committed]
+[0] Transaction 1570 started at 61467204
+[0] Transaction 1570 ended at 61468089 [committed]
+[0] Transaction 1571 started at 61468108
+[0] Transaction 1571 ended at 61468108 [committed]
+[0] Transaction 1572 started at 61468126
+Stall triggered
+[1] Transaction 1565 ended at 61553076 [committed]
+[1] Transaction 1573 started at 61553096
+[1] Transaction 1573 ended at 61553112 [committed]
+[1] Transaction 1574 started at 61553132
+[1] Transaction 1574 ended at 61557079 [committed]
+Race ahead mode entered on 1
+Race ahead mode ended
+[1] Transaction 1577 started at 61557102
+[1] Transaction 1577 ended at 61557812 [committed]
+[1] Transaction 1578 started at 61557819
+[1] Transaction 1578 ended at 61557821 [committed]
+[1] Transaction 1579 started at 61557829
+[1] Transaction 1579 ended at 62133870 [committed]
+[1] Transaction 1580 started at 62133890
+[1] Transaction 1580 ended at 62133906 [committed]
+[1] Transaction 1581 started at 62133926
+[1] Transaction 1581 ended at 62135159 [committed]
+[1] Transaction 1582 started at 62135180
+[1] Transaction 1582 ended at 62137385 [committed]
+[1] Transaction 1583 started at 62137404
+[1] Transaction 1583 ended at 62137404 [committed]
+[1] Transaction 1584 started at 62137422
+Stall triggered
+[0] Transaction 1572 ended at 62386731 [committed]
+Race ahead mode entered on 0
+[0] Transaction 1587 started at 62386731
+Race ahead mode ended
+[0] Transaction 1587 ended at 62387506 [committed]
+[0] Transaction 1588 started at 62387513
+[0] Transaction 1588 ended at 62391633 [committed]
+[0] Transaction 1589 started at 62391639
+[0] Transaction 1589 ended at 62392499 [committed]
+[0] Transaction 1590 started at 62392555
+[0] Transaction 1590 ended at 62392555 [committed]
+[0] Transaction 1591 started at 62393181
+[0] Transaction 1591 ended at 62393312 [committed]
+[0] Transaction 1592 started at 62393331
+[0] Transaction 1592 ended at 62393331 [committed]
+[0] Transaction 1593 started at 62393370
+Stall triggered
+[1] Transaction 1584 ended at 63065666 [committed]
+Race ahead mode entered on 1
+[1] Transaction 1596 started at 63065666
+Race ahead mode ended
+[1] Transaction 1596 ended at 63065703 [committed]
+[1] Transaction 1597 started at 63065723
+[1] Transaction 1597 ended at 63067005 [committed]
+[1] Transaction 1598 started at 63067026
+[1] Transaction 1598 ended at 63069319 [committed]
+[1] Transaction 1599 started at 63069356
+Stall triggered
+[0] Transaction 1593 ended at 63573249 [committed]
+[1] Transaction 1599 ended at 63573252 [committed]
+Race ahead mode entered on 1
+Race ahead mode ended
+[1] Transaction 1604 started at 63573316
+[0] Transaction 1601 started at 63573980
+[0] Transaction 1601 ended at 63573982 [committed]
+[0] Transaction 1603 started at 63573990
+[1] Transaction 1604 ended at 63574832 [committed]
+[1] Transaction 1605 started at 63574851
+[1] Transaction 1605 ended at 63574851 [committed]
+[1] Transaction 1606 started at 63574879
+Stall triggered
+[1] Transaction 1606 ended at 63575719 [committed]
+[1] Transaction 1607 started at 63575738
+[1] Transaction 1607 ended at 63575738 [committed]
+[1] Transaction 1608 started at 63575777
+[0] Transaction 1603 ended at 63579236 [committed]
+Race ahead mode entered on 0
+Race ahead mode ended
+[0] Transaction 1611 started at 63579270
+[0] Transaction 1611 ended at 63579715 [committed]
+[0] Transaction 1612 started at 63579734
+[0] Transaction 1612 ended at 63579734 [committed]
+[0] Transaction 1613 started at 63579765
+Stall triggered
+Abort triggered
+[0] Transaction 1613 ended at 63817446 [aborted]
+[0] Transaction 1614 started at 63817477
+Stall triggered
+Dominating Abort triggered
+[0] Transaction 1614 ended at 63837670 [aborted]
+[0] Transaction 1615 started at 63837708
+Stall triggered
+[1] Transaction 1608 ended at 64511041 [committed]
+[1] Transaction 1616 started at 64511071
+[1] Transaction 1616 ended at 64511789 [committed]
+[1] Transaction 1617 started at 64511791
+[1] Transaction 1617 ended at 64516519 [committed]
+Race ahead mode entered on 1
+Race ahead mode ended
+[1] Transaction 1620 started at 64516551
+[1] Transaction 1620 ended at 64517267 [committed]
+[1] Transaction 1621 started at 64517268
+[1] Transaction 1621 ended at 64517270 [committed]
+[1] Transaction 1622 started at 64517273
+Simulated 9500005 instructions so far at clock 65047374
+[1] Transaction 1622 ended at 65191365 [committed]
+[1] Transaction 1623 started at 65191383
+[1] Transaction 1623 ended at 65191401 [committed]
+[1] Transaction 1624 started at 65191421
+[1] Transaction 1624 ended at 65194510 [committed]
+[1] Transaction 1625 started at 65194531
+[1] Transaction 1625 ended at 65195267 [committed]
+[1] Transaction 1626 started at 65195268
+[1] Transaction 1626 ended at 65195270 [committed]
+[1] Transaction 1627 started at 65195273
+Stall triggered
+[0] Transaction 1615 ended at 65498355 [committed]
+Race ahead mode entered on 0
+[0] Transaction 1630 started at 65498355
+Race ahead mode ended
+[0] Transaction 1630 ended at 65499076 [committed]
+[0] Transaction 1631 started at 65499085
+[0] Transaction 1631 ended at 65500366 [committed]
+[0] Transaction 1632 started at 65500387
+[0] Transaction 1632 ended at 65502444 [committed]
+[0] Transaction 1633 started at 65502455
+[0] Transaction 1633 ended at 65502455 [committed]
+[0] Transaction 1634 started at 65502473
+[1] Transaction 1627 ended at 65987273 [committed]
+Race ahead mode entered on 1
+[1] Transaction 1638 started at 65987273
+Race ahead mode ended
+[1] Transaction 1638 ended at 65987837 [committed]
+[1] Transaction 1639 started at 65987837
+[1] Transaction 1639 ended at 65992148 [committed]
+[1] Transaction 1640 started at 65992169
+[1] Transaction 1640 ended at 65992915 [committed]
+[1] Transaction 1641 started at 65992916
+[1] Transaction 1641 ended at 65992916 [committed]
+[1] Transaction 1642 started at 65992918
+[0] Transaction 1634 ended at 66074337 [committed]
+Race ahead mode entered on 0
+[0] Transaction 1645 started at 66074337
+Race ahead mode ended
+[0] Transaction 1645 ended at 66075080 [committed]
+[0] Transaction 1646 started at 66075089
+[0] Transaction 1646 ended at 66078214 [committed]
+[0] Transaction 1647 started at 66078235
+[0] Transaction 1647 ended at 66079107 [committed]
+[0] Transaction 1648 started at 66079144
+[0] Transaction 1648 ended at 66079163 [committed]
+[0] Transaction 1649 started at 66079163
+[1] Transaction 1642 ended at 66486753 [committed]
+Race ahead mode entered on 1
+[1] Transaction 1652 started at 66486753
+Race ahead mode ended
+[1] Transaction 1652 ended at 66486790 [committed]
+[1] Transaction 1653 started at 66486810
+[1] Transaction 1653 ended at 66492175 [committed]
+[1] Transaction 1654 started at 66492177
+[1] Transaction 1654 ended at 66492835 [committed]
+[1] Transaction 1655 started at 66492872
+[1] Transaction 1655 ended at 66492891 [committed]
+[1] Transaction 1656 started at 66492891
+[0] Transaction 1649 ended at 66508705 [committed]
+Race ahead mode entered on 0
+[0] Transaction 1659 started at 66508705
+Race ahead mode ended
+[0] Transaction 1659 ended at 66509533 [committed]
+[0] Transaction 1660 started at 66509542
+[0] Transaction 1660 ended at 66510659 [committed]
+[0] Transaction 1661 started at 66510680
+[0] Transaction 1661 ended at 66512502 [committed]
+[0] Transaction 1662 started at 66512521
+[0] Transaction 1662 ended at 66512521 [committed]
+[0] Transaction 1663 started at 66512539
+[1] Transaction 1656 ended at 66854889 [committed]
+Race ahead mode entered on 1
+[1] Transaction 1666 started at 66854889
+Race ahead mode ended
+[1] Transaction 1666 ended at 66854926 [committed]
+[1] Transaction 1667 started at 66854946
+[1] Transaction 1667 ended at 66860442 [committed]
+[1] Transaction 1668 started at 66860442
+[1] Transaction 1668 ended at 66861180 [committed]
+[1] Transaction 1669 started at 66861182
+[1] Transaction 1669 ended at 66861182 [committed]
+[1] Transaction 1670 started at 66861184
+Stall triggered
+[0] Transaction 1663 ended at 67339762 [committed]
+Race ahead mode entered on 0
+[0] Transaction 1674 started at 67339762
+Race ahead mode ended
+[0] Transaction 1674 ended at 67340379 [committed]
+[0] Transaction 1675 started at 67340380
+[0] Transaction 1675 ended at 67344357 [committed]
+[0] Transaction 1676 started at 67344375
+[0] Transaction 1676 ended at 67345249 [committed]
+[0] Transaction 1677 started at 67345260
+[0] Transaction 1677 ended at 67345260 [committed]
+[0] Transaction 1678 started at 67345278
+[0] Transaction 1678 ended at 67727617 [committed]
+[0] Transaction 1679 started at 67728391
+[0] Transaction 1679 ended at 67728393 [committed]
+[0] Transaction 1680 started at 67728401
+[0] Transaction 1680 ended at 67734193 [committed]
+[0] Transaction 1681 started at 67734193
+[0] Transaction 1681 ended at 67735065 [committed]
+[0] Transaction 1682 started at 67735084
+[0] Transaction 1682 ended at 67735084 [committed]
+[0] Transaction 1683 started at 67735102
+[1] Transaction 1670 ended at 67770755 [committed]
+Race ahead mode entered on 1
+[1] Transaction 1686 started at 67770755
+Race ahead mode ended
+[1] Transaction 1686 ended at 67771419 [committed]
+[1] Transaction 1687 started at 67771426
+[1] Transaction 1687 ended at 67775077 [committed]
+[1] Transaction 1688 started at 67775098
+[1] Transaction 1688 ended at 67775805 [committed]
+[1] Transaction 1689 started at 67775812
+[1] Transaction 1689 ended at 67775812 [committed]
+[1] Transaction 1690 started at 67775812
+[1] Transaction 1690 ended at 67955310 [committed]
+[1] Transaction 1691 started at 67955328
+[1] Transaction 1691 ended at 67955990 [committed]
+[1] Transaction 1692 started at 67955994
+[1] Transaction 1692 ended at 67959099 [committed]
+[1] Transaction 1693 started at 67959099
+[1] Transaction 1693 ended at 67959782 [committed]
+[1] Transaction 1694 started at 67959785
+[1] Transaction 1694 ended at 67959787 [committed]
+[1] Transaction 1695 started at 67959790
+Simulated 10000003 instructions so far at clock 67974638
+[0] Transaction 1683 ended at 68461504 [committed]
+Race ahead mode entered on 0
+[0] Transaction 1699 started at 68461504
+Race ahead mode ended
+[0] Transaction 1699 ended at 68462170 [committed]
+[0] Transaction 1700 started at 68462176
+[0] Transaction 1700 ended at 68466137 [committed]
+[0] Transaction 1701 started at 68466143
+[0] Transaction 1701 ended at 68467002 [committed]
+[0] Transaction 1702 started at 68467021
+[0] Transaction 1702 ended at 68467021 [committed]
+[0] Transaction 1703 started at 68467039
+[1] Transaction 1695 ended at 68579695 [committed]
+Race ahead mode entered on 1
+[1] Transaction 1706 started at 68579695
+Race ahead mode ended
+[1] Transaction 1706 ended at 68580247 [committed]
+[1] Transaction 1707 started at 68580248
+[1] Transaction 1707 ended at 68583205 [committed]
+[1] Transaction 1708 started at 68583208
+[1] Transaction 1708 ended at 68584014 [committed]
+[1] Transaction 1709 started at 68584018
+[1] Transaction 1709 ended at 68584023 [committed]
+[1] Transaction 1710 started at 68584023
+[0] Transaction 1703 ended at 69295828 [committed]
+Race ahead mode entered on 0
+[0] Transaction 1714 started at 69295828
+Race ahead mode ended
+[0] Transaction 1714 ended at 69296438 [committed]
+[0] Transaction 1715 started at 69296443
+[0] Transaction 1715 ended at 69301368 [committed]
+[0] Transaction 1716 started at 69301368
+[0] Transaction 1716 ended at 69302236 [committed]
+[0] Transaction 1717 started at 69302255
+[0] Transaction 1717 ended at 69302255 [committed]
+[0] Transaction 1718 started at 69302273
+[1] Transaction 1710 ended at 69319244 [committed]
+Race ahead mode entered on 1
+[1] Transaction 1721 started at 69319244
+Race ahead mode ended
+[1] Transaction 1721 ended at 69319281 [committed]
+[1] Transaction 1722 started at 69319301
+[1] Transaction 1722 ended at 69323959 [committed]
+[1] Transaction 1723 started at 69323964
+[1] Transaction 1723 ended at 69324637 [committed]
+[1] Transaction 1724 started at 69324644
+[1] Transaction 1724 ended at 69324644 [committed]
+[1] Transaction 1725 started at 69324644
+[1] Transaction 1725 ended at 69699713 [committed]
+[1] Transaction 1726 started at 69699733
+[1] Transaction 1726 ended at 69699749 [committed]
+[1] Transaction 1727 started at 69699769
+[1] Transaction 1727 ended at 69703506 [committed]
+[1] Transaction 1728 started at 69703527
+[1] Transaction 1728 ended at 69704215 [committed]
+[1] Transaction 1729 started at 69704216
+[1] Transaction 1729 ended at 69704218 [committed]
+[1] Transaction 1730 started at 69704219
+[0] Transaction 1718 ended at 69750283 [committed]
+Race ahead mode entered on 0
+[0] Transaction 1733 started at 69750283
+Race ahead mode ended
+[0] Transaction 1733 ended at 69751047 [committed]
+[0] Transaction 1734 started at 69751056
+[0] Transaction 1734 ended at 69752213 [committed]
+[0] Transaction 1735 started at 69752234
+[0] Transaction 1735 ended at 69754066 [committed]
+[0] Transaction 1736 started at 69754085
+[0] Transaction 1736 ended at 69754085 [committed]
+[0] Transaction 1737 started at 69754103
+[0] Transaction 1737 ended at 70308822 [committed]
+[0] Transaction 1738 started at 70309482
+[0] Transaction 1738 ended at 70309484 [committed]
+[0] Transaction 1739 started at 70309492
+[0] Transaction 1739 ended at 70313606 [committed]
+[0] Transaction 1740 started at 70313607
+[0] Transaction 1740 ended at 70314483 [committed]
+[0] Transaction 1741 started at 70314502
+[0] Transaction 1741 ended at 70314502 [committed]
+[0] Transaction 1742 started at 70314520
+[1] Transaction 1730 ended at 70336069 [committed]
+Race ahead mode entered on 1
+[1] Transaction 1745 started at 70336069
+Race ahead mode ended
+[1] Transaction 1745 ended at 70336758 [committed]
+[1] Transaction 1746 started at 70336762
+[1] Transaction 1746 ended at 70337977 [committed]
+[1] Transaction 1747 started at 70337998
+[1] Transaction 1747 ended at 70340261 [committed]
+[1] Transaction 1748 started at 70340280
+[1] Transaction 1748 ended at 70340280 [committed]
+[1] Transaction 1749 started at 70340298
+Stall triggered
+Simulated 10500004 instructions so far at clock 70725670
+[1] Transaction 1749 ended at 70817585 [committed]
+[1] Transaction 1750 started at 70817605
+[1] Transaction 1750 ended at 70817621 [committed]
+[1] Transaction 1751 started at 70817641
+[1] Transaction 1751 ended at 70818873 [committed]
+[1] Transaction 1752 started at 70818894
+[1] Transaction 1752 ended at 70821007 [committed]
+[1] Transaction 1753 started at 70821026
+[1] Transaction 1753 ended at 70821026 [committed]
+[1] Transaction 1754 started at 70821044
+Stall triggered
+[0] Transaction 1742 ended at 71591207 [committed]
+Race ahead mode entered on 0
+[0] Transaction 1757 started at 71591207
+Race ahead mode ended
+[0] Transaction 1757 ended at 71591966 [committed]
+[0] Transaction 1758 started at 71591975
+[0] Transaction 1758 ended at 71597434 [committed]
+[0] Transaction 1759 started at 71597434
+[0] Transaction 1759 ended at 71598254 [committed]
+[0] Transaction 1760 started at 71598310
+[0] Transaction 1760 ended at 71598310 [committed]
+[0] Transaction 1761 started at 71599103
+[0] Transaction 1761 ended at 71599234 [committed]
+[0] Transaction 1762 started at 71599253
+[0] Transaction 1762 ended at 71599253 [committed]
+[0] Transaction 1763 started at 71599292
+[1] Transaction 1754 ended at 72103613 [committed]
+Race ahead mode entered on 1
+[1] Transaction 1766 started at 72103613
+Race ahead mode ended
+[1] Transaction 1766 ended at 72104152 [committed]
+[1] Transaction 1767 started at 72104160
+[1] Transaction 1767 ended at 72105476 [committed]
+[1] Transaction 1768 started at 72105497
+Stall triggered
+[0] Transaction 1763 ended at 72234041 [committed]
+[0] Transaction 1769 started at 72234693
+[0] Transaction 1769 ended at 72234760 [committed]
+[0] Transaction 1770 started at 72234763
+[1] Transaction 1768 ended at 72234771 [committed]
+[1] Transaction 1771 started at 72234808
+[1] Transaction 1771 ended at 72234827 [committed]
+Race ahead mode entered on 1
+Race ahead mode ended
+[1] Transaction 1774 started at 72234864
+Stall triggered
+[1] Transaction 1774 ended at 72236123 [committed]
+[1] Transaction 1775 started at 72236142
+[1] Transaction 1775 ended at 72236142 [committed]
+[1] Transaction 1776 started at 72236170
+Stall triggered
+Abort triggered
+[1] Transaction 1776 ended at 72236801 [aborted]
+[1] Transaction 1777 started at 72236834
+Stall triggered
+[0] Transaction 1770 ended at 72239075 [committed]
+Race ahead mode entered on 0
+Race ahead mode ended
+[0] Transaction 1780 started at 72239110
+Stall triggered
+Abort triggered
+[0] Transaction 1780 ended at 72239886 [aborted]
+[0] Transaction 1782 started at 72239915
+Stall triggered
+[1] Transaction 1777 ended at 72240515 [committed]
+Race ahead mode entered on 1
+Race ahead mode ended
+[1] Transaction 1785 started at 72240555
+[1] Transaction 1785 ended at 72240555 [committed]
+[1] Transaction 1786 started at 72240583
+Stall triggered
+Abort triggered
+[1] Transaction 1786 ended at 72240972 [aborted]
+[1] Transaction 1787 started at 72241035
+Stall triggered
+[0] Transaction 1782 ended at 72241051 [committed]
+Race ahead mode entered on 0
+Race ahead mode ended
+[0] Transaction 1790 started at 72241113
+[0] Transaction 1790 ended at 72241113 [committed]
+[0] Transaction 1791 started at 72241131
+augSesc: /home/echang/sesc-echang/src/MemSys/Devices/Directory.cpp:473: void Memory::Directory::OnRemoteInvalidateResponse(const Memory::InvalidateResponseMsg*, Memory::NodeID): Assertion `!m->blockAttached || b.owner == src' failed.

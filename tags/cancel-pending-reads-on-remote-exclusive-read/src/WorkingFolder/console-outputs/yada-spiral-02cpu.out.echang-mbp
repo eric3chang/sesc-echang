@@ -1,0 +1,183 @@
+.text Minor header aligment correction (400130 vs 400128)
+.data Minor header aligment correction (49e110 vs 49e108)
+static[0x47cea0-0x1000523c] heap[0x10006000-0x18006000] stack[0x18006000-0x187fe000] -> [0x96fdd008-0xaf35e168]
+Device : P(0)_DL1  Description : ProcessorInterface_0
+Device : P(0)_IL1  Description : InstSource
+Device : P(1)_DL1  Description : ProcessorInterface_1
+Device : P(1)_IL1  Description : InstSource
+Loading checkpoint...
+Pid: 0
+OSSim::spawn(-1,0,0x30000,0)
+Pid: 1
+OSSim::spawn(0,1,0x30001,0)
+Reading memory...
+Checkpoint loaded
+Start rabbit mode forever...
+Rabbit Mode Start 
+checkpointing...
+Leaving rabbit mode...
+Processor 0 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+[0] Transaction 1 started at 1584
+[1] Transaction 2 started at 2217
+Stall triggered
+Abort triggered
+[1] Transaction 2 ended at 2978 [aborted]
+[1] Transaction 3 started at 3010
+Stall triggered
+[0] Transaction 1 ended at 3909 [committed]
+[0] Transaction 4 started at 3945
+[0] Transaction 4 ended at 3945 [committed]
+[0] Transaction 5 started at 3963
+[1] Transaction 3 ended at 4629 [committed]
+Race ahead mode entered on 1
+Race ahead mode ended
+[1] Transaction 7 started at 4665
+[1] Transaction 7 ended at 4665 [committed]
+[1] Transaction 8 started at 4683
+Stall triggered
+Abort triggered
+[1] Transaction 8 ended at 180385 [aborted]
+[1] Transaction 9 started at 180563
+Dominating Abort triggered
+[1] Transaction 9 ended at 189900 [aborted]
+[1] Transaction 10 started at 190590
+Stall triggered
+Dominating Abort triggered
+[1] Transaction 10 ended at 208930 [aborted]
+[1] Transaction 11 started at 209002
+Stall triggered
+[0] Transaction 5 ended at 598632 [committed]
+[0] Transaction 12 started at 599361
+[0] Transaction 12 ended at 599363 [committed]
+[0] Transaction 13 started at 599368
+[0] Transaction 13 ended at 602672 [committed]
+Race ahead mode entered on 0
+Race ahead mode ended
+[0] Transaction 16 started at 602709
+[0] Transaction 16 ended at 602839 [committed]
+[0] Transaction 17 started at 602875
+[0] Transaction 17 ended at 602875 [committed]
+[0] Transaction 18 started at 602893
+Stall triggered
+[0] Transaction 18 ended at 800499 [committed]
+[0] Transaction 19 started at 801284
+[0] Transaction 19 ended at 801286 [committed]
+[0] Transaction 20 started at 801291
+[0] Transaction 20 ended at 803567 [committed]
+[0] Transaction 21 started at 803588
+[0] Transaction 21 ended at 804150 [committed]
+[0] Transaction 22 started at 804157
+[0] Transaction 22 ended at 804157 [committed]
+[0] Transaction 23 started at 804157
+Stall triggered
+Abort triggered
+[0] Transaction 23 ended at 874670 [aborted]
+[0] Transaction 24 started at 874742
+Stall triggered
+[1] Transaction 11 ended at 1409911 [committed]
+Race ahead mode entered on 1
+[1] Transaction 27 started at 1409911
+Race ahead mode ended
+[1] Transaction 27 ended at 1409948 [committed]
+[1] Transaction 28 started at 1409968
+[1] Transaction 28 ended at 1411324 [committed]
+[1] Transaction 29 started at 1411345
+[1] Transaction 29 ended at 1413297 [committed]
+[1] Transaction 30 started at 1413333
+[1] Transaction 30 ended at 1413333 [committed]
+[1] Transaction 31 started at 1413351
+Stall triggered
+Abort triggered
+[1] Transaction 31 ended at 1590401 [aborted]
+[1] Transaction 32 started at 1590438
+Stall triggered
+[0] Transaction 24 ended at 2187403 [committed]
+[0] Transaction 33 started at 2188196
+[0] Transaction 33 ended at 2188198 [committed]
+[0] Transaction 34 started at 2188206
+[0] Transaction 34 ended at 2191151 [committed]
+Race ahead mode entered on 0
+Race ahead mode ended
+[0] Transaction 37 started at 2191174
+[0] Transaction 37 ended at 2191899 [committed]
+[0] Transaction 38 started at 2191901
+[0] Transaction 38 ended at 2191901 [committed]
+[0] Transaction 39 started at 2192507
+[0] Transaction 39 ended at 2193305 [committed]
+[0] Transaction 40 started at 2193324
+[0] Transaction 40 ended at 2193324 [committed]
+[0] Transaction 41 started at 2193370
+[1] Transaction 32 ended at 2353475 [committed]
+Race ahead mode entered on 1
+[1] Transaction 44 started at 2353475
+Race ahead mode ended
+[1] Transaction 44 ended at 2353512 [committed]
+[1] Transaction 45 started at 2353532
+[1] Transaction 45 ended at 2355536 [committed]
+[1] Transaction 46 started at 2355557
+[1] Transaction 46 ended at 2356269 [committed]
+[1] Transaction 47 started at 2356288
+[1] Transaction 47 ended at 2356288 [committed]
+[1] Transaction 48 started at 2356914
+[1] Transaction 48 ended at 2357632 [committed]
+[1] Transaction 49 started at 2357651
+[1] Transaction 49 ended at 2357651 [committed]
+[1] Transaction 50 started at 2358329
+Stall triggered
+[0] Transaction 41 ended at 2764086 [committed]
+Race ahead mode entered on 0
+[0] Transaction 53 started at 2764086
+Race ahead mode ended
+[0] Transaction 53 ended at 2764815 [committed]
+[0] Transaction 54 started at 2764824
+[0] Transaction 54 ended at 2766367 [committed]
+[0] Transaction 55 started at 2766388
+[0] Transaction 55 ended at 2768535 [committed]
+[0] Transaction 56 started at 2768554
+[0] Transaction 56 ended at 2768554 [committed]
+[0] Transaction 57 started at 2769240
+[0] Transaction 57 ended at 2769374 [committed]
+[0] Transaction 58 started at 2769410
+[0] Transaction 58 ended at 2769410 [committed]
+[0] Transaction 59 started at 2769438
+[0] Transaction 59 ended at 2769537 [committed]
+[0] Transaction 60 started at 2769573
+[0] Transaction 60 ended at 2769573 [committed]
+[0] Transaction 61 started at 2769615
+[0] Transaction 61 ended at 2769699 [committed]
+[0] Transaction 62 started at 2769718
+[0] Transaction 62 ended at 2769718 [committed]
+[0] Transaction 63 started at 2769746
+[0] Transaction 63 ended at 2769771 [committed]
+[0] Transaction 64 started at 2769794
+[0] Transaction 64 ended at 2770453 [committed]
+Stalling processor 0 at barrier
+[1] Transaction 50 ended at 3079706 [committed]
+Race ahead mode entered on 1
+[1] Transaction 67 started at 3079706
+Race ahead mode ended
+[1] Transaction 67 ended at 3079743 [committed]
+[1] Transaction 68 started at 3079763
+[1] Transaction 68 ended at 3080380 [committed]
+[1] Transaction 69 started at 3080385
+[1] Transaction 69 ended at 3080953 [committed]
+[1] Transaction 70 started at 3080976
+[1] Transaction 70 ended at 3081230 [committed]
+Processor 1 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Stalling processor 1 at barrier
+Rabbit Mode Start 
+Elapsed time                    = 5680.211
+ done.
+Final mesh size                 = 40
+Number of elements processed    = 7
+Final mesh is valid.
+Finish error on 0
+Dumping stats
+beginning collision detection dump
+dumping result set
+ending collision detection dump
+Destroying TQueue 1 with pending nodes

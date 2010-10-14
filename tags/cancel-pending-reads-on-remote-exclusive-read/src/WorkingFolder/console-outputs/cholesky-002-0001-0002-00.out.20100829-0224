@@ -1,0 +1,880 @@
+.text Minor header aligment correction (10000040 vs 1000003c)
+.data Minor header aligment correction (10096c10 vs 10096c04)
+1.bss Minor header aligment correction 12 (10098b00 vs 10098af4)
+.bss Minor header aligment correction (10098b00 vs 10098af4)
+static[0x100814c0-0x1009964c] heap[0x1009a000-0x23f58000] stack[0x23f58000-0x24750000] -> [0x9790f008-0xabfddb48]
+OSSim::spawn(-1,0,0x10000,0)
+Device : P(0)_DL1  Description : ProcessorInterface_0
+Device : P(0)_IL1  Description : InstSource
+Device : P(1)_DL1  Description : ProcessorInterface_1
+Device : P(1)_IL1  Description : InstSource
+        msgSrc= 6 dst= 7 msg=    3 addr=603324160 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg=   13 addr=269055232 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 Dir::OnLocalRead RecvMsg
+ src=12 msgSrc= 1 dst= 7 msg=    7 addr=603324160 satis=1 blkAtt=1 excluOwn=1 solicMsg=3 Dir::OnRemoteReadResponse RecvMsg
+                  dst= 7           addr=603324160 Dir::AddDirectoryShare b.owner=(0)
+        msgSrc= 7 dst= 7 msg=   19 addr=603324160 satis=1 blkAtt=1 excluOwn=0 solicMsg=3 Dir::OnDirectoryBlockResponse OnRemoteReadResponse
+        msgSrc= 6 dst= 7 msg=   30 addr=603324160 requestingExclusive=1 alreadyHasBlock=1 directoryLookup=0 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg=   30 addr=603324160 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 Dir::OnRemoteRead PerformDirectoryFetch:Error
+        msgSrc= 6 dst= 7 msg=   39 addr=603324096 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg=   54 addr=603324160 satis=1 blkAtt=1 excluOwn=1 solicMsg=30 Dir::OnLocalReadResponse RecvMsg
+        msgSrc= 6 dst= 7 msg=   59 addr=603324224 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst=11 msg=   39 addr=603324096 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+        msgSrc= 6 dst=11 msg=   59 addr=603324224 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+ src=12 msgSrc= 1 dst= 7 msg=   17 addr=269055232 satis=1 blkAtt=1 excluOwn=1 solicMsg=13 Dir::OnRemoteReadResponse RecvMsg
+                  dst= 7           addr=269055232 Dir::AddDirectoryShare b.owner=(0)
+        msgSrc= 7 dst= 7 msg=   68 addr=269055232 satis=1 blkAtt=1 excluOwn=0 solicMsg=13 Dir::OnDirectoryBlockResponse OnRemoteReadResponse
+        msgSrc= 6 dst= 7 msg=   54 addr=603324160 satis=1 blkAtt=1 excluOwn=1 solicMsg=30 Dir::OnRemoteReadResponse RecvMsg
+                  dst= 7           addr=603324160 Dir::EraseDirectoryShare nodeID=0 b.owner=InvalidNodeID
+                  dst= 7           addr=603324160 Dir::AddDirectoryShare b.owner=(0)
+        msgSrc= 6 dst= 7 msg=   75 addr=269055296 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=1 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst=11 msg=   75 addr=269055296 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+        msgSrc= 6 dst= 7 msg=   87 addr=269060672 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst=11 msg=   87 addr=269060672 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+        msgSrc= 6 dst= 7 msg=   93 addr=269062784 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 Dir::OnLocalRead RecvMsg
+ src=12 msgSrc= 1 dst=11 msg=   66 addr=603324224 satis=1 blkAtt=1 excluOwn=1 solicMsg=59 Dir::OnRemoteReadResponse RecvMsg
+                  dst=11           addr=603324224 Dir::AddDirectoryShare b.owner=(0)
+ src=12 msgSrc= 1 dst=11 msg=   67 addr=603324096 satis=1 blkAtt=1 excluOwn=1 solicMsg=39 Dir::OnRemoteReadResponse RecvMsg
+                  dst=11           addr=603324096 Dir::AddDirectoryShare b.owner=(0)
+ src= 1 msgSrc=11 dst= 7 msg=  104 addr=603324224 satis=1 blkAtt=1 excluOwn=0 solicMsg=59 Dir::OnDirectoryBlockResponse RecvMsg
+ src=12 msgSrc= 1 dst=11 msg=   90 addr=269055296 satis=1 blkAtt=1 excluOwn=1 solicMsg=75 Dir::OnRemoteReadResponse RecvMsg
+                  dst=11           addr=269055296 Dir::AddDirectoryShare b.owner=(0)
+        msgSrc= 6 dst= 7 msg=  117 addr=269060736 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 Dir::OnLocalRead RecvMsg
+ src=12 msgSrc= 1 dst= 7 msg=  100 addr=269062784 satis=1 blkAtt=1 excluOwn=1 solicMsg=93 Dir::OnRemoteReadResponse RecvMsg
+                  dst= 7           addr=269062784 Dir::AddDirectoryShare b.owner=(0)
+ src= 1 msgSrc= 1 dst= 7 msg=   67 addr=603324096 satis=1 blkAtt=1 excluOwn=1 solicMsg=39 Dir::OnDirectoryBlockResponse RecvMsg
+ src=12 msgSrc= 1 dst=11 msg=   99 addr=269060672 satis=1 blkAtt=1 excluOwn=1 solicMsg=87 Dir::OnRemoteReadResponse RecvMsg
+                  dst=11           addr=269060672 Dir::AddDirectoryShare b.owner=(0)
+ src= 1 msgSrc= 1 dst= 7 msg=   90 addr=269055296 satis=1 blkAtt=1 excluOwn=1 solicMsg=75 Dir::OnDirectoryBlockResponse RecvMsg
+ src= 1 msgSrc= 1 dst= 7 msg=   99 addr=269060672 satis=1 blkAtt=1 excluOwn=1 solicMsg=87 Dir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 6 dst= 7 msg=  162 addr=603323840 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst=11 msg=  162 addr=603323840 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+ src=12 msgSrc= 1 dst= 7 msg=  128 addr=269060736 satis=1 blkAtt=1 excluOwn=1 solicMsg=117 Dir::OnRemoteReadResponse RecvMsg
+                  dst= 7           addr=269060736 Dir::AddDirectoryShare b.owner=(0)
+        msgSrc= 7 dst= 7 msg=  169 addr=269060736 satis=1 blkAtt=1 excluOwn=0 solicMsg=117 Dir::OnDirectoryBlockResponse OnRemoteReadResponse
+        msgSrc= 6 dst= 7 msg=  181 addr=269060736 requestingExclusive=1 alreadyHasBlock=1 directoryLookup=1 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg=  181 addr=269060736 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 Dir::OnRemoteRead PerformDirectoryFetch:Error
+        msgSrc= 6 dst= 7 msg=  187 addr=269060736 satis=1 blkAtt=1 excluOwn=1 solicMsg=181 Dir::OnLocalReadResponse RecvMsg
+        msgSrc= 6 dst= 7 msg=  187 addr=269060736 satis=1 blkAtt=1 excluOwn=1 solicMsg=181 Dir::OnRemoteReadResponse RecvMsg
+                  dst= 7           addr=269060736 Dir::EraseDirectoryShare nodeID=0 b.owner=InvalidNodeID
+                  dst= 7           addr=269060736 Dir::AddDirectoryShare b.owner=(0)
+ src=12 msgSrc= 1 dst=11 msg=  167 addr=603323840 satis=1 blkAtt=1 excluOwn=1 solicMsg=162 Dir::OnRemoteReadResponse RecvMsg
+                  dst=11           addr=603323840 Dir::AddDirectoryShare b.owner=(0)
+ src= 1 msgSrc=11 dst= 7 msg=  197 addr=603323840 satis=1 blkAtt=1 excluOwn=0 solicMsg=162 Dir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 6 dst= 7 msg=  223 addr=603323584 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst=11 msg=  223 addr=603323584 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+        msgSrc= 6 dst= 7 msg=  244 addr=269063104 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst=11 msg=  244 addr=269063104 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+ src=12 msgSrc= 1 dst=11 msg=  233 addr=603323584 satis=1 blkAtt=1 excluOwn=1 solicMsg=223 Dir::OnRemoteReadResponse RecvMsg
+                  dst=11           addr=603323584 Dir::AddDirectoryShare b.owner=(0)
+ src= 1 msgSrc= 1 dst= 7 msg=  233 addr=603323584 satis=1 blkAtt=1 excluOwn=1 solicMsg=223 Dir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 6 dst= 7 msg=  315 addr=268974784 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg=  316 addr=268974848 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst=11 msg=  315 addr=268974784 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+ src=12 msgSrc= 1 dst=11 msg=  249 addr=269063104 satis=1 blkAtt=1 excluOwn=1 solicMsg=244 Dir::OnRemoteReadResponse RecvMsg
+                  dst=11           addr=269063104 Dir::AddDirectoryShare b.owner=(0)
+ src= 1 msgSrc=11 dst= 7 msg=  325 addr=269063104 satis=1 blkAtt=1 excluOwn=0 solicMsg=244 Dir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 6 dst= 7 msg=  345 addr=269060800 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg=  353 addr=269055232 requestingExclusive=1 alreadyHasBlock=1 directoryLookup=1 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg=  353 addr=269055232 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 Dir::OnRemoteRead PerformDirectoryFetch:Error
+        msgSrc= 6 dst= 7 msg=  374 addr=603323520 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=1 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg=  380 addr=269055232 satis=1 blkAtt=1 excluOwn=1 solicMsg=353 Dir::OnLocalReadResponse RecvMsg
+        msgSrc= 6 dst=11 msg=  345 addr=269060800 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+        msgSrc= 6 dst= 7 msg=  380 addr=269055232 satis=1 blkAtt=1 excluOwn=1 solicMsg=353 Dir::OnRemoteReadResponse RecvMsg
+                  dst= 7           addr=269055232 Dir::EraseDirectoryShare nodeID=0 b.owner=InvalidNodeID
+                  dst= 7           addr=269055232 Dir::AddDirectoryShare b.owner=(0)
+ src=12 msgSrc= 1 dst= 7 msg=  324 addr=268974848 satis=1 blkAtt=1 excluOwn=1 solicMsg=316 Dir::OnRemoteReadResponse RecvMsg
+                  dst= 7           addr=268974848 Dir::AddDirectoryShare b.owner=(0)
+        msgSrc= 7 dst= 7 msg=  394 addr=268974848 satis=1 blkAtt=1 excluOwn=0 solicMsg=316 Dir::OnDirectoryBlockResponse OnRemoteReadResponse
+ src=12 msgSrc= 1 dst=11 msg=  327 addr=268974784 satis=1 blkAtt=1 excluOwn=1 solicMsg=315 Dir::OnRemoteReadResponse RecvMsg
+                  dst=11           addr=268974784 Dir::AddDirectoryShare b.owner=(0)
+ src= 1 msgSrc=11 dst= 7 msg=  398 addr=268974784 satis=1 blkAtt=1 excluOwn=0 solicMsg=315 Dir::OnDirectoryBlockResponse RecvMsg
+ src=12 msgSrc= 1 dst= 7 msg=  387 addr=603323520 satis=1 blkAtt=1 excluOwn=1 solicMsg=374 Dir::OnRemoteReadResponse RecvMsg
+                  dst= 7           addr=603323520 Dir::AddDirectoryShare b.owner=(0)
+ src=12 msgSrc= 1 dst=11 msg=  388 addr=269060800 satis=1 blkAtt=1 excluOwn=1 solicMsg=345 Dir::OnRemoteReadResponse RecvMsg
+                  dst=11           addr=269060800 Dir::AddDirectoryShare b.owner=(0)
+        msgSrc= 6 dst= 7 msg=  453 addr=603324096 blockAttached=1 Dir::OnLocalEviction RecvMsg
+        msgSrc= 6 dst= 7 msg=  451 addr=268972736 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg=  460 addr=268974720 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 Dir::OnLocalRead RecvMsg
+ src= 1 msgSrc= 1 dst= 7 msg=  388 addr=269060800 satis=1 blkAtt=1 excluOwn=1 solicMsg=345 Dir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 6 dst=11 msg=  451 addr=268972736 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+        msgSrc= 6 dst=11 msg=  453 addr=603324096 blockAttached=1 Dir::OnRemoteEviction RecvMsg
+        msgSrc= 6 dst=11 msg=  453 addr=603324096 blockAttached=1 Dir::OnRemoteEviction b.owner=InvalidNodeID
+ src= 1 msgSrc=11 dst= 7 msg=  473 addr=603324096 solicitingMessage=453 Dir::OnRemoteEvictionResponse RecvMsg
+ src=12 msgSrc= 1 dst=11 msg=  478 addr=603324096 solicitingMessage=475 Dir::OnRemoteWriteResponse RecvMsg
+ src=12 msgSrc= 1 dst= 7 msg=  467 addr=268974720 satis=1 blkAtt=1 excluOwn=1 solicMsg=460 Dir::OnRemoteReadResponse RecvMsg
+                  dst= 7           addr=268974720 Dir::AddDirectoryShare b.owner=(0)
+        msgSrc= 7 dst= 7 msg=  482 addr=268974720 satis=1 blkAtt=1 excluOwn=0 solicMsg=460 Dir::OnDirectoryBlockResponse OnRemoteReadResponse
+ src=12 msgSrc= 1 dst=11 msg=  477 addr=268972736 satis=1 blkAtt=1 excluOwn=1 solicMsg=451 Dir::OnRemoteReadResponse RecvMsg
+                  dst=11           addr=268972736 Dir::AddDirectoryShare b.owner=(0)
+ src= 1 msgSrc=11 dst= 7 msg=  491 addr=268972736 satis=1 blkAtt=1 excluOwn=0 solicMsg=451 Dir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 6 dst= 7 msg=  576 addr=603323584 blockAttached=1 Dir::OnLocalEviction RecvMsg
+        msgSrc= 6 dst= 7 msg=  572 addr=269060096 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=1 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg=  574 addr=269060288 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=1 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst=11 msg=  576 addr=603323584 blockAttached=1 Dir::OnRemoteEviction RecvMsg
+        msgSrc= 6 dst=11 msg=  576 addr=603323584 blockAttached=1 Dir::OnRemoteEviction b.owner=InvalidNodeID
+        msgSrc= 6 dst=11 msg=  574 addr=269060288 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+ src= 1 msgSrc=11 dst= 7 msg=  588 addr=603323584 solicitingMessage=576 Dir::OnRemoteEvictionResponse RecvMsg
+ src=12 msgSrc= 1 dst=11 msg=  595 addr=603323584 solicitingMessage=590 Dir::OnRemoteWriteResponse RecvMsg
+ src=12 msgSrc= 1 dst= 7 msg=  586 addr=269060096 satis=1 blkAtt=1 excluOwn=1 solicMsg=572 Dir::OnRemoteReadResponse RecvMsg
+                  dst= 7           addr=269060096 Dir::AddDirectoryShare b.owner=(0)
+ src=12 msgSrc= 1 dst=11 msg=  594 addr=269060288 satis=1 blkAtt=1 excluOwn=1 solicMsg=574 Dir::OnRemoteReadResponse RecvMsg
+                  dst=11           addr=269060288 Dir::AddDirectoryShare b.owner=(0)
+ src= 1 msgSrc= 1 dst= 7 msg=  594 addr=269060288 satis=1 blkAtt=1 excluOwn=1 solicMsg=574 Dir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 6 dst= 7 msg=  617 addr=269066240 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 Dir::OnLocalRead RecvMsg
+ src=12 msgSrc= 1 dst= 7 msg=  621 addr=269066240 satis=1 blkAtt=1 excluOwn=1 solicMsg=617 Dir::OnRemoteReadResponse RecvMsg
+                  dst= 7           addr=269066240 Dir::AddDirectoryShare b.owner=(0)
+        msgSrc= 7 dst= 7 msg=  623 addr=269066240 satis=1 blkAtt=1 excluOwn=0 solicMsg=617 Dir::OnDirectoryBlockResponse OnRemoteReadResponse
+        msgSrc= 6 dst= 7 msg=  628 addr=269066240 requestingExclusive=1 alreadyHasBlock=1 directoryLookup=0 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg=  628 addr=269066240 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 Dir::OnRemoteRead PerformDirectoryFetch:Error
+        msgSrc= 6 dst= 7 msg=  634 addr=269066240 satis=1 blkAtt=1 excluOwn=1 solicMsg=628 Dir::OnLocalReadResponse RecvMsg
+        msgSrc= 6 dst= 7 msg=  646 addr=269041024 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg=  634 addr=269066240 satis=1 blkAtt=1 excluOwn=1 solicMsg=628 Dir::OnRemoteReadResponse RecvMsg
+                  dst= 7           addr=269066240 Dir::EraseDirectoryShare nodeID=0 b.owner=InvalidNodeID
+                  dst= 7           addr=269066240 Dir::AddDirectoryShare b.owner=(0)
+ src=12 msgSrc= 1 dst= 7 msg=  650 addr=269041024 satis=1 blkAtt=1 excluOwn=1 solicMsg=646 Dir::OnRemoteReadResponse RecvMsg
+                  dst= 7           addr=269041024 Dir::AddDirectoryShare b.owner=(0)
+        msgSrc= 7 dst= 7 msg=  655 addr=269041024 satis=1 blkAtt=1 excluOwn=0 solicMsg=646 Dir::OnDirectoryBlockResponse OnRemoteReadResponse
+        msgSrc= 6 dst= 7 msg=  664 addr=269066304 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst=11 msg=  664 addr=269066304 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+ src=12 msgSrc= 1 dst=11 msg=  675 addr=269066304 satis=1 blkAtt=1 excluOwn=1 solicMsg=664 Dir::OnRemoteReadResponse RecvMsg
+                  dst=11           addr=269066304 Dir::AddDirectoryShare b.owner=(0)
+ src= 1 msgSrc= 1 dst= 7 msg=  675 addr=269066304 satis=1 blkAtt=1 excluOwn=1 solicMsg=664 Dir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 6 dst= 7 msg=  974 addr=268974784 blockAttached=0 Dir::OnLocalEviction RecvMsg
+        msgSrc= 6 dst= 7 msg=  972 addr=603323584 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst=11 msg=  972 addr=603323584 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+        msgSrc= 6 dst=11 msg=  974 addr=268974784 blockAttached=0 Dir::OnRemoteEviction RecvMsg
+        msgSrc= 6 dst=11 msg=  974 addr=268974784 blockAttached=0 Dir::OnRemoteEviction b.owner=InvalidNodeID
+ src= 1 msgSrc=11 dst= 7 msg=  985 addr=268974784 solicitingMessage=974 Dir::OnRemoteEvictionResponse RecvMsg
+ src=12 msgSrc= 1 dst=11 msg=  987 addr=603323584 satis=1 blkAtt=1 excluOwn=1 solicMsg=972 Dir::OnRemoteReadResponse RecvMsg
+                  dst=11           addr=603323584 Dir::AddDirectoryShare b.owner=(0)
+ src= 1 msgSrc=11 dst= 7 msg=  989 addr=603323584 satis=1 blkAtt=1 excluOwn=0 solicMsg=972 Dir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 6 dst= 7 msg= 1007 addr=603323584 requestingExclusive=1 alreadyHasBlock=1 directoryLookup=0 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst=11 msg= 1007 addr=603323584 requestingExclusive=1 alreadyHasBlock=1 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+ src= 1 msgSrc= 6 dst= 7 msg= 1007 addr=603323584 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 Dir::OnRemoteRead RecvMsg
+        msgSrc= 6 dst= 7 msg= 1017 addr=603323584 satis=1 blkAtt=1 excluOwn=1 solicMsg=1007 Dir::OnLocalReadResponse RecvMsg
+        msgSrc= 6 dst=11 msg= 1017 addr=603323584 satis=1 blkAtt=1 excluOwn=1 solicMsg=1007 Dir::OnRemoteReadResponse RecvMsg
+                  dst=11           addr=603323584 Dir::EraseDirectoryShare nodeID=0 b.owner=InvalidNodeID
+                  dst=11           addr=603323584 Dir::AddDirectoryShare b.owner=(0)
+ src= 1 msgSrc= 6 dst= 7 msg= 1017 addr=603323584 satis=1 blkAtt=1 excluOwn=1 solicMsg=1007 Dir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 6 dst= 7 msg= 1085 addr=269060800 blockAttached=1 Dir::OnLocalEviction RecvMsg
+        msgSrc= 6 dst= 7 msg= 1083 addr=269055168 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg= 1110 addr=269053184 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst=11 msg= 1083 addr=269055168 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+        msgSrc= 6 dst=11 msg= 1085 addr=269060800 blockAttached=1 Dir::OnRemoteEviction RecvMsg
+        msgSrc= 6 dst=11 msg= 1085 addr=269060800 blockAttached=1 Dir::OnRemoteEviction b.owner=InvalidNodeID
+ src= 1 msgSrc=11 dst= 7 msg= 1116 addr=269060800 solicitingMessage=1085 Dir::OnRemoteEvictionResponse RecvMsg
+ src=12 msgSrc= 1 dst=11 msg= 1122 addr=269060800 solicitingMessage=1118 Dir::OnRemoteWriteResponse RecvMsg
+ src=12 msgSrc= 1 dst=11 msg= 1120 addr=269055168 satis=1 blkAtt=1 excluOwn=1 solicMsg=1083 Dir::OnRemoteReadResponse RecvMsg
+                  dst=11           addr=269055168 Dir::AddDirectoryShare b.owner=(0)
+ src=12 msgSrc= 1 dst= 7 msg= 1121 addr=269053184 satis=1 blkAtt=1 excluOwn=1 solicMsg=1110 Dir::OnRemoteReadResponse RecvMsg
+                  dst= 7           addr=269053184 Dir::AddDirectoryShare b.owner=(0)
+        msgSrc= 7 dst= 7 msg= 1128 addr=269053184 satis=1 blkAtt=1 excluOwn=0 solicMsg=1110 Dir::OnDirectoryBlockResponse OnRemoteReadResponse
+        msgSrc= 6 dst= 7 msg= 1136 addr=269061056 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst=11 msg= 1136 addr=269061056 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+ src= 1 msgSrc= 1 dst= 7 msg= 1120 addr=269055168 satis=1 blkAtt=1 excluOwn=1 solicMsg=1083 Dir::OnDirectoryBlockResponse RecvMsg
+ src=12 msgSrc= 1 dst=11 msg= 1145 addr=269061056 satis=1 blkAtt=1 excluOwn=1 solicMsg=1136 Dir::OnRemoteReadResponse RecvMsg
+                  dst=11           addr=269061056 Dir::AddDirectoryShare b.owner=(0)
+ src= 1 msgSrc=11 dst= 7 msg= 1147 addr=269061056 satis=1 blkAtt=1 excluOwn=0 solicMsg=1136 Dir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 6 dst= 7 msg= 1154 addr=269061056 requestingExclusive=1 alreadyHasBlock=1 directoryLookup=0 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst=11 msg= 1154 addr=269061056 requestingExclusive=1 alreadyHasBlock=1 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+ src= 1 msgSrc= 6 dst= 7 msg= 1154 addr=269061056 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 Dir::OnRemoteRead RecvMsg
+        msgSrc= 6 dst= 7 msg= 1183 addr=269061056 satis=1 blkAtt=1 excluOwn=1 solicMsg=1154 Dir::OnLocalReadResponse RecvMsg
+        msgSrc= 6 dst= 7 msg= 1201 addr=269059968 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst=11 msg= 1183 addr=269061056 satis=1 blkAtt=1 excluOwn=1 solicMsg=1154 Dir::OnRemoteReadResponse RecvMsg
+                  dst=11           addr=269061056 Dir::EraseDirectoryShare nodeID=0 b.owner=InvalidNodeID
+                  dst=11           addr=269061056 Dir::AddDirectoryShare b.owner=(0)
+ src= 1 msgSrc= 6 dst= 7 msg= 1183 addr=269061056 satis=1 blkAtt=1 excluOwn=1 solicMsg=1154 Dir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 6 dst= 7 msg= 1240 addr=269060608 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg= 1253 addr=268965952 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst=11 msg= 1253 addr=268965952 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+ src=12 msgSrc= 1 dst= 7 msg= 1206 addr=269059968 satis=1 blkAtt=1 excluOwn=1 solicMsg=1201 Dir::OnRemoteReadResponse RecvMsg
+                  dst= 7           addr=269059968 Dir::AddDirectoryShare b.owner=(0)
+        msgSrc= 7 dst= 7 msg= 1263 addr=269059968 satis=1 blkAtt=1 excluOwn=0 solicMsg=1201 Dir::OnDirectoryBlockResponse OnRemoteReadResponse
+        msgSrc= 6 dst= 7 msg= 1304 addr=268974144 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg= 1315 addr=269060736 blockAttached=1 Dir::OnLocalEviction RecvMsg
+        msgSrc= 6 dst= 7 msg= 1315 addr=269060736 blockAttached=1 Dir::OnRemoteEviction OnLocalEviction
+        msgSrc= 6 dst= 7 msg= 1315 addr=269060736 blockAttached=1 Dir::OnRemoteEviction b.owner=InvalidNodeID
+        msgSrc= 6 dst= 7 msg= 1310 addr=268974208 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst=11 msg= 1304 addr=268974144 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+ src=12 msgSrc= 1 dst= 7 msg= 1245 addr=269060608 satis=1 blkAtt=1 excluOwn=1 solicMsg=1240 Dir::OnRemoteReadResponse RecvMsg
+                  dst= 7           addr=269060608 Dir::AddDirectoryShare b.owner=(0)
+        msgSrc= 7 dst= 7 msg= 1329 addr=269060608 satis=1 blkAtt=1 excluOwn=0 solicMsg=1240 Dir::OnDirectoryBlockResponse OnRemoteReadResponse
+        msgSrc= 6 dst= 7 msg= 1359 addr=269060672 blockAttached=1 Dir::OnLocalEviction RecvMsg
+        msgSrc= 6 dst= 7 msg= 1352 addr=603323456 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg= 1353 addr=603323392 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=1 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst=11 msg= 1359 addr=269060672 blockAttached=1 Dir::OnRemoteEviction RecvMsg
+        msgSrc= 6 dst=11 msg= 1359 addr=269060672 blockAttached=1 Dir::OnRemoteEviction b.owner=InvalidNodeID
+        msgSrc= 6 dst=11 msg= 1352 addr=603323456 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+ src=12 msgSrc= 1 dst=11 msg= 1261 addr=268965952 satis=1 blkAtt=1 excluOwn=1 solicMsg=1253 Dir::OnRemoteReadResponse RecvMsg
+                  dst=11           addr=268965952 Dir::AddDirectoryShare b.owner=(0)
+ src= 1 msgSrc=11 dst= 7 msg= 1369 addr=269060672 solicitingMessage=1359 Dir::OnRemoteEvictionResponse RecvMsg
+ src= 1 msgSrc=11 dst= 7 msg= 1375 addr=268965952 satis=1 blkAtt=1 excluOwn=0 solicMsg=1253 Dir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 6 dst= 7 msg= 1400 addr=269066304 blockAttached=1 Dir::OnLocalEviction RecvMsg
+        msgSrc= 6 dst= 7 msg= 1390 addr=603323328 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg= 1393 addr=269060672 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg= 1419 addr=603323200 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg= 1425 addr=603323264 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 Dir::OnLocalRead RecvMsg
+ src=12 msgSrc= 1 dst= 7 msg= 1327 addr=269060736 solicitingMessage=1317 Dir::OnRemoteWriteResponse RecvMsg
+        msgSrc= 6 dst=11 msg= 1390 addr=603323328 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+        msgSrc= 6 dst=11 msg= 1393 addr=269060672 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+        msgSrc= 6 dst=11 msg= 1419 addr=603323200 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+        msgSrc= 6 dst=11 msg= 1400 addr=269066304 blockAttached=1 Dir::OnRemoteEviction RecvMsg
+        msgSrc= 6 dst=11 msg= 1400 addr=269066304 blockAttached=1 Dir::OnRemoteEviction b.owner=InvalidNodeID
+ src= 1 msgSrc=11 dst= 7 msg= 1440 addr=269066304 solicitingMessage=1400 Dir::OnRemoteEvictionResponse RecvMsg
+ src=12 msgSrc= 1 dst=11 msg= 1326 addr=268974144 satis=1 blkAtt=1 excluOwn=1 solicMsg=1304 Dir::OnRemoteReadResponse RecvMsg
+                  dst=11           addr=268974144 Dir::AddDirectoryShare b.owner=(0)
+ src=12 msgSrc= 1 dst= 7 msg= 1328 addr=268974208 satis=1 blkAtt=1 excluOwn=1 solicMsg=1310 Dir::OnRemoteReadResponse RecvMsg
+                  dst= 7           addr=268974208 Dir::AddDirectoryShare b.owner=(0)
+        msgSrc= 7 dst= 7 msg= 1449 addr=268974208 satis=1 blkAtt=1 excluOwn=0 solicMsg=1310 Dir::OnDirectoryBlockResponse OnRemoteReadResponse
+ src= 1 msgSrc=11 dst= 7 msg= 1447 addr=268974144 satis=1 blkAtt=1 excluOwn=0 solicMsg=1304 Dir::OnDirectoryBlockResponse RecvMsg
+ src=12 msgSrc= 1 dst=11 msg= 1378 addr=269060672 solicitingMessage=1371 Dir::OnRemoteWriteResponse RecvMsg
+ src=12 msgSrc= 1 dst= 7 msg= 1368 addr=603323392 satis=1 blkAtt=1 excluOwn=1 solicMsg=1353 Dir::OnRemoteReadResponse RecvMsg
+                  dst= 7           addr=603323392 Dir::AddDirectoryShare b.owner=(0)
+ src=12 msgSrc= 1 dst=11 msg= 1377 addr=603323456 satis=1 blkAtt=1 excluOwn=1 solicMsg=1352 Dir::OnRemoteReadResponse RecvMsg
+                  dst=11           addr=603323456 Dir::AddDirectoryShare b.owner=(0)
+ src= 1 msgSrc= 1 dst= 7 msg= 1377 addr=603323456 satis=1 blkAtt=1 excluOwn=1 solicMsg=1352 Dir::OnDirectoryBlockResponse RecvMsg
+ src=12 msgSrc= 1 dst=11 msg= 1452 addr=269066304 solicitingMessage=1442 Dir::OnRemoteWriteResponse RecvMsg
+ src=12 msgSrc= 1 dst= 7 msg= 1432 addr=603323264 satis=1 blkAtt=1 excluOwn=1 solicMsg=1425 Dir::OnRemoteReadResponse RecvMsg
+                  dst= 7           addr=603323264 Dir::AddDirectoryShare b.owner=(0)
+ src=12 msgSrc= 1 dst=11 msg= 1444 addr=603323328 satis=1 blkAtt=1 excluOwn=1 solicMsg=1390 Dir::OnRemoteReadResponse RecvMsg
+                  dst=11           addr=603323328 Dir::AddDirectoryShare b.owner=(0)
+ src=12 msgSrc= 1 dst=11 msg= 1445 addr=269060672 satis=1 blkAtt=1 excluOwn=1 solicMsg=1393 Dir::OnRemoteReadResponse RecvMsg
+                  dst=11           addr=269060672 Dir::AddDirectoryShare b.owner=(0)
+ src= 1 msgSrc= 1 dst= 7 msg= 1444 addr=603323328 satis=1 blkAtt=1 excluOwn=1 solicMsg=1390 Dir::OnDirectoryBlockResponse RecvMsg
+ src=12 msgSrc= 1 dst=11 msg= 1446 addr=603323200 satis=1 blkAtt=1 excluOwn=1 solicMsg=1419 Dir::OnRemoteReadResponse RecvMsg
+                  dst=11           addr=603323200 Dir::AddDirectoryShare b.owner=(0)
+ src= 1 msgSrc= 1 dst= 7 msg= 1445 addr=269060672 satis=1 blkAtt=1 excluOwn=1 solicMsg=1393 Dir::OnDirectoryBlockResponse RecvMsg
+ src= 1 msgSrc= 1 dst= 7 msg= 1446 addr=603323200 satis=1 blkAtt=1 excluOwn=1 solicMsg=1419 Dir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 6 dst= 7 msg= 1583 addr=603324288 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 Dir::OnLocalRead RecvMsg
+ src=12 msgSrc= 1 dst= 7 msg= 1593 addr=603324288 satis=1 blkAtt=1 excluOwn=1 solicMsg=1583 Dir::OnRemoteReadResponse RecvMsg
+                  dst= 7           addr=603324288 Dir::AddDirectoryShare b.owner=(0)
+        msgSrc= 7 dst= 7 msg= 1600 addr=603324288 satis=1 blkAtt=1 excluOwn=0 solicMsg=1583 Dir::OnDirectoryBlockResponse OnRemoteReadResponse
+        msgSrc= 6 dst= 7 msg= 1683 addr=269066240 blockAttached=1 Dir::OnLocalEviction RecvMsg
+        msgSrc= 6 dst= 7 msg= 1683 addr=269066240 blockAttached=1 Dir::OnRemoteEviction OnLocalEviction
+        msgSrc= 6 dst= 7 msg= 1683 addr=269066240 blockAttached=1 Dir::OnRemoteEviction b.owner=InvalidNodeID
+        msgSrc= 6 dst= 7 msg= 1681 addr=268967424 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 Dir::OnLocalRead RecvMsg
+ src=12 msgSrc= 1 dst= 7 msg= 1690 addr=269066240 solicitingMessage=1685 Dir::OnRemoteWriteResponse RecvMsg
+ src=12 msgSrc= 1 dst= 7 msg= 1691 addr=268967424 satis=1 blkAtt=1 excluOwn=1 solicMsg=1681 Dir::OnRemoteReadResponse RecvMsg
+                  dst= 7           addr=268967424 Dir::AddDirectoryShare b.owner=(0)
+        msgSrc= 7 dst= 7 msg= 1694 addr=268967424 satis=1 blkAtt=1 excluOwn=0 solicMsg=1681 Dir::OnDirectoryBlockResponse OnRemoteReadResponse
+        msgSrc= 6 dst= 7 msg= 1737 addr=268972736 blockAttached=0 Dir::OnLocalEviction RecvMsg
+        msgSrc= 6 dst= 7 msg= 1735 addr=269060800 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst=11 msg= 1735 addr=269060800 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+        msgSrc= 6 dst=11 msg= 1737 addr=268972736 blockAttached=0 Dir::OnRemoteEviction RecvMsg
+        msgSrc= 6 dst=11 msg= 1737 addr=268972736 blockAttached=0 Dir::OnRemoteEviction b.owner=InvalidNodeID
+        msgSrc= 6 dst= 7 msg= 1753 addr=269041024 blockAttached=0 Dir::OnLocalEviction RecvMsg
+        msgSrc= 6 dst= 7 msg= 1753 addr=269041024 blockAttached=0 Dir::OnRemoteEviction OnLocalEviction
+        msgSrc= 6 dst= 7 msg= 1753 addr=269041024 blockAttached=0 Dir::OnRemoteEviction b.owner=InvalidNodeID
+        msgSrc= 6 dst= 7 msg= 1749 addr=269056384 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 Dir::OnLocalRead RecvMsg
+ src= 1 msgSrc=11 dst= 7 msg= 1750 addr=268972736 solicitingMessage=1737 Dir::OnRemoteEvictionResponse RecvMsg
+ src=12 msgSrc= 1 dst=11 msg= 1758 addr=269060800 satis=1 blkAtt=1 excluOwn=1 solicMsg=1735 Dir::OnRemoteReadResponse RecvMsg
+                  dst=11           addr=269060800 Dir::AddDirectoryShare b.owner=(0)
+ src=12 msgSrc= 1 dst= 7 msg= 1761 addr=269056384 satis=1 blkAtt=1 excluOwn=1 solicMsg=1749 Dir::OnRemoteReadResponse RecvMsg
+                  dst= 7           addr=269056384 Dir::AddDirectoryShare b.owner=(0)
+        msgSrc= 7 dst= 7 msg= 1806 addr=269056384 satis=1 blkAtt=1 excluOwn=0 solicMsg=1749 Dir::OnDirectoryBlockResponse OnRemoteReadResponse
+        msgSrc= 6 dst= 7 msg= 1819 addr=603324160 blockAttached=1 Dir::OnLocalEviction RecvMsg
+        msgSrc= 6 dst= 7 msg= 1819 addr=603324160 blockAttached=1 Dir::OnRemoteEviction OnLocalEviction
+        msgSrc= 6 dst= 7 msg= 1819 addr=603324160 blockAttached=1 Dir::OnRemoteEviction b.owner=InvalidNodeID
+        msgSrc= 6 dst= 7 msg= 1817 addr=268979968 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 Dir::OnLocalRead RecvMsg
+ src= 1 msgSrc=11 dst= 7 msg= 1804 addr=269060800 satis=1 blkAtt=1 excluOwn=0 solicMsg=1735 Dir::OnDirectoryBlockResponse RecvMsg
+ src=12 msgSrc= 1 dst= 7 msg= 1829 addr=603324160 solicitingMessage=1821 Dir::OnRemoteWriteResponse RecvMsg
+ src=12 msgSrc= 1 dst= 7 msg= 1830 addr=268979968 satis=1 blkAtt=1 excluOwn=1 solicMsg=1817 Dir::OnRemoteReadResponse RecvMsg
+                  dst= 7           addr=268979968 Dir::AddDirectoryShare b.owner=(0)
+        msgSrc= 7 dst= 7 msg= 1833 addr=268979968 satis=1 blkAtt=1 excluOwn=0 solicMsg=1817 Dir::OnDirectoryBlockResponse OnRemoteReadResponse
+        msgSrc= 6 dst= 7 msg= 1839 addr=269060800 requestingExclusive=1 alreadyHasBlock=1 directoryLookup=1 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst=11 msg= 1839 addr=269060800 requestingExclusive=1 alreadyHasBlock=1 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+        msgSrc= 6 dst= 7 msg= 1855 addr=268974144 blockAttached=0 Dir::OnLocalEviction RecvMsg
+        msgSrc= 6 dst= 7 msg= 1853 addr=269026880 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst=11 msg= 1855 addr=268974144 blockAttached=0 Dir::OnRemoteEviction RecvMsg
+        msgSrc= 6 dst=11 msg= 1855 addr=268974144 blockAttached=0 Dir::OnRemoteEviction b.owner=InvalidNodeID
+        msgSrc= 6 dst=11 msg= 1853 addr=269026880 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+ src= 1 msgSrc= 6 dst= 7 msg= 1839 addr=269060800 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 Dir::OnRemoteRead RecvMsg
+        msgSrc= 6 dst= 7 msg= 1867 addr=269060800 satis=1 blkAtt=1 excluOwn=1 solicMsg=1839 Dir::OnLocalReadResponse RecvMsg
+ src= 1 msgSrc=11 dst= 7 msg= 1860 addr=268974144 solicitingMessage=1855 Dir::OnRemoteEvictionResponse RecvMsg
+        msgSrc= 6 dst=11 msg= 1867 addr=269060800 satis=1 blkAtt=1 excluOwn=1 solicMsg=1839 Dir::OnRemoteReadResponse RecvMsg
+                  dst=11           addr=269060800 Dir::EraseDirectoryShare nodeID=0 b.owner=InvalidNodeID
+                  dst=11           addr=269060800 Dir::AddDirectoryShare b.owner=(0)
+ src= 1 msgSrc= 6 dst= 7 msg= 1867 addr=269060800 satis=1 blkAtt=1 excluOwn=1 solicMsg=1839 Dir::OnDirectoryBlockResponse RecvMsg
+ src=12 msgSrc= 1 dst=11 msg= 1870 addr=269026880 satis=1 blkAtt=1 excluOwn=1 solicMsg=1853 Dir::OnRemoteReadResponse RecvMsg
+                  dst=11           addr=269026880 Dir::AddDirectoryShare b.owner=(0)
+ src= 1 msgSrc=11 dst= 7 msg= 1877 addr=269026880 satis=1 blkAtt=1 excluOwn=0 solicMsg=1853 Dir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 6 dst= 7 msg= 1922 addr=268965952 blockAttached=0 Dir::OnLocalEviction RecvMsg
+        msgSrc= 6 dst= 7 msg= 1911 addr=269052992 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst=11 msg= 1911 addr=269052992 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+        msgSrc= 6 dst=11 msg= 1922 addr=268965952 blockAttached=0 Dir::OnRemoteEviction RecvMsg
+        msgSrc= 6 dst=11 msg= 1922 addr=268965952 blockAttached=0 Dir::OnRemoteEviction b.owner=InvalidNodeID
+        msgSrc= 6 dst= 7 msg= 1973 addr=268974848 blockAttached=0 Dir::OnLocalEviction RecvMsg
+        msgSrc= 6 dst= 7 msg= 1973 addr=268974848 blockAttached=0 Dir::OnRemoteEviction OnLocalEviction
+        msgSrc= 6 dst= 7 msg= 1973 addr=268974848 blockAttached=0 Dir::OnRemoteEviction b.owner=InvalidNodeID
+        msgSrc= 6 dst= 7 msg= 1970 addr=603324160 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 Dir::OnLocalRead RecvMsg
+ src= 1 msgSrc=11 dst= 7 msg= 1958 addr=268965952 solicitingMessage=1922 Dir::OnRemoteEvictionResponse RecvMsg
+ src=12 msgSrc= 1 dst=11 msg= 1978 addr=269052992 satis=1 blkAtt=1 excluOwn=1 solicMsg=1911 Dir::OnRemoteReadResponse RecvMsg
+                  dst=11           addr=269052992 Dir::AddDirectoryShare b.owner=(0)
+ src=12 msgSrc= 1 dst= 7 msg= 1982 addr=603324160 satis=1 blkAtt=1 excluOwn=1 solicMsg=1970 Dir::OnRemoteReadResponse RecvMsg
+                  dst= 7           addr=603324160 Dir::AddDirectoryShare b.owner=(0)
+        msgSrc= 7 dst= 7 msg= 1988 addr=603324160 satis=1 blkAtt=1 excluOwn=0 solicMsg=1970 Dir::OnDirectoryBlockResponse OnRemoteReadResponse
+ src= 1 msgSrc= 1 dst= 7 msg= 1978 addr=269052992 satis=1 blkAtt=1 excluOwn=1 solicMsg=1911 Dir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 6 dst= 7 msg= 2029 addr=269060672 blockAttached=1 Dir::OnLocalEviction RecvMsg
+        msgSrc= 6 dst= 7 msg= 2026 addr=268965952 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst=11 msg= 2026 addr=268965952 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+        msgSrc= 6 dst=11 msg= 2029 addr=269060672 blockAttached=1 Dir::OnRemoteEviction RecvMsg
+        msgSrc= 6 dst=11 msg= 2029 addr=269060672 blockAttached=1 Dir::OnRemoteEviction b.owner=InvalidNodeID
+ src= 1 msgSrc=11 dst= 7 msg= 2041 addr=269060672 solicitingMessage=2029 Dir::OnRemoteEvictionResponse RecvMsg
+ src=12 msgSrc= 1 dst=11 msg= 2046 addr=269060672 solicitingMessage=2043 Dir::OnRemoteWriteResponse RecvMsg
+ src=12 msgSrc= 1 dst=11 msg= 2045 addr=268965952 satis=1 blkAtt=1 excluOwn=1 solicMsg=2026 Dir::OnRemoteReadResponse RecvMsg
+                  dst=11           addr=268965952 Dir::AddDirectoryShare b.owner=(0)
+ src= 1 msgSrc=11 dst= 7 msg= 2049 addr=268965952 satis=1 blkAtt=1 excluOwn=0 solicMsg=2026 Dir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 6 dst= 7 msg= 2101 addr=269026880 blockAttached=0 Dir::OnLocalEviction RecvMsg
+        msgSrc= 6 dst= 7 msg= 2099 addr=269060672 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst=11 msg= 2099 addr=269060672 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+        msgSrc= 6 dst=11 msg= 2101 addr=269026880 blockAttached=0 Dir::OnRemoteEviction RecvMsg
+        msgSrc= 6 dst=11 msg= 2101 addr=269026880 blockAttached=0 Dir::OnRemoteEviction b.owner=InvalidNodeID
+        msgSrc= 6 dst= 7 msg= 2114 addr=268967232 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 Dir::OnLocalRead RecvMsg
+ src= 1 msgSrc=11 dst= 7 msg= 2108 addr=269026880 solicitingMessage=2101 Dir::OnRemoteEvictionResponse RecvMsg
+        msgSrc= 6 dst=11 msg= 2114 addr=268967232 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+ src=12 msgSrc= 1 dst=11 msg= 2115 addr=269060672 satis=1 blkAtt=1 excluOwn=1 solicMsg=2099 Dir::OnRemoteReadResponse RecvMsg
+                  dst=11           addr=269060672 Dir::AddDirectoryShare b.owner=(0)
+ src=12 msgSrc= 1 dst=11 msg= 2120 addr=268967232 satis=1 blkAtt=1 excluOwn=1 solicMsg=2114 Dir::OnRemoteReadResponse RecvMsg
+                  dst=11           addr=268967232 Dir::AddDirectoryShare b.owner=(0)
+ src= 1 msgSrc= 1 dst= 7 msg= 2115 addr=269060672 satis=1 blkAtt=1 excluOwn=1 solicMsg=2099 Dir::OnDirectoryBlockResponse RecvMsg
+ src= 1 msgSrc=11 dst= 7 msg= 2125 addr=268967232 satis=1 blkAtt=1 excluOwn=0 solicMsg=2114 Dir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 6 dst= 7 msg= 2176 addr=603323456 blockAttached=1 Dir::OnLocalEviction RecvMsg
+        msgSrc= 6 dst= 7 msg= 2174 addr=269026880 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst=11 msg= 2174 addr=269026880 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+        msgSrc= 6 dst=11 msg= 2176 addr=603323456 blockAttached=1 Dir::OnRemoteEviction RecvMsg
+        msgSrc= 6 dst=11 msg= 2176 addr=603323456 blockAttached=1 Dir::OnRemoteEviction b.owner=InvalidNodeID
+ src= 1 msgSrc=11 dst= 7 msg= 2189 addr=603323456 solicitingMessage=2176 Dir::OnRemoteEvictionResponse RecvMsg
+        msgSrc= 6 dst= 7 msg= 2206 addr=269052992 blockAttached=1 Dir::OnLocalEviction RecvMsg
+        msgSrc= 6 dst= 7 msg= 2204 addr=603323456 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst=11 msg= 2206 addr=269052992 blockAttached=1 Dir::OnRemoteEviction RecvMsg
+        msgSrc= 6 dst=11 msg= 2206 addr=269052992 blockAttached=1 Dir::OnRemoteEviction b.owner=InvalidNodeID
+        msgSrc= 6 dst=11 msg= 2204 addr=603323456 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+ src= 1 msgSrc=11 dst= 7 msg= 2243 addr=269052992 solicitingMessage=2206 Dir::OnRemoteEvictionResponse RecvMsg
+ src=12 msgSrc= 1 dst=11 msg= 2198 addr=603323456 solicitingMessage=2191 Dir::OnRemoteWriteResponse RecvMsg
+ src=12 msgSrc= 1 dst=11 msg= 2193 addr=269026880 satis=1 blkAtt=1 excluOwn=1 solicMsg=2174 Dir::OnRemoteReadResponse RecvMsg
+                  dst=11           addr=269026880 Dir::AddDirectoryShare b.owner=(0)
+ src= 1 msgSrc=11 dst= 7 msg= 2253 addr=269026880 satis=1 blkAtt=1 excluOwn=0 solicMsg=2174 Dir::OnDirectoryBlockResponse RecvMsg
+ src=12 msgSrc= 1 dst=11 msg= 2250 addr=269052992 solicitingMessage=2245 Dir::OnRemoteWriteResponse RecvMsg
+        msgSrc= 6 dst= 7 msg= 2310 addr=603323840 blockAttached=0 Dir::OnLocalEviction RecvMsg
+        msgSrc= 6 dst= 7 msg= 2306 addr=603324352 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst=11 msg= 2310 addr=603323840 blockAttached=0 Dir::OnRemoteEviction RecvMsg
+        msgSrc= 6 dst=11 msg= 2310 addr=603323840 blockAttached=0 Dir::OnRemoteEviction b.owner=InvalidNodeID
+        msgSrc= 6 dst=11 msg= 2306 addr=603324352 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+ src= 1 msgSrc=11 dst= 7 msg= 2315 addr=603323840 solicitingMessage=2310 Dir::OnRemoteEvictionResponse RecvMsg
+ src=12 msgSrc= 1 dst=11 msg= 2249 addr=603323456 satis=1 blkAtt=1 excluOwn=1 solicMsg=2204 Dir::OnRemoteReadResponse RecvMsg
+                  dst=11           addr=603323456 Dir::AddDirectoryShare b.owner=(0)
+ src= 1 msgSrc=11 dst= 7 msg= 2320 addr=603323456 satis=1 blkAtt=1 excluOwn=0 solicMsg=2204 Dir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 6 dst= 7 msg= 2353 addr=269060672 blockAttached=1 Dir::OnLocalEviction RecvMsg
+        msgSrc= 6 dst= 7 msg= 2339 addr=269052992 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg= 2362 addr=603323456 requestingExclusive=1 alreadyHasBlock=1 directoryLookup=1 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg= 2392 addr=268965952 blockAttached=0 Dir::OnLocalEviction RecvMsg
+        msgSrc= 6 dst= 7 msg= 2387 addr=269060672 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg= 2400 addr=269026880 blockAttached=0 Dir::OnLocalEviction RecvMsg
+        msgSrc= 6 dst= 7 msg= 2397 addr=268965952 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst=11 msg= 2397 addr=268965952 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+        msgSrc= 6 dst=11 msg= 2400 addr=269026880 blockAttached=0 Dir::OnRemoteEviction RecvMsg
+        msgSrc= 6 dst=11 msg= 2400 addr=269026880 blockAttached=0 Dir::OnRemoteEviction b.owner=InvalidNodeID
+        msgSrc= 6 dst=11 msg= 2387 addr=269060672 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+        msgSrc= 6 dst=11 msg= 2392 addr=268965952 blockAttached=0 Dir::OnRemoteEviction RecvMsg
+        msgSrc= 6 dst=11 msg= 2392 addr=268965952 blockAttached=0 Dir::OnRemoteEviction b.owner=InvalidNodeID
+        msgSrc= 6 dst=11 msg= 2339 addr=269052992 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+        msgSrc= 6 dst=11 msg= 2362 addr=603323456 requestingExclusive=1 alreadyHasBlock=1 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+ src= 1 msgSrc= 6 dst= 7 msg= 2397 addr=268965952 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 Dir::OnRemoteRead RecvMsg
+        msgSrc= 6 dst=11 msg= 2353 addr=269060672 blockAttached=1 Dir::OnRemoteEviction RecvMsg
+        msgSrc= 6 dst=11 msg= 2353 addr=269060672 blockAttached=1 Dir::OnRemoteEviction b.owner=InvalidNodeID
+ src= 1 msgSrc=11 dst= 7 msg= 2413 addr=269026880 solicitingMessage=2400 Dir::OnRemoteEvictionResponse RecvMsg
+ src= 1 msgSrc=11 dst= 7 msg= 2417 addr=268965952 solicitingMessage=2392 Dir::OnRemoteEvictionResponse RecvMsg
+        msgSrc= 6 dst= 7 msg= 2428 addr=268965952 satis=0 blkAtt=0 excluOwn=0 solicMsg=2397 Dir::OnLocalReadResponse RecvMsg
+ src= 1 msgSrc= 6 dst= 7 msg= 2387 addr=269060672 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 Dir::OnRemoteRead RecvMsg
+ src= 1 msgSrc= 6 dst= 7 msg= 2362 addr=603323456 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 Dir::OnRemoteRead RecvMsg
+        msgSrc= 6 dst= 7 msg= 2433 addr=269060672 satis=0 blkAtt=0 excluOwn=0 solicMsg=2387 Dir::OnLocalReadResponse RecvMsg
+        msgSrc= 6 dst=11 msg= 2428 addr=268965952 satis=0 blkAtt=0 excluOwn=0 solicMsg=2397 Dir::OnRemoteReadResponse RecvMsg
+ src= 1 msgSrc=11 dst= 7 msg= 2424 addr=269060672 solicitingMessage=2353 Dir::OnRemoteEvictionResponse RecvMsg
+        msgSrc= 6 dst= 7 msg= 2439 addr=603323456 satis=1 blkAtt=1 excluOwn=1 solicMsg=2362 Dir::OnLocalReadResponse RecvMsg
+        msgSrc= 6 dst=11 msg= 2433 addr=269060672 satis=0 blkAtt=0 excluOwn=0 solicMsg=2387 Dir::OnRemoteReadResponse RecvMsg
+        msgSrc= 6 dst=11 msg= 2439 addr=603323456 satis=1 blkAtt=1 excluOwn=1 solicMsg=2362 Dir::OnRemoteReadResponse RecvMsg
+                  dst=11           addr=603323456 Dir::EraseDirectoryShare nodeID=0 b.owner=InvalidNodeID
+                  dst=11           addr=603323456 Dir::AddDirectoryShare b.owner=(0)
+ src= 1 msgSrc= 6 dst= 7 msg= 2439 addr=603323456 satis=1 blkAtt=1 excluOwn=1 solicMsg=2362 Dir::OnDirectoryBlockResponse RecvMsg
+ src=12 msgSrc= 1 dst=11 msg= 2319 addr=603324352 satis=1 blkAtt=1 excluOwn=1 solicMsg=2306 Dir::OnRemoteReadResponse RecvMsg
+                  dst=11           addr=603324352 Dir::AddDirectoryShare b.owner=(0)
+ src= 1 msgSrc=11 dst= 7 msg= 2455 addr=603324352 satis=1 blkAtt=1 excluOwn=0 solicMsg=2306 Dir::OnDirectoryBlockResponse RecvMsg
+ src=12 msgSrc= 1 dst=11 msg= 2448 addr=269060672 solicitingMessage=2426 Dir::OnRemoteWriteResponse RecvMsg
+ src=12 msgSrc= 1 dst=11 msg= 2435 addr=269052992 satis=1 blkAtt=1 excluOwn=1 solicMsg=2339 Dir::OnRemoteReadResponse RecvMsg
+                  dst=11           addr=269052992 Dir::AddDirectoryShare b.owner=(0)
+ src=12 msgSrc= 1 dst=11 msg= 2446 addr=269060672 satis=1 blkAtt=1 excluOwn=1 solicMsg=2387 Dir::OnRemoteReadResponse RecvMsg
+                  dst=11           addr=269060672 Dir::AddDirectoryShare b.owner=(0)
+ src= 1 msgSrc= 1 dst= 7 msg= 2435 addr=269052992 satis=1 blkAtt=1 excluOwn=1 solicMsg=2339 Dir::OnDirectoryBlockResponse RecvMsg
+ src=12 msgSrc= 1 dst=11 msg= 2447 addr=268965952 satis=1 blkAtt=1 excluOwn=1 solicMsg=2397 Dir::OnRemoteReadResponse RecvMsg
+                  dst=11           addr=268965952 Dir::AddDirectoryShare b.owner=(0)
+ src= 1 msgSrc= 1 dst= 7 msg= 2446 addr=269060672 satis=1 blkAtt=1 excluOwn=1 solicMsg=2387 Dir::OnDirectoryBlockResponse RecvMsg
+ src= 1 msgSrc=11 dst= 7 msg= 2483 addr=268965952 satis=1 blkAtt=1 excluOwn=0 solicMsg=2397 Dir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 6 dst= 7 msg= 2588 addr=603323456 blockAttached=1 Dir::OnLocalEviction RecvMsg
+        msgSrc= 6 dst= 7 msg= 2586 addr=269026880 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst=11 msg= 2588 addr=603323456 blockAttached=1 Dir::OnRemoteEviction RecvMsg
+        msgSrc= 6 dst=11 msg= 2588 addr=603323456 blockAttached=1 Dir::OnRemoteEviction b.owner=InvalidNodeID
+        msgSrc= 6 dst=11 msg= 2586 addr=269026880 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+ src= 1 msgSrc=11 dst= 7 msg= 2613 addr=603323456 solicitingMessage=2588 Dir::OnRemoteEvictionResponse RecvMsg
+ src=12 msgSrc= 1 dst=11 msg= 2619 addr=603323456 solicitingMessage=2615 Dir::OnRemoteWriteResponse RecvMsg
+ src=12 msgSrc= 1 dst=11 msg= 2620 addr=269026880 satis=1 blkAtt=1 excluOwn=1 solicMsg=2586 Dir::OnRemoteReadResponse RecvMsg
+                  dst=11           addr=269026880 Dir::AddDirectoryShare b.owner=(0)
+ src= 1 msgSrc=11 dst= 7 msg= 2623 addr=269026880 satis=1 blkAtt=1 excluOwn=0 solicMsg=2586 Dir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 6 dst= 7 msg= 2654 addr=269052992 blockAttached=1 Dir::OnLocalEviction RecvMsg
+        msgSrc= 6 dst= 7 msg= 2648 addr=603323456 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst=11 msg= 2654 addr=269052992 blockAttached=1 Dir::OnRemoteEviction RecvMsg
+        msgSrc= 6 dst=11 msg= 2654 addr=269052992 blockAttached=1 Dir::OnRemoteEviction b.owner=InvalidNodeID
+        msgSrc= 6 dst=11 msg= 2648 addr=603323456 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+ src= 1 msgSrc=11 dst= 7 msg= 2722 addr=269052992 solicitingMessage=2654 Dir::OnRemoteEvictionResponse RecvMsg
+ src=12 msgSrc= 1 dst=11 msg= 2729 addr=269052992 solicitingMessage=2724 Dir::OnRemoteWriteResponse RecvMsg
+ src=12 msgSrc= 1 dst=11 msg= 2728 addr=603323456 satis=1 blkAtt=1 excluOwn=1 solicMsg=2648 Dir::OnRemoteReadResponse RecvMsg
+                  dst=11           addr=603323456 Dir::AddDirectoryShare b.owner=(0)
+ src= 1 msgSrc=11 dst= 7 msg= 2732 addr=603323456 satis=1 blkAtt=1 excluOwn=0 solicMsg=2648 Dir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 6 dst= 7 msg= 2759 addr=269060672 blockAttached=1 Dir::OnLocalEviction RecvMsg
+        msgSrc= 6 dst= 7 msg= 2747 addr=269052992 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg= 2769 addr=603323456 requestingExclusive=1 alreadyHasBlock=1 directoryLookup=0 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg= 2804 addr=269026880 blockAttached=0 Dir::OnLocalEviction RecvMsg
+        msgSrc= 6 dst= 7 msg= 2801 addr=269060672 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=1 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst=11 msg= 2801 addr=269060672 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+        msgSrc= 6 dst=11 msg= 2769 addr=603323456 requestingExclusive=1 alreadyHasBlock=1 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+        msgSrc= 6 dst=11 msg= 2804 addr=269026880 blockAttached=0 Dir::OnRemoteEviction RecvMsg
+        msgSrc= 6 dst=11 msg= 2804 addr=269026880 blockAttached=0 Dir::OnRemoteEviction b.owner=InvalidNodeID
+        msgSrc= 6 dst=11 msg= 2759 addr=269060672 blockAttached=1 Dir::OnRemoteEviction RecvMsg
+        msgSrc= 6 dst=11 msg= 2759 addr=269060672 blockAttached=1 Dir::OnRemoteEviction b.owner=InvalidNodeID
+        msgSrc= 6 dst=11 msg= 2747 addr=269052992 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+ src= 1 msgSrc= 6 dst= 7 msg= 2769 addr=603323456 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 Dir::OnRemoteRead RecvMsg
+ src= 1 msgSrc=11 dst= 7 msg= 2826 addr=269026880 solicitingMessage=2804 Dir::OnRemoteEvictionResponse RecvMsg
+ src= 1 msgSrc=11 dst= 7 msg= 2828 addr=269060672 solicitingMessage=2759 Dir::OnRemoteEvictionResponse RecvMsg
+ src= 1 msgSrc= 6 dst= 7 msg= 2801 addr=269060672 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 Dir::OnRemoteRead RecvMsg
+        msgSrc= 6 dst= 7 msg= 2845 addr=603323520 blockAttached=1 Dir::OnLocalEviction RecvMsg
+        msgSrc= 6 dst= 7 msg= 2845 addr=603323520 blockAttached=1 Dir::OnRemoteEviction OnLocalEviction
+        msgSrc= 6 dst= 7 msg= 2845 addr=603323520 blockAttached=1 Dir::OnRemoteEviction b.owner=InvalidNodeID
+        msgSrc= 6 dst= 7 msg= 2843 addr=268966016 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg= 2851 addr=603323456 satis=1 blkAtt=1 excluOwn=1 solicMsg=2769 Dir::OnLocalReadResponse RecvMsg
+        msgSrc= 6 dst= 7 msg= 2852 addr=269060672 satis=0 blkAtt=0 excluOwn=0 solicMsg=2801 Dir::OnLocalReadResponse RecvMsg
+        msgSrc= 6 dst=11 msg= 2852 addr=269060672 satis=0 blkAtt=0 excluOwn=0 solicMsg=2801 Dir::OnRemoteReadResponse RecvMsg
+        msgSrc= 6 dst=11 msg= 2851 addr=603323456 satis=1 blkAtt=1 excluOwn=1 solicMsg=2769 Dir::OnRemoteReadResponse RecvMsg
+                  dst=11           addr=603323456 Dir::EraseDirectoryShare nodeID=0 b.owner=InvalidNodeID
+                  dst=11           addr=603323456 Dir::AddDirectoryShare b.owner=(0)
+ src= 1 msgSrc= 6 dst= 7 msg= 2851 addr=603323456 satis=1 blkAtt=1 excluOwn=1 solicMsg=2769 Dir::OnDirectoryBlockResponse RecvMsg
+ src=12 msgSrc= 1 dst=11 msg= 2861 addr=269060672 solicitingMessage=2830 Dir::OnRemoteWriteResponse RecvMsg
+ src=12 msgSrc= 1 dst= 7 msg= 2862 addr=603323520 solicitingMessage=2849 Dir::OnRemoteWriteResponse RecvMsg
+ src=12 msgSrc= 1 dst=11 msg= 2860 addr=269052992 satis=1 blkAtt=1 excluOwn=1 solicMsg=2747 Dir::OnRemoteReadResponse RecvMsg
+                  dst=11           addr=269052992 Dir::AddDirectoryShare b.owner=(0)
+ src=12 msgSrc= 1 dst= 7 msg= 2863 addr=268966016 satis=1 blkAtt=1 excluOwn=1 solicMsg=2843 Dir::OnRemoteReadResponse RecvMsg
+                  dst= 7           addr=268966016 Dir::AddDirectoryShare b.owner=(0)
+        msgSrc= 7 dst= 7 msg= 2879 addr=268966016 satis=1 blkAtt=1 excluOwn=0 solicMsg=2843 Dir::OnDirectoryBlockResponse OnRemoteReadResponse
+ src=12 msgSrc= 1 dst=11 msg= 2868 addr=269060672 satis=1 blkAtt=1 excluOwn=1 solicMsg=2801 Dir::OnRemoteReadResponse RecvMsg
+                  dst=11           addr=269060672 Dir::AddDirectoryShare b.owner=(0)
+ src= 1 msgSrc= 1 dst= 7 msg= 2860 addr=269052992 satis=1 blkAtt=1 excluOwn=1 solicMsg=2747 Dir::OnDirectoryBlockResponse RecvMsg
+ src= 1 msgSrc= 1 dst= 7 msg= 2868 addr=269060672 satis=1 blkAtt=1 excluOwn=1 solicMsg=2801 Dir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 6 dst= 7 msg= 2951 addr=603324224 blockAttached=0 Dir::OnLocalEviction RecvMsg
+        msgSrc= 6 dst= 7 msg= 2947 addr=269060928 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst=11 msg= 2951 addr=603324224 blockAttached=0 Dir::OnRemoteEviction RecvMsg
+        msgSrc= 6 dst=11 msg= 2951 addr=603324224 blockAttached=0 Dir::OnRemoteEviction b.owner=InvalidNodeID
+        msgSrc= 6 dst=11 msg= 2947 addr=269060928 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+ src= 1 msgSrc=11 dst= 7 msg= 2991 addr=603324224 solicitingMessage=2951 Dir::OnRemoteEvictionResponse RecvMsg
+        msgSrc= 6 dst= 7 msg= 3064 addr=269060608 requestingExclusive=1 alreadyHasBlock=1 directoryLookup=0 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg= 3064 addr=269060608 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 Dir::OnRemoteRead PerformDirectoryFetch:Error
+        msgSrc= 6 dst= 7 msg= 3072 addr=269060608 satis=1 blkAtt=1 excluOwn=1 solicMsg=3064 Dir::OnLocalReadResponse RecvMsg
+        msgSrc= 6 dst= 7 msg= 3072 addr=269060608 satis=1 blkAtt=1 excluOwn=1 solicMsg=3064 Dir::OnRemoteReadResponse RecvMsg
+                  dst= 7           addr=269060608 Dir::EraseDirectoryShare nodeID=0 b.owner=InvalidNodeID
+                  dst= 7           addr=269060608 Dir::AddDirectoryShare b.owner=(0)
+Rabbit Mode Start 
+Tick 1000000
+Tick 2000000
+Tick 3000000
+Tick 4000000
+Tick 5000000
+No free memory for heap allocation
+
+Sparse Cholesky Factorization     Problem:         
+     2 Processors
+     Postpass partition size: 32
+     16384 byte cache
+
+
+
+true partitionsFan-out, 
+no block copy-acrossLB domain, embedded 
+distribution
+No orderingTick 6000000
+Tick 7000000
+Tick 8000000
+1846 supers, 0.00 nodes/super, 149017856 max super
+Tick 9000000
+Tick 10000000
+Tick 11000000
+1846/1107 supers before/after
+4029836/0 (0.00) ops before/after amalgamation
+
+before partition
+Divide for 2 P, 4 domains, 0.84 of work static, 0.93 eff, (0.00 overall)
+9822 total domain updates
+345 max height, 2 ops, 561046783157726504912887689090631695414206102286611071406598071882286013415988923361178456339230927401146947159738810368.00 conc, -0.29 bl for 29484500 P
+Target partition size 0, postpass size 32
+Tick 12000000
+Processor array is 2 by 1
+No redistributionSupers: 35: 1  101: 1  
+Blocks: 33: 1  34: 2  35: 1  
+4 partitions
+Tick 13000000
+Tick 14000000
+Tick 15000000
+4 partitions, 24 blocks
+Tick 16000000
+Tick 17000000
+Tick 18000000
+Tick 19000000
+Tick 20000000
+Leaving rabbit mode...
+        msgSrc= 6 dst= 7 msg= 3085 addr=269055232 blockAttached=1 Dir::OnLocalEviction RecvMsg
+        msgSrc= 6 dst= 7 msg= 3085 addr=269055232 blockAttached=1 Dir::OnRemoteEviction OnLocalEviction
+        msgSrc= 6 dst= 7 msg= 3085 addr=269055232 blockAttached=1 Dir::OnRemoteEviction b.owner=InvalidNodeID
+        msgSrc= 6 dst= 7 msg= 3083 addr=268967680 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 Dir::OnLocalRead RecvMsg
+OSSim::spawn(0,1,0x10000,0)
+sesc_spawn( 0x1001b924, 0x0, 0x0 ) pid = 0, child pid = 1, child context = 8fa1628
+FastSimBeginEvent
+FastSimBeginEvent
+ src=12 msgSrc= 1 dst=11 msg= 3013 addr=269060928 satis=1 blkAtt=1 excluOwn=1 solicMsg=2947 Dir::OnRemoteReadResponse RecvMsg
+                  dst=11           addr=269060928 Dir::AddDirectoryShare b.owner=(0)
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+        msgSrc= 6 dst= 7 msg= 3110 addr=269053184 blockAttached=0 Dir::OnLocalEviction RecvMsg
+        msgSrc= 6 dst= 7 msg= 3110 addr=269053184 blockAttached=0 Dir::OnRemoteEviction OnLocalEviction
+        msgSrc= 6 dst= 7 msg= 3110 addr=269053184 blockAttached=0 Dir::OnRemoteEviction b.owner=InvalidNodeID
+        msgSrc= 6 dst= 7 msg= 3108 addr=269067008 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 Dir::OnLocalRead RecvMsg
+        msgSrc=10 dst=11 msg= 3118 addr=603357120 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=1 Dir::OnLocalRead RecvMsg
+ src= 1 msgSrc= 1 dst= 7 msg= 3013 addr=269060928 satis=1 blkAtt=1 excluOwn=1 solicMsg=2947 Dir::OnDirectoryBlockResponse RecvMsg
+        msgSrc=10 dst=11 msg= 3129 addr=603357056 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 Dir::OnLocalRead RecvMsg
+ src= 1 msgSrc=10 dst= 7 msg= 3129 addr=603357056 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+        msgSrc=10 dst=11 msg= 3137 addr=269060608 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 Dir::OnLocalRead RecvMsg
+ src= 1 msgSrc=10 dst= 7 msg= 3137 addr=269060608 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+        msgSrc=10 dst= 7 msg= 3137 addr=269060608 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 Dir::OnRemoteRead PerformDirectoryFetch:Error
+        msgSrc= 6 dst= 7 msg= 3147 addr=269060608 satis=1 blkAtt=1 excluOwn=0 solicMsg=3137 Dir::OnLocalReadResponse RecvMsg
+ src=12 msgSrc= 1 dst= 7 msg= 3096 addr=269055232 solicitingMessage=3087 Dir::OnRemoteWriteResponse RecvMsg
+        msgSrc= 6 dst= 7 msg= 3147 addr=269060608 satis=1 blkAtt=1 excluOwn=0 solicMsg=3137 Dir::OnRemoteReadResponse RecvMsg
+                  dst= 7           addr=269060608 Dir::AddDirectoryShare exclusive=0 b.sharers.insert(1)
+        msgSrc= 7 dst=11 msg= 3158 addr=269060608 satis=1 blkAtt=1 excluOwn=0 solicMsg=3137 Dir::OnDirectoryBlockResponse RecvMsg
+ src=12 msgSrc= 1 dst= 7 msg= 3095 addr=268967680 satis=1 blkAtt=1 excluOwn=1 solicMsg=3083 Dir::OnRemoteReadResponse RecvMsg
+                  dst= 7           addr=268967680 Dir::AddDirectoryShare b.owner=(0)
+        msgSrc= 7 dst= 7 msg= 3171 addr=268967680 satis=1 blkAtt=1 excluOwn=0 solicMsg=3083 Dir::OnDirectoryBlockResponse OnRemoteReadResponse
+        msgSrc=10 dst=11 msg= 3202 addr=269063424 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 Dir::OnLocalRead RecvMsg
+ src= 1 msgSrc=10 dst= 7 msg= 3202 addr=269063424 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+        msgSrc=10 dst=11 msg= 3212 addr=269066944 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 Dir::OnLocalRead RecvMsg
+        msgSrc=10 dst=11 msg= 3213 addr=269067008 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 Dir::OnLocalRead RecvMsg
+ src= 1 msgSrc=10 dst= 7 msg= 3213 addr=269067008 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+ src=12 msgSrc= 1 dst= 7 msg= 3119 addr=269067008 satis=1 blkAtt=1 excluOwn=1 solicMsg=3108 Dir::OnRemoteReadResponse RecvMsg
+                  dst= 7           addr=269067008 Dir::AddDirectoryShare b.owner=(0)
+        msgSrc= 7 dst= 7 msg= 3223 addr=269067008 satis=1 blkAtt=1 excluOwn=0 solicMsg=3108 Dir::OnDirectoryBlockResponse OnRemoteReadResponse
+        msgSrc= 7 dst=11 msg= 3222 addr=269067008 satis=0 blkAtt=0 excluOwn=0 solicMsg=3213 Dir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 7 dst=11 msg= 3222 addr=269067008 satis=0 blkAtt=0 excluOwn=0 solicMsg=3213 Dir::OnLocalRead OnDirectoryBlockResponse
+        msgSrc= 6 dst= 7 msg= 3230 addr=269067008 requestingExclusive=1 alreadyHasBlock=1 directoryLookup=0 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg= 3230 addr=269067008 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 Dir::OnRemoteRead PerformDirectoryFetch:Error
+ src= 1 msgSrc=10 dst= 7 msg= 3213 addr=269067008 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+        msgSrc= 6 dst= 7 msg= 3238 addr=269067008 satis=1 blkAtt=1 excluOwn=1 solicMsg=3230 Dir::OnLocalReadResponse RecvMsg
+ src=12 msgSrc= 1 dst=11 msg= 3132 addr=603357120 satis=1 blkAtt=1 excluOwn=1 solicMsg=3118 Dir::OnRemoteReadResponse RecvMsg
+                  dst=11           addr=603357120 Dir::AddDirectoryShare b.owner=(1)
+        msgSrc= 7 dst=11 msg= 3240 addr=269067008 satis=0 blkAtt=0 excluOwn=1 solicMsg=3213 Dir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 7 dst=11 msg= 3240 addr=269067008 satis=0 blkAtt=0 excluOwn=1 solicMsg=3213 Dir::OnLocalRead OnDirectoryBlockResponse
+ src=12 msgSrc= 1 dst= 7 msg= 3140 addr=603357056 satis=1 blkAtt=1 excluOwn=1 solicMsg=3129 Dir::OnRemoteReadResponse RecvMsg
+                  dst= 7           addr=603357056 Dir::AddDirectoryShare b.owner=(1)
+ src= 1 msgSrc=10 dst= 7 msg= 3213 addr=269067008 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+        msgSrc= 6 dst= 7 msg= 3238 addr=269067008 satis=1 blkAtt=1 excluOwn=1 solicMsg=3230 Dir::OnRemoteReadResponse RecvMsg
+                  dst= 7           addr=269067008 Dir::EraseDirectoryShare nodeID=0 b.owner=InvalidNodeID
+                  dst= 7           addr=269067008 Dir::AddDirectoryShare b.owner=(0)
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+        msgSrc= 1 dst=11 msg= 3140 addr=603357056 satis=1 blkAtt=1 excluOwn=1 solicMsg=3129 Dir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 7 dst=11 msg= 3254 addr=269067008 satis=0 blkAtt=0 excluOwn=1 solicMsg=3213 Dir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 7 dst=11 msg= 3254 addr=269067008 satis=0 blkAtt=0 excluOwn=1 solicMsg=3213 Dir::OnLocalRead OnDirectoryBlockResponse
+        msgSrc= 6 dst= 7 msg= 3283 addr=269060288 blockAttached=1 Dir::OnLocalEviction RecvMsg
+        msgSrc= 6 dst= 7 msg= 3281 addr=269066944 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 Dir::OnLocalRead RecvMsg
+ src= 1 msgSrc=10 dst= 7 msg= 3213 addr=269067008 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+        msgSrc=10 dst= 7 msg= 3213 addr=269067008 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 Dir::OnRemoteRead PerformDirectoryFetch:Error
+        msgSrc= 6 dst= 7 msg= 3312 addr=269067008 satis=1 blkAtt=1 excluOwn=1 solicMsg=3213 Dir::OnLocalReadResponse RecvMsg
+        msgSrc= 6 dst=11 msg= 3283 addr=269060288 blockAttached=1 Dir::OnRemoteEviction RecvMsg
+        msgSrc= 6 dst=11 msg= 3283 addr=269060288 blockAttached=1 Dir::OnRemoteEviction b.owner=InvalidNodeID
+        msgSrc= 6 dst=11 msg= 3281 addr=269066944 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+        msgSrc= 6 dst= 7 msg= 3321 addr=269063424 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 Dir::OnLocalRead RecvMsg
+ src= 1 msgSrc=11 dst= 7 msg= 3315 addr=269060288 solicitingMessage=3283 Dir::OnRemoteEvictionResponse RecvMsg
+        msgSrc= 6 dst= 7 msg= 3312 addr=269067008 satis=1 blkAtt=1 excluOwn=1 solicMsg=3213 Dir::OnRemoteReadResponse RecvMsg
+                  dst= 7           addr=269067008 Dir::EraseDirectoryShare nodeID=0 b.owner=InvalidNodeID
+                  dst= 7           addr=269067008 Dir::AddDirectoryShare b.owner=(1)
+        msgSrc= 6 dst=11 msg= 3312 addr=269067008 satis=1 blkAtt=1 excluOwn=1 solicMsg=3213 Dir::OnDirectoryBlockResponse RecvMsg
+ src=12 msgSrc= 1 dst= 7 msg= 3220 addr=269063424 satis=1 blkAtt=1 excluOwn=1 solicMsg=3202 Dir::OnRemoteReadResponse RecvMsg
+                  dst= 7           addr=269063424 Dir::AddDirectoryShare b.owner=(1)
+                  dst= 7           addr=269063424 Dir::AddDirectoryShare exclusive=0 b.sharers.insert(0)
+        msgSrc= 7 dst= 7 msg= 3333 addr=269063424 satis=1 blkAtt=1 excluOwn=0 solicMsg=3321 Dir::OnDirectoryBlockResponse OnRemoteReadResponse
+ src=12 msgSrc= 1 dst=11 msg= 3225 addr=269066944 satis=1 blkAtt=1 excluOwn=1 solicMsg=3212 Dir::OnRemoteReadResponse RecvMsg
+                  dst=11           addr=269066944 Dir::AddDirectoryShare b.owner=(1)
+ src= 1 msgSrc=11 dst=11 msg= 3337 addr=269066944 satis=1 blkAtt=1 excluOwn=0 solicMsg=3212 Dir::OnDirectoryBlockResponse OnRemoteReadResponse
+                  dst=11           addr=269066944 Dir::AddDirectoryShare exclusive=0 b.sharers.insert(0)
+        msgSrc=10 dst=11 msg= 3349 addr=269066944 requestingExclusive=1 alreadyHasBlock=1 directoryLookup=0 Dir::OnLocalRead RecvMsg
+ src= 1 msgSrc=10 dst=11 msg= 3349 addr=269066944 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 Dir::OnRemoteRead PerformDirectoryFetch:Error
+        msgSrc=10 dst=11 msg= 3355 addr=269066944 satis=1 blkAtt=1 excluOwn=1 solicMsg=3349 Dir::OnLocalReadResponse RecvMsg
+        msgSrc= 7 dst=11 msg= 3331 addr=269063424 satis=1 blkAtt=1 excluOwn=0 solicMsg=3202 Dir::OnDirectoryBlockResponse RecvMsg
+ src= 1 msgSrc=11 dst= 7 msg= 3339 addr=269066944 satis=1 blkAtt=1 excluOwn=0 solicMsg=3281 Dir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 6 dst= 7 msg= 3370 addr=269066944 requestingExclusive=1 alreadyHasBlock=1 directoryLookup=0 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst=11 msg= 3370 addr=269066944 requestingExclusive=1 alreadyHasBlock=1 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+ src= 1 msgSrc=10 dst=11 msg= 3355 addr=269066944 satis=1 blkAtt=1 excluOwn=1 solicMsg=3349 Dir::OnRemoteReadResponse RecvMsg
+                  dst=11           addr=269066944 Dir::EraseDirectoryShare nodeID=1 b.owner=InvalidNodeID
+ src= 1 msgSrc=11 dst= 7 msg= 3374 addr=269066944 satis=0 blkAtt=0 excluOwn=0 solicMsg=3370 Dir::OnDirectoryBlockResponse RecvMsg
+        msgSrc=11 dst= 7 msg= 3374 addr=269066944 satis=0 blkAtt=0 excluOwn=0 solicMsg=3370 Dir::OnLocalRead OnDirectoryBlockResponse
+        msgSrc= 6 dst=11 msg= 3370 addr=269066944 requestingExclusive=1 alreadyHasBlock=1 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+ src= 1 msgSrc=11 dst= 7 msg= 3375 addr=269066944 Dir::OnRemoteInvalidate RecvMsg
+        msgSrc= 6 dst= 7 msg= 3386 addr=269066944 blockAttached=0 solicitingMessage=3375 Dir::OnLocalInvalidateResponse RecvMsg
+        msgSrc= 6 dst= 7 msg= 3387 addr=269066944 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 Dir::OnLocalRead RecvMsg
+ src=12 msgSrc= 1 dst=11 msg= 3325 addr=269060288 solicitingMessage=3317 Dir::OnRemoteWriteResponse RecvMsg
+        msgSrc= 6 dst=11 msg= 3387 addr=269066944 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+        msgSrc= 6 dst=11 msg= 3386 addr=269066944 blockAttached=0 solicitingMessage=3375 Dir::OnRemoteInvalidateResponse RecvMsg
+        msgSrc= 6 dst=11 msg= 3386 addr=269066944 blockAttached=0 solicitingMessage=3375 Dir::OnRemoteInvalidateResponse b.sharers.erase(0)
+        msgSrc= 6 dst=11 msg= 3386 addr=269066944 blockAttached=0 solicitingMessage=3375 Dir::OnRemoteInvalidateResponse b.sharers.clear()
+        msgSrc= 6 dst=11 msg= 3386 addr=269066944 blockAttached=0 solicitingMessage=3375 Dir::OnRemoteInvalidateResponse b.owner=1
+                  dst=11           addr=269066944 Dir::AddDirectoryShare b.owner=(1)
+ src= 1 msgSrc=11 dst= 7 msg= 3380 addr=269066944 satis=0 blkAtt=0 excluOwn=1 solicMsg=3370 Dir::OnDirectoryBlockResponse RecvMsg
+        msgSrc=11 dst= 7 msg= 3380 addr=269066944 satis=0 blkAtt=0 excluOwn=1 solicMsg=3370 Dir::OnLocalRead OnDirectoryBlockResponse
+        msgSrc= 6 dst=11 msg= 3370 addr=269066944 requestingExclusive=1 alreadyHasBlock=1 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+ src= 1 msgSrc= 6 dst=11 msg= 3370 addr=269066944 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 Dir::OnRemoteRead PerformDirectoryFetch:Error
+        msgSrc= 6 dst= 7 msg= 3418 addr=269059968 blockAttached=0 Dir::OnLocalEviction RecvMsg
+        msgSrc= 6 dst= 7 msg= 3418 addr=269059968 blockAttached=0 Dir::OnRemoteEviction OnLocalEviction
+        msgSrc= 6 dst= 7 msg= 3418 addr=269059968 blockAttached=0 Dir::OnRemoteEviction b.owner=InvalidNodeID
+        msgSrc= 6 dst= 7 msg= 3407 addr=269060480 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 Dir::OnLocalRead RecvMsg
+        msgSrc=10 dst=11 msg= 3430 addr=603356992 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=1 Dir::OnLocalRead RecvMsg
+ src= 1 msgSrc=11 dst= 7 msg= 3392 addr=269066944 satis=0 blkAtt=0 excluOwn=0 solicMsg=3387 Dir::OnDirectoryBlockResponse RecvMsg
+        msgSrc=11 dst= 7 msg= 3392 addr=269066944 satis=0 blkAtt=0 excluOwn=0 solicMsg=3387 Dir::OnLocalRead OnDirectoryBlockResponse
+        msgSrc=10 dst=11 msg= 3442 addr=269066944 satis=1 blkAtt=1 excluOwn=1 solicMsg=3370 Dir::OnLocalReadResponse RecvMsg
+        msgSrc= 6 dst=11 msg= 3387 addr=269066944 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+        msgSrc=10 dst=11 msg= 3459 addr=271484928 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=1 Dir::OnLocalRead RecvMsg
+ src= 1 msgSrc=11 dst= 7 msg= 3454 addr=269066944 satis=0 blkAtt=0 excluOwn=1 solicMsg=3387 Dir::OnDirectoryBlockResponse RecvMsg
+        msgSrc=11 dst= 7 msg= 3454 addr=269066944 satis=0 blkAtt=0 excluOwn=1 solicMsg=3387 Dir::OnLocalRead OnDirectoryBlockResponse
+ src= 1 msgSrc=10 dst= 7 msg= 3459 addr=271484928 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+        msgSrc= 6 dst=11 msg= 3387 addr=269066944 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+        msgSrc=10 dst=11 msg= 3472 addr=269060480 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 Dir::OnLocalRead RecvMsg
+ src= 1 msgSrc=10 dst=11 msg= 3442 addr=269066944 satis=1 blkAtt=1 excluOwn=1 solicMsg=3370 Dir::OnRemoteReadResponse RecvMsg
+                  dst=11           addr=269066944 Dir::EraseDirectoryShare nodeID=1 b.owner=InvalidNodeID
+                  dst=11           addr=269066944 Dir::AddDirectoryShare b.owner=(0)
+ src= 1 msgSrc=11 dst= 7 msg= 3469 addr=269066944 satis=0 blkAtt=0 excluOwn=1 solicMsg=3387 Dir::OnDirectoryBlockResponse RecvMsg
+        msgSrc=11 dst= 7 msg= 3469 addr=269066944 satis=0 blkAtt=0 excluOwn=1 solicMsg=3387 Dir::OnLocalRead OnDirectoryBlockResponse
+ src= 1 msgSrc=10 dst= 7 msg= 3472 addr=269060480 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+        msgSrc= 6 dst=11 msg= 3387 addr=269066944 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+ src= 1 msgSrc= 6 dst= 7 msg= 3387 addr=269066944 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 Dir::OnRemoteRead RecvMsg
+        msgSrc= 6 dst= 7 msg= 3483 addr=269066944 satis=0 blkAtt=0 excluOwn=0 solicMsg=3387 Dir::OnLocalReadResponse RecvMsg
+ src= 1 msgSrc=10 dst= 7 msg= 3442 addr=269066944 satis=1 blkAtt=1 excluOwn=1 solicMsg=3370 Dir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 6 dst= 7 msg= 3499 addr=268979968 blockAttached=0 Dir::OnLocalEviction RecvMsg
+        msgSrc= 6 dst= 7 msg= 3499 addr=268979968 blockAttached=0 Dir::OnRemoteEviction OnLocalEviction
+        msgSrc= 6 dst= 7 msg= 3499 addr=268979968 blockAttached=0 Dir::OnRemoteEviction b.owner=InvalidNodeID
+        msgSrc= 6 dst=11 msg= 3483 addr=269066944 satis=0 blkAtt=0 excluOwn=0 solicMsg=3387 Dir::OnRemoteReadResponse RecvMsg
+                  dst=11           addr=269066944 Dir::EraseDirectoryShare nodeID=0 b.owner=InvalidNodeID
+        msgSrc= 6 dst= 7 msg= 3495 addr=269067008 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=1 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg= 3555 addr=268974720 blockAttached=0 Dir::OnLocalEviction RecvMsg
+        msgSrc= 6 dst= 7 msg= 3555 addr=268974720 blockAttached=0 Dir::OnRemoteEviction OnLocalEviction
+        msgSrc= 6 dst= 7 msg= 3555 addr=268974720 blockAttached=0 Dir::OnRemoteEviction b.owner=InvalidNodeID
+        msgSrc= 6 dst=11 msg= 3495 addr=269067008 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 Dir::OnRemoteRead RecvMsg
+        msgSrc= 6 dst= 7 msg= 3553 addr=271493248 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 Dir::OnLocalRead RecvMsg
+        msgSrc=10 dst=11 msg= 3563 addr=269067008 satis=1 blkAtt=1 excluOwn=1 solicMsg=3495 Dir::OnLocalReadResponse RecvMsg
+ src= 1 msgSrc=10 dst= 7 msg= 3563 addr=269067008 satis=1 blkAtt=1 excluOwn=1 solicMsg=3495 Dir::OnRemoteReadResponse RecvMsg
+                  dst= 7           addr=269067008 Dir::EraseDirectoryShare nodeID=1 b.owner=InvalidNodeID
+                  dst= 7           addr=269067008 Dir::AddDirectoryShare b.owner=(0)
+ src=12 msgSrc= 1 dst=11 msg= 3460 addr=603356992 satis=1 blkAtt=1 excluOwn=1 solicMsg=3430 Dir::OnRemoteReadResponse RecvMsg
+                  dst=11           addr=603356992 Dir::AddDirectoryShare b.owner=(1)
+ src=12 msgSrc= 1 dst= 7 msg= 3455 addr=269060480 satis=1 blkAtt=1 excluOwn=1 solicMsg=3407 Dir::OnRemoteReadResponse RecvMsg
+                  dst= 7           addr=269060480 Dir::AddDirectoryShare b.owner=(0)
+        msgSrc= 7 dst= 7 msg= 3575 addr=269060480 satis=1 blkAtt=1 excluOwn=0 solicMsg=3407 Dir::OnDirectoryBlockResponse OnRemoteReadResponse
+                  dst= 7           addr=269060480 Dir::AddDirectoryShare exclusive=0 b.sharers.insert(1)
+        msgSrc= 6 dst= 7 msg= 3600 addr=269055296 blockAttached=1 Dir::OnLocalEviction RecvMsg
+        msgSrc= 6 dst= 7 msg= 3598 addr=269067584 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 Dir::OnLocalRead RecvMsg
+ src=12 msgSrc= 1 dst= 7 msg= 3475 addr=271484928 satis=1 blkAtt=1 excluOwn=1 solicMsg=3459 Dir::OnRemoteReadResponse RecvMsg
+                  dst= 7           addr=271484928 Dir::AddDirectoryShare b.owner=(1)
+        msgSrc= 7 dst=11 msg= 3577 addr=269060480 satis=1 blkAtt=1 excluOwn=0 solicMsg=3472 Dir::OnDirectoryBlockResponse RecvMsg
+        msgSrc=10 dst=11 msg= 3613 addr=269067584 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst=11 msg= 3598 addr=269067584 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+        msgSrc= 6 dst=11 msg= 3600 addr=269055296 blockAttached=1 Dir::OnRemoteEviction RecvMsg
+        msgSrc= 6 dst=11 msg= 3600 addr=269055296 blockAttached=1 Dir::OnRemoteEviction b.owner=InvalidNodeID
+ src= 1 msgSrc=11 dst= 7 msg= 3617 addr=269055296 solicitingMessage=3600 Dir::OnRemoteEvictionResponse RecvMsg
+ src=12 msgSrc= 1 dst=11 msg= 3546 addr=269066944 satis=1 blkAtt=1 excluOwn=1 solicMsg=3387 Dir::OnRemoteReadResponse RecvMsg
+                  dst=11           addr=269066944 Dir::AddDirectoryShare b.owner=(0)
+        msgSrc= 1 dst=11 msg= 3475 addr=271484928 satis=1 blkAtt=1 excluOwn=1 solicMsg=3459 Dir::OnDirectoryBlockResponse RecvMsg
+ src=12 msgSrc= 1 dst= 7 msg= 3567 addr=271493248 satis=1 blkAtt=1 excluOwn=1 solicMsg=3553 Dir::OnRemoteReadResponse RecvMsg
+                  dst= 7           addr=271493248 Dir::AddDirectoryShare b.owner=(0)
+ src= 1 msgSrc=11 dst= 7 msg= 3623 addr=269066944 satis=1 blkAtt=1 excluOwn=0 solicMsg=3387 Dir::OnDirectoryBlockResponse RecvMsg
+ src=12 msgSrc= 1 dst=11 msg= 3630 addr=269055296 solicitingMessage=3619 Dir::OnRemoteWriteResponse RecvMsg
+ src=12 msgSrc= 1 dst=11 msg= 3621 addr=269067584 satis=1 blkAtt=1 excluOwn=1 solicMsg=3613 Dir::OnRemoteReadResponse RecvMsg
+                  dst=11           addr=269067584 Dir::AddDirectoryShare b.owner=(1)
+ src= 1 msgSrc=11 dst=11 msg= 3639 addr=269067584 satis=1 blkAtt=1 excluOwn=0 solicMsg=3613 Dir::OnDirectoryBlockResponse OnRemoteReadResponse
+                  dst=11           addr=269067584 Dir::AddDirectoryShare exclusive=0 b.sharers.insert(0)
+        msgSrc=10 dst=11 msg= 3647 addr=269067776 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 Dir::OnLocalRead RecvMsg
+ src= 1 msgSrc=10 dst= 7 msg= 3647 addr=269067776 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+ src= 1 msgSrc=11 dst= 7 msg= 3641 addr=269067584 satis=1 blkAtt=1 excluOwn=0 solicMsg=3598 Dir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 6 dst= 7 msg= 3663 addr=268974208 blockAttached=0 Dir::OnLocalEviction RecvMsg
+        msgSrc= 6 dst= 7 msg= 3663 addr=268974208 blockAttached=0 Dir::OnRemoteEviction OnLocalEviction
+        msgSrc= 6 dst= 7 msg= 3663 addr=268974208 blockAttached=0 Dir::OnRemoteEviction b.owner=InvalidNodeID
+        msgSrc= 6 dst= 7 msg= 3660 addr=269067904 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 Dir::OnLocalRead RecvMsg
+ src=12 msgSrc= 1 dst= 7 msg= 3662 addr=269067776 satis=1 blkAtt=1 excluOwn=1 solicMsg=3647 Dir::OnRemoteReadResponse RecvMsg
+                  dst= 7           addr=269067776 Dir::AddDirectoryShare b.owner=(1)
+ src=12 msgSrc= 1 dst= 7 msg= 3668 addr=269067904 satis=1 blkAtt=1 excluOwn=1 solicMsg=3660 Dir::OnRemoteReadResponse RecvMsg
+                  dst= 7           addr=269067904 Dir::AddDirectoryShare b.owner=(0)
+        msgSrc= 7 dst= 7 msg= 3673 addr=269067904 satis=1 blkAtt=1 excluOwn=0 solicMsg=3660 Dir::OnDirectoryBlockResponse OnRemoteReadResponse
+FastSimBeginEvent
+FastSimBeginEvent
+        msgSrc= 7 dst=11 msg= 3671 addr=269067776 satis=1 blkAtt=1 excluOwn=0 solicMsg=3647 Dir::OnDirectoryBlockResponse RecvMsg
+FastSimBeginEvent
+FastSimBeginEvent
+        msgSrc= 6 dst= 7 msg= 3704 addr=269067584 requestingExclusive=1 alreadyHasBlock=1 directoryLookup=0 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg= 3718 addr=603323584 blockAttached=1 Dir::OnLocalEviction RecvMsg
+        msgSrc= 6 dst= 7 msg= 3714 addr=269067968 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 Dir::OnLocalRead RecvMsg
+        msgSrc=10 dst=11 msg= 3729 addr=603356928 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst=11 msg= 3704 addr=269067584 requestingExclusive=1 alreadyHasBlock=1 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+ src= 1 msgSrc= 6 dst=11 msg= 3704 addr=269067584 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 Dir::OnRemoteRead PerformDirectoryFetch:Error
+ src= 1 msgSrc=10 dst= 7 msg= 3729 addr=603356928 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+        msgSrc=10 dst=11 msg= 3739 addr=269067584 requestingExclusive=1 alreadyHasBlock=1 directoryLookup=1 Dir::OnLocalRead RecvMsg
+        msgSrc=10 dst=11 msg= 3747 addr=269067584 satis=1 blkAtt=1 excluOwn=1 solicMsg=3704 Dir::OnLocalReadResponse RecvMsg
+        msgSrc= 6 dst=11 msg= 3714 addr=269067968 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+        msgSrc= 6 dst=11 msg= 3718 addr=603323584 blockAttached=1 Dir::OnRemoteEviction RecvMsg
+        msgSrc= 6 dst=11 msg= 3718 addr=603323584 blockAttached=1 Dir::OnRemoteEviction b.owner=InvalidNodeID
+ src= 1 msgSrc=11 dst= 7 msg= 3753 addr=603323584 solicitingMessage=3718 Dir::OnRemoteEvictionResponse RecvMsg
+ src= 1 msgSrc=10 dst=11 msg= 3747 addr=269067584 satis=1 blkAtt=1 excluOwn=1 solicMsg=3704 Dir::OnRemoteReadResponse RecvMsg
+                  dst=11           addr=269067584 Dir::EraseDirectoryShare nodeID=1 b.owner=InvalidNodeID
+ src= 1 msgSrc=11 dst= 7 msg= 3758 addr=269067584 Dir::OnRemoteInvalidate RecvMsg
+        msgSrc= 6 dst= 7 msg= 3764 addr=269067584 blockAttached=0 solicitingMessage=3758 Dir::OnLocalInvalidateResponse RecvMsg
+        msgSrc= 6 dst= 7 msg= 3765 addr=269067584 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst=11 msg= 3765 addr=269067584 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+        msgSrc= 6 dst=11 msg= 3764 addr=269067584 blockAttached=0 solicitingMessage=3758 Dir::OnRemoteInvalidateResponse RecvMsg
+        msgSrc= 6 dst=11 msg= 3764 addr=269067584 blockAttached=0 solicitingMessage=3758 Dir::OnRemoteInvalidateResponse b.sharers.erase(0)
+        msgSrc= 6 dst=11 msg= 3764 addr=269067584 blockAttached=0 solicitingMessage=3758 Dir::OnRemoteInvalidateResponse b.sharers.clear()
+        msgSrc= 6 dst=11 msg= 3764 addr=269067584 blockAttached=0 solicitingMessage=3758 Dir::OnRemoteInvalidateResponse b.owner=0
+                  dst=11           addr=269067584 Dir::AddDirectoryShare b.owner=(0)
+ src= 1 msgSrc=11 dst= 7 msg= 3770 addr=269067584 satis=0 blkAtt=0 excluOwn=1 solicMsg=3765 Dir::OnDirectoryBlockResponse RecvMsg
+        msgSrc=11 dst= 7 msg= 3770 addr=269067584 satis=0 blkAtt=0 excluOwn=1 solicMsg=3765 Dir::OnLocalRead OnDirectoryBlockResponse
+        msgSrc= 6 dst=11 msg= 3765 addr=269067584 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+ src= 1 msgSrc=11 dst= 7 msg= 3779 addr=269067584 satis=0 blkAtt=0 excluOwn=1 solicMsg=3765 Dir::OnDirectoryBlockResponse RecvMsg
+        msgSrc=11 dst= 7 msg= 3779 addr=269067584 satis=0 blkAtt=0 excluOwn=1 solicMsg=3765 Dir::OnLocalRead OnDirectoryBlockResponse
+ src= 1 msgSrc=10 dst= 7 msg= 3739 addr=269067584 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 Dir::OnRemoteRead RecvMsg
+ src= 1 msgSrc=11 dst= 7 msg= 3771 addr=269067584 satis=1 blkAtt=1 excluOwn=1 solicMsg=3704 Dir::OnDirectoryBlockResponse RecvMsg
+        msgSrc= 6 dst= 7 msg= 3783 addr=269067584 satis=0 blkAtt=0 excluOwn=0 solicMsg=3739 Dir::OnLocalReadResponse RecvMsg
+        msgSrc= 6 dst=11 msg= 3765 addr=269067584 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+        msgSrc= 6 dst=11 msg= 3783 addr=269067584 satis=0 blkAtt=0 excluOwn=0 solicMsg=3739 Dir::OnRemoteReadResponse RecvMsg
+                  dst=11           addr=269067584 Dir::EraseDirectoryShare nodeID=0 b.owner=InvalidNodeID
+ src= 1 msgSrc=11 dst= 7 msg= 3790 addr=269067584 satis=0 blkAtt=0 excluOwn=1 solicMsg=3765 Dir::OnDirectoryBlockResponse RecvMsg
+        msgSrc=11 dst= 7 msg= 3790 addr=269067584 satis=0 blkAtt=0 excluOwn=1 solicMsg=3765 Dir::OnLocalRead OnDirectoryBlockResponse
+        msgSrc= 6 dst=11 msg= 3765 addr=269067584 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+ src= 1 msgSrc=11 dst= 7 msg= 3798 addr=269067584 satis=0 blkAtt=0 excluOwn=1 solicMsg=3765 Dir::OnDirectoryBlockResponse RecvMsg
+        msgSrc=11 dst= 7 msg= 3798 addr=269067584 satis=0 blkAtt=0 excluOwn=1 solicMsg=3765 Dir::OnLocalRead OnDirectoryBlockResponse
+        msgSrc= 6 dst=11 msg= 3765 addr=269067584 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+ src= 1 msgSrc=11 dst= 7 msg= 3802 addr=269067584 satis=0 blkAtt=0 excluOwn=1 solicMsg=3765 Dir::OnDirectoryBlockResponse RecvMsg
+        msgSrc=11 dst= 7 msg= 3802 addr=269067584 satis=0 blkAtt=0 excluOwn=1 solicMsg=3765 Dir::OnLocalRead OnDirectoryBlockResponse
+        msgSrc= 6 dst=11 msg= 3765 addr=269067584 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+ src= 1 msgSrc=11 dst= 7 msg= 3806 addr=269067584 satis=0 blkAtt=0 excluOwn=161 solicMsg=3765 Dir::OnDirectoryBlockResponse RecvMsg
+        msgSrc=11 dst= 7 msg= 3806 addr=269067584 satis=0 blkAtt=0 excluOwn=161 solicMsg=3765 Dir::OnLocalRead OnDirectoryBlockResponse
+        msgSrc= 6 dst=11 msg= 3765 addr=269067584 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+ src=12 msgSrc= 1 dst=11 msg= 3773 addr=603323584 solicitingMessage=3755 Dir::OnRemoteWriteResponse RecvMsg
+ src= 1 msgSrc=11 dst= 7 msg= 3812 addr=269067584 satis=0 blkAtt=0 excluOwn=223 solicMsg=3765 Dir::OnDirectoryBlockResponse RecvMsg
+        msgSrc=11 dst= 7 msg= 3812 addr=269067584 satis=0 blkAtt=0 excluOwn=223 solicMsg=3765 Dir::OnLocalRead OnDirectoryBlockResponse
+ src=12 msgSrc= 1 dst= 7 msg= 3750 addr=603356928 satis=1 blkAtt=1 excluOwn=1 solicMsg=3729 Dir::OnRemoteReadResponse RecvMsg
+                  dst= 7           addr=603356928 Dir::AddDirectoryShare b.owner=(1)
+        msgSrc= 6 dst=11 msg= 3765 addr=269067584 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+ src= 1 msgSrc=11 dst= 7 msg= 3819 addr=269067584 satis=0 blkAtt=0 excluOwn=1 solicMsg=3765 Dir::OnDirectoryBlockResponse RecvMsg
+        msgSrc=11 dst= 7 msg= 3819 addr=269067584 satis=0 blkAtt=0 excluOwn=1 solicMsg=3765 Dir::OnLocalRead OnDirectoryBlockResponse
+ src=12 msgSrc= 1 dst=11 msg= 3757 addr=269067968 satis=1 blkAtt=1 excluOwn=1 solicMsg=3714 Dir::OnRemoteReadResponse RecvMsg
+                  dst=11           addr=269067968 Dir::AddDirectoryShare b.owner=(0)
+        msgSrc= 6 dst=11 msg= 3765 addr=269067584 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+        msgSrc= 7 dst=11 msg= 3816 addr=603356928 satis=1 blkAtt=1 excluOwn=0 solicMsg=3729 Dir::OnDirectoryBlockResponse RecvMsg
+        msgSrc=10 dst=11 msg= 3833 addr=603356928 requestingExclusive=1 alreadyHasBlock=1 directoryLookup=1 Dir::OnLocalRead RecvMsg
+ src= 1 msgSrc=10 dst= 7 msg= 3833 addr=603356928 requestingExclusive=1 alreadyHasBlock=1 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+ src= 1 msgSrc=11 dst= 7 msg= 3825 addr=269067584 satis=0 blkAtt=0 excluOwn=1 solicMsg=3765 Dir::OnDirectoryBlockResponse RecvMsg
+        msgSrc=11 dst= 7 msg= 3825 addr=269067584 satis=0 blkAtt=0 excluOwn=1 solicMsg=3765 Dir::OnLocalRead OnDirectoryBlockResponse
+ src= 1 msgSrc=11 dst= 7 msg= 3822 addr=269067968 satis=1 blkAtt=1 excluOwn=0 solicMsg=3714 Dir::OnDirectoryBlockResponse RecvMsg
+        msgSrc=10 dst=11 msg= 3833 addr=603356928 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 Dir::OnRemoteRead RecvMsg
+        msgSrc= 6 dst=11 msg= 3765 addr=269067584 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+        msgSrc=10 dst=11 msg= 3849 addr=603356928 satis=1 blkAtt=1 excluOwn=1 solicMsg=3833 Dir::OnLocalReadResponse RecvMsg
+FastSimBeginEvent
+FastSimBeginEvent
+ src= 1 msgSrc=11 dst= 7 msg= 3847 addr=269067584 satis=0 blkAtt=0 excluOwn=0 solicMsg=3765 Dir::OnDirectoryBlockResponse RecvMsg
+        msgSrc=11 dst= 7 msg= 3847 addr=269067584 satis=0 blkAtt=0 excluOwn=0 solicMsg=3765 Dir::OnLocalRead OnDirectoryBlockResponse
+        msgSrc= 6 dst=11 msg= 3765 addr=269067584 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+ src=12 msgSrc= 1 dst=11 msg= 3796 addr=269067584 satis=1 blkAtt=1 excluOwn=1 solicMsg=3739 Dir::OnRemoteReadResponse RecvMsg
+                  dst=11           addr=269067584 Dir::AddDirectoryShare b.owner=(1)
+ src= 1 msgSrc=11 dst= 7 msg= 3856 addr=269067584 satis=0 blkAtt=0 excluOwn=1 solicMsg=3765 Dir::OnDirectoryBlockResponse RecvMsg
+        msgSrc=11 dst= 7 msg= 3856 addr=269067584 satis=0 blkAtt=0 excluOwn=1 solicMsg=3765 Dir::OnLocalRead OnDirectoryBlockResponse
+ src= 1 msgSrc=10 dst= 7 msg= 3849 addr=603356928 satis=1 blkAtt=1 excluOwn=1 solicMsg=3833 Dir::OnRemoteReadResponse RecvMsg
+                  dst= 7           addr=603356928 Dir::EraseDirectoryShare nodeID=1 b.owner=InvalidNodeID
+                  dst= 7           addr=603356928 Dir::AddDirectoryShare b.owner=(1)
+        msgSrc= 6 dst=11 msg= 3765 addr=269067584 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+ src= 1 msgSrc= 6 dst=11 msg= 3765 addr=269067584 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=0 Dir::OnRemoteRead PerformDirectoryFetch:Error
+        msgSrc=10 dst=11 msg= 3875 addr=269067840 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 Dir::OnLocalRead RecvMsg
+        msgSrc=10 dst=11 msg= 3879 addr=269067584 satis=1 blkAtt=1 excluOwn=0 solicMsg=3765 Dir::OnLocalReadResponse RecvMsg
+        msgSrc= 6 dst= 7 msg= 3891 addr=603324160 blockAttached=0 Dir::OnLocalEviction RecvMsg
+        msgSrc= 6 dst= 7 msg= 3891 addr=603324160 blockAttached=0 Dir::OnRemoteEviction OnLocalEviction
+        msgSrc= 6 dst= 7 msg= 3891 addr=603324160 blockAttached=0 Dir::OnRemoteEviction b.owner=InvalidNodeID
+        msgSrc= 6 dst= 7 msg= 3885 addr=270932736 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 Dir::OnLocalRead RecvMsg
+        msgSrc=10 dst=11 msg= 3849 addr=603356928 satis=1 blkAtt=1 excluOwn=1 solicMsg=3833 Dir::OnDirectoryBlockResponse RecvMsg
+ src= 1 msgSrc=10 dst=11 msg= 3879 addr=269067584 satis=1 blkAtt=1 excluOwn=0 solicMsg=3765 Dir::OnRemoteReadResponse RecvMsg
+                  dst=11           addr=269067584 Dir::AddDirectoryShare exclusive=0 b.sharers.insert(0)
+ src= 1 msgSrc=11 dst= 7 msg= 3904 addr=269067584 satis=1 blkAtt=1 excluOwn=0 solicMsg=3765 Dir::OnDirectoryBlockResponse RecvMsg
+ src=12 msgSrc= 1 dst=11 msg= 3896 addr=269067840 satis=1 blkAtt=1 excluOwn=1 solicMsg=3875 Dir::OnRemoteReadResponse RecvMsg
+                  dst=11           addr=269067840 Dir::AddDirectoryShare b.owner=(1)
+ src= 1 msgSrc=11 dst=11 msg= 3909 addr=269067840 satis=1 blkAtt=1 excluOwn=0 solicMsg=3875 Dir::OnDirectoryBlockResponse OnRemoteReadResponse
+ src=12 msgSrc= 1 dst= 7 msg= 3897 addr=270932736 satis=1 blkAtt=1 excluOwn=1 solicMsg=3885 Dir::OnRemoteReadResponse RecvMsg
+                  dst= 7           addr=270932736 Dir::AddDirectoryShare b.owner=(0)
+        msgSrc= 7 dst= 7 msg= 3912 addr=270932736 satis=1 blkAtt=1 excluOwn=0 solicMsg=3885 Dir::OnDirectoryBlockResponse OnRemoteReadResponse
+FastSimBeginEvent
+FastSimBeginEvent
+        msgSrc= 6 dst= 7 msg= 3922 addr=270932736 requestingExclusive=1 alreadyHasBlock=1 directoryLookup=0 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg= 3922 addr=270932736 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 Dir::OnRemoteRead PerformDirectoryFetch:Error
+        msgSrc= 6 dst= 7 msg= 3933 addr=270932736 satis=1 blkAtt=1 excluOwn=1 solicMsg=3922 Dir::OnLocalReadResponse RecvMsg
+        msgSrc= 6 dst= 7 msg= 3952 addr=268967680 blockAttached=0 Dir::OnLocalEviction RecvMsg
+        msgSrc= 6 dst= 7 msg= 3952 addr=268967680 blockAttached=0 Dir::OnRemoteEviction OnLocalEviction
+        msgSrc= 6 dst= 7 msg= 3952 addr=268967680 blockAttached=0 Dir::OnRemoteEviction b.owner=InvalidNodeID
+        msgSrc= 6 dst= 7 msg= 3950 addr=271091456 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 Dir::OnLocalRead RecvMsg
+        msgSrc=10 dst=11 msg= 3961 addr=271194944 requestingExclusive=0 alreadyHasBlock=0 directoryLookup=1 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg= 3933 addr=270932736 satis=1 blkAtt=1 excluOwn=1 solicMsg=3922 Dir::OnRemoteReadResponse RecvMsg
+                  dst= 7           addr=270932736 Dir::EraseDirectoryShare nodeID=0 b.owner=InvalidNodeID
+                  dst= 7           addr=270932736 Dir::AddDirectoryShare b.owner=(0)
+ src=12 msgSrc= 1 dst= 7 msg= 3962 addr=271091456 satis=1 blkAtt=1 excluOwn=1 solicMsg=3950 Dir::OnRemoteReadResponse RecvMsg
+                  dst= 7           addr=271091456 Dir::AddDirectoryShare b.owner=(0)
+ src=12 msgSrc= 1 dst=11 msg= 3966 addr=271194944 satis=1 blkAtt=1 excluOwn=1 solicMsg=3961 Dir::OnRemoteReadResponse RecvMsg
+                  dst=11           addr=271194944 Dir::AddDirectoryShare b.owner=(1)
+ src= 1 msgSrc=11 dst=11 msg= 3984 addr=271194944 satis=1 blkAtt=1 excluOwn=0 solicMsg=3961 Dir::OnDirectoryBlockResponse OnRemoteReadResponse
+        msgSrc=10 dst=11 msg= 4037 addr=271194944 requestingExclusive=1 alreadyHasBlock=1 directoryLookup=0 Dir::OnLocalRead RecvMsg
+ src= 1 msgSrc=10 dst=11 msg= 4037 addr=271194944 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 Dir::OnRemoteRead PerformDirectoryFetch:Error
+        msgSrc=10 dst=11 msg= 4046 addr=271194944 satis=1 blkAtt=1 excluOwn=1 solicMsg=4037 Dir::OnLocalReadResponse RecvMsg
+        msgSrc=10 dst=11 msg= 4056 addr=271374720 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=1 Dir::OnLocalRead RecvMsg
+ src= 1 msgSrc=10 dst= 7 msg= 4056 addr=271374720 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+FastSimBeginEvent
+FastSimBeginEvent
+ src= 1 msgSrc=10 dst=11 msg= 4046 addr=271194944 satis=1 blkAtt=1 excluOwn=1 solicMsg=4037 Dir::OnRemoteReadResponse RecvMsg
+                  dst=11           addr=271194944 Dir::EraseDirectoryShare nodeID=1 b.owner=InvalidNodeID
+                  dst=11           addr=271194944 Dir::AddDirectoryShare b.owner=(1)
+FastSimBeginEvent
+FastSimBeginEvent
+        msgSrc= 6 dst= 7 msg= 4171 addr=269067008 blockAttached=1 Dir::OnLocalEviction RecvMsg
+        msgSrc= 6 dst= 7 msg= 4171 addr=269067008 blockAttached=1 Dir::OnRemoteEviction OnLocalEviction
+        msgSrc= 6 dst= 7 msg= 4171 addr=269067008 blockAttached=1 Dir::OnRemoteEviction b.owner=InvalidNodeID
+        msgSrc= 6 dst= 7 msg= 4169 addr=271075072 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 Dir::OnLocalRead RecvMsg
+ src=12 msgSrc= 1 dst= 7 msg= 4063 addr=271374720 satis=1 blkAtt=1 excluOwn=1 solicMsg=4056 Dir::OnRemoteReadResponse RecvMsg
+                  dst= 7           addr=271374720 Dir::AddDirectoryShare b.owner=(1)
+ src=12 msgSrc= 1 dst= 7 msg= 4180 addr=269067008 solicitingMessage=4173 Dir::OnRemoteWriteResponse RecvMsg
+        msgSrc= 1 dst=11 msg= 4063 addr=271374720 satis=1 blkAtt=1 excluOwn=1 solicMsg=4056 Dir::OnDirectoryBlockResponse RecvMsg
+        msgSrc=10 dst=11 msg= 4196 addr=269067584 requestingExclusive=1 alreadyHasBlock=1 directoryLookup=1 Dir::OnLocalRead RecvMsg
+ src= 1 msgSrc=10 dst=11 msg= 4196 addr=269067584 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 Dir::OnRemoteRead PerformDirectoryFetch:Error
+        msgSrc=10 dst=11 msg= 4203 addr=269067584 satis=1 blkAtt=1 excluOwn=1 solicMsg=4196 Dir::OnLocalReadResponse RecvMsg
+ src= 1 msgSrc=10 dst=11 msg= 4203 addr=269067584 satis=1 blkAtt=1 excluOwn=1 solicMsg=4196 Dir::OnRemoteReadResponse RecvMsg
+                  dst=11           addr=269067584 Dir::EraseDirectoryShare nodeID=1 b.owner=InvalidNodeID
+ src= 1 msgSrc=11 dst= 7 msg= 4247 addr=269067584 Dir::OnRemoteInvalidate RecvMsg
+        msgSrc= 6 dst= 7 msg= 4252 addr=269067584 blockAttached=1 solicitingMessage=4247 Dir::OnLocalInvalidateResponse RecvMsg
+ src=12 msgSrc= 1 dst= 7 msg= 4181 addr=271075072 satis=1 blkAtt=1 excluOwn=1 solicMsg=4169 Dir::OnRemoteReadResponse RecvMsg
+                  dst= 7           addr=271075072 Dir::AddDirectoryShare b.owner=(0)
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+        msgSrc= 6 dst= 7 msg= 4264 addr=269067584 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg= 4407 addr=603323200 blockAttached=1 Dir::OnLocalEviction RecvMsg
+        msgSrc= 6 dst= 7 msg= 4401 addr=271091520 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst= 7 msg= 4425 addr=268967232 blockAttached=0 Dir::OnLocalEviction RecvMsg
+        msgSrc= 6 dst= 7 msg= 4419 addr=271075136 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=0 Dir::OnLocalRead RecvMsg
+        msgSrc= 6 dst=11 msg= 4264 addr=269067584 requestingExclusive=1 alreadyHasBlock=0 directoryLookup=1 Dir::OnDirectoryBlockRequest RecvMsg
+        msgSrc= 6 dst=11 msg= 4252 addr=269067584 blockAttached=1 solicitingMessage=4247 Dir::OnRemoteInvalidateResponse RecvMsg
+augSesc: /r/cslr21/erichang/sesc-echang/src/MemSys/Devices/Directory.cpp:484: void Memory::Directory::OnRemoteInvalidateResponse(const Memory::InvalidateResponseMsg*, Memory::NodeID): Assertion `!m->blockAttached || b.owner == src' failed.

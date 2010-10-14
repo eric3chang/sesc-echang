@@ -1,0 +1,581 @@
+static[0x10069a30-0x10083f84] heap[0x10084000-0x23f42000] stack[0x23f42000-0x2473a000] -> [0x97a14008-0xac0e45d8]
+Device : P(0)_DL1  Description : ProcessorInterface_0
+Device : P(0)_IL1  Description : InstSource
+Device : P(1)_DL1  Description : ProcessorInterface_1
+Device : P(1)_IL1  Description : InstSource
+Device : P(2)_DL1  Description : ProcessorInterface_2
+Device : P(2)_IL1  Description : InstSource
+Device : P(3)_DL1  Description : ProcessorInterface_3
+Device : P(3)_IL1  Description : InstSource
+Device : P(4)_DL1  Description : ProcessorInterface_4
+Device : P(4)_IL1  Description : InstSource
+Device : P(5)_DL1  Description : ProcessorInterface_5
+Device : P(5)_IL1  Description : InstSource
+Device : P(6)_DL1  Description : ProcessorInterface_6
+Device : P(6)_IL1  Description : InstSource
+Device : P(7)_DL1  Description : ProcessorInterface_7
+Device : P(7)_IL1  Description : InstSource
+Device : P(8)_DL1  Description : ProcessorInterface_8
+Device : P(8)_IL1  Description : InstSource
+Device : P(9)_DL1  Description : ProcessorInterface_9
+Device : P(9)_IL1  Description : InstSource
+Device : P(10)_DL1  Description : ProcessorInterface_10
+Device : P(10)_IL1  Description : InstSource
+Device : P(11)_DL1  Description : ProcessorInterface_11
+Device : P(11)_IL1  Description : InstSource
+Device : P(12)_DL1  Description : ProcessorInterface_12
+Device : P(12)_IL1  Description : InstSource
+Device : P(13)_DL1  Description : ProcessorInterface_13
+Device : P(13)_IL1  Description : InstSource
+Device : P(14)_DL1  Description : ProcessorInterface_14
+Device : P(14)_IL1  Description : InstSource
+Device : P(15)_DL1  Description : ProcessorInterface_15
+Device : P(15)_IL1  Description : InstSource
+Rabbit Mode Start 
+   1024 Complex Doubles
+   16 Processors
+   65536 Cache lines
+   16 Byte line size
+   4096 Bytes per page
+Leaving rabbit mode...
+sesc_spawn( 0x100013d4, 0x0, 0x0 ) pid = 0, child pid = 1, child context = 903bb68
+sesc_spawn( 0x100013d4, 0x0, 0x0 ) pid = 0, child pid = 2, child context = 903bcd0
+sesc_spawn( 0x100013d4, 0x0, 0x0 ) pid = 0, child pid = 3, child context = 9038d80
+sesc_spawn( 0x100013d4, 0x0, 0x0 ) pid = 0, child pid = 4, child context = 9038f00
+sesc_spawn( 0x100013d4, 0x0, 0x0 ) pid = 0, child pid = 5, child context = 903c7e8
+sesc_spawn( 0x100013d4, 0x0, 0x0 ) pid = 0, child pid = 6, child context = 903c978
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+Stalling processor 1 at barrier
+sesc_spawn( 0x100013d4, 0x0, 0x0 ) pid = 0, child pid = 7, child context = 904ce00
+sesc_spawn( 0x100013d4, 0x0, 0x0 ) pid = 0, child pid = 8, child context = 904cf68
+sesc_spawn( 0x100013d4, 0x0, 0x0 ) pid = 0, child pid = 9, child context = 904d160
+sesc_spawn( 0x100013d4, 0x0, 0x0 ) pid = 0, child pid = 10, child context = 904dcb8
+sesc_spawn( 0x100013d4, 0x0, 0x0 ) pid = 0, child pid = 11, child context = 904de20
+sesc_spawn( 0x100013d4, 0x0, 0x0 ) pid = 0, child pid = 12, child context = 904df88
+sesc_spawn( 0x100013d4, 0x0, 0x0 ) pid = 0, child pid = 13, child context = 904e0f0
+sesc_spawn( 0x100013d4, 0x0, 0x0 ) pid = 0, child pid = 14, child context = 904e258
+sesc_spawn( 0x100013d4, 0x0, 0x0 ) pid = 0, child pid = 15, child context = 904e3c0
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+Stalling processor 7 at barrier
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+Stalling processor 15 at barrier
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+Stalling processor 12 at barrier
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+Stalling processor 8 at barrier
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+Stalling processor 5 at barrier
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+Stalling processor 9 at barrier
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+Stalling processor 14 at barrier
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+Stalling processor 11 at barrier
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+Stalling processor 2 at barrier
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+Stalling processor 0 at barrier
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+Stalling processor 3 at barrier
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+Stalling processor 10 at barrier
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+Stalling processor 13 at barrier
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+Stalling processor 6 at barrier
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+Processor 4 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Releasing processor 2 from barrier
+Releasing processor 3 from barrier
+Releasing processor 4 from barrier
+Releasing processor 5 from barrier
+Releasing processor 6 from barrier
+Releasing processor 7 from barrier
+Releasing processor 8 from barrier
+Releasing processor 9 from barrier
+Releasing processor 10 from barrier
+Releasing processor 11 from barrier
+Releasing processor 12 from barrier
+Releasing processor 13 from barrier
+Releasing processor 14 from barrier
+Releasing processor 15 from barrier
+Stalling processor 3 at barrier
+Stalling processor 7 at barrier
+Stalling processor 8 at barrier
+Stalling processor 2 at barrier
+Stalling processor 14 at barrier
+Stalling processor 6 at barrier
+Stalling processor 11 at barrier
+Stalling processor 12 at barrier
+Stalling processor 1 at barrier
+Stalling processor 10 at barrier
+Stalling processor 15 at barrier
+Stalling processor 13 at barrier
+Stalling processor 9 at barrier
+Stalling processor 5 at barrier
+Stalling processor 0 at barrier
+Processor 4 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Releasing processor 2 from barrier
+Releasing processor 3 from barrier
+Releasing processor 4 from barrier
+Releasing processor 5 from barrier
+Releasing processor 6 from barrier
+Releasing processor 7 from barrier
+Releasing processor 8 from barrier
+Releasing processor 9 from barrier
+Releasing processor 10 from barrier
+Releasing processor 11 from barrier
+Releasing processor 12 from barrier
+Releasing processor 13 from barrier
+Releasing processor 14 from barrier
+Releasing processor 15 from barrier
+Stalling processor 4 at barrier
+Stalling processor 6 at barrier
+Stalling processor 10 at barrier
+Stalling processor 11 at barrier
+Stalling processor 0 at barrier
+Stalling processor 8 at barrier
+Stalling processor 12 at barrier
+Stalling processor 15 at barrier
+Stalling processor 2 at barrier
+Stalling processor 7 at barrier
+Stalling processor 3 at barrier
+Stalling processor 14 at barrier
+Stalling processor 1 at barrier
+Stalling processor 5 at barrier
+Stalling processor 13 at barrier
+Processor 9 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Releasing processor 2 from barrier
+Releasing processor 3 from barrier
+Releasing processor 4 from barrier
+Releasing processor 5 from barrier
+Releasing processor 6 from barrier
+Releasing processor 7 from barrier
+Releasing processor 8 from barrier
+Releasing processor 9 from barrier
+Releasing processor 10 from barrier
+Releasing processor 11 from barrier
+Releasing processor 12 from barrier
+Releasing processor 13 from barrier
+Releasing processor 14 from barrier
+Releasing processor 15 from barrier
+Stalling processor 6 at barrier
+Stalling processor 8 at barrier
+Stalling processor 13 at barrier
+Stalling processor 4 at barrier
+Stalling processor 7 at barrier
+Stalling processor 15 at barrier
+Stalling processor 10 at barrier
+Stalling processor 1 at barrier
+Stalling processor 2 at barrier
+Stalling processor 3 at barrier
+Stalling processor 12 at barrier
+Stalling processor 0 at barrier
+Stalling processor 5 at barrier
+Stalling processor 11 at barrier
+Stalling processor 9 at barrier
+Processor 14 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Releasing processor 2 from barrier
+Releasing processor 3 from barrier
+Releasing processor 4 from barrier
+Releasing processor 5 from barrier
+Releasing processor 6 from barrier
+Releasing processor 7 from barrier
+Releasing processor 8 from barrier
+Releasing processor 9 from barrier
+Releasing processor 10 from barrier
+Releasing processor 11 from barrier
+Releasing processor 12 from barrier
+Releasing processor 13 from barrier
+Releasing processor 14 from barrier
+Releasing processor 15 from barrier
+Stalling processor 0 at barrier
+Stalling processor 6 at barrier
+Stalling processor 10 at barrier
+Stalling processor 3 at barrier
+Stalling processor 15 at barrier
+Stalling processor 4 at barrier
+Stalling processor 8 at barrier
+Stalling processor 13 at barrier
+Stalling processor 9 at barrier
+Stalling processor 11 at barrier
+Stalling processor 1 at barrier
+Stalling processor 12 at barrier
+Stalling processor 7 at barrier
+Stalling processor 2 at barrier
+Stalling processor 14 at barrier
+Processor 5 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Releasing processor 2 from barrier
+Releasing processor 3 from barrier
+Releasing processor 4 from barrier
+Releasing processor 5 from barrier
+Releasing processor 6 from barrier
+Releasing processor 7 from barrier
+Releasing processor 8 from barrier
+Releasing processor 9 from barrier
+Releasing processor 10 from barrier
+Releasing processor 11 from barrier
+Releasing processor 12 from barrier
+Releasing processor 13 from barrier
+Releasing processor 14 from barrier
+Releasing processor 15 from barrier
+Stalling processor 12 at barrier
+Stalling processor 15 at barrier
+Stalling processor 4 at barrier
+Stalling processor 7 at barrier
+Stalling processor 1 at barrier
+Stalling processor 13 at barrier
+Stalling processor 3 at barrier
+Stalling processor 8 at barrier
+Stalling processor 10 at barrier
+Stalling processor 6 at barrier
+Stalling processor 9 at barrier
+Stalling processor 0 at barrier
+Stalling processor 14 at barrier
+Stalling processor 5 at barrier
+Stalling processor 11 at barrier
+Processor 2 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Releasing processor 2 from barrier
+Releasing processor 3 from barrier
+Releasing processor 4 from barrier
+Releasing processor 5 from barrier
+Releasing processor 6 from barrier
+Releasing processor 7 from barrier
+Releasing processor 8 from barrier
+Releasing processor 9 from barrier
+Releasing processor 10 from barrier
+Releasing processor 11 from barrier
+Releasing processor 12 from barrier
+Releasing processor 13 from barrier
+Releasing processor 14 from barrier
+Releasing processor 15 from barrier
+Stalling processor 15 at barrier
+Stalling processor 1 at barrier
+Stalling processor 12 at barrier
+Stalling processor 8 at barrier
+Stalling processor 13 at barrier
+Stalling processor 10 at barrier
+Stalling processor 3 at barrier
+Stalling processor 0 at barrier
+Stalling processor 7 at barrier
+Stalling processor 4 at barrier
+Stalling processor 6 at barrier
+Stalling processor 14 at barrier
+Stalling processor 9 at barrier
+Stalling processor 11 at barrier
+Stalling processor 5 at barrier
+Processor 2 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Releasing processor 2 from barrier
+Releasing processor 3 from barrier
+Releasing processor 4 from barrier
+Releasing processor 5 from barrier
+Releasing processor 6 from barrier
+Releasing processor 7 from barrier
+Releasing processor 8 from barrier
+Releasing processor 9 from barrier
+Releasing processor 10 from barrier
+Releasing processor 11 from barrier
+Releasing processor 12 from barrier
+Releasing processor 13 from barrier
+Releasing processor 14 from barrier
+Releasing processor 15 from barrier
+Stalling processor 2 at barrier
+Stalling processor 11 at barrier
+Stalling processor 7 at barrier
+Stalling processor 8 at barrier
+Stalling processor 15 at barrier
+Stalling processor 12 at barrier
+Stalling processor 6 at barrier
+Stalling processor 14 at barrier
+Stalling processor 3 at barrier
+Stalling processor 1 at barrier
+Stalling processor 9 at barrier
+Stalling processor 4 at barrier
+Stalling processor 5 at barrier
+Stalling processor 0 at barrier
+Stalling processor 13 at barrier
+Processor 10 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Releasing processor 2 from barrier
+Releasing processor 3 from barrier
+Releasing processor 4 from barrier
+Releasing processor 5 from barrier
+Releasing processor 6 from barrier
+Releasing processor 7 from barrier
+Releasing processor 8 from barrier
+Releasing processor 9 from barrier
+Releasing processor 10 from barrier
+Releasing processor 11 from barrier
+Releasing processor 12 from barrier
+Releasing processor 13 from barrier
+Releasing processor 14 from barrier
+Releasing processor 15 from barrier
+Simulated 500005 instructions so far at clock 122581
+Stalling processor 7 at barrier
+Stalling processor 6 at barrier
+Stalling processor 12 at barrier
+Stalling processor 1 at barrier
+Stalling processor 4 at barrier
+Stalling processor 3 at barrier
+Stalling processor 15 at barrier
+Stalling processor 10 at barrier
+Stalling processor 13 at barrier
+Stalling processor 0 at barrier
+Stalling processor 14 at barrier
+Stalling processor 5 at barrier
+Stalling processor 8 at barrier
+Stalling processor 9 at barrier
+Stalling processor 11 at barrier
+Processor 2 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Releasing processor 2 from barrier
+Releasing processor 3 from barrier
+Releasing processor 4 from barrier
+Releasing processor 5 from barrier
+Releasing processor 6 from barrier
+Releasing processor 7 from barrier
+Releasing processor 8 from barrier
+Releasing processor 9 from barrier
+Releasing processor 10 from barrier
+Releasing processor 11 from barrier
+Releasing processor 12 from barrier
+Releasing processor 13 from barrier
+Releasing processor 14 from barrier
+Releasing processor 15 from barrier
+Stalling processor 0 at barrier
+Stalling processor 6 at barrier
+Stalling processor 3 at barrier
+Stalling processor 10 at barrier
+Stalling processor 9 at barrier
+Stalling processor 15 at barrier
+Stalling processor 4 at barrier
+Stalling processor 8 at barrier
+Stalling processor 13 at barrier
+Stalling processor 11 at barrier
+Stalling processor 12 at barrier
+Stalling processor 1 at barrier
+Stalling processor 7 at barrier
+Stalling processor 5 at barrier
+Stalling processor 14 at barrier
+Processor 2 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Releasing processor 2 from barrier
+Releasing processor 3 from barrier
+Releasing processor 4 from barrier
+Releasing processor 5 from barrier
+Releasing processor 6 from barrier
+Releasing processor 7 from barrier
+Releasing processor 8 from barrier
+Releasing processor 9 from barrier
+Releasing processor 10 from barrier
+Releasing processor 11 from barrier
+Releasing processor 12 from barrier
+Releasing processor 13 from barrier
+Releasing processor 14 from barrier
+Releasing processor 15 from barrier
+Stalling processor 12 at barrier
+Stalling processor 0 at barrier
+Stalling processor 4 at barrier
+Stalling processor 7 at barrier
+Stalling processor 3 at barrier
+Stalling processor 13 at barrier
+Stalling processor 9 at barrier
+Stalling processor 15 at barrier
+Stalling processor 6 at barrier
+Stalling processor 8 at barrier
+Stalling processor 14 at barrier
+Stalling processor 1 at barrier
+Stalling processor 10 at barrier
+Stalling processor 5 at barrier
+Stalling processor 11 at barrier
+Processor 2 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Releasing processor 2 from barrier
+Releasing processor 3 from barrier
+Releasing processor 4 from barrier
+Releasing processor 5 from barrier
+Releasing processor 6 from barrier
+Releasing processor 7 from barrier
+Releasing processor 8 from barrier
+Releasing processor 9 from barrier
+Releasing processor 10 from barrier
+Releasing processor 11 from barrier
+Releasing processor 12 from barrier
+Releasing processor 13 from barrier
+Releasing processor 14 from barrier
+Releasing processor 15 from barrier
+Stalling processor 7 at barrier
+Stalling processor 15 at barrier
+Stalling processor 12 at barrier
+Stalling processor 3 at barrier
+Stalling processor 4 at barrier
+Stalling processor 6 at barrier
+Stalling processor 0 at barrier
+Stalling processor 1 at barrier
+Stalling processor 13 at barrier
+Stalling processor 10 at barrier
+Stalling processor 8 at barrier
+Stalling processor 11 at barrier
+Stalling processor 9 at barrier
+Stalling processor 14 at barrier
+Stalling processor 5 at barrier
+Processor 2 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Releasing processor 2 from barrier
+Releasing processor 3 from barrier
+Releasing processor 4 from barrier
+Releasing processor 5 from barrier
+Releasing processor 6 from barrier
+Releasing processor 7 from barrier
+Releasing processor 8 from barrier
+Releasing processor 9 from barrier
+Releasing processor 10 from barrier
+Releasing processor 11 from barrier
+Releasing processor 12 from barrier
+Releasing processor 13 from barrier
+Releasing processor 14 from barrier
+Releasing processor 15 from barrier
+mint_exit 1
+mint_exit 4
+mint_exit 6
+mint_exit 10
+mint_exit 11
+mint_exit 13
+mint_exit 3
+mint_exit 14
+mint_exit 12
+mint_exit 9
+mint_exit 5
+mint_exit 8
+mint_exit 7
+mint_exit 15
+mint_exit 2
+Rabbit Mode Start 
+    0                25              8       0.00000
+Start time                        :       1782583148
+Initialization finish time        :       1782583155
+Overall finish time               :       1782583180
+Total time with initialization    :               32
+Total time without initialization :               25
+Overall transpose time            :                8
+Overall transpose fraction        :          0.32000
+Checksum difference is -0.000 (0.000, 0.000)
+mint_exit 0
+Leaving rabbit mode...
+Rabbit Mode Start 
+Leaving rabbit mode...
+Rabbit Mode Start 
+Leaving rabbit mode...
+Rabbit Mode Start 
+Leaving rabbit mode...
+Rabbit Mode Start 
+Leaving rabbit mode...
+Rabbit Mode Start 
+Leaving rabbit mode...
+Rabbit Mode Start 
+Leaving rabbit mode...
+Rabbit Mode Start 
+Leaving rabbit mode...
+Rabbit Mode Start 
+Leaving rabbit mode...
+Rabbit Mode Start 
+Leaving rabbit mode...
+Rabbit Mode Start 
+Leaving rabbit mode...
+Rabbit Mode Start 
+Leaving rabbit mode...
+Rabbit Mode Start 
+Leaving rabbit mode...
+Rabbit Mode Start 
+Leaving rabbit mode...
+Rabbit Mode Start 
+Leaving rabbit mode...
+Rabbit Mode Start 
+Leaving rabbit mode...
+Rabbit Mode Start 
+Leaving rabbit mode...
+Get out of 'has-work' loop
+Finished running 
