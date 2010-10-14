@@ -268,8 +268,8 @@
 //				OutSimpleMemory1(i, l1);
 				for (int l2 = l1 * 2; l2 <= 8 * 1024; l2 *= 2)
 				{
-					OutDirectoryMemory(i, l1, l2);
-//					OutSimpleMemory2(i, l1, l2);
+					//OutDirectoryMemory(i, l1, l2);
+					OutSimpleMemory2(i, l1, l2);
 					for (int l3 = l2 * 2; l3 <= 64 * 1024; l3 *= 2)
 					{
 //						OutSimpleMemory3(i, l1, l2, l3);

@@ -314,7 +314,7 @@ namespace Memory
 					if(i->second.sourceNode == nodeID)
 					{
 #ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE
-               printDebugInfo("OnDirectoryBlockResponse",*r,"OnRemoteReadResponse",nodeID);
+               printDebugInfo("OnDirBlkResp",*r,"OnRemReadRes",nodeID);
 #endif
 						OnDirectoryBlockResponse(r,nodeID);
 					}
@@ -335,7 +335,7 @@ namespace Memory
 				DebugAssert(m->exclusiveOwnership);
 				DebugAssert(m->blockAttached);
 #ifdef MEMORY_DIRECTORY_DEBUG_DIRECTORY_DATA
-				printDebugInfo("OnRemoteReadResponse", *m,
+				printDebugInfo("OnRemReadRes", *m,
 				      ("directoryData[m->addr].owner="+to_string<NodeID>(
 				            directoryData[m->addr].owner)).c_str(), src);
 #endif
@@ -378,7 +378,7 @@ namespace Memory
 						else
 						{
 #ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE
-               printDebugInfo("OnRemoteInvalidate",*inv,"OnRemoteReadResponse",nodeID);
+               printDebugInfo("OnRemoteInvalidate",*inv,"OnRemReadRes",nodeID);
 #endif
 							OnRemoteInvalidate(inv, nodeID);
 						}
@@ -662,12 +662,12 @@ namespace Memory
 		if(!m->satisfied)
 		{
 #ifdef MEMORY_DIRECTORY_DEBUG_PENDING_LOCAL_READS
-		   printDebugInfo("OnDirectoryBlockResponse",*m,
+		   printDebugInfo("OnDirBlkResp",*m,
 		         ("pendingLocalReads.erase("+to_string<MessageID>(m->solicitingMessage)+")").c_str());
 #endif
 			pendingLocalReads.erase(m->solicitingMessage);
 #ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE
-               printDebugInfo("OnLocalRead",*m,"OnDirectoryBlockResponse");
+               printDebugInfo("OnLocalRead",*m,"OnDirBlkResp");
 #endif
 			OnLocalRead(ref);
 			return;
@@ -682,7 +682,7 @@ namespace Memory
 		r->solicitingMessage = ref->MsgID();
 		EM().DisposeMsg(ref);
 #ifdef MEMORY_DIRECTORY_DEBUG_PENDING_LOCAL_READS
-		printDebugInfo("OnDirectoryBlockResponse", *m,
+		printDebugInfo("OnDirBlkResp", *m,
 		   ("pendingLocalReads.erase("+m->solicitingMessage+")").c_str());
 #endif
 		pendingLocalReads.erase(m->solicitingMessage);
@@ -850,14 +850,14 @@ namespace Memory
 					if(m->directoryLookup)
 					{
 #ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE
-               printDebugInfo("OnDirectoryBlockResponse",*m,"RecvMsg",src);
+               printDebugInfo("OnDirBlkResp",*m,"RecvMsg",src);
 #endif
 						OnDirectoryBlockResponse(m,src);
 					}
 					else
 					{
 #ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE
-               printDebugInfo("OnRemoteReadResponse",*m,"RecvMsg",src);
+               printDebugInfo("OnRemReadRes",*m,"RecvMsg",src);
 #endif
 						OnRemoteReadResponse(m,src);
 					}
@@ -997,7 +997,7 @@ namespace Memory
    void Directory::printDebugInfo(const char* fromMethod,Address addr,NodeID id,const char* operation)
    {
       cout << setw(17) << " " // account for spacing from src and msgSrc
-            << " dst=" << setw(2) << getDeviceID()
+            << " dst=" << setw(3) << getDeviceID()
             << setw(10) << " "   // account for spacing from msgID
             << " addr=" << addr
             << " Dir::" << fromMethod
@@ -1008,7 +1008,7 @@ namespace Memory
    void Directory::printEraseOwner(const char* fromMethod,Address addr,NodeID id,const char* operation)
    {
       cout << setw(17) << " " // account for spacing from src and msgSrc
-            << " dst=" << setw(2) << getDeviceID()
+            << " dst=" << setw(3) << getDeviceID()
             << setw(10) << " "   // account for spacing from msgID
             << " addr=" << addr
             << " Dir::" << fromMethod
