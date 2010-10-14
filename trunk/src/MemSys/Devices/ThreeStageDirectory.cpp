@@ -504,7 +504,7 @@ namespace Memory
             dirResponse->isIntervention = true;
             //forward->isSpeculative = d.msg->isSpeculative;
             AutoDetermineDestSendMsg(dirResponse,d.sourceNode,remoteSendTime+lookupTime,
-                  &ThreeStageDirectory::OnRemoteReadResponse,"OnLocalReadRes","OnRemoteReadRes");
+                  &ThreeStageDirectory::OnRemoteReadResponse,"OnLocalReadRes","OnRemReadRes");
          } // if satisfied
          else  // unsatisfied, 2 possibilities:
          {//1. block was evicted before intervention message was received by this node
@@ -525,7 +525,7 @@ namespace Memory
             dirResponse->isIntervention = true;
             //forward->isSpeculative = d.msg->isSpeculative;
             AutoDetermineDestSendMsg(dirResponse,d.sourceNode,remoteSendTime+lookupTime,
-                  &ThreeStageDirectory::OnRemoteReadResponse,"OnLocalReadRes","OnRemoteReadRes");
+                  &ThreeStageDirectory::OnRemoteReadResponse,"OnLocalReadRes","OnRemReadRes");
          }
 		} // if (d.msg->isInterventionShared)
       // not doing speculative replies right now
@@ -539,7 +539,7 @@ namespace Memory
          forward->isSpeculative = true;
          forward->originalRequestingNode = d.msg->originalRequestingNode;
          AutoDetermineDestSendMsg(forward,d.msg->originalRequestingNode,remoteSendTime,
-               &ThreeStageDirectory::OnDirectoryBlockResponse,"OnLocalReadResponse","OnDirBlkResp");
+               &ThreeStageDirectory::OnDirectoryBlockResponse,"OnLocReadRes","OnDirBlkResp");
 		}
       */
       else
@@ -724,7 +724,7 @@ namespace Memory
 
          // the first message should be taken care of first
          AutoDetermineDestSendMsg(newMsg,i->sourceNode,remoteSendTime,
-            &ThreeStageDirectory::OnDirectoryBlockResponse,"OnRemoteReadRes","OnDirBlkResp");
+            &ThreeStageDirectory::OnDirectoryBlockResponse,"OnRemReadRes","OnDirBlkResp");
          /*
          std::pair<HashMultiMap<Address,LookupData<ReadMsg> >::iterator,
             HashMultiMap<Address,LookupData<ReadMsg> >::iterator> p
@@ -737,7 +737,7 @@ namespace Memory
          for (i++;i < tempVector.end(); i++)
          {
             AutoDetermineDestSendMsg(newMsg,i->sourceNode,remoteSendTime,
-            &ThreeStageDirectory::OnDirectoryBlockResponse,"OnRemoteReadRes","OnDirBlkResp");
+            &ThreeStageDirectory::OnDirectoryBlockResponse,"OnRemReadRes","OnDirBlkResp");
          }
          */
 
@@ -789,7 +789,7 @@ namespace Memory
          //DebugAssert(b.sharers.find(ld.previousOwner)==b.sharers.end());
          //b.sharers.insert(ld.previousOwner);
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_DIRECTORY_SHARED_READS
-         printDebugInfo("OnRemoteReadRes",*m,("pendDirShRead.erase("
+         printDebugInfo("OnRemReadRes",*m,("pendDirShRead.erase("
             +to_string<Address>(m->addr)+")").c_str(),src);
 #endif
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_DIRECTORY_DATA
@@ -811,7 +811,7 @@ namespace Memory
          DebugAssert(b.sharers.size()==0);
          DebugAssert(b.owner==ld.sourceNode);
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_DIRECTORY_SHARED_READS
-         printDebugInfo("OnRemoteReadRes",*m,("pendDirExRead.erase("
+         printDebugInfo("OnRemReadRes",*m,("pendDirExRead.erase("
             +to_string<Address>(m->addr)+")").c_str(),src);
 #endif
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_DIRECTORY_DATA
@@ -983,7 +983,32 @@ namespace Memory
 		DebugAssert(directoryData.find(m->addr) != directoryData.end());
 		BlockData& b = directoryData[m->addr];
 
-      if (pendingDirectorySharedReads.find(m->addr)!=pendingDirectorySharedReads.end())
+      /*
+      TODO
+      2010/10/14 Eric
+      if (m->isBlockNotFound)
+      {
+         if (b.owner==src)
+         {
+            if (b.sharers.find(src)==b.sharers.end())
+            {
+               b.owner = InvalidNodeID;
+            }
+            else
+            {
+               NodeID newOwner = *b.sharers.begin();
+               b.sharers.erase(newOwner);
+               b.owner = newOwner;
+            }
+         }
+         else if (b.sharers.find(src)!=b.sharers.end())
+         {
+            b.sharers.erase(src);
+         }
+         EM().DisposeMsg(m);
+      }
+      else*/
+         if (pendingDirectorySharedReads.find(m->addr)!=pendingDirectorySharedReads.end())
       {// if directory state is Busy-shared, transitions to shared, a shared response is returned to
          // the owner marked in the directory. A writeback busy acknowledgement is also sent to the requestor
          
@@ -991,12 +1016,12 @@ namespace Memory
          // block doesn't have to be attached because the block could be in Exclusive state.
             // block will be attached if block is in Own or Modified state
          //DebugAssert(m->blockAttached);
-         
-         // delete share from here
+                
+         // src is either in owner or in sharers
          DebugAssert(b.sharers.find(src)!=b.sharers.end() || b.owner==src);
          DebugAssert(b.sharers.find(src)==b.sharers.end() || b.owner!=src);
-         NodeID newOwner = InvalidNodeID;
-
+         // delete share
+         NodeID newOwner = InvalidNodeID;  
          if (b.owner==src)
          {
             // have to dereference the iterator
@@ -1075,7 +1100,10 @@ namespace Memory
          DebugAssert(b.owner!=InvalidNodeID);
          ReadResponseMsg *exclusiveResponse = EM().CreateReadResponseMsg(getDeviceID());
          exclusiveResponse->addr = m->addr;
-         exclusiveResponse->blockAttached = m->blockAttached;
+         // changed this to true because in this protocol, eviction is the same as writeback,
+            // and we have to send the writeback to the new owner
+         //exclusiveResponse->blockAttached = m->blockAttached;
+         exclusiveResponse->blockAttached = true;
          exclusiveResponse->directoryLookup = true;
          exclusiveResponse->exclusiveOwnership = true;
          exclusiveResponse->isFromEviction = true;
@@ -2032,7 +2060,7 @@ namespace Memory
 			case(mt_ReadResponse):
 				{
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-               printDebugInfo("OnLocalReadResponse",*msg,"RecvMsg");
+               printDebugInfo("OnLocReadRes",*msg,"RecvMsg");
 #endif
 					OnLocalReadResponse(msg);
 					break;
@@ -2117,7 +2145,7 @@ namespace Memory
 					else
 					{
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-               printDebugInfo("OnRemoteReadRes",*m,"RecvMsg",src);
+               printDebugInfo("OnRemReadRes",*m,"RecvMsg",src);
 #endif
 						OnRemoteReadResponse(m,src);
 					}
@@ -2221,9 +2249,10 @@ namespace Memory
       bool isExclusiveBusy = (pendingDirectoryExclusiveReads.find(myAddress)!=pendingDirectoryExclusiveReads.end());
       bool hasPendingMemAccess = (pendingMainMemAccesses.find(myAddress)!=pendingMainMemAccesses.end());
       bool isWaitingForInvalidationComplete = (waitingForInvalidationComplete.find(myAddress)!=waitingForInvalidationComplete.end());
+      bool isWaitingForReadResponse = (waitingForReadResponse.find(myAddress)!=waitingForReadResponse.end());
       
-      directoryData[myAddress].print(myAddress, myMessageID,
-         isSharedBusy, isExclusiveBusy, hasPendingMemAccess, isWaitingForInvalidationComplete);
+      directoryData[myAddress].print(myAddress, myMessageID,isSharedBusy, isExclusiveBusy, hasPendingMemAccess,
+         isWaitingForInvalidationComplete,isWaitingForReadResponse);
    }
 
 	/**

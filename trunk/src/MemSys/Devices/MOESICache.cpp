@@ -638,10 +638,11 @@ namespace Memory
 		BlockState* b = Lookup(tag);
       if (b==NULL)
       {         
-         // send eviction message because this block is not found
+         // send eviction message because this block is not found in the cache
          EvictionMsg *forward = EM().CreateEvictionMsg(getDeviceID());
          forward->addr = m->addr;
-         forward->blockAttached = false;
+         DebugAssert(m->blockAttached);
+         forward->blockAttached = m->blockAttached;
          forward->size = m->size;
          forward->isBlockNotFound = true;
          DebugAssert(pendingEviction.find(tag)==pendingEviction.end());
