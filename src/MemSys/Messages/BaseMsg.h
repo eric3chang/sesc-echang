@@ -57,8 +57,8 @@ namespace Memory
 		{
          cout
          //cout << std::hex
-            << " msgSrc=" << setw(2) << deviceID
-		      << " dst=" << setw(2) << destinationDeviceID
+            << " msgSrc=" << setw(3) << deviceID
+		      << " dst=" << setw(3) << destinationDeviceID
 		      << " msg=" << setw(6) << msgID
 		      // generatingPC doesn't seem to be used
 		      //<< " generatingPC=" << generatingPC

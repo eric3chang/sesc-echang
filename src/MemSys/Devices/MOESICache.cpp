@@ -106,7 +106,8 @@ namespace Memory
 	}
 	MOESICache::BlockState* MOESICache::Lookup(MOESICache::AddrTag tag)
 	{
-		BlockState* set = GetSet(CalcSetFromTag(tag));
+      int setIndex = CalcSetFromTag(tag);
+		BlockState* set = GetSet(setIndex);
 		DebugAssert(set);
 		for(int i = 0; i < associativity; i++)
 		{
@@ -635,6 +636,16 @@ namespace Memory
 		DebugAssert(m);
 		AddrTag tag = CalcTag(m->addr);
 		BlockState* b = Lookup(tag);
+      if (b==NULL)
+      {         
+         // send eviction message because this block is not found
+         EvictionMsg *forward = EM().CreateEvictionMsg(getDeviceID());
+         forward->addr = m->addr;
+         forward->blockAttached = false;
+         forward->size = m->size;
+         DebugAssert(pendingEviction.find(tag)==pendingEviction.end());
+         remoteConnection->SendMsg(forward,evictionTime);
+      }
 		if(b == NULL || !b->locked)
 		{
 			EM().DisposeMsg(m);

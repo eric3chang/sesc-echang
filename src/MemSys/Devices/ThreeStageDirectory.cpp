@@ -1063,11 +1063,13 @@ namespace Memory
             // an exclusive response is returned to the owner marked in the directory
          // A writeback busy acknowledgement is also sent to the requestor
          DebugAssert(pendingDirectorySharedReads.find(m->addr)==pendingDirectorySharedReads.end());
+         LookupData<ReadMsg> &ld = pendingDirectoryExclusiveReads[m->addr];
          DebugAssert(b.sharers.size()==0);
          // block doesn't have to be attached because the block could be in Exclusive state.
             // block will be attached if block is in Own or Modified state
-         DebugAssert(m->blockAttached);
-         DebugAssert(src==b.owner);
+         //DebugAssert(m->blockAttached);
+         DebugAssert(src==ld.previousOwner);
+         //DebugAssert(src==b.owner);
 
          // send exclusive response to the owner marked in the directory
          DebugAssert(b.owner!=InvalidNodeID);
@@ -1127,10 +1129,13 @@ namespace Memory
       else
 		{
          // check that src is actually in directoryData
-         DebugAssert(b.owner==src || b.sharers.find(src)!=b.sharers.end());
+         //DebugAssert(b.owner==src || b.sharers.find(src)!=b.sharers.end());
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_DIRECTORY_DATA
-         printDebugInfo("OnRemoteEviction",*m,
-            ("b.sharers.erase("+to_string<NodeID>(src)+")").c_str(),src);
+         if (b.owner==src || b.sharers.find(src)!=b.sharers.end())
+         {
+            printDebugInfo("OnRemoteEviction",*m,
+               ("b.sharers.erase("+to_string<NodeID>(src)+")").c_str(),src);
+         }
 #endif         
          if (b.owner==src)
          {
@@ -1142,7 +1147,6 @@ namespace Memory
          }
          else
          {
-            DebugAssert(b.sharers.find(src)!=b.sharers.end());
             b.sharers.erase(src);
          }
 
