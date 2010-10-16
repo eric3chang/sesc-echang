@@ -41,10 +41,22 @@ namespace Memory
 			HashSet<NodeID> sharers;
 			NodeID owner;
 
-			BlockData()
-			{
-				owner = InvalidNodeID;
-			}
+         BlockData() : owner(InvalidNodeID) {}
+         void print(Address myAddress, MessageID myMessageID,bool isSharedBusy, bool isExclusiveBusy)
+         {
+            cout << setw(10) << " ";
+            cout << " addr=" << myAddress;
+            cout << " msgID=" << myMessageID;
+            cout << " own=" << convertDirectoryNetworkIDToDeviceNodeID(owner);
+            cout << " sh=";
+            for (HashSet<NodeID>::iterator i = sharers.begin(); i != sharers.end(); i++)
+            {
+               cout << convertDirectoryNetworkIDToDeviceNodeID(*i) << " ";
+            }
+            cout << " isShBusy=" << isSharedBusy
+               << " isExBusy=" << isExclusiveBusy
+               << endl;
+         }
 		};
 		template <class T>
 		class LookupData
@@ -102,6 +114,7 @@ namespace Memory
 		void printDebugInfo(const char* fromMethod, const BaseMsg &myMessage, const char* operation);
 		void printDebugInfo(const char* fromMethod, const BaseMsg &myMessage, const char* operation,NodeID src);
 	   void printDebugInfo(const char* fromMethod,Address addr,NodeID id,const char* operation);
+      void printDirectoryData(Address myAddress, MessageID myMessageID);
 	   void printEraseOwner(const char* fromMethod,Address addr,NodeID id,const char* operation);
 		void printPendingDirectorySharedReads();
 	   void printPendingLocalReads();
