@@ -637,7 +637,11 @@ namespace Memory
 		AddrTag tag = CalcTag(m->addr);
 		BlockState* b = Lookup(tag);
       if (b==NULL)
-      {         
+      {
+         /*
+         // there is apparently a reason why we don't send another message back to evict the directory,
+            // but I'm not sure what it is
+         BlockState &bs = pendingEviction[m->addr];
          // send eviction message because this block is not found in the cache
          EvictionMsg *forward = EM().CreateEvictionMsg(getDeviceID());
          forward->addr = m->addr;
@@ -647,6 +651,7 @@ namespace Memory
          forward->isBlockNotFound = true;
          DebugAssert(pendingEviction.find(tag)==pendingEviction.end());
          remoteConnection->SendMsg(forward,evictionTime);
+         */
       }
 		if(b == NULL || !b->locked)
 		{
