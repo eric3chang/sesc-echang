@@ -58,11 +58,11 @@ namespace Memory
             {
                cout << convertDirectoryNetworkIDToDeviceNodeID(*i) << " ";
             }
-            cout << " isSharedBusy=" << isSharedBusy
-               << " isExclusiveBusy=" << isExclusiveBusy
-               << " hasPendingMemAccess=" << hasPendingMemAccess
-               << " isWaitForInvCom=" << isWaitingForInvalidationComplete
-               << " isWaitForReadRes=" << isWaitingForReadResponse
+            cout << " isShBusy=" << isSharedBusy
+               << " isExBusy=" << isExclusiveBusy
+               << " pendMemAccess=" << hasPendingMemAccess
+               << " waitForInvCom=" << isWaitingForInvalidationComplete
+               << " waitForReadRes=" << isWaitingForReadResponse
                << endl;
          }
 		};
@@ -79,8 +79,10 @@ namespace Memory
       {
       public:
          const ReadResponseMsg* msg;
-         int count;
+         int invalidatesReceived;
+         int invalidatesWaitingFor;
          std::vector<LookupData<ReadMsg> > pendingReads;
+         InvalidateData() : msg(NULL), invalidatesReceived(0), invalidatesWaitingFor(0) {}
       };
       class InterventionCompleteData
       {
@@ -128,6 +130,7 @@ namespace Memory
       //HashMap<MessageID, int> unsatisfiedRequests;
 
       void HandleInterventionComplete(const BaseMsg *msgIn, bool isPendingExclusive);
+      void HandleReceivedAllInvalidates(Address myAddress);
 		//void PerformDirectoryFetch(Address a, NodeID src);
 		void PerformDirectoryFetch(const ReadMsg *msgIn, NodeID src);
       void PerformDirectoryFetch(const ReadMsg *msgIn,NodeID src,bool isExclusive,NodeID target);
