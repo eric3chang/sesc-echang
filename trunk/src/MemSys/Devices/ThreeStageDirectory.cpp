@@ -118,6 +118,37 @@ namespace Memory
       }
    }
 
+   void ThreeStageDirectory::HandleReceivedAllInvalidates(Address myAddress)
+   {
+      DebugAssert(waitingForInvalidates.find(myAddress)!=waitingForInvalidates.end());
+      InvalidateData &id = waitingForInvalidates[myAddress];
+      DebugAssert(id.msg!=NULL);
+      const ReadResponseMsg* rrm = id.msg;
+      SendLocalReadResponse(rrm);
+      std::vector<LookupData<ReadMsg> > pendingReads = id.pendingReads;
+      // do not delete read response because it was sent to local
+      if (pendingReads.size() != 0)
+      {
+         for (std::vector<LookupData<ReadMsg> >::iterator i = pendingReads.begin();
+            i < pendingReads.end(); i++)
+         {// execute pending remote reads now that we sent the read response msg
+            // we need satisfyTime+localSendTime for the readResponse to get processed
+				CBOnRemoteRead::FunctionType* f = cbOnRemoteRead.Create();
+            f->Initialize(this,i->msg,i->sourceNode);
+				EM().ScheduleEvent(f,satisfyTime + localSendTime);
+         }
+      }
+      pendingReads.clear();
+      waitingForInvalidates.erase(myAddress);
+      // send invalidation complete message back to directory
+      NodeID directoryNode = directoryNodeCalc->CalcNodeID(myAddress);
+      InvalidationCompleteMsg *icm = EM().CreateInvalidationCompleteMsg(getDeviceID());
+      icm->addr = myAddress;
+      icm->solicitingMessage = rrm->solicitingMessage;
+      AutoDetermineDestSendMsg(icm,directoryNode,remoteSendTime,
+         &ThreeStageDirectory::OnRemoteInvalidationComplete,"HanRecAllInv","OnRemInvCom");
+   }
+
    // performs a directory fetch
 	void ThreeStageDirectory::PerformDirectoryFetch(const ReadMsg* msgIn, NodeID src)
 	{
@@ -1284,39 +1315,18 @@ namespace Memory
       b.sharers.convertToArray(sharers,MEMORY_3_STAGE_DIRECTORY_DEBUG_ARRAY_SIZE);
       m->blockAttached;
 #endif
-      DebugAssert(waitingForInvalidates.find(m->addr)!=waitingForInvalidates.end());
-      DebugAssert(waitingForInvalidates[m->addr].count > 0);
+      // invalidateResponse could arrive before directoryBlockResponse
+      //DebugAssert(waitingForInvalidates.find(m->addr)!=waitingForInvalidates.end());
 
-      // subtract the pending invalidates counter. If it reaches 0, it means all
+      // increment the pending invalidates counter. If it is the same as the number of invalidates
+         // we are waiting for, it means all
          // invalidates have been accounted for, so we can send the read response now.
-      waitingForInvalidates[m->addr].count--;
-      if (waitingForInvalidates[m->addr].count==0)
+      InvalidateData &ld = waitingForInvalidates[m->addr];
+      ld.invalidatesReceived++;
+      // if we have received all the invalidates
+      if (ld.invalidatesReceived==ld.invalidatesWaitingFor)
       {
-         const ReadResponseMsg* rrm = waitingForInvalidates[m->addr].msg;
-         SendLocalReadResponse(rrm);
-         std::vector<LookupData<ReadMsg> > pendingReads = waitingForInvalidates[m->addr].pendingReads;
-         waitingForInvalidates.erase(m->addr);
-         // do not delete read response because it was sent to local
-         if (pendingReads.size() != 0)
-         {
-            for (std::vector<LookupData<ReadMsg> >::iterator i = pendingReads.begin();
-               i < pendingReads.end(); i++)
-            {// execute pending remote reads now that we sent the read response msg
-               // we need satisfyTime+localSendTime for the readResponse to get processed
-				   CBOnRemoteRead::FunctionType* f = cbOnRemoteRead.Create();
-               f->Initialize(this,i->msg,i->sourceNode);
-				   EM().ScheduleEvent(f,satisfyTime + localSendTime);
-            }
-         }
-         pendingReads.clear();
-
-         // send invalidation complete message back to directory
-         NodeID directoryNode = directoryNodeCalc->CalcNodeID(m->addr);
-         InvalidationCompleteMsg *icm = EM().CreateInvalidationCompleteMsg(getDeviceID());
-         icm->addr = m->addr;
-         icm->solicitingMessage = m->solicitingMessage;
-         AutoDetermineDestSendMsg(icm,directoryNode,remoteSendTime,
-            &ThreeStageDirectory::OnRemoteInvalidationComplete,"OnRemInvResp","OnRemInvCom");
+         HandleReceivedAllInvalidates(m->addr);
       } // if (waitingForInvalidates[m->addr].count==0)
       // did all the directoryData operations in OnDirectoryBlockRequest      
 		if(m->blockAttached)
@@ -1439,11 +1449,12 @@ namespace Memory
 
       bool isWaitingForInvalidationComplete = (waitingForInvalidationComplete.find(m->addr)!=waitingForInvalidationComplete.end());
       DebugAssert(directoryNodeCalc->CalcNodeID(m->addr)==nodeID);
+      BlockData &b = directoryData[m->addr];
       DebugAssert(isWaitingForInvalidationComplete);
 
       LookupData<ReadMsg> &ld = waitingForInvalidationComplete[m->addr];
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-      printDebugInfo("OnRemInvCom",*m,"OnDirBlkRequ",src);
+      printDebugInfo("OnDirBlkRequ",*m,"OnRemInvCom",src);
 #endif
       // send nak to make it resend request
       //OnDirectoryBlockRequest(ld.msg,ld.sourceNode);
@@ -1934,15 +1945,27 @@ namespace Memory
          // check if we have to wait for invalidates
          if (m->pendingInvalidates > 0)
          {// there are pending invalidates, so put this reply into a queue
-            DebugAssert(waitingForInvalidates.find(m->addr)==waitingForInvalidates.end());
+
+            // invalidate responses could arrive before DirBlkResponse
+            //DebugAssert(waitingForInvalidates.find(m->addr)==waitingForInvalidates.end());
             DebugAssert(!m->isWaitingForInvalidateUnblock);
-            waitingForInvalidates[m->addr].msg = m;
-            waitingForInvalidates[m->addr].count = m->pendingInvalidates;
+            InvalidateData &id = waitingForInvalidates[m->addr];
+            DebugAssert(id.msg==NULL);
+            id.msg = m;
+            id.invalidatesWaitingFor = m->pendingInvalidates;
+            if (id.invalidatesReceived==id.invalidatesWaitingFor)
+            {
+               HandleReceivedAllInvalidates(m->addr);
+            }
             return;
          }
-
-         // else, send local read response to cache above
-         SendLocalReadResponse(m);
+         else
+         {// else, pendingInvalidates == 0
+            //send local read response to cache above
+            DebugAssert(!m->pendingInvalidates);
+            DebugAssert(waitingForInvalidates.find(m->addr)==waitingForInvalidates.end());
+            SendLocalReadResponse(m);
+         }
 
          if (m->hasPendingMemAccesses)
          {// schedule memAccessComplete to be sent after we give enough time
