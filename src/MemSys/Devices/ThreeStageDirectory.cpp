@@ -305,24 +305,30 @@ namespace Memory
    */
    void ThreeStageDirectory::SendLocalReadResponse(const ReadResponseMsg* m)
    {
-      if (!m->isFromEviction)
-      {
-         ReadResponseMsg* r = (ReadResponseMsg*)EM().ReplicateMsg(m);
+      if (!m->evictionMessage)
+      {// if m is coming from eviction
+         //ReadResponseMsg* r = (ReadResponseMsg*)EM().ReplicateMsg(m);
          DebugAssert(pendingLocalReads.find(m->solicitingMessage)!=pendingLocalReads.end());
          const ReadMsg* ref = pendingLocalReads[m->solicitingMessage];
-		   r->solicitingMessage = ref->MsgID();
+         DebugAssert(m->solicitingMessage==ref->MsgID());
 		   EM().DisposeMsg(ref);
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_LOCAL_READS
 		   printDebugInfo("OnDirectoryBlockResponse", *m,
 		      ("pendingLocalReads.erase("+to_string<MessageID>(m->solicitingMessage)+")").c_str());
 #endif
 		   pendingLocalReads.erase(m->solicitingMessage);
-		   EM().DisposeMsg(m);
-		   SendMsg(localConnectionID, r, satisfyTime + localSendTime);
+         EraseReversePendingLocalRead(m,ref);
+		   //EM().DisposeMsg(m);
+		   SendMsg(localConnectionID, m, satisfyTime + localSendTime);
       }
       else
-      {// eviction read response messages are sent without request
-         DebugAssert(pendingLocalReads.find(m->solicitingMessage)==pendingLocalReads.end());
+      {
+         //DebugAssert(pendingLocalReads.find(m->solicitingMessage)==pendingLocalReads.end());
+         DebugAssert(pendingLocalReads.find(m->solicitingMessage)!=pendingLocalReads.end());
+         const ReadMsg *ref = pendingLocalReads[m->solicitingMessage];
+         EM().DisposeMsg(pendingLocalReads[m->solicitingMessage]);
+         pendingLocalReads.erase(m->solicitingMessage);
+         EraseReversePendingLocalRead(m,ref);
          SendMsg(localConnectionID, m, satisfyTime + localSendTime);
       }
    }
@@ -391,6 +397,33 @@ namespace Memory
 			b.sharers.insert(id);
 		}
 	}
+
+   void ThreeStageDirectory::AddReversePendingLocalRead(const ReadMsg *m)
+   {
+      ReversePendingLocalReadData &myData = reversePendingLocalReads[m->addr];
+      HashMap<MessageID,const ReadMsg*> &exclusiveRead = myData.exclusiveRead;
+      HashMap<MessageID,const ReadMsg*> &sharedRead = myData.sharedRead;
+      HashMap<MessageID,const ReadMsg*> &myMap = m->requestingExclusive ? exclusiveRead : sharedRead;
+      DebugAssert(myMap.find(m->MsgID())==myMap.end());
+      myMap[m->MsgID()] = (ReadMsg*)EM().ReplicateMsg(m);
+   }
+
+   void ThreeStageDirectory::EraseReversePendingLocalRead(const ReadResponseMsg *m,const ReadMsg *ref)
+   {
+      DebugAssert(reversePendingLocalReads.find(m->addr)!=reversePendingLocalReads.end());
+      ReversePendingLocalReadData &myData = reversePendingLocalReads[m->addr];
+      HashMap<MessageID,const ReadMsg*> &exclusiveRead = myData.exclusiveRead;
+      HashMap<MessageID,const ReadMsg*> &sharedRead = myData.sharedRead;
+      HashMap<MessageID,const ReadMsg*> &myMap = ref->requestingExclusive ? myData.exclusiveRead : myData.sharedRead;
+      DebugAssert(myMap.find(m->solicitingMessage)!=myMap.end());
+      EM().DisposeMsg(myMap[m->solicitingMessage]);
+      myMap.erase(m->solicitingMessage);
+
+      if (exclusiveRead.size()==0 && sharedRead.size()==0)
+      {
+         reversePendingLocalReads.erase(m->addr);
+      }
+   }
 
    void ThreeStageDirectory::ChangeOwnerToShare(Address a, NodeID id)
 	{
@@ -476,8 +509,30 @@ namespace Memory
 		printDebugInfo("OnLocalRead", *m,
 		      ("pendingLocalReads.insert("+to_string<MessageID>(m->MsgID())+")").c_str());
 #endif
+      // if we have a request with permissions greater, dispose it
+      ReversePendingLocalReadData &myData = reversePendingLocalReads[m->addr];
+      HashMap<MessageID,const ReadMsg*> &exclusiveRead = myData.exclusiveRead;
+      HashMap<MessageID,const ReadMsg*> &sharedRead = myData.sharedRead;
+      if (m->requestingExclusive)
+      {
+         if(exclusiveRead.size()!=0)
+         {
+            EM().DisposeMsg(m);
+            return;
+         }
+      }
+      else
+      {// shared read
+         if (exclusiveRead.size()!=0 || sharedRead.size()!=0)
+         {
+            EM().DisposeMsg(m);
+            return;
+         }
+      }
+
 		DebugAssert(pendingLocalReads.find(m->MsgID()) == pendingLocalReads.end());
 		pendingLocalReads[m->MsgID()] = m;
+      AddReversePendingLocalRead(m);
 		ReadMsg* forward = (ReadMsg*)EM().ReplicateMsg(m);
 		forward->onCompletedCallback = NULL;
 		forward->directoryLookup = true;
@@ -858,6 +913,11 @@ namespace Memory
          // either way, we should not send any messages
 
          // by this time, we should have removed src from sharers
+         DebugAssert(b.owner!=InvalidNodeID);
+         // owner could be src if an eviction message came from the previous owner was received before this
+            // and OnRemoteEviction should change b.owner to src.
+         // owner could also not be source if eviction message came from an oldSharer and src was simply deleted
+         //DebugAssert(b.owner==src);
          DebugAssert(b.sharers.find(src)==b.sharers.end());
          
          DebugAssert(waitingForReadResponse.find(m->addr)!=waitingForReadResponse.end());
@@ -1047,6 +1107,10 @@ namespace Memory
          // block doesn't have to be attached because the block could be in Exclusive state.
             // block will be attached if block is in Own or Modified state
          //DebugAssert(m->blockAttached);
+
+         LookupData<ReadMsg> &ld = pendingDirectorySharedReads[m->addr];
+         const ReadMsg* ref = ld.msg;
+         DebugAssert(ref);
                 
          // src is either in owner or in sharers
          DebugAssert(b.sharers.find(src)!=b.sharers.end() || b.owner==src);
@@ -1078,12 +1142,13 @@ namespace Memory
             sharedResponse->blockAttached = true;
             sharedResponse->directoryLookup = true;
             sharedResponse->exclusiveOwnership = false;
-            sharedResponse->isFromEviction = true;
+            //sharedResponse->isFromEviction = true;
+            sharedResponse->evictionMessage = m->MsgID();
             sharedResponse->isIntervention = false;
             sharedResponse->originalRequestingNode = src;
             sharedResponse->size = m->size;
             sharedResponse->satisfied = true;
-            sharedResponse->solicitingMessage = m->MsgID();
+            sharedResponse->solicitingMessage = ref->MsgID();
             AutoDetermineDestSendMsg(sharedResponse,b.owner,remoteSendTime,
                &ThreeStageDirectory::OnDirectoryBlockResponse,"OnRemoteEviction","OnDirBlkResp");
          }
@@ -1120,6 +1185,8 @@ namespace Memory
          // A writeback busy acknowledgement is also sent to the requestor
          DebugAssert(pendingDirectorySharedReads.find(m->addr)==pendingDirectorySharedReads.end());
          LookupData<ReadMsg> &ld = pendingDirectoryExclusiveReads[m->addr];
+         const ReadMsg *ref = ld.msg;
+         DebugAssert(ref);
          DebugAssert(b.sharers.size()==0);
          // block doesn't have to be attached because the block could be in Exclusive state.
             // block will be attached if block is in Own or Modified state
@@ -1137,11 +1204,12 @@ namespace Memory
          exclusiveResponse->blockAttached = true;
          exclusiveResponse->directoryLookup = true;
          exclusiveResponse->exclusiveOwnership = true;
-         exclusiveResponse->isFromEviction = true;
+         //exclusiveResponse->isFromEviction = true;
+         exclusiveResponse->evictionMessage = m->MsgID();
          exclusiveResponse->isIntervention = false;
          exclusiveResponse->originalRequestingNode = src;
          exclusiveResponse->size = m->size;
-         exclusiveResponse->solicitingMessage = m->MsgID();
+         exclusiveResponse->solicitingMessage = ref->MsgID();
          AutoDetermineDestSendMsg(exclusiveResponse,b.owner,remoteSendTime,
             &ThreeStageDirectory::OnDirectoryBlockResponse,"OnRemoteEviction","OnDirBlkResp");
 
@@ -1453,9 +1521,11 @@ namespace Memory
       DebugAssert(isWaitingForInvalidationComplete);
 
       LookupData<ReadMsg> &ld = waitingForInvalidationComplete[m->addr];
+      /*
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
       printDebugInfo("OnDirBlkRequ",*m,"OnRemInvCom",src);
 #endif
+      */
       // send nak to make it resend request
       //OnDirectoryBlockRequest(ld.msg,ld.sourceNode);
       /*
@@ -1893,16 +1963,23 @@ namespace Memory
 		printPendingLocalReads();
 #endif
 
-      if (m->isFromEviction)
+      if (m->evictionMessage)
       {
          // eviction messages don't have to be satisfied if OnLocalReadResponse
             // managed to return before OnLocalEviction
          //DebugAssert(m->satisfied);
          DebugAssert(m->pendingInvalidates == 0);
          DebugAssert(!m->hasPendingMemAccesses);
-         if (m->satisfied)
+
+         // evictionResponse could have arrived after interventionResponse
+         if (pendingLocalReads.find(m->solicitingMessage)!=pendingLocalReads.end() && m->satisfied)
          {
             SendLocalReadResponse(m);
+         }
+         else
+         {// if the response coming from eviction has already been satisfied or
+            // m is not a satisfied message
+            EM().DisposeMsg(m);
          }
       }
       else
@@ -1917,7 +1994,7 @@ namespace Memory
             toDir->solicitingMessage = m->solicitingMessage;
 
             // use 0 time to simulate instantaneous sending
-            AutoDetermineDestSendMsg(toDir,directoryNodeCalc->CalcNodeID(m->addr),0,
+            AutoDetermineDestSendMsg(toDir,directoryNodeCalc->CalcNodeID(m->addr),remoteSendTime,
                &ThreeStageDirectory::OnRemoteInterventionComplete,"OnDirBlkResp","OnRemIntCom");
          }
 
@@ -1934,6 +2011,7 @@ namespace Memory
 		            ("pendingLocalReads.erase("+to_string<MessageID>(m->solicitingMessage)+")").c_str());
    #endif
 			   pendingLocalReads.erase(m->solicitingMessage);
+            EraseReversePendingLocalRead(m,ref);
    #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
                   printDebugInfo("OnLocalRead",*m,"OnDirBlkResp");
    #endif

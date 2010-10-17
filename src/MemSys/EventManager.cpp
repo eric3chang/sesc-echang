@@ -54,8 +54,9 @@ namespace Memory
 	{
 		ReadResponseMsg* m = readResponsePool.Take();
 		m->directoryLookup = false;
+      m->evictionMessage = 0;
       m->exclusiveOwnership = false;
-      m->isFromEviction = false;
+      //m->isFromEviction = false;
       m->isIntervention = false;
       m->isWaitingForInvalidateUnblock = false;
       //m->isSpeculative = false;
