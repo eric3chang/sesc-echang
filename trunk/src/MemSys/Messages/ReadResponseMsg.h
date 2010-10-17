@@ -12,9 +12,10 @@ namespace Memory
 		bool satisfied;
 		bool blockAttached;
       bool directoryLookup;
+      MessageID evictionMessage;
 		bool exclusiveOwnership;
       bool hasPendingMemAccesses;
-      bool isFromEviction;
+      //bool isFromEviction;
       bool isIntervention;
       bool isWaitingForInvalidateUnblock;
       int pendingInvalidates;
@@ -32,12 +33,13 @@ namespace Memory
 		   cout << " addr=" << addr
             <<" sat=" << satisfied
 		      << " att=" << blockAttached
+            << " evic=" << evictionMessage
             << " exOwn=" << exclusiveOwnership
             << " sMsg=" << solicitingMessage
             << " memAcc=" << hasPendingMemAccesses
-            << " evic=" << isFromEviction
+            //<< " isEvic=" << isFromEviction
             << " intv=" << isIntervention
-            << " invUnblock=" << isWaitingForInvalidateUnblock
+            << " invUnblk=" << isWaitingForInvalidateUnblock
             << " ogNode=" << convertDirectoryNetworkIDToDeviceNodeID(originalRequestingNode)
             << " pendInv=" << pendingInvalidates
             //<< " spec=" << isSpeculative

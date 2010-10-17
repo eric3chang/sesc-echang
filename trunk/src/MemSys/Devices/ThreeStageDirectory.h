@@ -91,6 +91,12 @@ namespace Memory
          const InterventionCompleteMsg* icm;
          InterventionCompleteData() : rrm(NULL), icm(NULL) {}
       };
+      class ReversePendingLocalReadData
+      {
+      public:
+         HashMap<MessageID,const ReadMsg*>exclusiveRead;
+         HashMap<MessageID,const ReadMsg*>sharedRead;
+      };
 
       unsigned int messagesReceived;
 
@@ -108,6 +114,7 @@ namespace Memory
 		NodeID nodeID;
 
 		HashMap<MessageID, const ReadMsg*> pendingLocalReads;
+      HashMap<Address, ReversePendingLocalReadData>reversePendingLocalReads;
 		HashMap<MessageID, LookupData<ReadMsg> > pendingRemoteReads;
 		HashMap<MessageID, LookupData<InvalidateMsg> > pendingRemoteInvalidates;
 		HashMap<Address, LookupData<ReadMsg> > pendingDirectorySharedReads;
@@ -140,6 +147,8 @@ namespace Memory
       void SendMemAccessComplete(Address addr, NodeID directoryNode);
 		void EraseDirectoryShare(Address a, NodeID id);
 		void AddDirectoryShare(Address a, NodeID id, bool exclusive);
+      void AddReversePendingLocalRead(const ReadMsg *m);
+      void EraseReversePendingLocalRead(const ReadResponseMsg *m,const ReadMsg *ref);
       void ChangeOwnerToShare(Address a, NodeID id);
       void writeToMainMemory(const EvictionMsg *m);
       void writeToMainMemory(const InvalidateResponseMsg *m);

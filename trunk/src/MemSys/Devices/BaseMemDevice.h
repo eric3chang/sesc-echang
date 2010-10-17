@@ -52,11 +52,12 @@ namespace Memory
       {
          if ((src == InvalidNodeID) || (src == 0))
          {
-            cout << setw(7) << " ";
+            cout << setw(8) << " ";
          }
          else
          {
-            cout << " src=" << setw(2) << src;
+            // convert from nodeID to deviceID
+            cout << " src=" << setw(3) << (4*src)+7;
          }
          myBaseMsg.print(deviceID);
          cout
