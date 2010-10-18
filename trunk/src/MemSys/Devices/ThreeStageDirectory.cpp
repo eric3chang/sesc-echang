@@ -123,7 +123,10 @@ namespace Memory
       DebugAssert(waitingForInvalidates.find(myAddress)!=waitingForInvalidates.end());
       InvalidateData &id = waitingForInvalidates[myAddress];
       DebugAssert(id.msg!=NULL);
-      const ReadResponseMsg* rrm = id.msg;
+      ReadResponseMsg* rrm = (ReadResponseMsg*)id.msg;
+      // the block should always be attached, according to the protocol,
+         // that way, the read request can be guaranteed to be satisfied
+      rrm->blockAttached = true;
       SendLocalReadResponse(rrm);
       std::vector<LookupData<ReadMsg> > pendingReads = id.pendingReads;
       // do not delete read response because it was sent to local
@@ -344,6 +347,29 @@ namespace Memory
       // send to src, which should be the directory
       AutoDetermineDestSendMsg(reply,directoryNode,remoteSendTime,
          &ThreeStageDirectory::OnRemoteMemAccessComplete,"OnDirBlkResp","OnRemoteMemAccCom");
+   }
+
+   void ThreeStageDirectory::SendRemoteRead(const ReadMsg *m,NodeID dest,const char *fromMethod)
+   {
+      if (dest==nodeID)
+      {
+#ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
+         printDebugInfo("OnRemRead",*m,fromMethod,nodeID);
+#endif
+         //CALL_MEMBER_FN(*this,func) (msg,dest);
+			CBOnRemoteRead::FunctionType* f = cbOnRemoteRead.Create();
+         f->Initialize(this,m,nodeID);
+			EM().ScheduleEvent(f,satisfyTime+localSendTime);
+         return;
+      }
+      else
+      {
+         NetworkMsg* nm = EM().CreateNetworkMsg(getDeviceID(),m->GeneratingPC());
+         nm->payloadMsg = m;
+         nm->sourceNode = nodeID;
+         nm->destinationNode = dest;
+         SendMsg(remoteConnectionID, nm, remoteSendTime);
+      }
    }
 
 	/**
@@ -785,7 +811,8 @@ namespace Memory
 
 		DebugAssert(isPendingDirectorySharedReads || isPendingDirectoryExclusiveReads || isPendingMainMemAccesses || isWaitingForReadResponse);
       // m->addr should only exist in one of the HashMaps
-		DebugAssert((!isPendingDirectorySharedReads + !isPendingDirectoryExclusiveReads + !isPendingMainMemAccesses + !isWaitingForReadResponse) == 3);
+      int pendingCount = isPendingDirectorySharedReads + isPendingDirectoryExclusiveReads + isPendingMainMemAccesses + isWaitingForReadResponse;
+		DebugAssert(pendingCount <= 2);
 		DebugAssert(directoryData.find(m->addr) != directoryData.end());
 
       if (src == memoryNodeCalc->CalcNodeID(m->addr))
@@ -883,6 +910,26 @@ namespace Memory
 #endif
          HandleInterventionComplete(m,false);
       }
+      else if (isWaitingForReadResponse)
+      {// a local read response could be sent by OnRemoteEviction or here, depending on who satisfies the read
+         BlockData &b = directoryData[m->addr];
+         // if satisfied, it means OnLocalReadResponse was called before OnLocalEviction
+         // if unsatisfied, it means OnLocalEviction was called before OnLocalReadResponse
+         // either way, we should not send any messages
+
+         // by this time, we should have removed src from sharers
+         DebugAssert(b.owner!=InvalidNodeID);
+         // owner could be src if an eviction message came from the previous owner was received before this
+            // and OnRemoteEviction should change b.owner to src.
+         // owner could also not be source if eviction message came from an oldSharer and src was simply deleted
+         //DebugAssert(b.owner==src);
+         DebugAssert(b .sharers.find(src)==b.sharers.end());
+         
+         DebugAssert(waitingForReadResponse.find(m->addr)!=waitingForReadResponse.end());
+         EM().DisposeMsg(waitingForReadResponse[m->addr]);
+         waitingForReadResponse.erase(m->addr);
+         EM().DisposeMsg(m);
+      }
       else if (m->isIntervention && pendingDirectoryExclusiveReads.find(m->addr)!=pendingDirectoryExclusiveReads.end() && m->satisfied)
       {// has to be satisfied, because unsatisfied intervention messages are caught at the old owner node that evicted the block
          // or where OnRemoteInvalidateResponse arrived after an OnRemoteRead
@@ -905,108 +952,97 @@ namespace Memory
 #endif
          HandleInterventionComplete(m,true);
       }
-      else if (isWaitingForReadResponse)
-      {// a local read response could be sent by OnRemoteEviction or here, depending on who satisfies the read
-         BlockData &b = directoryData[m->addr];
-         // if satisfied, it means OnLocalReadResponse was called before OnLocalEviction
-         // if unsatisfied, it means OnLocalEviction was called before OnLocalReadResponse
-         // either way, we should not send any messages
-
-         // by this time, we should have removed src from sharers
-         DebugAssert(b.owner!=InvalidNodeID);
-         // owner could be src if an eviction message came from the previous owner was received before this
-            // and OnRemoteEviction should change b.owner to src.
-         // owner could also not be source if eviction message came from an oldSharer and src was simply deleted
-         //DebugAssert(b.owner==src);
-         DebugAssert(b.sharers.find(src)==b.sharers.end());
-         
-         DebugAssert(waitingForReadResponse.find(m->addr)!=waitingForReadResponse.end());
-         EM().DisposeMsg(waitingForReadResponse[m->addr]);
-         waitingForReadResponse.erase(m->addr);
-         EM().DisposeMsg(m);
-      }
       else if (!m->satisfied)
       {// a node was read before OnRemoteInvalidateResponse transfers data from the old node
-         // to the newer node that was invalidated
+         // to the newer node that was invalidated. send another intervention exclusive request to the previous owner
 
-         // send another intervention exclusive request to the previous owner
          BlockData &b = directoryData[m->addr];
          
          // previous owner should have been moved to sharers
-         DebugAssert(b.sharers.find(src)!=b.sharers.end());
          //DebugAssert(isPendingDirectoryExclusiveReads || isPendingDirectorySharedReads);
-         DebugAssert(isPendingDirectorySharedReads);
          // b.owner can be src when m is unsatisfied since this change is made during request
          //DebugAssert(b.owner != src);
          const ReadMsg* read;
          if (isPendingDirectoryExclusiveReads)
          {
-            DebugAssert(src == pendingDirectoryExclusiveReads[m->addr].previousOwner);
-            read = pendingDirectoryExclusiveReads[m->addr].msg;
-            DebugAssert(read->originalRequestingNode == pendingDirectoryExclusiveReads[m->addr].sourceNode);
+            DebugAssert(m->isIntervention);
+            LookupData<ReadMsg> &ld = pendingDirectoryExclusiveReads[m->addr];
+            DebugAssert(src == ld.previousOwner);
+            read = ld.msg;
+            DebugAssert(read->originalRequestingNode == ld.sourceNode);
+            
+            // resend read request
+            SendRemoteRead(read,src,"OnRemReadResp");
+            
+            //AutoDetermineDestSendMsg(read,src,remoteSendTime,&ThreeStageDirectory::OnRemoteRead,
+            //   "OnRemReadRes","OnRemRead");
          }
          else if (isPendingDirectorySharedReads)
          {
+            DebugAssert(m->isIntervention);
+            DebugAssert(b.sharers.find(src)!=b.sharers.end());
             if(b.owner==src)
             {
                return;
             }
-            //DebugAssert(src == pendingDirectorySharedReads[m->addr].previousOwner);
+            DebugAssert(src == pendingDirectorySharedReads[m->addr].previousOwner);
             read = pendingDirectorySharedReads[m->addr].msg;
             DebugAssert(read->originalRequestingNode == pendingDirectorySharedReads[m->addr].sourceNode);
+            NodeID previousOwner = src;
+
+            // send nak so read request could check the directory when it resends the message
+            ReadResponseMsg* rrm = EM().CreateReadResponseMsg(getDeviceID());
+            rrm->addr = read->addr;
+            rrm->blockAttached = false;
+            rrm->directoryLookup = true;
+            rrm->satisfied = false;
+            rrm->solicitingMessage = read->MsgID();
+            rrm->size = read->size;
+         
+            NodeID sourceNode = pendingDirectorySharedReads[m->addr].sourceNode;
+            AutoDetermineDestSendMsg(rrm,sourceNode,remoteSendTime,
+               &ThreeStageDirectory::OnDirectoryBlockResponse,"OnRemoteReadResponse","OnDirBlkResp");
+            DebugAssert(b.owner==sourceNode || b.sharers.find(sourceNode)!=b.sharers.end());
+            DebugAssert(b.owner!=sourceNode || b.sharers.find(sourceNode)==b.sharers.end());
+
+            // erase the newly added node so that we don't keep trying to fetch from an invalid location
+            if (b.owner==sourceNode)
+            {
+               NodeID newOwner = *(b.sharers.begin());
+               b.owner = newOwner;
+               b.sharers.erase(newOwner);
+            }
+            else
+            {
+               b.sharers.erase(sourceNode);
+            }
+
+            pendingDirectorySharedReads.erase(m->addr);
+            printDirectoryData(m->addr,m->solicitingMessage);
+
+            /*
+            AutoDetermineDestSendMsg(read,previousOwner,lookupTime+remoteSendTime,
+               &ThreeStageDirectory::OnRemoteRead,"OnRemoteReadResponse","OnRemoteRead");
+               */
+
+            // not doing speculative replies right now
+            // request speculative reply from a sharer
+            /*
+            ReadMsg* speculativeRequest = (ReadMsg*)EM().ReplicateMsg(m);
+            speculativeRequest->alreadyHasBlock = false;
+            speculativeRequest->directoryLookup = false;
+            speculativeRequest->isInterventionShared = true;
+            speculativeRequest->requestingExclusive = false;
+            speculativeRequest->isInterventionShared = true;
+            speculativeRequest->isSpeculative = true;
+            AutoDetermineDestSendMsg(speculativeRequest,src,localSendTime,
+               &ThreeStageDirectory::OnRemoteSpeculativeReadResponse,"OnDirBlkReqShRead","OnRemoteSpecReadRes");
+               */
          }
          else
          {
             DebugFail("should not be here");
          }
-         NodeID previousOwner = src;
-
-         // send nak so read request could check the directory when it resends the message
-         ReadResponseMsg* rrm = EM().CreateReadResponseMsg(getDeviceID());
-         rrm->addr = read->addr;
-         rrm->blockAttached = false;
-         rrm->directoryLookup = true;
-         rrm->satisfied = false;
-         rrm->solicitingMessage = read->MsgID();
-         rrm->size = read->size;
-         
-         NodeID sourceNode = pendingDirectorySharedReads[m->addr].sourceNode;
-         AutoDetermineDestSendMsg(rrm,sourceNode,remoteSendTime,
-            &ThreeStageDirectory::OnDirectoryBlockResponse,"OnRemoteReadResponse","OnDirBlkResp");
-         DebugAssert(b.owner==sourceNode || b.sharers.find(sourceNode)!=b.sharers.end());
-         DebugAssert(b.owner!=sourceNode || b.sharers.find(sourceNode)==b.sharers.end());
-         if (b.owner==sourceNode)
-         {
-            NodeID newOwner = *(b.sharers.begin());
-            b.owner = newOwner;
-            b.sharers.erase(newOwner);
-         }
-         else
-         {
-            b.sharers.erase(sourceNode);
-         }
-
-         pendingDirectorySharedReads.erase(m->addr);
-         printDirectoryData(m->addr,m->solicitingMessage);
-
-         /*
-         AutoDetermineDestSendMsg(read,previousOwner,lookupTime+remoteSendTime,
-            &ThreeStageDirectory::OnRemoteRead,"OnRemoteReadResponse","OnRemoteRead");
-            */
-
-         // not doing speculative replies right now
-         // request speculative reply from a sharer
-         /*
-         ReadMsg* speculativeRequest = (ReadMsg*)EM().ReplicateMsg(m);
-         speculativeRequest->alreadyHasBlock = false;
-         speculativeRequest->directoryLookup = false;
-         speculativeRequest->isInterventionShared = true;
-         speculativeRequest->requestingExclusive = false;
-         speculativeRequest->isInterventionShared = true;
-         speculativeRequest->isSpeculative = true;
-         AutoDetermineDestSendMsg(speculativeRequest,src,localSendTime,
-            &ThreeStageDirectory::OnRemoteSpeculativeReadResponse,"OnDirBlkReqShRead","OnRemoteSpecReadRes");
-            */
       }
       else
       {

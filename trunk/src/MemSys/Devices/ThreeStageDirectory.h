@@ -145,6 +145,7 @@ namespace Memory
       void SendLocalReadResponse(const ReadResponseMsg *msgIn);
       void SendDirectoryBlockRequest(const ReadMsg *msgIn);
       void SendMemAccessComplete(Address addr, NodeID directoryNode);
+      void SendRemoteRead(const ReadMsg *m,NodeID dest,const char *fromMethod);
 		void EraseDirectoryShare(Address a, NodeID id);
 		void AddDirectoryShare(Address a, NodeID id, bool exclusive);
       void AddReversePendingLocalRead(const ReadMsg *m);
