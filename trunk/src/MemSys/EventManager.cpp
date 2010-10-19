@@ -59,7 +59,7 @@ namespace Memory
       m->exclusiveOwnership = false;
       //m->isFromEviction = false;
       m->isIntervention = false;
-      m->isWaitingForInvalidateUnblock = false;
+      m->isWaitingForInvalidateUnlock = false;
       //m->isSpeculative = false;
       m->hasPendingMemAccesses = false;
       m->pendingInvalidates = 0;
@@ -122,6 +122,15 @@ namespace Memory
 		m->SetIDInfo(currentMsgStamp++,devID,generatingPC);
       m->addr = 0;
       m->solicitingMessage = 0;
+		return m;
+	}
+	UnrequestedReadResponseMsg* EventManager::CreateUnrequestedReadResponseMsg(DeviceID devID, Address generatingPC)
+	{
+		UnrequestedReadResponseMsg* m = unrequestedReadResponsePool.Take();
+      m->blockAttached = false;
+      m->evictionMessage = 0;
+      m->exclusiveOwnership = false;
+		m->SetIDInfo(currentMsgStamp++,devID,generatingPC);
 		return m;
 	}
 	NetworkMsg* EventManager::CreateNetworkMsg(DeviceID devID, Address generatingPC)
@@ -228,6 +237,13 @@ namespace Memory
 				ret = m;
 				break;
 			}
+		case(mt_UnrequestedReadResponse):
+			{
+				UnrequestedReadResponseMsg* m = CreateUnrequestedReadResponseMsg(msg->GeneratingDeviceID(),msg->GeneratingPC());
+				*m = *((UnrequestedReadResponseMsg*)msg);
+				ret = m;
+				break;
+			}
 		case(mt_Network):
 			{
 				NetworkMsg* m = CreateNetworkMsg(msg->GeneratingDeviceID(),msg->GeneratingPC());
@@ -259,6 +275,7 @@ namespace Memory
 			case(mt_InterventionComplete): interventionCompletePool.Return((InterventionCompleteMsg*)msg); break;
 			case(mt_InvalidationComplete): invalidationCompletePool.Return((InvalidationCompleteMsg*)msg); break;
 			case(mt_ReadComplete): readCompletePool.Return((ReadCompleteMsg*)msg); break;
+			case(mt_UnrequestedReadResponse): unrequestedReadResponsePool.Return((UnrequestedReadResponseMsg*)msg); break;
 			case(mt_Network): networkPool.Return((NetworkMsg*)msg); break;
 			default: DebugFail("Unknown Msg Type");
 		}

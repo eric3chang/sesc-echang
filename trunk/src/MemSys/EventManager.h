@@ -10,6 +10,7 @@
 #include "InterventionCompleteMsg.h"
 #include "InvalidationCompleteMsg.h"
 #include "ReadCompleteMsg.h"
+#include "UnrequestedReadResponseMsg.h"
 
 namespace Memory
 {
@@ -50,6 +51,7 @@ namespace Memory
 		Pool<InterventionCompleteMsg> interventionCompletePool;
 		Pool<InvalidationCompleteMsg> invalidationCompletePool;
 		Pool<ReadCompleteMsg> readCompletePool;
+		Pool<UnrequestedReadResponseMsg> unrequestedReadResponsePool;
 		Pool<NetworkMsg> networkPool;
 	public:
 		ReadMsg* CreateReadMsg(DeviceID devID, Address generatingPC = 0);
@@ -65,6 +67,7 @@ namespace Memory
 		InterventionCompleteMsg* CreateInterventionCompleteMsg(DeviceID devID, Address generatingPC = 0);
 		InvalidationCompleteMsg* CreateInvalidationCompleteMsg(DeviceID devID, Address generatingPC = 0);
 		ReadCompleteMsg* CreateReadCompleteMsg(DeviceID devID, Address generatingPC = 0);
+		UnrequestedReadResponseMsg* CreateUnrequestedReadResponseMsg(DeviceID devID, Address generatingPC = 0);
 		NetworkMsg* CreateNetworkMsg(DeviceID devID, Address generatingPC = 0);
 
 		BaseMsg* ReplicateMsg(const BaseMsg* msg);

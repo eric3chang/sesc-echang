@@ -501,6 +501,9 @@
     <ClInclude Include="MemSys\Messages\ReadCompleteMsg.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MemSys\Messages\UnrequestedReadResponseMsg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="libmem\AddressPrefetcher.cpp">
