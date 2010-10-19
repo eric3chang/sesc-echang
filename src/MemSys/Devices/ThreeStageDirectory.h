@@ -143,6 +143,7 @@ namespace Memory
 
       void HandleInterventionComplete(const BaseMsg *msgIn, bool isPendingExclusive);
       void HandleReceivedAllInvalidates(Address myAddress);
+      bool IsInPendingDirectoryNormalSharedRead(const ReadMsg *m);
 		//void PerformDirectoryFetch(Address a, NodeID src);
 		void PerformDirectoryFetch(const ReadMsg *msgIn, NodeID src);
       void PerformDirectoryFetch(const ReadMsg *msgIn,NodeID src,bool isExclusive,NodeID target);
@@ -154,8 +155,9 @@ namespace Memory
 		void EraseDirectoryShare(Address a, NodeID id);
 		void AddDirectoryShare(Address a, NodeID id, bool exclusive);
       void AddReversePendingLocalRead(const ReadMsg *m);
-      void AddPendingDirectoryNormalSharedRead(const ReadMsg *m, NodeID src);
       void EraseReversePendingLocalRead(const ReadResponseMsg *m,const ReadMsg *ref);
+      void AddPendingDirectoryNormalSharedRead(const ReadMsg *m, NodeID src);
+      void ErasePendingDirectoryNormalSharedRead(const ReadResponseMsg *m);
       void ChangeOwnerToShare(Address a, NodeID id);
       void writeToMainMemory(const EvictionMsg *m);
       void writeToMainMemory(const InvalidateResponseMsg *m);

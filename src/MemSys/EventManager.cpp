@@ -21,6 +21,7 @@ namespace Memory
 		m->directoryLookup = false;
 		m->originalRequestingNode = InvalidNodeID;
 		m->isIntervention = false;
+      m->isNonBusySharedRead = false;
       m->isWaitingForInvalidateUnlock = false;
       //m->isSpeculative = false;
 		m->SetIDInfo(currentMsgStamp++,devID,generatingPC);

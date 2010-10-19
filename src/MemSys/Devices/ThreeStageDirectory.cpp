@@ -217,6 +217,22 @@ namespace Memory
 		}
 	}
 
+   bool ThreeStageDirectory::IsInPendingDirectoryNormalSharedRead(const ReadMsg *m)
+   {
+      DebugAssert(pendingDirectoryNormalSharedReads.find(m->addr)!=pendingDirectoryNormalSharedReads.end());
+      AddrLookupIteratorPair &iteratorPair = pendingDirectoryNormalSharedReads.equal_range(m->addr);
+      for (; iteratorPair.first!=iteratorPair.second; ++iteratorPair.first)
+      {
+         LookupData<ReadMsg> &ld = iteratorPair.first->second;
+         const ReadMsg *ref = ld.msg;
+         if (ref->MsgID()==m->MsgID())
+         {
+            return true;
+         }
+      }
+      return false;
+   }
+
    // performs a directory fetch
 	void ThreeStageDirectory::PerformDirectoryFetch(const ReadMsg* msgIn,NodeID src,bool isExclusive,NodeID target)
 	{
@@ -286,7 +302,7 @@ namespace Memory
 		if(remoteNode == nodeID)
 		{
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-		   printDebugInfo("OnDirectoryBlockRequest",*forward,"SendDirBlkReq");
+		   printDebugInfo("OnDirBlkRequ",*forward,"SendDirBlkReq");
 #endif
 			CBOnDirectoryBlockRequest::FunctionType* f = cbOnDirectoryBlockRequest.Create();
 			f->Initialize(this,forward,nodeID);
@@ -433,6 +449,32 @@ namespace Memory
       DebugAssert(myMap.find(m->MsgID())==myMap.end());
       myMap[m->MsgID()] = (ReadMsg*)EM().ReplicateMsg(m);
    }
+   
+   void ThreeStageDirectory::ErasePendingDirectoryNormalSharedRead(const ReadResponseMsg *m)
+   {
+      BlockData &b = directoryData[m->addr];
+      AddrLookupIteratorPair &iteratorPair = pendingDirectoryNormalSharedReads.equal_range(m->addr);
+      bool hasFoundReadMsg = false;
+      for (; iteratorPair.first != iteratorPair.second; ++iteratorPair.first)
+      {
+         LookupData<ReadMsg> &ld = iteratorPair.first->second;
+         const ReadMsg *myReadMsg = ld.msg;
+         if (myReadMsg->MsgID()==m->solicitingMessage)
+         {
+            hasFoundReadMsg = true;
+            // because we replicated the read message that was actually sent
+               // to the owner or sharer, the original message doesn't
+               // have isNonBusySharedRead == true
+            //DebugAssert(myReadMsg->isNonBusySharedRead);
+            EM().DisposeMsg(myReadMsg);
+            break;
+         }
+      }
+      DebugAssert(hasFoundReadMsg);
+      // delete from pendingDirectoryNormalSharedReads
+      pendingDirectoryNormalSharedReads.erase(iteratorPair.first);
+      return;
+   }
 
    void ThreeStageDirectory::AddPendingDirectoryNormalSharedRead(const ReadMsg *m, NodeID src)
    {
@@ -441,6 +483,7 @@ namespace Memory
       ld.sourceNode = src;
       AddrLookupPair insertedPair(m->addr,ld);
       pendingDirectoryNormalSharedReads.insert(insertedPair);
+      return;
    }
 
    void ThreeStageDirectory::EraseReversePendingLocalRead(const ReadResponseMsg *m,const ReadMsg *ref)
@@ -458,6 +501,7 @@ namespace Memory
       {
          reversePendingLocalReads.erase(m->addr);
       }
+      return;
    }
 
    void ThreeStageDirectory::ChangeOwnerToShare(Address a, NodeID id)
@@ -666,19 +710,29 @@ namespace Memory
       else
       {
          // send response back to the requester
-         ReadResponseMsg* forward = (ReadResponseMsg*)EM().ReplicateMsg(m);
-         forward->originalRequestingNode = d.msg->originalRequestingNode;
+         ReadResponseMsg* blockResponse = (ReadResponseMsg*)EM().ReplicateMsg(m);
+         blockResponse->originalRequestingNode = d.msg->originalRequestingNode;
          // changed this to true because of 3-stage directory
-         forward->directoryLookup = true;
-         forward->isIntervention = false;
-         forward->isWaitingForInvalidateUnblock = d.msg->isWaitingForInvalidateUnlock;
-         //forward->isSpeculative = d.msg->isSpeculative;
+         blockResponse->directoryLookup = true;
+         blockResponse->isIntervention = false;
+         blockResponse->isWaitingForInvalidateUnblock = d.msg->isWaitingForInvalidateUnlock;
+         blockResponse->originalRequestingNode = d.msg->originalRequestingNode;
+         //blockResponse->isSpeculative = d.msg->isSpeculative;
          // the destination node is the original requesting node, and not the directory
-         AutoDetermineDestSendMsg(forward,d.msg->originalRequestingNode,remoteSendTime+lookupTime,
+         AutoDetermineDestSendMsg(blockResponse,d.msg->originalRequestingNode,remoteSendTime+lookupTime,
                &ThreeStageDirectory::OnDirectoryBlockResponse,"OnLocReadRes","OnDirBlkResp");
 
-         // Add stuff here?
-         //if (
+         // if it is coming from a non-busy shared read, send response to directory to
+            // notify directory to erase the message
+         if (d.msg->isNonBusySharedRead)
+         {
+            NodeID directoryNode = directoryNodeCalc->CalcNodeID(m->addr);
+            ReadResponseMsg* toDir = (ReadResponseMsg*)EM().ReplicateMsg(m);
+            toDir->directoryLookup = false;
+            toDir->originalRequestingNode = d.msg->originalRequestingNode;
+            AutoDetermineDestSendMsg(toDir,directoryNode,remoteSendTime,
+               &ThreeStageDirectory::OnRemoteReadResponse,"OnLocReadRes","OnRemReadRes");
+         }
       }
       // cannot dispose this message because it's in OnLocalRead
       //EM().DisposeMsg(pendingRemoteReads[m->solicitingMessage].msg);
@@ -820,10 +874,16 @@ namespace Memory
       bool isPendingMainMemAccesses = (pendingMainMemAccesses.find(m->addr)!=pendingMainMemAccesses.end());
       bool isWaitingForInterventionComplete = (waitingForInterventionComplete.find(m->solicitingMessage)!=waitingForInterventionComplete.end());
       bool isWaitingForReadResponse = (waitingForReadResponse.find(m->addr)!=waitingForReadResponse.end());
+      bool isWaitingForSharedRead = (pendingDirectoryNormalSharedReads.find(m->addr)!=pendingDirectoryNormalSharedReads.end());
 
-		DebugAssert(isPendingDirectorySharedReads || isPendingDirectoryExclusiveReads || isPendingMainMemAccesses || isWaitingForReadResponse);
+      // is not used to indicate busy
+      bool isWaitingForInvalidationComplete = waitingForInvalidationComplete.find(m->addr)!=waitingForInvalidationComplete.end();
+
+		DebugAssert(isPendingDirectorySharedReads || isPendingDirectoryExclusiveReads || isPendingMainMemAccesses || isWaitingForReadResponse
+         || isWaitingForSharedRead);
       // m->addr should only exist in one of the HashMaps
-      int pendingCount = isPendingDirectorySharedReads + isPendingDirectoryExclusiveReads + isPendingMainMemAccesses + isWaitingForReadResponse;
+      int pendingCount = isPendingDirectorySharedReads + isPendingDirectoryExclusiveReads + isPendingMainMemAccesses + isWaitingForReadResponse
+         + isWaitingForSharedRead;
 		DebugAssert(pendingCount == 1);
 		DebugAssert(directoryData.find(m->addr) != directoryData.end());
 
@@ -1051,10 +1111,34 @@ namespace Memory
                &ThreeStageDirectory::OnRemoteSpeculativeReadResponse,"OnDirBlkReqShRead","OnRemoteSpecReadRes");
                */
          }
+         else if (b.sharers.size()!=0)
+         {//non-busy shared response satisfied. We still have to erase pending directory normal shared read
+            BlockData &b = directoryData[m->addr];
+            // requesting node doesn't have to be in the directory if eviction was called before OnRemoteReadResponse arrived
+            DebugAssert(b.owner==m->originalRequestingNode || b.sharers.find(m->originalRequestingNode)!=b.sharers.end());
+            ErasePendingDirectoryNormalSharedRead(m);
+            return;
+         }
          else
          {
             DebugFail("should not be here");
          }
+      }
+      else if (directoryData[m->addr].sharers.size()!=0)
+      {// regular non-busy shared response
+         BlockData &b = directoryData[m->addr];
+         // check that the requesting node is in fact in the directory
+         // requesting node doesn't have to be in the directory if eviction was called before OnRemoteReadResponse arrived
+         //DebugAssert(b.owner==m->originalRequestingNode || b.sharers.find(m->originalRequestingNode)!=b.sharers.end());
+         ErasePendingDirectoryNormalSharedRead(m);
+         return;
+      }
+      else if (isWaitingForInvalidationComplete)
+      {// we have been invalidated by an exclusive request. erase pending directory normal shared read
+         BlockData &b = directoryData[m->addr];
+         DebugAssert(b.sharers.size()==0);
+         ErasePendingDirectoryNormalSharedRead(m);
+         return;
       }
       else
       {
@@ -1600,6 +1684,8 @@ namespace Memory
       DebugAssert(msgIn->Type()==mt_ReadComplete);
       ReadCompleteMsg* m = (ReadCompleteMsg*)msgIn;
 
+      DebugAssert(directoryNodeCalc->CalcNodeID(m->addr)==nodeID);
+
       DebugAssert(invalidateLock.find(m->addr)!=invalidateLock.end());
       std::vector<ReadMsg> &invalidateLockVector = invalidateLock[m->addr];
 
@@ -1624,6 +1710,9 @@ namespace Memory
          invalidateLock.erase(m->addr);
       }
       EM().DisposeMsg(m);
+#ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_DIRECTORY_DATA
+      printDirectoryData(m->addr,m->solicitingMessage);
+#endif
    } // ThreeStageDirectory::OnRemoteReadComplete
 
 	void ThreeStageDirectory::OnDirectoryBlockRequest(const BaseMsg* msgIn, NodeID src)
@@ -1765,18 +1854,52 @@ namespace Memory
             // perform directory fetch before modifying directoryData
             ReadMsg *forward = (ReadMsg*)EM().ReplicateMsg(m);
             forward->isWaitingForInvalidateUnlock = true;
-            //PerformDirectoryFetch(forward,src,false,b.owner);
-            // have to use sharers.begin because using owner results in livelock
-            PerformDirectoryFetch(forward,src,false,*(b.sharers.begin()));
+            forward->isNonBusySharedRead = true;
+            
+            // find a destination that is not src, because if src is in
+               // b, it means we just inserted it and we haven't satisfied the insertion
+            NodeID dest = InvalidNodeID;
+            if (b.owner!=src)
+            {
+               DebugAssert(b.owner!=InvalidNodeID);
+               dest = b.owner;
+            }
+            else
+            {
+               for each (NodeID tempNodeID in b.sharers)
+               {
+                  if (tempNodeID != src)
+                  {
+                     dest = tempNodeID;
+                     break;
+                  }
+               }
+               /*
+               for (HashSet<NodeID>::iterator i = b.sharers.begin(); i < b.sharers.end(); i++)
+               {
+                  if (i != src)
+                  {
+                     dest = i;
+                     break;
+                  }
+               }
+               */
+            }
+            DebugAssert(dest!=InvalidNodeID);
+            PerformDirectoryFetch(forward,src,false,dest);
          
-            b.sharers.insert(src);
+            if (b.owner!=src)
+            {
+               // readd the sharers to the end
+               b.sharers.insert(b.sharers.end(), src);
+            }
             // do not dispose msg here, because we are forwarding it
             //EM().DisposeMsg(m);
             return;
          }
          else
          {//hasSentRequestPreviously
-            DebugFail("has sent request previously");
+            DebugAssert(IsInPendingDirectoryNormalSharedRead(m));
             std::vector<ReadMsg> &invalidateLockVector = invalidateLock[m->addr];
             bool hasMessage = false;
             for (std::vector<ReadMsg>::iterator i=invalidateLockVector.begin();
@@ -1790,17 +1913,44 @@ namespace Memory
             }
             DebugAssert(hasMessage);
 
-            // perform directory fetch before modifying directoryData
             ReadMsg *forward = (ReadMsg*)EM().ReplicateMsg(m);
             forward->isWaitingForInvalidateUnlock = true;
+            forward->isNonBusySharedRead = true;
             //PerformDirectoryFetch(forward,src,false,b.owner);
-            // have to use sharers.begin because using owner results in livelock
-            PerformDirectoryFetch(forward,src,false,*(b.sharers.begin()));
-         
-            DebugAssert(b.sharers.find(src)!=b.sharers.end());
-            // dispose message here, because we already have it.
-               // it's okay to dispose here because OnLocalRead replicates a message
-            EM().DisposeMsg(m);
+
+            // find a destination that is not src, because if src is in
+               // b, it means we just inserted it and we haven't satisfied the insertion
+            NodeID dest = InvalidNodeID;
+            if (b.owner!=src)
+            {
+               DebugAssert(b.owner!=InvalidNodeID);
+               dest = b.owner;
+            }
+            else
+            {
+               for each (NodeID tempNodeID in b.sharers)
+               {
+                  if (tempNodeID != src)
+                  {
+                     dest = tempNodeID;
+                     break;
+                  }
+               }
+               /*
+               for (HashSet<NodeID>::iterator i = b.sharers.begin(); i < b.sharers.end(); i++)
+               {
+                  if (i != src)
+                  {
+                     dest = i;
+                     break;
+                  }
+               }
+               */
+            }
+            DebugAssert(dest!=InvalidNodeID);
+            PerformDirectoryFetch(forward,src,false,dest);
+            // cannot dispose this message
+            //EM().DisposeMsg(m);
             return;            
          }
       }// else if (b.sharers.size()!=0)
@@ -2308,7 +2458,7 @@ namespace Memory
 					if(m->directoryLookup)
 					{
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-               printDebugInfo("OnDirectoryBlockRequest",*m,"RecvMsg",src);
+               printDebugInfo("OnDirBlkRequ",*m,"RecvMsg",src);
 #endif
 						OnDirectoryBlockRequest(m,src);
 					}
@@ -2533,11 +2683,11 @@ namespace Memory
    void ThreeStageDirectory::printDebugInfo(const char* fromMethod,Address addr,NodeID id,const char* operation)
    {
       cout << setw(17) << " " // account for spacing from src and msgSrc
-            << " dst=" << setw(2) << getDeviceID()
+            << " dst=" << setw(3) << getDeviceID()
             << setw(10) << " "   // account for spacing from msgID
             << " addr=" << addr
             << " 3SDir:" << fromMethod
-            << " " << operation << "(" << id << ")"
+            << " " << operation << "(" << 7+(id*4) << ")"
             << endl;
    }
 
