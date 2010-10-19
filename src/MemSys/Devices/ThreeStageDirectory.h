@@ -70,7 +70,7 @@ namespace Memory
 		class LookupData
 		{
 		public:
-         LookupData() : previousOwner(InvalidNodeID) {}
+         LookupData() : msg(NULL), sourceNode(InvalidNodeID), previousOwner(InvalidNodeID) {}
 			const T* msg;
 			NodeID sourceNode;
          NodeID previousOwner;
@@ -98,6 +98,10 @@ namespace Memory
          HashMap<MessageID,const ReadMsg*>sharedRead;
       };
 
+      typedef HashMultiMap<Address,LookupData<ReadMsg> > AddrLookupHashMultiMap;
+      typedef std::pair<Address,LookupData<ReadMsg> > AddrLookupPair;
+      typedef std::pair<AddrLookupHashMultiMap::iterator,AddrLookupHashMultiMap::iterator> AddrLookupIteratorPair;
+
       unsigned int messagesReceived;
 
 		TimeDelta localSendTime;
@@ -117,8 +121,9 @@ namespace Memory
       HashMap<Address, ReversePendingLocalReadData>reversePendingLocalReads;
 		HashMap<MessageID, LookupData<ReadMsg> > pendingRemoteReads;
 		HashMap<MessageID, LookupData<InvalidateMsg> > pendingRemoteInvalidates;
-		HashMap<Address, LookupData<ReadMsg> > pendingDirectorySharedReads;
-		HashMap<Address, LookupData<ReadMsg> > pendingDirectoryExclusiveReads;
+		HashMap<Address, LookupData<ReadMsg> > pendingDirectoryBusySharedReads;
+		HashMultiMap<Address, LookupData<ReadMsg> > pendingDirectoryNormalSharedReads;
+		HashMap<Address, LookupData<ReadMsg> > pendingDirectoryBusyExclusiveReads;
       HashMap<Address, std::vector<LookupData<ReadMsg> > > pendingMainMemAccesses;
       HashSet<MessageID> pendingMemoryWrites;
       //HashSet<Address> pendingIgnoreInterventions;
@@ -131,7 +136,7 @@ namespace Memory
 		HashMap<Address, const EvictionMsg*> pendingEviction;
       HashMap<Address, std::vector<ReadMsg> >invalidateLock;
 		HashMap<Address, BlockData> directoryData;
-		//HashMap<Address, BlockData> pendingDirectoryExclusiveReadsDirectoryData;
+		//HashMap<Address, BlockData> pendingDirectoryBusyExclusiveReadsDirectoryData;
       //HashMap<MessageID, LookupData<ReadMsg> > pendingSpeculativeReads;
       //HashMap<Address, const ReadResponseMsg* > pendingSpeculativeReadResponses;
       //HashMap<MessageID, int> unsatisfiedRequests;
@@ -149,6 +154,7 @@ namespace Memory
 		void EraseDirectoryShare(Address a, NodeID id);
 		void AddDirectoryShare(Address a, NodeID id, bool exclusive);
       void AddReversePendingLocalRead(const ReadMsg *m);
+      void AddPendingDirectoryNormalSharedRead(const ReadMsg *m, NodeID src);
       void EraseReversePendingLocalRead(const ReadResponseMsg *m,const ReadMsg *ref);
       void ChangeOwnerToShare(Address a, NodeID id);
       void writeToMainMemory(const EvictionMsg *m);
@@ -192,7 +198,7 @@ namespace Memory
 	   void printEraseOwner(const char* fromMethod,Address addr,NodeID id,const char* operation);
 
       void printDirectoryData(Address myAddress, MessageID myMessageID);
-		void printPendingDirectorySharedReads();
+		void printPendingDirectoryBusySharedReads();
 	   void printPendingLocalReads();
 
 		typedef PooledFunctionGenerator<StoredClassFunction2<ThreeStageDirectory,const BaseMsg*, NodeID, &ThreeStageDirectory::OnDirectoryBlockRequest> > CBOnDirectoryBlockRequest;
