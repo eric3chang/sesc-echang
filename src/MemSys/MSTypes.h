@@ -27,6 +27,7 @@ namespace Memory
 		mt_InvalidateResponse,
 		mt_EvictionResponse,
       mt_EvictionBusyAck,
+      mt_UnrequestedReadResponse,
 
       // messages used to signal a completion of an operation, may not contain data
       mt_MemAccessComplete,

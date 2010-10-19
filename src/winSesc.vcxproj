@@ -664,6 +664,7 @@
     <ClInclude Include="memsys\messages\networkmsg.h" />
     <ClInclude Include="MemSys\Messages\ReadCompleteMsg.h" />
     <ClInclude Include="MemSys\Messages\SpeculativeReadResponseMsg.h" />
+    <ClInclude Include="MemSys\Messages\UnrequestedReadResponseMsg.h" />
     <ClInclude Include="MemSys\MSTypes.h" />
     <ClInclude Include="libmem\mtst1.h" />
     <ClInclude Include="libmint\myelf.h" />

@@ -96,6 +96,8 @@ namespace Memory
       public:
          HashMap<MessageID,const ReadMsg*>exclusiveRead;
          HashMap<MessageID,const ReadMsg*>sharedRead;
+         bool isSatisfiedByEviction;
+         ReversePendingLocalReadData() : isSatisfiedByEviction(false) {}
       };
 
       typedef HashMultiMap<Address,LookupData<ReadMsg> > AddrLookupHashMultiMap;
@@ -180,6 +182,7 @@ namespace Memory
 		void OnRemoteEvictionBusyAck(const BaseMsg* msgIn, NodeID src);
 		void OnRemoteInvalidate(const BaseMsg* msgIn, NodeID src);
 		void OnRemoteInvalidateResponse(const BaseMsg* msgIn, NodeID src);
+		void OnRemoteUnrequestedReadResponse(const BaseMsg* msgIn, NodeID src);
 
 		void OnRemoteMemAccessComplete(const BaseMsg* msgIn, NodeID src);
       void OnRemoteInterventionComplete(const BaseMsg* msgIn, NodeID src);

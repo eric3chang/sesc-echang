@@ -17,7 +17,7 @@ namespace Memory
       bool hasPendingMemAccesses;
       //bool isFromEviction;
       bool isIntervention;
-      bool isWaitingForInvalidateUnblock;
+      bool isWaitingForInvalidateUnlock;
       int pendingInvalidates;
       //bool isSpeculative;   // not implementing speculative right now
 		MessageID solicitingMessage;
@@ -39,7 +39,7 @@ namespace Memory
             << " memAcc=" << hasPendingMemAccesses
             //<< " isEvic=" << isFromEviction
             << " intv=" << isIntervention
-            << " invUnblk=" << isWaitingForInvalidateUnblock
+            << " invUnlk=" << isWaitingForInvalidateUnlock
             << " ogNode=" << convertDirectoryNetworkIDToDeviceNodeID(originalRequestingNode)
             << " pendInv=" << pendingInvalidates
             //<< " spec=" << isSpeculative
