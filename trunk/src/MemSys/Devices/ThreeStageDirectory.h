@@ -208,6 +208,8 @@ namespace Memory
 
 		typedef PooledFunctionGenerator<StoredClassFunction2<ThreeStageDirectory,const BaseMsg*, NodeID, &ThreeStageDirectory::OnDirectoryBlockRequest> > CBOnDirectoryBlockRequest;
 		CBOnDirectoryBlockRequest cbOnDirectoryBlockRequest;
+      typedef PooledFunctionGenerator<StoredClassFunction2<ThreeStageDirectory,const BaseMsg*, NodeID, &ThreeStageDirectory::OnRemoteEviction> > CBOnRemoteEviction;
+		CBOnRemoteEviction cbOnRemoteEviction;
       typedef PooledFunctionGenerator<StoredClassFunction2<ThreeStageDirectory,const BaseMsg*, NodeID, &ThreeStageDirectory::OnRemoteRead> > CBOnRemoteRead;
 		CBOnRemoteRead cbOnRemoteRead;
       typedef PooledFunctionGenerator<StoredClassFunction2<ThreeStageDirectory,Address, NodeID, &ThreeStageDirectory::SendMemAccessComplete> > CBSendMemAccessComplete;

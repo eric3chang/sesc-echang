@@ -188,7 +188,7 @@ namespace Memory
 		if(target == nodeID)
 		{
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-               printDebugInfo("OnRemoteRead",*m,"PerformDirectoryFetch(ReadMsg,src)",nodeID);
+               printDebugInfo("OnRemRead",*m,"PerDirFet(ReadMsg,src)",nodeID);
 #endif
          //TODO 2010/09/02 Eric, change this because of 3-stage directory
          //OnRemoteRead should know to use m->requestingNode
@@ -260,7 +260,7 @@ namespace Memory
 		{
          DebugAssert(m->directoryLookup==false);
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-               printDebugInfo("OnRemoteRead",*m,"PerformDirectoryFetch(m,src,isEx,targ)",nodeID);
+               printDebugInfo("OnRemRead",*m,"PerDirFet(m,src,isEx,targ)",nodeID);
 #endif
 			OnRemoteRead(m, nodeID);
 		}
@@ -789,9 +789,12 @@ namespace Memory
 		if(directoryNode == nodeID)
 		{
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-               printDebugInfo("OnRemoteEviction",*m,"OnLocalEviction",nodeID);
+               printDebugInfo("OnRemEvic",*m,"OnLocalEviction",nodeID);
 #endif
-			OnRemoteEviction(m,nodeID);
+         CBOnRemoteEviction::FunctionType* f = cbOnRemoteEviction.Create();
+         f->Initialize(this,m,nodeID);
+         // stagger the events so they don't all try to request at the same time
+         EM().ScheduleEvent(f, localSendTime);
 		}
 		else
 		{
@@ -848,7 +851,7 @@ namespace Memory
       ReadMsg* m = (ReadMsg*)msgIn;
 		DebugAssert(!m->directoryLookup);
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_REMOTE_READS
-		printDebugInfo("OnRemoteRead", *m,
+		printDebugInfo("OnRemRead", *m,
 		      ("pendingRemoteReads.insert("+to_string<MessageID>(m->MsgID())+")").c_str());
 #endif
       // if we are still waiting for invalidates, put it in a queue
@@ -1017,12 +1020,13 @@ namespace Memory
          // either way, we should not send any messages
 
          // by this time, we should have removed src from sharers
+
          DebugAssert(b.owner!=InvalidNodeID);
          // owner could be src if an eviction message came from the previous owner was received before this
             // and OnRemoteEviction should change b.owner to src.
          // owner could also not be source if eviction message came from an oldSharer and src was simply deleted
          //DebugAssert(b.owner==src);
-         DebugAssert(b .sharers.find(src)==b.sharers.end());
+         DebugAssert(b.sharers.find(src)==b.sharers.end());
          
          DebugAssert(waitingForReadResponse.find(m->addr)!=waitingForReadResponse.end());
          EM().DisposeMsg(waitingForReadResponse[m->addr]);
@@ -1078,7 +1082,7 @@ namespace Memory
          
             NodeID sourceNode = pendingDirectoryBusySharedReads[m->addr].sourceNode;
             AutoDetermineDestSendMsg(rrm,sourceNode,remoteSendTime,
-               &ThreeStageDirectory::OnDirectoryBlockResponse,"OnRemoteReadResponse","OnDirBlkResp");
+               &ThreeStageDirectory::OnDirectoryBlockResponse,"OnRemReadRes","OnDirBlkResp");
             DebugAssert(b.owner==sourceNode || b.sharers.find(sourceNode)!=b.sharers.end());
             DebugAssert(b.owner!=sourceNode || b.sharers.find(sourceNode)==b.sharers.end());
 
@@ -1099,7 +1103,7 @@ namespace Memory
 
             /*
             AutoDetermineDestSendMsg(read,previousOwner,lookupTime+remoteSendTime,
-               &ThreeStageDirectory::OnRemoteRead,"OnRemoteReadResponse","OnRemoteRead");
+               &ThreeStageDirectory::OnRemoteRead,"OnRemReadRes","OnRemRead");
                */
 
             // not doing speculative replies right now
@@ -1324,7 +1328,7 @@ namespace Memory
             sharedResponse->satisfied = true;
             sharedResponse->solicitingMessage = ref->MsgID();
             AutoDetermineDestSendMsg(sharedResponse,b.owner,remoteSendTime,
-               &ThreeStageDirectory::OnDirectoryBlockResponse,"OnRemoteEviction","OnDirBlkResp");
+               &ThreeStageDirectory::OnDirectoryBlockResponse,"OnRemEvic","OnDirBlkResp");
          }
          // else if we deleted the owner, it means the owner just evicted itself,
             // so we should not send shared response
@@ -1337,7 +1341,7 @@ namespace Memory
          busyAck->size = m->size;
          busyAck->solicitingMessage = m->MsgID();
          AutoDetermineDestSendMsg(busyAck,src,remoteSendTime,
-            &ThreeStageDirectory::OnRemoteEvictionResponse,"OnRemoteEviction","OnRemoteEvictionRes");
+            &ThreeStageDirectory::OnRemoteEvictionResponse,"OnRemEvic","OnRemEvicRes");
 
          // if we are here, it means OnLocalEviction is called before OnRemoteRead called on the oldOwner,
          // so we are waiting for a read response message that could be satisfied or unsatisfied
@@ -1385,7 +1389,7 @@ namespace Memory
          exclusiveResponse->size = m->size;
          exclusiveResponse->solicitingMessage = ref->MsgID();
          AutoDetermineDestSendMsg(exclusiveResponse,b.owner,remoteSendTime,
-            &ThreeStageDirectory::OnDirectoryBlockResponse,"OnRemoteEviction","OnDirBlkResp");
+            &ThreeStageDirectory::OnDirectoryBlockResponse,"OnRemEvic","OnDirBlkResp");
 
          // send writeback busy acknowledgement to eviction requestor
          EvictionResponseMsg *busyAck = EM().CreateEvictionResponseMsg(getDeviceID());
@@ -1395,7 +1399,7 @@ namespace Memory
          busyAck->size = m->size;
          busyAck->solicitingMessage = m->MsgID();
          AutoDetermineDestSendMsg(busyAck,src,remoteSendTime,
-            &ThreeStageDirectory::OnRemoteEvictionResponse,"OnRemoteEviction","OnRemoteEvictionRes");
+            &ThreeStageDirectory::OnRemoteEvictionResponse,"OnRemEvic","OnRemEvicRes");
 
          // if we are here, it means OnLocalEviction is called before OnRemoteRead called on the oldOwner,
          // so we are waiting for an unsatisfied read response message
@@ -1419,7 +1423,7 @@ namespace Memory
 			rm->solicitingMessage = m->MsgID();
 
          AutoDetermineDestSendMsg(rm,src,remoteSendTime,&ThreeStageDirectory::OnRemoteEvictionResponse
-            ,"OnRemoteEviction","OnRemoteEvictionResponse");
+            ,"OnRemEvic","OnRemEvicResponse");
 
          b.owner=InvalidNodeID;
          EM().DisposeMsg(m);
@@ -1434,7 +1438,7 @@ namespace Memory
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_DIRECTORY_DATA
          if (b.owner==src || b.sharers.find(src)!=b.sharers.end())
          {
-            printDebugInfo("OnRemoteEviction",*m,
+            printDebugInfo("OnRemEvic",*m,
                ("b.sharers.erase("+to_string<NodeID>(7+(4*src))+")").c_str(),src);
          }
 #endif         
@@ -1476,7 +1480,7 @@ namespace Memory
          evictionResponse->size = m->size;
          evictionResponse->solicitingMessage = m->MsgID();
          AutoDetermineDestSendMsg(evictionResponse,src,remoteSendTime,
-            &ThreeStageDirectory::OnRemoteEvictionResponse,"OnRemoteEviction","OnRemoteEvictionRes");         
+            &ThreeStageDirectory::OnRemoteEvictionResponse,"OnRemEvic","OnRemEvicRes");         
          EM().DisposeMsg(m);
 		}
 
@@ -1496,7 +1500,7 @@ namespace Memory
       DebugAssert(msgIn->Type()==mt_EvictionResponse);
       EvictionResponseMsg* m = (EvictionResponseMsg*)msgIn;
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_EVICTION
-      printDebugInfo("OnRemoteEvictionResponse", *m,
+      printDebugInfo("OnRemEvicResponse", *m,
             ("pendingEviction.erase("+to_string<Address>(m->addr)+")").c_str());
 #endif
       // if we have OnLocalReads waiting for this evictionResponse
@@ -2035,7 +2039,7 @@ namespace Memory
          pendingDirectoryBusySharedReads[m->addr].msg = read;
          pendingDirectoryBusySharedReads[m->addr].previousOwner = previousOwner;
          AutoDetermineDestSendMsg(read,previousOwner,localSendTime,
-            &ThreeStageDirectory::OnRemoteRead,"OnDirBlkReqShRead","OnRemoteRead");
+            &ThreeStageDirectory::OnRemoteRead,"OnDirBlkReqShRead","OnRemRead");
 
          // not doing speculative replies right now
          // request speculative reply from a sharer
@@ -2225,7 +2229,7 @@ namespace Memory
          pendingDirectoryBusyExclusiveReads[m->addr].msg = read;
          pendingDirectoryBusyExclusiveReads[m->addr].previousOwner = previousOwner;
          AutoDetermineDestSendMsg(read,previousOwner,lookupTime+remoteSendTime,
-            &ThreeStageDirectory::OnRemoteRead,"OnDirBlkReqExRead","OnRemoteRead");
+            &ThreeStageDirectory::OnRemoteRead,"OnDirBlkReqExRead","OnRemRead");
 
          // not doing speculative replies right now
          // request speculative reply from a sharer
@@ -2532,7 +2536,7 @@ namespace Memory
 					else
 					{
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-               printDebugInfo("OnRemoteRead",*m,"RecvMsg",src);
+               printDebugInfo("OnRemRead",*m,"RecvMsg",src);
 #endif
 						OnRemoteRead(m,src);
 					}
@@ -2578,7 +2582,7 @@ namespace Memory
 			case(mt_Eviction):
 				{
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-               printDebugInfo("OnRemoteEviction",*payload,"RecvMsg",src);
+               printDebugInfo("OnRemEvic",*payload,"RecvMsg",src);
 #endif
 					OnRemoteEviction(payload,src);
 					break;
@@ -2586,7 +2590,7 @@ namespace Memory
 			case(mt_EvictionResponse):
 				{
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-               printDebugInfo("OnRemoteEvictionResponse",*payload,"RecvMsg",src);
+               printDebugInfo("OnRemEvicResponse",*payload,"RecvMsg",src);
 #endif
 					OnRemoteEvictionResponse(payload,src);
 					break;
@@ -2594,7 +2598,7 @@ namespace Memory
 			case(mt_EvictionBusyAck):
 				{
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-               printDebugInfo("OnRemoteEvictionBusyAck",*payload,"RecvMsg",src);
+               printDebugInfo("OnRemEvicBusyAck",*payload,"RecvMsg",src);
 #endif
 					OnRemoteEvictionBusyAck(payload,src);
 					break;
