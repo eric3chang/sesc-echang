@@ -96,8 +96,9 @@ namespace Memory
       public:
          HashMap<MessageID,const ReadMsg*>exclusiveRead;
          HashMap<MessageID,const ReadMsg*>sharedRead;
-         bool isSatisfiedByEviction;
-         ReversePendingLocalReadData() : isSatisfiedByEviction(false) {}
+         bool isExclusiveReadSatisfiedByEviction;
+         bool isSharedReadSatisfiedByEviction;
+         ReversePendingLocalReadData() : isExclusiveReadSatisfiedByEviction(false),isSharedReadSatisfiedByEviction(false) {}
       };
 
       typedef HashMultiMap<Address,LookupData<ReadMsg> > AddrLookupHashMultiMap;
