@@ -21,7 +21,7 @@ configure_file (
 
 # overwrite default DEBUG build
 # ADDRESS_CHK - performs address alignment checks on individual memory accesses
-set ( CMAKE_CXX_FLAGS_DEBUG "-ggdb -DDEBUG -DADDRESS_CHK" CACHE STRING
+set ( CMAKE_CXX_FLAGS_DEBUG "-ggdb -DDEBUG -DADDRESS_CHK -Wno-unused-variable" CACHE STRING
    "Flags used by the C++ compiler during debug builds."
    FORCE )
 MARK_AS_ADVANCED (
