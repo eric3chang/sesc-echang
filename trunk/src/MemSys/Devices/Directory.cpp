@@ -524,15 +524,16 @@ namespace Memory
 #endif
 			b.owner = InvalidNodeID;
 		}
-		else
+      else if (b.sharers.find(src) != b.sharers.end())
 		{
-			DebugAssert(b.sharers.find(src) != b.sharers.end());
 #ifdef MEMORY_DIRECTORY_DEBUG_DIRECTORY_DATA
 			printDebugInfo("OnRemoteInvalidateResponse",*m,
 			   ("b.sharers.erase("+to_string<NodeID>(src)+")").c_str(),src);
 #endif
 			b.sharers.erase(src);
 		}
+      // it is possible that both the owner and sharer don't contain src if an RemoteEviction arrives before this
+
 		if(m->blockAttached)
 		{
 			WriteMsg* wm = EM().CreateWriteMsg(getDeviceID(), m->GeneratingPC());
