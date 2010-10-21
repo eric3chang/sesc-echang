@@ -533,6 +533,10 @@ namespace Memory
 			b.sharers.erase(src);
 		}
       // it is possible that both the owner and sharer don't contain src if an RemoteEviction arrives before this
+      else
+      {
+         int breakpoint = 0;
+      }
 
 		if(m->blockAttached)
 		{
@@ -1007,9 +1011,9 @@ namespace Memory
 
    void Directory::printDebugInfo(const char* fromMethod,Address addr,NodeID id,const char* operation)
    {
-      cout << setw(17) << " " // account for spacing from src and msgSrc
+      cout << setw(19) << " " // account for spacing from src and msgSrc
             << " dst=" << setw(3) << getDeviceID()
-            << setw(10) << " "   // account for spacing from msgID
+            << setw(11) << " "   // account for spacing from msgID
             << " addr=" << addr
             << " Dir::" << fromMethod
             << " " << operation << "(" << id << ")"
