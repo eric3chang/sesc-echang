@@ -16,7 +16,7 @@ namespace Memory
    /**
    converts networkNodeID (0,1,2...) to deviceNodeID (7,11,15...)
    */
-   static int convertDirectoryNetworkIDToDeviceNodeID(NodeID myNodeID)
+   static int convertNodeIDToDeviceID(NodeID myNodeID)
    {
       return(myNodeID*4 + 7);
    }

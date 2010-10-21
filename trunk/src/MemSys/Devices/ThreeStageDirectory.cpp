@@ -220,7 +220,7 @@ namespace Memory
    bool ThreeStageDirectory::IsInPendingDirectoryNormalSharedRead(const ReadMsg *m)
    {
       DebugAssert(pendingDirectoryNormalSharedReads.find(m->addr)!=pendingDirectoryNormalSharedReads.end());
-      AddrLookupIteratorPair &iteratorPair = pendingDirectoryNormalSharedReads.equal_range(m->addr);
+      AddrLookupIteratorPair iteratorPair = pendingDirectoryNormalSharedReads.equal_range(m->addr);
       for (; iteratorPair.first!=iteratorPair.second; ++iteratorPair.first)
       {
          LookupData<ReadMsg> &ld = iteratorPair.first->second;
@@ -454,7 +454,7 @@ namespace Memory
    void ThreeStageDirectory::ErasePendingDirectoryNormalSharedRead(const ReadResponseMsg *m)
    {/*
       BlockData &b = directoryData[m->addr];
-      AddrLookupIteratorPair &iteratorPair = pendingDirectoryNormalSharedReads.equal_range(m->addr);
+      AddrLookupIteratorPair iteratorPair = pendingDirectoryNormalSharedReads.equal_range(m->addr);
       bool hasFoundReadMsg = false;
       for (; iteratorPair.first != iteratorPair.second; ++iteratorPair.first)
       {
@@ -1067,7 +1067,7 @@ namespace Memory
             DebugAssert(src == pendingDirectoryBusySharedReads[m->addr].previousOwner);
             read = pendingDirectoryBusySharedReads[m->addr].msg;
             DebugAssert(read->originalRequestingNode == pendingDirectoryBusySharedReads[m->addr].sourceNode);
-            NodeID previousOwner = src;
+            //NodeID previousOwner = src;
 
             // send nak so read request could check the directory when it resends the message
             ReadResponseMsg* rrm = EM().CreateReadResponseMsg(getDeviceID());
@@ -1197,7 +1197,7 @@ namespace Memory
 
          if (myHashMap!=NULL)
          {// if we can satisfy a read
-            HashMap<MessageID,const ReadMsg*>::iterator &myIterator = myHashMap->begin();
+            HashMap<MessageID,const ReadMsg*>::iterator myIterator = myHashMap->begin();
 
             const ReadMsg* ref = myIterator->second;
          
@@ -1447,7 +1447,7 @@ namespace Memory
          if (b.owner==src || b.sharers.find(src)!=b.sharers.end())
          {
             printDebugInfo("OnRemEvic",*m,
-               ("b.sharers.erase("+to_string<NodeID>(7+(4*src))+")").c_str(),src);
+               ("b.sharers.erase("+to_string<NodeID>(Memory::convertNodeIDToDeviceID(src))+")").c_str(),src);
          }
 #endif         
          if (b.owner==src)
@@ -1584,7 +1584,6 @@ namespace Memory
       BlockData& b = directoryData[m->addr];
       NodeID sharers[MEMORY_3_STAGE_DIRECTORY_DEBUG_ARRAY_SIZE];
       b.sharers.convertToArray(sharers,MEMORY_3_STAGE_DIRECTORY_DEBUG_ARRAY_SIZE);
-      m->blockAttached;
 #endif
       // invalidateResponse could arrive before directoryBlockResponse
       //DebugAssert(waitingForInvalidates.find(m->addr)!=waitingForInvalidates.end());
@@ -1720,9 +1719,9 @@ namespace Memory
 
       bool isWaitingForInvalidationComplete = (waitingForInvalidationComplete.find(m->addr)!=waitingForInvalidationComplete.end());
       DebugAssert(directoryNodeCalc->CalcNodeID(m->addr)==nodeID);
-      BlockData &b = directoryData[m->addr];
       DebugAssert(isWaitingForInvalidationComplete);
 
+      BlockData &b = directoryData[m->addr];
       LookupData<ReadMsg> &ld = waitingForInvalidationComplete[m->addr];
       /*
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
@@ -1902,7 +1901,7 @@ namespace Memory
       else if (b.sharers.size()!=0)
       {// if directory state is shared, add requesting node to sharer and request reply from any sharer
          bool hasSentRequestPreviously = false;
-         AddrLookupIteratorPair &iteratorPair = pendingDirectoryNormalSharedReads.equal_range(m->addr);
+         AddrLookupIteratorPair iteratorPair = pendingDirectoryNormalSharedReads.equal_range(m->addr);
          for (; iteratorPair.first != iteratorPair.second; ++iteratorPair.first)
          {
             LookupData<ReadMsg> &ld = iteratorPair.first->second;
@@ -1937,6 +1936,7 @@ namespace Memory
             }
             else
             {
+               /*
                for each (NodeID tempNodeID in b.sharers)
                {
                   if (tempNodeID != src)
@@ -1945,24 +1945,24 @@ namespace Memory
                      break;
                   }
                }
-               /*
-               for (HashSet<NodeID>::iterator i = b.sharers.begin(); i < b.sharers.end(); i++)
+               */
+               for (HashSet<NodeID>::iterator i = b.sharers.begin(); i != b.sharers.end(); i++)
                {
-                  if (i != src)
+                  NodeID tempNodeID = *i;
+                  if (tempNodeID != src)
                   {
-                     dest = i;
+                     dest = tempNodeID;
                      break;
                   }
                }
-               */
             }
             DebugAssert(dest!=InvalidNodeID);
             PerformDirectoryFetch(forward,src,false,dest);
          
-            if (b.owner!=src)
+            if (b.owner!=src && b.sharers.find(m->addr)==b.sharers.end())
             {
-               // readd the sharers to the end
-               b.sharers.insert(b.sharers.end(), src);
+               // add src to sharers if not already in it
+               b.sharers.insert(src);
             }
             // do not dispose msg here, because we are forwarding it
             //EM().DisposeMsg(m);
@@ -1998,7 +1998,7 @@ namespace Memory
                dest = b.owner;
             }
             else
-            {
+            {/*
                for each (NodeID tempNodeID in b.sharers)
                {
                   if (tempNodeID != src)
@@ -2007,16 +2007,16 @@ namespace Memory
                      break;
                   }
                }
-               /*
-               for (HashSet<NodeID>::iterator i = b.sharers.begin(); i < b.sharers.end(); i++)
+               */
+               for (HashSet<NodeID>::iterator i = b.sharers.begin(); i != b.sharers.end(); i++)
                {
-                  if (i != src)
+                  NodeID tempNodeID = *i;
+                  if (tempNodeID != src)
                   {
-                     dest = i;
+                     dest = tempNodeID;
                      break;
                   }
                }
-               */
             }
             DebugAssert(dest!=InvalidNodeID);
             PerformDirectoryFetch(forward,src,false,dest);
@@ -2785,7 +2785,7 @@ namespace Memory
             << setw(10) << " "   // account for spacing from msgID
             << " addr=" << addr
             << " 3SDir:" << fromMethod
-            << " " << operation << "(" << 7+(id*4) << ")"
+            << " " << operation << "(" << Memory::convertNodeIDToDeviceID(id) << ")"
             << endl;
    }
 

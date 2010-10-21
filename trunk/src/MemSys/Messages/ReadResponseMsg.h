@@ -40,7 +40,7 @@ namespace Memory
             //<< " isEvic=" << isFromEviction
             << " intv=" << isIntervention
             << " invUnlk=" << isWaitingForInvalidateUnlock
-            << " ogNode=" << convertDirectoryNetworkIDToDeviceNodeID(originalRequestingNode)
+            << " ogNode=" << Memory::convertNodeIDToDeviceID(originalRequestingNode)
             << " pendInv=" << pendingInvalidates
             //<< " spec=" << isSpeculative
 		   ;

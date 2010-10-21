@@ -19,7 +19,7 @@ namespace Memory
 		{
 		   BaseMsg::print(destinationDeviceID);
 		   cout << " addr=" << addr
-            << " newOwner=" << convertDirectoryNetworkIDToDeviceNodeID(newOwner)
+            << " newOwner=" << Memory::convertNodeIDToDeviceID(newOwner)
             << " sMsg=" << solicitingMessage
 		   ;
 		}

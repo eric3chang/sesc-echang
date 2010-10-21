@@ -52,11 +52,11 @@ namespace Memory
             cout << setw(10) << " ";
             cout << " addr=" << myAddress;
             cout << " msgID=" << myMessageID;
-            cout << " own=" << convertDirectoryNetworkIDToDeviceNodeID(owner);
+            cout << " own=" << Memory::convertNodeIDToDeviceID(owner);
             cout << " sh=";
             for (HashSet<NodeID>::iterator i = sharers.begin(); i != sharers.end(); i++)
             {
-               cout << convertDirectoryNetworkIDToDeviceNodeID(*i) << " ";
+               cout << Memory::convertNodeIDToDeviceID(*i) << " ";
             }
             cout << " isShBusy=" << isSharedBusy
                << " isExBusy=" << isExclusiveBusy

@@ -47,7 +47,7 @@ namespace Memory
                << " interv=" << isIntervention
                << " nonBusyShRead=" << isNonBusySharedRead
                << " invUnlock=" << isWaitingForInvalidateUnlock
-               << " ogReqNode=" << convertDirectoryNetworkIDToDeviceNodeID(originalRequestingNode)
+               << " ogReqNode=" << Memory::convertNodeIDToDeviceID(originalRequestingNode)
                //<< " spec=" << isSpeculative
 		   ;
 		}
