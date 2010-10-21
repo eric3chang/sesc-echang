@@ -494,9 +494,12 @@ namespace Memory
       HashMap<MessageID,const ReadMsg*> &exclusiveRead = myData.exclusiveRead;
       HashMap<MessageID,const ReadMsg*> &sharedRead = myData.sharedRead;
       HashMap<MessageID,const ReadMsg*> &myMap = ref->requestingExclusive ? myData.exclusiveRead : myData.sharedRead;
+      bool &isSatisfiedByEviction = ref->requestingExclusive ?
+         myData.isExclusiveReadSatisfiedByEviction : myData.isSharedReadSatisfiedByEviction;
       DebugAssert(myMap.find(m->solicitingMessage)!=myMap.end());
       EM().DisposeMsg(myMap[m->solicitingMessage]);
       myMap.erase(m->solicitingMessage);
+      isSatisfiedByEviction = false;
 
       if (exclusiveRead.size()==0 && sharedRead.size()==0)
       {
@@ -1019,13 +1022,8 @@ namespace Memory
          // if unsatisfied, it means OnLocalEviction was called before OnLocalReadResponse
          // either way, we should not send any messages
 
-         // by this time, we should have removed src from sharers
-
-         DebugAssert(b.owner!=InvalidNodeID);
-         // owner could be src if an eviction message came from the previous owner was received before this
-            // and OnRemoteEviction should change b.owner to src.
-         // owner could also not be source if eviction message came from an oldSharer and src was simply deleted
-         //DebugAssert(b.owner==src);
+         //owner could have been changed by a remote eviction, so there's no way to know what it should be
+         //DebugAssert(b.owner!=InvalidNodeID);
          DebugAssert(b.sharers.find(src)==b.sharers.end());
          
          DebugAssert(waitingForReadResponse.find(m->addr)!=waitingForReadResponse.end());
@@ -1178,33 +1176,43 @@ namespace Memory
       UnrequestedReadResponseMsg *m = (UnrequestedReadResponseMsg*)msgIn;
 
       if (reversePendingLocalReads.find(m->addr)!=reversePendingLocalReads.end())
-      {
+      {// if there are pending reads
          ReversePendingLocalReadData &myData = reversePendingLocalReads[m->addr];
-         // this message should have been sent when directory state was in non-busy shared,
-            // might have to delete this assertion in the future, because
-            // one cannot guarantee that an exclusive read didn't go through after the shared
-         DebugAssert(myData.exclusiveRead.size()==0);
-         DebugAssert(myData.sharedRead.size()==1);
-         DebugAssert(m->blockAttached);
 
-         HashMap<MessageID,const ReadMsg*> &myHashMap = myData.sharedRead;
-         HashMap<MessageID,const ReadMsg*>::iterator &myIterator = myHashMap.begin();
+         HashMap<MessageID,const ReadMsg*> *myHashMap = NULL;
+         if (myData.exclusiveRead.size()==1 && m->exclusiveOwnership)
+         {
+            myHashMap = &myData.exclusiveRead;
+            myData.isExclusiveReadSatisfiedByEviction = true;
+            if (myData.sharedRead.size()==1)
+            {
+               myData.isSharedReadSatisfiedByEviction = true;
+            }
+         }
+         else if (myData.sharedRead.size()==1)
+         {
+            myHashMap = &myData.sharedRead;
+            myData.isSharedReadSatisfiedByEviction = true;
+         }
 
-         myData.isSatisfiedByEviction = true;
-         const ReadMsg* ref = myIterator->second;
+         if (myHashMap!=NULL)
+         {// if we can satisfy a read
+            HashMap<MessageID,const ReadMsg*>::iterator &myIterator = myHashMap->begin();
+
+            const ReadMsg* ref = myIterator->second;
          
-         ReadResponseMsg *forward = EM().CreateReadResponseMsg(getDeviceID());
-         forward->addr = m->addr;
-         forward->blockAttached = m->blockAttached;
-         forward->evictionMessage = m->evictionMessage;
-         forward->exclusiveOwnership = m->exclusiveOwnership;
-         forward->satisfied = true;
-         forward->size = m->size;
-         forward->solicitingMessage = ref->MsgID();
+            ReadResponseMsg *forward = EM().CreateReadResponseMsg(getDeviceID());
+            forward->addr = m->addr;
+            forward->blockAttached = m->blockAttached;
+            forward->evictionMessage = m->evictionMessage;
+            forward->exclusiveOwnership = m->exclusiveOwnership;
+            forward->satisfied = true;
+            forward->size = m->size;
+            forward->solicitingMessage = ref->MsgID();
          
-		   SendMsg(localConnectionID, forward, satisfyTime + localSendTime);
-      }
-      
+		      SendMsg(localConnectionID, forward, satisfyTime + localSendTime);
+         } // if (myHashMap!=NULL)
+      }// if there are pending reads
       EM().DisposeMsg(m);
       return;
    } // void ThreeStageDirectory::OnRemoteUnrequestedReadResponse(const BaseMsg* msgIn, NodeID src)
@@ -2322,17 +2330,28 @@ namespace Memory
 		            ("pendingLocalReads.erase("+to_string<MessageID>(m->solicitingMessage)+")").c_str());
    #endif
 			   pendingLocalReads.erase(m->solicitingMessage);
-            EraseReversePendingLocalRead(m,ref);
    #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
             printDebugInfo("OnLocalRead",*m,"OnDirBlkResp");
    #endif
             ReversePendingLocalReadData &myData = reversePendingLocalReads[m->addr];
-            if (myData.isSatisfiedByEviction)
-            {
-               myData.isSatisfiedByEviction = false;
+
+            if (ref->requestingExclusive && myData.isExclusiveReadSatisfiedByEviction)
+            {// eraseReversePendingLocalRead depends on myData.isExclusiveReadSatisfiedByEviction
+               myData.isExclusiveReadSatisfiedByEviction = false;
+               EraseReversePendingLocalRead(m,ref);
+               EM().DisposeMsg(ref);
+               EM().DisposeMsg(m);
+            }
+            else if (myData.isSharedReadSatisfiedByEviction)
+            {// eraseReversePendingLocalRead depends on myData.isSharedReadSatisfiedByEviction
+               myData.isSharedReadSatisfiedByEviction = false;
+               EraseReversePendingLocalRead(m,ref);
+               EM().DisposeMsg(ref);
+               EM().DisposeMsg(m);
             }
             else
             {
+               EraseReversePendingLocalRead(m,ref);
 			      OnLocalRead(ref);
             }
 			   return;
