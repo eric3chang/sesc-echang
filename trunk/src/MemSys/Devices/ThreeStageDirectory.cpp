@@ -342,15 +342,19 @@ namespace Memory
       }
       else
       {
-         //DebugAssert(pendingLocalReads.find(m->solicitingMessage)==pendingLocalReads.end());
-         DebugAssert(pendingLocalReads.find(m->solicitingMessage)!=pendingLocalReads.end());
-         const ReadMsg *ref = pendingLocalReads[m->solicitingMessage];
-         DebugAssert(m->solicitingMessage==ref->MsgID());
-         EM().DisposeMsg(ref);
-         pendingLocalReads.erase(m->solicitingMessage);
-         EraseReversePendingLocalRead(m,ref);
+         // don't erase anything if the message is an evictionMessage
          SendMsg(localConnectionID, m, satisfyTime + localSendTime);
       }
+   }
+
+   void ThreeStageDirectory::SendInterventionCompleteMsg(const ReadResponseMsg *m, const char *fromMethod)
+   {
+      InterventionCompleteMsg *toDir = EM().CreateInterventionCompleteMsg(getDeviceID());
+      toDir->addr = m->addr;
+      toDir->solicitingMessage = m->solicitingMessage;
+
+      AutoDetermineDestSendMsg(toDir,directoryNodeCalc->CalcNodeID(m->addr),remoteSendTime,
+         &ThreeStageDirectory::OnRemoteInterventionComplete,"OnDirBlkResp",fromMethod);
    }
 
    /**
@@ -485,6 +489,14 @@ namespace Memory
       AddrLookupPair insertedPair(m->addr,ld);
       pendingDirectoryNormalSharedReads.insert(insertedPair);
       return;*/
+   }
+
+   void ThreeStageDirectory::ErasePendingLocalRead(const ReadResponseMsg *m)
+   {
+      DebugAssert(pendingLocalReads.find(m->solicitingMessage)!=pendingLocalReads.end());
+      const ReadMsg* ref = pendingLocalReads[m->solicitingMessage];
+      EM().DisposeMsg(ref);
+      pendingLocalReads.erase(m->solicitingMessage);
    }
 
    void ThreeStageDirectory::EraseReversePendingLocalRead(const ReadResponseMsg *m,const ReadMsg *ref)
@@ -646,14 +658,14 @@ namespace Memory
 
 		if (d.msg->isIntervention)
 		{
-         if (m->satisfied)
-         {
+         //if (m->satisfied)
+         //{
             //TODO 2010/09/23 Eric
             // block doesn't have to be attached if owner is still waiting for response from memory
                // or if the intervention message arrived before data arrived from memory
             //DebugAssert(m->blockAttached);
 
-            // send response back to the requester, have to make sure that this arrives before the directory message arrives
+            // send response back to the requester
             ReadResponseMsg* forward = (ReadResponseMsg*)EM().ReplicateMsg(m);
             forward->originalRequestingNode = d.msg->originalRequestingNode;
             // changed this to true because of 3-stage directory
@@ -665,7 +677,7 @@ namespace Memory
             AutoDetermineDestSendMsg(forward,d.msg->originalRequestingNode,remoteSendTime+lookupTime,
                   &ThreeStageDirectory::OnDirectoryBlockResponse,"OnLocalReadRes","OnDirBlkResp");
 
-            // send response back to the directory, have to make sure that this arrives after the requester message arrives
+            // send response back to the directory
             ReadResponseMsg* dirResponse = (ReadResponseMsg*)EM().ReplicateMsg(m);
             DebugAssert(d.msg->originalRequestingNode != InvalidNodeID);
             dirResponse->originalRequestingNode = d.msg->originalRequestingNode;
@@ -674,6 +686,7 @@ namespace Memory
             //forward->isSpeculative = d.msg->isSpeculative;
             AutoDetermineDestSendMsg(dirResponse,d.sourceNode,remoteSendTime+lookupTime,
                   &ThreeStageDirectory::OnRemoteReadResponse,"OnLocalReadRes","OnRemReadRes");
+            /*
          } // if satisfied
          else  // unsatisfied, 2 possibilities:
          {//1. block was evicted before intervention message was received by this node
@@ -681,10 +694,8 @@ namespace Memory
             // the second case should never happen, because it was taken care of by locks on the directory side
 
             // wait for special eviction response to arrive, ignore intervention message
-            /*
             DebugAssert(waitingForEvictionBusyAck.find(m->addr)==waitingForEvictionBusyAck.end());
             waitingForEvictionBusyAck[m->addr] = m;
-            */
 
             // only needs to send response back to the directory it is case 1: evicted
             ReadResponseMsg* dirResponse = (ReadResponseMsg*)EM().ReplicateMsg(m);
@@ -696,7 +707,8 @@ namespace Memory
             AutoDetermineDestSendMsg(dirResponse,d.sourceNode,remoteSendTime+lookupTime,
                   &ThreeStageDirectory::OnRemoteReadResponse,"OnLocalReadRes","OnRemReadRes");
          }
-		} // if (d.msg->isInterventionShared)
+         */
+		} // if (d.msg->isIntervention)
       // not doing speculative replies right now
       /*
       else if (d.msg->isSpeculative)
@@ -779,6 +791,7 @@ namespace Memory
 		DebugAssert(msgIn);
       DebugAssert(msgIn->Type()==mt_Eviction);
       EvictionMsg* m = (EvictionMsg*)msgIn;
+
 		DebugAssert(pendingEviction.find(m->addr) == pendingEviction.end());
       EvictionMsg* myEvictionMsg = (EvictionMsg*)EM().ReplicateMsg(m);
       pendingEviction[m->addr] = myEvictionMsg;
@@ -787,6 +800,18 @@ namespace Memory
 		erm->size = m->size;
 		erm->solicitingMessage = m->MsgID();
 		SendMsg(localConnectionID, erm, localSendTime);
+
+		//if there is a pending read, notify directory to cancel the pending read
+		   // this situation happens when OnLocalRead has already sent a read request,
+		   // but eviction comes after it
+		if (reversePendingLocalReads.find(m->addr)!=reversePendingLocalReads.end())
+		{
+		   ReversePendingLocalReadData &myData = reversePendingLocalReads[m->addr];
+		   //myData.
+		   //TODO notify directory
+		   // 2010/10/21
+		}
+
       // send eviction message to directory
 		NodeID directoryNode = directoryNodeCalc->CalcNodeID(m->addr);
 		if(directoryNode == nodeID)
@@ -1070,6 +1095,9 @@ namespace Memory
             //NodeID previousOwner = src;
 
             // send nak so read request could check the directory when it resends the message
+            /*
+            // don't need to send nak anymore because a directory response is always sent by the
+                // previous owner now
             ReadResponseMsg* rrm = EM().CreateReadResponseMsg(getDeviceID());
             rrm->addr = read->addr;
             rrm->blockAttached = false;
@@ -1077,10 +1105,12 @@ namespace Memory
             rrm->satisfied = false;
             rrm->solicitingMessage = read->MsgID();
             rrm->size = read->size;
-         
-            NodeID sourceNode = pendingDirectoryBusySharedReads[m->addr].sourceNode;
+
             AutoDetermineDestSendMsg(rrm,sourceNode,remoteSendTime,
                &ThreeStageDirectory::OnDirectoryBlockResponse,"OnRemReadRes","OnDirBlkResp");
+            */
+         
+            NodeID sourceNode = pendingDirectoryBusySharedReads[m->addr].sourceNode;
             DebugAssert(b.owner==sourceNode || b.sharers.find(sourceNode)!=b.sharers.end());
             DebugAssert(b.owner!=sourceNode || b.sharers.find(sourceNode)==b.sharers.end());
 
@@ -1241,6 +1271,7 @@ namespace Memory
 			SendMsg(remoteConnectionID, nm, remoteSendTime);
 		}
 	}
+
 	void ThreeStageDirectory::OnRemoteWriteResponse(const BaseMsg* msgIn, NodeID src)
 	{
 		DebugAssert(msgIn);
@@ -1249,7 +1280,8 @@ namespace Memory
       DebugAssert(pendingMemoryWrites.find(m->solicitingMessage)!=pendingMemoryWrites.end());
       pendingMemoryWrites.erase(m->solicitingMessage);
 		EM().DisposeMsg(m);
-	}
+	}// OnRemoteWriteResponse
+
 	void ThreeStageDirectory::OnRemoteEviction(const BaseMsg* msgIn, NodeID src)
 	{
 		DebugAssert(msgIn);
@@ -1317,7 +1349,7 @@ namespace Memory
 
          // if we just deleted a share, we should send a sharedResponse
          //if (newOwner==InvalidNodeID)
-         {
+         //{
             // send shared response to the owner marked in the directory
             DebugAssert(b.owner!=InvalidNodeID);
             ReadResponseMsg *sharedResponse = EM().CreateReadResponseMsg(getDeviceID());
@@ -1337,7 +1369,7 @@ namespace Memory
             sharedResponse->solicitingMessage = ref->MsgID();
             AutoDetermineDestSendMsg(sharedResponse,b.owner,remoteSendTime,
                &ThreeStageDirectory::OnDirectoryBlockResponse,"OnRemEvic","OnDirBlkResp");
-         }
+         //}
          // else if we deleted the owner, it means the owner just evicted itself,
             // so we should not send shared response
 
@@ -2293,7 +2325,13 @@ namespace Memory
          // evictionResponse could have arrived after interventionResponse
          if (pendingLocalReads.find(m->solicitingMessage)!=pendingLocalReads.end() && m->satisfied)
          {
+            const ReadMsg* ref = pendingLocalReads[m->solicitingMessage];
+            DebugAssert(reversePendingLocalReads.find(m->addr)!=reversePendingLocalReads.end());
+            ReversePendingLocalReadData &myData = reversePendingLocalReads[m->addr];
+            bool &isSatisfiedByRead = ref->requestingExclusive ?
+                  myData.isExclusiveReadSatisfiedByEviction : myData.isSharedReadSatisfiedByEviction;
             SendLocalReadResponse(m);
+            isSatisfiedByRead = true;
          }
          else
          {// if the response coming from eviction has already been satisfied or
@@ -2301,27 +2339,32 @@ namespace Memory
             EM().DisposeMsg(m);
          }
       }
-      else
+      else //  !m->evictionMessage
       {
-         if (m->isIntervention)
-         {
-            // send intervention complete message to directory so it knows to unblock directory
-            DebugAssert(m->pendingInvalidates==0);
-            DebugAssert(m->satisfied);
-            InterventionCompleteMsg *toDir = EM().CreateInterventionCompleteMsg(getDeviceID());
-            toDir->addr = m->addr;
-            toDir->solicitingMessage = m->solicitingMessage;
-
-            // use 0 time to simulate instantaneous sending
-            AutoDetermineDestSendMsg(toDir,directoryNodeCalc->CalcNodeID(m->addr),remoteSendTime,
-               &ThreeStageDirectory::OnRemoteInterventionComplete,"OnDirBlkResp","OnRemIntCom");
-         }
-
-		   // check that m->solicitingMessage is in pendingLocalReads before accessing it.
-		   // Error here probably means that the directoryBlockResponse was sent twice or 
+         // check that m->solicitingMessage is in pendingLocalReads before accessing it.
+         // Error here probably means that the directoryBlockResponse was sent twice or
          // was sent to the wrong node.
+#if !defined _WIN32
+         DebugAssert(reversePendingLocalReads.find(m->addr)!=reversePendingLocalReads.end());
+         ReversePendingLocalReadData &myData = reversePendingLocalReads[m->addr];
+         HashMap<MessageID,const ReadMsg*>&exclusiveRead = myData.exclusiveRead;
+         HashMap<MessageID,const ReadMsg*>&sharedRead = myData.sharedRead;
+         const ReadMsg* firstExclusiveMsg = NULL;
+         const ReadMsg* firstSharedMsg = NULL;
+         if (exclusiveRead.size()!=0)
+         {
+            firstExclusiveMsg = exclusiveRead.begin()->second;
+         }
+         if (sharedRead.size()!=0)
+         {
+            sharedRead.begin()->second;
+         }
+         bool &isExclusiveReadSatisfiedByEviction = myData.isExclusiveReadSatisfiedByEviction;
+         bool &isSharedReadSatisfiedByEviction = myData.isSharedReadSatisfiedByEviction;
+#endif
+
          DebugAssert(pendingLocalReads.find(m->solicitingMessage)!=pendingLocalReads.end());
-		   const ReadMsg* ref = pendingLocalReads[m->solicitingMessage];
+         const ReadMsg* ref = pendingLocalReads[m->solicitingMessage];
 
 		   if(!m->satisfied)
 		   {
@@ -2335,12 +2378,14 @@ namespace Memory
    #endif
             ReversePendingLocalReadData &myData = reversePendingLocalReads[m->addr];
 
+            bool isSatisfied = false;
             if (ref->requestingExclusive && myData.isExclusiveReadSatisfiedByEviction)
             {// eraseReversePendingLocalRead depends on myData.isExclusiveReadSatisfiedByEviction
                myData.isExclusiveReadSatisfiedByEviction = false;
                EraseReversePendingLocalRead(m,ref);
                EM().DisposeMsg(ref);
                EM().DisposeMsg(m);
+               isSatisfied = true;
             }
             else if (myData.isSharedReadSatisfiedByEviction)
             {// eraseReversePendingLocalRead depends on myData.isSharedReadSatisfiedByEviction
@@ -2348,12 +2393,19 @@ namespace Memory
                EraseReversePendingLocalRead(m,ref);
                EM().DisposeMsg(ref);
                EM().DisposeMsg(m);
+               isSatisfied = true;
             }
             else
             {
                EraseReversePendingLocalRead(m,ref);
 			      OnLocalRead(ref);
             }
+
+            if (isSatisfied && m->isIntervention)
+            {
+               SendInterventionCompleteMsg(m,"OnDirBlkResp");
+            }
+
 			   return;
          }
          // m is satisfied
@@ -2381,6 +2433,16 @@ namespace Memory
             DebugAssert(!m->pendingInvalidates);
             DebugAssert(waitingForInvalidates.find(m->addr)==waitingForInvalidates.end());
             SendLocalReadResponse(m);
+         }
+
+         if (m->isIntervention && m->satisfied)
+         {
+            // send intervention complete message to directory so it knows to unblock directory
+            DebugAssert(m->pendingInvalidates==0);
+            SendInterventionCompleteMsg(m,"OnDirBlkResp");
+            // done in sendLocalReadResponse
+            //EraseReversePendingLocalRead(m,ref);
+            //ErasePendingLocalRead(m);
          }
 
          if (m->hasPendingMemAccesses)

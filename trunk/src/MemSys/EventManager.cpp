@@ -276,7 +276,7 @@ namespace Memory
 			case(mt_InvalidationComplete): invalidationCompletePool.Return((InvalidationCompleteMsg*)msg); break;
 			case(mt_ReadComplete): readCompletePool.Return((ReadCompleteMsg*)msg); break;
 			case(mt_UnrequestedReadResponse): unrequestedReadResponsePool.Return((UnrequestedReadResponseMsg*)msg); break;
-			case(mt_Network): networkPool.Return((NetworkMsg*)msg); break;
+         case(mt_Network): networkPool.Return((NetworkMsg*)msg); break;
 			default: DebugFail("Unknown Msg Type");
 		}
 	}

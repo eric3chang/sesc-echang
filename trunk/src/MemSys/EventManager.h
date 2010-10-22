@@ -68,7 +68,7 @@ namespace Memory
 		InvalidationCompleteMsg* CreateInvalidationCompleteMsg(DeviceID devID, Address generatingPC = 0);
 		ReadCompleteMsg* CreateReadCompleteMsg(DeviceID devID, Address generatingPC = 0);
 		UnrequestedReadResponseMsg* CreateUnrequestedReadResponseMsg(DeviceID devID, Address generatingPC = 0);
-		NetworkMsg* CreateNetworkMsg(DeviceID devID, Address generatingPC = 0);
+      NetworkMsg* CreateNetworkMsg(DeviceID devID, Address generatingPC = 0);
 
 		BaseMsg* ReplicateMsg(const BaseMsg* msg);
 
