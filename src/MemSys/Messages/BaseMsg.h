@@ -29,8 +29,6 @@ namespace Memory
 		Address generatingPC;
 
 	public:
-      // added virtual destructor to eliminate constructor warnings
-      // Eric Chang 2010/07/30
 		virtual ~BaseMsg(){}
 		virtual bool IsResponse() const = 0;
 		virtual size_t MsgSize() const = 0;

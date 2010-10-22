@@ -153,6 +153,7 @@ namespace Memory
 		//void PerformDirectoryFetchOwner(const ReadMsg *msgIn, NodeID src);
       void SendLocalReadResponse(const ReadResponseMsg *msgIn);
       void SendDirectoryBlockRequest(const ReadMsg *msgIn);
+      void SendInterventionCompleteMsg(const ReadResponseMsg *m,const char *fromMethod);
       void SendMemAccessComplete(Address addr, NodeID directoryNode);
       void SendRemoteRead(const ReadMsg *m,NodeID dest,const char *fromMethod);
 		void EraseDirectoryShare(Address a, NodeID id);
@@ -161,6 +162,7 @@ namespace Memory
       void EraseReversePendingLocalRead(const ReadResponseMsg *m,const ReadMsg *ref);
       void AddPendingDirectoryNormalSharedRead(const ReadMsg *m, NodeID src);
       void ErasePendingDirectoryNormalSharedRead(const ReadResponseMsg *m);
+      void ErasePendingLocalRead(const ReadResponseMsg *m);
       void ChangeOwnerToShare(Address a, NodeID id);
       void writeToMainMemory(const EvictionMsg *m);
       void writeToMainMemory(const InvalidateResponseMsg *m);
