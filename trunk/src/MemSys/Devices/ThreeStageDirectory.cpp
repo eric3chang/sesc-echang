@@ -325,7 +325,7 @@ namespace Memory
    void ThreeStageDirectory::SendLocalReadResponse(const ReadResponseMsg* m)
    {
       if (!m->evictionMessage)
-      {// if m is coming from eviction
+      {// if m is not coming from eviction
          //ReadResponseMsg* r = (ReadResponseMsg*)EM().ReplicateMsg(m);
          DebugAssert(pendingLocalReads.find(m->solicitingMessage)!=pendingLocalReads.end());
          const ReadMsg* ref = pendingLocalReads[m->solicitingMessage];
@@ -354,7 +354,7 @@ namespace Memory
       toDir->solicitingMessage = m->solicitingMessage;
 
       AutoDetermineDestSendMsg(toDir,directoryNodeCalc->CalcNodeID(m->addr),remoteSendTime,
-         &ThreeStageDirectory::OnRemoteInterventionComplete,"OnDirBlkResp",fromMethod);
+         &ThreeStageDirectory::OnRemoteInterventionComplete,fromMethod,"OnRemIntervCom");
    }
 
    /**
@@ -368,6 +368,28 @@ namespace Memory
       // send to src, which should be the directory
       AutoDetermineDestSendMsg(reply,directoryNode,remoteSendTime,
          &ThreeStageDirectory::OnRemoteMemAccessComplete,"OnDirBlkResp","OnRemoteMemAccCom");
+   }
+
+   void ThreeStageDirectory::SendRemoteEviction(const EvictionMsg *m,NodeID dest,const char *fromMethod)
+   {
+      if(dest == nodeID)
+      {
+#ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
+               printDebugInfo("OnRemEvic",*m,"OnLocEvic",dest);
+#endif
+         CBOnRemoteEviction::FunctionType* f = cbOnRemoteEviction.Create();
+         f->Initialize(this,m,nodeID);
+         // stagger the events to avoid some race conditions
+         EM().ScheduleEvent(f, localSendTime);
+      }
+      else
+      {
+         NetworkMsg* nm = EM().CreateNetworkMsg(getDeviceID(),m->GeneratingPC());
+         nm->destinationNode = dest;
+         nm->sourceNode = nodeID;
+         nm->payloadMsg = m;
+         SendMsg(remoteConnectionID, nm, remoteSendTime);
+      }
    }
 
    void ThreeStageDirectory::SendRemoteRead(const ReadMsg *m,NodeID dest,const char *fromMethod)
@@ -608,6 +630,9 @@ namespace Memory
       ReversePendingLocalReadData &myData = reversePendingLocalReads[m->addr];
       HashMap<MessageID,const ReadMsg*> &exclusiveRead = myData.exclusiveRead;
       HashMap<MessageID,const ReadMsg*> &sharedRead = myData.sharedRead;
+
+      DebugAssert(myData.myEvictionMsg==NULL);
+
       if (m->requestingExclusive)
       {
          if(exclusiveRead.size()!=0)
@@ -801,38 +826,28 @@ namespace Memory
 		erm->solicitingMessage = m->MsgID();
 		SendMsg(localConnectionID, erm, localSendTime);
 
-		//if there is a pending read, notify directory to cancel the pending read
+		//if there is a pending read, hold the eviction until the response returns
 		   // this situation happens when OnLocalRead has already sent a read request,
 		   // but eviction comes after it
 		if (reversePendingLocalReads.find(m->addr)!=reversePendingLocalReads.end())
 		{
 		   ReversePendingLocalReadData &myData = reversePendingLocalReads[m->addr];
-		   //myData.
-		   //TODO notify directory
-		   // 2010/10/21
-		}
-
-      // send eviction message to directory
-		NodeID directoryNode = directoryNodeCalc->CalcNodeID(m->addr);
-		if(directoryNode == nodeID)
-		{
-#ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-               printDebugInfo("OnRemEvic",*m,"OnLocalEviction",nodeID);
-#endif
-         CBOnRemoteEviction::FunctionType* f = cbOnRemoteEviction.Create();
-         f->Initialize(this,m,nodeID);
-         // stagger the events so they don't all try to request at the same time
-         EM().ScheduleEvent(f, localSendTime);
+		   HashMap<MessageID,const ReadMsg*> exclusiveRead = myData.exclusiveRead;
+		   HashMap<MessageID,const ReadMsg*> sharedRead = myData.sharedRead;
+		   bool hasExclusiveRead = exclusiveRead.size()!=0;
+		   bool hasSharedRead = sharedRead.size()!=0;
+		   DebugAssert(hasExclusiveRead || hasSharedRead);
+		   myData.myEvictionMsg = m;
+		   return;
 		}
 		else
-		{
-			NetworkMsg* nm = EM().CreateNetworkMsg(getDeviceID(),m->GeneratingPC());
-			nm->destinationNode = directoryNode;
-			nm->sourceNode = nodeID;
-			nm->payloadMsg = m;
-			SendMsg(remoteConnectionID, nm, remoteSendTime);
+		{// there are no pending local reads
+		   NodeID directoryNode = directoryNodeCalc->CalcNodeID(m->addr);
+		   SendRemoteEviction(m,directoryNode,"OnLocEvic");
+         return;
 		}
-	}
+	}// OnLocalEviction
+
 	void ThreeStageDirectory::OnLocalInvalidateResponse(const BaseMsg* msgIn)
 	{
 		DebugAssert(msgIn);
@@ -1968,16 +1983,6 @@ namespace Memory
             }
             else
             {
-               /*
-               for each (NodeID tempNodeID in b.sharers)
-               {
-                  if (tempNodeID != src)
-                  {
-                     dest = tempNodeID;
-                     break;
-                  }
-               }
-               */
                for (HashSet<NodeID>::iterator i = b.sharers.begin(); i != b.sharers.end(); i++)
                {
                   NodeID tempNodeID = *i;
@@ -2030,16 +2035,7 @@ namespace Memory
                dest = b.owner;
             }
             else
-            {/*
-               for each (NodeID tempNodeID in b.sharers)
-               {
-                  if (tempNodeID != src)
-                  {
-                     dest = tempNodeID;
-                     break;
-                  }
-               }
-               */
+            {
                for (HashSet<NodeID>::iterator i = b.sharers.begin(); i != b.sharers.end(); i++)
                {
                   NodeID tempNodeID = *i;
@@ -2344,9 +2340,12 @@ namespace Memory
          // check that m->solicitingMessage is in pendingLocalReads before accessing it.
          // Error here probably means that the directoryBlockResponse was sent twice or
          // was sent to the wrong node.
-#if !defined _WIN32
+         DebugAssert(pendingLocalReads.find(m->solicitingMessage)!=pendingLocalReads.end());
+         const ReadMsg* ref = pendingLocalReads[m->solicitingMessage];
          DebugAssert(reversePendingLocalReads.find(m->addr)!=reversePendingLocalReads.end());
          ReversePendingLocalReadData &myData = reversePendingLocalReads[m->addr];
+
+#if !defined _WIN32
          HashMap<MessageID,const ReadMsg*>&exclusiveRead = myData.exclusiveRead;
          HashMap<MessageID,const ReadMsg*>&sharedRead = myData.sharedRead;
          const ReadMsg* firstExclusiveMsg = NULL;
@@ -2357,14 +2356,24 @@ namespace Memory
          }
          if (sharedRead.size()!=0)
          {
-            sharedRead.begin()->second;
+            firstSharedMsg = sharedRead.begin()->second;
          }
          bool &isExclusiveReadSatisfiedByEviction = myData.isExclusiveReadSatisfiedByEviction;
          bool &isSharedReadSatisfiedByEviction = myData.isSharedReadSatisfiedByEviction;
 #endif
 
-         DebugAssert(pendingLocalReads.find(m->solicitingMessage)!=pendingLocalReads.end());
-         const ReadMsg* ref = pendingLocalReads[m->solicitingMessage];
+         if (myData.myEvictionMsg!=NULL)
+         {// if there is a pending eviction, it means that OnLocalEviction occured after
+            // OnLocalRead. remove pending local reads and send eviction message
+            const EvictionMsg* myEvictionMsg = myData.myEvictionMsg;
+            NodeID directoryNode = directoryNodeCalc->CalcNodeID(m->addr);
+            SendRemoteEviction(myEvictionMsg,directoryNode,"OnDirBlkResp");
+            myData.myEvictionMsg = NULL;
+            EraseReversePendingLocalRead(m,ref);
+            ErasePendingLocalRead(m);
+            EM().DisposeMsg(m);
+            return;
+         }
 
 		   if(!m->satisfied)
 		   {
@@ -2376,7 +2385,6 @@ namespace Memory
    #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
             printDebugInfo("OnLocalRead",*m,"OnDirBlkResp");
    #endif
-            ReversePendingLocalReadData &myData = reversePendingLocalReads[m->addr];
 
             bool isSatisfied = false;
             if (ref->requestingExclusive && myData.isExclusiveReadSatisfiedByEviction)

@@ -98,7 +98,9 @@ namespace Memory
          HashMap<MessageID,const ReadMsg*>sharedRead;
          bool isExclusiveReadSatisfiedByEviction;
          bool isSharedReadSatisfiedByEviction;
-         ReversePendingLocalReadData() : isExclusiveReadSatisfiedByEviction(false),isSharedReadSatisfiedByEviction(false) {}
+         EvictionMsg *myEvictionMsg;
+         ReversePendingLocalReadData() : isExclusiveReadSatisfiedByEviction(false),isSharedReadSatisfiedByEviction(false)
+            ,myEvictionMsg(NULL) {}
       };
 
       typedef HashMultiMap<Address,LookupData<ReadMsg> > AddrLookupHashMultiMap;
@@ -155,6 +157,7 @@ namespace Memory
       void SendDirectoryBlockRequest(const ReadMsg *msgIn);
       void SendInterventionCompleteMsg(const ReadResponseMsg *m,const char *fromMethod);
       void SendMemAccessComplete(Address addr, NodeID directoryNode);
+      void SendRemoteEviction(const EvictionMsg *m,NodeID dest,const char *fromMethod);
       void SendRemoteRead(const ReadMsg *m,NodeID dest,const char *fromMethod);
 		void EraseDirectoryShare(Address a, NodeID id);
 		void AddDirectoryShare(Address a, NodeID id, bool exclusive);
