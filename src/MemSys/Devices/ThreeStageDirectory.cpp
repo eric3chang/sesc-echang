@@ -626,13 +626,13 @@ namespace Memory
 		printDebugInfo("OnLocalRead", *m,
 		      ("pendingLocalReads.insert("+to_string<MessageID>(m->MsgID())+")").c_str());
 #endif
-      // if we have a request with permissions greater, dispose it
       ReversePendingLocalReadData &myData = reversePendingLocalReads[m->addr];
       HashMap<MessageID,const ReadMsg*> &exclusiveRead = myData.exclusiveRead;
       HashMap<MessageID,const ReadMsg*> &sharedRead = myData.sharedRead;
 
       DebugAssert(myData.myEvictionMsg==NULL);
-
+            
+      // if we have a request with permissions greater, dispose it
       if (m->requestingExclusive)
       {
          if(exclusiveRead.size()!=0)
@@ -1462,7 +1462,7 @@ namespace Memory
          waitingForReadResponse[m->addr] = m;
 
          // transitions from busy-exclusive to exclusive
-         EM().DisposeMsg(pendingDirectoryBusyExclusiveReads[m->addr].msg);
+         //EM().DisposeMsg(pendingDirectoryBusyExclusiveReads[m->addr].msg);
          pendingDirectoryBusyExclusiveReads.erase(m->addr);
       }
       else if (b.owner==src && b.sharers.size()==0)
@@ -2369,10 +2369,12 @@ namespace Memory
             NodeID directoryNode = directoryNodeCalc->CalcNodeID(m->addr);
             SendRemoteEviction(myEvictionMsg,directoryNode,"OnDirBlkResp");
             myData.myEvictionMsg = NULL;
+            /*
             EraseReversePendingLocalRead(m,ref);
             ErasePendingLocalRead(m);
             EM().DisposeMsg(m);
             return;
+            */
          }
 
 		   if(!m->satisfied)
@@ -2416,7 +2418,8 @@ namespace Memory
 
 			   return;
          }
-         // m is satisfied
+
+         //else m is satisfied
 
          // check if we have to wait for invalidates
          if (m->pendingInvalidates > 0)

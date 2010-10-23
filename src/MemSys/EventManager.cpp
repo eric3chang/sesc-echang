@@ -24,7 +24,8 @@ namespace Memory
       m->isNonBusySharedRead = false;
       m->isWaitingForInvalidateUnlock = false;
       //m->isSpeculative = false;
-		m->SetIDInfo(currentMsgStamp++,devID,generatingPC);
+      MessageID newMessageID = currentMsgStamp++;
+		m->SetIDInfo(newMessageID,devID,generatingPC);
 		return m;
 	}
 	WriteMsg* EventManager::CreateWriteMsg(DeviceID devID, Address generatingPC)
