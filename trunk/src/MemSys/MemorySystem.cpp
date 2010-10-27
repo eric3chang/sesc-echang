@@ -36,6 +36,7 @@ namespace Memory
 	   deviceFactory.RegisterNode("Directory",new Factory<std::string,BaseMemDevice>::GenericFactoryNode<Directory>());
 	   deviceFactory.RegisterNode("ThreeStageDirectory",new Factory<std::string,BaseMemDevice>::GenericFactoryNode<ThreeStageDirectory>());
 		deviceFactory.RegisterNode("MOESICache",new Factory<std::string,BaseMemDevice>::GenericFactoryNode<MOESICache>());
+      deviceFactory.RegisterNode("MSICache",new Factory<std::string,BaseMemDevice>::GenericFactoryNode<MSICache>());
 		deviceFactory.RegisterNode("NetworkMemoryInterface",new Factory<std::string,BaseMemDevice>::GenericFactoryNode<NetworkMemoryInterface>());
 		deviceFactory.RegisterNode("RandomLoadNetwork",new Factory<std::string,BaseMemDevice>::GenericFactoryNode<RandomLoadNetwork>());
 		deviceFactory.RegisterNode("SnoopyBus",new Factory<std::string,BaseMemDevice>::GenericFactoryNode<SnoopyBus>());

@@ -3,6 +3,7 @@ add_library (Devices
    Directory.cpp
    ThreeStageDirectory.cpp
    MOESICache.cpp
+   MSICache.cpp
    NetworkMemoryInterface.cpp
    RandomLoadNetwork.cpp
    SESCProcessorInterface.cpp
