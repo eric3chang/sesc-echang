@@ -12,6 +12,7 @@ Global
 		fft-3sd-moesi-008-0001-0002-00|Win32 = fft-3sd-moesi-008-0001-0002-00|Win32
 		fft-3sd-moesi-016-0001-0002-00|Win32 = fft-3sd-moesi-016-0001-0002-00|Win32
 		fft-3sd-moesi-032-0001-0002-00|Win32 = fft-3sd-moesi-032-0001-0002-00|Win32
+		fft-3sd-msi-002-0001-0002-00|Win32 = fft-3sd-msi-002-0001-0002-00|Win32
 		fft-dir-moesi-004-0001-0002-00|Win32 = fft-dir-moesi-004-0001-0002-00|Win32
 		fft-dir-moesi-008-0001-0002-00|Win32 = fft-dir-moesi-008-0001-0002-00|Win32
 		fft-dir-moesi-016-0001-0002-00|Win32 = fft-dir-moesi-016-0001-0002-00|Win32
@@ -36,6 +37,8 @@ Global
 		{A54864F1-6C99-4165-A176-888B5427ADC2}.fft-3sd-moesi-016-0001-0002-00|Win32.Build.0 = fft-3sd-moesi-016-0001-0002-00|Win32
 		{A54864F1-6C99-4165-A176-888B5427ADC2}.fft-3sd-moesi-032-0001-0002-00|Win32.ActiveCfg = fft-3sd-moesi-032-0001-0002-00|Win32
 		{A54864F1-6C99-4165-A176-888B5427ADC2}.fft-3sd-moesi-032-0001-0002-00|Win32.Build.0 = fft-3sd-moesi-032-0001-0002-00|Win32
+		{A54864F1-6C99-4165-A176-888B5427ADC2}.fft-3sd-msi-002-0001-0002-00|Win32.ActiveCfg = fft-3sd-msi-002-0001-0002-00|Win32
+		{A54864F1-6C99-4165-A176-888B5427ADC2}.fft-3sd-msi-002-0001-0002-00|Win32.Build.0 = fft-3sd-msi-002-0001-0002-00|Win32
 		{A54864F1-6C99-4165-A176-888B5427ADC2}.fft-dir-moesi-004-0001-0002-00|Win32.ActiveCfg = fft-dir-moesi-004-0001-0002-00|Win32
 		{A54864F1-6C99-4165-A176-888B5427ADC2}.fft-dir-moesi-004-0001-0002-00|Win32.Build.0 = fft-dir-moesi-004-0001-0002-00|Win32
 		{A54864F1-6C99-4165-A176-888B5427ADC2}.fft-dir-moesi-008-0001-0002-00|Win32.ActiveCfg = fft-dir-moesi-008-0001-0002-00|Win32
