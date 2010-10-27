@@ -224,7 +224,7 @@ namespace Memory
 		AddrTag tag = CalcTag(m->addr);
 		BlockState* b = Lookup(tag);
 		DebugAssert(b);
-		if(b->state == bs_Invalid || (m->requestingExclusive && (b->state == bs_Shared || b->state == bs_Owned)))
+		if(b->state == bs_Invalid || (m->requestingExclusive && (b->state == bs_Shared)))
 		{//miss
 			if(!b->locked)
 			{
@@ -294,15 +294,28 @@ namespace Memory
 		{
 			if(b->state == bs_Modified)
 			{
-				b->state = bs_Owned;
+				//b->state = bs_Owned;
+			   if(waitingOnBlockUnlock.find(tag) != waitingOnBlockUnlock.end())
+			   {
+				   DebugAssert(b->locked);
+				   b->state = bs_Invalid;
+			   }
+			   else
+			   {
+				   DebugAssert(!b->locked);
+				   InvalidateBlock(*b);
+			   }
+			   res->exclusiveOwnership = true;
+			   res->blockAttached = true;
+			   res->satisfied = true;
 			}
 			else if(b->state == bs_Exclusive)
 			{
 				b->state = bs_Shared;
+			   res->exclusiveOwnership = false;
+			   res->blockAttached = true;
+			   res->satisfied = true;
 			}
-			res->exclusiveOwnership = false;
-			res->blockAttached = true;
-			res->satisfied = true;
 		}
 		remoteConnection->SendMsg(res,hitTime);
 		EM().DisposeMsg(m);
@@ -313,7 +326,7 @@ namespace Memory
 		AddrTag tag = CalcTag(m->addr);
 		BlockState* b = Lookup(tag);
 		DebugAssert(b);
-		if(b->state == bs_Invalid || b->state == bs_Shared || b->state == bs_Owned)
+		if(b->state == bs_Invalid || b->state == bs_Shared)
 		{
 			if(!b->locked)
 			{
@@ -357,13 +370,15 @@ namespace Memory
 		{
 			res->blockAttached = true;
 		}
+      /*
 		else if (b && (b->state == bs_Owned))
 		{
 		   res->blockAttached = true;
 		}
+      */
 		else if(b == NULL && pendingEviction.find(tag) != pendingEviction.end())
 		{
-			res->blockAttached = (pendingEviction[tag].state == bs_Modified) || (pendingEviction[tag].state == bs_Owned);
+			res->blockAttached = (pendingEviction[tag].state == bs_Modified);
 #ifdef MEMORY_MOESI_CACHE_DEBUG_PENDING_EVICTION
 			printDebugInfo("RespondInvalidate",tag,"pendingEviction.erase");
 #endif
@@ -493,7 +508,7 @@ namespace Memory
 		BlockState* b = Lookup(tag);
 		if(b)
 		{//block found
-			if(topCache || b->state == bs_Invalid || (!m->requestingExclusive && (b->state == bs_Shared || b->state == bs_Owned)))
+			if(topCache || b->state == bs_Invalid || (!m->requestingExclusive && (b->state == bs_Shared)))
 			{//satisfy here
 				PerformRemoteRead(m);
 			}
@@ -597,10 +612,12 @@ namespace Memory
 			{
 				b->state = bs_Modified;
 			}
+         /*
 			else if(b->state == bs_Shared)
 			{
 				b->state = bs_Owned;
 			}
+         */
 		}
 		EvictionResponseMsg* res = EM().CreateEvictionResponseMsg(getDeviceID(),m->GeneratingPC());
 		res->addr = m->addr;
@@ -740,10 +757,12 @@ namespace Memory
                {
                   b->state = bs_Modified;
                }
+               /*
                else if(b->state == bs_Shared)
                {
                   b->state = bs_Owned;
                }
+               */
             }
          }
          if(pendingInvalidate.find(tag) != pendingInvalidate.end())
@@ -755,7 +774,7 @@ namespace Memory
             EvictionMsg* forward = EM().CreateEvictionMsg(getDeviceID(),m->GeneratingPC());
             forward->addr = CalcAddr(CalcTag(m->addr));
             forward->size = lineSize;
-            forward->blockAttached = pendingEviction[tag].state == bs_Modified || pendingEviction[tag].state == bs_Owned;
+            forward->blockAttached = pendingEviction[tag].state == bs_Modified;
    #ifdef MEMORY_MOESI_CACHE_DEBUG_PENDING_EVICTION
             printDebugInfo("OnLocalInvalidateResponse",tag,"pendingEviction.erase");
    #endif
