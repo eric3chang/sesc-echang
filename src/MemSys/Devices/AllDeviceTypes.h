@@ -3,6 +3,7 @@
 #include "Directory.h"
 #include "ThreeStageDirectory.h"
 #include "MOESICache.h"
+#include "MSICache.h"
 #include "NetworkMemoryInterface.h"
 #include "RandomLoadNetwork.h"
 #include "SESCProcessorInterface.h"

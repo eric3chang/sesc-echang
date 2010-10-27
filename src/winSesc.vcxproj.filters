@@ -504,6 +504,9 @@
     <ClInclude Include="MemSys\Messages\UnrequestedReadResponseMsg.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MemSys\Devices\MSICache.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="libmem\AddressPrefetcher.cpp">
@@ -807,6 +810,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MemSys\Devices\ThreeStageDirectory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MemSys\Devices\MSICache.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

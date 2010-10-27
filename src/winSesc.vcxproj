@@ -730,6 +730,7 @@
     <ClInclude Include="MemSys\Messages\WriteMsg.h" />
     <ClInclude Include="MemSys\Messages\WriteResponseMsg.h" />
     <ClInclude Include="libsuc\zlibStreams.h" />
+    <ClInclude Include="MemSys\Devices\MSICache.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="libmem\AddressPrefetcher.cpp" />
@@ -756,6 +757,7 @@
     <ClCompile Include="libmint\elf.cpp" />
     <ClCompile Include="libmint\error_ops.cpp" />
     <ClCompile Include="MemSys\Devices\Directory.cpp" />
+    <ClCompile Include="MemSys\Devices\MSICache.cpp" />
     <ClCompile Include="MemSys\Devices\NetworkMemoryInterface.cpp" />
     <ClCompile Include="MemSys\Devices\RandomLoadNetwork.cpp" />
     <ClCompile Include="MemSys\Devices\ThreeStageDirectory.cpp" />
