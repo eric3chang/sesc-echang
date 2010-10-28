@@ -1032,6 +1032,13 @@ namespace Memory
          printDirectoryData(m->addr, m->solicitingMessage);
 #endif
          HandleInterventionComplete(m,false);
+
+         // erase the previous owner if m is exclusive owned (if cache doesn't have owner state)
+         if (m->exclusiveOwnership)
+         {
+            DebugAssert(b.owner==m->originalRequestingNode);
+            b.sharers.clear();
+         }
       }
       else if (m->isIntervention && pendingDirectoryBusyExclusiveReads.find(m->addr)!=pendingDirectoryBusyExclusiveReads.end() && m->satisfied)
       {// has to be satisfied, because unsatisfied intervention messages are caught at the old owner node that evicted the block
