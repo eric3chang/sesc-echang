@@ -9,9 +9,9 @@
 #include "to_string.h"
 
 // toggles debug output
-//#define MEMORY_MOESI_CACHE_DEBUG_VERBOSE
-//#define MEMORY_MOESI_CACHE_DEBUG_PENDING_EVICTION
-//#define MEMORY_MOESI_CACHE_DEBUG_PENDING_INVALIDATE
+//#define MEMORY_MESI_CACHE_DEBUG_VERBOSE
+//#define MEMORY_MESI_CACHE_DEBUG_PENDING_EVICTION
+//#define MEMORY_MESI_CACHE_DEBUG_PENDING_INVALIDATE
 
 namespace Memory
 {
@@ -42,7 +42,7 @@ namespace Memory
 				index--;
 			}
 		}
-		DebugFail("Strange indexing problem in Random Eviction [MOESI]");
+		DebugFail("Strange indexing problem in Random Eviction [MESI]");
 		return InvalidBlock;
 	}
 	int MESICache::LRUEvictionPolicy::Evict(Memory::MESICache::BlockState *set, int setSize)
@@ -152,7 +152,7 @@ namespace Memory
          }
          else
          {
-   #ifdef MEMORY_MOESI_CACHE_DEBUG_PENDING_EVICTION
+   #ifdef MEMORY_MESI_CACHE_DEBUG_PENDING_EVICTION
             printDebugInfo("AllocateBlock",set[eviction].tag,"pendingEviction.insert");
    #endif
             DebugAssert(pendingEviction.find(set[eviction].tag) == pendingEviction.end());
@@ -194,7 +194,7 @@ namespace Memory
          // need to tell OnLocalInvalidResponse that BlockEviction was canceled
 		   canceledBlockEviction.insert(tag);
 			mySet[index] = pendingEviction[tag];
-#ifdef MEMORY_MOESI_CACHE_DEBUG_PENDING_EVICTION
+#ifdef MEMORY_MESI_CACHE_DEBUG_PENDING_EVICTION
 			printDebugInfo("PrepareFreshBlock",tag,"pendingEviction.erase");
 #endif
 			pendingEviction.erase(tag);
@@ -316,6 +316,12 @@ namespace Memory
 			   res->blockAttached = true;
 			   res->satisfied = true;
 			}
+         else
+         {// state == bs_Shared
+            res->exclusiveOwnership = false;
+            res->blockAttached = true;
+            res->satisfied = true;
+         }
 		}
 		remoteConnection->SendMsg(res,hitTime);
 		EM().DisposeMsg(m);
@@ -379,7 +385,7 @@ namespace Memory
 		else if(b == NULL && pendingEviction.find(tag) != pendingEviction.end())
 		{
 			res->blockAttached = (pendingEviction[tag].state == bs_Modified);
-#ifdef MEMORY_MOESI_CACHE_DEBUG_PENDING_EVICTION
+#ifdef MEMORY_MESI_CACHE_DEBUG_PENDING_EVICTION
 			printDebugInfo("RespondInvalidate",tag,"pendingEviction.erase");
 #endif
 			pendingEviction.erase(tag);
@@ -407,7 +413,7 @@ namespace Memory
 			InvalidateBlock(*b);
 		}
 		EM().DisposeMsg(pendingInvalidate[tag]);
-#ifdef MEMORY_MOESI_CACHE_DEBUG_PENDING_INVALIDATE
+#ifdef MEMORY_MESI_CACHE_DEBUG_PENDING_INVALIDATE
 		printDebugInfo("RespondInvalidate",tag,"pendingInvalidate.erase");
 #endif
 		pendingInvalidate.erase(tag);
@@ -580,7 +586,7 @@ namespace Memory
 		}
 		else
 		{
-#ifdef MEMORY_MOESI_CACHE_DEBUG_PENDING_INVALIDATE
+#ifdef MEMORY_MESI_CACHE_DEBUG_PENDING_INVALIDATE
 		   printDebugInfo("OnRemoteInvalidate",*m,
 		         ("pendingInvalidate.insert(" + to_string<AddrTag>(tag)+")").c_str());
 #endif
@@ -697,7 +703,7 @@ namespace Memory
 	}
 	void MESICache::OnLocalInvalidateResponse(const InvalidateResponseMsg* m)
 	{
-#ifdef MEMORY_MOESI_CACHE_DEBUG_COMMON
+#ifdef MEMORY_MESI_CACHE_DEBUG_COMMON
    #ifdef _WIN32
          waitingOnBlockUnlock;
          waitingOnSetUnlock;
@@ -705,18 +711,18 @@ namespace Memory
          pendingEviction;
          pendingInvalidate;
    #else
-         #define MEMORY_MOESI_CACHE_ARRAY_SIZE 200
-         StoredFunctionBase* waitingOnBlockUnlockArray[MEMORY_MOESI_CACHE_ARRAY_SIZE];
-         StoredFunctionBase* waitingOnSetUnlockArray[MEMORY_MOESI_CACHE_ARRAY_SIZE];
-         StoredFunctionBase* waitingOnRemoteReadsArray[MEMORY_MOESI_CACHE_ARRAY_SIZE];
-         BlockState pendingEvictionArray[MEMORY_MOESI_CACHE_ARRAY_SIZE];
-         const InvalidateMsg* pendingInvalidateArray[MEMORY_MOESI_CACHE_ARRAY_SIZE];
+         #define MEMORY_MESI_CACHE_ARRAY_SIZE 200
+         StoredFunctionBase* waitingOnBlockUnlockArray[MEMORY_MESI_CACHE_ARRAY_SIZE];
+         StoredFunctionBase* waitingOnSetUnlockArray[MEMORY_MESI_CACHE_ARRAY_SIZE];
+         StoredFunctionBase* waitingOnRemoteReadsArray[MEMORY_MESI_CACHE_ARRAY_SIZE];
+         BlockState pendingEvictionArray[MEMORY_MESI_CACHE_ARRAY_SIZE];
+         const InvalidateMsg* pendingInvalidateArray[MEMORY_MESI_CACHE_ARRAY_SIZE];
 
-         waitingOnBlockUnlock.convertToArray(waitingOnBlockUnlockArray,MEMORY_MOESI_CACHE_ARRAY_SIZE);
-         convertVectorToArray<StoredFunctionBase*>(waitingOnSetUnlock,waitingOnSetUnlockArray,MEMORY_MOESI_CACHE_ARRAY_SIZE);
-         waitingOnRemoteReads.convertToArray(waitingOnRemoteReadsArray,MEMORY_MOESI_CACHE_ARRAY_SIZE);
-         pendingEviction.convertToArray(pendingEvictionArray,MEMORY_MOESI_CACHE_ARRAY_SIZE);
-         pendingInvalidate.convertToArray(pendingInvalidateArray,MEMORY_MOESI_CACHE_ARRAY_SIZE);
+         waitingOnBlockUnlock.convertToArray(waitingOnBlockUnlockArray,MEMORY_MESI_CACHE_ARRAY_SIZE);
+         convertVectorToArray<StoredFunctionBase*>(waitingOnSetUnlock,waitingOnSetUnlockArray,MEMORY_MESI_CACHE_ARRAY_SIZE);
+         waitingOnRemoteReads.convertToArray(waitingOnRemoteReadsArray,MEMORY_MESI_CACHE_ARRAY_SIZE);
+         pendingEviction.convertToArray(pendingEvictionArray,MEMORY_MESI_CACHE_ARRAY_SIZE);
+         pendingInvalidate.convertToArray(pendingInvalidateArray,MEMORY_MESI_CACHE_ARRAY_SIZE);
    #endif
 #endif
 		DebugAssert(m);
@@ -775,7 +781,7 @@ namespace Memory
             forward->addr = CalcAddr(CalcTag(m->addr));
             forward->size = lineSize;
             forward->blockAttached = pendingEviction[tag].state == bs_Modified;
-   #ifdef MEMORY_MOESI_CACHE_DEBUG_PENDING_EVICTION
+   #ifdef MEMORY_MESI_CACHE_DEBUG_PENDING_EVICTION
             printDebugInfo("OnLocalInvalidateResponse",tag,"pendingEviction.erase");
    #endif
             pendingEviction.erase(tag);
@@ -932,49 +938,49 @@ namespace Memory
 			switch(msg->Type())
 			{
 			case(mt_Read):
-         #ifdef MEMORY_MOESI_CACHE_DEBUG_VERBOSE
+         #ifdef MEMORY_MESI_CACHE_DEBUG_VERBOSE
             printDebugInfo("OnLocalRead", *msg, "RecvMsg");
          #endif
 				OnLocalRead((const ReadMsg*)msg);
 				break;
 			case(mt_Write):
-         #ifdef MEMORY_MOESI_CACHE_DEBUG_VERBOSE
+         #ifdef MEMORY_MESI_CACHE_DEBUG_VERBOSE
             printDebugInfo("OnLocalWrite", *msg, "RecvMsg");
          #endif
 				OnLocalWrite((const WriteMsg*)msg);
 				break;
 			case(mt_Invalidate):
-         #ifdef MEMORY_MOESI_CACHE_DEBUG_VERBOSE
+         #ifdef MEMORY_MESI_CACHE_DEBUG_VERBOSE
             printDebugInfo("OnLocalInvalidate", *msg, "RecvMsg");
          #endif
 				OnLocalInvalidate((const InvalidateMsg*)msg);
 				break;
 			case(mt_Eviction):
-         #ifdef MEMORY_MOESI_CACHE_DEBUG_VERBOSE
+         #ifdef MEMORY_MESI_CACHE_DEBUG_VERBOSE
             printDebugInfo("OnLocalEviction", *msg, "RecvMsg");
          #endif
 				OnLocalEviction((const EvictionMsg*)msg);
 				break;
 			case(mt_ReadResponse):
-         #ifdef MEMORY_MOESI_CACHE_DEBUG_VERBOSE
+         #ifdef MEMORY_MESI_CACHE_DEBUG_VERBOSE
             printDebugInfo("OnLocalReadResponse", *msg, "RecvMsg");
          #endif
 				OnLocalReadResponse((const ReadResponseMsg*)msg);
 				break;
 			case(mt_WriteResponse):
-         #ifdef MEMORY_MOESI_CACHE_DEBUG_VERBOSE
+         #ifdef MEMORY_MESI_CACHE_DEBUG_VERBOSE
             printDebugInfo("OnLocalWriteResponse", *msg, "RecvMsg");
          #endif
 				OnLocalWriteResponse((const WriteResponseMsg*)msg);
 				break;
 			case(mt_InvalidateResponse):
-         #ifdef MEMORY_MOESI_CACHE_DEBUG_VERBOSE
+         #ifdef MEMORY_MESI_CACHE_DEBUG_VERBOSE
             printDebugInfo("OnLocalInvalidateResponse", *msg, "RecvMsg");
          #endif
 				OnLocalInvalidateResponse((const InvalidateResponseMsg*)msg);
 				break;
 			case(mt_EvictionResponse):
-         #ifdef MEMORY_MOESI_CACHE_DEBUG_VERBOSE
+         #ifdef MEMORY_MESI_CACHE_DEBUG_VERBOSE
             printDebugInfo("OnLocalEvictionResponse", *msg, "RecvMsg");
          #endif
 				OnLocalEvictionResponse((const EvictionResponseMsg*)msg);
@@ -988,49 +994,49 @@ namespace Memory
 			switch(msg->Type())
 			{
 			case(mt_Read):
-         #ifdef MEMORY_MOESI_CACHE_DEBUG_VERBOSE
+         #ifdef MEMORY_MESI_CACHE_DEBUG_VERBOSE
             printDebugInfo("OnRemoteRead", *msg, "RecvMsg");
          #endif
 				OnRemoteRead((const ReadMsg*)msg);
 				break;
 			case(mt_Write):
-         #ifdef MEMORY_MOESI_CACHE_DEBUG_VERBOSE
+         #ifdef MEMORY_MESI_CACHE_DEBUG_VERBOSE
             printDebugInfo("OnRemoteWrite", *msg, "RecvMsg");
          #endif
 				OnRemoteWrite((const WriteMsg*)msg);
 				break;
 			case(mt_Invalidate):
-         #ifdef MEMORY_MOESI_CACHE_DEBUG_VERBOSE
+         #ifdef MEMORY_MESI_CACHE_DEBUG_VERBOSE
             printDebugInfo("OnRemoteInvalidate", *msg, "RecvMsg");
          #endif
 				OnRemoteInvalidate((const InvalidateMsg*)msg);
 				break;
 			case(mt_Eviction):
-         #ifdef MEMORY_MOESI_CACHE_DEBUG_VERBOSE
+         #ifdef MEMORY_MESI_CACHE_DEBUG_VERBOSE
             printDebugInfo("OnRemoteEviction", *msg, "RecvMsg");
          #endif
 				OnRemoteEviction((const EvictionMsg*)msg);
 				break;
 			case(mt_ReadResponse):
-         #ifdef MEMORY_MOESI_CACHE_DEBUG_VERBOSE
+         #ifdef MEMORY_MESI_CACHE_DEBUG_VERBOSE
             printDebugInfo("OnRemoteReadResponse", *msg, "RecvMsg");
          #endif
 				OnRemoteReadResponse((const ReadResponseMsg*)msg);
 				break;
 			case(mt_WriteResponse):
-         #ifdef MEMORY_MOESI_CACHE_DEBUG_VERBOSE
+         #ifdef MEMORY_MESI_CACHE_DEBUG_VERBOSE
             printDebugInfo("OnRemoteWriteResponse", *msg, "RecvMsg");
          #endif
 				OnRemoteWriteResponse((const WriteResponseMsg*)msg);
 				break;
 			case(mt_InvalidateResponse):
-         #ifdef MEMORY_MOESI_CACHE_DEBUG_VERBOSE
+         #ifdef MEMORY_MESI_CACHE_DEBUG_VERBOSE
             printDebugInfo("OnRemoteInvalidateResponse", *msg, "RecvMsg");
          #endif
 				OnRemoteInvalidateResponse((const InvalidateResponseMsg*)msg);
 				break;
 			case(mt_EvictionResponse):
-         #ifdef MEMORY_MOESI_CACHE_DEBUG_VERBOSE
+         #ifdef MEMORY_MESI_CACHE_DEBUG_VERBOSE
             printDebugInfo("OnRemoteEvictionResponse", *msg, "RecvMsg");
          #endif
 				OnRemoteEvictionResponse((const EvictionResponseMsg*)msg);
