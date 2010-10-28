@@ -959,6 +959,7 @@
   <ItemGroup>
     <ClInclude Include="include\hash_fun_extra.h" />
     <ClInclude Include="include\to_string.h" />
+    <ClInclude Include="MemSys\Devices\MESICache.h" />
     <ClInclude Include="MemSys\Messages\InvalidationCompleteMsg.h" />
     <ClInclude Include="libmint\Addressing.h" />
     <ClInclude Include="libmem\AddressPrefetcher.h" />
@@ -1147,6 +1148,7 @@
     <ClCompile Include="libmint\elf.cpp" />
     <ClCompile Include="libmint\error_ops.cpp" />
     <ClCompile Include="MemSys\Devices\Directory.cpp" />
+    <ClCompile Include="MemSys\Devices\MESICache.cpp" />
     <ClCompile Include="MemSys\Devices\MSICache.cpp" />
     <ClCompile Include="MemSys\Devices\NetworkMemoryInterface.cpp" />
     <ClCompile Include="MemSys\Devices\RandomLoadNetwork.cpp" />
