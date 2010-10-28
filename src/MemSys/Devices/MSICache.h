@@ -36,7 +36,7 @@ namespace Memory
 		{
 			bs_Modified,
 			//bs_Owned,
-			bs_Exclusive,
+			//bs_Exclusive,
 			bs_Shared,
 			bs_Invalid,
 		};
