@@ -295,7 +295,8 @@ namespace Memory
 		{
 			if(b->state == bs_Modified)
 			{
-				//b->state = bs_Owned;
+				b->state = bs_Shared;
+            /*
 			   if(waitingOnBlockUnlock.find(tag) != waitingOnBlockUnlock.end())
 			   {
 				   DebugAssert(b->locked);
@@ -306,16 +307,11 @@ namespace Memory
 				   DebugAssert(!b->locked);
 				   InvalidateBlock(*b);
 			   }
-			   res->exclusiveOwnership = true;
+            */
+			   res->exclusiveOwnership = false;
 			   res->blockAttached = true;
 			   res->satisfied = true;
 			}
-         else
-         {// b->state == shared
-            res->exclusiveOwnership = false;
-            res->blockAttached = true;
-            res->satisfied = true;
-         }
          /*
 			else if(b->state == bs_Exclusive)
 			{
@@ -325,6 +321,12 @@ namespace Memory
 			   res->satisfied = true;
 			}
          */
+         else
+         {// b->state == shared
+            res->exclusiveOwnership = false;
+            res->blockAttached = true;
+            res->satisfied = true;
+         }
 		}
 		remoteConnection->SendMsg(res,hitTime);
 		EM().DisposeMsg(m);
