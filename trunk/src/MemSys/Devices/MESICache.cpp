@@ -593,6 +593,7 @@ namespace Memory
 		DebugAssert(m);
 		AddrTag tag = CalcTag(m->addr);
 		BlockState* b = Lookup(tag);
+
 		if(b && m->blockAttached)
 		{
 			if(b->state == bs_Exclusive)
@@ -606,6 +607,7 @@ namespace Memory
 			}
          */
 		}
+
 		EvictionResponseMsg* res = EM().CreateEvictionResponseMsg(getDeviceID(),m->GeneratingPC());
 		res->addr = m->addr;
 		res->size = m->size;
