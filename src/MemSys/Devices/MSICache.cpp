@@ -250,8 +250,7 @@ namespace Memory
 			res->addr = m->addr;
 			res->size = m->size;
 			res->blockAttached = !m->alreadyHasBlock;
-			//res->exclusiveOwnership = (b->state == bs_Exclusive || b->state == bs_Modified);
-         res->exclusiveOwnership = (b->state == bs_Modified);
+			res->exclusiveOwnership = (b->state == bs_Modified);
 			res->satisfied = true;
 			res->solicitingMessage = m->MsgID();
 			localConnection->SendMsg(res,hitTime);
@@ -296,37 +295,16 @@ namespace Memory
 			if(b->state == bs_Modified)
 			{
 				b->state = bs_Shared;
-            /*
-			   if(waitingOnBlockUnlock.find(tag) != waitingOnBlockUnlock.end())
-			   {
-				   DebugAssert(b->locked);
-				   b->state = bs_Invalid;
-			   }
-			   else
-			   {
-				   DebugAssert(!b->locked);
-				   InvalidateBlock(*b);
-			   }
-            */
-			   res->exclusiveOwnership = false;
-			   res->blockAttached = true;
-			   res->satisfied = true;
 			}
          /*
 			else if(b->state == bs_Exclusive)
 			{
 				b->state = bs_Shared;
-			   res->exclusiveOwnership = false;
-			   res->blockAttached = true;
-			   res->satisfied = true;
 			}
          */
-         else
-         {// b->state == shared
-            res->exclusiveOwnership = false;
-            res->blockAttached = true;
-            res->satisfied = true;
-         }
+			res->exclusiveOwnership = false;
+			res->blockAttached = true;
+			res->satisfied = true;
 		}
 		remoteConnection->SendMsg(res,hitTime);
 		EM().DisposeMsg(m);
@@ -368,6 +346,7 @@ namespace Memory
 			EM().DisposeMsg(m);
 		}
 		b->lastWrite = EM().CurrentTick();
+		return;
 	}
 	void MSICache::RespondInvalidate(MSICache::AddrTag tag)
 	{
@@ -620,6 +599,7 @@ namespace Memory
 
 		if(b && m->blockAttached)
 		{
+			//DebugAssert(b->state==bs_Modified);
 			//if(b->state == bs_Exclusive)
 			{
 				b->state = bs_Modified;
@@ -682,13 +662,12 @@ namespace Memory
 			EM().DisposeMsg(m);
 			return;
 		}
-      /*
 		if(m->exclusiveOwnership)
 		{
-			b->state = bs_Exclusive;
+			//b->state = bs_Exclusive;
+			b->state = bs_Modified;
 		}
 		else
-      */
 		{
 			b->state = bs_Shared;
 		}
@@ -764,6 +743,7 @@ namespace Memory
             {
                //if(b->state == bs_Exclusive)
                {
+						DebugAssert(b->state==bs_Modified);
                   b->state = bs_Modified;
                }
                /*
