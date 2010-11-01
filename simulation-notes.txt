@@ -1,0 +1,7 @@
+lion
+mpi
+cray
+dorado
+
+apps: barnes, fmm, ocean, radiosity, raytrace, volrend, water-nsquared, water-spatial
+
