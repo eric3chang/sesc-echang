@@ -1,3 +1,0 @@
-benchmarks/genome -t2 -g256 -s16 -n16384
-
-n - NiceValue
