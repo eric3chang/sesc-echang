@@ -31,6 +31,7 @@ Global
 		fft-snoopy-moesi-032-0001-0002-00|Win32 = fft-snoopy-moesi-032-0001-0002-00|Win32
 		memtest-002-3sd-moesi|Win32 = memtest-002-3sd-moesi|Win32
 		Release|Win32 = Release|Win32
+		temp|Win32 = temp|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{A54864F1-6C99-4165-A176-888B5427ADC2}.Debug|Win32.ActiveCfg = Release|Win32
@@ -85,6 +86,8 @@ Global
 		{A54864F1-6C99-4165-A176-888B5427ADC2}.memtest-002-3sd-moesi|Win32.Build.0 = memtest-002-3sd-moesi|Win32
 		{A54864F1-6C99-4165-A176-888B5427ADC2}.Release|Win32.ActiveCfg = Release|Win32
 		{A54864F1-6C99-4165-A176-888B5427ADC2}.Release|Win32.Build.0 = Release|Win32
+		{A54864F1-6C99-4165-A176-888B5427ADC2}.temp|Win32.ActiveCfg = temp|Win32
+		{A54864F1-6C99-4165-A176-888B5427ADC2}.temp|Win32.Build.0 = temp|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
