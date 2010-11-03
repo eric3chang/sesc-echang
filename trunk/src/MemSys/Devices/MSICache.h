@@ -167,6 +167,10 @@ namespace Memory
       void printDebugInfo(const char* fromMethod,const AddrTag tag,const char* operation);
 	public:
 		virtual ~MSICache();
+		virtual unsigned int getReadHits();
+		virtual unsigned int getReadMisses();
+		virtual unsigned int getWriteHits();
+		virtual unsigned int getWriteMisses();
 		virtual void Initialize(EventManager* em, const RootConfigNode& config, const std::vector<Connection*>& connectionSet);
 		virtual void DumpRunningState(RootConfigNode& node);
 		virtual void DumpStats(std::ostream& out);

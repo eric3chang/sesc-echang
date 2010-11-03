@@ -78,6 +78,22 @@ namespace Memory
       BlockState *myBlockState = &(cacheContents[i * associativity]);
       return myBlockState;
 	}
+	unsigned int MOESICache::getReadHits()
+	{
+		return readHits;
+	}
+	unsigned int MOESICache::getReadMisses()
+	{
+		return readMisses;
+	}
+	unsigned int MOESICache::getWriteHits()
+	{
+		return writeHits;
+	}
+	unsigned int MOESICache::getWriteMisses()
+	{
+		return writeMisses;
+	}
 	void MOESICache::InvalidateBlock(MOESICache::BlockState& block)
 	{
 		DebugAssert(waitingOnBlockUnlock.find(block.tag) == waitingOnBlockUnlock.end());
