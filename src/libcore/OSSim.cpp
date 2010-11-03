@@ -39,6 +39,7 @@ Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #endif
 #include <iostream>
 #include <fstream>
+#include <typeinfo>
 
 #include "icode.h"
 #include "opcodes.h"
@@ -54,7 +55,6 @@ Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
 #include <fstream>
 #include <string>
-
 
 #include "ThreadContext.h"
 #include "OSSim.h"
@@ -1002,13 +1002,141 @@ void OSSim::simFinish()
      using Memory::BaseMemDevice;
      std::vector<BaseMemDevice*>deviceSet = MemSys_system.getDeviceSet();
 
-     for (std::vector<BaseMemDevice*>::iterator i=deviceSet.begin(); i!=deviceSet.end(); i++)
-     {
-        BaseMemDevice* ptr = *i;
-        out << ptr->DeviceName() << std::endl;
-        ptr->DumpStats(out);
-        out << std::endl;
-     }
+		long long unsigned int totalCacheReadHits = 0;
+		long long unsigned int totalCacheReadMisses = 0;
+		long long unsigned int totalCacheWriteHits = 0;
+		long long unsigned int totalCacheWriteMisses = 0;
+
+		long long unsigned int totalL1CacheReadHits = 0;
+		long long unsigned int totalL1CacheReadMisses = 0;
+		long long unsigned int totalL1CacheWriteHits = 0;
+		long long unsigned int totalL1CacheWriteMisses = 0;
+
+		long long unsigned int totalL2CacheReadHits = 0;
+		long long unsigned int totalL2CacheReadMisses = 0;
+		long long unsigned int totalL2CacheWriteHits = 0;
+		long long unsigned int totalL2CacheWriteMisses = 0;
+
+		for (std::vector<BaseMemDevice*>::iterator i=deviceSet.begin(); i!=deviceSet.end(); i++)
+		{
+			BaseMemDevice* ptr = *i;
+			unsigned int cacheReadHits = 0;
+			unsigned int cacheReadMisses = 0;
+			unsigned int cacheWriteHits = 0;
+			unsigned int cacheWriteMisses = 0;
+			bool isL1Cache = false;
+			bool isL2Cache = false;
+
+			// if memdevice is a type of cache, do special processing to get total hits and total misses
+			bool isMSICache = (typeid(*ptr)==typeid(Memory::MSICache));
+			bool isMESICache = (typeid(*ptr)==typeid(Memory::MESICache));
+			bool isMOESICache = (typeid(*ptr)==typeid(Memory::MOESICache));
+
+			if (isMSICache)
+			{
+				Memory::MSICache *tempCache = (Memory::MSICache*)ptr;
+				string deviceName = tempCache->DeviceName();
+				size_t findL1 = deviceName.find("L1");
+				size_t findL2 = deviceName.find("L2");
+
+				if (findL1!=string::npos)
+				{
+					isL1Cache = true;
+				}
+				if (findL2!=string::npos)
+				{
+					isL2Cache = true;
+				}
+
+				cacheReadHits = tempCache->getReadHits();
+				cacheReadMisses = tempCache->getReadMisses();
+				cacheWriteHits = tempCache->getWriteHits();
+				cacheWriteMisses = tempCache->getWriteMisses();
+			}
+			else if (isMESICache)
+			{
+				Memory::MESICache *tempCache = (Memory::MESICache*)ptr;
+				string deviceName = tempCache->DeviceName();
+				size_t findL1 = deviceName.find("L1");
+				size_t findL2 = deviceName.find("L2");
+
+				if (findL1!=string::npos)
+				{
+					isL1Cache = true;
+				}
+				if (findL2!=string::npos)
+				{
+					isL2Cache = true;
+				}
+
+				cacheReadHits = tempCache->getReadHits();
+				cacheReadMisses = tempCache->getReadMisses();
+				cacheWriteHits = tempCache->getWriteHits();
+				cacheWriteMisses = tempCache->getWriteMisses();
+			}
+			else if (isMOESICache)
+			{
+				Memory::MOESICache *tempCache = (Memory::MOESICache*)ptr;
+				string deviceName = tempCache->DeviceName();
+				size_t findL1 = deviceName.find("L1");
+				size_t findL2 = deviceName.find("L2");
+
+				if (findL1!=string::npos)
+				{
+					isL1Cache = true;
+				}
+				if (findL2!=string::npos)
+				{
+					isL2Cache = true;
+				}
+
+				cacheReadHits = tempCache->getReadHits();
+				cacheReadMisses = tempCache->getReadMisses();
+				cacheWriteHits = tempCache->getWriteHits();
+				cacheWriteMisses = tempCache->getWriteMisses();
+			}
+
+			out << ptr->DeviceName() << std::endl;
+			ptr->DumpStats(out);
+			out << std::endl;
+
+			if (isMSICache || isMESICache || isMOESICache)
+			{
+				if (isL1Cache)
+				{
+					totalL1CacheReadHits += cacheReadHits;
+					totalL1CacheReadMisses += cacheReadMisses;
+					totalL1CacheWriteHits += cacheWriteHits;
+					totalL1CacheWriteMisses += cacheWriteMisses;
+				}
+				if (isL2Cache)
+				{
+					totalL2CacheReadHits += cacheReadHits;
+					totalL2CacheReadMisses += cacheReadMisses;
+					totalL2CacheWriteHits += cacheWriteHits;
+					totalL2CacheWriteMisses += cacheWriteMisses;
+				}
+				totalCacheReadHits += cacheReadHits;
+				totalCacheReadMisses += cacheReadMisses;
+				totalCacheWriteHits += cacheWriteHits;
+				totalCacheWriteMisses += cacheWriteMisses;
+			}
+		} // end memdevice for loops
+
+		out << "totalL1CacheReadHits:" << totalL1CacheReadHits << std::endl;
+		out << "totalL1CacheReadMisses:" << totalL1CacheReadMisses << std::endl;
+		out << "totalL1CacheWriteHits:" << totalL1CacheWriteHits << std::endl;
+		out << "totalL1CacheWriteMisses:" << totalL1CacheWriteMisses << std::endl;
+		out << std::endl;
+		out << "totalL2CacheReadHits:" << totalL2CacheReadHits << std::endl;
+		out << "totalL2CacheReadMisses:" << totalL2CacheReadMisses << std::endl;
+		out << "totalL2CacheWriteHits:" << totalL2CacheWriteHits << std::endl;
+		out << "totalL2CacheWriteMisses:" << totalL2CacheWriteMisses << std::endl;
+		out << std::endl;
+		out << "totalCacheReadHits:" << totalCacheReadHits << std::endl;
+		out << "totalCacheReadMisses:" << totalCacheReadMisses << std::endl;
+		out << "totalCacheWriteHits:" << totalCacheWriteHits << std::endl;
+		out << "totalCacheWriteMisses:" << totalCacheWriteMisses << std::endl;
 
      //TMInterface::DumpStats(out);
      out << "EndGroup #" << std::endl;

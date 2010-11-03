@@ -78,6 +78,22 @@ namespace Memory
       BlockState *myBlockState = &(cacheContents[i * associativity]);
       return myBlockState;
 	}
+	unsigned int MESICache::getReadHits()
+	{
+		return readHits;
+	}
+	unsigned int MESICache::getReadMisses()
+	{
+		return readMisses;
+	}
+	unsigned int MESICache::getWriteHits()
+	{
+		return writeHits;
+	}
+	unsigned int MESICache::getWriteMisses()
+	{
+		return writeMisses;
+	}
 	void MESICache::InvalidateBlock(MESICache::BlockState& block)
 	{
 		DebugAssert(waitingOnBlockUnlock.find(block.tag) == waitingOnBlockUnlock.end());

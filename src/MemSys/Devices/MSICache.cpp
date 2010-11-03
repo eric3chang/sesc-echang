@@ -78,6 +78,22 @@ namespace Memory
       BlockState *myBlockState = &(cacheContents[i * associativity]);
       return myBlockState;
 	}
+	unsigned int MSICache::getReadHits()
+	{
+		return readHits;
+	}
+	unsigned int MSICache::getReadMisses()
+	{
+		return readMisses;
+	}
+	unsigned int MSICache::getWriteHits()
+	{
+		return writeHits;
+	}
+	unsigned int MSICache::getWriteMisses()
+	{
+		return writeMisses;
+	}
 	void MSICache::InvalidateBlock(MSICache::BlockState& block)
 	{
 		DebugAssert(waitingOnBlockUnlock.find(block.tag) == waitingOnBlockUnlock.end());
