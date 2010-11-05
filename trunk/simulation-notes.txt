@@ -6,6 +6,7 @@ dorado
 apps: barnes, fmm, ocean, radiosity, raytrace, volrend, water-nsquared, water-spatial
 
 BARNES
+ < benchmarks-splash2-sesc/barnes-inputs/cpu2
          infile
 16384    nbody   
 123      seed
@@ -60,7 +61,7 @@ BARNES
        Default is 1.
 
 CHOLESKY
--p2 -B32 -C16384 -t
+-p2 -B32 -C16384 -t < benchmarks-splash2-sesc/cholesky-inputs/lshp.O
 /*  Sparse Cholesky Factorization (Fan-Out with no block copy-across)    */
 /*  -pP : P = number of processors.                                      */
 /*  -Bb : Use a postpass partition size of b.                            */
@@ -226,32 +227,34 @@ VOLREND num_processes head-scaleddown4
           without a suffix
 
 WATER-SP & WATER-NSQ 
+water < benchmarks-splash2-sesc/water-inputs/cpu2
   1.5e-16   512  3   6
  -1      3000     3  0
 1 6.21275
-    TSTEP:   the physical time interval (in sec) between timesteps.  
-    Good default is 1e-15.
-    NMOL:    the number of molecules to be simulated.
-    NSTEP:   the number of timesteps to be simulated.
-    NORDER:  the order of the predictor-corrector method to be used.
-    set this to 6.
-    NSAVE:   the frequency with which to save data in data collection.
-    Set to 0 always.
-    NRST:    the frequency with which to write RST file: set to 0 always (not used). 
-    NPRINT:  the frequency with which to compute potential energy. 
-    i.e. the routine POTENG is called every NPRINT timesteps.
-    It also computes intermolecular as well as intramolecular
-    interactions, and hence is very expensive.
-    NFMC:    Not used (historical artifact).  Set to anything, say 0.
-    NumProcs: the number of processors to be used.
-    CUTOFF:  the cutoff radius to be used (in Angstrom, 
-    floating-point).  In a real simulation, this
-    will be set to 0 here in which case the program will 
-    compute it itself (and set it to about 11 Angstrom.   
-    It can be set by the user if they want
-    to use an artificially small cutoff radius, for example
-    to control the number of boxes created for small problems 
-    (and not have fewer boxes than processors). 
+
+1.5e-16   TSTEP:   the physical time interval (in sec) between timesteps.  
+            Good default is 1e-15.
+512       NMOL:    the number of molecules to be simulated.
+3         NSTEP:   the number of timesteps to be simulated.
+6         NORDER:  the order of the predictor-corrector method to be used.
+            set this to 6.
+-1        NSAVE:   the frequency with which to save data in data collection.
+             Set to 0 always.
+3000      NRST:    the frequency with which to write RST file: set to 0 always (not used). 
+3         NPRINT:  the frequency with which to compute potential energy. 
+             i.e. the routine POTENG is called every NPRINT timesteps.
+             It also computes intermolecular as well as intramolecular
+             interactions, and hence is very expensive.
+0         NFMC:    Not used (historical artifact).  Set to anything, say 0.
+1         NumProcs: the number of processors to be used.
+6.21275   CUTOFF:  the cutoff radius to be used (in Angstrom, 
+             floating-point).  In a real simulation, this
+             will be set to 0 here in which case the program will 
+             compute it itself (and set it to about 11 Angstrom.   
+             It can be set by the user if they want
+             to use an artificially small cutoff radius, for example
+             to control the number of boxes created for small problems 
+             (and not have fewer boxes than processors). 
 
 
 
