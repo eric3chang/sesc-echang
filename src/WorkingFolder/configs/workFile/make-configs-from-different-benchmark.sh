@@ -1,21 +1,31 @@
 #/bin/bash
 # rename files to create more config files
-#untested!
-
 #set -x   # verbose output
+
+if [[ $1 == '' ]]; then
+   echo "usage: make-configs-from-different-benchmark NEW_BENCHMARK"
+   exit 1
+fi
+
 OLD_BENCHMARK=fft
-NEW_BENCHMARK=barnes
+NEW_BENCHMARK=$1
 
-FILENAME_SUFFIX=-3sd-moesi-002-0001-0002-
+L1_SIZE=0001
+L2_SIZE=0002
 
-OLD_FILENAME=${OLD_BENCHMARK}${FILENAME_SUFFIX}??.conf
-NEW_FILENAME_PREFIX=${NEW_BENCHMARK}${FILENAME_SUFFIX}
+DIR_TYPES=(dir 3sd)
+CACHE_TYPES=(moesi msi)
+CPU_COUNTS=(002 004 008 016 032)
 
-for file in $(ls $OLD_FILENAME); do
-   # gets the string of 00-14
-   string=${file:0-7:2}
-   newFilename=${NEW_FILENAME_PREFIX}${string}
-   cp $file $newFilename.conf
-   sed -i "s/$OLD_BENCHMARK/$NEW_BENCHMARK/" $newFilename.conf
+for dirType in ${DIR_TYPES[*]}; do
+   for cacheType in ${CACHE_TYPES[*]}; do
+      for cpuCount in ${CPU_COUNTS[*]}; do
+         suffix="-$dirType-$cacheType-$cpuCount-$L1_SIZE-$L2_SIZE-00.conf"
+         oldname=${OLD_BENCHMARK}${suffix}
+         newname=${NEW_BENCHMARK}${suffix}
+         cp $oldname $newname
+         sed -i "s/$OLD_BENCHMARK/$NEW_BENCHMARK/g" $newname
+      done
+   done
 done
 
