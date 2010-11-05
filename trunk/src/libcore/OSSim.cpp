@@ -354,9 +354,11 @@ void OSSim::processParams(int32_t argc, char **argv, char **envp)
 
   char *name = (i == argc) ? argv[0] : argv[i];
   {
+#ifndef _WIN32
     char *p = strrchr(name, '/');
     if (p)
       name = p + 1;
+#endif
   }
   benchName = strdup(name);
 #ifdef _MSC_VER
