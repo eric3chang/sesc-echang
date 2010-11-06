@@ -1,9 +1,18 @@
-lion
-mpi
 cray
 dorado
+lion
+mpi
 
 apps: barnes, fmm, ocean, radiosity, raytrace, volrend, water-nsquared, water-spatial
+kernels: cholesky, fft, lu, radix
+
+all: barnes, cholesky, fft, fmm, lu, ocean, radiosity, radix, raytrace,
+volrend, water-nsquared, water-spatial
+
+cray: barnes, cholesky, fft
+dorado: fmm, lu, ocean
+lion: radiosity, radix, raytrace
+mpi: volrend, water-nsquared, water-spatial
 
 BARNES
  < benchmarks-splash2-sesc/barnes-inputs/cpu2
