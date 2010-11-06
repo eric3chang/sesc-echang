@@ -333,7 +333,8 @@ public:
   void initAddressing(VAddr dataVAddrLb, VAddr dataVAddrUb,
 		      MINTAddrType rMap, MINTAddrType mMap, MINTAddrType sTop);
   RAddr virt2real(VAddr vaddr, short opflags=E_READ | E_BYTE) const{
-    I(isValidDataVAddr(vaddr));
+    //I(isValidDataVAddr(vaddr));
+	 DebugAssert(isValidDataVAddr(vaddr));
     return virtToRealOffset+vaddr;
   }
   VAddr real2virt(RAddr raddr) const{

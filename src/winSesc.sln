@@ -5,6 +5,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "winSesc", "winSesc.vcxproj"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		cholesky-dir-moesi-002-0001-0002-00|Win32 = cholesky-dir-moesi-002-0001-0002-00|Win32
 		Debug|Win32 = Debug|Win32
 		fft-002-0001-0002-00|Win32 = fft-002-0001-0002-00|Win32
 		fft-3sd-mesi-032-0001-0002-00|Win32 = fft-3sd-mesi-032-0001-0002-00|Win32
@@ -32,8 +33,11 @@ Global
 		memtest-002-3sd-moesi|Win32 = memtest-002-3sd-moesi|Win32
 		Release|Win32 = Release|Win32
 		temp|Win32 = temp|Win32
+		water-dir-moesi-002-0001-0002-00|Win32 = water-dir-moesi-002-0001-0002-00|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A54864F1-6C99-4165-A176-888B5427ADC2}.cholesky-dir-moesi-002-0001-0002-00|Win32.ActiveCfg = cholesky-dir-moesi-002-0001-0002-00|Win32
+		{A54864F1-6C99-4165-A176-888B5427ADC2}.cholesky-dir-moesi-002-0001-0002-00|Win32.Build.0 = cholesky-dir-moesi-002-0001-0002-00|Win32
 		{A54864F1-6C99-4165-A176-888B5427ADC2}.Debug|Win32.ActiveCfg = Release|Win32
 		{A54864F1-6C99-4165-A176-888B5427ADC2}.Debug|Win32.Build.0 = Release|Win32
 		{A54864F1-6C99-4165-A176-888B5427ADC2}.fft-002-0001-0002-00|Win32.ActiveCfg = fft-002-0001-0002-00|Win32
@@ -88,6 +92,8 @@ Global
 		{A54864F1-6C99-4165-A176-888B5427ADC2}.Release|Win32.Build.0 = Release|Win32
 		{A54864F1-6C99-4165-A176-888B5427ADC2}.temp|Win32.ActiveCfg = temp|Win32
 		{A54864F1-6C99-4165-A176-888B5427ADC2}.temp|Win32.Build.0 = temp|Win32
+		{A54864F1-6C99-4165-A176-888B5427ADC2}.water-dir-moesi-002-0001-0002-00|Win32.ActiveCfg = water-dir-moesi-002-0001-0002-00|Win32
+		{A54864F1-6C99-4165-A176-888B5427ADC2}.water-dir-moesi-002-0001-0002-00|Win32.Build.0 = water-dir-moesi-002-0001-0002-00|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
