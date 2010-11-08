@@ -1,5 +1,6 @@
-cray
+#cray - do not use cray. It only has 1GB of memory
 dorado
+illiac
 lion
 mpi
 
@@ -9,10 +10,14 @@ kernels: cholesky, fft, lu, radix
 all: barnes, cholesky, fft, fmm, lu, ocean, radiosity, radix, raytrace,
 volrend, water-nsquared, water-spatial
 
-cray: barnes, cholesky, fft
 dorado: fmm, lu, ocean
-lion: radiosity, radix, raytrace
-mpi: volrend, water-nsquared, water-spatial
+illiac: barnes, cholesky, fft
+lion: radix, raytrace
+mpi: volrend
+
+NOT USED
+radiosity   # doesn't seem to drop out of rabbit mode
+water-nsquared, water-spatial     # seg-faults on ThreadContext.h line 336
 
 BARNES
  < benchmarks-splash2-sesc/barnes-inputs/cpu2
