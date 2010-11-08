@@ -227,7 +227,7 @@ RADIX
 /*                                                                       */
 
 RAYTRACE
--p2 balls4.env
+-p2 benchmarks-splash2-sesc/raytrace-inputs/balls4.env
  *	prt [options] envfile
  *
  *		-h	Print this usage message.
