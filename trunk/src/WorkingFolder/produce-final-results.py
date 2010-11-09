@@ -1,6 +1,7 @@
 #!/usr/bin/python
 import sys
 
+# these change the results that get put into the final result file
 FINAL_RESULTS_FOLDER='final-results/'
 MEM_DEVICE_FOLDER='mem-device-results/'
 MEM_DEVICE_1=['totalL1Cache','totalL2Cache']
@@ -9,16 +10,18 @@ MEM_DEVICE_3=['Hits','Misses']
 RESULTS_FOLDER='results/'
 RESULTS_STRING='TotalRunTime'
 
+# these change the input files that we are reading from
+directoryTypeArray = ['dir', '3sd']
+cacheTypeArray = ['moesi', 'msi']
+#cpuCountArray = ['002', '004', '008', '016', '032']
+cpuCountArray = ['032']
+memdeviceArray = []
+
 if (len(sys.argv) != 2):
     print('usage: produce-final-results.py BENCHMARK_NAME')
     exit()
 else:
     benchmarkName = sys.argv[1]
-
-directoryTypeArray = ['dir', '3sd']
-cacheTypeArray = ['moesi', 'msi']
-cpuCountArray = ['002', '004', '008', '016', '032']
-memdeviceArray = []
 
 # create totalL1CacheReadHits, totalL1CacheReadMisses,...
 for word1 in MEM_DEVICE_1:
@@ -26,11 +29,11 @@ for word1 in MEM_DEVICE_1:
         for word3 in MEM_DEVICE_3:
             memdeviceArray.append(word1+word2+word3)
 
-def writeFinalResults(outputFile,resultFileString,memdeviceFileString):
+def writeFinalResults(cpuCount, outputFile,resultFileString,memdeviceFileString):
     memdeviceFile = open(memdeviceFileString,'r')
     resultFile = open(resultFileString,'r')
 
-    outputFile.write(benchmarkName+'\n')
+    outputFile.write(benchmarkName+'-'+cpuCount+'\n')
 
     # process TotalRunTime
     for line in resultFile:
@@ -62,17 +65,19 @@ def writeFinalResults(outputFile,resultFileString,memdeviceFileString):
     memdeviceFile.close()
     resultFile.close()
 
-outputFileString = FINAL_RESULTS_FOLDER+benchmarkName+'.txt'
-outputFile = open(outputFileString,'w')
 
 '''
 # debug code
+outputFileString = FINAL_RESULTS_FOLDER+benchmarkName+'.txt'
+outputFile = open(outputFileString,'w')
 debugFileString = 'fft-002-0001-0002-00.txt'
 resultFile = RESULTS_FOLDER+debugFileString
 memdeviceFile = MEM_DEVICE_FOLDER+debugFileString
-writeFinalResults(outputFile, resultFile, memdeviceFile)
+writeFinalResults('002',outputFile, resultFile, memdeviceFile)
+outputFile.close()
 # end debug code
 '''
+
 
 for directoryType in directoryTypeArray:
     for cacheType in cacheTypeArray:
@@ -80,6 +85,7 @@ for directoryType in directoryTypeArray:
             filenamePrefix = benchmarkName+'-'+directoryType+'-'+cacheType+'-'+cpuCount+'-0001-0002-00'
             resultFileString = RESULTS_FOLDER+filenamePrefix+'.txt'
             memdeviceFileString = MEM_DEVICE_FOLDER+filenamePrefix+'.txt'
-            writeFinalResults(outputFile, resultFileString, memdeviceFileString)
-
-outputFile.close()
+            outputFileString = FINAL_RESULTS_FOLDER+benchmarkName+'-'+cpuCount+'.txt'
+            outputFile = open(outputFileString,'w')
+            writeFinalResults(cpuCount, outputFile, resultFileString, memdeviceFileString)
+            outputFile.close()
