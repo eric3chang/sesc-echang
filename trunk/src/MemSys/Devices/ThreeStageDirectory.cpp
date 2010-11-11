@@ -1149,7 +1149,9 @@ namespace Memory
             }
 
             pendingDirectoryBusySharedReads.erase(m->addr);
+#ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_DIRECTORY_DATA
             printDirectoryData(m->addr,m->solicitingMessage);
+#endif
 
             /*
             AutoDetermineDestSendMsg(read,previousOwner,lookupTime+remoteSendTime,
