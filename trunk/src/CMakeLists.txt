@@ -29,7 +29,8 @@ MARK_AS_ADVANCED (
 
 # overwrite default Release build
 # using -O2 or -O3 causes program to crash unexpectedly
-set ( CMAKE_CXX_FLAGS_RELEASE "-O1 -Wno-unused-variable" CACHE STRING
+# using -O1 possibly causes radix to crash
+set ( CMAKE_CXX_FLAGS_RELEASE "-O1 -DDEBUG -DADDRESS_CHK -Wno-unused-variable" CACHE STRING
    "Flags used by the C++ compiler during release builds."
    FORCE )
 MARK_AS_ADVANCED (

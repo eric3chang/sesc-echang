@@ -1,0 +1,119 @@
+static[0x10069a30-0x10083f84] heap[0x10084000-0x23f42000] stack[0x23f42000-0x2473a000] -> [0xd7a9b008-0xec16b5d8]
+Device : P(0)_DL1  Description : ProcessorInterface_0
+Device : P(0)_IL1  Description : InstSource
+Device : P(1)_DL1  Description : ProcessorInterface_1
+Device : P(1)_IL1  Description : InstSource
+Rabbit Mode Start 
+   1024 Complex Doubles
+   2 Processors
+   65536 Cache lines
+   16 Byte line size
+   4096 Bytes per page
+Leaving rabbit mode...
+sesc_spawn( 0x100013d4, 0x0, 0x0 ) pid = 0, child pid = 1, child context = 9faaf08
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+Stalling processor 1 at barrier
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+Processor 0 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Stalling processor 1 at barrier
+Processor 0 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Stalling processor 0 at barrier
+Processor 1 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Stalling processor 1 at barrier
+Processor 0 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Stalling processor 0 at barrier
+Processor 1 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Stalling processor 0 at barrier
+Processor 1 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Stalling processor 0 at barrier
+Processor 1 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Stalling processor 0 at barrier
+Processor 1 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Simulated 500003 instructions so far at clock 812460
+Stalling processor 0 at barrier
+Processor 1 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Stalling processor 0 at barrier
+Processor 1 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Stalling processor 0 at barrier
+Processor 1 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Stalling processor 0 at barrier
+Processor 1 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+mint_exit 1
+Rabbit Mode Start 
+    0               211            109       0.00000
+Start time                        :       1358180350
+Initialization finish time        :       1358180366
+Overall finish time               :       1358180577
+Total time with initialization    :              227
+Total time without initialization :              211
+Overall transpose time            :              109
+Overall transpose fraction        :          0.51659
+Checksum difference is -0.000 (0.000, 0.000)
+mint_exit 0
+Leaving rabbit mode...
+Rabbit Mode Start 
+Leaving rabbit mode...
+Rabbit Mode Start 
+Leaving rabbit mode...
+Rabbit Mode Start 
+Leaving rabbit mode...
+Rabbit Mode Start 
+Leaving rabbit mode...
+Rabbit Mode Start 
+Leaving rabbit mode...
+Rabbit Mode Start 
+Leaving rabbit mode...
+Rabbit Mode Start 
+Leaving rabbit mode...
+Rabbit Mode Start 
+Leaving rabbit mode...
+Rabbit Mode Start 
+Leaving rabbit mode...
+Rabbit Mode Start 
+Leaving rabbit mode...
+Rabbit Mode Start 
+Leaving rabbit mode...
+Rabbit Mode Start 
+Leaving rabbit mode...
+Rabbit Mode Start 
+Leaving rabbit mode...
+Rabbit Mode Start 
+Leaving rabbit mode...
+Rabbit Mode Start 
+Leaving rabbit mode...
+Rabbit Mode Start 
+Leaving rabbit mode...
+Get out of 'has-work' loop
+Finished running 
+Dumping stats
+Dumping stats
