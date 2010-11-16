@@ -15,6 +15,10 @@ except ValueError:
     print (USAGE_MESSAGE)
     exit(1)
 
+# append zeros if necessary
+while (len(cpuCount)<3):
+    cpuCount = '0'+cpuCount
+
 # open a new file to dump results into
 outFilename = cpuCount+'-combined'+SUFFIX
 outFile = open(outFilename,'w')
