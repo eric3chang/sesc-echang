@@ -33,6 +33,7 @@ Global
 		fft-dir-msi-032-0001-0002-00|Win32 = fft-dir-msi-032-0001-0002-00|Win32
 		fft-snoopy-moesi-032-0001-0002-00|Win32 = fft-snoopy-moesi-032-0001-0002-00|Win32
 		memtest-002-3sd-moesi|Win32 = memtest-002-3sd-moesi|Win32
+		radix-3sd-msi-002-0001-0002-00|Win32 = radix-3sd-msi-002-0001-0002-00|Win32
 		Release|Win32 = Release|Win32
 		temp|Win32 = temp|Win32
 		water-dir-moesi-002-0001-0002-00|Win32 = water-dir-moesi-002-0001-0002-00|Win32
@@ -94,6 +95,8 @@ Global
 		{A54864F1-6C99-4165-A176-888B5427ADC2}.fft-snoopy-moesi-032-0001-0002-00|Win32.Build.0 = fft-snoopy-moesi-032-0001-0002-00|Win32
 		{A54864F1-6C99-4165-A176-888B5427ADC2}.memtest-002-3sd-moesi|Win32.ActiveCfg = memtest-002-3sd-moesi|Win32
 		{A54864F1-6C99-4165-A176-888B5427ADC2}.memtest-002-3sd-moesi|Win32.Build.0 = memtest-002-3sd-moesi|Win32
+		{A54864F1-6C99-4165-A176-888B5427ADC2}.radix-3sd-msi-002-0001-0002-00|Win32.ActiveCfg = radix-3sd-msi-002-0001-0002-00|Win32
+		{A54864F1-6C99-4165-A176-888B5427ADC2}.radix-3sd-msi-002-0001-0002-00|Win32.Build.0 = radix-3sd-msi-002-0001-0002-00|Win32
 		{A54864F1-6C99-4165-A176-888B5427ADC2}.Release|Win32.ActiveCfg = Release|Win32
 		{A54864F1-6C99-4165-A176-888B5427ADC2}.Release|Win32.Build.0 = Release|Win32
 		{A54864F1-6C99-4165-A176-888B5427ADC2}.temp|Win32.ActiveCfg = temp|Win32
