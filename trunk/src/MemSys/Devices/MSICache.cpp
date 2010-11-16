@@ -8,11 +8,6 @@
 #include <algorithm>
 #include "to_string.h"
 
-// toggles debug output
-//#define MEMORY_MSI_CACHE_DEBUG_VERBOSE
-//#define MEMORY_MSI_CACHE_DEBUG_PENDING_EVICTION
-//#define MEMORY_MSI_CACHE_DEBUG_PENDING_INVALIDATE
-
 namespace Memory
 {
 	int MSICache::RandomEvictionPolicy::Evict(Memory::MSICache::BlockState *set, int setSize)

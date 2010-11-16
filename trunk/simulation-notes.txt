@@ -21,6 +21,9 @@ NOT USED
 radiosity   # doesn't seem to drop out of rabbit mode
 water-nsquared, water-spatial     # seg-faults on ThreadContext.h line 336
 
+order for benchmarks on number of total instructions
+fft, fmm (256 particles), radix, ocean, cholesky (lshp.O), lu, volrend(head), raytrace(car), barnes (16K particles)
+
 BARNES
  < benchmarks-splash2-sesc/barnes-inputs/cpu2
          infile
@@ -85,6 +88,7 @@ CHOLESKY
 /*  -s  : Print individual processor timing statistics.                  */
 /*  -t  : Test output.                                                   */
 /*  -h  : Print out command line options.  
+default is tk15.O
 
 FFT
 -m10 -p2 -n65536 -l4 -t
@@ -116,7 +120,7 @@ FFT
 FMM
 two cluster    Cluster Type
 plummer        Distribution Type
-256            Number of Particles
+256            Number of Particles (default is 16384, but I'm using 256)
 1e-6           Precision
 1              Number of Processors
 5              Number of Time Steps
@@ -181,6 +185,7 @@ LU
 
 OCEAN
 -n130 -p1 -e1e-7 -r20000.0 -t28800.0
+default is -n258
 /*     -nN : Simulate NxN ocean.  N must be (power of 2)+2.              */
 /*     -pP : P = number of processors.  P must be power of 2.            */
 /*     -eE : E = error tolerance for iterative relaxation.               */
@@ -230,6 +235,7 @@ RADIX
 
 RAYTRACE
 -p2 benchmarks-splash2-sesc/raytrace-inputs/balls4.env
+default is car.env
  *	prt [options] envfile
  *
  *		-h	Print this usage message.
