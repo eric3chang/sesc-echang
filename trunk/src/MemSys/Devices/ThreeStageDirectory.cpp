@@ -2839,13 +2839,13 @@ namespace Memory
    void ThreeStageDirectory::printDebugInfo(const char* fromMethod, const BaseMsg &myMessage,
          const char* operation)
    {
-      printBaseMemDeviceDebugInfo("3SDir", fromMethod, myMessage, operation);
+      printBaseMemDeviceDebugInfo("3SD", fromMethod, myMessage, operation);
    }
 
    void ThreeStageDirectory::printDebugInfo(const char* fromMethod, const BaseMsg &myMessage,
          const char* operation, NodeID src)
    {
-      printBaseMemDeviceDebugInfo("3SDir", fromMethod, myMessage, operation, src);
+      printBaseMemDeviceDebugInfo("3SD", fromMethod, myMessage, operation, src);
    }
 
    void ThreeStageDirectory::printDebugInfo(const char* fromMethod,Address addr,NodeID id,const char* operation)
