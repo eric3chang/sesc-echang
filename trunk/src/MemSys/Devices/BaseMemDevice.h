@@ -61,7 +61,7 @@ namespace Memory
          }
          myBaseMsg.print(deviceID);
          cout
-            << " " << childClass << "::" << fromMethod
+            << " " << childClass << ":" << fromMethod
             << " " << operation
             << endl;
       }

@@ -137,7 +137,7 @@ namespace Memory
       icm->addr = myAddress;
       icm->solicitingMessage = rrm->solicitingMessage;
       AutoDetermineDestSendMsg(icm,directoryNode,remoteSendTime,
-         &ThreeStageDirectory::OnRemoteInvalidationComplete,"HanRecAllInv","OnRemInvCom");
+         &ThreeStageDirectory::OnRemoteInvalidationComplete,"HanRecAllInv","RemInvCom");
    }
 
    // performs a directory fetch
@@ -176,7 +176,7 @@ namespace Memory
 		if(target == nodeID)
 		{
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-               printDebugInfo("OnRemRead",*m,"PerDirFet(ReadMsg,src)",nodeID);
+               printDebugInfo("RemRead",*m,"PerDirFet(ReadMsg,src)",nodeID);
 #endif
          //TODO 2010/09/02 Eric, change this because of 3-stage directory
          //OnRemoteRead should know to use m->requestingNode
@@ -248,7 +248,7 @@ namespace Memory
 		{
          DebugAssert(m->directoryLookup==false);
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-               printDebugInfo("OnRemRead",*m,"PerDirFet(m,src,isEx,targ)",nodeID);
+               printDebugInfo("RemRead",*m,"PerDirFet(m,src,isEx,targ)",nodeID);
 #endif
 			OnRemoteRead(m, nodeID);
 		}
@@ -290,7 +290,7 @@ namespace Memory
 		if(remoteNode == nodeID)
 		{
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-		   printDebugInfo("OnDirBlkRequ",*forward,"SendDirBlkReq");
+		   printDebugInfo("DirBlkReq",*forward,"SendDirBlkReq");
 #endif
 			CBOnDirectoryBlockRequest::FunctionType* f = cbOnDirectoryBlockRequest.Create();
 			f->Initialize(this,forward,nodeID);
@@ -320,7 +320,7 @@ namespace Memory
          DebugAssert(m->solicitingMessage==ref->MsgID());
 		   EM().DisposeMsg(ref);
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_LOCAL_READS
-		   printDebugInfo("OnDirectoryBlockResponse", *m,
+		   printDebugInfo("DirectoryBlockResponse", *m,
 		      ("pendingLocalReads.erase("+to_string<MessageID>(m->solicitingMessage)+")").c_str());
 #endif
 		   pendingLocalReads.erase(m->solicitingMessage);
@@ -342,7 +342,7 @@ namespace Memory
       toDir->solicitingMessage = m->solicitingMessage;
 
       AutoDetermineDestSendMsg(toDir,directoryNodeCalc->CalcNodeID(m->addr),remoteSendTime,
-         &ThreeStageDirectory::OnRemoteInterventionComplete,fromMethod,"OnRemIntervCom");
+         &ThreeStageDirectory::OnRemoteInterventionComplete,fromMethod,"RemIntervCom");
    }
 
    /**
@@ -355,7 +355,7 @@ namespace Memory
 
       // send to src, which should be the directory
       AutoDetermineDestSendMsg(reply,directoryNode,remoteSendTime,
-         &ThreeStageDirectory::OnRemoteMemAccessComplete,"OnDirBlkResp","OnRemoteMemAccCom");
+         &ThreeStageDirectory::OnRemoteMemAccessComplete,"DirBlkResp","RemoteMemAccCom");
    }
 
    void ThreeStageDirectory::SendRemoteEviction(const EvictionMsg *m,NodeID dest,const char *fromMethod)
@@ -363,7 +363,7 @@ namespace Memory
       if(dest == nodeID)
       {
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-               printDebugInfo("OnRemEvic",*m,"OnLocEvic",dest);
+               printDebugInfo("RemEvic",*m,"LocEvic",dest);
 #endif
          CBOnRemoteEviction::FunctionType* f = cbOnRemoteEviction.Create();
          f->Initialize(this,m,nodeID);
@@ -385,7 +385,7 @@ namespace Memory
       if (dest==nodeID)
       {
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-         printDebugInfo("OnRemRead",*m,fromMethod,nodeID);
+         printDebugInfo("RemRead",*m,fromMethod,nodeID);
 #endif
          //CALL_MEMBER_FN(*this,func) (msg,dest);
 			CBOnRemoteRead::FunctionType* f = cbOnRemoteRead.Create();
@@ -611,7 +611,7 @@ namespace Memory
       DebugAssert(msgIn->Type()==mt_Read);
       ReadMsg* m = (ReadMsg*)msgIn;
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_LOCAL_READS
-		printDebugInfo("OnLocalRead", *m,
+		printDebugInfo("LocalRead", *m,
 		      ("pendingLocalReads.insert("+to_string<MessageID>(m->MsgID())+")").c_str());
 #endif
       ReversePendingLocalReadData &myData = reversePendingLocalReads[m->addr];
@@ -688,7 +688,7 @@ namespace Memory
             //forward->isSpeculative = d.msg->isSpeculative;
             // the destination node is the original requesting node, and not the directory
             AutoDetermineDestSendMsg(forward,d.msg->originalRequestingNode,remoteSendTime+lookupTime,
-                  &ThreeStageDirectory::OnDirectoryBlockResponse,"OnLocalReadRes","OnDirBlkResp");
+                  &ThreeStageDirectory::OnDirectoryBlockResponse,"LocalReadRes","DirBlkResp");
 
             // send response back to the directory
             ReadResponseMsg* dirResponse = (ReadResponseMsg*)EM().ReplicateMsg(m);
@@ -698,7 +698,7 @@ namespace Memory
             dirResponse->isIntervention = true;
             //forward->isSpeculative = d.msg->isSpeculative;
             AutoDetermineDestSendMsg(dirResponse,d.sourceNode,remoteSendTime+lookupTime,
-                  &ThreeStageDirectory::OnRemoteReadResponse,"OnLocalReadRes","OnRemReadRes");
+                  &ThreeStageDirectory::OnRemoteReadResponse,"LocalReadRes","RemReadRes");
             /*
          } // if satisfied
          else  // unsatisfied, 2 possibilities:
@@ -718,7 +718,7 @@ namespace Memory
             dirResponse->isIntervention = true;
             //forward->isSpeculative = d.msg->isSpeculative;
             AutoDetermineDestSendMsg(dirResponse,d.sourceNode,remoteSendTime+lookupTime,
-                  &ThreeStageDirectory::OnRemoteReadResponse,"OnLocalReadRes","OnRemReadRes");
+                  &ThreeStageDirectory::OnRemoteReadResponse,"LocalReadRes","RemReadRes");
          }
          */
 		} // if (d.msg->isIntervention)
@@ -733,7 +733,7 @@ namespace Memory
          forward->isSpeculative = true;
          forward->originalRequestingNode = d.msg->originalRequestingNode;
          AutoDetermineDestSendMsg(forward,d.msg->originalRequestingNode,remoteSendTime,
-               &ThreeStageDirectory::OnDirectoryBlockResponse,"OnLocReadRes","OnDirBlkResp");
+               &ThreeStageDirectory::OnDirectoryBlockResponse,"LocReadRes","DirBlkResp");
 		}
       */
       else
@@ -749,7 +749,7 @@ namespace Memory
          //blockResponse->isSpeculative = d.msg->isSpeculative;
          // the destination node is the original requesting node, and not the directory
          AutoDetermineDestSendMsg(blockResponse,d.msg->originalRequestingNode,remoteSendTime+lookupTime,
-               &ThreeStageDirectory::OnDirectoryBlockResponse,"OnLocReadRes","OnDirBlkResp");
+               &ThreeStageDirectory::OnDirectoryBlockResponse,"LocReadRes","DirBlkResp");
 
          // if it is coming from a non-busy shared read, send response to directory to
             // notify directory to erase the message
@@ -763,7 +763,7 @@ namespace Memory
             toDir->directoryLookup = false;
             toDir->originalRequestingNode = d.msg->originalRequestingNode;
             AutoDetermineDestSendMsg(toDir,directoryNode,remoteSendTime,
-               &ThreeStageDirectory::OnRemoteReadResponse,"OnLocReadRes","OnRemReadRes");
+               &ThreeStageDirectory::OnRemoteReadResponse,"LocReadRes","RemReadRes");
          }
          */
       }
@@ -831,7 +831,7 @@ namespace Memory
 		else
 		{// there are no pending local reads
 		   NodeID directoryNode = directoryNodeCalc->CalcNodeID(m->addr);
-		   SendRemoteEviction(m,directoryNode,"OnLocEvic");
+		   SendRemoteEviction(m,directoryNode,"LocEvic");
          return;
 		}
 	}// OnLocalEviction
@@ -861,7 +861,7 @@ namespace Memory
 		else
 		{
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-               printDebugInfo("OnRemoteInvalidateResponse",*m,"OnLocalInvalidateResponse",nodeID);
+               printDebugInfo("RemoteInvalidateResponse",*m,"LocalInvalidateResponse",nodeID);
 #endif
 			OnRemoteInvalidateResponse(m,nodeID);
 		}
@@ -869,7 +869,7 @@ namespace Memory
       // do not delete m here, it will be deleted in OnRemoteInvalidateResponse
       //EM().DisposeMsg(m);
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_REMOTE_INVALIDATES
-		printDebugInfo("OnLocalInvalidateResponse",*m,
+		printDebugInfo("LocalInvalidateResponse",*m,
 		   ("PRI.erase("+to_string<Address>(d.msg->addr)+")").c_str());
 #endif
       pendingRemoteInvalidates.erase(m->solicitingMessage);
@@ -882,7 +882,7 @@ namespace Memory
       ReadMsg* m = (ReadMsg*)msgIn;
 		DebugAssert(!m->directoryLookup);
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_REMOTE_READS
-		printDebugInfo("OnRemRead", *m,
+		printDebugInfo("RemRead", *m,
 		      ("pendingRemoteReads.insert("+to_string<MessageID>(m->MsgID())+")").c_str());
 #endif
       // if we are still waiting for invalidates, put it in a queue
@@ -948,7 +948,7 @@ namespace Memory
 
          // the first message should be taken care of first
          AutoDetermineDestSendMsg(newMsg,i->sourceNode,remoteSendTime,
-            &ThreeStageDirectory::OnDirectoryBlockResponse,"OnRemReadRes","OnDirBlkResp");
+            &ThreeStageDirectory::OnDirectoryBlockResponse,"RemReadRes","DirBlkResp");
          /*
          std::pair<HashMultiMap<Address,LookupData<ReadMsg> >::iterator,
             HashMultiMap<Address,LookupData<ReadMsg> >::iterator> p
@@ -961,7 +961,7 @@ namespace Memory
          for (i++;i < tempVector.end(); i++)
          {
             AutoDetermineDestSendMsg(newMsg,i->sourceNode,remoteSendTime,
-            &ThreeStageDirectory::OnDirectoryBlockResponse,"OnRemReadRes","OnDirBlkResp");
+            &ThreeStageDirectory::OnDirectoryBlockResponse,"RemReadRes","DirBlkResp");
          }
          */
 
@@ -982,7 +982,7 @@ namespace Memory
       if (pendingIgnoreInterventions.find(m->addr)!=pendingIgnoreInterventions.end())
       {
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-         printDebugInfo("OnRemoteReadResp",*m,"ignoring intervention",src);
+         printDebugInfo("RemoteReadResp",*m,"ignoring intervention",src);
 #endif
          pendingIgnoreInterventions.erase(m->addr);
          if (pendingDirectoryBusySharedReads.find(m->addr)!=pendingDirectoryBusySharedReads.end())
@@ -1013,7 +1013,7 @@ namespace Memory
          //DebugAssert(b.sharers.find(ld.previousOwner)==b.sharers.end());
          //b.sharers.insert(ld.previousOwner);
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_DIRECTORY_SHARED_READS
-         printDebugInfo("OnRemReadRes",*m,("pendDirShRead.erase("
+         printDebugInfo("RemReadRes",*m,("pendDirShRead.erase("
             +to_string<Address>(m->addr)+")").c_str(),src);
 #endif
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_DIRECTORY_DATA
@@ -1042,7 +1042,7 @@ namespace Memory
          DebugAssert(b.sharers.size()==0);
          DebugAssert(b.owner==ld.sourceNode);
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_DIRECTORY_SHARED_READS
-         printDebugInfo("OnRemReadRes",*m,("pendDirExRead.erase("
+         printDebugInfo("RemReadRes",*m,("pendDirExRead.erase("
             +to_string<Address>(m->addr)+")").c_str(),src);
 #endif
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_DIRECTORY_DATA
@@ -1086,10 +1086,10 @@ namespace Memory
             DebugAssert(read->originalRequestingNode == ld.sourceNode);
             
             // resend read request
-            SendRemoteRead(read,src,"OnRemReadResp");
+            SendRemoteRead(read,src,"RemReadResp");
             
             //AutoDetermineDestSendMsg(read,src,remoteSendTime,&ThreeStageDirectory::OnRemoteRead,
-            //   "OnRemReadRes","OnRemRead");
+            //   "RemReadRes","RemRead");
          }
          else if (isPendingDirectorySharedReads)
          {
@@ -1117,7 +1117,7 @@ namespace Memory
             rrm->size = read->size;
 
             AutoDetermineDestSendMsg(rrm,sourceNode,remoteSendTime,
-               &ThreeStageDirectory::OnDirectoryBlockResponse,"OnRemReadRes","OnDirBlkResp");
+               &ThreeStageDirectory::OnDirectoryBlockResponse,"RemReadRes","DirBlkResp");
             */
          
             NodeID sourceNode = pendingDirectoryBusySharedReads[m->addr].sourceNode;
@@ -1143,7 +1143,7 @@ namespace Memory
 
             /*
             AutoDetermineDestSendMsg(read,previousOwner,lookupTime+remoteSendTime,
-               &ThreeStageDirectory::OnRemoteRead,"OnRemReadRes","OnRemRead");
+               &ThreeStageDirectory::OnRemoteRead,"RemReadRes","RemRead");
                */
 
             // not doing speculative replies right now
@@ -1157,7 +1157,7 @@ namespace Memory
             speculativeRequest->isInterventionShared = true;
             speculativeRequest->isSpeculative = true;
             AutoDetermineDestSendMsg(speculativeRequest,src,localSendTime,
-               &ThreeStageDirectory::OnRemoteSpeculativeReadResponse,"OnDirBlkReqShRead","OnRemoteSpecReadRes");
+               &ThreeStageDirectory::OnRemoteSpeculativeReadResponse,"DirBlkReqShRead","RemoteSpecReadRes");
                */
          }
          else if (b.sharers.size()!=0)
@@ -1380,7 +1380,7 @@ namespace Memory
             sharedResponse->satisfied = true;
             sharedResponse->solicitingMessage = ref->MsgID();
             AutoDetermineDestSendMsg(sharedResponse,b.owner,remoteSendTime,
-               &ThreeStageDirectory::OnDirectoryBlockResponse,"OnRemEvic","OnDirBlkResp");
+               &ThreeStageDirectory::OnDirectoryBlockResponse,"RemEvic","DirBlkResp");
          //}
          // else if we deleted the owner, it means the owner just evicted itself,
             // so we should not send shared response
@@ -1393,7 +1393,7 @@ namespace Memory
          busyAck->size = m->size;
          busyAck->solicitingMessage = m->MsgID();
          AutoDetermineDestSendMsg(busyAck,src,remoteSendTime,
-            &ThreeStageDirectory::OnRemoteEvictionResponse,"OnRemEvic","OnRemEvicRes");
+            &ThreeStageDirectory::OnRemoteEvictionResponse,"RemEvic","RemEvicRes");
 
          // if we are here, it means OnLocalEviction is called before OnRemoteRead called on the oldOwner,
          // so we are waiting for a read response message that could be satisfied or unsatisfied
@@ -1441,7 +1441,7 @@ namespace Memory
          exclusiveResponse->size = m->size;
          exclusiveResponse->solicitingMessage = ref->MsgID();
          AutoDetermineDestSendMsg(exclusiveResponse,b.owner,remoteSendTime,
-            &ThreeStageDirectory::OnDirectoryBlockResponse,"OnRemEvic","OnDirBlkResp");
+            &ThreeStageDirectory::OnDirectoryBlockResponse,"RemEvic","DirBlkResp");
 
          // send writeback busy acknowledgement to eviction requestor
          EvictionResponseMsg *busyAck = EM().CreateEvictionResponseMsg(getDeviceID());
@@ -1451,7 +1451,7 @@ namespace Memory
          busyAck->size = m->size;
          busyAck->solicitingMessage = m->MsgID();
          AutoDetermineDestSendMsg(busyAck,src,remoteSendTime,
-            &ThreeStageDirectory::OnRemoteEvictionResponse,"OnRemEvic","OnRemEvicRes");
+            &ThreeStageDirectory::OnRemoteEvictionResponse,"RemEvic","RemEvicRes");
 
          // if we are here, it means OnLocalEviction is called before OnRemoteRead called on the oldOwner,
          // so we are waiting for an unsatisfied read response message
@@ -1475,7 +1475,7 @@ namespace Memory
 			rm->solicitingMessage = m->MsgID();
 
          AutoDetermineDestSendMsg(rm,src,remoteSendTime,&ThreeStageDirectory::OnRemoteEvictionResponse
-            ,"OnRemEvic","OnRemEvicResponse");
+            ,"RemEvic","RemEvicResponse");
 
          b.owner=InvalidNodeID;
          EM().DisposeMsg(m);
@@ -1490,7 +1490,7 @@ namespace Memory
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_DIRECTORY_DATA
          if (b.owner==src || b.sharers.find(src)!=b.sharers.end())
          {
-            printDebugInfo("OnRemEvic",*m,
+            printDebugInfo("RemEvic",*m,
                ("b.sharers.erase("+to_string<NodeID>(Memory::convertNodeIDToDeviceID(src))+")").c_str(),src);
          }
 #endif         
@@ -1521,7 +1521,7 @@ namespace Memory
             forward->size = m->size;
             
             AutoDetermineDestSendMsg(forward,b.owner,remoteSendTime,
-               &ThreeStageDirectory::OnRemoteUnrequestedReadResponse,"OnRemEvic","OnRemUnreqReadRes");
+               &ThreeStageDirectory::OnRemoteUnrequestedReadResponse,"RemEvic","RemUnreqReadRes");
          }
 
          // send regular eviction response msg
@@ -1532,7 +1532,7 @@ namespace Memory
          evictionResponse->size = m->size;
          evictionResponse->solicitingMessage = m->MsgID();
          AutoDetermineDestSendMsg(evictionResponse,src,remoteSendTime,
-            &ThreeStageDirectory::OnRemoteEvictionResponse,"OnRemEvic","OnRemEvicRes");         
+            &ThreeStageDirectory::OnRemoteEvictionResponse,"RemEvic","RemEvicRes");         
          EM().DisposeMsg(m);
 		}
 
@@ -1552,7 +1552,7 @@ namespace Memory
       DebugAssert(msgIn->Type()==mt_EvictionResponse);
       EvictionResponseMsg* m = (EvictionResponseMsg*)msgIn;
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_EVICTION
-      printDebugInfo("OnRemEvicResponse", *m,
+      printDebugInfo("RemEvicResponse", *m,
             ("pendingEviction.erase("+to_string<Address>(m->addr)+")").c_str());
 #endif
       // if we have OnLocalReads waiting for this evictionResponse
@@ -1606,7 +1606,7 @@ namespace Memory
       InvalidateMsg* m = (InvalidateMsg*)msgIn;
       DebugAssert(m->newOwner != InvalidNodeID);
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_REMOTE_INVALIDATES
-      printDebugInfo("OnRemoteInvalidate", *m,
+      printDebugInfo("RemoteInvalidate", *m,
             ("PRI.insert("+to_string<Address>(m->addr)+")").c_str());
 #endif
       DebugAssert(pendingRemoteInvalidates.find(m->MsgID()) == pendingRemoteInvalidates.end());
@@ -1703,7 +1703,7 @@ namespace Memory
          response->size = i->msg->size;
          response->solicitingMessage = i->msg->MsgID();
          AutoDetermineDestSendMsg(response,i->sourceNode,remoteSendTime+lookupTime,
-            &ThreeStageDirectory::OnDirectoryBlockResponse,"OnRemMemAccCom","OnDirBlkResp");
+            &ThreeStageDirectory::OnDirectoryBlockResponse,"RemMemAccCom","DirBlkResp");
          */
       }
 
@@ -1769,7 +1769,7 @@ namespace Memory
       LookupData<ReadMsg> &ld = waitingForInvalidationComplete[m->addr];
       /*
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-      printDebugInfo("OnDirBlkRequ",*m,"OnRemInvCom",src);
+      printDebugInfo("DirBlkReq",*m,"RemInvCom",src);
 #endif
       */
       // send nak to make it resend request
@@ -1784,7 +1784,7 @@ namespace Memory
       response->size = ref->size;
       response->solicitingMessage = ref->MsgID();
       AutoDetermineDestSendMsg(response,ld.sourceNode,remoteSendTime,
-         &ThreeStageDirectory::OnDirectoryBlockResponse,"OnRemInvCom","OnDirBlkResp");
+         &ThreeStageDirectory::OnDirectoryBlockResponse,"RemInvCom","DirBlkResp");
          */
 
       // don't delete ref because it's still in OnLocalRead
@@ -1931,7 +1931,7 @@ namespace Memory
             forward->solicitingMessage = m->MsgID();
 
             AutoDetermineDestSendMsg(forward,src,lookupTime+remoteSendTime,
-               &ThreeStageDirectory::OnDirectoryBlockResponse,"OnDirBlkReqShRead","OnDirBlkResp");
+               &ThreeStageDirectory::OnDirectoryBlockResponse,"DirBlkReqShRead","DirBlkResp");
          } // else if (b.owner==src)
          else
          {
@@ -2065,14 +2065,14 @@ namespace Memory
          read->isIntervention = true;
          read->requestingExclusive = false;
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_DIRECTORY_SHARED_READS
-         printDebugInfo("OnDirBlkReqShRead",*m,("pendDirShRead.insert("
+         printDebugInfo("DirBlkReqShRead",*m,("pendDirShRead.insert("
             +to_string<Address>(m->addr)+")").c_str(),src);
 #endif
          pendingDirectoryBusySharedReads[m->addr].sourceNode = src;
          pendingDirectoryBusySharedReads[m->addr].msg = read;
          pendingDirectoryBusySharedReads[m->addr].previousOwner = previousOwner;
          AutoDetermineDestSendMsg(read,previousOwner,localSendTime,
-            &ThreeStageDirectory::OnRemoteRead,"OnDirBlkReqShRead","OnRemRead");
+            &ThreeStageDirectory::OnRemoteRead,"DirBlkReqShRead","RemRead");
 
          // not doing speculative replies right now
          // request speculative reply from a sharer
@@ -2085,7 +2085,7 @@ namespace Memory
          speculativeRequest->isInterventionShared = true;
          speculativeRequest->isSpeculative = true;
          AutoDetermineDestSendMsg(speculativeRequest,src,localSendTime,
-            &ThreeStageDirectory::OnRemoteSpeculativeReadResponse,"OnDirBlkReqShRead","OnRemoteSpecReadRes");
+            &ThreeStageDirectory::OnRemoteSpeculativeReadResponse,"DirBlkReqShRead","RemoteSpecReadRes");
             */
 
          b.owner = src;
@@ -2141,7 +2141,7 @@ namespace Memory
             forward->solicitingMessage = m->MsgID();
 
             AutoDetermineDestSendMsg(forward,src,lookupTime+remoteSendTime,
-               &ThreeStageDirectory::OnDirectoryBlockResponse,"OnDirBlkReqExRead","OnDirBlkResp");
+               &ThreeStageDirectory::OnDirectoryBlockResponse,"DirBlkReqExRead","DirBlkResp");
          } // else if (b.owner==src)
          else
          {
@@ -2169,7 +2169,7 @@ namespace Memory
             rrm->solicitingMessage = m->MsgID();
 
             AutoDetermineDestSendMsg(rrm, src, remoteSendTime,
-               &ThreeStageDirectory::OnDirectoryBlockResponse,"OnDirBlkExRead","OnDirBlkResp");
+               &ThreeStageDirectory::OnDirectoryBlockResponse,"DirBlkExRead","DirBlkResp");
             return;
          }
 
@@ -2202,7 +2202,7 @@ namespace Memory
          
          //PerformDirectoryFetch(m,src,false,*(b.sharers.begin()));
          AutoDetermineDestSendMsg(reply,src,lookupTime+remoteSendTime,
-            &ThreeStageDirectory::OnDirectoryBlockResponse,"OnDirBlkReqExRead","OnDirBlkResp");
+            &ThreeStageDirectory::OnDirectoryBlockResponse,"DirBlkReqExRead","DirBlkResp");
 
          // send invalidations to the sharers
          for (HashSet<NodeID>::iterator i = b.sharers.begin(); i!=b.sharers.end(); i++)
@@ -2217,7 +2217,7 @@ namespace Memory
             invalidation->size = m->size;
             invalidation->solicitingMessage = m->MsgID();
             AutoDetermineDestSendMsg(invalidation,*i,lookupTime+remoteSendTime,
-               &ThreeStageDirectory::OnRemoteInvalidate,"OnDirBlkReqExRead","OnRemoteInv");
+               &ThreeStageDirectory::OnRemoteInvalidate,"DirBlkReqExRead","RemoteInv");
          }
 
          // send invalidation to owner if it is not the new owner
@@ -2229,7 +2229,7 @@ namespace Memory
             invalidation->size = m->size;
             invalidation->solicitingMessage = m->MsgID();
             AutoDetermineDestSendMsg(invalidation,b.owner,lookupTime+remoteSendTime,
-               &ThreeStageDirectory::OnRemoteInvalidate,"OnDirBlkReqExRead","OnRemoteInv");
+               &ThreeStageDirectory::OnRemoteInvalidate,"DirBlkReqExRead","RemoteInv");
          }
 
          b.sharers.clear();
@@ -2255,14 +2255,14 @@ namespace Memory
          read->isIntervention = true;
          read->requestingExclusive = true;
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_DIRECTORY_SHARED_READS
-         printDebugInfo("OnDirBlkReqShRead",*m,("pendDirShRead.insert("
+         printDebugInfo("DirBlkReqShRead",*m,("pendDirShRead.insert("
             +to_string<Address>(m->addr)+")").c_str(),src);
 #endif
          pendingDirectoryBusyExclusiveReads[m->addr].sourceNode = src;
          pendingDirectoryBusyExclusiveReads[m->addr].msg = read;
          pendingDirectoryBusyExclusiveReads[m->addr].previousOwner = previousOwner;
          AutoDetermineDestSendMsg(read,previousOwner,lookupTime+remoteSendTime,
-            &ThreeStageDirectory::OnRemoteRead,"OnDirBlkReqExRead","OnRemRead");
+            &ThreeStageDirectory::OnRemoteRead,"DirBlkReqExRead","RemRead");
 
          // not doing speculative replies right now
          // request speculative reply from a sharer
@@ -2275,7 +2275,7 @@ namespace Memory
          speculativeRequest->isInterventionShared = true;
          speculativeRequest->isSpeculative = true;
          AutoDetermineDestSendMsg(speculativeRequest,src,localSendTime,
-            &ThreeStageDirectory::OnRemoteSpeculativeReadResponse,"OnDirBlkReqShRead","OnRemoteSpecReadRes");
+            &ThreeStageDirectory::OnRemoteSpeculativeReadResponse,"DirBlkReqShRead","RemoteSpecReadRes");
             */
 
          b.owner = src;
@@ -2364,7 +2364,7 @@ namespace Memory
             // OnLocalRead. remove pending local reads and send eviction message
             const EvictionMsg* myEvictionMsg = myData.myEvictionMsg;
             NodeID directoryNode = directoryNodeCalc->CalcNodeID(m->addr);
-            SendRemoteEviction(myEvictionMsg,directoryNode,"OnDirBlkResp");
+            SendRemoteEviction(myEvictionMsg,directoryNode,"DirBlkResp");
             myData.myEvictionMsg = NULL;
             /*
             EraseReversePendingLocalRead(m,ref);
@@ -2377,12 +2377,12 @@ namespace Memory
 		   if(!m->satisfied)
 		   {
    #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_LOCAL_READS
-		      printDebugInfo("OnDirBlkResp",*m,
+		      printDebugInfo("DirBlkResp",*m,
 		            ("pendingLocalReads.erase("+to_string<MessageID>(m->solicitingMessage)+")").c_str());
    #endif
 			   pendingLocalReads.erase(m->solicitingMessage);
    #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-            printDebugInfo("OnLocalRead",*m,"OnDirBlkResp");
+            printDebugInfo("LocalRead",*m,"DirBlkResp");
    #endif
 
             bool isSatisfied = false;
@@ -2410,7 +2410,7 @@ namespace Memory
 
             if (isSatisfied && m->isIntervention)
             {
-               SendInterventionCompleteMsg(m,"OnDirBlkResp");
+               SendInterventionCompleteMsg(m,"DirBlkResp");
             }
 
 			   return;
@@ -2447,7 +2447,7 @@ namespace Memory
          {
             // send intervention complete message to directory so it knows to unblock directory
             DebugAssert(m->pendingInvalidates==0);
-            SendInterventionCompleteMsg(m,"OnDirBlkResp");
+            SendInterventionCompleteMsg(m,"DirBlkResp");
             // done in sendLocalReadResponse
             //EraseReversePendingLocalRead(m,ref);
             //ErasePendingLocalRead(m);
@@ -2469,7 +2469,7 @@ namespace Memory
             rcm->solicitingMessage = m->solicitingMessage;
             NodeID directoryNode = directoryNodeCalc->CalcNodeID(m->addr);
             AutoDetermineDestSendMsg(rcm, directoryNode, remoteSendTime,
-               &ThreeStageDirectory::OnRemoteReadComplete,"OnDirBlkResp","OnRemReadCom");
+               &ThreeStageDirectory::OnRemoteReadComplete,"DirBlkResp","RemReadCom");
          }
 		} // else m is not from eviction
 	} //ThreeStageDirectory::OnDirectoryBlockResponse
@@ -2561,7 +2561,7 @@ namespace Memory
 			case(mt_Read):
 				{
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-			      printDebugInfo("OnLocalRead",*msg,"RecvMsg");
+			      printDebugInfo("LocalRead",*msg,"RecvMsg");
 #endif
 					OnLocalRead(msg);
 					break;
@@ -2569,7 +2569,7 @@ namespace Memory
 			case(mt_ReadResponse):
 				{
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-               printDebugInfo("OnLocReadRes",*msg,"RecvMsg");
+               printDebugInfo("LocReadRes",*msg,"RecvMsg");
 #endif
 					OnLocalReadResponse(msg);
 					break;
@@ -2577,7 +2577,7 @@ namespace Memory
 			case(mt_Write):
 				{
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-               printDebugInfo("OnLocalWrite",*msg,"RecvMsg");
+               printDebugInfo("LocalWrite",*msg,"RecvMsg");
 #endif
 					OnLocalWrite(msg);
 					break;
@@ -2585,7 +2585,7 @@ namespace Memory
 			case(mt_Eviction):
 				{
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-               printDebugInfo("OnLocalEviction",*msg,"RecvMsg");
+               printDebugInfo("LocalEviction",*msg,"RecvMsg");
 #endif
 					OnLocalEviction(msg);
 					break;
@@ -2593,7 +2593,7 @@ namespace Memory
 			case(mt_InvalidateResponse):
 				{
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-               printDebugInfo("OnLocalInvalidateResponse",*msg,"RecvMsg");
+               printDebugInfo("LocalInvalidateResponse",*msg,"RecvMsg");
 #endif
 					OnLocalInvalidateResponse(msg);
 					break;
@@ -2618,14 +2618,14 @@ namespace Memory
 					if(m->directoryLookup)
 					{
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-               printDebugInfo("OnDirBlkRequ",*m,"RecvMsg",src);
+               printDebugInfo("DirBlkReq",*m,"RecvMsg",src);
 #endif
 						OnDirectoryBlockRequest(m,src);
 					}
 					else
 					{
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-               printDebugInfo("OnRemRead",*m,"RecvMsg",src);
+               printDebugInfo("RemRead",*m,"RecvMsg",src);
 #endif
 						OnRemoteRead(m,src);
 					}
@@ -2637,7 +2637,7 @@ namespace Memory
 					if(m->directoryLookup)
 					{
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-               printDebugInfo("OnDirBlkResp",*m,"RecvMsg",src);
+               printDebugInfo("DirBlkResp",*m,"RecvMsg",src);
 #endif
 						OnDirectoryBlockResponse(m,src);
 					}
@@ -2646,7 +2646,7 @@ namespace Memory
                else if (m->isSpeculative)
                {
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-               printDebugInfo("OnRemoteSpeculativeReadResponse",*m,"RecvMsg",src);
+               printDebugInfo("RemoteSpeculativeReadResponse",*m,"RecvMsg",src);
 #endif
 			      OnRemoteSpeculativeReadResponse(m,src);
                }
@@ -2654,7 +2654,7 @@ namespace Memory
 					else
 					{
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-               printDebugInfo("OnRemReadRes",*m,"RecvMsg",src);
+               printDebugInfo("RemReadRes",*m,"RecvMsg",src);
 #endif
 						OnRemoteReadResponse(m,src);
 					}
@@ -2663,7 +2663,7 @@ namespace Memory
 			case(mt_WriteResponse):
 				{
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-               printDebugInfo("OnRemoteWriteRes",*payload,"RecvMsg",src);
+               printDebugInfo("RemoteWriteRes",*payload,"RecvMsg",src);
 #endif
 					OnRemoteWriteResponse(payload,src);
 					break;
@@ -2671,7 +2671,7 @@ namespace Memory
 			case(mt_Eviction):
 				{
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-               printDebugInfo("OnRemEvic",*payload,"RecvMsg",src);
+               printDebugInfo("RemEvic",*payload,"RecvMsg",src);
 #endif
 					OnRemoteEviction(payload,src);
 					break;
@@ -2679,7 +2679,7 @@ namespace Memory
 			case(mt_EvictionResponse):
 				{
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-               printDebugInfo("OnRemEvicResponse",*payload,"RecvMsg",src);
+               printDebugInfo("RemEvicResponse",*payload,"RecvMsg",src);
 #endif
 					OnRemoteEvictionResponse(payload,src);
 					break;
@@ -2687,7 +2687,7 @@ namespace Memory
 			case(mt_EvictionBusyAck):
 				{
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-               printDebugInfo("OnRemEvicBusyAck",*payload,"RecvMsg",src);
+               printDebugInfo("RemEvicBusyAck",*payload,"RecvMsg",src);
 #endif
 					OnRemoteEvictionBusyAck(payload,src);
 					break;
@@ -2695,7 +2695,7 @@ namespace Memory
 			case(mt_Invalidate):
             {
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-               printDebugInfo("OnRemoteInvalidate",*payload,"RecvMsg",src);
+               printDebugInfo("RemoteInvalidate",*payload,"RecvMsg",src);
 #endif
 					OnRemoteInvalidate(payload,src);
 					break;
@@ -2703,7 +2703,7 @@ namespace Memory
 			case(mt_InvalidateResponse):
 				{
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-               printDebugInfo("OnRemoteInvalidateResponse",*payload,"RecvMsg",src);
+               printDebugInfo("RemoteInvalidateResponse",*payload,"RecvMsg",src);
 #endif
 					OnRemoteInvalidateResponse(payload,src);
 					break;
@@ -2711,7 +2711,7 @@ namespace Memory
 			case(mt_MemAccessComplete):
 				{
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-               printDebugInfo("OnRemoteMemAccessComplete",*payload,"RecvMsg",src);
+               printDebugInfo("RemoteMemAccessComplete",*payload,"RecvMsg",src);
 #endif
 					OnRemoteMemAccessComplete(payload,src);
 					break;
@@ -2719,7 +2719,7 @@ namespace Memory
 			case(mt_InterventionComplete):
 				{
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-               printDebugInfo("OnRemoteInterventionComplete",*payload,"RecvMsg",src);
+               printDebugInfo("RemoteInterventionComplete",*payload,"RecvMsg",src);
 #endif
 					OnRemoteInterventionComplete(payload,src);
 					break;
@@ -2727,7 +2727,7 @@ namespace Memory
 			case(mt_InvalidationComplete):
 				{
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-               printDebugInfo("OnRemInvCom",*payload,"RecvMsg",src);
+               printDebugInfo("RemInvCom",*payload,"RecvMsg",src);
 #endif
 					OnRemoteInvalidationComplete(payload,src);
 					break;
@@ -2735,7 +2735,7 @@ namespace Memory
 			case(mt_ReadComplete):
 				{
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-               printDebugInfo("OnRemReadCom",*payload,"RecvMsg",src);
+               printDebugInfo("RemReadCom",*payload,"RecvMsg",src);
 #endif
 					OnRemoteReadComplete(payload,src);
 					break;
@@ -2743,7 +2743,7 @@ namespace Memory
 			case(mt_UnrequestedReadResponse):
 				{
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-               printDebugInfo("OnRemUnreqReadRes",*payload,"RecvMsg",src);
+               printDebugInfo("RemUnreqReadRes",*payload,"RecvMsg",src);
 #endif
 					OnRemoteUnrequestedReadResponse(payload,src);
 					break;
@@ -2839,33 +2839,33 @@ namespace Memory
    void ThreeStageDirectory::printDebugInfo(const char* fromMethod, const BaseMsg &myMessage,
          const char* operation)
    {
-      printBaseMemDeviceDebugInfo("3SD", fromMethod, myMessage, operation);
+      printBaseMemDeviceDebugInfo("3", fromMethod, myMessage, operation);
    }
 
    void ThreeStageDirectory::printDebugInfo(const char* fromMethod, const BaseMsg &myMessage,
          const char* operation, NodeID src)
    {
-      printBaseMemDeviceDebugInfo("3SD", fromMethod, myMessage, operation, src);
+      printBaseMemDeviceDebugInfo("3", fromMethod, myMessage, operation, src);
    }
 
    void ThreeStageDirectory::printDebugInfo(const char* fromMethod,Address addr,NodeID id,const char* operation)
    {
-      cout << setw(17) << " " // account for spacing from src and msgSrc
+      cout << setw(15) << " " // account for spacing from src and msgSrc
             << " dst=" << setw(3) << getDeviceID()
             << setw(10) << " "   // account for spacing from msgID
             << " addr=" << addr
-            << " 3SDir:" << fromMethod
+            << " " << fromMethod
             << " " << operation << "(" << Memory::convertNodeIDToDeviceID(id) << ")"
             << endl;
    }
 
    void ThreeStageDirectory::printEraseOwner(const char* fromMethod,Address addr,NodeID id,const char* operation)
    {
-      cout << setw(17) << " " // account for spacing from src and msgSrc
+      cout << setw(15) << " " // account for spacing from src and msgSrc
             << " dst=" << setw(2) << getDeviceID()
             << setw(10) << " "   // account for spacing from msgID
             << " addr=" << addr
-            << " 3SDir:" << fromMethod
+            << " " << fromMethod
             << " nodeID=" << id
             << " " << operation
             << endl;
