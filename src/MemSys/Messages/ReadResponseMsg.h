@@ -33,15 +33,15 @@ namespace Memory
 		   cout << " addr=" << addr
             <<" sat=" << satisfied
 		      << " att=" << blockAttached
-            << " evic=" << evictionMessage
-            << " exOwn=" << exclusiveOwnership
+            << " evi=" << evictionMessage
+            << " exOw=" << exclusiveOwnership
             << " sMsg=" << solicitingMessage
-            << " memAcc=" << hasPendingMemAccesses
+            << " memAc=" << hasPendingMemAccesses
             //<< " isEvic=" << isFromEviction
             << " intv=" << isIntervention
             << " invUnlk=" << isWaitingForInvalidateUnlock
             << " ogNode=" << Memory::convertNodeIDToDeviceID(originalRequestingNode)
-            << " pendInv=" << pendingInvalidates
+            << " pInv=" << pendingInvalidates
             //<< " spec=" << isSpeculative
 		   ;
 		}
