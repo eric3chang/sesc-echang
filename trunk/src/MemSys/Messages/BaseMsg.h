@@ -50,7 +50,6 @@ namespace Memory
 		{
 			return deviceID;
 		}
-
 		virtual void print(DeviceID destinationDeviceID) const
 		{
          cout

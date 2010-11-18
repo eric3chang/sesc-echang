@@ -15,7 +15,6 @@ namespace Memory
 		virtual bool IsResponse() const { return true; }
 		virtual size_t MsgSize() const { return 1 + sizeof(Address) + (blockAttached?size:0); }
 		virtual MsgType Type() const { return mt_InvalidateResponse; }
-   protected:
       virtual void print(DeviceID destinationDeviceID) const
 		{
 		   BaseMsg::print(destinationDeviceID);
