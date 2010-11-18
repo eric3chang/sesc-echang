@@ -290,7 +290,7 @@ namespace Memory
 			if(pendingDirectorySharedReads.find(m->addr) != pendingDirectorySharedReads.end())
 			{
 			   // for all the elements in pendingDirectorySharedReads where key is in the range of m->addr
-				for(HashMap<Address,LookupData<ReadMsg> >::iterator i = pendingDirectorySharedReads.equal_range(m->addr).first; i != pendingDirectorySharedReads.equal_range(m->addr).second; i++)
+				for(HashMultiMap<Address,LookupData<ReadMsg> >::iterator i = pendingDirectorySharedReads.equal_range(m->addr).first; i != pendingDirectorySharedReads.equal_range(m->addr).second; i++)
 				{
 					ReadResponseMsg* r = EM().CreateReadResponseMsg(getDeviceID(),i->second.msg->GeneratingPC());
 					r->blockAttached = true;
@@ -304,7 +304,7 @@ namespace Memory
 					if(i->second.sourceNode == nodeID)
 					{
 #ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE
-               printDebugInfo("DirBlkResp",*r,"RemReadRes",nodeID);
+               printDebugInfo("DirBlkRes",*r,"RemReadRes",nodeID);
 #endif
 						OnDirectoryBlockResponse(r,nodeID);
 					}
@@ -667,12 +667,12 @@ namespace Memory
 		if(!m->satisfied)
 		{
 #ifdef MEMORY_DIRECTORY_DEBUG_PENDING_LOCAL_READS
-		   printDebugInfo("DirBlkResp",*m,
+		   printDebugInfo("DirBlkRes",*m,
 		         ("pendingLocalReads.erase("+to_string<MessageID>(m->solicitingMessage)+")").c_str());
 #endif
 			pendingLocalReads.erase(m->solicitingMessage);
 #ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE
-               printDebugInfo("LocalRead",*m,"DirBlkResp");
+               printDebugInfo("LocalRead",*m,"DirBlkRes");
 #endif
 			OnLocalRead(ref);
 			return;
@@ -687,7 +687,7 @@ namespace Memory
 		r->solicitingMessage = ref->MsgID();
 		EM().DisposeMsg(ref);
 #ifdef MEMORY_DIRECTORY_DEBUG_PENDING_LOCAL_READS
-		printDebugInfo("DirBlkResp", *m,
+		printDebugInfo("DirBlkRes", *m,
 		   ("pendingLocalReads.erase("+m->solicitingMessage+")").c_str());
 #endif
 		pendingLocalReads.erase(m->solicitingMessage);
@@ -855,7 +855,7 @@ namespace Memory
 					if(m->directoryLookup)
 					{
 #ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE
-               printDebugInfo("DirBlkResp",*m,"RecvMsg",src);
+               printDebugInfo("DirBlkRes",*m,"RecvMsg",src);
 #endif
 						OnDirectoryBlockResponse(m,src);
 					}

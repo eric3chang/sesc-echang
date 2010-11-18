@@ -40,7 +40,7 @@ namespace Memory
 		virtual void print(DeviceID destinationDeviceID) const
 		{
 		   BaseMsg::print(destinationDeviceID);
-		   cout << " addr=" << addr
+		   cout << " adr=" << addr
 		         << " reqEx=" << requestingExclusive
 		         << " hasBlk=" << alreadyHasBlock
 		         << " dirLook=" << directoryLookup
