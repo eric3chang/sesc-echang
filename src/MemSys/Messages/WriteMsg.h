@@ -26,8 +26,6 @@ namespace Memory
 				onCompletedCallback->Call();
 			}
 		}
-
-   protected:
       virtual void print(DeviceID destinationDeviceID) const
 		{
 		   BaseMsg::print(destinationDeviceID);

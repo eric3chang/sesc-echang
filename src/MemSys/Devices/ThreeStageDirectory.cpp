@@ -6,6 +6,7 @@
 #include "../EventManager.h"
 #include "../Connection.h"
 #include "to_string.h"
+#include "stl_container_utils.h"
 
 // used in AutoDetermineDestSendMsg's member function calling
 #define CALL_MEMBER_FN(object,ptrToMember)  ((object).*(ptrToMember))

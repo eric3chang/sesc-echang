@@ -18,7 +18,6 @@ namespace Memory
 		virtual size_t MsgSize() const { return payloadMsg->MsgSize() + 4; }
 		virtual MsgType Type() const { return mt_Network; }
 
-   protected:
 		virtual void print(DeviceID destinationDeviceID) const
 		{
 		   BaseMsg::print(destinationDeviceID);
