@@ -20,4 +20,5 @@
 - use the following splash2 benchmarks:
 -- kernel: cholesky, fft, lu, radix
 -- apps: Ocean, fmm : only these two provide correct.out
+-- print *(iter._M_current)   // command to print the current iterator in gdb
 

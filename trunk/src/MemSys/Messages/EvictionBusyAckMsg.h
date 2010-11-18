@@ -19,7 +19,7 @@ namespace Memory
       virtual void print(DeviceID destinationDeviceID) const
       {
          BaseMsg::print(destinationDeviceID);
-         cout << " addr=" << addr
+         cout << " adr=" << addr
             << " isExclusive=" << isExclusive
             << " solicitMsg=" << solicitingMessage
          ;
