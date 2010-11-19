@@ -5,6 +5,9 @@
 #include "../Configuration.h"
 #include "../EventManager.h"
 #include "../Connection.h"
+
+// debugging utilities
+//#include "dump.h"
 #include "to_string.h"
 
 using std::cerr;
