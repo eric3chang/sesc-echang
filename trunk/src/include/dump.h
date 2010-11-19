@@ -36,11 +36,11 @@ namespace Memory
 	template <class Key>
 	void dumpTemplate(HashMap<Key,const BaseMsg*> &m)
 	{
-		HashMap<Key,const BaseMsg*>::const_iterator i,j;
+		typename HashMap<Key,const BaseMsg*>::const_iterator i,j;
 		i = m.begin();
 		j = m.end();
 
-		std::cout << "[dump]" << std::endl;
+		std::cout << "[" << "dump" << "]" << std::endl;
 		for(; i != j; ++i)
 		{
 			std::cout << '[' << i->first << "]";
