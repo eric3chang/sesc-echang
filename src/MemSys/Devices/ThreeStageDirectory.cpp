@@ -2334,8 +2334,19 @@ namespace Memory
             // m is not a satisfied message
             EM().DisposeMsg(m);
          }
-      } // if (m->evictionMessage)
-      else //  !m->evictionMessage
+      } // end if (m->evictionMessage)
+      else if (pendingLocalReads.find(m->solicitingMessage)==pendingLocalReads.end())
+      {// if we cannot find the soliciting message in pendingLocalReads,
+      	// it's possible that it was satisfied by a previous message, so ignore
+      	DebugAssert(reversePendingLocalReads.find(m->addr)==reversePendingLocalReads.end());
+      	// it must be unsatisfied, because the previous directoryBlockResponse has
+      		// to be satisfied in order to clear the message from pendingLocalReads
+      	DebugAssert(!m->satisfied);
+
+      	// ignore message
+      	EM().DisposeMsg(m);
+      }// end else if m->solicitingMessage is not in pendingLocalReads
+      else
       {
          // check that m->solicitingMessage is in pendingLocalReads before accessing it.
          DebugAssert(pendingLocalReads.find(m->solicitingMessage)!=pendingLocalReads.end());
