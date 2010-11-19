@@ -7,7 +7,7 @@
 #include "../Connection.h"
 
 // debugging utilities
-//#include "dump.h"
+#include "dump.h"
 #include "to_string.h"
 
 using std::cerr;
