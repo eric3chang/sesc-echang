@@ -1308,6 +1308,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\dump.h" />
     <ClInclude Include="include\hash_fun_extra.h" />
     <ClInclude Include="include\to_string.h" />
     <ClInclude Include="MemSys\Devices\MESICache.h" />

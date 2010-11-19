@@ -5,8 +5,10 @@
 #include "../Configuration.h"
 #include "../EventManager.h"
 #include "../Connection.h"
+
+// debugging utilities
+#include "dump.h"
 #include "to_string.h"
-#include "stl_container_utils.h"
 
 // used in AutoDetermineDestSendMsg's member function calling
 #define CALL_MEMBER_FN(object,ptrToMember)  ((object).*(ptrToMember))
