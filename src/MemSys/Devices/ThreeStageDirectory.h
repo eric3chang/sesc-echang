@@ -158,6 +158,8 @@ namespace Memory
       //HashMap<Address, const ReadResponseMsg* > pendingSpeculativeReadResponses;
       //HashMap<MessageID, int> unsatisfiedRequests;
 
+		void dump(HashMap<Memory::MessageID, const Memory::BaseMsg*> &m);
+
       void HandleInterventionComplete(const BaseMsg *msgIn, bool isPendingExclusive);
       void HandleReceivedAllInvalidates(Address myAddress);
       bool IsInPendingDirectoryNormalSharedRead(const ReadMsg *m);
