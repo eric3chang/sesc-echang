@@ -7,7 +7,6 @@
 #include "../Connection.h"
 
 // debugging utilities
-#include "dump.h"
 #include "to_string.h"
 
 // used in AutoDetermineDestSendMsg's member function calling
@@ -40,6 +39,11 @@ namespace Memory
 		{
 			nodeSet.push_back(Config::GetInt(node,"NodeIDSet",0,i));
 		}
+	}
+
+	void ThreeStageDirectory::dump(HashMap<Memory::MessageID, const Memory::BaseMsg*> &m)
+	{
+		DumpMsgTemplate<Memory::MessageID>(m);
 	}
 
    void ThreeStageDirectory::HandleInterventionComplete(const BaseMsg *msgIn, bool isPendingExclusive)

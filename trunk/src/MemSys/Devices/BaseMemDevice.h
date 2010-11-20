@@ -32,6 +32,23 @@ namespace Memory
 		CBSendMsg cbSendMsg;
 
 	public:
+		// debugging functions
+		template <class Key>
+		static void DumpMsgTemplate(HashMap<Key,const Memory::BaseMsg*> &m)
+		{
+			typename HashMap<Key,const Memory::BaseMsg*>::const_iterator i,j;
+			i = m.begin();
+			j = m.end();
+
+			std::cout << "[" << "dump" << "]" << std::endl;
+			for(; i != j; ++i)
+			{
+				std::cout << '[' << i->first << "]";
+				i->second->print(0);
+				std::cout << std::endl;
+			}
+		}
+
 		BaseMemDevice();
 		virtual ~BaseMemDevice();
 		virtual void Initialize(EventManager* em, const RootConfigNode& config,
