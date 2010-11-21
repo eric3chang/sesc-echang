@@ -9,10 +9,12 @@ inline void DebugFaultCatcher()
 }
 
 #if defined(DEBUG) || defined(_DEBUG)
-#define DebugAssert(x) if(!(x)){ DebugFaultCatcher(); assert(x);}
-#define DebugFail(x) if(true){ DebugFaultCatcher(); assert(x == 0); assert(x);}
+   #define DebugAssertWithMessageID(x,mid) if(!(x)){ \
+      std::cout << "Failed at MessageID=" << mid << std::endl; DebugFaultCatcher(); assert(x);}
+   #define DebugAssert(x) if(!(x)){ DebugFaultCatcher(); assert(x);}
+   #define DebugFail(x) if(true){ DebugFaultCatcher(); assert(x == 0); assert(x);}
 #else
-#define DebugAssert(x) 
-#define DebugFail(x) assert(x == 0)
+   #define DebugAssertWithMessageID(x,mid)
+   #define DebugAssert(x)
+   #define DebugFail(x) assert(x == 0)
 #endif
-

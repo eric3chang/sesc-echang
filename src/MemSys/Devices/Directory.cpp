@@ -135,13 +135,13 @@ namespace Memory
 	 */
 	void Directory::OnLocalRead(const ReadMsg* m)
 	{
-		DebugAssert(m);
+		DebugAssertWithMessageID(m,m->MsgID())
 		NodeID remoteNode = directoryNodeCalc->CalcNodeID(m->addr);
 #ifdef MEMORY_DIRECTORY_DEBUG_PENDING_LOCAL_READS
 		printDebugInfo("LocalRead", *m,
 		      ("pendingLocalReads.insert("+to_string<MessageID>(m->MsgID())+")").c_str());
 #endif
-		DebugAssert(pendingLocalReads.find(m->MsgID()) == pendingLocalReads.end());
+		DebugAssertWithMessageID(pendingLocalReads.find(m->MsgID()) == pendingLocalReads.end(),m->MsgID())
 		pendingLocalReads[m->MsgID()] = m;
 		ReadMsg* forward = (ReadMsg*)EM().ReplicateMsg(m);
 		forward->onCompletedCallback = NULL;
@@ -155,7 +155,7 @@ namespace Memory
 		else
 		{
 			NetworkMsg* nm = EM().CreateNetworkMsg(getDeviceID(), m->GeneratingPC());
-			DebugAssert(nm);
+			DebugAssertWithMessageID(nm,m->MsgID())
 			nm->destinationNode = remoteNode;
 			nm->sourceNode = nodeID;
 			nm->payloadMsg = forward;
@@ -164,10 +164,10 @@ namespace Memory
 	}
 	void Directory::OnLocalReadResponse(const ReadResponseMsg* m)
 	{
-		DebugAssert(m);
-		DebugAssert(pendingRemoteReads.find(m->solicitingMessage) != pendingRemoteReads.end());
+		DebugAssertWithMessageID(m,m->MsgID())
+		DebugAssertWithMessageID(pendingRemoteReads.find(m->solicitingMessage) != pendingRemoteReads.end(),m->MsgID())
 		LookupData<ReadMsg>& d = pendingRemoteReads[m->solicitingMessage];
-		DebugAssert(d.msg->MsgID() == m->solicitingMessage);
+		DebugAssertWithMessageID(d.msg->MsgID() == m->solicitingMessage,m->MsgID())
 		NetworkMsg* nm = EM().CreateNetworkMsg(getDeviceID(),d.msg->GeneratingPC());
 		ReadResponseMsg* forward = (ReadResponseMsg*)EM().ReplicateMsg(m);
 		nm->sourceNode = nodeID;
@@ -186,7 +186,7 @@ namespace Memory
 	}
 	void Directory::OnLocalWrite(const WriteMsg* m)
 	{
-		DebugAssert(m);
+		DebugAssertWithMessageID(m,m->MsgID())
 		NodeID id = directoryNodeCalc->CalcNodeID(m->addr);
 		WriteResponseMsg* wrm = EM().CreateWriteResponseMsg(getDeviceID(),m->GeneratingPC());
 		wrm->addr = m->addr;
@@ -200,7 +200,7 @@ namespace Memory
 		else
 		{
 			NetworkMsg* nm = EM().CreateNetworkMsg(getDeviceID(),m->GeneratingPC());
-			DebugAssert(nm);
+			DebugAssertWithMessageID(nm,m->MsgID())
 			nm->sourceNode = nodeID;
 			nm->destinationNode = id;
 			nm->payloadMsg = m;
@@ -209,7 +209,7 @@ namespace Memory
 	}
 	void Directory::OnLocalEviction(const EvictionMsg* m)
 	{
-		DebugAssert(m);
+		DebugAssertWithMessageID(m,m->MsgID())
 #ifdef MEMORY_DIRECTORY_DEBUG_PENDING_EVICTION
       printDebugInfo("LocalEviction", *m,
          ("pendingEviction.insert("+to_string<Address>(m->addr)+")").c_str());
@@ -240,10 +240,10 @@ namespace Memory
 	}
 	void Directory::OnLocalInvalidateResponse(const InvalidateResponseMsg* m)
 	{
-		DebugAssert(m);
-		DebugAssert(pendingRemoteInvalidates.find(m->addr) != pendingRemoteInvalidates.end());
+		DebugAssertWithMessageID(m,m->MsgID())
+		DebugAssertWithMessageID(pendingRemoteInvalidates.find(m->addr) != pendingRemoteInvalidates.end(),m->MsgID())
 		LookupData<InvalidateMsg>& d = pendingRemoteInvalidates[m->addr];
-		DebugAssert(d.msg->MsgID() == m->solicitingMessage);
+		DebugAssertWithMessageID(d.msg->MsgID() == m->solicitingMessage,m->MsgID())
 		if(nodeID != d.sourceNode)
 		{
 			NetworkMsg* nm = EM().CreateNetworkMsg(getDeviceID(),d.msg->GeneratingPC());
@@ -264,24 +264,24 @@ namespace Memory
 	}
 	void Directory::OnRemoteRead(const ReadMsg* m, NodeID src)
 	{
-		DebugAssert(m);
-		DebugAssert(!m->directoryLookup);
+		DebugAssertWithMessageID(m,m->MsgID())
+		DebugAssertWithMessageID(!m->directoryLookup,m->MsgID())
 #ifdef MEMORY_DIRECTORY_DEBUG_PENDING_REMOTE_READS
 		printDebugInfo("RemoteRead", *m,
 		      ("pendingRemoteReads.insert("+to_string<MessageID>(m->MsgID())+")").c_str());
 #endif
-		DebugAssert(pendingRemoteReads.find(m->MsgID()) == pendingRemoteReads.end());
+		DebugAssertWithMessageID(pendingRemoteReads.find(m->MsgID()) == pendingRemoteReads.end(),m->MsgID())
 		pendingRemoteReads[m->MsgID()].msg = m;
 		pendingRemoteReads[m->MsgID()].sourceNode = src;
 		SendMsg(localConnectionID, EM().ReplicateMsg(m), localSendTime);
 	}
 	void Directory::OnRemoteReadResponse(const ReadResponseMsg* m, NodeID src)
 	{
-		DebugAssert(m);
-		DebugAssert(!m->directoryLookup);
-		DebugAssert(pendingDirectorySharedReads.find(m->addr) != pendingDirectorySharedReads.end() || pendingDirectoryExclusiveReads.find(m->addr) != pendingDirectoryExclusiveReads.end());
-		DebugAssert(pendingDirectorySharedReads.find(m->addr) == pendingDirectorySharedReads.end() || pendingDirectoryExclusiveReads.find(m->addr) == pendingDirectoryExclusiveReads.end());
-		DebugAssert(directoryData.find(m->addr) != directoryData.end());
+		DebugAssertWithMessageID(m,m->MsgID())
+		DebugAssertWithMessageID(!m->directoryLookup,m->MsgID())
+		DebugAssertWithMessageID(pendingDirectorySharedReads.find(m->addr) != pendingDirectorySharedReads.end() || pendingDirectoryExclusiveReads.find(m->addr) != pendingDirectoryExclusiveReads.end(),m->MsgID())
+		DebugAssertWithMessageID(pendingDirectorySharedReads.find(m->addr) == pendingDirectorySharedReads.end() || pendingDirectoryExclusiveReads.find(m->addr) == pendingDirectoryExclusiveReads.end(),m->MsgID())
+		DebugAssertWithMessageID(directoryData.find(m->addr) != directoryData.end(),m->MsgID())
 		if(m->satisfied)
 		{
 			if(m->exclusiveOwnership)
@@ -324,9 +324,9 @@ namespace Memory
 			}  //if(pendingDirectorySharedReads.find(m->addr) != pendingDirectorySharedReads.end())
 			else // pendingDirectorySharedReads.find(m->addr) == pendingDirectorySharedReads.end())
 			{  // there is no pending shared read on this address
-				DebugAssert(m->exclusiveOwnership);
-				DebugAssert(m->blockAttached);
-				DebugAssert(directoryData[m->addr].owner == InvalidNodeID || directoryData[m->addr].owner == src);
+				DebugAssertWithMessageID(m->exclusiveOwnership,m->MsgID())
+				DebugAssertWithMessageID(m->blockAttached,m->MsgID())
+				DebugAssertWithMessageID(directoryData[m->addr].owner == InvalidNodeID || directoryData[m->addr].owner == src,m->MsgID())
 				if(directoryData[m->addr].sharers.size() == 0)
 				{//send block on now
 					ReadResponseMsg* response = (ReadResponseMsg*)EM().ReplicateMsg(m);
@@ -377,7 +377,7 @@ namespace Memory
 		else  // !m->satisfied
 		{
 			EraseDirectoryShare(m->addr,src);
-			DebugAssert(directoryData[m->addr].owner == InvalidNodeID);
+			DebugAssertWithMessageID(directoryData[m->addr].owner == InvalidNodeID,m->MsgID())
 			PerformDirectoryFetch(m->addr);
 			EM().DisposeMsg(m);
 		}
@@ -388,8 +388,8 @@ namespace Memory
 
 	void Directory::OnRemoteWrite(const WriteMsg* m, NodeID src)
 	{
-		DebugAssert(m);
-		DebugAssert(nodeID == directoryNodeCalc->CalcNodeID(m->addr));
+		DebugAssertWithMessageID(m,m->MsgID())
+		DebugAssertWithMessageID(nodeID == directoryNodeCalc->CalcNodeID(m->addr),m->MsgID())
 		NodeID memoryNode = memoryNodeCalc->CalcNodeID(m->addr);
 		if(src != nodeID)
 		{
@@ -411,13 +411,13 @@ namespace Memory
 	}
 	void Directory::OnRemoteWriteResponse(const WriteResponseMsg* m, NodeID src)
 	{
-		DebugAssert(m);
+		DebugAssertWithMessageID(m,m->MsgID())
 		EM().DisposeMsg(m);
 	}
 	void Directory::OnRemoteEviction(const EvictionMsg* m, NodeID src)
 	{
-		DebugAssert(m);
-		DebugAssert(directoryData.find(m->addr) != directoryData.end());
+		DebugAssertWithMessageID(m,m->MsgID())
+		DebugAssertWithMessageID(directoryData.find(m->addr) != directoryData.end(),m->MsgID())
 		BlockData& b = directoryData[m->addr];
 		if(b.owner == src)
 		{
@@ -440,7 +440,7 @@ namespace Memory
       printDebugInfo("RemoteEviction", *m,
          ("pendingEviction.erase("+to_string<Address>(m->addr)+")").c_str(),src);
 #endif
-			DebugAssert(pendingEviction.find(m->addr) != pendingEviction.end());
+			DebugAssertWithMessageID(pendingEviction.find(m->addr) != pendingEviction.end(),m->MsgID())
 			pendingEviction.erase(m->addr);
 		}
 		else
@@ -474,24 +474,24 @@ namespace Memory
 
 	void Directory::OnRemoteEvictionResponse(const EvictionResponseMsg* m, NodeID src)
 	{
-		DebugAssert(m);
+		DebugAssertWithMessageID(m,m->MsgID())
 #ifdef MEMORY_DIRECTORY_DEBUG_PENDING_EVICTION
       printDebugInfo("RemoteEvictionResponse", *m,
          ("pendingEviction.erase("+to_string<Address>(m->addr)+")").c_str(),src);
 #endif
-		DebugAssert(pendingEviction.find(m->addr) != pendingEviction.end());
+		DebugAssertWithMessageID(pendingEviction.find(m->addr) != pendingEviction.end(),m->MsgID())
 		pendingEviction.erase(m->addr);
 		SendMsg(localConnectionID, m, localSendTime);
 	}
 
 	void Directory::OnRemoteInvalidate(const InvalidateMsg* m, NodeID src)
 	{
-		DebugAssert(m);
+		DebugAssertWithMessageID(m,m->MsgID())
 #ifdef MEMORY_DIRECTORY_DEBUG_PENDING_REMOTE_INVALIDATES
       printDebugInfo("RemoteInvalidate", *m,
             ("pendingRemoteInvalidates.insert("+to_string<Address>(m->addr)+")").c_str());
 #endif
-		DebugAssert(pendingRemoteInvalidates.find(m->addr) == pendingRemoteInvalidates.end());
+		DebugAssertWithMessageID(pendingRemoteInvalidates.find(m->addr) == pendingRemoteInvalidates.end(),m->MsgID())
 		pendingRemoteInvalidates[m->addr].sourceNode = src;
 		pendingRemoteInvalidates[m->addr].msg = m;
 		SendMsg(localConnectionID, EM().ReplicateMsg(m), localSendTime);
@@ -499,11 +499,11 @@ namespace Memory
 
 	void Directory::OnRemoteInvalidateResponse(const InvalidateResponseMsg* m, NodeID src)
 	{
-		DebugAssert(m);
-		DebugAssert(directoryData.find(m->addr) != directoryData.end());
+		DebugAssertWithMessageID(m,m->MsgID())
+		DebugAssertWithMessageID(directoryData.find(m->addr) != directoryData.end(),m->MsgID())
 		BlockData& b = directoryData[m->addr];
-		DebugAssert(!m->blockAttached || (b.owner == src) || (b.owner==InvalidNodeID));
-      DebugAssert(m->blockAttached || (b.sharers.find(src)!=b.sharers.end()) || b.owner==src || b.owner==InvalidNodeID);
+		DebugAssertWithMessageID(!m->blockAttached || (b.owner == src) || (b.owner==InvalidNodeID),m->MsgID())
+      DebugAssertWithMessageID(m->blockAttached || (b.sharers.find(src)!=b.sharers.end()) || b.owner==src || b.owner==InvalidNodeID,m->MsgID())
 		if(b.owner == src)
 		{
 #ifdef MEMORY_DIRECTORY_DEBUG_DIRECTORY_DATA
@@ -584,7 +584,7 @@ namespace Memory
 
 	void Directory::OnDirectoryBlockRequest(const ReadMsg* m, NodeID src)
 	{
-		DebugAssert(m);
+		DebugAssertWithMessageID(m,m->MsgID())
       // if the address is in pendingDirectoryExclusiveReads or
 		// we are requesting for exclusive access and the address is in pendingDirectorySharedReads
 		if(pendingDirectoryExclusiveReads.find(m->addr) != pendingDirectoryExclusiveReads.end() ||
@@ -622,7 +622,7 @@ namespace Memory
 		ld.sourceNode = src;
 		if(m->requestingExclusive)
 		{
-			DebugAssert(pendingDirectoryExclusiveReads.find(m->addr) == pendingDirectoryExclusiveReads.end());
+			DebugAssertWithMessageID(pendingDirectoryExclusiveReads.find(m->addr) == pendingDirectoryExclusiveReads.end(),m->MsgID())
 			pendingDirectoryExclusiveReads[m->addr] = ld;
 		}
 		else
@@ -647,7 +647,7 @@ namespace Memory
 	}
 	void Directory::OnDirectoryBlockResponse(const ReadResponseMsg* m, NodeID src)
 	{
-		DebugAssert(m);
+		DebugAssertWithMessageID(m,m->MsgID())
 
 #ifdef MEMORY_DIRECTORY_DEBUG_PENDING_DIRECTORY_SHARED_READS
 		printPendingDirectorySharedReads();
@@ -658,7 +658,7 @@ namespace Memory
 		// check that m->solicitingMessage is in pendingLocalReads before accessing it
 		// error here means that we expect there to be a message in pendingLocalReads,
 		// but the message is not there
-      DebugAssert(pendingLocalReads.find(m->solicitingMessage) != pendingLocalReads.end());
+      DebugAssertWithMessageID(pendingLocalReads.find(m->solicitingMessage) != pendingLocalReads.end(),m->MsgID())
 		const ReadMsg* ref = pendingLocalReads[m->solicitingMessage];
 
 		if(!m->satisfied)
