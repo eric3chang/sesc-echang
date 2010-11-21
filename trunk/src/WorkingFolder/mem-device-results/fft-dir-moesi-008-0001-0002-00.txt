@@ -1,5 +1,5 @@
 Group string ReportFileName mem-device-results/fft-dir-moesi-008-0001-0002-00.txt string BenchName fft int ProcessorSkew0 46 int ProcessorSkew1 344 int ProcessorSkew2 166 int ProcessorSkew3 31 int ProcessorSkew4 329 int ProcessorSkew5 457 int ProcessorSkew6 308 int ProcessorSkew7 252 #
-int TotalRunTime 289641 #
+int TotalRunTime 286050 #
 MainMemory
 
 Network
@@ -7,26 +7,26 @@ Network
 NMInt
 
 ProcessorInterface_0
-readCount:13894
+readCount:13895
 writeCount:9549
-totalOperations:23443
+totalOperations:23444
 
 L1_0
-messagesReceived:27488
-readHits:13894
-readMisses:854
+messagesReceived:27476
+readHits:13895
+readMisses:856
 writeHits:9549
-writeMisses:499
+writeMisses:491
 
 L2_0
-messagesReceived:6562
-readHits:1353
-readMisses:1052
+messagesReceived:6521
+readHits:1347
+readMisses:1048
 writeHits:0
 writeMisses:0
 
 Directory_0
-messagesReceived:6776
+messagesReceived:6813
 
 ProcessorInterface_1
 readCount:13280
@@ -34,43 +34,43 @@ writeCount:9169
 totalOperations:22449
 
 L1_1
-messagesReceived:26434
+messagesReceived:26397
 readHits:13280
-readMisses:830
-writeHits:9165
-writeMisses:497
+readMisses:828
+writeHits:9168
+writeMisses:489
 
 L2_1
-messagesReceived:6440
-readHits:1324
-readMisses:1046
+messagesReceived:6375
+readHits:1316
+readMisses:1032
 writeHits:0
 writeMisses:0
 
 Directory_1
-messagesReceived:7095
+messagesReceived:7014
 
 ProcessorInterface_2
 readCount:13216
-writeCount:9153
-totalOperations:22369
+writeCount:9152
+totalOperations:22368
 
 L1_2
-messagesReceived:26259
+messagesReceived:26234
 readHits:13216
-readMisses:804
-writeHits:9153
-writeMisses:484
+readMisses:805
+writeHits:9152
+writeMisses:480
 
 L2_2
-messagesReceived:6199
-readHits:1289
+messagesReceived:6201
+readHits:1285
 readMisses:1001
 writeHits:0
 writeMisses:0
 
 Directory_2
-messagesReceived:7045
+messagesReceived:7034
 
 ProcessorInterface_3
 readCount:13216
@@ -78,21 +78,21 @@ writeCount:9152
 totalOperations:22368
 
 L1_3
-messagesReceived:26180
+messagesReceived:26166
 readHits:13216
-readMisses:808
+readMisses:804
 writeHits:9152
-writeMisses:475
+writeMisses:479
 
 L2_3
-messagesReceived:6144
-readHits:1283
-readMisses:991
+messagesReceived:6150
+readHits:1284
+readMisses:993
 writeHits:0
 writeMisses:0
 
 Directory_3
-messagesReceived:7345
+messagesReceived:7333
 
 ProcessorInterface_4
 readCount:13216
@@ -100,43 +100,43 @@ writeCount:9152
 totalOperations:22368
 
 L1_4
-messagesReceived:26221
+messagesReceived:26208
 readHits:13216
 readMisses:808
 writeHits:9152
-writeMisses:480
+writeMisses:481
 
 L2_4
 messagesReceived:6175
-readHits:1288
+readHits:1289
 readMisses:995
 writeHits:0
 writeMisses:0
 
 Directory_4
-messagesReceived:7252
+messagesReceived:7273
 
 ProcessorInterface_5
-readCount:13216
+readCount:13215
 writeCount:9152
-totalOperations:22368
+totalOperations:22367
 
 L1_5
-messagesReceived:26177
-readHits:13216
-readMisses:805
+messagesReceived:26202
+readHits:13215
+readMisses:804
 writeHits:9152
-writeMisses:465
+writeMisses:474
 
 L2_5
-messagesReceived:6066
-readHits:1270
-readMisses:966
+messagesReceived:6120
+readHits:1278
+readMisses:978
 writeHits:0
 writeMisses:0
 
 Directory_5
-messagesReceived:6718
+messagesReceived:6814
 
 ProcessorInterface_6
 readCount:13215
@@ -144,21 +144,21 @@ writeCount:9152
 totalOperations:22367
 
 L1_6
-messagesReceived:26216
+messagesReceived:26227
 readHits:13215
-readMisses:806
+readMisses:807
 writeHits:9152
-writeMisses:468
+writeMisses:482
 
 L2_6
-messagesReceived:6121
-readHits:1274
-readMisses:981
+messagesReceived:6200
+readHits:1289
+readMisses:998
 writeHits:0
 writeMisses:0
 
 Directory_6
-messagesReceived:6793
+messagesReceived:6918
 
 ProcessorInterface_7
 readCount:13214
@@ -166,34 +166,34 @@ writeCount:9151
 totalOperations:22365
 
 L1_7
-messagesReceived:26200
+messagesReceived:26198
 readHits:13214
-readMisses:808
+readMisses:809
 writeHits:9151
-writeMisses:472
+writeMisses:476
 
 L2_7
 messagesReceived:6165
-readHits:1280
-readMisses:986
+readHits:1285
+readMisses:985
 writeHits:0
 writeMisses:0
 
 Directory_7
-messagesReceived:6860
+messagesReceived:6844
 
 totalL1CacheReadHits:106467
-totalL1CacheReadMisses:6523
-totalL1CacheWriteHits:73626
-totalL1CacheWriteMisses:3840
+totalL1CacheReadMisses:6521
+totalL1CacheWriteHits:73628
+totalL1CacheWriteMisses:3852
 
-totalL2CacheReadHits:10361
-totalL2CacheReadMisses:8018
+totalL2CacheReadHits:10373
+totalL2CacheReadMisses:8030
 totalL2CacheWriteHits:0
 totalL2CacheWriteMisses:0
 
-totalCacheReadHits:116828
-totalCacheReadMisses:14541
-totalCacheWriteHits:73626
-totalCacheWriteMisses:3840
+totalCacheReadHits:116840
+totalCacheReadMisses:14551
+totalCacheWriteHits:73628
+totalCacheWriteMisses:3852
 EndGroup #
