@@ -502,11 +502,6 @@ namespace Memory
 		DebugAssert(m);
 		DebugAssert(directoryData.find(m->addr) != directoryData.end());
 		BlockData& b = directoryData[m->addr];
-#if defined MEMORY_DIRECTORY_DEBUG_DIRECTORY_DATA && !defined _WIN32
-      #define MEMORY_DIRECTORY_DEBUG_ARRAY_SIZE 20
-      NodeID sharers[MEMORY_DIRECTORY_DEBUG_ARRAY_SIZE];
-      b.sharers.convertToArray(sharers,MEMORY_DIRECTORY_DEBUG_ARRAY_SIZE);
-#endif
 		DebugAssert(!m->blockAttached || (b.owner == src) || (b.owner==InvalidNodeID));
       DebugAssert(m->blockAttached || (b.sharers.find(src)!=b.sharers.end()) || b.owner==src || b.owner==InvalidNodeID);
 		if(b.owner == src)
@@ -526,7 +521,7 @@ namespace Memory
 		}
       // it is possible that both the owner and sharer don't contain src if an RemoteEviction arrives before this
       else
-      {
+      {// a convenient place to set a breakpoint
          int breakpoint = 0;
       }
 
