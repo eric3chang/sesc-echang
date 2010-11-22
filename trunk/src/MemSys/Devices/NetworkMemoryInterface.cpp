@@ -44,7 +44,7 @@ namespace Memory
 			DebugAssert(n->destinationNode == nodeID);
 			const BaseMsg* payload = n->payloadMsg;
 			DebugAssert(payload);
-			DebugAssert(sourceTable.find(payload->MsgID()) == sourceTable.end());
+			DebugAssertWithMessageID(sourceTable.find(payload->MsgID()) == sourceTable.end(),payload->MsgID());
 			sourceTable[payload->MsgID()] = n->sourceNode;
 			SendMsg(memoryConnectionID, payload, 0);
 			EM().DisposeMsg(n);

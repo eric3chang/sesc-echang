@@ -626,7 +626,7 @@ void ThreeStageDirectory::HandleInterventionComplete(const BaseMsg *msgIn, bool 
       HashMap<MessageID,const ReadMsg*> &exclusiveRead = myData.exclusiveRead;
       HashMap<MessageID,const ReadMsg*> &sharedRead = myData.sharedRead;
 
-      DebugAssertWithMessageID(myData.myEvictionMsg!=NULL,m->MsgID());
+      DebugAssertWithMessageID(myData.myEvictionMsg==NULL,m->MsgID());
             
       // if we have a request with permissions greater, dispose it
       if (m->requestingExclusive)
