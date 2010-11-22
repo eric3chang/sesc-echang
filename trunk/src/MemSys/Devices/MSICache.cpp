@@ -720,10 +720,10 @@ void MSICache::PerformRead(const ReadMsg* m)
 #endif
 		DebugAssertWithMessageID(m,m->MsgID());
 		AddrTag tag = CalcTag(m->addr);
-		DebugAssert(pendingEviction.find(tag) != pendingEviction.end()
+		DebugAssertWithMessageID(pendingEviction.find(tag) != pendingEviction.end()
 		      || pendingInvalidate.find(tag) != pendingInvalidate.end()
 		      || canceledBlockEviction.find(tag) != canceledBlockEviction.end()
-		      );
+		      ,m->MsgID());
 		// if a block eviction was canceled by PrepareFreshBlock()
 		if (canceledBlockEviction.find(tag) != canceledBlockEviction.end())
 		{
