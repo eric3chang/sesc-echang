@@ -475,7 +475,7 @@ namespace Memory
 	}
 	void MOESICache::OnLocalRead(const ReadMsg* m)
 	{
-		DebugAssert(m);
+		DebugAssertWithMessageID(m,m->MsgID())
 		AddrTag tag = CalcTag(m->addr);
 		BlockState* b = Lookup(tag);
 		if(b)
@@ -499,7 +499,7 @@ namespace Memory
 	}
 	void MOESICache::OnRemoteRead(const ReadMsg* m)
 	{
-		DebugAssert(m);
+		DebugAssertWithMessageID(m,m->MsgID())
 		AddrTag tag = CalcTag(m->addr);
 		BlockState* b = Lookup(tag);
 		if(b)
@@ -529,7 +529,7 @@ namespace Memory
 	}
 	void MOESICache::OnLocalWrite(const WriteMsg* m)
 	{
-		DebugAssert(m);
+		DebugAssertWithMessageID(m,m->MsgID())
 		AddrTag tag = CalcTag(m->addr);
 		BlockState* b = Lookup(tag);
 		if(b)
@@ -567,7 +567,7 @@ namespace Memory
 	}
 	void MOESICache::OnRemoteInvalidate(const InvalidateMsg* m)
 	{
-		DebugAssert(m);
+		DebugAssertWithMessageID(m,m->MsgID())
 		AddrTag tag = CalcTag(m->addr);
 		if(pendingInvalidate.find(tag) != pendingInvalidate.end())
 		{
@@ -599,7 +599,7 @@ namespace Memory
 	}
 	void MOESICache::OnLocalEviction(const EvictionMsg* m)
 	{
-		DebugAssert(m);
+		DebugAssertWithMessageID(m,m->MsgID())
 		AddrTag tag = CalcTag(m->addr);
 		BlockState* b = Lookup(tag);
 		if(b && m->blockAttached)
@@ -622,7 +622,7 @@ namespace Memory
 	}
 	void MOESICache::OnRemoteEviction(const EvictionMsg* m)
 	{
-		DebugAssert(m);
+		DebugAssertWithMessageID(m,m->MsgID())
 		EvictionResponseMsg* res = EM().CreateEvictionResponseMsg(getDeviceID(),m->GeneratingPC());
 		res->addr = m->addr;
 		res->size = m->size;
@@ -632,7 +632,7 @@ namespace Memory
 	}
 	void MOESICache::OnLocalReadResponse(const ReadResponseMsg* m)
 	{
-		DebugAssert(m);
+		DebugAssertWithMessageID(m,m->MsgID())
 		AddrTag tag = CalcTag(m->addr);
 		if(waitingOnRemoteReads.find(tag) != waitingOnRemoteReads.end())
 		{
@@ -644,7 +644,7 @@ namespace Memory
 	}
 	void MOESICache::OnRemoteReadResponse(const ReadResponseMsg* m)
 	{
-		DebugAssert(m);
+		DebugAssertWithMessageID(m,m->MsgID())
 		AddrTag tag = CalcTag(m->addr);
 		BlockState* b = Lookup(tag);
       /*
@@ -656,11 +656,11 @@ namespace Memory
          // send eviction message because this block is not found in the cache
          EvictionMsg *forward = EM().CreateEvictionMsg(getDeviceID());
          forward->addr = m->addr;
-         DebugAssert(m->blockAttached);
+         DebugAssertWithMessageID(m->blockAttached,m->MsgID())
          forward->blockAttached = m->blockAttached;
          forward->size = m->size;
          forward->isBlockNotFound = true;
-         DebugAssert(pendingEviction.find(tag)==pendingEviction.end());
+         DebugAssertWithMessageID(pendingEviction.find(tag)==pendingEviction.end(),m->MsgID())
          remoteConnection->SendMsg(forward,evictionTime);
       }
    */
@@ -713,7 +713,7 @@ namespace Memory
          pendingInvalidate.convertToArray(pendingInvalidateArray,MEMORY_MOESI_CACHE_ARRAY_SIZE);
    #endif
 #endif
-		DebugAssert(m);
+		DebugAssertWithMessageID(m,m->MsgID())
 		AddrTag tag = CalcTag(m->addr);
 		DebugAssert(pendingEviction.find(tag) != pendingEviction.end()
 		      || pendingInvalidate.find(tag) != pendingInvalidate.end()
@@ -724,8 +724,8 @@ namespace Memory
 		{
 		   // if the block was canceled eviction, it shouldn't be found
 		   // in pendingEviction or pendingInvalidate
-		   DebugAssert(pendingEviction.find(tag) == pendingEviction.end());
-		   DebugAssert(pendingInvalidate.find(tag)==pendingInvalidate.end());
+		   DebugAssertWithMessageID(pendingEviction.find(tag) == pendingEviction.end(),m->MsgID())
+		   DebugAssertWithMessageID(pendingInvalidate.find(tag)==pendingInvalidate.end(),m->MsgID())
 		   canceledBlockEviction.erase(tag);
 		   EM().DisposeMsg(m);
 		   return;

@@ -45,6 +45,10 @@ namespace Memory
 	{
 		DumpMsgTemplate<Memory::MessageID>(m);
 	}
+	void ThreeStageDirectory::dump(HashMap<Address,LookupData<BaseMsg> > &m)
+	{
+		DumpLookupDataTemplate<Address>(m);
+	}
 
 void ThreeStageDirectory::AddDirectoryShare(Address a, NodeID id, bool exclusive)
 	{
@@ -167,7 +171,7 @@ void ThreeStageDirectory::writeToMainMemory(Address addr, Address generatingPC, 
       nm->payloadMsg = wm;
       SendMsg(remoteConnectionID, nm, remoteSendTime);
    }
-void ThreeStageDirectory::HandleInterventionComplete(const BaseMsg *msgIn, bool isPendingExclusive)
+	void ThreeStageDirectory::HandleInterventionComplete(const BaseMsg *msgIn, bool isPendingExclusive)
    {
       if (msgIn->Type()==mt_ReadResponse)
       {
@@ -1429,8 +1433,9 @@ void ThreeStageDirectory::HandleInterventionComplete(const BaseMsg *msgIn, bool 
          // block doesn't have to be attached because the block could be in Exclusive state.
             // block will be attached if block is in Own or Modified state
          //DebugAssertWithMessageID(m->blockAttached,m->MsgID())
-         // src should either be ld.previousOwner or b.owner because we have either
-				// kicked the previous owner out or this is an eviction from the owner
+
+         // src can be ld.previousOwner if the block was evicted before Invalidate gets there
+				// src can also be b.owner because b.owner could have the block even while exclusive busy
          DebugAssertWithMessageID(src==ld.previousOwner || src==b.owner,m->MsgID())
          //DebugAssertWithMessageID(src==b.owner,m->MsgID())
 
