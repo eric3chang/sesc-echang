@@ -86,6 +86,11 @@ namespace Memory
 			const T* msg;
 			NodeID sourceNode;
          NodeID previousOwner;
+         void print() const
+         {
+         	std::cout << " srcNode=" << sourceNode
+         			<< " prevOwn=" << previousOwner;
+         }
 		};
       class InvalidateData
       {
@@ -159,6 +164,27 @@ namespace Memory
       //HashMap<MessageID, int> unsatisfiedRequests;
 
 		void dump(HashMap<Memory::MessageID, const Memory::BaseMsg*> &m);
+		void dump(HashMap<Address,LookupData<BaseMsg> > &m);
+		// debugging functions
+		template <class Key>
+		static void DumpLookupDataTemplate(HashMap<Key,LookupData<Memory::BaseMsg> > &m)
+		{
+			typename HashMap<Key,LookupData<Memory::BaseMsg> >::const_iterator i,j;
+			i = m.begin();
+			j = m.end();
+
+			std::cout << "[" << "dump" << "]" << std::endl;
+			for(; i != j; ++i)
+			{
+				std::cout << '[' << i->first << "]";
+				const LookupData<Memory::BaseMsg> &ld = i->second;
+				ld.print();
+				std::cout << std::endl;
+				const Memory::BaseMsg* m = ld.msg;
+				m->print(0);
+				std::cout << std::endl;
+			}
+		}
 
       void HandleInterventionComplete(const BaseMsg *msgIn, bool isPendingExclusive);
       void HandleReceivedAllInvalidates(Address myAddress);
