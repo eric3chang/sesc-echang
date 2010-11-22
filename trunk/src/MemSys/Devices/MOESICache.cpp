@@ -137,7 +137,30 @@ namespace Memory
 	 * can be called as the result of a block not being found in cache
 	 * during a read from the CPU side (OnLocalRead)
 	 */
-	bool MOESICache::AllocateBlock(MOESICache::AddrTag tag)
+	void MOESICache::UnlockBlock(MOESICache::AddrTag tag)
+	{
+		BlockState* b = Lookup(tag);
+		DebugAssert(b);
+		DebugAssert(b->valid);
+		DebugAssert(b->locked);
+		DebugAssert(waitingOnBlockUnlock.find(tag) != waitingOnBlockUnlock.end());
+		b->locked = false;
+		StoredFunctionBase* f = waitingOnBlockUnlock[tag];
+		waitingOnBlockUnlock.erase(tag);
+		DebugAssert(f);
+		f->Call();
+		if(!b->locked)
+		{
+			int setIndex = CalcSetFromTag(tag);
+			f = waitingOnSetUnlock[setIndex];
+			if(f)
+			{
+				waitingOnSetUnlock[setIndex] = NULL;
+				f->Call();
+			}
+		}
+	}
+bool MOESICache::AllocateBlock(MOESICache::AddrTag tag)
 	{
 		BlockState* set = GetSet(CalcSetFromTag(tag));
 		DebugAssert(set);
@@ -184,11 +207,32 @@ namespace Memory
          return true;
 		}
 	}
-	void MOESICache::RetryMsg(const BaseMsg* m, int connectionID)
+	void MOESICache::EvictBlock(MOESICache::AddrTag tag)
 	{
-		RecvMsg(m,connectionID);
+		BlockState* b = Lookup(tag);
+		DebugAssert(b != NULL);
+		DebugAssert(pendingEviction.find(tag) == pendingEviction.end());
+		DebugAssert(b->valid);
+		DebugAssert(!b->locked);
+		DebugAssert(b->state != bs_Invalid);
+		EvictionMsg* m = EM().CreateEvictionMsg(getDeviceID(),0);
+		DebugAssert(m);
+		m->addr = CalcAddr(b->tag);
+		m->size = lineSize;
+		m->blockAttached = (b->lastWrite != 0);
+		DebugAssert(remoteConnection);
+		remoteConnection->SendMsg(m,evictionTime);
 	}
-	void MOESICache::PrepareFreshBlock(int setNumber, int index, AddrTag tag)
+void MOESICache::LockBlock(MOESICache::AddrTag tag)
+	{
+		BlockState* b = Lookup(tag);
+		DebugAssert(b);
+		DebugAssert(b->valid);
+		DebugAssert(!b->locked);
+		DebugAssert(waitingOnBlockUnlock.find(tag) == waitingOnBlockUnlock.end());
+		b->locked = true;
+	}
+void MOESICache::PrepareFreshBlock(int setNumber, int index, AddrTag tag)
 	{
 		BlockState* mySet = GetSet(setNumber);
 		DebugAssert(mySet[index].locked == false);
@@ -213,150 +257,7 @@ namespace Memory
 		}
 		DebugAssert(mySet[index].locked == false);
 	}
-	void MOESICache::EvictBlock(MOESICache::AddrTag tag)
-	{
-		BlockState* b = Lookup(tag);
-		DebugAssert(b != NULL);
-		DebugAssert(pendingEviction.find(tag) == pendingEviction.end());
-		DebugAssert(b->valid);
-		DebugAssert(!b->locked);
-		DebugAssert(b->state != bs_Invalid);
-		EvictionMsg* m = EM().CreateEvictionMsg(getDeviceID(),0);
-		DebugAssert(m);
-		m->addr = CalcAddr(b->tag);
-		m->size = lineSize;
-		m->blockAttached = (b->lastWrite != 0);
-		DebugAssert(remoteConnection);
-		remoteConnection->SendMsg(m,evictionTime);
-	}
-	void MOESICache::PerformRead(const ReadMsg* m)
-	{		
-		DebugAssert(m);
-		AddrTag tag = CalcTag(m->addr);
-		BlockState* b = Lookup(tag);
-		DebugAssert(b);
-		if(b->state == bs_Invalid || (m->requestingExclusive && (b->state == bs_Shared || b->state == bs_Owned)))
-		{//miss
-			if(!b->locked)
-			{
-				LockBlock(tag);
-				readMisses++;
-				ReadMsg* forward = EM().CreateReadMsg(getDeviceID(),m->GeneratingPC());
-				forward->addr = CalcAddr(tag);
-				forward->size = lineSize;
-				forward->alreadyHasBlock = (b->state != bs_Invalid);
-				forward->onCompletedCallback = NULL;
-				forward->requestingExclusive = m->requestingExclusive;
-				remoteConnection->SendMsg(forward, missTime);
-			}
-			CBPerformRead::FunctionType* f = cbPerformRead.Create();
-			f->Initialize(this,m);
-			WaitOnBlockUnlock(tag,f);
-		}
-		else
-		{  //hit
-		   readHits++;
-			ReadResponseMsg* res = EM().CreateReadResponseMsg(getDeviceID(),m->GeneratingPC());
-			m->SignalComplete();
-			res->addr = m->addr;
-			res->size = m->size;
-			res->blockAttached = !m->alreadyHasBlock;
-			res->exclusiveOwnership = (b->state == bs_Exclusive || b->state == bs_Modified);
-			res->satisfied = true;
-			res->solicitingMessage = m->MsgID();
-			localConnection->SendMsg(res,hitTime);
-			EM().DisposeMsg(m);
-		}
-		b->lastRead = EM().CurrentTick();
-	}
-	void MOESICache::PerformRemoteRead(const ReadMsg* m)
-	{
-		DebugAssert(m);
-		AddrTag tag = CalcTag(m->addr);
-		BlockState* b = Lookup(tag);
-		ReadResponseMsg* res = EM().CreateReadResponseMsg(getDeviceID(),m->GeneratingPC());
-		res->addr = m->addr;
-		res->size = m->size;
-		m->SignalComplete();
-		res->solicitingMessage = m->MsgID();
-		if(b == NULL || b->state == bs_Invalid)
-		{
-			res->exclusiveOwnership = false;
-			res->satisfied = false;
-			res->blockAttached = false;
-		}
-		else if(m->requestingExclusive)
-		{
-			res->blockAttached = !m->alreadyHasBlock;
-			res->exclusiveOwnership = true;
-			res->satisfied = true;
-			if(waitingOnBlockUnlock.find(tag) != waitingOnBlockUnlock.end())
-			{
-				DebugAssert(b->locked);
-				b->state = bs_Invalid;
-			}
-			else
-			{
-				DebugAssert(!b->locked);
-				InvalidateBlock(*b);
-			}
-		}
-		else
-		{
-			if(b->state == bs_Modified)
-			{
-				b->state = bs_Owned;
-			}
-			else if(b->state == bs_Exclusive)
-			{
-				b->state = bs_Shared;
-			}
-			res->exclusiveOwnership = false;
-			res->blockAttached = true;
-			res->satisfied = true;
-		}
-		remoteConnection->SendMsg(res,hitTime);
-		EM().DisposeMsg(m);
-	}
-	void MOESICache::PerformWrite(const WriteMsg* m)
-	{
-		DebugAssert(m);
-		AddrTag tag = CalcTag(m->addr);
-		BlockState* b = Lookup(tag);
-		DebugAssert(b);
-		if(b->state == bs_Invalid || b->state == bs_Shared || b->state == bs_Owned)
-		{
-			if(!b->locked)
-			{
-				LockBlock(tag);
-				writeMisses++;
-				ReadMsg* forward = EM().CreateReadMsg(getDeviceID(),m->GeneratingPC());
-				forward->addr = CalcAddr(tag);
-				forward->size = lineSize;
-				forward->alreadyHasBlock = (b->state != bs_Invalid);
-				forward->onCompletedCallback = NULL;
-				forward->requestingExclusive = true;
-				remoteConnection->SendMsg(forward, missTime);
-			}
-			CBPerformWrite::FunctionType* f = cbPerformWrite.Create();
-			f->Initialize(this,m);
-			WaitOnBlockUnlock(tag,f);
-		}
-		else
-		{
-		   writeHits++;
-			b->state = bs_Modified;
-			WriteResponseMsg* res = EM().CreateWriteResponseMsg(getDeviceID(),m->GeneratingPC());
-			res->addr = m->addr;
-			res->size = m->size;
-			res->solicitingMessage = m->MsgID();
-			m->SignalComplete();
-			localConnection->SendMsg(res,hitTime);
-			EM().DisposeMsg(m);
-		}
-		b->lastWrite = EM().CurrentTick();
-	}
-	void MOESICache::RespondInvalidate(MOESICache::AddrTag tag)
+			void MOESICache::RespondInvalidate(MOESICache::AddrTag tag)
 	{
 		DebugAssert(pendingInvalidate.find(tag) != pendingInvalidate.end())
 		BlockState* b = Lookup(tag);
@@ -408,39 +309,7 @@ namespace Memory
 #endif
 		pendingInvalidate.erase(tag);
 	}
-	void MOESICache::LockBlock(MOESICache::AddrTag tag)
-	{
-		BlockState* b = Lookup(tag);
-		DebugAssert(b);
-		DebugAssert(b->valid);
-		DebugAssert(!b->locked);
-		DebugAssert(waitingOnBlockUnlock.find(tag) == waitingOnBlockUnlock.end());
-		b->locked = true;
-	}
-	void MOESICache::UnlockBlock(MOESICache::AddrTag tag)
-	{
-		BlockState* b = Lookup(tag);
-		DebugAssert(b);
-		DebugAssert(b->valid);
-		DebugAssert(b->locked);
-		DebugAssert(waitingOnBlockUnlock.find(tag) != waitingOnBlockUnlock.end());
-		b->locked = false;
-		StoredFunctionBase* f = waitingOnBlockUnlock[tag];
-		waitingOnBlockUnlock.erase(tag);
-		DebugAssert(f);
-		f->Call();
-		if(!b->locked)
-		{
-			int setIndex = CalcSetFromTag(tag);
-			f = waitingOnSetUnlock[setIndex];
-			if(f)
-			{
-				waitingOnSetUnlock[setIndex] = NULL;
-				f->Call();
-			}
-		}
-	}
-	void MOESICache::WaitOnBlockUnlock(MOESICache::AddrTag tag, StoredFunctionBase* f)
+void MOESICache::WaitOnBlockUnlock(MOESICache::AddrTag tag, StoredFunctionBase* f)
 	{
 		DebugAssert(f);
 		if(waitingOnBlockUnlock.find(tag) != waitingOnBlockUnlock.end())
@@ -451,18 +320,7 @@ namespace Memory
 		}
 		waitingOnBlockUnlock[tag] = f;
 	}
-	void MOESICache::WaitOnSetUnlock(int s, StoredFunctionBase* f)
-	{
-		DebugAssert(f);
-		if(waitingOnSetUnlock[s])
-		{
-			CompositPool::FunctionType* c = compositPool.Create();
-			c->Initialize(waitingOnSetUnlock[s],f);
-			f = c;
-		}
-		waitingOnSetUnlock[s] = f;
-	}
-	void MOESICache::WaitOnRemoteReadResponse(MOESICache::AddrTag tag, StoredFunctionBase* f)
+void MOESICache::WaitOnRemoteReadResponse(MOESICache::AddrTag tag, StoredFunctionBase* f)
 	{
 		DebugAssert(f);
 		if(waitingOnRemoteReads.find(tag) != waitingOnRemoteReads.end())
@@ -473,9 +331,151 @@ namespace Memory
 		}
 		waitingOnRemoteReads[tag] = f;
 	}
-	void MOESICache::OnLocalRead(const ReadMsg* m)
+void MOESICache::WaitOnSetUnlock(int s, StoredFunctionBase* f)
 	{
-		DebugAssertWithMessageID(m,m->MsgID())
+		DebugAssert(f);
+		if(waitingOnSetUnlock[s])
+		{
+			CompositPool::FunctionType* c = compositPool.Create();
+			c->Initialize(waitingOnSetUnlock[s],f);
+			f = c;
+		}
+		waitingOnSetUnlock[s] = f;
+	}
+void MOESICache::PerformRead(const ReadMsg* m)
+	{		
+		DebugAssertWithMessageID(m,m->MsgID());
+		AddrTag tag = CalcTag(m->addr);
+		BlockState* b = Lookup(tag);
+		DebugAssertWithMessageID(b,m->MsgID());
+		if(b->state == bs_Invalid || (m->requestingExclusive && (b->state == bs_Shared || b->state == bs_Owned)))
+		{//miss
+			if(!b->locked)
+			{
+				LockBlock(tag);
+				readMisses++;
+				ReadMsg* forward = EM().CreateReadMsg(getDeviceID(),m->GeneratingPC());
+				forward->addr = CalcAddr(tag);
+				forward->size = lineSize;
+				forward->alreadyHasBlock = (b->state != bs_Invalid);
+				forward->onCompletedCallback = NULL;
+				forward->requestingExclusive = m->requestingExclusive;
+				remoteConnection->SendMsg(forward, missTime);
+			}
+			CBPerformRead::FunctionType* f = cbPerformRead.Create();
+			f->Initialize(this,m);
+			WaitOnBlockUnlock(tag,f);
+		}
+		else
+		{  //hit
+		   readHits++;
+			ReadResponseMsg* res = EM().CreateReadResponseMsg(getDeviceID(),m->GeneratingPC());
+			m->SignalComplete();
+			res->addr = m->addr;
+			res->size = m->size;
+			res->blockAttached = !m->alreadyHasBlock;
+			res->exclusiveOwnership = (b->state == bs_Exclusive || b->state == bs_Modified);
+			res->satisfied = true;
+			res->solicitingMessage = m->MsgID();
+			localConnection->SendMsg(res,hitTime);
+			EM().DisposeMsg(m);
+		}
+		b->lastRead = EM().CurrentTick();
+	}
+	void MOESICache::PerformRemoteRead(const ReadMsg* m)
+	{
+		DebugAssertWithMessageID(m,m->MsgID());
+		AddrTag tag = CalcTag(m->addr);
+		BlockState* b = Lookup(tag);
+		ReadResponseMsg* res = EM().CreateReadResponseMsg(getDeviceID(),m->GeneratingPC());
+		res->addr = m->addr;
+		res->size = m->size;
+		m->SignalComplete();
+		res->solicitingMessage = m->MsgID();
+		if(b == NULL || b->state == bs_Invalid)
+		{
+			res->exclusiveOwnership = false;
+			res->satisfied = false;
+			res->blockAttached = false;
+		}
+		else if(m->requestingExclusive)
+		{
+			res->blockAttached = !m->alreadyHasBlock;
+			res->exclusiveOwnership = true;
+			res->satisfied = true;
+			if(waitingOnBlockUnlock.find(tag) != waitingOnBlockUnlock.end())
+			{
+				DebugAssertWithMessageID(b->locked,m->MsgID());
+				b->state = bs_Invalid;
+			}
+			else
+			{
+				DebugAssertWithMessageID(!b->locked,m->MsgID());
+				InvalidateBlock(*b);
+			}
+		}
+		else
+		{
+			if(b->state == bs_Modified)
+			{
+				b->state = bs_Owned;
+			}
+			else if(b->state == bs_Exclusive)
+			{
+				b->state = bs_Shared;
+			}
+			res->exclusiveOwnership = false;
+			res->blockAttached = true;
+			res->satisfied = true;
+		}
+		remoteConnection->SendMsg(res,hitTime);
+		EM().DisposeMsg(m);
+	}
+	void MOESICache::PerformWrite(const WriteMsg* m)
+	{
+		DebugAssertWithMessageID(m,m->MsgID());
+		AddrTag tag = CalcTag(m->addr);
+		BlockState* b = Lookup(tag);
+		DebugAssertWithMessageID(b,m->MsgID());
+		if(b->state == bs_Invalid || b->state == bs_Shared || b->state == bs_Owned)
+		{
+			if(!b->locked)
+			{
+				LockBlock(tag);
+				writeMisses++;
+				ReadMsg* forward = EM().CreateReadMsg(getDeviceID(),m->GeneratingPC());
+				forward->addr = CalcAddr(tag);
+				forward->size = lineSize;
+				forward->alreadyHasBlock = (b->state != bs_Invalid);
+				forward->onCompletedCallback = NULL;
+				forward->requestingExclusive = true;
+				remoteConnection->SendMsg(forward, missTime);
+			}
+			CBPerformWrite::FunctionType* f = cbPerformWrite.Create();
+			f->Initialize(this,m);
+			WaitOnBlockUnlock(tag,f);
+		}
+		else
+		{
+		   writeHits++;
+			b->state = bs_Modified;
+			WriteResponseMsg* res = EM().CreateWriteResponseMsg(getDeviceID(),m->GeneratingPC());
+			res->addr = m->addr;
+			res->size = m->size;
+			res->solicitingMessage = m->MsgID();
+			m->SignalComplete();
+			localConnection->SendMsg(res,hitTime);
+			EM().DisposeMsg(m);
+		}
+		b->lastWrite = EM().CurrentTick();
+	}
+	void MOESICache::RetryMsg(const BaseMsg* m, int connectionID)
+	{
+		RecvMsg(m,connectionID);
+	}
+				void MOESICache::OnLocalRead(const ReadMsg* m)
+	{
+		DebugAssertWithMessageID(m,m->MsgID());
 		AddrTag tag = CalcTag(m->addr);
 		BlockState* b = Lookup(tag);
 		if(b)
@@ -499,7 +499,7 @@ namespace Memory
 	}
 	void MOESICache::OnRemoteRead(const ReadMsg* m)
 	{
-		DebugAssertWithMessageID(m,m->MsgID())
+		DebugAssertWithMessageID(m,m->MsgID());
 		AddrTag tag = CalcTag(m->addr);
 		BlockState* b = Lookup(tag);
 		if(b)
@@ -529,7 +529,7 @@ namespace Memory
 	}
 	void MOESICache::OnLocalWrite(const WriteMsg* m)
 	{
-		DebugAssertWithMessageID(m,m->MsgID())
+		DebugAssertWithMessageID(m,m->MsgID());
 		AddrTag tag = CalcTag(m->addr);
 		BlockState* b = Lookup(tag);
 		if(b)
@@ -567,7 +567,7 @@ namespace Memory
 	}
 	void MOESICache::OnRemoteInvalidate(const InvalidateMsg* m)
 	{
-		DebugAssertWithMessageID(m,m->MsgID())
+		DebugAssertWithMessageID(m,m->MsgID());
 		AddrTag tag = CalcTag(m->addr);
 		if(pendingInvalidate.find(tag) != pendingInvalidate.end())
 		{
@@ -599,7 +599,7 @@ namespace Memory
 	}
 	void MOESICache::OnLocalEviction(const EvictionMsg* m)
 	{
-		DebugAssertWithMessageID(m,m->MsgID())
+		DebugAssertWithMessageID(m,m->MsgID());
 		AddrTag tag = CalcTag(m->addr);
 		BlockState* b = Lookup(tag);
 		if(b && m->blockAttached)
@@ -622,7 +622,7 @@ namespace Memory
 	}
 	void MOESICache::OnRemoteEviction(const EvictionMsg* m)
 	{
-		DebugAssertWithMessageID(m,m->MsgID())
+		DebugAssertWithMessageID(m,m->MsgID());
 		EvictionResponseMsg* res = EM().CreateEvictionResponseMsg(getDeviceID(),m->GeneratingPC());
 		res->addr = m->addr;
 		res->size = m->size;
@@ -632,7 +632,7 @@ namespace Memory
 	}
 	void MOESICache::OnLocalReadResponse(const ReadResponseMsg* m)
 	{
-		DebugAssertWithMessageID(m,m->MsgID())
+		DebugAssertWithMessageID(m,m->MsgID());
 		AddrTag tag = CalcTag(m->addr);
 		if(waitingOnRemoteReads.find(tag) != waitingOnRemoteReads.end())
 		{
@@ -644,7 +644,7 @@ namespace Memory
 	}
 	void MOESICache::OnRemoteReadResponse(const ReadResponseMsg* m)
 	{
-		DebugAssertWithMessageID(m,m->MsgID())
+		DebugAssertWithMessageID(m,m->MsgID());
 		AddrTag tag = CalcTag(m->addr);
 		BlockState* b = Lookup(tag);
       /*
@@ -656,11 +656,11 @@ namespace Memory
          // send eviction message because this block is not found in the cache
          EvictionMsg *forward = EM().CreateEvictionMsg(getDeviceID());
          forward->addr = m->addr;
-         DebugAssertWithMessageID(m->blockAttached,m->MsgID())
+         DebugAssertWithMessageID(m->blockAttached,m->MsgID());
          forward->blockAttached = m->blockAttached;
          forward->size = m->size;
          forward->isBlockNotFound = true;
-         DebugAssertWithMessageID(pendingEviction.find(tag)==pendingEviction.end(),m->MsgID())
+         DebugAssertWithMessageID(pendingEviction.find(tag)==pendingEviction.end(),m->MsgID());
          remoteConnection->SendMsg(forward,evictionTime);
       }
    */
@@ -713,7 +713,7 @@ namespace Memory
          pendingInvalidate.convertToArray(pendingInvalidateArray,MEMORY_MOESI_CACHE_ARRAY_SIZE);
    #endif
 #endif
-		DebugAssertWithMessageID(m,m->MsgID())
+		DebugAssertWithMessageID(m,m->MsgID());
 		AddrTag tag = CalcTag(m->addr);
 		DebugAssert(pendingEviction.find(tag) != pendingEviction.end()
 		      || pendingInvalidate.find(tag) != pendingInvalidate.end()
@@ -724,8 +724,8 @@ namespace Memory
 		{
 		   // if the block was canceled eviction, it shouldn't be found
 		   // in pendingEviction or pendingInvalidate
-		   DebugAssertWithMessageID(pendingEviction.find(tag) == pendingEviction.end(),m->MsgID())
-		   DebugAssertWithMessageID(pendingInvalidate.find(tag)==pendingInvalidate.end(),m->MsgID())
+		   DebugAssertWithMessageID(pendingEviction.find(tag) == pendingEviction.end(),m->MsgID());
+		   DebugAssertWithMessageID(pendingInvalidate.find(tag)==pendingInvalidate.end(),m->MsgID());
 		   canceledBlockEviction.erase(tag);
 		   EM().DisposeMsg(m);
 		   return;
