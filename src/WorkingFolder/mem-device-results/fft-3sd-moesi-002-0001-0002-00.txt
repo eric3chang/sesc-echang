@@ -1,5 +1,5 @@
 Group string ReportFileName mem-device-results/fft-3sd-moesi-002-0001-0002-00.txt string BenchName fft int ProcessorSkew0 46 int ProcessorSkew1 344 #
-int TotalRunTime 1115363 #
+int TotalRunTime 1115194 #
 MainMemory
 
 Network
@@ -7,13 +7,13 @@ Network
 NMInt
 
 ProcessorInterface_0
-readCount:52365
+readCount:52359
 writeCount:36356
-totalOperations:88721
+totalOperations:88715
 
 L1_0
-messagesReceived:158832
-readHits:52365
+messagesReceived:158826
+readHits:52359
 readMisses:3105
 writeHits:36356
 writeMisses:3458
@@ -50,7 +50,7 @@ writeMisses:0
 Directory_1
 messagesReceived:32252
 
-totalL1CacheReadHits:104129
+totalL1CacheReadHits:104123
 totalL1CacheReadMisses:6228
 totalL1CacheWriteHits:72331
 totalL1CacheWriteMisses:6898
@@ -60,7 +60,7 @@ totalL2CacheReadMisses:11396
 totalL2CacheWriteHits:0
 totalL2CacheWriteMisses:0
 
-totalCacheReadHits:117254
+totalCacheReadHits:117248
 totalCacheReadMisses:17624
 totalCacheWriteHits:72331
 totalCacheWriteMisses:6898

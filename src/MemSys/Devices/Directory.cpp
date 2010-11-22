@@ -37,6 +37,12 @@ namespace Memory
 		}
 	}
 
+	// debug function
+   void Directory::dump(HashMap<Memory::MessageID, const Memory::BaseMsg*> &m)
+   {
+      DumpMsgTemplate<Memory::MessageID>(m);
+   }
+
    // performs a directory fetch from main memory of address a
 	void Directory::PerformDirectoryFetch(Address a)
 	{
@@ -49,6 +55,9 @@ namespace Memory
 		ReadMsg* m = (ReadMsg*)EM().ReplicateMsg(
 		      (pendingDirectorySharedReads.find(a) != pendingDirectorySharedReads.end())
 		      ?pendingDirectorySharedReads.find(a)->second.msg : pendingDirectoryExclusiveReads[a].msg);
+#ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE
+         printDebugInfo("PerformDirectoryFetch",*m,"");
+#endif
 		m->directoryLookup = false;
 		m->onCompletedCallback = NULL;
 		m->alreadyHasBlock = false;
@@ -67,9 +76,12 @@ namespace Memory
 			target = memoryNodeCalc->CalcNodeID(a);
 		}
 		if(target == nodeID)
-		{
-#ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE
-               printDebugInfo("RemoteRead",*m,"PerformDirectoryFetch:Error",nodeID);
+		{// if target == nodeID, it could mean that the block was evicted or invalidated
+		   // and a response has already been sent, but we still need
+			// to do this to get a proper read response, otherwise the program
+			// will stall
+#ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE_OLD
+         printDebugInfo("RemoteRead",*m,"PerformDirectoryFetch:Error",nodeID);
 #endif
 			OnRemoteRead(m, nodeID);//ERROR
 		}
@@ -135,6 +147,9 @@ namespace Memory
 	 */
 	void Directory::OnLocalRead(const ReadMsg* m)
 	{
+#ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE
+               printDebugInfo("LocRead",*m,"");
+#endif
 		DebugAssertWithMessageID(m,m->MsgID())
 		NodeID remoteNode = directoryNodeCalc->CalcNodeID(m->addr);
 #ifdef MEMORY_DIRECTORY_DEBUG_PENDING_LOCAL_READS
@@ -164,6 +179,9 @@ namespace Memory
 	}
 	void Directory::OnLocalReadResponse(const ReadResponseMsg* m)
 	{
+#ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE
+               printDebugInfo("LocReadRes",*m,"");
+#endif
 		DebugAssertWithMessageID(m,m->MsgID())
 		DebugAssertWithMessageID(pendingRemoteReads.find(m->solicitingMessage) != pendingRemoteReads.end(),m->MsgID())
 		LookupData<ReadMsg>& d = pendingRemoteReads[m->solicitingMessage];
@@ -186,6 +204,9 @@ namespace Memory
 	}
 	void Directory::OnLocalWrite(const WriteMsg* m)
 	{
+#ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE
+      printDebugInfo("LocWrite",*m,"");
+#endif
 		DebugAssertWithMessageID(m,m->MsgID())
 		NodeID id = directoryNodeCalc->CalcNodeID(m->addr);
 		WriteResponseMsg* wrm = EM().CreateWriteResponseMsg(getDeviceID(),m->GeneratingPC());
@@ -209,6 +230,9 @@ namespace Memory
 	}
 	void Directory::OnLocalEviction(const EvictionMsg* m)
 	{
+#ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE
+               printDebugInfo("LocEvic",*m,"");
+#endif
 		DebugAssertWithMessageID(m,m->MsgID())
 #ifdef MEMORY_DIRECTORY_DEBUG_PENDING_EVICTION
       printDebugInfo("LocalEviction", *m,
@@ -224,7 +248,7 @@ namespace Memory
 		NodeID id = directoryNodeCalc->CalcNodeID(m->addr);
 		if(id == nodeID)
 		{
-#ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE
+#ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE_OLD
                printDebugInfo("RemoteEviction",*m,"LocalEviction",nodeID);
 #endif
 			OnRemoteEviction(m,nodeID);
@@ -240,6 +264,9 @@ namespace Memory
 	}
 	void Directory::OnLocalInvalidateResponse(const InvalidateResponseMsg* m)
 	{
+#ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE
+               printDebugInfo("LocInvRes",*m,"");
+#endif
 		DebugAssertWithMessageID(m,m->MsgID())
 		DebugAssertWithMessageID(pendingRemoteInvalidates.find(m->addr) != pendingRemoteInvalidates.end(),m->MsgID())
 		LookupData<InvalidateMsg>& d = pendingRemoteInvalidates[m->addr];
@@ -254,7 +281,7 @@ namespace Memory
 		}
 		else
 		{
-#ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE
+#ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE_OLD
                printDebugInfo("RemoteInvalidateResponse",*m,"LocalInvalidateResponse",nodeID);
 #endif
 			OnRemoteInvalidateResponse(m,nodeID);
@@ -264,6 +291,9 @@ namespace Memory
 	}
 	void Directory::OnRemoteRead(const ReadMsg* m, NodeID src)
 	{
+#ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE
+      printDebugInfo("RemRead",*m,"",src);
+#endif
 		DebugAssertWithMessageID(m,m->MsgID())
 		DebugAssertWithMessageID(!m->directoryLookup,m->MsgID())
 #ifdef MEMORY_DIRECTORY_DEBUG_PENDING_REMOTE_READS
@@ -277,6 +307,9 @@ namespace Memory
 	}
 	void Directory::OnRemoteReadResponse(const ReadResponseMsg* m, NodeID src)
 	{
+#ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE
+      printDebugInfo("RemReadRes",*m,"",src);
+#endif
 		DebugAssertWithMessageID(m,m->MsgID())
 		DebugAssertWithMessageID(!m->directoryLookup,m->MsgID())
 		DebugAssertWithMessageID(pendingDirectorySharedReads.find(m->addr) != pendingDirectorySharedReads.end() || pendingDirectoryExclusiveReads.find(m->addr) != pendingDirectoryExclusiveReads.end(),m->MsgID())
@@ -305,7 +338,7 @@ namespace Memory
 					AddDirectoryShare(m->addr,i->second.sourceNode,false);
 					if(i->second.sourceNode == nodeID)
 					{
-#ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE
+#ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE_OLD
                printDebugInfo("DirBlkRes",*r,"RemReadRes",nodeID);
 #endif
 						OnDirectoryBlockResponse(r,nodeID);
@@ -364,8 +397,8 @@ namespace Memory
 						}
 						else
 						{
-#ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE
-               printDebugInfo("RemoteInvalidate",*inv,"RemReadRes",nodeID);
+#ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE_OLD
+							printDebugInfo("RemoteInvalidate",*inv,"RemReadRes",nodeID);
 #endif
 							OnRemoteInvalidate(inv, nodeID);
 						}
@@ -377,7 +410,7 @@ namespace Memory
 		else  // !m->satisfied
 		{
 			EraseDirectoryShare(m->addr,src);
-			DebugAssertWithMessageID(directoryData[m->addr].owner == InvalidNodeID,m->MsgID())
+			DebugAssertWithMessageID(directoryData[m->addr].owner == InvalidNodeID,m->MsgID());
 			PerformDirectoryFetch(m->addr);
 			EM().DisposeMsg(m);
 		}
@@ -388,6 +421,9 @@ namespace Memory
 
 	void Directory::OnRemoteWrite(const WriteMsg* m, NodeID src)
 	{
+#ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE
+      printDebugInfo("RemWrite",*m,"",src);
+#endif
 		DebugAssertWithMessageID(m,m->MsgID())
 		DebugAssertWithMessageID(nodeID == directoryNodeCalc->CalcNodeID(m->addr),m->MsgID())
 		NodeID memoryNode = memoryNodeCalc->CalcNodeID(m->addr);
@@ -411,11 +447,17 @@ namespace Memory
 	}
 	void Directory::OnRemoteWriteResponse(const WriteResponseMsg* m, NodeID src)
 	{
+#ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE
+      printDebugInfo("RemWriteRes",*m,"",src);
+#endif
 		DebugAssertWithMessageID(m,m->MsgID())
 		EM().DisposeMsg(m);
 	}
 	void Directory::OnRemoteEviction(const EvictionMsg* m, NodeID src)
 	{
+#ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE
+      printDebugInfo("RemEvic",*m,"",src);
+#endif
 		DebugAssertWithMessageID(m,m->MsgID())
 		DebugAssertWithMessageID(directoryData.find(m->addr) != directoryData.end(),m->MsgID())
 		BlockData& b = directoryData[m->addr];
@@ -474,6 +516,9 @@ namespace Memory
 
 	void Directory::OnRemoteEvictionResponse(const EvictionResponseMsg* m, NodeID src)
 	{
+#ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE
+      printDebugInfo("RemEvicRes",*m,"",src);
+#endif
 		DebugAssertWithMessageID(m,m->MsgID())
 #ifdef MEMORY_DIRECTORY_DEBUG_PENDING_EVICTION
       printDebugInfo("RemoteEvictionResponse", *m,
@@ -486,6 +531,9 @@ namespace Memory
 
 	void Directory::OnRemoteInvalidate(const InvalidateMsg* m, NodeID src)
 	{
+#ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE
+      printDebugInfo("RemInv",*m,"",src);
+#endif
 		DebugAssertWithMessageID(m,m->MsgID())
 #ifdef MEMORY_DIRECTORY_DEBUG_PENDING_REMOTE_INVALIDATES
       printDebugInfo("RemoteInvalidate", *m,
@@ -499,6 +547,9 @@ namespace Memory
 
 	void Directory::OnRemoteInvalidateResponse(const InvalidateResponseMsg* m, NodeID src)
 	{
+#ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE
+      printDebugInfo("RemInvRes",*m,"",src);
+#endif
 		DebugAssertWithMessageID(m,m->MsgID())
 		DebugAssertWithMessageID(directoryData.find(m->addr) != directoryData.end(),m->MsgID())
 		BlockData& b = directoryData[m->addr];
@@ -584,6 +635,9 @@ namespace Memory
 
 	void Directory::OnDirectoryBlockRequest(const ReadMsg* m, NodeID src)
 	{
+#ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE
+               printDebugInfo("DirBlkReq",*m,"",src);
+#endif
 		DebugAssertWithMessageID(m,m->MsgID())
       // if the address is in pendingDirectoryExclusiveReads or
 		// we are requesting for exclusive access and the address is in pendingDirectorySharedReads
@@ -647,6 +701,9 @@ namespace Memory
 	}
 	void Directory::OnDirectoryBlockResponse(const ReadResponseMsg* m, NodeID src)
 	{
+#ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE
+               printDebugInfo("DirBlkRes",*m,"",src);
+#endif
 		DebugAssertWithMessageID(m,m->MsgID())
 
 #ifdef MEMORY_DIRECTORY_DEBUG_PENDING_DIRECTORY_SHARED_READS
@@ -668,7 +725,7 @@ namespace Memory
 		         ("pendingLocalReads.erase("+to_string<MessageID>(m->solicitingMessage)+")").c_str());
 #endif
 			pendingLocalReads.erase(m->solicitingMessage);
-#ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE
+#ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE_OLD
                printDebugInfo("LocalRead",*m,"DirBlkRes");
 #endif
 			OnLocalRead(ref);
@@ -775,7 +832,7 @@ namespace Memory
 			{
 			case(mt_Read):
 				{
-#ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE
+#ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE_OLD
 			      printDebugInfo("LocalRead",*msg,"RecvMsg");
 #endif
 					OnLocalRead((ReadMsg*)msg);
@@ -783,7 +840,7 @@ namespace Memory
 				}
 			case(mt_ReadResponse):
 				{
-#ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE
+#ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE_OLD
                printDebugInfo("LocReadRes",*msg,"RecvMsg");
 #endif
 					OnLocalReadResponse((ReadResponseMsg*)msg);
@@ -791,7 +848,7 @@ namespace Memory
 				}
 			case(mt_Write):
 				{
-#ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE
+#ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE_OLD
                printDebugInfo("LocalWrite",*msg,"RecvMsg");
 #endif
 					OnLocalWrite((WriteMsg*)msg);
@@ -799,7 +856,7 @@ namespace Memory
 				}
 			case(mt_Eviction):
 				{
-#ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE
+#ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE_OLD
                printDebugInfo("LocalEviction",*msg,"RecvMsg");
 #endif
 					OnLocalEviction((EvictionMsg*)msg);
@@ -807,7 +864,7 @@ namespace Memory
 				}
 			case(mt_InvalidateResponse):
 				{
-#ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE
+#ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE_OLD
                printDebugInfo("LocalInvalidateResponse",*msg,"RecvMsg");
 #endif
 					OnLocalInvalidateResponse((InvalidateResponseMsg*)msg);
@@ -832,14 +889,14 @@ namespace Memory
 					ReadMsg* m = (ReadMsg*)payload;
 					if(m->directoryLookup)
 					{
-#ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE
+#ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE_OLD
                printDebugInfo("DirBlkReq",*m,"RecvMsg",src);
 #endif
 						OnDirectoryBlockRequest(m,src);
 					}
 					else
 					{
-#ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE
+#ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE_OLD
                printDebugInfo("RemoteRead",*m,"RecvMsg",src);
 #endif
 						OnRemoteRead(m,src);
@@ -851,14 +908,14 @@ namespace Memory
 					ReadResponseMsg* m = (ReadResponseMsg*)payload;
 					if(m->directoryLookup)
 					{
-#ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE
+#ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE_OLD
                printDebugInfo("DirBlkRes",*m,"RecvMsg",src);
 #endif
 						OnDirectoryBlockResponse(m,src);
 					}
 					else
 					{
-#ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE
+#ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE_OLD
                printDebugInfo("RemReadRes",*m,"RecvMsg",src);
 #endif
 						OnRemoteReadResponse(m,src);
@@ -868,7 +925,7 @@ namespace Memory
 			case(mt_WriteResponse):
 				{
                WriteResponseMsg* m = (WriteResponseMsg*)payload;
-#ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE
+#ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE_OLD
                printDebugInfo("RemoteWriteResponse",*m,"RecvMsg",src);
 #endif
 					OnRemoteWriteResponse(m,src);
@@ -877,7 +934,7 @@ namespace Memory
 			case(mt_Eviction):
 				{
                EvictionMsg* m = (EvictionMsg*)payload;
-#ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE
+#ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE_OLD
                printDebugInfo("RemoteEviction",*m,"RecvMsg",src);
 #endif
 					OnRemoteEviction(m,src);
@@ -886,7 +943,7 @@ namespace Memory
 			case(mt_EvictionResponse):
 				{
                EvictionResponseMsg* m = (EvictionResponseMsg*)payload;
-#ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE
+#ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE_OLD
                printDebugInfo("RemoteEvictionResponse",*m,"RecvMsg",src);
 #endif
 					OnRemoteEvictionResponse(m,src);
@@ -895,7 +952,7 @@ namespace Memory
 			case(mt_Invalidate):
             {
                InvalidateMsg* m = (InvalidateMsg*)payload;
-#ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE
+#ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE_OLD
                printDebugInfo("RemoteInvalidate",*m,"RecvMsg",src);
 #endif
 					OnRemoteInvalidate(m,src);
@@ -904,7 +961,7 @@ namespace Memory
 			case(mt_InvalidateResponse):
 				{
 			      InvalidateResponseMsg* m = (InvalidateResponseMsg*)payload;
-#ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE
+#ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE_OLD
                printDebugInfo("RemoteInvalidateResponse",*m,"RecvMsg",src);
 #endif
 					OnRemoteInvalidateResponse(m,src);

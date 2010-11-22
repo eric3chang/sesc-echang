@@ -6,8 +6,9 @@
 #include <vector>
 
 // toggles debug messages
-#define MEMORY_DIRECTORY_DEBUG_VERBOSE
-#define MEMORY_DIRECTORY_DEBUG_DIRECTORY_DATA
+//#define MEMORY_DIRECTORY_DEBUG_VERBOSE
+//#define MEMORY_DIRECTORY_DEBUG_DIRECTORY_DATA
+//#define MEMORY_DIRECTORY_DEBUG_VERBOSE_OLD
 //#define MEMORY_DIRECTORY_DEBUG_MSG_COUNT
 //#define MEMORY_DIRECTORY_DEBUG_PENDING_DIRECTORY_SHARED_READS
 //#define MEMORY_DIRECTORY_DEBUG_PENDING_EVICTION
@@ -98,6 +99,8 @@ namespace Memory
 		HashMap<Address, LookupData<ReadMsg> > pendingDirectoryExclusiveReads;
 		HashSet<Address> pendingEviction;
 		HashMap<Address, BlockData> directoryData;
+
+      void dump(HashMap<Memory::MessageID, const Memory::BaseMsg*> &m);
 
 		void PerformDirectoryFetch(Address a);
 		void EraseDirectoryShare(Address a, NodeID id);
