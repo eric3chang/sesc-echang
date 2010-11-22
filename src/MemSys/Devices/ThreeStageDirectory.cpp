@@ -1429,7 +1429,9 @@ void ThreeStageDirectory::HandleInterventionComplete(const BaseMsg *msgIn, bool 
          // block doesn't have to be attached because the block could be in Exclusive state.
             // block will be attached if block is in Own or Modified state
          //DebugAssertWithMessageID(m->blockAttached,m->MsgID())
-         DebugAssertWithMessageID(src==ld.previousOwner,m->MsgID())
+         // src should either be ld.previousOwner or b.owner because we have either
+				// kicked the previous owner out or this is an eviction from the owner
+         DebugAssertWithMessageID(src==ld.previousOwner || src==b.owner,m->MsgID())
          //DebugAssertWithMessageID(src==b.owner,m->MsgID())
 
          // send exclusive response to the owner marked in the directory
