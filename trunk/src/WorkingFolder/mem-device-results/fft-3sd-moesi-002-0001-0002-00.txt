@@ -1,5 +1,5 @@
 Group string ReportFileName mem-device-results/fft-3sd-moesi-002-0001-0002-00.txt string BenchName fft int ProcessorSkew0 46 int ProcessorSkew1 344 #
-int TotalRunTime 1115194 #
+int TotalRunTime 38259 #
 MainMemory
 
 Network
@@ -7,61 +7,61 @@ Network
 NMInt
 
 ProcessorInterface_0
-readCount:52359
-writeCount:36356
-totalOperations:88715
+readCount:1513
+writeCount:483
+totalOperations:1996
 
 L1_0
-messagesReceived:158826
-readHits:52359
-readMisses:3105
-writeHits:36356
-writeMisses:3458
+messagesReceived:2485
+readHits:1504
+readMisses:166
+writeHits:483
+writeMisses:29
 
 L2_0
-messagesReceived:35839
-readHits:6564
-readMisses:5709
+messagesReceived:896
+readHits:193
+readMisses:158
 writeHits:0
 writeMisses:0
 
 Directory_0
-messagesReceived:32322
+messagesReceived:700
 
 ProcessorInterface_1
-readCount:51764
-writeCount:35977
-totalOperations:87741
+readCount:901
+writeCount:86
+totalOperations:987
 
 L1_1
-messagesReceived:158265
-readHits:51764
-readMisses:3123
-writeHits:35975
-writeMisses:3440
+messagesReceived:1307
+readHits:869
+readMisses:115
+writeHits:86
+writeMisses:11
 
 L2_1
-messagesReceived:35756
-readHits:6561
-readMisses:5687
+messagesReceived:626
+readHits:120
+readMisses:121
 writeHits:0
 writeMisses:0
 
 Directory_1
-messagesReceived:32252
+messagesReceived:607
 
-totalL1CacheReadHits:104123
-totalL1CacheReadMisses:6228
-totalL1CacheWriteHits:72331
-totalL1CacheWriteMisses:6898
+totalL1CacheReadHits:2373
+totalL1CacheReadMisses:281
+totalL1CacheWriteHits:569
+totalL1CacheWriteMisses:40
 
-totalL2CacheReadHits:13125
-totalL2CacheReadMisses:11396
+totalL2CacheReadHits:313
+totalL2CacheReadMisses:279
 totalL2CacheWriteHits:0
 totalL2CacheWriteMisses:0
 
-totalCacheReadHits:117248
-totalCacheReadMisses:17624
-totalCacheWriteHits:72331
-totalCacheWriteMisses:6898
+totalCacheReadHits:2686
+totalCacheReadMisses:560
+totalCacheWriteHits:569
+totalCacheWriteMisses:40
 EndGroup #

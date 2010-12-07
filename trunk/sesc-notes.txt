@@ -1,24 +1,17 @@
 - only need to include .cpp files inside cmake add_executable and add_library commands
 - to eliminate "destructor not called" error, use #include instead of forward declaration. basically, we have to include the class before calling the destructor
-- RunFile.txt contains sample ways to run the program
 - check Events.cpp for synchronization routines
 - For all the cache structures, we have hitDelay and missDelay. hitDelay is the time that it takes to return the data (data + tag access). missDelay is the time that it takes to detect a cache miss (tag). Most L1 caches, the hitDelay is the same as the misDelay. This is not true for L2 caches, and for other cache configuration (phased cache).
 - use lion to run simulations. lion is a 8-core system with 12GB of memory
-- src/libapp contains files related to compiling custom multi-threaded
-  programs
+- src/libapp contains files related to compiling custom multi-threaded programs
 - use DebugFail(), DebugAssert(), fatal() to indicate error conditions
 - Connection - Local means sending something towards CPU. Remote means sending
   data away from CPU towards the network or main memory.
-- only need to modify genome__64_1_8_2_Perfect.conf_0 type files and .memory
-  files
 - nothing useful in libvmem
-- run benchmark on regular machine, store the result, then run the benchmark
-  inside sesc simulator, then compare if the results are correct.
-- efence vs valgrind
-- gcc -S [filename].c produces disassembly
-2010/08/25 - use yada-dots for testing OnRemoteInvalidateResponse error because it's the smallest
+- print *(iter._M_current)   // command to print the current iterator in gdb
 - use the following splash2 benchmarks:
 -- kernel: cholesky, fft, lu, radix
 -- apps: Ocean, fmm : only these two provide correct.out
--- print *(iter._M_current)   // command to print the current iterator in gdb
+-- Matt got Barnes, Radix, Raytrace, Ocean, FFT, Cholesky and FMM to work
+- use -yINT to run only INT number of instructions
 
