@@ -160,7 +160,7 @@ namespace Memory
 			}
 		}
 	}
-bool MOESICache::AllocateBlock(MOESICache::AddrTag tag)
+	bool MOESICache::AllocateBlock(MOESICache::AddrTag tag)
 	{
 		BlockState* set = GetSet(CalcSetFromTag(tag));
 		DebugAssert(set);
@@ -186,9 +186,9 @@ bool MOESICache::AllocateBlock(MOESICache::AddrTag tag)
          }
          else
          {
-   #ifdef MEMORY_MOESI_CACHE_DEBUG_PENDING_EVICTION
-            printDebugInfo("AllocateBlock",set[eviction].tag,"pendingEviction.insert");
-   #endif
+				#ifdef MEMORY_MOESI_CACHE_DEBUG_PENDING_EVICTION
+					printDebugInfo("AllocateBlock",set[eviction].tag,"pendingEviction.insert");
+				#endif
             DebugAssert(pendingEviction.find(set[eviction].tag) == pendingEviction.end());
             pendingEviction[set[eviction].tag] = set[eviction];
 
@@ -223,7 +223,7 @@ bool MOESICache::AllocateBlock(MOESICache::AddrTag tag)
 		DebugAssert(remoteConnection);
 		remoteConnection->SendMsg(m,evictionTime);
 	}
-void MOESICache::LockBlock(MOESICache::AddrTag tag)
+	void MOESICache::LockBlock(MOESICache::AddrTag tag)
 	{
 		BlockState* b = Lookup(tag);
 		DebugAssert(b);
@@ -232,7 +232,7 @@ void MOESICache::LockBlock(MOESICache::AddrTag tag)
 		DebugAssert(waitingOnBlockUnlock.find(tag) == waitingOnBlockUnlock.end());
 		b->locked = true;
 	}
-void MOESICache::PrepareFreshBlock(int setNumber, int index, AddrTag tag)
+	void MOESICache::PrepareFreshBlock(int setNumber, int index, AddrTag tag)
 	{
 		BlockState* mySet = GetSet(setNumber);
 		DebugAssert(mySet[index].locked == false);
@@ -249,15 +249,15 @@ void MOESICache::PrepareFreshBlock(int setNumber, int index, AddrTag tag)
          // need to tell OnLocalInvalidResponse that BlockEviction was canceled
 		   canceledBlockEviction.insert(tag);
 			mySet[index] = pendingEviction[tag];
-#ifdef MEMORY_MOESI_CACHE_DEBUG_PENDING_EVICTION
-			printDebugInfo("PrepareFreshBlock",tag,"pendingEviction.erase");
-#endif
+			#ifdef MEMORY_MOESI_CACHE_DEBUG_PENDING_EVICTION
+				printDebugInfo("PrepareFreshBlock",tag,"pendingEviction.erase");
+			#endif
 			pendingEviction.erase(tag);
 			DebugAssert(mySet[index].state != bs_Invalid);
 		}
 		DebugAssert(mySet[index].locked == false);
 	}
-			void MOESICache::RespondInvalidate(MOESICache::AddrTag tag)
+	void MOESICache::RespondInvalidate(MOESICache::AddrTag tag)
 	{
 		DebugAssert(pendingInvalidate.find(tag) != pendingInvalidate.end())
 		BlockState* b = Lookup(tag);
@@ -276,9 +276,9 @@ void MOESICache::PrepareFreshBlock(int setNumber, int index, AddrTag tag)
 		else if(b == NULL && pendingEviction.find(tag) != pendingEviction.end())
 		{
 			res->blockAttached = (pendingEviction[tag].state == bs_Modified) || (pendingEviction[tag].state == bs_Owned);
-#ifdef MEMORY_MOESI_CACHE_DEBUG_PENDING_EVICTION
+		#ifdef MEMORY_MOESI_CACHE_DEBUG_PENDING_EVICTION
 			printDebugInfo("RespondInvalidate",tag,"pendingEviction.erase");
-#endif
+		#endif
 			pendingEviction.erase(tag);
 		}
 		else
@@ -304,12 +304,12 @@ void MOESICache::PrepareFreshBlock(int setNumber, int index, AddrTag tag)
 			InvalidateBlock(*b);
 		}
 		EM().DisposeMsg(pendingInvalidate[tag]);
-#ifdef MEMORY_MOESI_CACHE_DEBUG_PENDING_INVALIDATE
-		printDebugInfo("RespondInvalidate",tag,"pendingInvalidate.erase");
-#endif
+		#ifdef MEMORY_MOESI_CACHE_DEBUG_PENDING_INVALIDATE
+			printDebugInfo("RespondInvalidate",tag,"pendingInvalidate.erase");
+		#endif
 		pendingInvalidate.erase(tag);
 	}
-void MOESICache::WaitOnBlockUnlock(MOESICache::AddrTag tag, StoredFunctionBase* f)
+	void MOESICache::WaitOnBlockUnlock(MOESICache::AddrTag tag, StoredFunctionBase* f)
 	{
 		DebugAssert(f);
 		if(waitingOnBlockUnlock.find(tag) != waitingOnBlockUnlock.end())
@@ -320,7 +320,7 @@ void MOESICache::WaitOnBlockUnlock(MOESICache::AddrTag tag, StoredFunctionBase* 
 		}
 		waitingOnBlockUnlock[tag] = f;
 	}
-void MOESICache::WaitOnRemoteReadResponse(MOESICache::AddrTag tag, StoredFunctionBase* f)
+	void MOESICache::WaitOnRemoteReadResponse(MOESICache::AddrTag tag, StoredFunctionBase* f)
 	{
 		DebugAssert(f);
 		if(waitingOnRemoteReads.find(tag) != waitingOnRemoteReads.end())
@@ -331,7 +331,7 @@ void MOESICache::WaitOnRemoteReadResponse(MOESICache::AddrTag tag, StoredFunctio
 		}
 		waitingOnRemoteReads[tag] = f;
 	}
-void MOESICache::WaitOnSetUnlock(int s, StoredFunctionBase* f)
+	void MOESICache::WaitOnSetUnlock(int s, StoredFunctionBase* f)
 	{
 		DebugAssert(f);
 		if(waitingOnSetUnlock[s])
@@ -342,7 +342,7 @@ void MOESICache::WaitOnSetUnlock(int s, StoredFunctionBase* f)
 		}
 		waitingOnSetUnlock[s] = f;
 	}
-void MOESICache::PerformRead(const ReadMsg* m)
+	void MOESICache::PerformRead(const ReadMsg* m)
 	{		
 		DebugAssertWithMessageID(m,m->MsgID());
 		AddrTag tag = CalcTag(m->addr);
