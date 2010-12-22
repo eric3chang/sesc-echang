@@ -473,7 +473,7 @@ namespace Memory
 	{
 		RecvMsg(m,connectionID);
 	}
-				void MOESICache::OnLocalRead(const ReadMsg* m)
+	void MOESICache::OnLocalRead(const ReadMsg* m)
 	{
 		DebugAssertWithMessageID(m,m->MsgID());
 		AddrTag tag = CalcTag(m->addr);

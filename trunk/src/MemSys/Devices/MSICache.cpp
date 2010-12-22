@@ -283,7 +283,7 @@ namespace Memory
 #endif
 		pendingInvalidate.erase(tag);
 	}
-void MSICache::LockBlock(MSICache::AddrTag tag)
+	void MSICache::LockBlock(MSICache::AddrTag tag)
 	{
 		BlockState* b = Lookup(tag);
 		DebugAssert(b);
@@ -292,7 +292,7 @@ void MSICache::LockBlock(MSICache::AddrTag tag)
 		DebugAssert(waitingOnBlockUnlock.find(tag) == waitingOnBlockUnlock.end());
 		b->locked = true;
 	}
-void MSICache::UnlockBlock(MSICache::AddrTag tag)
+	void MSICache::UnlockBlock(MSICache::AddrTag tag)
 	{
 		BlockState* b = Lookup(tag);
 		DebugAssert(b);
@@ -315,7 +315,7 @@ void MSICache::UnlockBlock(MSICache::AddrTag tag)
 			}
 		}
 	}
-void MSICache::WaitOnBlockUnlock(MSICache::AddrTag tag, StoredFunctionBase* f)
+	void MSICache::WaitOnBlockUnlock(MSICache::AddrTag tag, StoredFunctionBase* f)
 	{
 		DebugAssert(f);
 		if(waitingOnBlockUnlock.find(tag) != waitingOnBlockUnlock.end())
@@ -326,7 +326,7 @@ void MSICache::WaitOnBlockUnlock(MSICache::AddrTag tag, StoredFunctionBase* f)
 		}
 		waitingOnBlockUnlock[tag] = f;
 	}
-void MSICache::WaitOnRemoteReadResponse(MSICache::AddrTag tag, StoredFunctionBase* f)
+	void MSICache::WaitOnRemoteReadResponse(MSICache::AddrTag tag, StoredFunctionBase* f)
 	{
 		DebugAssert(f);
 		if(waitingOnRemoteReads.find(tag) != waitingOnRemoteReads.end())
@@ -337,7 +337,7 @@ void MSICache::WaitOnRemoteReadResponse(MSICache::AddrTag tag, StoredFunctionBas
 		}
 		waitingOnRemoteReads[tag] = f;
 	}
-void MSICache::WaitOnSetUnlock(int s, StoredFunctionBase* f)
+	void MSICache::WaitOnSetUnlock(int s, StoredFunctionBase* f)
 	{
 		DebugAssert(f);
 		if(waitingOnSetUnlock[s])
@@ -348,7 +348,7 @@ void MSICache::WaitOnSetUnlock(int s, StoredFunctionBase* f)
 		}
 		waitingOnSetUnlock[s] = f;
 	}
-void MSICache::PerformRead(const ReadMsg* m)
+	void MSICache::PerformRead(const ReadMsg* m)
 	{		
 		DebugAssertWithMessageID(m,m->MsgID());
 		AddrTag tag = CalcTag(m->addr);
