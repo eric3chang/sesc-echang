@@ -189,11 +189,55 @@ namespace Memory
          return true;
 		}
 	}
-	void MESICache::RetryMsg(const BaseMsg* m, int connectionID)
+	void MESICache::EvictBlock(MESICache::AddrTag tag)
 	{
-		RecvMsg(m,connectionID);
+		BlockState* b = Lookup(tag);
+		DebugAssert(b != NULL);
+		DebugAssert(pendingEviction.find(tag) == pendingEviction.end());
+		DebugAssert(b->valid);
+		DebugAssert(!b->locked);
+		DebugAssert(b->state != bs_Invalid);
+		EvictionMsg* m = EM().CreateEvictionMsg(getDeviceID(),0);
+		DebugAssert(m);
+		m->addr = CalcAddr(b->tag);
+		m->size = lineSize;
+		m->blockAttached = (b->lastWrite != 0);
+		DebugAssert(remoteConnection);
+		remoteConnection->SendMsg(m,evictionTime);
 	}
-	void MESICache::PrepareFreshBlock(int setNumber, int index, AddrTag tag)
+void MESICache::LockBlock(MESICache::AddrTag tag)
+	{
+		BlockState* b = Lookup(tag);
+		DebugAssert(b);
+		DebugAssert(b->valid);
+		DebugAssert(!b->locked);
+		DebugAssert(waitingOnBlockUnlock.find(tag) == waitingOnBlockUnlock.end());
+		b->locked = true;
+	}
+void MESICache::UnlockBlock(MESICache::AddrTag tag)
+	{
+		BlockState* b = Lookup(tag);
+		DebugAssert(b);
+		DebugAssert(b->valid);
+		DebugAssert(b->locked);
+		DebugAssert(waitingOnBlockUnlock.find(tag) != waitingOnBlockUnlock.end());
+		b->locked = false;
+		StoredFunctionBase* f = waitingOnBlockUnlock[tag];
+		waitingOnBlockUnlock.erase(tag);
+		DebugAssert(f);
+		f->Call();
+		if(!b->locked)
+		{
+			int setIndex = CalcSetFromTag(tag);
+			f = waitingOnSetUnlock[setIndex];
+			if(f)
+			{
+				waitingOnSetUnlock[setIndex] = NULL;
+				f->Call();
+			}
+		}
+	}
+void MESICache::PrepareFreshBlock(int setNumber, int index, AddrTag tag)
 	{
 		BlockState* mySet = GetSet(setNumber);
 		DebugAssert(mySet[index].locked == false);
@@ -218,23 +262,94 @@ namespace Memory
 		}
 		DebugAssert(mySet[index].locked == false);
 	}
-	void MESICache::EvictBlock(MESICache::AddrTag tag)
+void MESICache::RespondInvalidate(MESICache::AddrTag tag)
 	{
+		DebugAssert(pendingInvalidate.find(tag) != pendingInvalidate.end())
 		BlockState* b = Lookup(tag);
-		DebugAssert(b != NULL);
-		DebugAssert(pendingEviction.find(tag) == pendingEviction.end());
-		DebugAssert(b->valid);
-		DebugAssert(!b->locked);
-		DebugAssert(b->state != bs_Invalid);
-		EvictionMsg* m = EM().CreateEvictionMsg(getDeviceID(),0);
-		DebugAssert(m);
-		m->addr = CalcAddr(b->tag);
-		m->size = lineSize;
-		m->blockAttached = (b->lastWrite != 0);
-		DebugAssert(remoteConnection);
-		remoteConnection->SendMsg(m,evictionTime);
+		InvalidateResponseMsg* res = EM().CreateInvalidateResponseMsg(getDeviceID(),0);
+		res->addr = CalcAddr(tag);
+		res->size = lineSize;
+		res->solicitingMessage = pendingInvalidate[tag]->MsgID();
+		if(b && (b->state == bs_Modified))
+		{
+			res->blockAttached = true;
+		}
+      /*
+		else if (b && (b->state == bs_Owned))
+		{
+		   res->blockAttached = true;
+		}
+      */
+		else if(b == NULL && pendingEviction.find(tag) != pendingEviction.end())
+		{
+			res->blockAttached = (pendingEviction[tag].state == bs_Modified);
+#ifdef MEMORY_MESI_CACHE_DEBUG_PENDING_EVICTION
+			printDebugInfo("RespondInvalidate",tag,"pendingEviction.erase");
+#endif
+			pendingEviction.erase(tag);
+		}
+		else
+		{
+			res->blockAttached = false;
+		}
+		remoteConnection->SendMsg(res,invalidateTime);
+		if(waitingOnBlockUnlock.find(tag) != waitingOnBlockUnlock.end())
+		{
+			DebugAssert(b);
+			DebugAssert(b->locked);
+			b->state = bs_Invalid;
+			ReadMsg* forward = EM().CreateReadMsg(getDeviceID(),pendingInvalidate[tag]->GeneratingPC());
+			forward->addr = pendingInvalidate[tag]->addr;
+			forward->size = lineSize;
+			forward->alreadyHasBlock = false;
+			forward->onCompletedCallback = NULL;
+			forward->requestingExclusive = false;
+			remoteConnection->SendMsg(forward,invalidateTime);
+		}
+		else if (b)
+		{
+			InvalidateBlock(*b);
+		}
+		EM().DisposeMsg(pendingInvalidate[tag]);
+#ifdef MEMORY_MESI_CACHE_DEBUG_PENDING_INVALIDATE
+		printDebugInfo("RespondInvalidate",tag,"pendingInvalidate.erase");
+#endif
+		pendingInvalidate.erase(tag);
 	}
-	void MESICache::PerformRead(const ReadMsg* m)
+			void MESICache::WaitOnBlockUnlock(MESICache::AddrTag tag, StoredFunctionBase* f)
+	{
+		DebugAssert(f);
+		if(waitingOnBlockUnlock.find(tag) != waitingOnBlockUnlock.end())
+		{
+			CompositPool::FunctionType* c = compositPool.Create();
+			c->Initialize(waitingOnBlockUnlock[tag],f);
+			f = c;
+		}
+		waitingOnBlockUnlock[tag] = f;
+	}
+void MESICache::WaitOnRemoteReadResponse(MESICache::AddrTag tag, StoredFunctionBase* f)
+	{
+		DebugAssert(f);
+		if(waitingOnRemoteReads.find(tag) != waitingOnRemoteReads.end())
+		{
+			CompositPool::FunctionType* c = compositPool.Create();
+			c->Initialize(waitingOnRemoteReads[tag],f);
+			f = c;
+		}
+		waitingOnRemoteReads[tag] = f;
+	}
+void MESICache::WaitOnSetUnlock(int s, StoredFunctionBase* f)
+	{
+		DebugAssert(f);
+		if(waitingOnSetUnlock[s])
+		{
+			CompositPool::FunctionType* c = compositPool.Create();
+			c->Initialize(waitingOnSetUnlock[s],f);
+			f = c;
+		}
+		waitingOnSetUnlock[s] = f;
+	}
+void MESICache::PerformRead(const ReadMsg* m)
 	{		
 		DebugAssert(m);
 		AddrTag tag = CalcTag(m->addr);
@@ -361,126 +476,11 @@ namespace Memory
 		}
 		b->lastWrite = EM().CurrentTick();
 	}
-	void MESICache::RespondInvalidate(MESICache::AddrTag tag)
+				void MESICache::RetryMsg(const BaseMsg* m, int connectionID)
 	{
-		DebugAssert(pendingInvalidate.find(tag) != pendingInvalidate.end())
-		BlockState* b = Lookup(tag);
-		InvalidateResponseMsg* res = EM().CreateInvalidateResponseMsg(getDeviceID(),0);
-		res->addr = CalcAddr(tag);
-		res->size = lineSize;
-		res->solicitingMessage = pendingInvalidate[tag]->MsgID();
-		if(b && (b->state == bs_Modified))
-		{
-			res->blockAttached = true;
-		}
-      /*
-		else if (b && (b->state == bs_Owned))
-		{
-		   res->blockAttached = true;
-		}
-      */
-		else if(b == NULL && pendingEviction.find(tag) != pendingEviction.end())
-		{
-			res->blockAttached = (pendingEviction[tag].state == bs_Modified);
-#ifdef MEMORY_MESI_CACHE_DEBUG_PENDING_EVICTION
-			printDebugInfo("RespondInvalidate",tag,"pendingEviction.erase");
-#endif
-			pendingEviction.erase(tag);
-		}
-		else
-		{
-			res->blockAttached = false;
-		}
-		remoteConnection->SendMsg(res,invalidateTime);
-		if(waitingOnBlockUnlock.find(tag) != waitingOnBlockUnlock.end())
-		{
-			DebugAssert(b);
-			DebugAssert(b->locked);
-			b->state = bs_Invalid;
-			ReadMsg* forward = EM().CreateReadMsg(getDeviceID(),pendingInvalidate[tag]->GeneratingPC());
-			forward->addr = pendingInvalidate[tag]->addr;
-			forward->size = lineSize;
-			forward->alreadyHasBlock = false;
-			forward->onCompletedCallback = NULL;
-			forward->requestingExclusive = false;
-			remoteConnection->SendMsg(forward,invalidateTime);
-		}
-		else if (b)
-		{
-			InvalidateBlock(*b);
-		}
-		EM().DisposeMsg(pendingInvalidate[tag]);
-#ifdef MEMORY_MESI_CACHE_DEBUG_PENDING_INVALIDATE
-		printDebugInfo("RespondInvalidate",tag,"pendingInvalidate.erase");
-#endif
-		pendingInvalidate.erase(tag);
+		RecvMsg(m,connectionID);
 	}
-	void MESICache::LockBlock(MESICache::AddrTag tag)
-	{
-		BlockState* b = Lookup(tag);
-		DebugAssert(b);
-		DebugAssert(b->valid);
-		DebugAssert(!b->locked);
-		DebugAssert(waitingOnBlockUnlock.find(tag) == waitingOnBlockUnlock.end());
-		b->locked = true;
-	}
-	void MESICache::UnlockBlock(MESICache::AddrTag tag)
-	{
-		BlockState* b = Lookup(tag);
-		DebugAssert(b);
-		DebugAssert(b->valid);
-		DebugAssert(b->locked);
-		DebugAssert(waitingOnBlockUnlock.find(tag) != waitingOnBlockUnlock.end());
-		b->locked = false;
-		StoredFunctionBase* f = waitingOnBlockUnlock[tag];
-		waitingOnBlockUnlock.erase(tag);
-		DebugAssert(f);
-		f->Call();
-		if(!b->locked)
-		{
-			int setIndex = CalcSetFromTag(tag);
-			f = waitingOnSetUnlock[setIndex];
-			if(f)
-			{
-				waitingOnSetUnlock[setIndex] = NULL;
-				f->Call();
-			}
-		}
-	}
-	void MESICache::WaitOnBlockUnlock(MESICache::AddrTag tag, StoredFunctionBase* f)
-	{
-		DebugAssert(f);
-		if(waitingOnBlockUnlock.find(tag) != waitingOnBlockUnlock.end())
-		{
-			CompositPool::FunctionType* c = compositPool.Create();
-			c->Initialize(waitingOnBlockUnlock[tag],f);
-			f = c;
-		}
-		waitingOnBlockUnlock[tag] = f;
-	}
-	void MESICache::WaitOnSetUnlock(int s, StoredFunctionBase* f)
-	{
-		DebugAssert(f);
-		if(waitingOnSetUnlock[s])
-		{
-			CompositPool::FunctionType* c = compositPool.Create();
-			c->Initialize(waitingOnSetUnlock[s],f);
-			f = c;
-		}
-		waitingOnSetUnlock[s] = f;
-	}
-	void MESICache::WaitOnRemoteReadResponse(MESICache::AddrTag tag, StoredFunctionBase* f)
-	{
-		DebugAssert(f);
-		if(waitingOnRemoteReads.find(tag) != waitingOnRemoteReads.end())
-		{
-			CompositPool::FunctionType* c = compositPool.Create();
-			c->Initialize(waitingOnRemoteReads[tag],f);
-			f = c;
-		}
-		waitingOnRemoteReads[tag] = f;
-	}
-	void MESICache::OnLocalRead(const ReadMsg* m)
+			void MESICache::OnLocalRead(const ReadMsg* m)
 	{
 		DebugAssert(m);
 		AddrTag tag = CalcTag(m->addr);

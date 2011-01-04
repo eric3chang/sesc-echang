@@ -184,11 +184,55 @@ namespace Memory
          return true;
 		}
 	}
-	void MSICache::RetryMsg(const BaseMsg* m, int connectionID)
+	void MSICache::EvictBlock(MSICache::AddrTag tag)
 	{
-		RecvMsg(m,connectionID);
+		BlockState* b = Lookup(tag);
+		DebugAssert(b != NULL);
+		DebugAssert(pendingEviction.find(tag) == pendingEviction.end());
+		DebugAssert(b->valid);
+		DebugAssert(!b->locked);
+		DebugAssert(b->state != bs_Invalid);
+		EvictionMsg* m = EM().CreateEvictionMsg(getDeviceID(),0);
+		DebugAssert(m);
+		m->addr = CalcAddr(b->tag);
+		m->size = lineSize;
+		m->blockAttached = (b->lastWrite != 0);
+		DebugAssert(remoteConnection);
+		remoteConnection->SendMsg(m,evictionTime);
 	}
-	void MSICache::PrepareFreshBlock(int setNumber, int index, AddrTag tag)
+void MSICache::LockBlock(MSICache::AddrTag tag)
+	{
+		BlockState* b = Lookup(tag);
+		DebugAssert(b);
+		DebugAssert(b->valid);
+		DebugAssert(!b->locked);
+		DebugAssert(waitingOnBlockUnlock.find(tag) == waitingOnBlockUnlock.end());
+		b->locked = true;
+	}
+void MSICache::UnlockBlock(MSICache::AddrTag tag)
+	{
+		BlockState* b = Lookup(tag);
+		DebugAssert(b);
+		DebugAssert(b->valid);
+		DebugAssert(b->locked);
+		DebugAssert(waitingOnBlockUnlock.find(tag) != waitingOnBlockUnlock.end());
+		b->locked = false;
+		StoredFunctionBase* f = waitingOnBlockUnlock[tag];
+		waitingOnBlockUnlock.erase(tag);
+		DebugAssert(f);
+		f->Call();
+		if(!b->locked)
+		{
+			int setIndex = CalcSetFromTag(tag);
+			f = waitingOnSetUnlock[setIndex];
+			if(f)
+			{
+				waitingOnSetUnlock[setIndex] = NULL;
+				f->Call();
+			}
+		}
+	}
+void MSICache::PrepareFreshBlock(int setNumber, int index, AddrTag tag)
 	{
 		BlockState* mySet = GetSet(setNumber);
 		DebugAssert(mySet[index].locked == false);
@@ -213,23 +257,7 @@ namespace Memory
 		}
 		DebugAssert(mySet[index].locked == false);
 	}
-	void MSICache::EvictBlock(MSICache::AddrTag tag)
-	{
-		BlockState* b = Lookup(tag);
-		DebugAssert(b != NULL);
-		DebugAssert(pendingEviction.find(tag) == pendingEviction.end());
-		DebugAssert(b->valid);
-		DebugAssert(!b->locked);
-		DebugAssert(b->state != bs_Invalid);
-		EvictionMsg* m = EM().CreateEvictionMsg(getDeviceID(),0);
-		DebugAssert(m);
-		m->addr = CalcAddr(b->tag);
-		m->size = lineSize;
-		m->blockAttached = (b->lastWrite != 0);
-		DebugAssert(remoteConnection);
-		remoteConnection->SendMsg(m,evictionTime);
-	}
-	void MSICache::RespondInvalidate(MSICache::AddrTag tag)
+void MSICache::RespondInvalidate(MSICache::AddrTag tag)
 	{
 		DebugAssert(pendingInvalidate.find(tag) != pendingInvalidate.end())
 		BlockState* b = Lookup(tag);
@@ -283,39 +311,7 @@ namespace Memory
 #endif
 		pendingInvalidate.erase(tag);
 	}
-	void MSICache::LockBlock(MSICache::AddrTag tag)
-	{
-		BlockState* b = Lookup(tag);
-		DebugAssert(b);
-		DebugAssert(b->valid);
-		DebugAssert(!b->locked);
-		DebugAssert(waitingOnBlockUnlock.find(tag) == waitingOnBlockUnlock.end());
-		b->locked = true;
-	}
-	void MSICache::UnlockBlock(MSICache::AddrTag tag)
-	{
-		BlockState* b = Lookup(tag);
-		DebugAssert(b);
-		DebugAssert(b->valid);
-		DebugAssert(b->locked);
-		DebugAssert(waitingOnBlockUnlock.find(tag) != waitingOnBlockUnlock.end());
-		b->locked = false;
-		StoredFunctionBase* f = waitingOnBlockUnlock[tag];
-		waitingOnBlockUnlock.erase(tag);
-		DebugAssert(f);
-		f->Call();
-		if(!b->locked)
-		{
-			int setIndex = CalcSetFromTag(tag);
-			f = waitingOnSetUnlock[setIndex];
-			if(f)
-			{
-				waitingOnSetUnlock[setIndex] = NULL;
-				f->Call();
-			}
-		}
-	}
-	void MSICache::WaitOnBlockUnlock(MSICache::AddrTag tag, StoredFunctionBase* f)
+void MSICache::WaitOnBlockUnlock(MSICache::AddrTag tag, StoredFunctionBase* f)
 	{
 		DebugAssert(f);
 		if(waitingOnBlockUnlock.find(tag) != waitingOnBlockUnlock.end())
@@ -326,7 +322,7 @@ namespace Memory
 		}
 		waitingOnBlockUnlock[tag] = f;
 	}
-	void MSICache::WaitOnRemoteReadResponse(MSICache::AddrTag tag, StoredFunctionBase* f)
+void MSICache::WaitOnRemoteReadResponse(MSICache::AddrTag tag, StoredFunctionBase* f)
 	{
 		DebugAssert(f);
 		if(waitingOnRemoteReads.find(tag) != waitingOnRemoteReads.end())
@@ -337,7 +333,7 @@ namespace Memory
 		}
 		waitingOnRemoteReads[tag] = f;
 	}
-	void MSICache::WaitOnSetUnlock(int s, StoredFunctionBase* f)
+void MSICache::WaitOnSetUnlock(int s, StoredFunctionBase* f)
 	{
 		DebugAssert(f);
 		if(waitingOnSetUnlock[s])
@@ -348,7 +344,7 @@ namespace Memory
 		}
 		waitingOnSetUnlock[s] = f;
 	}
-	void MSICache::PerformRead(const ReadMsg* m)
+void MSICache::PerformRead(const ReadMsg* m)
 	{		
 		DebugAssertWithMessageID(m,m->MsgID());
 		AddrTag tag = CalcTag(m->addr);
@@ -388,7 +384,7 @@ namespace Memory
 		}
 		b->lastRead = EM().CurrentTick();
 	}
-	void MSICache::PerformRemoteRead(const ReadMsg* m)
+void MSICache::PerformRemoteRead(const ReadMsg* m)
 	{
 		DebugAssertWithMessageID(m,m->MsgID());
 		AddrTag tag = CalcTag(m->addr);
@@ -439,7 +435,7 @@ namespace Memory
 		remoteConnection->SendMsg(res,hitTime);
 		EM().DisposeMsg(m);
 	}
-	void MSICache::PerformWrite(const WriteMsg* m)
+void MSICache::PerformWrite(const WriteMsg* m)
 	{
 		DebugAssertWithMessageID(m,m->MsgID());
 		AddrTag tag = CalcTag(m->addr);
@@ -478,7 +474,11 @@ namespace Memory
 		b->lastWrite = EM().CurrentTick();
 		return;
 	}
-							void MSICache::OnLocalRead(const ReadMsg* m)
+void MSICache::RetryMsg(const BaseMsg* m, int connectionID)
+	{
+		RecvMsg(m,connectionID);
+	}
+																		void MSICache::OnLocalRead(const ReadMsg* m)
 	{
 		DebugAssertWithMessageID(m,m->MsgID());
 		AddrTag tag = CalcTag(m->addr);
