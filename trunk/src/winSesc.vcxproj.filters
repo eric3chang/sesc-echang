@@ -513,6 +513,9 @@
     <ClInclude Include="include\dump.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MemSys\Devices\OriginDirectory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="libmem\AddressPrefetcher.cpp">
@@ -822,6 +825,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MemSys\Devices\MESICache.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MemSys\Devices\OriginDirectory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
