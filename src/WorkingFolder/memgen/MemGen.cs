@@ -85,7 +85,7 @@
 	{
 		output.WriteLine("Root MemoryDevice Begin");
 		output.WriteLine("Int DeviceID " + (index++));
-		output.WriteLine("String DeviceType Directory");
+		output.WriteLine("String DeviceType OriginDirectory");
 		output.WriteLine("String DeviceName " + name);
 		output.WriteLine("Int LocalSendTime " + 4);
 		output.WriteLine("Int RemoteSendTime " + 4);
@@ -110,6 +110,16 @@
 		output.WriteLine("End");
 		output.WriteLine("End");
 	}
+    public static void AddMainMemory(string deviceName, int readLatency, int writeLatency)
+    {
+        output.WriteLine("Root MemoryDevice Begin");
+        output.WriteLine("String DeviceType TestMemory");
+        output.WriteLine("String DeviceName " + deviceName);
+        output.WriteLine("Int DeviceID " + (index++));
+        output.WriteLine("Int ReadLatency " + readLatency);
+        output.WriteLine("Int WriteLatency " + writeLatency);
+        output.WriteLine("End");
+    }
 	public static void AddNetwork(string name, int totalNodes, int randomMin, int randomMax, float perPacket)
 	{
 		output.WriteLine("Root MemoryDevice Begin");
@@ -258,6 +268,34 @@
 		output.WriteLine("End");
 		output.Close();
 	}
+    public static void OutOriginDirectoryMemory(int nodeCount, int l1, int l2)
+    {
+        output = new System.IO.StreamWriter("memoryConfigs\\OriginDirectory_p" + nodeCount + "_c" + l1 + "L1-" + l2 + "L2.memory");
+        index = 1;
+        output.WriteLine("Begin");
+        //MainMemory(400, 300);
+        AddNetwork("Network", nodeCount, 4, 20, 0.1f);
+        //AddNetworkMemoryInterface("NMInt", nodeCount + 10);
+        l1 *= 1024;
+        l2 *= 1024;
+        for (int i = 0; i < nodeCount; i++)
+        {
+            AddSESCInterface("ProcessorInterface_" + i);
+            AddCache("L1_" + i, 4, l1 / (4 * 64), 64, 3, 1, EvictionPolicy.LRU);
+            AddCache("L2_" + i, 4, l2 / (4 * 64), 64, 7, 4, EvictionPolicy.LRU);
+            AddDirectory("Directory_" + i, nodeCount, i, nodeCount + 10);
+            AddMainMemory("MainMemory_" + i, 400, 300);
+            Connection("ProcessorInterface_" + i, "L1_" + i, "Connection", "LocalConnection", 0);
+            Connection("L1_" + i, "L2_" + i, "RemoteConnection", "LocalConnection", 0);
+            Connection("L2_" + i, "Directory_" + i, "RemoteConnection", "LocalCacheConnection", 0);
+            Connection("MainMemory_" + i, "Directory_" + i, "RemoteConnection", "LocalMemoryConnection", 0);
+            Connection("Directory_" + i, "Network", "RemoteConnection", "Connection_" + i, 0);
+        }
+        //Connection("Network", "NMInt", "MemoryConnection", "NetworkConnection", 0);
+        //Connection("NMInt", "MainMemory", "MemoryConnection", "Remoteconnection", 0);
+        output.WriteLine("End");
+        output.Close();
+    }
 	public static void Main(string[] args)
 	{
 		System.IO.Directory.CreateDirectory("memoryConfigs");
@@ -268,8 +306,8 @@
 //				OutSimpleMemory1(i, l1);
 				for (int l2 = l1 * 2; l2 <= 8 * 1024; l2 *= 2)
 				{
-					//OutDirectoryMemory(i, l1, l2);
-					OutSimpleMemory2(i, l1, l2);
+					OutOriginDirectoryMemory(i, l1, l2);
+					//OutSimpleMemory2(i, l1, l2);
 					for (int l3 = l2 * 2; l3 <= 64 * 1024; l3 *= 2)
 					{
 //						OutSimpleMemory3(i, l1, l2, l3);
