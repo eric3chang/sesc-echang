@@ -1,0 +1,21 @@
+#Thu Oct 29 02:50:09 EDT 2009
+occurrenceHighlighting=false
+printMargin=true
+AbstractTextEditor.Color.Background=35,35,48
+eclipse.preferences.version=1
+spacesForTabs=true
+spellingIndication=false
+AbstractTextEditor.Color.Foreground.SystemDefault=false
+AbstractTextEditor.Color.Foreground=229,229,229
+overviewRuler_migration=migrated_3.1
+spellingEngine=org.eclipse.jdt.internal.ui.text.spelling.DefaultSpellingEngine
+lineNumberRuler=true
+printMarginColumn=76
+currentLineColor=56,53,56
+occurrenceIndicationInOverviewRuler=false
+filteredSearchResultIndicationColor=75,75,97
+printMarginColor=204,204,204
+org.eclipse.cdt.ui.occurrenceIndicationColor=104,134,131
+AbstractTextEditor.Color.Background.SystemDefault=false
+lineNumberColor=204,204,204
+searchResultHighlighting=false

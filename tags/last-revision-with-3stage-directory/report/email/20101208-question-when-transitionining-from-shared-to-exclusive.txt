@@ -1,0 +1,21 @@
+Dear Professor:
+
+I have reattached the fsms with explanations for each underneath. I was not sure as to what degree and what type of detail I should provide with the fsms. I feel that it is more appropriate to use a paragraph form instead of a list form, where I would have a list of states and explanations for each states. The form I have provided here is what I called paragraph form. In addition, I was not sure whether or not I needed to provide a fsm for the design portion of my report. The fsms I have here are drawn with implementation taken into account. If I followed the design on the paper directly, I do not think I would need to include any of the actions regarding storing and clearing requests. Also, I wasn't sure if I shouuld have split the fsms into read request, write request, and remote-read/invalidate request, but I felt that it was more compact if I combined them all into one fsm, since that is the way that it will be implemented.
+
+I also attached my original question below that I had about implementing the transition from the Shared state to the Exclusive state.
+
+Re:
+   The scenario you describe is possible.
+   The description in the paper does not really cover this situation.
+   It seems to me that this problem can be solved by having
+   the requestor transition to a "busy" state after sending the
+   original request and having this state persist until
+   it transitions to exclusive state in step 6c.
+   Any intervention requests arriving while the block is
+   in this "busy" state should be NACKed.
+
+I have attached two files indicating the changes I made to handle this last case. Fsm-directory.pdf indicates the directory's actions and fsm-requester-owner-sharer.pdf indicates the requester, owner, and sharer's actions. The relevant changes are colored in red. Is this what you meant in your comments above?
+
+----
+Sinerely,
+Eric Chang

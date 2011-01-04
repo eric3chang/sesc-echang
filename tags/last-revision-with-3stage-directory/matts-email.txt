@@ -1,0 +1,45 @@
+Okay so I have previously solved the never dropping out of rabbit
+mode. Basiclaly the benchmarks Mike was using had a specific
+instruction they were running to drop out of rabbit mode which is not
+present in Splash 2. So what you need to do is in exec.cpp:
+OP(mint_sesc_fast_sim_begin)
+comment out // rsesc_fast_sim_begin(pthread->getPid()); // MARK
+add this line to start rabbit mode: SimOp_BeginRabbit(picode, pthread);
+then in OP(mint_sesc_fast_sim_end)
+comment out // rsesc_fast_sim_end(pthread->getPid()); // MARK
+this is if you want to take a checkpoint
+//SimOp_TakeCheckpoint(picode, pthread);
+add this line: SimOp_EndRabbit(picode, pthread);
+
+The other change I made is that begin rabbit mode adds ++ to a counter
+and end rabbit mode -- to the same counter. I changed the end to set
+the counter to 0 so end rabbit always ends rabbit mode. Otherwise I
+found that rabbit mode was not ending. This is in OSSim.cpp, void
+OSSim::RabbitModeStop(). Using that lu should run correctly. Also so
+you know the benchmarks I can verify that are running are lu, fft,
+fmm, radix, ocean, raytrace, and barnes. The problem with lu is that
+it relies very heavily on a single processor. In 25 million
+instructions I get 4.04891e+006 read hits for processor 1 and only
+about 7-10 each for p2, p3, and p4.
+
+Now for cholesky: I get stack overflow
+
+Volrend says: Loading map from .den file...
+Read failed on file 7
+
+both waters: fails at ThreadContext.h line 336
+
+radiosity: is odd. It spawns the correct number of threads and
+prints messages like it is running correctly but the tick count never
+stops which means it is still in rabbit mode. Both of these should not
+be true at the same time. My print statements show that Begin Rabbit
+and End Rabbit are never called. This benchmark may need to be started
+out of rabbit mode from the very begining. The problem is that even
+with -w1 not set, rabbit mode end is never called and timming
+statistics are not collected until after rabbit mode end is called.
+
+Hope that helps. On all my benchmarks I am running the default
+settings that spalsh recomends.
+
+Regards,
+Matt 

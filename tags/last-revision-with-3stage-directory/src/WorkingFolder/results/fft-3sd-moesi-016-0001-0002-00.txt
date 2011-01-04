@@ -1,0 +1,3 @@
+Group string ReportFileName results/fft-3sd-moesi-016-0001-0002-00.txt string BenchName fft int ProcessorSkew0 46 int ProcessorSkew1 344 int ProcessorSkew2 166 int ProcessorSkew3 31 int ProcessorSkew4 329 int ProcessorSkew5 457 int ProcessorSkew6 308 int ProcessorSkew7 252 int ProcessorSkew8 109 int ProcessorSkew9 347 int ProcessorSkew10 473 int ProcessorSkew11 177 int ProcessorSkew12 13 int ProcessorSkew13 81 int ProcessorSkew14 255 int ProcessorSkew15 116 #
+int TotalRunTime 171948 #
+EndGroup #

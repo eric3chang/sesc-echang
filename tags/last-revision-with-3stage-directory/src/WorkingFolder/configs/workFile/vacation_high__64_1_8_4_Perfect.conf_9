@@ -1,0 +1,15 @@
+ShouldLoadCheckpoint = 1
+CheckpointName = "checkpoints\chk_vacation_high_4.checkpoint"
+DieAfterCheckpointTaken = 1
+HeapMemorySize = 134217728
+FilterSize = 64
+ReportFile = 'results\vacation_high__64_1_8_4_Perfect_9.txt'
+CompositionResultFile = 'results\vacation_high__64_1_8_4_Perfect_composition_9.dat'
+ProcessorSkew[0] = 182
+ProcessorSkew[1] = 50
+ProcessorSkew[2] = 148
+ProcessorSkew[3] = 64
+BenchName = 'vacationhigh'
+<base.conf>
+<memSysConfigs/MemConfig_1_8_4.conf>
+

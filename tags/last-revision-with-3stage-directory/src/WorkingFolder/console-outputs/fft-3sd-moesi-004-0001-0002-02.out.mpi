@@ -1,0 +1,198 @@
+.text Minor header aligment correction (10000040 vs 1000003c)
+.data Minor header aligment correction (100816e0 vs 100816d8)
+1.bss Minor header aligment correction 12 (100834d0 vs 100834c4)
+.bss Minor header aligment correction (100834d0 vs 100834c4)
+static[0x10069a30-0x10083f84] heap[0x10084000-0x23f42000] stack[0x23f42000-0x2473a000] -> [0x97a34008-0xac1045d8]
+OSSim::spawn(-1,0,0x10000,0)
+Device : P(0)_DL1  Description : ProcessorInterface_0
+Device : P(0)_IL1  Description : InstSource
+Device : P(1)_DL1  Description : ProcessorInterface_1
+Device : P(1)_IL1  Description : InstSource
+Device : P(2)_DL1  Description : ProcessorInterface_2
+Device : P(2)_IL1  Description : InstSource
+Device : P(3)_DL1  Description : ProcessorInterface_3
+Device : P(3)_IL1  Description : InstSource
+Rabbit Mode Start 
+   1024 Complex Doubles
+   4 Processors
+   65536 Cache lines
+   16 Byte line size
+   4096 Bytes per page
+Leaving rabbit mode...
+OSSim::spawn(0,1,0x10000,0)
+OSSim::spawn(0,2,0x10000,0)
+OSSim::spawn(0,3,0x10000,0)
+sesc_spawn( 0x100013d4, 0x0, 0x0 ) pid = 0, child pid = 1, child context = 9028df0
+sesc_spawn( 0x100013d4, 0x0, 0x0 ) pid = 0, child pid = 2, child context = 90264f0
+sesc_spawn( 0x100013d4, 0x0, 0x0 ) pid = 0, child pid = 3, child context = 90266d0
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+Stalling processor 1 at barrier
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+Stalling processor 0 at barrier
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+Stalling processor 3 at barrier
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+FastSimBeginEvent
+Processor 2 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Releasing processor 2 from barrier
+Releasing processor 3 from barrier
+Stalling processor 2 at barrier
+Stalling processor 3 at barrier
+Stalling processor 0 at barrier
+Processor 1 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Releasing processor 2 from barrier
+Releasing processor 3 from barrier
+Stalling processor 2 at barrier
+Stalling processor 0 at barrier
+Stalling processor 1 at barrier
+Processor 3 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Releasing processor 2 from barrier
+Releasing processor 3 from barrier
+Stalling processor 1 at barrier
+Stalling processor 2 at barrier
+Stalling processor 3 at barrier
+Processor 0 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Releasing processor 2 from barrier
+Releasing processor 3 from barrier
+Stalling processor 2 at barrier
+Stalling processor 3 at barrier
+Stalling processor 0 at barrier
+Processor 1 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Releasing processor 2 from barrier
+Releasing processor 3 from barrier
+Stalling processor 2 at barrier
+Stalling processor 0 at barrier
+Stalling processor 3 at barrier
+Processor 1 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Releasing processor 2 from barrier
+Releasing processor 3 from barrier
+Stalling processor 2 at barrier
+Stalling processor 3 at barrier
+Stalling processor 0 at barrier
+Processor 1 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Releasing processor 2 from barrier
+Releasing processor 3 from barrier
+Stalling processor 3 at barrier
+Stalling processor 0 at barrier
+Stalling processor 2 at barrier
+Processor 1 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Releasing processor 2 from barrier
+Releasing processor 3 from barrier
+Simulated 500001 instructions so far at clock 315236
+Stalling processor 1 at barrier
+Stalling processor 3 at barrier
+Stalling processor 2 at barrier
+Processor 0 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Releasing processor 2 from barrier
+Releasing processor 3 from barrier
+Stalling processor 2 at barrier
+Stalling processor 0 at barrier
+Stalling processor 1 at barrier
+Processor 3 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Releasing processor 2 from barrier
+Releasing processor 3 from barrier
+Stalling processor 3 at barrier
+Stalling processor 2 at barrier
+Stalling processor 1 at barrier
+Processor 0 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Releasing processor 2 from barrier
+Releasing processor 3 from barrier
+Stalling processor 2 at barrier
+Stalling processor 1 at barrier
+Stalling processor 3 at barrier
+Processor 0 has triggered a release
+Releasing processor 0 from barrier
+Releasing processor 1 from barrier
+Releasing processor 2 from barrier
+Releasing processor 3 from barrier
+OSSim::exit err[80] (cpid 1)
+OSSim::exit err[268976840] (cpid 2)
+OSSim::exit err[268976840] (cpid 3)
+OSSim::wait (cpid 0)
+OSSim::wait (cpid 0)
+OSSim::wait (cpid 0)
+mint_exit 1
+mint_exit 2
+mint_exit 3
+Rabbit Mode Start 
+    0                80             27       0.00000
+Start time                        :        785449236
+Initialization finish time        :        785449243
+Overall finish time               :        785449323
+Total time with initialization    :               87
+Total time without initialization :               80
+Overall transpose time            :               27
+Overall transpose fraction        :          0.33750
+Checksum difference is -0.000 (0.000, 0.000)
+OSSim::exit err[0] (cpid 0)
+mint_exit 0
+Leaving rabbit mode...
+Rabbit Mode Start 
+Leaving rabbit mode...
+Rabbit Mode Start 
+Leaving rabbit mode...
+Rabbit Mode Start 
+Leaving rabbit mode...
+Rabbit Mode Start 
+Leaving rabbit mode...
+Rabbit Mode Start 
+Leaving rabbit mode...
+Rabbit Mode Start 
+Leaving rabbit mode...
+Rabbit Mode Start 
+Leaving rabbit mode...
+Rabbit Mode Start 
+Leaving rabbit mode...
+Rabbit Mode Start 
+Leaving rabbit mode...
+Rabbit Mode Start 
+Leaving rabbit mode...
+Rabbit Mode Start 
+Leaving rabbit mode...
+Rabbit Mode Start 
+Leaving rabbit mode...
+Rabbit Mode Start 
+Leaving rabbit mode...
+Rabbit Mode Start 
+Leaving rabbit mode...
+Rabbit Mode Start 
+Leaving rabbit mode...
+Rabbit Mode Start 
+Leaving rabbit mode...
+Get out of 'has-work' loop
+Finished running 

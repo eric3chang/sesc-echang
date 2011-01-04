@@ -1,0 +1,1108 @@
+#BEGIN Configuration used. Extracted from "configs/workFile/genome-snoopy-02cpu.conf":
+ProcessorSkew=46
+ProcessorSkew[1:1]=344
+procsPerNode=1
+pageSize  =4096
+HeapMemorySize=67108864
+technology='techParam'
+cpucore   ='ProcDesc0'
+cpucore[1:1]='ProcDesc1'
+CheckpointName='checkpoints\chk-genome-snoopy-02cpu.checkpoint'
+NoMigration=true
+MemorySystemConfig='Simple2.memory'
+ShouldLoadCheckpoint=0
+[ProcDesc1]
+issueWidth=3
+inorder   =false
+minTLBMissDelay=16
+instQueueSize=12
+maxIRequests=3
+itlb      ='FXITLB'
+maxBranches=22
+maxLoads  =48
+decodeDelay=3
+stForwardDelay=1
+maxStores =42
+dtlb      ='FXDTLB'
+dataSource="ProcessorInterface_1 DL1"
+OSType    ='std'
+fetchWidth=6
+bb4Cycle  =1
+retireWidth=3
+cluster   ='FXClusterIssueX'
+cluster[1:1]='FPClusterIssueX'
+bpred     ='BPredIssueX'
+enableICache=true
+robSize   =126
+interClusterLat=2
+fpRegs    =68
+instrSource="InstSource IL1"
+intRegs   =90
+renameDelay=3
+[FXClusterIssueX]
+iBJLat    =1
+schedNumPorts=4
+iALUUnit  ='ALUIssueX'
+iLoadLat  =1
+iALULat   =1
+recycleAt ='Execute'
+iMultUnit ='ALUIssueX'
+wakeUpNumPorts=4
+winSize   =68
+iDivLat   =12
+wakeUpPortOccp=1
+iBJUnit   ='ALUIssueX'
+iDivUnit  ='ALUIssueX'
+iLoadUnit ='LDIssueX'
+iStoreLat =1
+schedPortOccp=1
+iMultLat  =4
+iStoreUnit='STIssueX'
+schedDelay=1
+wakeupDelay=3
+[FPClusterIssueX]
+fpDivUnit ='FP0IssueX'
+wakeupDelay=3
+wakeUpPortOccp=1
+wakeUpNumPorts=4
+schedDelay=1
+fpALULat  =2
+schedNumPorts=4
+fpMultLat =4
+fpDivLat  =10
+schedPortOccp=1
+fpALUUnit ='FP0IssueX'
+fpMultUnit='FP0IssueX'
+recycleAt ='Execute'
+winSize   =32
+[ProcDesc0]
+maxIRequests=3
+renameDelay=3
+fetchWidth=6
+issueWidth=3
+OSType    ='std'
+maxBranches=22
+maxStores =42
+inorder   =false
+bpred     ='BPredIssueX'
+interClusterLat=2
+minTLBMissDelay=16
+dtlb      ='FXDTLB'
+fpRegs    =68
+bb4Cycle  =1
+instQueueSize=12
+enableICache=true
+itlb      ='FXITLB'
+regFileDelay=3
+stForwardDelay=1
+maxLoads  =48
+decodeDelay=3
+cluster[1:1]='FPClusterIssueX'
+cluster   ='FXClusterIssueX'
+intRegs   =90
+retireWidth=3
+dataSource="ProcessorInterface_0 DL1"
+robSize   =126
+instrSource="InstSource IL1"
+[InstSource]
+MSHR      ='BigMemMSHR'
+missDelay =1600000
+hitDelay  =1
+size      =1024
+lowerLevel='voidDevice'
+assoc     =1
+numPorts  =1
+replPolicy='LRU'
+deviceType='niceCache'
+bsize     =64
+portOccp  =1
+[FXITLB]
+bsize     =8
+size      =256
+deviceType='tlb'
+replPolicy='LRU'
+assoc     =32
+[BPredIssueX]
+MetaBits  =2
+btbSize   =2048
+btbReplPolicy='LRU'
+btbAssoc  =2
+bpred4Cycle=1
+l2size    =16384
+historySize=11
+localBits =2
+type      ='hybrid'
+rasSize   =0
+BTACDelay =0
+localSize =16384
+btbBsize  =1
+Metasize  =16384
+l2Bits    =1
+[FXDTLB]
+replPolicy='LRU'
+assoc     =64
+size      =512
+deviceType='tlb'
+bsize     =8
+[ALUIssueX]
+Num       =2
+Occ       =1
+[FP0IssueX]
+Occ       =1
+Num       =2
+[LDIssueX]
+Num       =0
+Occ       =1
+[BigMemMSHR]
+type      ='none'
+size      =32
+bsize     =64
+[ProcessorInterface_0]
+deviceType='SESCProcessorInterface'
+[STIssueX]
+Occ       =1
+Num       =0
+[ProcessorInterface_1]
+deviceType='SESCProcessorInterface'
+[techParam]
+frequency =5.000000e+09
+[voidDevice]
+deviceType='void'
+#END Configuration used. Extracted from "configs/workFile/genome-snoopy-02cpu.conf":
+OSSim:beginTime=Wed Aug 18 17:46:52 2010
+
+OSSim:bench=/r/cslr21/erichang/sesc-echang/src/WorkingFolder/augSesc -w1 -cconfigs/workFile/genome-snoopy-02cpu.conf -dconfigs/workFile/genome-snoopy-02cpu.report benchmarks/genome -t2 -g256 -s16 -n16384 
+OSSim:benchName=genome
+OSSim:rabbit=1
+#BEGIN Configuration used. Extracted from "configs/workFile/genome-snoopy-02cpu.conf":
+ProcessorSkew=46
+ProcessorSkew[1:1]=344
+procsPerNode=1
+pageSize  =4096
+HeapMemorySize=67108864
+technology='techParam'
+cpucore   ='ProcDesc0'
+cpucore[1:1]='ProcDesc1'
+CheckpointName='checkpoints\chk-genome-snoopy-02cpu.checkpoint'
+NoMigration=true
+MemorySystemConfig='Simple2.memory'
+ShouldLoadCheckpoint=1
+[ProcDesc1]
+issueWidth=3
+inorder   =false
+minTLBMissDelay=16
+instQueueSize=12
+maxIRequests=3
+itlb      ='FXITLB'
+maxBranches=22
+maxLoads  =48
+decodeDelay=3
+stForwardDelay=1
+maxStores =42
+dtlb      ='FXDTLB'
+dataSource="ProcessorInterface_1 DL1"
+OSType    ='std'
+fetchWidth=6
+bb4Cycle  =1
+retireWidth=3
+cluster   ='FXClusterIssueX'
+cluster[1:1]='FPClusterIssueX'
+bpred     ='BPredIssueX'
+enableICache=true
+robSize   =126
+interClusterLat=2
+fpRegs    =68
+instrSource="InstSource IL1"
+intRegs   =90
+renameDelay=3
+[FXClusterIssueX]
+iBJLat    =1
+schedNumPorts=4
+iALUUnit  ='ALUIssueX'
+iLoadLat  =1
+iALULat   =1
+recycleAt ='Execute'
+iMultUnit ='ALUIssueX'
+wakeUpNumPorts=4
+winSize   =68
+iDivLat   =12
+wakeUpPortOccp=1
+iBJUnit   ='ALUIssueX'
+iDivUnit  ='ALUIssueX'
+iLoadUnit ='LDIssueX'
+iStoreLat =1
+schedPortOccp=1
+iMultLat  =4
+iStoreUnit='STIssueX'
+schedDelay=1
+wakeupDelay=3
+[FPClusterIssueX]
+fpDivUnit ='FP0IssueX'
+wakeupDelay=3
+wakeUpPortOccp=1
+wakeUpNumPorts=4
+schedDelay=1
+fpALULat  =2
+schedNumPorts=4
+fpMultLat =4
+fpDivLat  =10
+schedPortOccp=1
+fpALUUnit ='FP0IssueX'
+fpMultUnit='FP0IssueX'
+recycleAt ='Execute'
+winSize   =32
+[ProcDesc0]
+maxIRequests=3
+renameDelay=3
+fetchWidth=6
+issueWidth=3
+OSType    ='std'
+maxBranches=22
+maxStores =42
+inorder   =false
+bpred     ='BPredIssueX'
+interClusterLat=2
+minTLBMissDelay=16
+dtlb      ='FXDTLB'
+fpRegs    =68
+bb4Cycle  =1
+instQueueSize=12
+enableICache=true
+itlb      ='FXITLB'
+regFileDelay=3
+stForwardDelay=1
+maxLoads  =48
+decodeDelay=3
+cluster[1:1]='FPClusterIssueX'
+cluster   ='FXClusterIssueX'
+intRegs   =90
+retireWidth=3
+dataSource="ProcessorInterface_0 DL1"
+robSize   =126
+instrSource="InstSource IL1"
+[InstSource]
+MSHR      ='BigMemMSHR'
+missDelay =1600000
+hitDelay  =1
+size      =1024
+lowerLevel='voidDevice'
+assoc     =1
+numPorts  =1
+replPolicy='LRU'
+deviceType='niceCache'
+bsize     =64
+portOccp  =1
+[FXITLB]
+bsize     =8
+size      =256
+deviceType='tlb'
+replPolicy='LRU'
+assoc     =32
+[BPredIssueX]
+MetaBits  =2
+btbSize   =2048
+btbReplPolicy='LRU'
+btbAssoc  =2
+bpred4Cycle=1
+l2size    =16384
+historySize=11
+localBits =2
+type      ='hybrid'
+rasSize   =0
+BTACDelay =0
+localSize =16384
+btbBsize  =1
+Metasize  =16384
+l2Bits    =1
+[FXDTLB]
+replPolicy='LRU'
+assoc     =64
+size      =512
+deviceType='tlb'
+bsize     =8
+[ALUIssueX]
+Num       =2
+Occ       =1
+[FP0IssueX]
+Occ       =1
+Num       =2
+[LDIssueX]
+Num       =0
+Occ       =1
+[BigMemMSHR]
+type      ='none'
+size      =32
+bsize     =64
+[ProcessorInterface_0]
+deviceType='SESCProcessorInterface'
+[STIssueX]
+Occ       =1
+Num       =0
+[ProcessorInterface_1]
+deviceType='SESCProcessorInterface'
+[techParam]
+frequency =5.000000e+09
+[voidDevice]
+deviceType='void'
+#END Configuration used. Extracted from "configs/workFile/genome-snoopy-02cpu.conf":
+#BEGIN Configuration used. Extracted from "configs/workFile/genome-snoopy-02cpu.conf":
+ProcessorSkew=46
+ProcessorSkew[1:1]=344
+procsPerNode=1
+pageSize  =4096
+HeapMemorySize=67108864
+technology='techParam'
+cpucore   ='ProcDesc0'
+cpucore[1:1]='ProcDesc1'
+CheckpointName='checkpoints\chk-genome-snoopy-02cpu.checkpoint'
+NoMigration=true
+MemorySystemConfig='Simple2.memory'
+ShouldLoadCheckpoint=1
+[ProcDesc1]
+issueWidth=3
+inorder   =false
+minTLBMissDelay=16
+instQueueSize=12
+maxIRequests=3
+itlb      ='FXITLB'
+maxBranches=22
+maxLoads  =48
+decodeDelay=3
+stForwardDelay=1
+maxStores =42
+dtlb      ='FXDTLB'
+dataSource="ProcessorInterface_1 DL1"
+OSType    ='std'
+fetchWidth=6
+bb4Cycle  =1
+retireWidth=3
+cluster   ='FXClusterIssueX'
+cluster[1:1]='FPClusterIssueX'
+bpred     ='BPredIssueX'
+enableICache=true
+robSize   =126
+interClusterLat=2
+fpRegs    =68
+instrSource="InstSource IL1"
+intRegs   =90
+renameDelay=3
+[FXClusterIssueX]
+iBJLat    =1
+schedNumPorts=4
+iALUUnit  ='ALUIssueX'
+iLoadLat  =1
+iALULat   =1
+recycleAt ='Execute'
+iMultUnit ='ALUIssueX'
+wakeUpNumPorts=4
+winSize   =68
+iDivLat   =12
+wakeUpPortOccp=1
+iBJUnit   ='ALUIssueX'
+iDivUnit  ='ALUIssueX'
+iLoadUnit ='LDIssueX'
+iStoreLat =1
+schedPortOccp=1
+iMultLat  =4
+iStoreUnit='STIssueX'
+schedDelay=1
+wakeupDelay=3
+[FPClusterIssueX]
+fpDivUnit ='FP0IssueX'
+wakeupDelay=3
+wakeUpPortOccp=1
+wakeUpNumPorts=4
+schedDelay=1
+fpALULat  =2
+schedNumPorts=4
+fpMultLat =4
+fpDivLat  =10
+schedPortOccp=1
+fpALUUnit ='FP0IssueX'
+fpMultUnit='FP0IssueX'
+recycleAt ='Execute'
+winSize   =32
+[ProcDesc0]
+maxIRequests=3
+renameDelay=3
+fetchWidth=6
+issueWidth=3
+OSType    ='std'
+maxBranches=22
+maxStores =42
+inorder   =false
+bpred     ='BPredIssueX'
+interClusterLat=2
+minTLBMissDelay=16
+dtlb      ='FXDTLB'
+fpRegs    =68
+bb4Cycle  =1
+instQueueSize=12
+enableICache=true
+itlb      ='FXITLB'
+regFileDelay=3
+stForwardDelay=1
+maxLoads  =48
+decodeDelay=3
+cluster[1:1]='FPClusterIssueX'
+cluster   ='FXClusterIssueX'
+intRegs   =90
+retireWidth=3
+dataSource="ProcessorInterface_0 DL1"
+robSize   =126
+instrSource="InstSource IL1"
+[InstSource]
+MSHR      ='BigMemMSHR'
+missDelay =1600000
+hitDelay  =1
+size      =1024
+lowerLevel='voidDevice'
+assoc     =1
+numPorts  =1
+replPolicy='LRU'
+deviceType='niceCache'
+bsize     =64
+portOccp  =1
+[FXITLB]
+bsize     =8
+size      =256
+deviceType='tlb'
+replPolicy='LRU'
+assoc     =32
+[BPredIssueX]
+MetaBits  =2
+btbSize   =2048
+btbReplPolicy='LRU'
+btbAssoc  =2
+bpred4Cycle=1
+l2size    =16384
+historySize=11
+localBits =2
+type      ='hybrid'
+rasSize   =0
+BTACDelay =0
+localSize =16384
+btbBsize  =1
+Metasize  =16384
+l2Bits    =1
+[FXDTLB]
+replPolicy='LRU'
+assoc     =64
+size      =512
+deviceType='tlb'
+bsize     =8
+[ALUIssueX]
+Num       =2
+Occ       =1
+[FP0IssueX]
+Occ       =1
+Num       =2
+[LDIssueX]
+Num       =0
+Occ       =1
+[BigMemMSHR]
+type      ='none'
+size      =32
+bsize     =64
+[ProcessorInterface_0]
+deviceType='SESCProcessorInterface'
+[STIssueX]
+Occ       =1
+Num       =0
+[ProcessorInterface_1]
+deviceType='SESCProcessorInterface'
+[techParam]
+frequency =5.000000e+09
+[voidDevice]
+deviceType='void'
+#END Configuration used. Extracted from "configs/workFile/genome-snoopy-02cpu.conf":
+#BEGIN Configuration used. Extracted from "configs/workFile/genome-snoopy-02cpu.conf":
+ProcessorSkew=46
+ProcessorSkew[1:1]=344
+procsPerNode=1
+pageSize  =4096
+HeapMemorySize=67108864
+technology='techParam'
+cpucore   ='ProcDesc0'
+cpucore[1:1]='ProcDesc1'
+CheckpointName='checkpoints\chk-genome-snoopy-02cpu.checkpoint'
+NoMigration=true
+MemorySystemConfig='Simple2.memory'
+ShouldLoadCheckpoint=1
+[ProcDesc1]
+issueWidth=3
+inorder   =false
+minTLBMissDelay=16
+instQueueSize=12
+maxIRequests=3
+itlb      ='FXITLB'
+maxBranches=22
+maxLoads  =48
+decodeDelay=3
+stForwardDelay=1
+maxStores =42
+dtlb      ='FXDTLB'
+dataSource="ProcessorInterface_1 DL1"
+OSType    ='std'
+fetchWidth=6
+bb4Cycle  =1
+retireWidth=3
+cluster   ='FXClusterIssueX'
+cluster[1:1]='FPClusterIssueX'
+bpred     ='BPredIssueX'
+enableICache=true
+robSize   =126
+interClusterLat=2
+fpRegs    =68
+instrSource="InstSource IL1"
+intRegs   =90
+renameDelay=3
+[FXClusterIssueX]
+iBJLat    =1
+schedNumPorts=4
+iALUUnit  ='ALUIssueX'
+iLoadLat  =1
+iALULat   =1
+recycleAt ='Execute'
+iMultUnit ='ALUIssueX'
+wakeUpNumPorts=4
+winSize   =68
+iDivLat   =12
+wakeUpPortOccp=1
+iBJUnit   ='ALUIssueX'
+iDivUnit  ='ALUIssueX'
+iLoadUnit ='LDIssueX'
+iStoreLat =1
+schedPortOccp=1
+iMultLat  =4
+iStoreUnit='STIssueX'
+schedDelay=1
+wakeupDelay=3
+[FPClusterIssueX]
+fpDivUnit ='FP0IssueX'
+wakeupDelay=3
+wakeUpPortOccp=1
+wakeUpNumPorts=4
+schedDelay=1
+fpALULat  =2
+schedNumPorts=4
+fpMultLat =4
+fpDivLat  =10
+schedPortOccp=1
+fpALUUnit ='FP0IssueX'
+fpMultUnit='FP0IssueX'
+recycleAt ='Execute'
+winSize   =32
+[ProcDesc0]
+maxIRequests=3
+renameDelay=3
+fetchWidth=6
+issueWidth=3
+OSType    ='std'
+maxBranches=22
+maxStores =42
+inorder   =false
+bpred     ='BPredIssueX'
+interClusterLat=2
+minTLBMissDelay=16
+dtlb      ='FXDTLB'
+fpRegs    =68
+bb4Cycle  =1
+instQueueSize=12
+enableICache=true
+itlb      ='FXITLB'
+regFileDelay=3
+stForwardDelay=1
+maxLoads  =48
+decodeDelay=3
+cluster[1:1]='FPClusterIssueX'
+cluster   ='FXClusterIssueX'
+intRegs   =90
+retireWidth=3
+dataSource="ProcessorInterface_0 DL1"
+robSize   =126
+instrSource="InstSource IL1"
+[InstSource]
+MSHR      ='BigMemMSHR'
+missDelay =1600000
+hitDelay  =1
+size      =1024
+lowerLevel='voidDevice'
+assoc     =1
+numPorts  =1
+replPolicy='LRU'
+deviceType='niceCache'
+bsize     =64
+portOccp  =1
+[FXITLB]
+bsize     =8
+size      =256
+deviceType='tlb'
+replPolicy='LRU'
+assoc     =32
+[BPredIssueX]
+MetaBits  =2
+btbSize   =2048
+btbReplPolicy='LRU'
+btbAssoc  =2
+bpred4Cycle=1
+l2size    =16384
+historySize=11
+localBits =2
+type      ='hybrid'
+rasSize   =0
+BTACDelay =0
+localSize =16384
+btbBsize  =1
+Metasize  =16384
+l2Bits    =1
+[FXDTLB]
+replPolicy='LRU'
+assoc     =64
+size      =512
+deviceType='tlb'
+bsize     =8
+[ALUIssueX]
+Num       =2
+Occ       =1
+[FP0IssueX]
+Occ       =1
+Num       =2
+[LDIssueX]
+Num       =0
+Occ       =1
+[BigMemMSHR]
+type      ='none'
+size      =32
+bsize     =64
+[ProcessorInterface_0]
+deviceType='SESCProcessorInterface'
+[STIssueX]
+Occ       =1
+Num       =0
+[ProcessorInterface_1]
+deviceType='SESCProcessorInterface'
+[techParam]
+frequency =5.000000e+09
+[voidDevice]
+deviceType='void'
+#END Configuration used. Extracted from "configs/workFile/genome-snoopy-02cpu.conf":
+OSSim:beginTime=Wed Aug 18 17:59:25 2010
+
+OSSim:bench=/r/cslr21/erichang/sesc-echang/src/WorkingFolder/augSesc -w1 -cconfigs/workFile/genome-snoopy-02cpu.conf -dconfigs/workFile/genome-snoopy-02cpu.report benchmarks/genome -t2 -g256 -s16 -n16384 
+OSSim:benchName=genome
+OSSim:rabbit=1
+ProcessId(0):totalTime=0:waitTime=0:spawnTime=0:exitTime=12979745:Switchs=1
+ProcessId(0):cpu=0:migrable=false:pinned=true:pid=0:ppid=-1:parentId=-1
+ProcessId(1):totalTime=0:waitTime=0:spawnTime=0:exitTime=12979745:Switchs=1
+ProcessId(1):cpu=1:migrable=false:pinned=true:pid=1:ppid=0:parentId=0
+ProcessId:nSwitchs=0:nSpawns=0:nGradInsts=0:nWPathInsts=0
+Proc(0):clockTicks=12979745
+Proc(1):clockTicks=12979745
+OSSim:reportName=Final
+OSSim:msecs=  617.68:nCPUs=2:nCycles=12979745
+OSSim:pseudoreset=0
+BEGIN GStats::report Final
+P(0)_IL1:readHalfMiss=0
+P(0)_IL1:writeHalfMiss=0
+P(0)_IL1:writeMiss=0
+P(0)_IL1:readMiss=0
+P(0)_IL1:readHit=807765
+P(0)_IL1:writeHit=0
+P(0)_IL1:writeBack=0
+P(0)_IL1:lineFill=0
+P(0)_IL1:linePush=0
+P(0)_IL1:nForwarded=0
+P(0)_IL1:nWBFull=0
+P(0)_IL1_avgPendingWrites:v=0:n=0
+P(0)_IL1_avgMissLat:v=0:n=0
+P(0)_IL1:rejected=0
+P(0)_IL1:rejectedHits=0
+P(0)_IL1_MSHR0_MSHR:nUse=0
+P(0)_IL1_MSHR0_MSHR:nUseReads=0
+P(0)_IL1_MSHR0_MSHR:nUseWrites=0
+P(0)_IL1_MSHR0_MSHR:nOverflows=0
+P(0)_IL1_MSHR0_MSHR_maxUsedEntries:max=0:n=0
+P(0)_IL1_MSHR0_MSHR:nCanAccept=0
+P(0)_IL1_MSHR0_MSHR:nCanNotAccept=0
+P(0)_IL1_MSHR0_MSHR:nCanNotAcceptConv=0
+P(0)_IL1_MSHR0_MSHR:blockingCycles_AutoAvg=0.000000
+P(0)_IL1_B0:nAccesses=807765
+P(0)_IL1_occ:v=0:n=0
+P(0)_IL1_B0_occ:v=0:n=0
+P(0)_IL1_MSHR_B0_occ:v=0:n=0
+P(0)_DTLB:nMiss=3655
+P(0)_ITLB:nMiss=9
+P(0):TLBTime=135568
+LDSTQ(0)_ldldViolations=3
+LDSTQ(0)_stldViolations=24
+LDSTQ(0)_ststViolations=24
+LDSTQ(0)_stldForwarding=137
+Proc(0)_FXClusterIssueX:nReplay=925
+Proc(0)_FXClusterIssueX_wakeUp_occ:v=0.0353279:n=8260430
+Proc(0)_FXClusterIssueX_sched_occ:v=0.00352669:n=4130215
+Proc(0)_FXClusterIssueX_winNotUsed:v=34.9686:n=4130212
+ALUIssueX(0)_occ:v=0.0273872:n=1885299
+ALUIssueX(0)_occ:v=0:n=18
+ALUIssueX(0)_occ:v=0:n=10597
+ALUIssueX(0)_occ:v=0.0264339:n=1004771
+LDIssueX(0)_occ:v=0:n=0
+FULoad(0)_ldqNotUsed:v=36.3101:n=1071269
+FULoad(0):nForwarded=0
+STIssueX(0)_occ:v=0:n=0
+FUStore(0)_stqNotUsed:v=36.995:n=158260
+FUStore(0):nDeadStore=0
+FUStore(0):nFences=0
+FUStore(0):fenceStallCycles=0
+Proc(0)_FPClusterIssueX:nReplay=0
+Proc(0)_FPClusterIssueX_wakeUp_occ:v=0:n=0
+Proc(0)_FPClusterIssueX_sched_occ:v=0:n=0
+Proc(0)_FPClusterIssueX_winNotUsed:v=0:n=0
+FP0IssueX(0)_occ:v=0:n=0
+FP0IssueX(0)_occ:v=0:n=0
+FP0IssueX(0)_occ:v=0:n=0
+Proc(0)_robUsed:v=42.7521:n=12979745
+Processor(0)_noFetch=2376952
+Processor(0)_noFetch2=9795032
+ExeEngine(0)_retired:v=0.335878:n=12296780
+ExeEngine(0):noRetOtherCause=0
+Processor(0):nLocks=0
+Processor(0):nLockContCycles=0
+ExeEngine(0):nSmallWin=4502601
+ExeEngine(0):nSmallROB=86299
+ExeEngine(0):nSmallREG=623849
+ExeEngine(0):nOutsLoads=0
+ExeEngine(0):nOutsStores=0
+ExeEngine(0):nOutsBranches=1113165
+ExeEngine(0):nReplays=0
+ExeEngine(0):PortConflict=0
+ExeEngine(0):switch=0
+ExeEngine(0):noRetSelf_iOpInvalid_NotExecuted=0
+ExeEngine(0):noRetSelf_iALU_NotExecuted=3282113
+ExeEngine(0):noRetSelf_iMult_NotExecuted=21
+ExeEngine(0):noRetSelf_iDiv_NotExecuted=161127
+ExeEngine(0):noRetSelf_iBJ_NotExecuted=1288058
+ExeEngine(0):noRetSelf_iLoad_NotExecuted=6524332
+ExeEngine(0):noRetSelf_iStore_NotExecuted=58164
+ExeEngine(0):noRetSelf_fpALU_NotExecuted=0
+ExeEngine(0):noRetSelf_fpMult_NotExecuted=0
+ExeEngine(0):noRetSelf_fpDiv_NotExecuted=0
+ExeEngine(0):noRetSelf_iFence_NotExecuted=0
+ExeEngine(0):noRetSelf_iLoad_NotFinished=0
+ExeEngine(0):noRetSelf_iStore_NoCacheSpace=193
+ExeEngine(0):noRetSelf_iStore_NoCachePorts=0
+ExeEngine(0):noRetSelf_iStore_WaitForFence=0
+ExeEngine(0):noRetSelf_iFence_NoCacheSpace=0
+ExeEngine(0):noRetSelf_iFence_WaitForFence=0
+ExeEngine(0):noRetOther_iOpInvalid_NotExecuted=0
+ExeEngine(0):noRetOther_iALU_NotExecuted=5738848
+ExeEngine(0):noRetOther_iMult_NotExecuted=42
+ExeEngine(0):noRetOther_iDiv_NotExecuted=303037
+ExeEngine(0):noRetOther_iBJ_NotExecuted=2232803
+ExeEngine(0):noRetOther_iLoad_NotExecuted=12959092
+ExeEngine(0):noRetOther_iStore_NotExecuted=100448
+ExeEngine(0):noRetOther_fpALU_NotExecuted=0
+ExeEngine(0):noRetOther_fpMult_NotExecuted=0
+ExeEngine(0):noRetOther_fpDiv_NotExecuted=0
+ExeEngine(0):noRetOther_iFence_NotExecuted=0
+ExeEngine(0):noRetOther_iLoad_NotFinished=0
+ExeEngine(0):noRetOther_iStore_NoCacheSpace=386
+ExeEngine(0):noRetOther_iStore_NoCachePorts=0
+ExeEngine(0):noRetOther_iStore_WaitForFence=0
+ExeEngine(0):noRetOther_iFence_NoCacheSpace=0
+ExeEngine(0):noRetOther_iFence_WaitForFence=0
+PendingWindow(0)_iOpInvalid:n=0
+PendingWindow(0)_iALU:n=1885300
+PendingWindow(0)_iComplex:n=10615
+PendingWindow(0)_iBJ:n=1004771
+PendingWindow(0)_iLoad:n=1071271
+PendingWindow(0)_iStore:n=158260
+PendingWindow(0)_fpALU:n=0
+PendingWindow(0)_fpComplex:n=0
+PendingWindow(0)_other:n=0
+FetchEngine(0)_avgBranchTime:v=83.7394:n=132141
+FetchEngine(0)_avgInstsFetched:v=0:n=0
+FetchEngine(0):nDelayInst1=66392436
+FetchEngine(0):nDelayInst2=399544
+FetchEngine(0):nFetched=4130234
+FetchEngine(0):nBTAC=0
+FetchEngine(0):szBB(1)=291606
+FetchEngine(0):szBB(2)=84120
+FetchEngine(0):szBB(3)=67590
+FetchEngine(0):szBB(4)=47991
+FetchEngine(0):szBB(5)=299095
+FetchEngine(0):szBB(6)=7548
+FetchEngine(0):szBB(7)=19380
+FetchEngine(0):szBB(8)=160261
+FetchEngine(0):szBB(9)=3664
+FetchEngine(0):szBB(10)=369
+FetchEngine(0):szBB(11)=12389
+FetchEngine(0):szBB(12)=125
+FetchEngine(0):szBB(13)=8336
+FetchEngine(0):szBB(14)=174
+FetchEngine(0):szBB(15)=2125
+FetchEngine(0):szBB(17)=1
+FetchEngine(0):szBB_MaxKey=17
+FetchEngine(0):szBB_Avg=4.110608
+FetchEngine(0):szBB_Samples=1004774
+FetchEngine(0):szFB(1)=1222
+FetchEngine(0):szFB(2)=56342
+FetchEngine(0):szFB(3)=34870
+FetchEngine(0):szFB(4)=12844
+FetchEngine(0):szFB(5)=32873
+FetchEngine(0):szFB(6)=22374
+FetchEngine(0):szFB(7)=12028
+FetchEngine(0):szFB(8)=28481
+FetchEngine(0):szFB(9)=10110
+FetchEngine(0):szFB(10)=122
+FetchEngine(0):szFB(11)=12633
+FetchEngine(0):szFB(12)=9047
+FetchEngine(0):szFB(13)=8695
+FetchEngine(0):szFB(14)=35
+FetchEngine(0):szFB(15)=23
+FetchEngine(0):szFB(16)=155
+FetchEngine(0):szFB(17)=3
+FetchEngine(0):szFB(18)=227
+FetchEngine(0):szFB(19)=36
+FetchEngine(0):szFB(20)=1493
+FetchEngine(0):szFB(21)=3
+FetchEngine(0):szFB(22)=755
+FetchEngine(0):szFB(23)=16
+FetchEngine(0):szFB(24)=85
+FetchEngine(0):szFB(25)=1
+FetchEngine(0):szFB(30)=30
+FetchEngine(0):szFB(33)=3
+FetchEngine(0):szFB(41)=1
+FetchEngine(0):szFB(49)=1
+FetchEngine(0):szFB(57)=1
+FetchEngine(0):szFB(65)=1
+FetchEngine(0):szFB(73)=1
+FetchEngine(0):szFB(81)=1
+FetchEngine(0):szFB(89)=1
+FetchEngine(0):szFB(97)=1
+FetchEngine(0):szFB(101)=16146
+FetchEngine(0):szFB(105)=1
+FetchEngine(0):szFB(113)=1
+FetchEngine(0):szFB(119)=122
+FetchEngine(0):szFB(121)=124
+FetchEngine(0):szFB(129)=8212
+FetchEngine(0):szFB(1316)=14
+FetchEngine(0):szFB_MaxKey=1316
+FetchEngine(0):szFB_Avg=15.346363
+FetchEngine(0):szFB_Samples=269134
+FetchEngine(0):szFS(1)=22927
+FetchEngine(0):szFS(2)=87987
+FetchEngine(0):szFS(3)=53529
+FetchEngine(0):szFS(4)=14198
+FetchEngine(0):szFS(5)=60790
+FetchEngine(0):szFS(6)=568334
+FetchEngine(0):szFS_MaxKey=6
+FetchEngine(0):szFS_Avg=5.113163
+FetchEngine(0):szFS_Samples=807765
+BPred(0)_RAS:nHit=75049
+BPred(0)_RAS:nMiss=0
+BPred(0):nBranches=1004774
+BPred(0):nTaken=269134
+BPred(0):nMiss=132141
+BPred(0)_Hybrid:nHit=797584
+BPred(0)_Hybrid:nMiss=132141
+BPred(0)_BTB:nHit=64532
+BPred(0)_BTB:nMiss=99168
+P(1)_IL1:readHalfMiss=0
+P(1)_IL1:writeHalfMiss=0
+P(1)_IL1:writeMiss=0
+P(1)_IL1:readMiss=0
+P(1)_IL1:readHit=804959
+P(1)_IL1:writeHit=0
+P(1)_IL1:writeBack=0
+P(1)_IL1:lineFill=0
+P(1)_IL1:linePush=0
+P(1)_IL1:nForwarded=0
+P(1)_IL1:nWBFull=0
+P(1)_IL1_avgPendingWrites:v=0:n=0
+P(1)_IL1_avgMissLat:v=0:n=0
+P(1)_IL1:rejected=0
+P(1)_IL1:rejectedHits=0
+P(1)_IL1_MSHR0_MSHR:nUse=0
+P(1)_IL1_MSHR0_MSHR:nUseReads=0
+P(1)_IL1_MSHR0_MSHR:nUseWrites=0
+P(1)_IL1_MSHR0_MSHR:nOverflows=0
+P(1)_IL1_MSHR0_MSHR_maxUsedEntries:max=0:n=0
+P(1)_IL1_MSHR0_MSHR:nCanAccept=0
+P(1)_IL1_MSHR0_MSHR:nCanNotAccept=0
+P(1)_IL1_MSHR0_MSHR:nCanNotAcceptConv=0
+P(1)_IL1_MSHR0_MSHR:blockingCycles_AutoAvg=0.000000
+P(1)_IL1_B0:nAccesses=804959
+P(1)_IL1_occ:v=0:n=0
+P(1)_IL1_B0_occ:v=0:n=0
+P(1)_IL1_MSHR_B0_occ:v=0:n=0
+P(1)_DTLB:nMiss=4594
+P(1)_ITLB:nMiss=8
+P(1):TLBTime=170274
+LDSTQ(1)_ldldViolations=2
+LDSTQ(1)_stldViolations=19
+LDSTQ(1)_ststViolations=0
+LDSTQ(1)_stldForwarding=233
+Proc(1)_FXClusterIssueX:nReplay=1110
+Proc(1)_FXClusterIssueX_wakeUp_occ:v=0.0324281:n=8240072
+Proc(1)_FXClusterIssueX_sched_occ:v=0.00370361:n=4120036
+Proc(1)_FXClusterIssueX_winNotUsed:v=34.8492:n=4120036
+ALUIssueX(1)_occ:v=0.0262871:n=1878410
+ALUIssueX(1)_occ:v=0:n=18
+ALUIssueX(1)_occ:v=0:n=10382
+ALUIssueX(1)_occ:v=0.0261996:n=1005245
+LDIssueX(1)_occ:v=0:n=0
+FULoad(1)_ldqNotUsed:v=36.2644:n=1070212
+FULoad(1):nForwarded=0
+STIssueX(1)_occ:v=0:n=0
+FUStore(1)_stqNotUsed:v=37.1579:n=155769
+FUStore(1):nDeadStore=0
+FUStore(1):nFences=0
+FUStore(1):fenceStallCycles=0
+Proc(1)_FPClusterIssueX:nReplay=0
+Proc(1)_FPClusterIssueX_wakeUp_occ:v=0:n=0
+Proc(1)_FPClusterIssueX_sched_occ:v=0:n=0
+Proc(1)_FPClusterIssueX_winNotUsed:v=0:n=0
+FP0IssueX(1)_occ:v=0:n=0
+FP0IssueX(1)_occ:v=0:n=0
+FP0IssueX(1)_occ:v=0:n=0
+Proc(1)_robUsed:v=42.0981:n=12979745
+Processor(1)_noFetch=2372658
+Processor(1)_noFetch2=9802128
+ExeEngine(1)_retired:v=0.329782:n=12493219
+ExeEngine(1):noRetOtherCause=0
+Processor(1):nLocks=0
+Processor(1):nLockContCycles=0
+ExeEngine(1):nSmallWin=4674715
+ExeEngine(1):nSmallROB=35332
+ExeEngine(1):nSmallREG=545887
+ExeEngine(1):nOutsLoads=0
+ExeEngine(1):nOutsStores=0
+ExeEngine(1):nOutsBranches=1078245
+ExeEngine(1):nReplays=0
+ExeEngine(1):PortConflict=0
+ExeEngine(1):switch=0
+ExeEngine(1):noRetSelf_iOpInvalid_NotExecuted=0
+ExeEngine(1):noRetSelf_iALU_NotExecuted=3269637
+ExeEngine(1):noRetSelf_iMult_NotExecuted=16
+ExeEngine(1):noRetSelf_iDiv_NotExecuted=159689
+ExeEngine(1):noRetSelf_iBJ_NotExecuted=1280107
+ExeEngine(1):noRetSelf_iLoad_NotExecuted=6744895
+ExeEngine(1):noRetSelf_iStore_NotExecuted=61071
+ExeEngine(1):noRetSelf_fpALU_NotExecuted=0
+ExeEngine(1):noRetSelf_fpMult_NotExecuted=0
+ExeEngine(1):noRetSelf_fpDiv_NotExecuted=0
+ExeEngine(1):noRetSelf_iFence_NotExecuted=0
+ExeEngine(1):noRetSelf_iLoad_NotFinished=0
+ExeEngine(1):noRetSelf_iStore_NoCacheSpace=0
+ExeEngine(1):noRetSelf_iStore_NoCachePorts=0
+ExeEngine(1):noRetSelf_iStore_WaitForFence=0
+ExeEngine(1):noRetSelf_iFence_NoCacheSpace=0
+ExeEngine(1):noRetSelf_iFence_WaitForFence=0
+ExeEngine(1):noRetOther_iOpInvalid_NotExecuted=0
+ExeEngine(1):noRetOther_iALU_NotExecuted=5713655
+ExeEngine(1):noRetOther_iMult_NotExecuted=30
+ExeEngine(1):noRetOther_iDiv_NotExecuted=300307
+ExeEngine(1):noRetOther_iBJ_NotExecuted=2215278
+ExeEngine(1):noRetOther_iLoad_NotExecuted=13397277
+ExeEngine(1):noRetOther_iStore_NotExecuted=105422
+ExeEngine(1):noRetOther_fpALU_NotExecuted=0
+ExeEngine(1):noRetOther_fpMult_NotExecuted=0
+ExeEngine(1):noRetOther_fpDiv_NotExecuted=0
+ExeEngine(1):noRetOther_iFence_NotExecuted=0
+ExeEngine(1):noRetOther_iLoad_NotFinished=0
+ExeEngine(1):noRetOther_iStore_NoCacheSpace=0
+ExeEngine(1):noRetOther_iStore_NoCachePorts=0
+ExeEngine(1):noRetOther_iStore_WaitForFence=0
+ExeEngine(1):noRetOther_iFence_NoCacheSpace=0
+ExeEngine(1):noRetOther_iFence_WaitForFence=0
+PendingWindow(1)_iOpInvalid:n=0
+PendingWindow(1)_iALU:n=1878410
+PendingWindow(1)_iComplex:n=10400
+PendingWindow(1)_iBJ:n=1005245
+PendingWindow(1)_iLoad:n=1070212
+PendingWindow(1)_iStore:n=155769
+PendingWindow(1)_fpALU:n=0
+PendingWindow(1)_fpComplex:n=0
+PendingWindow(1)_other:n=0
+FetchEngine(1)_avgBranchTime:v=85.6946:n=131554
+FetchEngine(1)_avgInstsFetched:v=0:n=0
+FetchEngine(1):nDelayInst1=67640820
+FetchEngine(1):nDelayInst2=397954
+FetchEngine(1):nFetched=4120036
+FetchEngine(1):nBTAC=0
+FetchEngine(1):szBB(1)=291263
+FetchEngine(1):szBB(2)=85382
+FetchEngine(1):szBB(3)=68548
+FetchEngine(1):szBB(4)=49247
+FetchEngine(1):szBB(5)=300120
+FetchEngine(1):szBB(6)=4318
+FetchEngine(1):szBB(7)=19764
+FetchEngine(1):szBB(8)=160002
+FetchEngine(1):szBB(9)=3482
+FetchEngine(1):szBB(10)=380
+FetchEngine(1):szBB(11)=12144
+FetchEngine(1):szBB(12)=118
+FetchEngine(1):szBB(13)=8313
+FetchEngine(1):szBB(14)=167
+FetchEngine(1):szBB(15)=1996
+FetchEngine(1):szBB(17)=1
+FetchEngine(1):szBB_MaxKey=17
+FetchEngine(1):szBB_Avg=4.098536
+FetchEngine(1):szBB_Samples=1005245
+FetchEngine(1):szFB(1)=1173
+FetchEngine(1):szFB(2)=56546
+FetchEngine(1):szFB(3)=34229
+FetchEngine(1):szFB(4)=13355
+FetchEngine(1):szFB(5)=33504
+FetchEngine(1):szFB(6)=22485
+FetchEngine(1):szFB(7)=10364
+FetchEngine(1):szFB(8)=28671
+FetchEngine(1):szFB(9)=11770
+FetchEngine(1):szFB(10)=138
+FetchEngine(1):szFB(1169)=14
+FetchEngine(1):szFB(11)=12383
+FetchEngine(1):szFB(12)=9015
+FetchEngine(1):szFB(13)=8434
+FetchEngine(1):szFB(14)=15
+FetchEngine(1):szFB(15)=14
+FetchEngine(1):szFB(16)=127
+FetchEngine(1):szFB(17)=2
+FetchEngine(1):szFB(18)=207
+FetchEngine(1):szFB(19)=35
+FetchEngine(1):szFB(20)=2079
+FetchEngine(1):szFB(22)=33
+FetchEngine(1):szFB(24)=68
+FetchEngine(1):szFB(30)=32
+FetchEngine(1):szFB(33)=1
+FetchEngine(1):szFB(101)=16142
+FetchEngine(1):szFB(110)=1
+FetchEngine(1):szFB(119)=119
+FetchEngine(1):szFB(121)=117
+FetchEngine(1):szFB(129)=8194
+FetchEngine(1):szFB_MaxKey=1169
+FetchEngine(1):szFB_Avg=15.300920
+FetchEngine(1):szFB_Samples=269267
+FetchEngine(1):szFS(1)=20524
+FetchEngine(1):szFS(2)=88316
+FetchEngine(1):szFS(3)=54771
+FetchEngine(1):szFS(4)=14107
+FetchEngine(1):szFS(5)=61307
+FetchEngine(1):szFS(6)=565934
+FetchEngine(1):szFS_MaxKey=6
+FetchEngine(1):szFS_Avg=5.118318
+FetchEngine(1):szFS_Samples=804959
+BPred(1)_RAS:nHit=75714
+BPred(1)_RAS:nMiss=0
+BPred(1):nBranches=1005245
+BPred(1):nTaken=269267
+BPred(1):nMiss=131554
+BPred(1)_Hybrid:nHit=797977
+BPred(1)_Hybrid:nMiss=131554
+BPred(1)_BTB:nHit=64073
+BPred(1)_BTB:nMiss=99271
+MemoryOS:numOSPages=3
+MemoryOS:numUsrPages=247
+END GStats::report Final
+OSSim:endTime=Wed Aug 18 18:09:43 2010
+
