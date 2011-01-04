@@ -137,29 +137,6 @@ namespace Memory
 	 * can be called as the result of a block not being found in cache
 	 * during a read from the CPU side (OnLocalRead)
 	 */
-	void MOESICache::UnlockBlock(MOESICache::AddrTag tag)
-	{
-		BlockState* b = Lookup(tag);
-		DebugAssert(b);
-		DebugAssert(b->valid);
-		DebugAssert(b->locked);
-		DebugAssert(waitingOnBlockUnlock.find(tag) != waitingOnBlockUnlock.end());
-		b->locked = false;
-		StoredFunctionBase* f = waitingOnBlockUnlock[tag];
-		waitingOnBlockUnlock.erase(tag);
-		DebugAssert(f);
-		f->Call();
-		if(!b->locked)
-		{
-			int setIndex = CalcSetFromTag(tag);
-			f = waitingOnSetUnlock[setIndex];
-			if(f)
-			{
-				waitingOnSetUnlock[setIndex] = NULL;
-				f->Call();
-			}
-		}
-	}
 	bool MOESICache::AllocateBlock(MOESICache::AddrTag tag)
 	{
 		BlockState* set = GetSet(CalcSetFromTag(tag));
@@ -186,9 +163,9 @@ namespace Memory
          }
          else
          {
-				#ifdef MEMORY_MOESI_CACHE_DEBUG_PENDING_EVICTION
-					printDebugInfo("AllocateBlock",set[eviction].tag,"pendingEviction.insert");
-				#endif
+			#ifdef MEMORY_MOESI_CACHE_DEBUG_PENDING_EVICTION
+				printDebugInfo("AllocateBlock",set[eviction].tag,"pendingEviction.insert");
+			#endif
             DebugAssert(pendingEviction.find(set[eviction].tag) == pendingEviction.end());
             pendingEviction[set[eviction].tag] = set[eviction];
 
@@ -200,8 +177,8 @@ namespace Memory
                localConnection->SendMsg(im,invalidateTime);
             }
 
-            // PrepareFreshBlock can sometimes
-            // prepare the block that we just inserted into pendingEviction
+            // PrepareFreshBlock can sometimes 
+               // prepare the block that we just inserted into pendingEviction
             PrepareFreshBlock(CalcSetFromTag(tag),eviction,tag);
          }
          return true;
@@ -232,7 +209,30 @@ namespace Memory
 		DebugAssert(waitingOnBlockUnlock.find(tag) == waitingOnBlockUnlock.end());
 		b->locked = true;
 	}
-	void MOESICache::PrepareFreshBlock(int setNumber, int index, AddrTag tag)
+	void MOESICache::UnlockBlock(MOESICache::AddrTag tag)
+	{
+		BlockState* b = Lookup(tag);
+		DebugAssert(b);
+		DebugAssert(b->valid);
+		DebugAssert(b->locked);
+		DebugAssert(waitingOnBlockUnlock.find(tag) != waitingOnBlockUnlock.end());
+		b->locked = false;
+		StoredFunctionBase* f = waitingOnBlockUnlock[tag];
+		waitingOnBlockUnlock.erase(tag);
+		DebugAssert(f);
+		f->Call();
+		if(!b->locked)
+		{
+			int setIndex = CalcSetFromTag(tag);
+			f = waitingOnSetUnlock[setIndex];
+			if(f)
+			{
+				waitingOnSetUnlock[setIndex] = NULL;
+				f->Call();
+			}
+		}
+	}
+void MOESICache::PrepareFreshBlock(int setNumber, int index, AddrTag tag)
 	{
 		BlockState* mySet = GetSet(setNumber);
 		DebugAssert(mySet[index].locked == false);
@@ -249,9 +249,9 @@ namespace Memory
          // need to tell OnLocalInvalidResponse that BlockEviction was canceled
 		   canceledBlockEviction.insert(tag);
 			mySet[index] = pendingEviction[tag];
-			#ifdef MEMORY_MOESI_CACHE_DEBUG_PENDING_EVICTION
-				printDebugInfo("PrepareFreshBlock",tag,"pendingEviction.erase");
-			#endif
+		#ifdef MEMORY_MOESI_CACHE_DEBUG_PENDING_EVICTION
+			printDebugInfo("PrepareFreshBlock",tag,"pendingEviction.erase");
+		#endif
 			pendingEviction.erase(tag);
 			DebugAssert(mySet[index].state != bs_Invalid);
 		}
@@ -304,9 +304,9 @@ namespace Memory
 			InvalidateBlock(*b);
 		}
 		EM().DisposeMsg(pendingInvalidate[tag]);
-		#ifdef MEMORY_MOESI_CACHE_DEBUG_PENDING_INVALIDATE
-			printDebugInfo("RespondInvalidate",tag,"pendingInvalidate.erase");
-		#endif
+	#ifdef MEMORY_MOESI_CACHE_DEBUG_PENDING_INVALIDATE
+		printDebugInfo("RespondInvalidate",tag,"pendingInvalidate.erase");
+	#endif
 		pendingInvalidate.erase(tag);
 	}
 	void MOESICache::WaitOnBlockUnlock(MOESICache::AddrTag tag, StoredFunctionBase* f)
@@ -715,10 +715,10 @@ namespace Memory
 #endif
 		DebugAssertWithMessageID(m,m->MsgID());
 		AddrTag tag = CalcTag(m->addr);
-		DebugAssert(pendingEviction.find(tag) != pendingEviction.end()
+		DebugAssertWithMessageID(pendingEviction.find(tag) != pendingEviction.end()
 		      || pendingInvalidate.find(tag) != pendingInvalidate.end()
 		      || canceledBlockEviction.find(tag) != canceledBlockEviction.end()
-		      );
+		      ,m->MsgID());
 		// if a block eviction was canceled by PrepareFreshBlock()
 		if (canceledBlockEviction.find(tag) != canceledBlockEviction.end())
 		{

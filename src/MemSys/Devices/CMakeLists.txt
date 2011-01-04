@@ -1,6 +1,7 @@
 add_library (Devices
    BaseMemDevice.cpp
    Directory.cpp
+   OriginDirectory.cpp
    ThreeStageDirectory.cpp
    MSICache.cpp
    MESICache.cpp
