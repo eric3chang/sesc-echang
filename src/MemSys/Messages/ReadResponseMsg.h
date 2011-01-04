@@ -15,11 +15,7 @@ namespace Memory
       MessageID evictionMessage;
 		bool exclusiveOwnership;
       bool hasPendingMemAccesses;
-      //bool isFromEviction;
-      bool isIntervention;
-      bool isWaitingForInvalidateUnlock;
       int pendingInvalidates;
-      //bool isSpeculative;   // not implementing speculative right now
 		MessageID solicitingMessage;
 		NodeID originalRequestingNode;
 
@@ -36,12 +32,8 @@ namespace Memory
             << " exOw=" << exclusiveOwnership
             << " sMsg=" << solicitingMessage
             << " memAc=" << hasPendingMemAccesses
-            //<< " isEvic=" << isFromEviction
-            << " intv=" << isIntervention
-            << " invUnlk=" << isWaitingForInvalidateUnlock
             << " ogNode=" << Memory::convertNodeIDToDeviceID(originalRequestingNode)
             << " pInv=" << pendingInvalidates
-            //<< " spec=" << isSpeculative
 		   ;
 		}
 

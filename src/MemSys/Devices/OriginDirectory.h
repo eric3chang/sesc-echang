@@ -27,7 +27,6 @@ namespace Memory
 	class WriteResponseMsg;
 	class InvalidateResponseMsg;
 	class EvictionResponseMsg;
-   class InterventionCompleteMsg;
 	//class NetworkMsg;
 	class OriginDirectory : public BaseMemDevice
 	{
@@ -59,7 +58,7 @@ namespace Memory
 
          BlockData() : owner(InvalidNodeID) {}
          void print(Address myAddress, MessageID myMessageID,bool isSharedBusy, bool isExclusiveBusy,
-            bool hasPendingMemAccess, bool isWaitingForInvalidationComplete,bool isWaitingForReadResponse)
+            bool hasPendingMemAccess,bool isWaitingForReadResponse)
          {
             cout << setw(10) << " ";
             cout << " addr=" << myAddress;
@@ -73,7 +72,6 @@ namespace Memory
             cout << " isShBusy=" << isSharedBusy
                << " isExBusy=" << isExclusiveBusy
                << " pendMemAccess=" << hasPendingMemAccess
-               << " waitForInvCom=" << isWaitingForInvalidationComplete
                << " waitForReadRes=" << isWaitingForReadResponse
                << endl;
          }
@@ -100,13 +98,6 @@ namespace Memory
          int invalidatesWaitingFor;
          std::vector<LookupData<ReadMsg> > pendingReads;
          InvalidateData() : msg(NULL), invalidatesReceived(0), invalidatesWaitingFor(0) {}
-      };
-      class InterventionCompleteData
-      {
-      public:
-         const ReadResponseMsg* rrm;
-         const InterventionCompleteMsg* icm;
-         InterventionCompleteData() : rrm(NULL), icm(NULL) {}
       };
       class ReversePendingLocalReadData
       {
@@ -154,8 +145,6 @@ namespace Memory
       HashMap<Address, const ReadResponseMsg* >waitingForEvictionBusyAck;
       HashMap<Address, const ReadMsg*>waitingForEvictionResponse;
       HashMap<Address, InvalidateData> waitingForInvalidates;
-      HashMap<MessageID, InterventionCompleteData >waitingForInterventionComplete;
-      HashMap<Address, LookupData<ReadMsg> >waitingForInvalidationComplete;
       HashMap<Address, const EvictionMsg* >waitingForReadResponse;
 		HashMap<Address, const EvictionMsg*> pendingEviction;
       HashMap<Address, std::vector<ReadMsg> >invalidateLock;
@@ -197,8 +186,6 @@ namespace Memory
 		//void PerformDirectoryFetchOwner(const ReadMsg *msgIn, NodeID src);
       void SendLocalReadResponse(const ReadResponseMsg *msgIn);
       void SendDirectoryBlockRequest(const ReadMsg *msgIn);
-      void SendInterventionCompleteMsg(const ReadResponseMsg *m,const char *fromMethod);
-      void SendMemAccessComplete(Address addr, NodeID directoryNode);
       void SendRemoteEviction(const EvictionMsg *m,NodeID dest,const char *fromMethod);
       void SendRemoteRead(const ReadMsg *m,NodeID dest,const char *fromMethod);
 		void EraseDirectoryShare(Address a, NodeID id);
@@ -227,15 +214,8 @@ namespace Memory
 		void OnRemoteWriteResponse(const BaseMsg* msgIn, NodeID src);
 		void OnRemoteEviction(const BaseMsg* msgIn, NodeID src);
 		void OnRemoteEvictionResponse(const BaseMsg* msgIn, NodeID src);
-		void OnRemoteEvictionBusyAck(const BaseMsg* msgIn, NodeID src);
 		void OnRemoteInvalidate(const BaseMsg* msgIn, NodeID src);
 		void OnRemoteInvalidateResponse(const BaseMsg* msgIn, NodeID src);
-		void OnRemoteUnrequestedReadResponse(const BaseMsg* msgIn, NodeID src);
-
-		void OnRemoteMemAccessComplete(const BaseMsg* msgIn, NodeID src);
-      void OnRemoteInterventionComplete(const BaseMsg* msgIn, NodeID src);
-      void OnRemoteInvalidationComplete(const BaseMsg* msgIn, NodeID src);
-      void OnRemoteReadComplete(const BaseMsg* msgIn, NodeID src);
 
 		void OnDirectoryBlockRequest(const BaseMsg* msgIn, NodeID src);
       void OnDirectoryBlockRequestSharedRead(const BaseMsg* msgIn, NodeID src);
@@ -260,8 +240,6 @@ namespace Memory
 		CBOnRemoteEviction cbOnRemoteEviction;
       typedef PooledFunctionGenerator<StoredClassFunction2<OriginDirectory,const BaseMsg*, NodeID, &OriginDirectory::OnRemoteRead> > CBOnRemoteRead;
 		CBOnRemoteRead cbOnRemoteRead;
-      typedef PooledFunctionGenerator<StoredClassFunction2<OriginDirectory,Address, NodeID, &OriginDirectory::SendMemAccessComplete> > CBSendMemAccessComplete;
-		CBSendMemAccessComplete cbSendMemAccessComplete;
 
 		// 2010/08/05 Eric: seems to be unused
 		/*
