@@ -1404,6 +1404,7 @@
     <ClInclude Include="libmem\AlwaysPrefetch.h" />
     <ClInclude Include="libmem\Bank.h" />
     <ClInclude Include="MemSys\Devices\BaseMemDevice.h" />
+    <ClInclude Include="MemSys\Messages\BaseDeviceMsg.h" />
     <ClInclude Include="MemSys\Messages\BaseMsg.h" />
     <ClInclude Include="libsuc\BloomFilter.h" />
     <ClInclude Include="libcore\BPred.h" />
@@ -1431,6 +1432,9 @@
     <ClInclude Include="libmint\event.h" />
     <ClInclude Include="MemSys\EventManager.h" />
     <ClInclude Include="libll\Events.h" />
+    <ClInclude Include="MemSys\Messages\BaseNakMsg.h" />
+    <ClInclude Include="MemSys\Messages\CacheNakMsg.h" />
+    <ClInclude Include="MemSys\Messages\DirectoryNakMsg.h" />
     <ClInclude Include="MemSys\Messages\EvictionMsg.h" />
     <ClInclude Include="MemSys\Messages\EvictionResponseMsg.h" />
     <ClInclude Include="libll\ExecutionFlow.h" />
@@ -1454,7 +1458,9 @@
     <ClInclude Include="libmint\icode.h" />
     <ClInclude Include="libll\Instruction.h" />
     <ClInclude Include="libll\InstType.h" />
+    <ClInclude Include="MemSys\Messages\InterventionMsg.h" />
     <ClInclude Include="memsys\messages\interventionsharedrequestmsg.h" />
+    <ClInclude Include="MemSys\Messages\InvalidateAckMsg.h" />
     <ClInclude Include="MemSys\Messages\InvalidateMsg.h" />
     <ClInclude Include="MemSys\Messages\InvalidateResponseMsg.h" />
     <ClInclude Include="libtrans\ITMCollisionDetection.h" />
@@ -1479,7 +1485,13 @@
     <ClInclude Include="libsuc\MSHR.h" />
     <ClInclude Include="MemSys\Messages\InvalidateSharerMsg.h" />
     <ClInclude Include="memsys\messages\networkmsg.h" />
+    <ClInclude Include="MemSys\Messages\ReadReplyMsg.h" />
     <ClInclude Include="MemSys\Messages\SpeculativeReadResponseMsg.h" />
+    <ClInclude Include="MemSys\Messages\SpeculativeReplyMsg.h" />
+    <ClInclude Include="MemSys\Messages\TransferMsg.h" />
+    <ClInclude Include="MemSys\Messages\WritebackAckMsg.h" />
+    <ClInclude Include="MemSys\Messages\WritebackMsg.h" />
+    <ClInclude Include="MemSys\Messages\WritebackRequestMsg.h" />
     <ClInclude Include="MemSys\MSTypes.h" />
     <ClInclude Include="libmem\mtst1.h" />
     <ClInclude Include="libmint\myelf.h" />
