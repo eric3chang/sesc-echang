@@ -52,18 +52,13 @@ End
 Root MemoryDevice Begin
 Int DeviceID 5
 String DeviceType OriginDirectory
-String DeviceName Directory_0
+String DeviceName OriginDirectory_0
 Int LocalSendTime 4
 Int RemoteSendTime 4
 Int LookupRetryTime 4
 Int LookupTime 4
 Int SatisfyTime 4
 Int NodeID 0
-Root MemoryNodeCalculator Begin
-String Type HashedPageCalculator
-Int PageSize 64
-IntSet NodeIDSet 1 { 12 }
-End
 Root DirectoryNodeCalculator Begin
 String Type HashedPageCalculator
 Int PageSize 64
@@ -93,20 +88,20 @@ Int Latency 0
 End
 Root Connection Begin
 String FromDevice L2_0
-String ToDevice Directory_0
+String ToDevice OriginDirectory_0
 String FromName RemoteConnection
 String ToName LocalCacheConnection
 Int Latency 0
 End
 Root Connection Begin
 String FromDevice MainMemory_0
-String ToDevice Directory_0
+String ToDevice OriginDirectory_0
 String FromName RemoteConnection
 String ToName LocalMemoryConnection
 Int Latency 0
 End
 Root Connection Begin
-String FromDevice Directory_0
+String FromDevice OriginDirectory_0
 String ToDevice Network
 String FromName RemoteConnection
 String ToName Connection_0
@@ -144,18 +139,13 @@ End
 Root MemoryDevice Begin
 Int DeviceID 10
 String DeviceType OriginDirectory
-String DeviceName Directory_1
+String DeviceName OriginDirectory_1
 Int LocalSendTime 4
 Int RemoteSendTime 4
 Int LookupRetryTime 4
 Int LookupTime 4
 Int SatisfyTime 4
 Int NodeID 1
-Root MemoryNodeCalculator Begin
-String Type HashedPageCalculator
-Int PageSize 64
-IntSet NodeIDSet 1 { 12 }
-End
 Root DirectoryNodeCalculator Begin
 String Type HashedPageCalculator
 Int PageSize 64
@@ -185,20 +175,20 @@ Int Latency 0
 End
 Root Connection Begin
 String FromDevice L2_1
-String ToDevice Directory_1
+String ToDevice OriginDirectory_1
 String FromName RemoteConnection
 String ToName LocalCacheConnection
 Int Latency 0
 End
 Root Connection Begin
 String FromDevice MainMemory_1
-String ToDevice Directory_1
+String ToDevice OriginDirectory_1
 String FromName RemoteConnection
 String ToName LocalMemoryConnection
 Int Latency 0
 End
 Root Connection Begin
-String FromDevice Directory_1
+String FromDevice OriginDirectory_1
 String ToDevice Network
 String FromName RemoteConnection
 String ToName Connection_1
