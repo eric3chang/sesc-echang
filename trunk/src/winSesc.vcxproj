@@ -1391,7 +1391,6 @@
     <ClInclude Include="include\to_string.h" />
     <ClInclude Include="MemSys\Devices\MESICache.h" />
     <ClInclude Include="MemSys\Devices\OriginDirectory.h" />
-    <ClInclude Include="MemSys\Messages\InvalidationCompleteMsg.h" />
     <ClInclude Include="libmint\Addressing.h" />
     <ClInclude Include="libmem\AddressPrefetcher.h" />
     <ClInclude Include="libmint\AddressSpace.h" />
@@ -1400,7 +1399,6 @@
     <ClInclude Include="memsys\devices\directory.h" />
     <ClInclude Include="memsys\devices\networkmemoryinterface.h" />
     <ClInclude Include="memsys\devices\randomloadnetwork.h" />
-    <ClInclude Include="MemSys\Devices\ThreeStageDirectory.h" />
     <ClInclude Include="MemSys\Messages\AllMessageTypes.h" />
     <ClInclude Include="libsuc\alloca.h" />
     <ClInclude Include="libmem\AlwaysPrefetch.h" />
@@ -1433,7 +1431,6 @@
     <ClInclude Include="libmint\event.h" />
     <ClInclude Include="MemSys\EventManager.h" />
     <ClInclude Include="libll\Events.h" />
-    <ClInclude Include="MemSys\Messages\EvictionBusyAckMsg.h" />
     <ClInclude Include="MemSys\Messages\EvictionMsg.h" />
     <ClInclude Include="MemSys\Messages\EvictionResponseMsg.h" />
     <ClInclude Include="libll\ExecutionFlow.h" />
@@ -1457,7 +1454,6 @@
     <ClInclude Include="libmint\icode.h" />
     <ClInclude Include="libll\Instruction.h" />
     <ClInclude Include="libll\InstType.h" />
-    <ClInclude Include="MemSys\Messages\InterventionCompleteMsg.h" />
     <ClInclude Include="memsys\messages\interventionsharedrequestmsg.h" />
     <ClInclude Include="MemSys\Messages\InvalidateMsg.h" />
     <ClInclude Include="MemSys\Messages\InvalidateResponseMsg.h" />
@@ -1482,11 +1478,8 @@
     <ClInclude Include="MemSys\Devices\MOESICache.h" />
     <ClInclude Include="libsuc\MSHR.h" />
     <ClInclude Include="MemSys\Messages\InvalidateSharerMsg.h" />
-    <ClInclude Include="MemSys\Messages\MemAccessCompleteMsg.h" />
     <ClInclude Include="memsys\messages\networkmsg.h" />
-    <ClInclude Include="MemSys\Messages\ReadCompleteMsg.h" />
     <ClInclude Include="MemSys\Messages\SpeculativeReadResponseMsg.h" />
-    <ClInclude Include="MemSys\Messages\UnrequestedReadResponseMsg.h" />
     <ClInclude Include="MemSys\MSTypes.h" />
     <ClInclude Include="libmem\mtst1.h" />
     <ClInclude Include="libmint\myelf.h" />
@@ -1584,7 +1577,6 @@
     <ClCompile Include="MemSys\Devices\NetworkMemoryInterface.cpp" />
     <ClCompile Include="MemSys\Devices\OriginDirectory.cpp" />
     <ClCompile Include="MemSys\Devices\RandomLoadNetwork.cpp" />
-    <ClCompile Include="MemSys\Devices\ThreeStageDirectory.cpp" />
     <ClCompile Include="MemSys\EventManager.cpp" />
     <ClCompile Include="libll\Events.cpp" />
     <ClCompile Include="libmint\exec.cpp" />

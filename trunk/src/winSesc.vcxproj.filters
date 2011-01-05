@@ -474,9 +474,6 @@
     <ClInclude Include="include\to_string.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MemSys\Devices\ThreeStageDirectory.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="MemSys\Messages\InvalidateSharerMsg.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -484,24 +481,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="memsys\messages\interventionsharedrequestmsg.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MemSys\Messages\EvictionBusyAckMsg.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MemSys\Messages\MemAccessCompleteMsg.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MemSys\Messages\InterventionCompleteMsg.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MemSys\Messages\InvalidationCompleteMsg.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MemSys\Messages\ReadCompleteMsg.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MemSys\Messages\UnrequestedReadResponseMsg.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MemSys\Devices\MSICache.h">
@@ -816,9 +795,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MemSys\Devices\RandomLoadNetwork.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MemSys\Devices\ThreeStageDirectory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MemSys\Devices\MSICache.cpp">
