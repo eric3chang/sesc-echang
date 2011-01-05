@@ -32,7 +32,7 @@ namespace Memory
 			{
 				ReadMsg* rm = (ReadMsg*)msg;
 				replyTime = readTime;
-				ReadResponseMsg* m = EM().CreateReadResponseMsg(getDeviceID(),msg->GeneratingPC());
+				ReadResponseMsg* m = EM().CreateReadResponseMsg(GetDeviceID(),msg->GeneratingPC());
 				m->addr = rm->addr;
 				m->size = rm->size;
 				m->blockAttached = true;
@@ -49,7 +49,7 @@ namespace Memory
 			{
 				WriteMsg* wm = (WriteMsg*)msg;
 				replyTime = writeTime;
-				WriteResponseMsg* m = EM().CreateWriteResponseMsg(getDeviceID(),msg->GeneratingPC());
+				WriteResponseMsg* m = EM().CreateWriteResponseMsg(GetDeviceID(),msg->GeneratingPC());
 				m->addr = wm->addr;
 				m->size = wm->size;
 				m->solicitingMessage = wm->MsgID();
@@ -60,7 +60,7 @@ namespace Memory
 		case(mt_Eviction):
 			{
 				EvictionMsg* em = (EvictionMsg*)msg;
-				EvictionResponseMsg* m = EM().CreateEvictionResponseMsg(getDeviceID(),msg->GeneratingPC());
+				EvictionResponseMsg* m = EM().CreateEvictionResponseMsg(GetDeviceID(),msg->GeneratingPC());
 				m->addr = em->addr;
 				m->size = em->size;
 				m->solicitingMessage = m->MsgID();

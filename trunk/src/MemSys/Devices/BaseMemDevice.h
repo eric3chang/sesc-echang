@@ -1,4 +1,5 @@
 #pragma once
+#include "AllMessageTypes.h"
 #include "../MSTypes.h"
 #include "../StoredFunctionCall.h"
 #include "../HashContainers.h"
@@ -57,11 +58,13 @@ namespace Memory
 		virtual void DumpStats(std::ostream& out) = 0;
 		virtual void RecvMsg(const BaseMsg* msg, int connectionID) = 0;
 
+		static Address GetAddress(const BaseMsg* m);
+
 		int ConnectionCount();
 		Connection& GetConnection(int index);
 		EventManager& EM();
 		// changed this because compiler sometimes think ID() is #define from nanassert
-	   DeviceID getDeviceID() const;
+	   DeviceID GetDeviceID() const;
 		const std::string& DeviceName();
 
       void printBaseMemDeviceDebugInfo(const char* childClass, const char* fromMethod,

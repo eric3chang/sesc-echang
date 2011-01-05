@@ -18,7 +18,7 @@ namespace Memory
 		{
 		   BaseMsg::print(destinationDeviceID);
 		   cout << " adr=" << addr
-            << " newOwner=" << Memory::convertNodeIDToDeviceID(newOwner)
+            << " newOwner=" << BaseMsg::convertNodeIDToDeviceID(newOwner)
             << " sMsg=" << solicitingMessage
 		   ;
 		}

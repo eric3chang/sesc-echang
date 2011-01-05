@@ -171,7 +171,7 @@ namespace Memory
 
             if(pendingInvalidate.find(tag) == pendingInvalidate.end())
             {
-               InvalidateMsg* im = EM().CreateInvalidateMsg(getDeviceID(),0);
+               InvalidateMsg* im = EM().CreateInvalidateMsg(GetDeviceID(),0);
                im->addr = CalcAddr(set[eviction].tag);
                im->size = lineSize;
                localConnection->SendMsg(im,invalidateTime);
@@ -192,7 +192,7 @@ namespace Memory
 		DebugAssert(b->valid);
 		DebugAssert(!b->locked);
 		DebugAssert(b->state != bs_Invalid);
-		EvictionMsg* m = EM().CreateEvictionMsg(getDeviceID(),0);
+		EvictionMsg* m = EM().CreateEvictionMsg(GetDeviceID(),0);
 		DebugAssert(m);
 		m->addr = CalcAddr(b->tag);
 		m->size = lineSize;
@@ -261,7 +261,7 @@ void MOESICache::PrepareFreshBlock(int setNumber, int index, AddrTag tag)
 	{
 		DebugAssert(pendingInvalidate.find(tag) != pendingInvalidate.end())
 		BlockState* b = Lookup(tag);
-		InvalidateResponseMsg* res = EM().CreateInvalidateResponseMsg(getDeviceID(),0);
+		InvalidateResponseMsg* res = EM().CreateInvalidateResponseMsg(GetDeviceID(),0);
 		res->addr = CalcAddr(tag);
 		res->size = lineSize;
 		res->solicitingMessage = pendingInvalidate[tag]->MsgID();
@@ -291,7 +291,7 @@ void MOESICache::PrepareFreshBlock(int setNumber, int index, AddrTag tag)
 			DebugAssert(b);
 			DebugAssert(b->locked);
 			b->state = bs_Invalid;
-			ReadMsg* forward = EM().CreateReadMsg(getDeviceID(),pendingInvalidate[tag]->GeneratingPC());
+			ReadMsg* forward = EM().CreateReadMsg(GetDeviceID(),pendingInvalidate[tag]->GeneratingPC());
 			forward->addr = pendingInvalidate[tag]->addr;
 			forward->size = lineSize;
 			forward->alreadyHasBlock = false;
@@ -354,7 +354,7 @@ void MOESICache::PrepareFreshBlock(int setNumber, int index, AddrTag tag)
 			{
 				LockBlock(tag);
 				readMisses++;
-				ReadMsg* forward = EM().CreateReadMsg(getDeviceID(),m->GeneratingPC());
+				ReadMsg* forward = EM().CreateReadMsg(GetDeviceID(),m->GeneratingPC());
 				forward->addr = CalcAddr(tag);
 				forward->size = lineSize;
 				forward->alreadyHasBlock = (b->state != bs_Invalid);
@@ -369,7 +369,7 @@ void MOESICache::PrepareFreshBlock(int setNumber, int index, AddrTag tag)
 		else
 		{  //hit
 		   readHits++;
-			ReadResponseMsg* res = EM().CreateReadResponseMsg(getDeviceID(),m->GeneratingPC());
+			ReadResponseMsg* res = EM().CreateReadResponseMsg(GetDeviceID(),m->GeneratingPC());
 			m->SignalComplete();
 			res->addr = m->addr;
 			res->size = m->size;
@@ -387,7 +387,7 @@ void MOESICache::PrepareFreshBlock(int setNumber, int index, AddrTag tag)
 		DebugAssertWithMessageID(m,m->MsgID());
 		AddrTag tag = CalcTag(m->addr);
 		BlockState* b = Lookup(tag);
-		ReadResponseMsg* res = EM().CreateReadResponseMsg(getDeviceID(),m->GeneratingPC());
+		ReadResponseMsg* res = EM().CreateReadResponseMsg(GetDeviceID(),m->GeneratingPC());
 		res->addr = m->addr;
 		res->size = m->size;
 		m->SignalComplete();
@@ -443,7 +443,7 @@ void MOESICache::PrepareFreshBlock(int setNumber, int index, AddrTag tag)
 			{
 				LockBlock(tag);
 				writeMisses++;
-				ReadMsg* forward = EM().CreateReadMsg(getDeviceID(),m->GeneratingPC());
+				ReadMsg* forward = EM().CreateReadMsg(GetDeviceID(),m->GeneratingPC());
 				forward->addr = CalcAddr(tag);
 				forward->size = lineSize;
 				forward->alreadyHasBlock = (b->state != bs_Invalid);
@@ -459,7 +459,7 @@ void MOESICache::PrepareFreshBlock(int setNumber, int index, AddrTag tag)
 		{
 		   writeHits++;
 			b->state = bs_Modified;
-			WriteResponseMsg* res = EM().CreateWriteResponseMsg(getDeviceID(),m->GeneratingPC());
+			WriteResponseMsg* res = EM().CreateWriteResponseMsg(GetDeviceID(),m->GeneratingPC());
 			res->addr = m->addr;
 			res->size = m->size;
 			res->solicitingMessage = m->MsgID();
@@ -510,7 +510,7 @@ void MOESICache::PrepareFreshBlock(int setNumber, int index, AddrTag tag)
 			}
 			else
 			{
-				ReadMsg* forward = EM().CreateReadMsg(getDeviceID(),m->GeneratingPC());
+				ReadMsg* forward = EM().CreateReadMsg(GetDeviceID(),m->GeneratingPC());
 				forward->addr = m->addr;
 				forward->alreadyHasBlock = true;
 				forward->onCompletedCallback = NULL;
@@ -552,7 +552,7 @@ void MOESICache::PrepareFreshBlock(int setNumber, int index, AddrTag tag)
 	}
 	void MOESICache::OnRemoteWrite(const WriteMsg* m)
 	{
-		WriteResponseMsg* res = EM().CreateWriteResponseMsg(getDeviceID(),m->GeneratingPC());
+		WriteResponseMsg* res = EM().CreateWriteResponseMsg(GetDeviceID(),m->GeneratingPC());
 		res->addr = m->addr;
 		res->size = m->size;
 		res->solicitingMessage = m->MsgID();
@@ -613,7 +613,7 @@ void MOESICache::PrepareFreshBlock(int setNumber, int index, AddrTag tag)
 				b->state = bs_Owned;
 			}
 		}
-		EvictionResponseMsg* res = EM().CreateEvictionResponseMsg(getDeviceID(),m->GeneratingPC());
+		EvictionResponseMsg* res = EM().CreateEvictionResponseMsg(GetDeviceID(),m->GeneratingPC());
 		res->addr = m->addr;
 		res->size = m->size;
 		res->solicitingMessage = m->MsgID();
@@ -623,7 +623,7 @@ void MOESICache::PrepareFreshBlock(int setNumber, int index, AddrTag tag)
 	void MOESICache::OnRemoteEviction(const EvictionMsg* m)
 	{
 		DebugAssertWithMessageID(m,m->MsgID());
-		EvictionResponseMsg* res = EM().CreateEvictionResponseMsg(getDeviceID(),m->GeneratingPC());
+		EvictionResponseMsg* res = EM().CreateEvictionResponseMsg(GetDeviceID(),m->GeneratingPC());
 		res->addr = m->addr;
 		res->size = m->size;
 		res->solicitingMessage = m->MsgID();
@@ -763,7 +763,7 @@ void MOESICache::PrepareFreshBlock(int setNumber, int index, AddrTag tag)
          }
          if(pendingEviction.find(tag) != pendingEviction.end())
          {
-            EvictionMsg* forward = EM().CreateEvictionMsg(getDeviceID(),m->GeneratingPC());
+            EvictionMsg* forward = EM().CreateEvictionMsg(GetDeviceID(),m->GeneratingPC());
             forward->addr = CalcAddr(CalcTag(m->addr));
             forward->size = lineSize;
             forward->blockAttached = pendingEviction[tag].state == bs_Modified || pendingEviction[tag].state == bs_Owned;
@@ -1045,7 +1045,7 @@ void MOESICache::PrepareFreshBlock(int setNumber, int index, AddrTag tag)
    void MOESICache::printDebugInfo(const char* fromMethod,const AddrTag tag,const char* operation)
    {
       cout << setw(17) << " "
-            << " dst=" << setw(2) << getDeviceID()
+            << " dst=" << setw(2) << GetDeviceID()
             << " MOESICache::" << fromMethod
             << " " << operation << "(" << tag << ")"
             << endl;

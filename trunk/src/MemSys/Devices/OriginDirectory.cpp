@@ -50,7 +50,7 @@ namespace Memory
 		DumpLookupDataTemplate<Address>(m);
 	}
 
-void OriginDirectory::AddDirectoryShare(Address a, NodeID id, bool exclusive)
+	void OriginDirectory::AddDirectoryShare(Address a, NodeID id, bool exclusive)
 	{
       DebugAssert(directoryNodeCalc->CalcNodeID(a)==nodeID);
 		BlockData& b = directoryData[a];
@@ -209,7 +209,7 @@ void OriginDirectory::HandleReceivedAllInvalidates(Address myAddress)
 		}
 		else
 		{
-			NetworkMsg* nm = EM().CreateNetworkMsg(getDeviceID(), m->GeneratingPC());
+			NetworkMsg* nm = EM().CreateNetworkMsg(GetDeviceID(), m->GeneratingPC());
 			nm->destinationNode = target;
 			if (isTargetMemory)
 			{
@@ -278,7 +278,7 @@ void OriginDirectory::HandleReceivedAllInvalidates(Address myAddress)
 		}
 		else
 		{
-			NetworkMsg* nm = EM().CreateNetworkMsg(getDeviceID(), m->GeneratingPC());
+			NetworkMsg* nm = EM().CreateNetworkMsg(GetDeviceID(), m->GeneratingPC());
 			nm->destinationNode = target;
          /*
          //TODO 2010/09/24 Eric
@@ -324,7 +324,7 @@ void OriginDirectory::HandleReceivedAllInvalidates(Address myAddress)
 		}
 		else
 		{
-			NetworkMsg* nm = EM().CreateNetworkMsg(getDeviceID(), forward->GeneratingPC());
+			NetworkMsg* nm = EM().CreateNetworkMsg(GetDeviceID(), forward->GeneratingPC());
 			DebugAssertWithMessageID(nm,forward->MsgID())
 			nm->destinationNode = remoteNode;
 			nm->sourceNode = nodeID;
@@ -380,7 +380,7 @@ void OriginDirectory::HandleReceivedAllInvalidates(Address myAddress)
       }
       else
       {
-         NetworkMsg* nm = EM().CreateNetworkMsg(getDeviceID(),m->GeneratingPC());
+         NetworkMsg* nm = EM().CreateNetworkMsg(GetDeviceID(),m->GeneratingPC());
          nm->destinationNode = dest;
          nm->sourceNode = nodeID;
          nm->payloadMsg = m;
@@ -405,7 +405,7 @@ void OriginDirectory::HandleReceivedAllInvalidates(Address myAddress)
       }
       else
       {
-         NetworkMsg* nm = EM().CreateNetworkMsg(getDeviceID(),m->GeneratingPC());
+         NetworkMsg* nm = EM().CreateNetworkMsg(GetDeviceID(),m->GeneratingPC());
          nm->payloadMsg = m;
          nm->sourceNode = nodeID;
          nm->destinationNode = dest;
@@ -508,7 +508,7 @@ void OriginDirectory::HandleReceivedAllInvalidates(Address myAddress)
       }
       else
       {
-         NetworkMsg* nm = EM().CreateNetworkMsg(getDeviceID(),msg->GeneratingPC());
+         NetworkMsg* nm = EM().CreateNetworkMsg(GetDeviceID(),msg->GeneratingPC());
          nm->payloadMsg = msg;
          nm->sourceNode = nodeID;
          nm->destinationNode = dest;
@@ -731,18 +731,18 @@ void OriginDirectory::HandleReceivedAllInvalidates(Address myAddress)
    void OriginDirectory::printDebugInfo(const char* fromMethod,Address addr,NodeID id,const char* operation)
    {
       cout << setw(15) << " " // account for spacing from src and msgSrc
-            << " dst=" << setw(3) << getDeviceID()
+            << " dst=" << setw(3) << GetDeviceID()
             << setw(10) << " "   // account for spacing from msgID
             << " addr=" << addr
             << " " << fromMethod
-            << " " << operation << "(" << Memory::convertNodeIDToDeviceID(id) << ")"
+            << " " << operation << "(" << BaseMsg::convertNodeIDToDeviceID(id) << ")"
             << endl;
    }
 
    void OriginDirectory::printEraseOwner(const char* fromMethod,Address addr,NodeID id,const char* operation)
    {
       cout << setw(15) << " " // account for spacing from src and msgSrc
-            << " dst=" << setw(2) << getDeviceID()
+            << " dst=" << setw(2) << GetDeviceID()
             << setw(10) << " "   // account for spacing from msgID
             << " addr=" << addr
             << " " << fromMethod

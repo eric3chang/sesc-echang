@@ -32,7 +32,7 @@ namespace Memory
             << " exOw=" << exclusiveOwnership
             << " sMsg=" << solicitingMessage
             << " memAc=" << hasPendingMemAccesses
-            << " ogNode=" << Memory::convertNodeIDToDeviceID(originalRequestingNode)
+            << " ogNode=" << BaseMsg::convertNodeIDToDeviceID(originalRequestingNode)
             << " pInv=" << pendingInvalidates
 		   ;
 		}
