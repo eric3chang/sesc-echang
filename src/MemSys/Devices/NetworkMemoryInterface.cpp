@@ -65,7 +65,7 @@ namespace Memory
 				DebugFail("bad from-memory msg type");
 			}
 			DebugAssert(sourceTable.find(referenceID) != sourceTable.end());
-			NetworkMsg* n = EM().CreateNetworkMsg(getDeviceID(), msg->GeneratingPC());
+			NetworkMsg* n = EM().CreateNetworkMsg(GetDeviceID(), msg->GeneratingPC());
 			n->payloadMsg = msg;
 			n->sourceNode = nodeID;
 			n->destinationNode = sourceTable[referenceID];

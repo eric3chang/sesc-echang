@@ -68,11 +68,41 @@ namespace Memory
 #endif
 		return *(connectionSet[index]);
 	}
+	Address BaseMemDevice::GetAddress(const BaseMsg* m)
+	{
+		switch(m->Type())
+		{
+		case (mt_Eviction):
+			return ((const EvictionMsg*)m)->addr;
+		case (mt_EvictionResponse):
+			return ((const EvictionResponseMsg*)m)->addr;
+		case (mt_Invalidate):
+			return ((const InvalidateMsg*)m)->addr;
+		case (mt_InvalidateResponse):
+			return ((const InvalidateResponseMsg*)m)->addr;
+		case (mt_Network):
+			return 0;
+		case (mt_Read):
+			return ((const ReadMsg*)m)->addr;
+		case (mt_ReadResponse):
+			return ((const ReadResponseMsg*)m)->addr;
+		case (mt_Write):
+			return ((const WriteMsg*)m)->addr;
+		case (mt_WriteResponse):
+			return ((const WriteResponseMsg*)m)->addr;
+
+		case (mt_Transfer):
+			return ((const TransferMsg*)m)->addr;
+		case (mt_WritebackRequest):
+			return ((const WritebackRequestMsg*)m)->addr;
+		}
+		return 0;
+	}
 	EventManager& BaseMemDevice::EM()
 	{
 		return *em;
 	}
-	DeviceID BaseMemDevice::getDeviceID() const
+	DeviceID BaseMemDevice::GetDeviceID() const
 	{
 		return deviceID;
 	}

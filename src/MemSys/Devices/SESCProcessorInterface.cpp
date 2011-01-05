@@ -69,7 +69,7 @@ namespace Memory
 		case MemRead:
 			{
 			   readCount++;
-				ReadMsg* r = EM().CreateReadMsg(this->getDeviceID(),(Address)(mreq->dinst->getInst()->addr));
+				ReadMsg* r = EM().CreateReadMsg(this->GetDeviceID(),(Address)(mreq->dinst->getInst()->addr));
 				r->addr = (Address)mreq->getPAddr();
 				r->size = 1;
 				r->alreadyHasBlock = false;
@@ -81,7 +81,7 @@ namespace Memory
 		case MemWrite:
 			{
 			   writeCount++;
-				WriteMsg* w = EM().CreateWriteMsg(this->getDeviceID(),(Address)(mreq->dinst->getInst()->addr));
+				WriteMsg* w = EM().CreateWriteMsg(this->GetDeviceID(),(Address)(mreq->dinst->getInst()->addr));
 				msg = w;
 				w->addr = (Address)mreq->getPAddr();
 				w->size = 1;

@@ -87,7 +87,7 @@ namespace Memory
 		}
 		else
 		{
-			NetworkMsg* nm = EM().CreateNetworkMsg(getDeviceID(), m->GeneratingPC());
+			NetworkMsg* nm = EM().CreateNetworkMsg(GetDeviceID(), m->GeneratingPC());
 			nm->destinationNode = target;
 			nm->sourceNode = nodeID;
 			nm->payloadMsg = m;
@@ -169,7 +169,7 @@ namespace Memory
 		}
 		else
 		{
-			NetworkMsg* nm = EM().CreateNetworkMsg(getDeviceID(), m->GeneratingPC());
+			NetworkMsg* nm = EM().CreateNetworkMsg(GetDeviceID(), m->GeneratingPC());
 			DebugAssertWithMessageID(nm,m->MsgID())
 			nm->destinationNode = remoteNode;
 			nm->sourceNode = nodeID;
@@ -186,7 +186,7 @@ namespace Memory
 		DebugAssertWithMessageID(pendingRemoteReads.find(m->solicitingMessage) != pendingRemoteReads.end(),m->MsgID())
 		LookupData<ReadMsg>& d = pendingRemoteReads[m->solicitingMessage];
 		DebugAssertWithMessageID(d.msg->MsgID() == m->solicitingMessage,m->MsgID())
-		NetworkMsg* nm = EM().CreateNetworkMsg(getDeviceID(),d.msg->GeneratingPC());
+		NetworkMsg* nm = EM().CreateNetworkMsg(GetDeviceID(),d.msg->GeneratingPC());
 		ReadResponseMsg* forward = (ReadResponseMsg*)EM().ReplicateMsg(m);
 		nm->sourceNode = nodeID;
 		nm->destinationNode = d.sourceNode;
@@ -209,7 +209,7 @@ namespace Memory
 #endif
 		DebugAssertWithMessageID(m,m->MsgID())
 		NodeID id = directoryNodeCalc->CalcNodeID(m->addr);
-		WriteResponseMsg* wrm = EM().CreateWriteResponseMsg(getDeviceID(),m->GeneratingPC());
+		WriteResponseMsg* wrm = EM().CreateWriteResponseMsg(GetDeviceID(),m->GeneratingPC());
 		wrm->addr = m->addr;
 		wrm->size = m->size;
 		wrm->solicitingMessage = m->MsgID();
@@ -220,7 +220,7 @@ namespace Memory
 		}
 		else
 		{
-			NetworkMsg* nm = EM().CreateNetworkMsg(getDeviceID(),m->GeneratingPC());
+			NetworkMsg* nm = EM().CreateNetworkMsg(GetDeviceID(),m->GeneratingPC());
 			DebugAssertWithMessageID(nm,m->MsgID())
 			nm->sourceNode = nodeID;
 			nm->destinationNode = id;
@@ -240,7 +240,7 @@ namespace Memory
 #endif
 		DebugAssert(pendingEviction.find(m->addr) == pendingEviction.end())
 		pendingEviction.insert(m->addr);
-		EvictionResponseMsg* erm = EM().CreateEvictionResponseMsg(getDeviceID(),m->GeneratingPC());
+		EvictionResponseMsg* erm = EM().CreateEvictionResponseMsg(GetDeviceID(),m->GeneratingPC());
 		erm->addr = m->addr;
 		erm->size = m->size;
 		erm->solicitingMessage = m->MsgID();
@@ -255,7 +255,7 @@ namespace Memory
 		}
 		else
 		{
-			NetworkMsg* nm = EM().CreateNetworkMsg(getDeviceID(),m->GeneratingPC());
+			NetworkMsg* nm = EM().CreateNetworkMsg(GetDeviceID(),m->GeneratingPC());
 			nm->destinationNode = id;
 			nm->sourceNode = nodeID;
 			nm->payloadMsg = m;
@@ -273,7 +273,7 @@ namespace Memory
 		DebugAssertWithMessageID(d.msg->MsgID() == m->solicitingMessage,m->MsgID())
 		if(nodeID != d.sourceNode)
 		{
-			NetworkMsg* nm = EM().CreateNetworkMsg(getDeviceID(),d.msg->GeneratingPC());
+			NetworkMsg* nm = EM().CreateNetworkMsg(GetDeviceID(),d.msg->GeneratingPC());
 			nm->sourceNode = nodeID;
 			nm->destinationNode = d.sourceNode;
 			nm->payloadMsg = m;
@@ -327,7 +327,7 @@ namespace Memory
 			   // for all the elements in pendingDirectorySharedReads where key is in the range of m->addr
 				for(HashMultiMap<Address,LookupData<ReadMsg> >::iterator i = pendingDirectorySharedReads.equal_range(m->addr).first; i != pendingDirectorySharedReads.equal_range(m->addr).second; i++)
 				{
-					ReadResponseMsg* r = EM().CreateReadResponseMsg(getDeviceID(),i->second.msg->GeneratingPC());
+					ReadResponseMsg* r = EM().CreateReadResponseMsg(GetDeviceID(),i->second.msg->GeneratingPC());
 					r->blockAttached = true;
 					r->addr = m->addr;
 					r->size = m->size;
@@ -345,7 +345,7 @@ namespace Memory
 					}
 					else
 					{
-						NetworkMsg* nm = EM().CreateNetworkMsg(getDeviceID(),i->second.msg->GeneratingPC());
+						NetworkMsg* nm = EM().CreateNetworkMsg(GetDeviceID(),i->second.msg->GeneratingPC());
 						nm->destinationNode = i->second.sourceNode;
 						nm->sourceNode = nodeID;
 						nm->payloadMsg = r;
@@ -366,7 +366,7 @@ namespace Memory
 					response->directoryLookup = true;
 					if(pendingDirectoryExclusiveReads[m->addr].sourceNode != nodeID)
 					{
-						NetworkMsg* net = EM().CreateNetworkMsg(getDeviceID(),m->GeneratingPC());
+						NetworkMsg* net = EM().CreateNetworkMsg(GetDeviceID(),m->GeneratingPC());
 						net->sourceNode = nodeID;
 						net->destinationNode = pendingDirectoryExclusiveReads[m->addr].sourceNode;
 						net->payloadMsg = response;
@@ -384,12 +384,12 @@ namespace Memory
 				{//hold the block, send on once all invalidations are complete
 					for(HashSet<NodeID>::iterator i = directoryData[m->addr].sharers.begin(); i != directoryData[m->addr].sharers.end(); i++)
 					{
-						InvalidateMsg* inv = EM().CreateInvalidateMsg(getDeviceID(),m->GeneratingPC());
+						InvalidateMsg* inv = EM().CreateInvalidateMsg(GetDeviceID(),m->GeneratingPC());
 						inv->addr = m->addr;
 						inv->size = m->size;
 						if(*i != nodeID)
 						{
-							NetworkMsg* net = EM().CreateNetworkMsg(getDeviceID(),m->GeneratingPC());
+							NetworkMsg* net = EM().CreateNetworkMsg(GetDeviceID(),m->GeneratingPC());
 							net->destinationNode = *i;
 							net->sourceNode = nodeID;
 							net->payloadMsg = inv;
@@ -429,16 +429,16 @@ namespace Memory
 		NodeID memoryNode = memoryNodeCalc->CalcNodeID(m->addr);
 		if(src != nodeID)
 		{
-			WriteResponseMsg* wrm = EM().CreateWriteResponseMsg(getDeviceID(), m->GeneratingPC());
+			WriteResponseMsg* wrm = EM().CreateWriteResponseMsg(GetDeviceID(), m->GeneratingPC());
 			wrm->addr = m->addr;
 			wrm->size = m->size;
 			wrm->solicitingMessage = m->MsgID();
-			NetworkMsg* nm = EM().CreateNetworkMsg(getDeviceID(), m->GeneratingPC());
+			NetworkMsg* nm = EM().CreateNetworkMsg(GetDeviceID(), m->GeneratingPC());
 			nm->sourceNode = nodeID;
 			nm->destinationNode = memoryNode;
 			nm->payloadMsg = m;
 			SendMsg(remoteConnectionID, nm, remoteSendTime);
-			nm = EM().CreateNetworkMsg(getDeviceID(), m->GeneratingPC());
+			nm = EM().CreateNetworkMsg(GetDeviceID(), m->GeneratingPC());
 			nm->sourceNode = nodeID;
 			nm->destinationNode = src;
 			nm->payloadMsg = wrm;
@@ -487,11 +487,11 @@ namespace Memory
 		}
 		else
 		{
-			EvictionResponseMsg* rm = EM().CreateEvictionResponseMsg(getDeviceID(),m->GeneratingPC());
+			EvictionResponseMsg* rm = EM().CreateEvictionResponseMsg(GetDeviceID(),m->GeneratingPC());
 			rm->addr = m->addr;
 			rm->size = m->size;
 			rm->solicitingMessage = m->MsgID();
-			NetworkMsg* nm = EM().CreateNetworkMsg(getDeviceID(),m->GeneratingPC());
+			NetworkMsg* nm = EM().CreateNetworkMsg(GetDeviceID(),m->GeneratingPC());
 			nm->destinationNode = src;
 			nm->sourceNode = nodeID;
 			nm->payloadMsg = rm;
@@ -499,11 +499,11 @@ namespace Memory
 		}
 		if(m->blockAttached)
 		{
-			WriteMsg* wm = EM().CreateWriteMsg(getDeviceID(), m->GeneratingPC());
+			WriteMsg* wm = EM().CreateWriteMsg(GetDeviceID(), m->GeneratingPC());
 			wm->addr = m->addr;
 			wm->size = m->size;
 			wm->onCompletedCallback = NULL;
-			NetworkMsg* nm = EM().CreateNetworkMsg(getDeviceID(), m->GeneratingPC());
+			NetworkMsg* nm = EM().CreateNetworkMsg(GetDeviceID(), m->GeneratingPC());
 			nm->sourceNode = nodeID;
 			nm->destinationNode = memoryNodeCalc->CalcNodeID(m->addr);
 			nm->payloadMsg = wm;
@@ -578,11 +578,11 @@ namespace Memory
 
 		if(m->blockAttached)
 		{
-			WriteMsg* wm = EM().CreateWriteMsg(getDeviceID(), m->GeneratingPC());
+			WriteMsg* wm = EM().CreateWriteMsg(GetDeviceID(), m->GeneratingPC());
 			wm->addr = m->addr;
 			wm->size = m->size;
 			wm->onCompletedCallback = NULL;
-			NetworkMsg* nm = EM().CreateNetworkMsg(getDeviceID(), m->GeneratingPC());
+			NetworkMsg* nm = EM().CreateNetworkMsg(GetDeviceID(), m->GeneratingPC());
 			nm->sourceNode = nodeID;
 			nm->destinationNode = memoryNodeCalc->CalcNodeID(m->addr);
 			nm->payloadMsg = wm;
@@ -602,7 +602,7 @@ namespace Memory
 #endif
 				b.sharers.clear();
 				b.owner = pendingDirectoryExclusiveReads[m->addr].sourceNode;
-				ReadResponseMsg* rm = EM().CreateReadResponseMsg(getDeviceID(),pendingDirectoryExclusiveReads[m->addr].msg->GeneratingPC());
+				ReadResponseMsg* rm = EM().CreateReadResponseMsg(GetDeviceID(),pendingDirectoryExclusiveReads[m->addr].msg->GeneratingPC());
 				rm->addr = m->addr;
 				rm->size = m->size;
 				rm->blockAttached = true;
@@ -616,7 +616,7 @@ namespace Memory
 				}
 				else
 				{
-					NetworkMsg* n = EM().CreateNetworkMsg(getDeviceID(), pendingDirectoryExclusiveReads[m->addr].msg->GeneratingPC());
+					NetworkMsg* n = EM().CreateNetworkMsg(GetDeviceID(), pendingDirectoryExclusiveReads[m->addr].msg->GeneratingPC());
 					n->sourceNode = nodeID;
 					n->destinationNode = pendingDirectoryExclusiveReads[m->addr].sourceNode;
 					n->payloadMsg = rm;
@@ -652,8 +652,8 @@ namespace Memory
 			}
 			else
 			{
-				NetworkMsg* n = EM().CreateNetworkMsg(getDeviceID(),m->GeneratingPC());
-				ReadResponseMsg* rm = EM().CreateReadResponseMsg(getDeviceID(),m->GeneratingPC());
+				NetworkMsg* n = EM().CreateNetworkMsg(GetDeviceID(),m->GeneratingPC());
+				ReadResponseMsg* rm = EM().CreateReadResponseMsg(GetDeviceID(),m->GeneratingPC());
 				n->sourceNode = nodeID;
 				n->destinationNode = src;
 				n->payloadMsg = rm;
@@ -731,7 +731,7 @@ namespace Memory
 			OnLocalRead(ref);
 			return;
 		}
-		ReadResponseMsg* r = EM().CreateReadResponseMsg(getDeviceID(),ref->GeneratingPC());
+		ReadResponseMsg* r = EM().CreateReadResponseMsg(GetDeviceID(),ref->GeneratingPC());
 		r->addr = ref->addr;
 		r->blockAttached = m->blockAttached;
 		r->directoryLookup = false;
@@ -1056,7 +1056,7 @@ namespace Memory
    void Directory::printDebugInfo(const char* fromMethod,Address addr,NodeID id,const char* operation)
    {
       cout << setw(17) << " " // account for spacing from src and msgSrc
-            << " dst=" << setw(3) << getDeviceID()
+            << " dst=" << setw(3) << GetDeviceID()
             << setw(11) << " "   // account for spacing from msgID
             << " addr=" << addr
             << " " << fromMethod
@@ -1077,7 +1077,7 @@ namespace Memory
    void Directory::printEraseOwner(const char* fromMethod,Address addr,NodeID id,const char* operation)
    {
       cout << setw(17) << " " // account for spacing from src and msgSrc
-            << " dst=" << setw(3) << getDeviceID()
+            << " dst=" << setw(3) << GetDeviceID()
             << setw(10) << " "   // account for spacing from msgID
             << " addr=" << addr
             << " " << fromMethod

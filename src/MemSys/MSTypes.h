@@ -28,5 +28,17 @@ namespace Memory
 		mt_EvictionResponse,
 
 		mt_Network,
+
+		// added for Origin protocol
+		mt_CacheNak,
+		mt_DirectoryNak,
+		mt_Intervention,
+		mt_InvalidateAck,
+		mt_ReadReply,
+		mt_SpeculativeReply,
+		mt_Transfer,
+		mt_Writeback,
+		mt_WritebackAck,
+		mt_WritebackRequest
 	};
 }
