@@ -124,9 +124,7 @@ namespace Memory
 		TimeDelta lookupRetryTime;
 
 		NodeIDCalculator* directoryNodeCalc;
-		NodeIDCalculator* memoryNodeCalc;
 
-		int localConnectionID;
 		int localCacheConnectionID;
 		int localMemoryConnectionID;
 		int remoteConnectionID;
@@ -177,7 +175,6 @@ namespace Memory
 			}
 		}
 
-      void HandleInterventionComplete(const BaseMsg *msgIn, bool isPendingExclusive);
       void HandleReceivedAllInvalidates(Address myAddress);
       bool IsInPendingDirectoryNormalSharedRead(const ReadMsg *m);
 		//void PerformDirectoryFetch(Address a, NodeID src);
@@ -201,27 +198,6 @@ namespace Memory
       void writeToMainMemory(const ReadResponseMsg *m);
       void writeToMainMemory(Address addr, Address generatingPC, size_t size);
 
-		void OnLocalRead(const BaseMsg* msgIn);
-		void OnLocalReadResponse(const BaseMsg* msgIn);
-		void OnLocalWrite(const BaseMsg* msgIn);
-		void OnLocalEviction(const BaseMsg* msgIn);
-		void OnLocalInvalidateResponse(const BaseMsg* msgIn);
-
-		void OnRemoteRead(const BaseMsg* msgIn, NodeID src);
-		void OnRemoteReadResponse(const BaseMsg* msgIn, NodeID src);
-      //void OnRemoteSpeculativeReadResponse(const BaseMsg* msgIn, NodeID src);
-		void OnRemoteWrite(const BaseMsg* msgIn, NodeID src);
-		void OnRemoteWriteResponse(const BaseMsg* msgIn, NodeID src);
-		void OnRemoteEviction(const BaseMsg* msgIn, NodeID src);
-		void OnRemoteEvictionResponse(const BaseMsg* msgIn, NodeID src);
-		void OnRemoteInvalidate(const BaseMsg* msgIn, NodeID src);
-		void OnRemoteInvalidateResponse(const BaseMsg* msgIn, NodeID src);
-
-		void OnDirectoryBlockRequest(const BaseMsg* msgIn, NodeID src);
-      void OnDirectoryBlockRequestSharedRead(const BaseMsg* msgIn, NodeID src);
-      void OnDirectoryBlockRequestExclusiveRead(const BaseMsg* msgIn, NodeID src);
-		void OnDirectoryBlockResponse(const BaseMsg* msgIn, NodeID src);
-
       void AutoDetermineDestSendMsg(const BaseMsg* msg, NodeID dest, TimeDelta sendTime,
          OriginDirectoryMemFn func, const char* fromMethod, const char* toMethod);
 
@@ -234,13 +210,14 @@ namespace Memory
 		void printPendingDirectoryBusySharedReads();
 	   void printPendingLocalReads();
 
+	   /*
 		typedef PooledFunctionGenerator<StoredClassFunction2<OriginDirectory,const BaseMsg*, NodeID, &OriginDirectory::OnDirectoryBlockRequest> > CBOnDirectoryBlockRequest;
 		CBOnDirectoryBlockRequest cbOnDirectoryBlockRequest;
       typedef PooledFunctionGenerator<StoredClassFunction2<OriginDirectory,const BaseMsg*, NodeID, &OriginDirectory::OnRemoteEviction> > CBOnRemoteEviction;
 		CBOnRemoteEviction cbOnRemoteEviction;
       typedef PooledFunctionGenerator<StoredClassFunction2<OriginDirectory,const BaseMsg*, NodeID, &OriginDirectory::OnRemoteRead> > CBOnRemoteRead;
 		CBOnRemoteRead cbOnRemoteRead;
-
+		*/
 		// 2010/08/05 Eric: seems to be unused
 		/*
 		typedef PooledFunctionGenerator<StoredClassFunction2<Directory,const ReadResponseMsg*, NodeID, &Directory::OnDirectoryBlockResponse> > CBOnDirectoryBlockResponse;
