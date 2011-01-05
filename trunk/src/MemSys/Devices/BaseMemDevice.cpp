@@ -91,8 +91,24 @@ namespace Memory
 		case (mt_WriteResponse):
 			return ((const WriteResponseMsg*)m)->addr;
 
+		case (mt_CacheNak):
+			return ((const CacheNakMsg*)m)->addr;
+		case (mt_DirectoryNak):
+			return ((const DirectoryNakMsg*)m)->addr;
+		case (mt_Intervention):
+			return ((const InterventionMsg*)m)->addr;
+		case (mt_InvalidateAck):
+			return ((const InvalidateAckMsg*)m)->addr;
+		case (mt_ReadReply):
+			return ((const ReadReplyMsg*)m)->addr;
+		case (mt_SpeculativeReply):
+			return ((const SpeculativeReplyMsg*)m)->addr;
 		case (mt_Transfer):
 			return ((const TransferMsg*)m)->addr;
+		case (mt_Writeback):
+			return ((const WritebackMsg*)m)->addr;
+		case (mt_WritebackAck):
+			return ((const WritebackAckMsg*)m)->addr;
 		case (mt_WritebackRequest):
 			return ((const WritebackRequestMsg*)m)->addr;
 		}
