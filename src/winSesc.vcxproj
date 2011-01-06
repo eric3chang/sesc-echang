@@ -109,8 +109,20 @@
       <Configuration>fft-origin-moesi-002-0001-0002</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="fft-snoopy-moesi-002-0001-0002|Win32">
+      <Configuration>fft-snoopy-moesi-002-0001-0002</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="fft-snoopy-moesi-032-0001-0002-00|Win32">
       <Configuration>fft-snoopy-moesi-032-0001-0002-00</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="fft-snoopy-moesi-032-0016-1024|Win32">
+      <Configuration>fft-snoopy-moesi-032-0016-1024</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="fft-snoopy-moesi-064-0016-1024|Win32">
+      <Configuration>fft-snoopy-moesi-064-0016-1024</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
     <ProjectConfiguration Include="memtest-002-3sd-moesi|Win32">
@@ -200,6 +212,15 @@
     <ConfigurationType>Application</ConfigurationType>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='fft-origin-moesi-002-0001-0002|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='fft-snoopy-moesi-064-0016-1024|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='fft-snoopy-moesi-002-0001-0002|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='fft-snoopy-moesi-032-0016-1024|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='barnes-dir-moesi-002-0001-0002-00|Win32'" Label="Configuration">
@@ -310,6 +331,15 @@
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='fft-origin-moesi-002-0001-0002|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='fft-snoopy-moesi-064-0016-1024|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='fft-snoopy-moesi-002-0001-0002|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='fft-snoopy-moesi-032-0016-1024|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='barnes-dir-moesi-002-0001-0002-00|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
@@ -381,6 +411,9 @@
     <OutDir Condition="'$(Configuration)|$(Platform)'=='fft-dir-moesi-008-0001-0002-00|Win32'">Debug\</OutDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='fft-3sd-moesi-002-0001-0002-00|Win32'">Debug\</OutDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='fft-origin-moesi-002-0001-0002|Win32'">Debug\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='fft-snoopy-moesi-064-0016-1024|Win32'">Debug\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='fft-snoopy-moesi-002-0001-0002|Win32'">Debug\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='fft-snoopy-moesi-032-0016-1024|Win32'">Debug\</OutDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='barnes-dir-moesi-002-0001-0002-00|Win32'">Debug\</OutDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='barnes-3sd-msi-032-0001-0002-00|Win32'">Debug\</OutDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='fft-3sd-msi-004-0001-0002-00|Win32'">Debug\</OutDir>
@@ -415,6 +448,9 @@
     <IntDir Condition="'$(Configuration)|$(Platform)'=='fft-dir-moesi-008-0001-0002-00|Win32'">Debug\</IntDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='fft-3sd-moesi-002-0001-0002-00|Win32'">Debug\</IntDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='fft-origin-moesi-002-0001-0002|Win32'">Debug\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='fft-snoopy-moesi-064-0016-1024|Win32'">Debug\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='fft-snoopy-moesi-002-0001-0002|Win32'">Debug\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='fft-snoopy-moesi-032-0016-1024|Win32'">Debug\</IntDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='barnes-dir-moesi-002-0001-0002-00|Win32'">Debug\</IntDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='barnes-3sd-msi-032-0001-0002-00|Win32'">Debug\</IntDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='fft-3sd-msi-004-0001-0002-00|Win32'">Debug\</IntDir>
@@ -449,6 +485,9 @@
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='fft-dir-moesi-008-0001-0002-00|Win32'">true</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='fft-3sd-moesi-002-0001-0002-00|Win32'">true</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='fft-origin-moesi-002-0001-0002|Win32'">true</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='fft-snoopy-moesi-064-0016-1024|Win32'">true</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='fft-snoopy-moesi-002-0001-0002|Win32'">true</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='fft-snoopy-moesi-032-0016-1024|Win32'">true</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='barnes-dir-moesi-002-0001-0002-00|Win32'">true</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='barnes-3sd-msi-032-0001-0002-00|Win32'">true</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='fft-3sd-msi-004-0001-0002-00|Win32'">true</LinkIncremental>
@@ -485,6 +524,9 @@
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='fft-dir-moesi-008-0001-0002-00|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='fft-3sd-moesi-002-0001-0002-00|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='fft-origin-moesi-002-0001-0002|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='fft-snoopy-moesi-064-0016-1024|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='fft-snoopy-moesi-002-0001-0002|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='fft-snoopy-moesi-032-0016-1024|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='barnes-dir-moesi-002-0001-0002-00|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='barnes-3sd-msi-032-0001-0002-00|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='fft-3sd-msi-004-0001-0002-00|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
@@ -907,6 +949,81 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='fft-origin-moesi-002-0001-0002|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <AdditionalIncludeDirectories>MemSys\Messages\;PersonalTools\includes\;libtrans\;libvmem\;libtm\;libsuperlu\;libsuc\;libsmp\;libsesctherm\;libsescspot\;librst\;libpower\;libpint\;libnet\;libmem\;libemul\;libcore\;libll\;libmint\;libapp\;libAugMem\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;HANGING_ASSERT;_DEBUG;SYSTEM_SESC;DEBUG;_CONSOLE;LENDIAN;__i386__;DEBUG_DUMP_PROGRAM;ADDRESS_CHK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <AdditionalOptions>zdll.exp zdll.lib %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalLibraryDirectories>PersonalTools\libraries\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <LinkTimeCodeGeneration>
+      </LinkTimeCodeGeneration>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='fft-snoopy-moesi-064-0016-1024|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <AdditionalIncludeDirectories>MemSys\Messages\;PersonalTools\includes\;libtrans\;libvmem\;libtm\;libsuperlu\;libsuc\;libsmp\;libsesctherm\;libsescspot\;librst\;libpower\;libpint\;libnet\;libmem\;libemul\;libcore\;libll\;libmint\;libapp\;libAugMem\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;HANGING_ASSERT;_DEBUG;SYSTEM_SESC;DEBUG;_CONSOLE;LENDIAN;__i386__;DEBUG_DUMP_PROGRAM;ADDRESS_CHK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <AdditionalOptions>zdll.exp zdll.lib %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalLibraryDirectories>PersonalTools\libraries\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <LinkTimeCodeGeneration>
+      </LinkTimeCodeGeneration>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='fft-snoopy-moesi-002-0001-0002|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <AdditionalIncludeDirectories>MemSys\Messages\;PersonalTools\includes\;libtrans\;libvmem\;libtm\;libsuperlu\;libsuc\;libsmp\;libsesctherm\;libsescspot\;librst\;libpower\;libpint\;libnet\;libmem\;libemul\;libcore\;libll\;libmint\;libapp\;libAugMem\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;HANGING_ASSERT;_DEBUG;SYSTEM_SESC;DEBUG;_CONSOLE;LENDIAN;__i386__;DEBUG_DUMP_PROGRAM;ADDRESS_CHK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <AdditionalOptions>zdll.exp zdll.lib %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalLibraryDirectories>PersonalTools\libraries\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <LinkTimeCodeGeneration>
+      </LinkTimeCodeGeneration>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='fft-snoopy-moesi-032-0016-1024|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
