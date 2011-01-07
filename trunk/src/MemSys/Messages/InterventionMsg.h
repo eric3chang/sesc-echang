@@ -1,5 +1,5 @@
 #pragma once
-#include "BaseMsg.h"
+#include "ReadMsg.h"
 
 namespace Memory
 {

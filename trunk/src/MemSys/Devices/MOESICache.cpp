@@ -164,7 +164,7 @@ namespace Memory
          else
          {
 			#ifdef MEMORY_MOESI_CACHE_DEBUG_PENDING_EVICTION
-				printDebugInfo("AllocateBlock",set[eviction].tag,"pendingEviction.insert");
+				PrintDebugInfo("AllocateBlock",set[eviction].tag,"pendingEviction.insert");
 			#endif
             DebugAssert(pendingEviction.find(set[eviction].tag) == pendingEviction.end());
             pendingEviction[set[eviction].tag] = set[eviction];
@@ -250,7 +250,7 @@ void MOESICache::PrepareFreshBlock(int setNumber, int index, AddrTag tag)
 		   canceledBlockEviction.insert(tag);
 			mySet[index] = pendingEviction[tag];
 		#ifdef MEMORY_MOESI_CACHE_DEBUG_PENDING_EVICTION
-			printDebugInfo("PrepareFreshBlock",tag,"pendingEviction.erase");
+			PrintDebugInfo("PrepareFreshBlock",tag,"pendingEviction.erase");
 		#endif
 			pendingEviction.erase(tag);
 			DebugAssert(mySet[index].state != bs_Invalid);
@@ -277,7 +277,7 @@ void MOESICache::PrepareFreshBlock(int setNumber, int index, AddrTag tag)
 		{
 			res->blockAttached = (pendingEviction[tag].state == bs_Modified) || (pendingEviction[tag].state == bs_Owned);
 		#ifdef MEMORY_MOESI_CACHE_DEBUG_PENDING_EVICTION
-			printDebugInfo("RespondInvalidate",tag,"pendingEviction.erase");
+			PrintDebugInfo("RespondInvalidate",tag,"pendingEviction.erase");
 		#endif
 			pendingEviction.erase(tag);
 		}
@@ -305,7 +305,7 @@ void MOESICache::PrepareFreshBlock(int setNumber, int index, AddrTag tag)
 		}
 		EM().DisposeMsg(pendingInvalidate[tag]);
 	#ifdef MEMORY_MOESI_CACHE_DEBUG_PENDING_INVALIDATE
-		printDebugInfo("RespondInvalidate",tag,"pendingInvalidate.erase");
+		PrintDebugInfo("RespondInvalidate",tag,"pendingInvalidate.erase");
 	#endif
 		pendingInvalidate.erase(tag);
 	}
@@ -577,7 +577,7 @@ void MOESICache::PrepareFreshBlock(int setNumber, int index, AddrTag tag)
 		else
 		{
 #ifdef MEMORY_MOESI_CACHE_DEBUG_PENDING_INVALIDATE
-		   printDebugInfo("OnRemoteInvalidate",*m,
+		   PrintDebugInfo("OnRemoteInvalidate",*m,
 		         ("pendingInvalidate.insert(" + to_string<AddrTag>(tag)+")").c_str());
 #endif
 		   pendingInvalidate[tag] = m;
@@ -768,7 +768,7 @@ void MOESICache::PrepareFreshBlock(int setNumber, int index, AddrTag tag)
             forward->size = lineSize;
             forward->blockAttached = pendingEviction[tag].state == bs_Modified || pendingEviction[tag].state == bs_Owned;
    #ifdef MEMORY_MOESI_CACHE_DEBUG_PENDING_EVICTION
-            printDebugInfo("OnLocalInvalidateResponse",tag,"pendingEviction.erase");
+            PrintDebugInfo("OnLocalInvalidateResponse",tag,"pendingEviction.erase");
    #endif
             pendingEviction.erase(tag);
             remoteConnection->SendMsg(forward,evictionTime);
@@ -925,49 +925,49 @@ void MOESICache::PrepareFreshBlock(int setNumber, int index, AddrTag tag)
 			{
 			case(mt_Read):
          #ifdef MEMORY_MOESI_CACHE_DEBUG_VERBOSE
-            printDebugInfo("OnLocalRead", *msg, "RecvMsg");
+            PrintDebugInfo("OnLocalRead", *msg, "RecvMsg");
          #endif
 				OnLocalRead((const ReadMsg*)msg);
 				break;
 			case(mt_Write):
          #ifdef MEMORY_MOESI_CACHE_DEBUG_VERBOSE
-            printDebugInfo("OnLocalWrite", *msg, "RecvMsg");
+            PrintDebugInfo("OnLocalWrite", *msg, "RecvMsg");
          #endif
 				OnLocalWrite((const WriteMsg*)msg);
 				break;
 			case(mt_Invalidate):
          #ifdef MEMORY_MOESI_CACHE_DEBUG_VERBOSE
-            printDebugInfo("OnLocalInvalidate", *msg, "RecvMsg");
+            PrintDebugInfo("OnLocalInvalidate", *msg, "RecvMsg");
          #endif
 				OnLocalInvalidate((const InvalidateMsg*)msg);
 				break;
 			case(mt_Eviction):
          #ifdef MEMORY_MOESI_CACHE_DEBUG_VERBOSE
-            printDebugInfo("OnLocalEviction", *msg, "RecvMsg");
+            PrintDebugInfo("OnLocalEviction", *msg, "RecvMsg");
          #endif
 				OnLocalEviction((const EvictionMsg*)msg);
 				break;
 			case(mt_ReadResponse):
          #ifdef MEMORY_MOESI_CACHE_DEBUG_VERBOSE
-            printDebugInfo("OnLocalReadResponse", *msg, "RecvMsg");
+            PrintDebugInfo("OnLocalReadResponse", *msg, "RecvMsg");
          #endif
 				OnLocalReadResponse((const ReadResponseMsg*)msg);
 				break;
 			case(mt_WriteResponse):
          #ifdef MEMORY_MOESI_CACHE_DEBUG_VERBOSE
-            printDebugInfo("OnLocalWriteResponse", *msg, "RecvMsg");
+            PrintDebugInfo("OnLocalWriteResponse", *msg, "RecvMsg");
          #endif
 				OnLocalWriteResponse((const WriteResponseMsg*)msg);
 				break;
 			case(mt_InvalidateResponse):
          #ifdef MEMORY_MOESI_CACHE_DEBUG_VERBOSE
-            printDebugInfo("OnLocalInvalidateResponse", *msg, "RecvMsg");
+            PrintDebugInfo("OnLocalInvalidateResponse", *msg, "RecvMsg");
          #endif
 				OnLocalInvalidateResponse((const InvalidateResponseMsg*)msg);
 				break;
 			case(mt_EvictionResponse):
          #ifdef MEMORY_MOESI_CACHE_DEBUG_VERBOSE
-            printDebugInfo("OnLocalEvictionResponse", *msg, "RecvMsg");
+            PrintDebugInfo("OnLocalEvictionResponse", *msg, "RecvMsg");
          #endif
 				OnLocalEvictionResponse((const EvictionResponseMsg*)msg);
 				break;
@@ -981,49 +981,49 @@ void MOESICache::PrepareFreshBlock(int setNumber, int index, AddrTag tag)
 			{
 			case(mt_Read):
          #ifdef MEMORY_MOESI_CACHE_DEBUG_VERBOSE
-            printDebugInfo("OnRemoteRead", *msg, "RecvMsg");
+            PrintDebugInfo("OnRemoteRead", *msg, "RecvMsg");
          #endif
 				OnRemoteRead((const ReadMsg*)msg);
 				break;
 			case(mt_Write):
          #ifdef MEMORY_MOESI_CACHE_DEBUG_VERBOSE
-            printDebugInfo("OnRemoteWrite", *msg, "RecvMsg");
+            PrintDebugInfo("OnRemoteWrite", *msg, "RecvMsg");
          #endif
 				OnRemoteWrite((const WriteMsg*)msg);
 				break;
 			case(mt_Invalidate):
          #ifdef MEMORY_MOESI_CACHE_DEBUG_VERBOSE
-            printDebugInfo("OnRemoteInvalidate", *msg, "RecvMsg");
+            PrintDebugInfo("OnRemoteInvalidate", *msg, "RecvMsg");
          #endif
 				OnRemoteInvalidate((const InvalidateMsg*)msg);
 				break;
 			case(mt_Eviction):
          #ifdef MEMORY_MOESI_CACHE_DEBUG_VERBOSE
-            printDebugInfo("OnRemoteEviction", *msg, "RecvMsg");
+            PrintDebugInfo("OnRemoteEviction", *msg, "RecvMsg");
          #endif
 				OnRemoteEviction((const EvictionMsg*)msg);
 				break;
 			case(mt_ReadResponse):
          #ifdef MEMORY_MOESI_CACHE_DEBUG_VERBOSE
-            printDebugInfo("OnRemoteReadResponse", *msg, "RecvMsg");
+            PrintDebugInfo("OnRemoteReadResponse", *msg, "RecvMsg");
          #endif
 				OnRemoteReadResponse((const ReadResponseMsg*)msg);
 				break;
 			case(mt_WriteResponse):
          #ifdef MEMORY_MOESI_CACHE_DEBUG_VERBOSE
-            printDebugInfo("OnRemoteWriteResponse", *msg, "RecvMsg");
+            PrintDebugInfo("OnRemoteWriteResponse", *msg, "RecvMsg");
          #endif
 				OnRemoteWriteResponse((const WriteResponseMsg*)msg);
 				break;
 			case(mt_InvalidateResponse):
          #ifdef MEMORY_MOESI_CACHE_DEBUG_VERBOSE
-            printDebugInfo("OnRemoteInvalidateResponse", *msg, "RecvMsg");
+            PrintDebugInfo("OnRemoteInvalidateResponse", *msg, "RecvMsg");
          #endif
 				OnRemoteInvalidateResponse((const InvalidateResponseMsg*)msg);
 				break;
 			case(mt_EvictionResponse):
          #ifdef MEMORY_MOESI_CACHE_DEBUG_VERBOSE
-            printDebugInfo("OnRemoteEvictionResponse", *msg, "RecvMsg");
+            PrintDebugInfo("OnRemoteEvictionResponse", *msg, "RecvMsg");
          #endif
 				OnRemoteEvictionResponse((const EvictionResponseMsg*)msg);
 				break;

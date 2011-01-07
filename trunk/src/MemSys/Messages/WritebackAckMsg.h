@@ -1,5 +1,5 @@
 #pragma once
-#include "BaseMsg.h"
+#include "EvictionResponseMsg.h"
 
 namespace Memory
 {
