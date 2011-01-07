@@ -7,6 +7,7 @@
 #include "../Connection.h"
 
 // debugging utilities
+#include <sstream>
 #include "to_string.h"
 
 // used in AutoDetermineDestSendMsg's member function calling
@@ -53,12 +54,12 @@ namespace Memory
 	void OriginDirectory::AddDirectoryShare(Address a, NodeID id, bool exclusive)
 	{
       DebugAssert(directoryNodeCalc->CalcNodeID(a)==nodeID);
-		BlockData& b = directoryData[a];
+		DirectoryData& b = directoryDataMap[a];
 		DebugAssert(!exclusive || (b.sharers.size() == 0 && (b.owner == id || b.owner == InvalidNodeID)));
 		if(b.owner == id || b.owner == InvalidNodeID)
 		{
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_DIRECTORY_DATA
-         printDebugInfo("AddDirectoryShare",a, id, "b.owner=");
+         PrintDebugInfo("AddDirectoryShare",a, id, "b.owner=");
 #endif
          // unnecessary because owner is allowed to change when there are sharers
          //DebugAssert(b.sharers.find(id)==b.sharers.end());
@@ -67,19 +68,19 @@ namespace Memory
 		else if(b.sharers.find(id) == b.sharers.end())
 		{
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_DIRECTORY_DATA
-         printDebugInfo("AddDirectoryShare",a, id,
+         PrintDebugInfo("AddDirectoryShare",a, id,
             ("exclusive="+to_string<bool>(exclusive)+" b.sharers.insert").c_str());
 #endif
 			b.sharers.insert(id);
 		}
 	}
 
-void OriginDirectory::ChangeOwnerToShare(Address a, NodeID id)
+	void OriginDirectory::ChangeOwnerToShare(Address a, NodeID id)
 	{
       DebugAssert(directoryNodeCalc->CalcNodeID(a)==nodeID);
-		BlockData& b = directoryData[a];
+		DirectoryData& b = directoryDataMap[a];
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_DIRECTORY_DATA
-         printDebugInfo("ChangeOwnerToShare",a, id);
+         PrintDebugInfo("ChangeOwnerToShare",a, id);
 #endif
 		DebugAssert(b.owner==id);
       DebugAssert(b.sharers.find(nodeID)==b.sharers.end());
@@ -87,17 +88,17 @@ void OriginDirectory::ChangeOwnerToShare(Address a, NodeID id)
       b.sharers.insert(id);
 	}
 
-void OriginDirectory::EraseDirectoryShare(Address a, NodeID id)
+	void OriginDirectory::EraseDirectoryShare(Address a, NodeID id)
 	{
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_COUNTERS
 	   threeStageDirectoryEraseDirectoryShareCounter++;
 #endif
-		DebugAssert(directoryData.find(a) != directoryData.end());
-		BlockData& b = directoryData[a];
+		DebugAssert(directoryDataMap.find(a) != directoryDataMap.end());
+		DirectoryData& b = directoryDataMap[a];
 		if(b.owner == id)
 		{
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_DIRECTORY_DATA
-         printEraseOwner("EraseDirectoryShare",a, id,"b.owner=InvalidNodeID");
+         PrintEraseOwner("EraseDirectoryShare",a, id,"b.owner=InvalidNodeID");
 #endif
 			b.owner = InvalidNodeID;
 			DebugAssert(b.sharers.find(id) == b.sharers.end());
@@ -105,13 +106,22 @@ void OriginDirectory::EraseDirectoryShare(Address a, NodeID id)
 		else if(b.sharers.find(id) != b.sharers.end())
 		{
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_DIRECTORY_DATA
-		   printDebugInfo("EraseDirectoryShare",a, id,"b.sharers.erase");
+		   PrintDebugInfo("EraseDirectoryShare",a, id,"b.sharers.erase");
 #endif
 			b.sharers.erase(id);
 		}
 	}
-
-void OriginDirectory::HandleReceivedAllInvalidates(Address myAddress)
+	OriginDirectory::CacheData& OriginDirectory::GetCacheData(const BaseMsg* m)
+	{
+		Address currentAddress = BaseMemDevice::GetAddress(m);
+		return cacheDataMap[currentAddress];
+	}
+	OriginDirectory::DirectoryData& OriginDirectory::GetDirectoryData(const BaseMsg* m)
+	{
+		Address currentAddress = BaseMemDevice::GetAddress(m);
+		return directoryDataMap[currentAddress];
+	}
+	void OriginDirectory::HandleReceivedAllInvalidates(Address myAddress)
    {
       DebugAssert(waitingForInvalidates.find(myAddress)!=waitingForInvalidates.end());
       InvalidateData &id = waitingForInvalidates[myAddress];
@@ -142,26 +152,6 @@ void OriginDirectory::HandleReceivedAllInvalidates(Address myAddress)
       NodeID directoryNode = directoryNodeCalc->CalcNodeID(myAddress);
    }
 
-	void OriginDirectory::writeToMainMemory(Address addr, Address generatingPC, size_t size)
-   {
-		//TODO: rewrite this
-		/*
-      DebugAssert(addr && size);
-      WriteMsg* wm = EM().CreateWriteMsg(getDeviceID(), generatingPC);
-      wm->addr = addr;
-      wm->size = size;
-      wm->onCompletedCallback = NULL;
-      DebugAssert(pendingMemoryWrites.find(wm->MsgID())==pendingMemoryWrites.end());
-      pendingMemoryWrites.insert(wm->MsgID());
-
-      NetworkMsg* nm = EM().CreateNetworkMsg(getDeviceID(), generatingPC);
-      nm->sourceNode = nodeID;
-      nm->destinationNode = memoryNodeCalc->CalcNodeID(addr);
-      nm->payloadMsg = wm;
-      SendMsg(remoteConnectionID, nm, remoteSendTime);
-      */
-   }
-
    // performs a directory fetch
 	void OriginDirectory::PerformDirectoryFetch(const ReadMsg* msgIn, NodeID src)
 	{
@@ -174,7 +164,7 @@ void OriginDirectory::HandleReceivedAllInvalidates(Address myAddress)
       m->onCompletedCallback = NULL;
       m->requestingExclusive = msgIn->requestingExclusive;
       m->size = msgIn->size;
-		BlockData& b = directoryData[m->addr];
+		DirectoryData& b = directoryDataMap[m->addr];
 		NodeID target;
 		bool isTargetMemory = false;
 		// directoryLookup is true only for memory because we want to return a
@@ -200,7 +190,7 @@ void OriginDirectory::HandleReceivedAllInvalidates(Address myAddress)
 		if(target == nodeID)
 		{
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-               printDebugInfo("RemRead",*m,"PerDirFet(ReadMsg,src)",nodeID);
+               PrintDebugInfo("RemRead",*m,"PerDirFet(ReadMsg,src)",nodeID);
 #endif
          //TODO 2010/09/02 Eric, change this because of 3-stage directory
          //OnRemoteRead should know to use m->requestingNode
@@ -272,7 +262,7 @@ void OriginDirectory::HandleReceivedAllInvalidates(Address myAddress)
 		{
          DebugAssertWithMessageID(m->directoryLookup==false,m->MsgID())
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-               printDebugInfo("RemRead",*m,"PerDirFet(m,src,isEx,targ)",nodeID);
+               PrintDebugInfo("RemRead",*m,"PerDirFet(m,src,isEx,targ)",nodeID);
 #endif
 			//OnRemoteRead(m, nodeID);
 		}
@@ -346,7 +336,7 @@ void OriginDirectory::HandleReceivedAllInvalidates(Address myAddress)
          DebugAssertWithMessageID(m->solicitingMessage==ref->MsgID(),m->MsgID())
 		   EM().DisposeMsg(ref);
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_LOCAL_READS
-		   printDebugInfo("DirectoryBlockResponse", *m,
+		   PrintDebugInfo("DirectoryBlockResponse", *m,
 		      ("pendingLocalReads.erase("+to_string<MessageID>(m->solicitingMessage)+")").c_str());
 #endif
 		   pendingLocalReads.erase(m->solicitingMessage);
@@ -364,7 +354,39 @@ void OriginDirectory::HandleReceivedAllInvalidates(Address myAddress)
    /**
    send a memory access complete message
    */
-      void OriginDirectory::SendRemoteEviction(const EvictionMsg *m,NodeID dest,const char *fromMethod)
+   void OriginDirectory::SendMemoryRequest(const BaseMsg *msg)
+   {
+   	if (msg->Type()==mt_Read
+   			|| msg->Type()==mt_Write
+   			|| msg->Type()==mt_Eviction)
+   	{
+   		BaseMsg *m = EM().ReplicateMsg(msg);
+   		// using 0 for send time because the time is taken care of in TestMemory
+   		SendMsg(localMemoryConnectionID,m,0);
+   	}
+   	else
+   	{
+   		std::stringstream ss;
+   		std::string output;
+
+   		ss << "OriginDirectory::SendRequestToMemory: can't send msg with id "
+   				<< msg->MsgID()
+   				<< " and type "
+   				<< msg->Type()
+   				<< " to memory";
+   		output = ss.str();
+   		DebugFail(output.c_str());
+   	}
+   }
+   void OriginDirectory::SendNetworkMessage(const BaseMsg *msg, NodeID dest)
+   {
+		NetworkMsg* nm = EM().CreateNetworkMsg(GetDeviceID(), msg->GeneratingPC());
+		nm->sourceNode = nodeID;
+		nm->destinationNode = dest;
+		nm->payloadMsg = msg;
+		SendMsg(remoteConnectionID, nm, remoteSendTime);
+   }
+   void OriginDirectory::SendRemoteEviction(const EvictionMsg *m,NodeID dest,const char *fromMethod)
    {
       if(dest == nodeID)
       {
@@ -387,13 +409,12 @@ void OriginDirectory::HandleReceivedAllInvalidates(Address myAddress)
          SendMsg(remoteConnectionID, nm, remoteSendTime);
       }
    }
-
    void OriginDirectory::SendRemoteRead(const ReadMsg *m,NodeID dest,const char *fromMethod)
    {
       if (dest==nodeID)
       {
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-         printDebugInfo("RemRead",*m,fromMethod,nodeID);
+         PrintDebugInfo("RemRead",*m,fromMethod,nodeID);
 #endif
          //CALL_MEMBER_FN(*this,func) (msg,dest);
          /*
@@ -412,12 +433,11 @@ void OriginDirectory::HandleReceivedAllInvalidates(Address myAddress)
          SendMsg(remoteConnectionID, nm, remoteSendTime);
       }
    }
-
-	/**
+   	/**
 	 * erase Node id as a share for Address a. If a is owned by id, check that there
 	 * are no other shares
 	 */
-		   void OriginDirectory::AddReversePendingLocalRead(const ReadMsg *m)
+   void OriginDirectory::AddReversePendingLocalRead(const ReadMsg *m)
    {
       ReversePendingLocalReadData &myData = reversePendingLocalReads[m->addr];
       HashMap<MessageID,const ReadMsg*> &exclusiveRead = myData.exclusiveRead;
@@ -429,7 +449,7 @@ void OriginDirectory::HandleReceivedAllInvalidates(Address myAddress)
    
    void OriginDirectory::ErasePendingDirectoryNormalSharedRead(const ReadResponseMsg *m)
    {/*
-      BlockData &b = directoryData[m->addr];
+      BlockData &b = directoryDataMap[m->addr];
       AddrLookupIteratorPair iteratorPair = pendingDirectoryNormalSharedReads.equal_range(m->addr);
       bool hasFoundReadMsg = false;
       for (; iteratorPair.first != iteratorPair.second; ++iteratorPair.first)
@@ -492,16 +512,16 @@ void OriginDirectory::HandleReceivedAllInvalidates(Address myAddress)
       return;
    }
 
-      /**
-   Automatically determines whether to send to local or remote node
-   */
+   /**
+    * Automatically determines whether to send to local or remote node
+    */
    void OriginDirectory::AutoDetermineDestSendMsg(const BaseMsg* msg, NodeID dest, TimeDelta sendTime,
       OriginDirectoryMemFn func, const char* fromMethod, const char* toMethod)
    {
       if (dest==nodeID)
       {
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-         printDebugInfo(toMethod,*msg,fromMethod,nodeID);
+         PrintDebugInfo(toMethod,*msg,fromMethod,nodeID);
 #endif
          CALL_MEMBER_FN(*this,func) (msg,dest);
          return;
@@ -515,30 +535,6 @@ void OriginDirectory::HandleReceivedAllInvalidates(Address myAddress)
          SendMsg(remoteConnectionID, nm, sendTime);
       }
    }
-
-   void OriginDirectory::writeToMainMemory(const EvictionMsg *m)
-   {
-      writeToMainMemory(m->addr, m->GeneratingPC(), m->size);
-   }
-
-   void OriginDirectory::writeToMainMemory(const InvalidateResponseMsg *m)
-   {
-      writeToMainMemory(m->addr, m->GeneratingPC(), m->size);
-   }
-
-   void OriginDirectory::writeToMainMemory(const ReadResponseMsg *m)
-   {
-      writeToMainMemory(m->addr, m->GeneratingPC(), m->size);
-   }
-
-   /**
-   write block to main memory
-   */
-   // void OriginDirectory::writeToMainMemory(const BaseMsg* msgIn)
-
-	/**
-	 * the message came from the local (cpu) side. It is a read msg
-	 */
 
 	void OriginDirectory::Initialize(EventManager* em, const RootConfigNode& config, const std::vector<Connection*>& connectionSet)
 	{
@@ -601,9 +597,111 @@ void OriginDirectory::HandleReceivedAllInvalidates(Address myAddress)
 	{
 	   out << "messagesReceived:" << messagesReceived << std::endl;
 	}
+	void OriginDirectory::OnDirectoryShared(
+			const BaseMsg* msg, NodeID src, DirectoryData& directoryData, bool isFromMemory)
+	{
+		HashSet<NodeID>& sharers = directoryData.sharers;
+		NodeID& owner = directoryData.owner;
+		const BaseMsg* firstRequest = directoryData.firstRequest;
+		DirectoryState& state = directoryData.state;
+		int& pendingInvalidates = directoryData.pendingInvalidates;
+
+		if (msg->Type()==mt_Read)
+		{
+			const ReadMsg* m = (const ReadMsg*)msg;
+			if (!m->requestingExclusive)
+			{
+				state = ds_SharedMemoryAccess;
+				sharers.insert(src);
+				firstRequest = m;
+				SendMemoryRequest(m);
+			}
+			else
+			{ // is requesting exclusive
+				if (owner!=src && sharers.find(src)==sharers.end())
+				{// if m is exclusive read and requester is not owner or in sharers
+					state = ds_SharedExclusiveMemoryAccess;
+					SendMemoryRequest(m);
+				}
+				else if (owner==src || sharers.find(src)!=sharers.end())
+				{// if requester is owner or is in sharers
+					state = ds_Exclusive;
+					pendingInvalidates = sharers.size();
+
+					// send exclusive reply (no data) with invalidates pending to requester
+					ReadReplyMsg* rrm = EM().CreateReadReplyMsg(GetDeviceID(),m->GeneratingPC());
+					EM().InitializeReadResponseMsg(rrm, m);
+					rrm->blockAttached = false;
+					rrm->exclusiveOwnership = true;
+					rrm->originalRequestingNode = src;
+					rrm->pendingInvalidates = pendingInvalidates;
+					rrm->satisfied = false;
+					NetworkMsg* nm = EM().CreateNetworkMsg(GetDeviceID(), m->GeneratingPC());
+					nm->sourceNode = nodeID;
+					nm->destinationNode = src;
+					nm->payloadMsg = rrm;
+					SendMsg(remoteConnectionID, nm, remoteSendTime);
+
+					// send invalidates to owner if it is not the requester
+					if (owner!=src)
+					{
+						InvalidateMsg* im = EM().CreateInvalidateMsg(GetDeviceID(),m->GeneratingPC());
+						im->addr = m->addr;
+						im->newOwner = src;
+						im->size = m->size;
+						im->solicitingMessage = m->MsgID();
+						SendNetworkMessage(im, src);
+					}
+
+					// send invalidates to sharers that are not the requester
+					for(HashSet<NodeID>::iterator i = sharers.begin(); i != sharers.end(); i++)
+					{
+						if (*i!=src)
+						{
+							InvalidateMsg* im = EM().CreateInvalidateMsg(GetDeviceID(),m->GeneratingPC());
+							im->addr = m->addr;
+							im->newOwner = src;
+							im->size = m->size;
+							im->solicitingMessage = m->MsgID();
+							SendNetworkMessage(im, *i);
+						}
+					}
+					owner = src;
+					sharers.clear();
+				}//else if (owner==src || sharers.find(src)!=sharers.end())
+			}// is requesting exclusive
+		}//if (msg->Type()==mt_Read)
+		else
+		{
+			PrintError("OriginDir::OnDirSh",msg);
+		}// else msgType != read
+	} // OriginDirectory::OnDirectoryShared
+
+	void OriginDirectory::OnDirectoryUnowned(
+			const BaseMsg* msg, NodeID src, DirectoryData& directoryData, bool isFromMemory)
+	{
+		DirectoryState& state = directoryData.state;
+		const BaseMsg* firstRequest = directoryData.firstRequest;
+		NodeID& owner = directoryData.owner;
+
+		if (msg->Type()==mt_Read)
+		{
+			const ReadMsg* m = (const ReadMsg*)msg;
+			state = ds_ExclusiveMemoryAccess;
+			DebugAssertWithMessageID(firstRequest==NULL, m->MsgID());
+			firstRequest = m;
+			SendMemoryRequest(m);
+			DebugAssertWithMessageID(owner==InvalidNodeID,m->MsgID());
+			owner = src;
+		}
+		else
+		{
+			PrintError("OriginDir::OnDirUnowned",msg);
+		}
+	}
 	/**
-	 * Handles all the incoming messages from outside of the directory.
-	 * The message can come from the cache side or from the network.
+	 * Handles all the messages coming into the directory
+	 * The message can come from the cache, memory, or the network
 	 */
 	void OriginDirectory::RecvMsg(const BaseMsg* msg, int connectionID)
 	{
@@ -616,9 +714,12 @@ void OriginDirectory::HandleReceivedAllInvalidates(Address myAddress)
 #endif
 		DebugAssert(msg);
 
+		CacheData& cacheData = GetCacheData(msg);
+		DirectoryData& directoryData = GetDirectoryData(msg);
+
 		if(connectionID == localCacheConnectionID)
 		{
-			;
+			//TODO 2011/01/06
 		}
 		else if (connectionID == localMemoryConnectionID)
 		{
@@ -639,17 +740,30 @@ void OriginDirectory::HandleReceivedAllInvalidates(Address myAddress)
 		}
 	}
 
-   void OriginDirectory::printDirectoryData(Address myAddress, MessageID myMessageID)
+   void OriginDirectory::PrintDirectoryData(Address myAddress, MessageID myMessageID)
    {
-      DebugAssert(directoryData.find(myAddress)!=directoryData.end());
+      DebugAssert(directoryDataMap.find(myAddress)!=directoryDataMap.end());
 
       bool isSharedBusy = (pendingDirectoryBusySharedReads.find(myAddress)!=pendingDirectoryBusySharedReads.end());
       bool isExclusiveBusy = (pendingDirectoryBusyExclusiveReads.find(myAddress)!=pendingDirectoryBusyExclusiveReads.end());
       bool hasPendingMemAccess = (pendingMainMemAccesses.find(myAddress)!=pendingMainMemAccesses.end());
       bool isWaitingForReadResponse = (waitingForReadResponse.find(myAddress)!=waitingForReadResponse.end());
       
-      directoryData[myAddress].print(myAddress, myMessageID,isSharedBusy, isExclusiveBusy, hasPendingMemAccess
+      directoryDataMap[myAddress].print(myAddress, myMessageID,isSharedBusy, isExclusiveBusy, hasPendingMemAccess
          ,isWaitingForReadResponse);
+   }
+
+   void OriginDirectory::PrintError(const char* fromMethod, const BaseMsg *m)
+   {
+		std::stringstream ss;
+		ss << fromMethod
+			<< ": msg received with id "
+			<< m->MsgID()
+			<< " type "
+			<< m->Type()
+			;
+		std::string output = ss.str();
+		DebugFail(output.c_str());
    }
 
 	/**
@@ -658,7 +772,7 @@ void OriginDirectory::HandleReceivedAllInvalidates(Address myAddress)
 	 * a regular array instead of a vector is because Eclipse can view
 	 * Array elements directly, but not elements in STL containers.
 	 */
-	void OriginDirectory::printPendingDirectoryBusySharedReads()
+	void OriginDirectory::PrintPendingDirectoryBusySharedReads()
 	{
 	   HashMap<Address, LookupData<ReadMsg> >::const_iterator myIterator;
 
@@ -689,7 +803,7 @@ void OriginDirectory::HandleReceivedAllInvalidates(Address myAddress)
     * a regular array instead of a vector is because Eclipse can view
     * Array elements directly, but not elements in STL containers.
     */
-	void OriginDirectory::printPendingLocalReads()
+	void OriginDirectory::PrintPendingLocalReads()
 	{
       HashMap<MessageID, const ReadMsg*>::const_iterator myIterator;
 
@@ -716,19 +830,19 @@ void OriginDirectory::HandleReceivedAllInvalidates(Address myAddress)
       readMsgArray = NULL;
 	}
 
-   void OriginDirectory::printDebugInfo(const char* fromMethod, const BaseMsg &myMessage,
+   void OriginDirectory::PrintDebugInfo(const char* fromMethod, const BaseMsg &myMessage,
          const char* operation)
    {
       printBaseMemDeviceDebugInfo("3", fromMethod, myMessage, operation);
    }
 
-   void OriginDirectory::printDebugInfo(const char* fromMethod, const BaseMsg &myMessage,
+   void OriginDirectory::PrintDebugInfo(const char* fromMethod, const BaseMsg &myMessage,
          const char* operation, NodeID src)
    {
       printBaseMemDeviceDebugInfo("3", fromMethod, myMessage, operation, src);
    }
 
-   void OriginDirectory::printDebugInfo(const char* fromMethod,Address addr,NodeID id,const char* operation)
+   void OriginDirectory::PrintDebugInfo(const char* fromMethod,Address addr,NodeID id,const char* operation)
    {
       cout << setw(15) << " " // account for spacing from src and msgSrc
             << " dst=" << setw(3) << GetDeviceID()
@@ -739,7 +853,7 @@ void OriginDirectory::HandleReceivedAllInvalidates(Address myAddress)
             << endl;
    }
 
-   void OriginDirectory::printEraseOwner(const char* fromMethod,Address addr,NodeID id,const char* operation)
+   void OriginDirectory::PrintEraseOwner(const char* fromMethod,Address addr,NodeID id,const char* operation)
    {
       cout << setw(15) << " " // account for spacing from src and msgSrc
             << " dst=" << setw(2) << GetDeviceID()

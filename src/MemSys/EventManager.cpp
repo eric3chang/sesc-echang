@@ -55,13 +55,18 @@ namespace Memory
       m->isWaitingForInvalidateUnlock = false;
 		m->SetIDInfo(currentMsgStamp++,devID,generatingPC);
 	}
+	void EventManager::InitializeReadResponseMsg(ReadResponseMsg* readRes, const ReadMsg* read)
+	{
+		readRes->addr = read->addr;
+		readRes->size = read->size;
+		readRes->solicitingMessage = read->MsgID();
+	}
 	void EventManager::InitializeReadResponseMsg(ReadResponseMsg* m, DeviceID devID, Address generatingPC)
 	{
 		m->directoryLookup = false;
       m->evictionMessage = 0;
       m->exclusiveOwnership = false;
-      m->hasPendingMemAccesses = false;
-      m->pendingInvalidates = 0;
+      m->isDirty = false;
 		m->originalRequestingNode = InvalidNodeID;
 		m->SetIDInfo(currentMsgStamp++,devID,generatingPC);
 	}
@@ -150,6 +155,7 @@ namespace Memory
 	{
 		ReadReplyMsg* m = readReplyPool.Take();
 		InitializeReadResponseMsg(m,devID,generatingPC);
+		m->pendingInvalidates = 0;
 		return m;
 	}
    SpeculativeReplyMsg* EventManager::CreateSpeculativeReplyMsg(DeviceID devID, Address generatingPC)

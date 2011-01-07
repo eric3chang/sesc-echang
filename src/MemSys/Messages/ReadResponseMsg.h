@@ -14,8 +14,7 @@ namespace Memory
       bool directoryLookup;
       MessageID evictionMessage;
 		bool exclusiveOwnership;
-      bool hasPendingMemAccesses;
-      int pendingInvalidates;
+		bool isDirty;
 		MessageID solicitingMessage;
 		NodeID originalRequestingNode;
 
@@ -30,10 +29,9 @@ namespace Memory
 		      << " at=" << blockAttached
             << " evi=" << evictionMessage
             << " exOw=" << exclusiveOwnership
+            << " dirty=" << isDirty
             << " sMsg=" << solicitingMessage
-            << " memAc=" << hasPendingMemAccesses
             << " ogNode=" << BaseMsg::convertNodeIDToDeviceID(originalRequestingNode)
-            << " pInv=" << pendingInvalidates
 		   ;
 		}
 

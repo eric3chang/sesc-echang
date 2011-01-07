@@ -124,13 +124,13 @@ namespace Memory
 		void OnDirectoryBlockRequest(const ReadMsg* m, NodeID src);
 		void OnDirectoryBlockResponse(const ReadResponseMsg* m, NodeID src);
 
-		void printDebugInfo(const char* fromMethod, const BaseMsg &myMessage, const char* operation);
-		void printDebugInfo(const char* fromMethod, const BaseMsg &myMessage, const char* operation,NodeID src);
-	   void printDebugInfo(const char* fromMethod,Address addr,NodeID id,const char* operation);
-      void printDirectoryData(Address myAddress, MessageID myMessageID);
-	   void printEraseOwner(const char* fromMethod,Address addr,NodeID id,const char* operation);
-		void printPendingDirectorySharedReads();
-	   void printPendingLocalReads();
+		void PrintDebugInfo(const char* fromMethod, const BaseMsg &myMessage, const char* operation);
+		void PrintDebugInfo(const char* fromMethod, const BaseMsg &myMessage, const char* operation,NodeID src);
+	   void PrintDebugInfo(const char* fromMethod,Address addr,NodeID id,const char* operation);
+      void PrintDirectoryData(Address myAddress, MessageID myMessageID);
+	   void PrintEraseOwner(const char* fromMethod,Address addr,NodeID id,const char* operation);
+		void PrintPendingDirectorySharedReads();
+	   void PrintPendingLocalReads();
 
 		typedef PooledFunctionGenerator<StoredClassFunction2<Directory,const ReadMsg*, NodeID, &Directory::OnDirectoryBlockRequest> > CBOnDirectoryBlockRequest;
 		CBOnDirectoryBlockRequest cbOnDirectoryBlockRequest;

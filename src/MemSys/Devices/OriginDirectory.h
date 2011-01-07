@@ -27,7 +27,7 @@ namespace Memory
 	class WriteResponseMsg;
 	class InvalidateResponseMsg;
 	class EvictionResponseMsg;
-	//class NetworkMsg;
+
 	class OriginDirectory : public BaseMemDevice
 	{
 		typedef Address AddrTag;
@@ -50,13 +50,82 @@ namespace Memory
 			virtual NodeID CalcNodeID(Address addr) const;
 			virtual void Initialize(const RootConfigNode& node);
 		};
-		class BlockData
+		enum CacheState
+		{
+			cs_Exclusive,
+			cs_ExclusiveWaitingForSpeculativeReply,
+			cs_Invalid,
+			cs_Shared,
+			cs_SharedWaitingForSpeculativeReply,
+			cs_WaitingForIntervention,
+			cs_WaitingForExclusiveReadResponse,
+			cs_WaitingForExclusiveResponseAck,
+			cs_WaitingForKInvalidatesJInvalidatesReceived,
+			cs_WaitingForSharedReadResponse,
+			cs_WaitingForSharedResponseAck,
+			cs_WaitingForWritebackBusyAck,
+			cs_WaitingForWritebackResponse
+		};
+		enum ReadRequestState
+		{
+			rrs_NoPendingReads,
+			rrs_PendingExclusiveRead,
+			rrs_PendingSharedRead,
+			rrs_PendingSharedReadExclusiveRead
+		};
+		enum DirectoryState
+		{
+			ds_BusyExclusive,
+			ds_BusyExclusiveMemoryAccess,
+			ds_BusyExclusiveMemoryAccessWritebackRequest,
+			ds_BusyShared,
+			ds_BusySharedMemoryAccess,
+			ds_BusySharedMemoryAccessWritebackRequest,
+			ds_Exclusive,
+			ds_ExclusiveMemoryAccess,
+			ds_Shared,
+			ds_SharedMemoryAccess,
+			ds_SharedExclusiveMemoryAccess,
+			ds_SharedMemoryAccessWritebackRequest,
+			ds_Unowned
+		};
+		class CacheData
 		{
 		public:
-			HashSet<NodeID> sharers;
-			NodeID owner;
+			CacheState cacheState;
+			ReadRequestState readRequestState;
 
-         BlockData() : owner(InvalidNodeID) {}
+			const ReadMsg* firstReply;
+			NodeID firstReplySrc;
+			int invalidAcksReceived;
+			const ReadMsg* pendingExclusiveRead;
+			const ReadMsg* pendingSharedRead;
+
+			CacheData() :
+				cacheState(cs_Invalid),
+				readRequestState(rrs_NoPendingReads),
+				firstReply(NULL),
+				firstReplySrc(InvalidNodeID),
+				invalidAcksReceived(-1),
+				pendingExclusiveRead(NULL),
+				pendingSharedRead(NULL)
+			{}
+		};
+		class DirectoryData
+		{
+		public:
+			const BaseMsg* firstRequest;
+			NodeID owner;
+			int pendingInvalidates;
+			HashSet<NodeID> sharers;
+			DirectoryState state;
+
+         DirectoryData() :
+         	firstRequest(NULL),
+         	owner(InvalidNodeID),
+         	pendingInvalidates(-1),
+         	state(ds_Unowned)
+			{}
          void print(Address myAddress, MessageID myMessageID,bool isSharedBusy, bool isExclusiveBusy,
             bool hasPendingMemAccess,bool isWaitingForReadResponse)
          {
@@ -146,7 +215,8 @@ namespace Memory
       HashMap<Address, const EvictionMsg* >waitingForReadResponse;
 		HashMap<Address, const EvictionMsg*> pendingEviction;
       HashMap<Address, std::vector<ReadMsg> >invalidateLock;
-		HashMap<Address, BlockData> directoryData;
+		HashMap<Address, DirectoryData> directoryDataMap;
+		HashMap<Address, CacheData> cacheDataMap;
 		//HashMap<Address, BlockData> pendingDirectoryBusyExclusiveReadsDirectoryData;
       //HashMap<MessageID, LookupData<ReadMsg> > pendingSpeculativeReads;
       //HashMap<Address, const ReadResponseMsg* > pendingSpeculativeReadResponses;
@@ -175,6 +245,8 @@ namespace Memory
 			}
 		}
 
+		CacheData& GetCacheData(const BaseMsg* m);
+		DirectoryData& GetDirectoryData(const BaseMsg* m);
       void HandleReceivedAllInvalidates(Address myAddress);
       bool IsInPendingDirectoryNormalSharedRead(const ReadMsg *m);
 		//void PerformDirectoryFetch(Address a, NodeID src);
@@ -183,9 +255,11 @@ namespace Memory
 		//void PerformDirectoryFetchOwner(const ReadMsg *msgIn, NodeID src);
       void SendLocalReadResponse(const ReadResponseMsg *msgIn);
       void SendDirectoryBlockRequest(const ReadMsg *msgIn);
+      void SendMemoryRequest(const BaseMsg *msg);
+      void SendNetworkMessage(const BaseMsg *msg, NodeID dest);
       void SendRemoteEviction(const EvictionMsg *m,NodeID dest,const char *fromMethod);
       void SendRemoteRead(const ReadMsg *m,NodeID dest,const char *fromMethod);
-		void EraseDirectoryShare(Address a, NodeID id);
+      void EraseDirectoryShare(Address a, NodeID id);
 		void AddDirectoryShare(Address a, NodeID id, bool exclusive);
       void AddReversePendingLocalRead(const ReadMsg *m);
       void EraseReversePendingLocalRead(const ReadResponseMsg *m,const ReadMsg *ref);
@@ -193,23 +267,22 @@ namespace Memory
       void ErasePendingDirectoryNormalSharedRead(const ReadResponseMsg *m);
       void ErasePendingLocalRead(const ReadResponseMsg *m);
       void ChangeOwnerToShare(Address a, NodeID id);
-      void writeToMainMemory(const EvictionMsg *m);
-      void writeToMainMemory(const InvalidateResponseMsg *m);
-      void writeToMainMemory(const ReadResponseMsg *m);
-      void writeToMainMemory(Address addr, Address generatingPC, size_t size);
 
       void AutoDetermineDestSendMsg(const BaseMsg* msg, NodeID dest, TimeDelta sendTime,
          OriginDirectoryMemFn func, const char* fromMethod, const char* toMethod);
 
-		void printDebugInfo(const char* fromMethod, const BaseMsg &myMessage, const char* operation);
-		void printDebugInfo(const char* fromMethod, const BaseMsg &myMessage, const char* operation,NodeID src);
-	   void printDebugInfo(const char* fromMethod,Address addr,NodeID id,const char* operation="");
-	   void printEraseOwner(const char* fromMethod,Address addr,NodeID id,const char* operation);
+		void PrintError(const char* fromMethod, const BaseMsg *m);
+		void PrintDebugInfo(const char* fromMethod, const BaseMsg &myMessage, const char* operation);
+		void PrintDebugInfo(const char* fromMethod, const BaseMsg &myMessage, const char* operation,NodeID src);
+	   void PrintDebugInfo(const char* fromMethod,Address addr,NodeID id,const char* operation="");
+	   void PrintEraseOwner(const char* fromMethod,Address addr,NodeID id,const char* operation);
 
-      void printDirectoryData(Address myAddress, MessageID myMessageID);
-		void printPendingDirectoryBusySharedReads();
-	   void printPendingLocalReads();
+      void PrintDirectoryData(Address myAddress, MessageID myMessageID);
+		void PrintPendingDirectoryBusySharedReads();
+	   void PrintPendingLocalReads();
 
+	   void OnDirectoryShared(const BaseMsg* msg, NodeID src, DirectoryData& directoryData, bool isFromMemory);
+	   void OnDirectoryUnowned(const BaseMsg* msg, NodeID src, DirectoryData& directoryData, bool isFromMemory);
 	   /*
 		typedef PooledFunctionGenerator<StoredClassFunction2<OriginDirectory,const BaseMsg*, NodeID, &OriginDirectory::OnDirectoryBlockRequest> > CBOnDirectoryBlockRequest;
 		CBOnDirectoryBlockRequest cbOnDirectoryBlockRequest;
