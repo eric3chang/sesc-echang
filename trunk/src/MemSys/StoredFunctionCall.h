@@ -83,6 +83,7 @@ public:
 		arg2 = a2;
 	}
 };
+
 template <class Host, class Arg1, class Arg2, class Arg3, void (Host::*Func)(Arg1,Arg2,Arg3)>
 class StoredClassFunction3 : public StoredFunctionBase
 {
@@ -102,6 +103,30 @@ public:
 		arg1 = a1;
 		arg2 = a2;
 		arg3 = a3;
+	}
+};
+
+template <class Host, class Arg1, class Arg2, class Arg3, class Arg4, void (Host::*Func)(Arg1,Arg2,Arg3,Arg4)>
+class StoredClassFunction4 : public StoredFunctionBase
+{
+protected:
+	Host* host;
+	Arg1 arg1;
+	Arg2 arg2;
+	Arg3 arg3;
+	Arg4 arg4;
+	virtual void Execute()
+	{
+		(host->*Func)(arg1,arg2,arg3,arg4);
+	}
+public:
+	void Initialize(Host* h, Arg1 a1, Arg2 a2, Arg3 a3, Arg4 a4)
+	{
+		host = h;
+		arg1 = a1;
+		arg2 = a2;
+		arg3 = a3;
+		arg4 = a4;
 	}
 };
 

@@ -149,7 +149,6 @@ namespace Memory
       pendingReads.clear();
       waitingForInvalidates.erase(myAddress);
       // send invalidation complete message back to directory
-      NodeID directoryNode = directoryNodeCalc->CalcNodeID(myAddress);
    }
 
    // performs a directory fetch
@@ -295,31 +294,52 @@ namespace Memory
 	}
 
    /**
-   send directory block request
+   send directory request
    */
-   void OriginDirectory::SendDirectoryBlockRequest(const ReadMsg *forward)
+   void OriginDirectory::SendDirectoryNetworkMessage(const BaseMsg *msg, NodeID dest)
    {
-		NodeID remoteNode = directoryNodeCalc->CalcNodeID(forward->addr);
-
-		if(remoteNode == nodeID)
-		{
-			/*
+   	if (dest==nodeID)
+   	{
+      	/*
 #ifdef MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-		   printDebugInfo("DirBlkReq",*forward,"SendDirBlkReq");
+               printDebugInfo("RemEvic",*m,"LocEvic",dest);
 #endif
-			CBOnDirectoryBlockRequest::FunctionType* f = cbOnDirectoryBlockRequest.Create();
-			f->Initialize(this,forward,nodeID);
+         CBOnRemoteEviction::FunctionType* f = cbOnRemoteEviction.Create();
+         f->Initialize(this,m,nodeID);
+         // stagger the events to avoid some race conditions
+         EM().ScheduleEvent(f, localSendTime);
+         */
+   		// wait for localSendTime
+   		// call RecvMsg(m, remoteConnectionID)
+
+   		//CBRecvMsg::FunctionType* f;
+   	}
+   	else
+   	{
+			NetworkMsg* nm = EM().CreateNetworkMsg(GetDeviceID(), msg->GeneratingPC());
+			DebugAssertWithMessageID(nm,msg->MsgID());
+			nm->sourceNode = nodeID;
+			nm->destinationNode = dest;
+			nm->payloadMsg = msg;
+			SendMsg(remoteConnectionID, nm, remoteSendTime);
+   	}
+   }
+
+   void OriginDirectory::SendDirectoryRequest(const ReadMsg *msgIn, bool isFromMemory)
+   {
+		NodeID dirNode = directoryNodeCalc->CalcNodeID(msgIn->addr);
+		const ReadMsg* forward = (const ReadMsg*)EM().ReplicateMsg(msgIn);
+		DirectoryData& directoryData = GetDirectoryData(msgIn);
+
+		if(dirNode == nodeID)
+		{
+			CBOnDirectory::FunctionType* f = cbOnDirectory.Create();
+			f->Initialize(this, forward, nodeID, &directoryData, isFromMemory);
 			EM().ScheduleEvent(f, localSendTime);
-			*/
 		}
 		else
 		{
-			NetworkMsg* nm = EM().CreateNetworkMsg(GetDeviceID(), forward->GeneratingPC());
-			DebugAssertWithMessageID(nm,forward->MsgID())
-			nm->destinationNode = remoteNode;
-			nm->sourceNode = nodeID;
-			nm->payloadMsg = forward;
-			SendMsg(remoteConnectionID, nm, remoteSendTime);
+			SendNetworkMessage(forward, dirNode);
 		}
    }
 
@@ -378,14 +398,17 @@ namespace Memory
    		DebugFail(output.c_str());
    	}
    }
-   void OriginDirectory::SendNetworkMessage(const BaseMsg *msg, NodeID dest)
+
+      void OriginDirectory::SendNetworkMessage(const BaseMsg *msg, NodeID dest)
    {
 		NetworkMsg* nm = EM().CreateNetworkMsg(GetDeviceID(), msg->GeneratingPC());
+		DebugAssertWithMessageID(nm,msg->MsgID());
 		nm->sourceNode = nodeID;
 		nm->destinationNode = dest;
 		nm->payloadMsg = msg;
 		SendMsg(remoteConnectionID, nm, remoteSendTime);
    }
+
    void OriginDirectory::SendRemoteEviction(const EvictionMsg *m,NodeID dest,const char *fromMethod)
    {
       if(dest == nodeID)
@@ -597,8 +620,443 @@ namespace Memory
 	{
 	   out << "messagesReceived:" << messagesReceived << std::endl;
 	}
-	void OriginDirectory::OnDirectoryShared(
-			const BaseMsg* msg, NodeID src, DirectoryData& directoryData, bool isFromMemory)
+
+	void OriginDirectory::OnCache(const BaseMsg* msg, NodeID src, CacheData& cacheData)
+	{
+		CacheState& state = cacheData.cacheState;
+
+		switch(state)
+		{
+		case cs_Exclusive:
+			OnCacheExclusive(msg,src,cacheData);
+			break;
+		case cs_ExclusiveWaitingForSpeculativeReply:
+			OnCacheExclusiveWaitingForSpeculativeReply(msg, src, cacheData);
+			break;
+		case cs_Invalid:
+			OnCacheInvalid(msg,src,cacheData);
+			break;
+		case cs_Shared:
+			OnCacheShared(msg,src,cacheData);
+			break;
+		case cs_SharedWaitingForSpeculativeReply:
+			OnCacheSharedWaitingForSpeculativeReply(msg, src, cacheData);
+			break;
+		case cs_WaitingForExclusiveReadResponse:
+			OnCacheWaitingForExclusiveReadResponse(msg, src, cacheData);
+			break;
+		case cs_WaitingForExclusiveResponseAck:
+			OnCacheWaitingForExclusiveResponseAck(msg, src, cacheData);
+			break;
+		case cs_WaitingForIntervention:
+			OnCacheWaitingForIntervention(msg, src, cacheData);
+			break;
+		case cs_WaitingForKInvalidatesJInvalidatesReceived:
+			OnCacheWaitingForKInvalidatesJInvalidatesReceived(msg, src, cacheData);
+			break;
+		case cs_WaitingForSharedReadResponse:
+			OnCacheWaitingForSharedReadResponse(msg, src, cacheData);
+			break;
+		case cs_WaitingForSharedResponseAck:
+			OnCacheWaitingForSharedResponseAck(msg, src, cacheData);
+			break;
+		case cs_WaitingForWritebackBusyAck:
+			OnCacheWaitingForWritebackBusyAck(msg, src, cacheData);
+			break;
+		case cs_WaitingForWritebackResponse:
+			OnCacheWaitingForWritebackResponse(msg, src, cacheData);
+			break;
+		default:
+			PrintError("OnCache",msg);
+			break;
+		}
+	}
+
+	void OriginDirectory::OnCacheExclusive(const BaseMsg* msg, NodeID src, CacheData& cacheData)
+	{
+		;
+	}
+
+	void OriginDirectory::OnCacheExclusiveWaitingForSpeculativeReply(const BaseMsg* msg, NodeID src, CacheData& cacheData)
+	{
+		;
+	}
+	
+	void OriginDirectory::OnCacheInvalid(const BaseMsg* msg, NodeID src, CacheData& cacheData)
+	{
+		CacheState& state = cacheData.cacheState;
+
+		if (msg->Type()==mt_Intervention)
+		{
+			const InterventionMsg* m = (const InterventionMsg*)msg;
+			NodeID dirNode = directoryNodeCalc->CalcNodeID(m->addr);
+
+			if (m->requestingExclusive)
+			{
+				// send exclusive ack to requester
+				ReadResponseMsg* rrm = EM().CreateReadResponseMsg(GetDeviceID(),m->GeneratingPC());
+				EM().InitializeReadResponseMsg(rrm,m);
+				rrm->blockAttached = false;
+				rrm->exclusiveOwnership = true;
+				rrm->satisfied = true;
+				SendNetworkMessage(rrm, src);
+
+				// send dirty transfer to directory
+				TransferMsg* tm = EM().CreateTransferMsg(GetDeviceID(),m->GeneratingPC());
+				EM().InitializeEvictionMsg(tm,m);
+				tm->isDirty = true;
+				SendNetworkMessage(tm, dirNode);
+			}
+			else
+			{ // not requesting exclusive
+				// send shared ack to requester
+				ReadResponseMsg* rrm = EM().CreateReadResponseMsg(GetDeviceID(), m->GeneratingPC());
+				EM().InitializeReadResponseMsg(rrm, m);
+				rrm->blockAttached = false;
+				rrm->exclusiveOwnership = false;
+				rrm->satisfied = true;
+				SendNetworkMessage(rrm, src);
+
+				// send shared transfer to directory
+				TransferMsg* tm = EM().CreateTransferMsg(GetDeviceID(), m->GeneratingPC());
+				EM().InitializeEvictionMsg(tm, m);
+				tm->isShared = true;
+				SendNetworkMessage(tm, dirNode);
+			} // if (m->requestingExclusive)
+		}// if (msgType==Intervention)
+		else if (msg->Type()==mt_Read)
+		{
+			const ReadMsg* m = (const ReadMsg*)msg;
+
+			if (!m->requestingExclusive)
+			{
+				// must be from local
+				DebugAssert(src==InvalidNodeID);
+
+				state = cs_WaitingForSharedReadResponse;
+
+				// forward m to directory
+				SendDirectoryRequest(m,false);
+			}
+			else
+			{ // is requesting exclusive
+				DebugAssert(src==InvalidNodeID);
+
+				state = cs_WaitingForExclusiveReadResponse;
+
+				// forward m to directory
+				SendDirectoryRequest(m,false);
+			} // if (!m->requestingExclusive)
+		} // else if (msg->Type()==mt_Read)
+		else
+		{
+			PrintError("OnCacheInvalid",msg);
+		}
+	}
+
+	void OriginDirectory::OnCacheShared(const BaseMsg* msg, NodeID src, CacheData& cacheData)
+	{
+		;
+	}
+
+	void OriginDirectory::OnCacheSharedWaitingForSpeculativeReply(const BaseMsg* msg, NodeID src, CacheData& cacheData)
+	{
+		;
+	}
+
+	void OriginDirectory::OnCacheWaitingForExclusiveReadResponse(const BaseMsg* msg, NodeID src, CacheData& cacheData)
+	{
+		;
+	}
+
+	void OriginDirectory::OnCacheWaitingForExclusiveResponseAck(const BaseMsg* msg, NodeID src, CacheData& cacheData)
+	{
+		;
+	}
+
+	void OriginDirectory::OnCacheWaitingForIntervention(const BaseMsg* msg, NodeID src, CacheData& cacheData)
+	{
+		;
+	}
+
+	void OriginDirectory::OnCacheWaitingForKInvalidatesJInvalidatesReceived(const BaseMsg* msg, NodeID src, CacheData& cacheData)
+	{
+		;
+	}
+
+	void OriginDirectory::OnCacheWaitingForSharedReadResponse(const BaseMsg* msg, NodeID src, CacheData& cacheData)
+	{
+		;
+	}
+
+	void OriginDirectory::OnCacheWaitingForSharedResponseAck(const BaseMsg* msg, NodeID src, CacheData& cacheData)
+	{
+		;
+	}
+
+	void OriginDirectory::OnCacheWaitingForWritebackBusyAck(const BaseMsg* msg, NodeID src, CacheData& cacheData)
+	{
+		;
+	}
+
+	void OriginDirectory::OnCacheWaitingForWritebackResponse(const BaseMsg* msg, NodeID src, CacheData& cacheData)
+	{
+		;
+	}
+
+   void OriginDirectory::OnCacheRead(const ReadMsg* m, CacheData* cacheData)
+   {
+   	ReadRequestState& state = cacheData->readRequestState;
+   	const ReadMsg* pendingExclusiveRead = cacheData->pendingExclusiveRead;
+   	const ReadMsg* pendingSharedRead = cacheData->pendingSharedRead;
+
+   	switch(state)
+   	{
+   	case rrs_NoPendingReads:
+   		if (!m->requestingExclusive)
+   		{
+   			state = rrs_PendingSharedRead;
+   			OnCache(m, InvalidNodeID, *cacheData);
+   			DebugAssertWithMessageID(pendingSharedRead==NULL, m->MsgID());
+   			pendingSharedRead = m;
+   		}
+   		else
+   		{ // m is not requesting exclusive
+   			state = rrs_PendingExclusiveRead;
+   			OnCache(m, InvalidNodeID, *cacheData);
+   			DebugAssertWithMessageID(pendingExclusiveRead==NULL, m->MsgID());
+   			pendingExclusiveRead = m;
+   		}
+   		break;
+   	case rrs_PendingSharedRead:
+   		if (m->requestingExclusive)
+   		{
+   			state = rrs_PendingSharedReadExclusiveRead;
+   		}
+   		else
+   		{
+   			// ignore message if it's a shared read
+   		}
+   		break;
+   	case rrs_PendingSharedReadExclusiveRead:
+   		// ignore message
+   		break;
+   	case rrs_PendingExclusiveRead:
+   		// ignore message
+   		break;
+   	default:
+   		PrintError("OnCacheRead",m,state);
+   		break;
+   	}
+   }
+
+	void OriginDirectory::OnDirectory(const BaseMsg* msg, NodeID src, DirectoryData* directoryData, bool isFromMemory)
+	{
+		DirectoryState& state = directoryData->state;
+
+		switch(state)
+		{
+		case ds_BusyExclusiveMemoryAccess:
+			OnDirectoryBusyExclusiveMemoryAccess(msg, src, *directoryData, isFromMemory);
+			break;
+		case ds_BusyExclusive:
+			OnDirectoryBusyExclusive(msg, src, *directoryData, isFromMemory);
+			break;
+		case ds_BusyExclusiveMemoryAccessWritebackRequest:
+			OnDirectoryBusyExclusiveMemoryAccessWritebackRequest(msg, src, *directoryData, isFromMemory);
+			break;
+		case ds_BusyShared:
+			OnDirectoryBusyShared(msg, src, *directoryData, isFromMemory);
+			break;
+		case ds_BusySharedMemoryAccess:
+			OnDirectoryBusySharedMemoryAccess(msg, src, *directoryData, isFromMemory);
+			break;
+		case ds_BusySharedMemoryAccessWritebackRequest:
+			OnDirectoryBusySharedMemoryAccessWritebackRequest(msg, src, *directoryData, isFromMemory);
+			break;
+		case ds_ExclusiveMemoryAccess:
+			OnDirectoryExclusiveMemoryAccess(msg, src, *directoryData, isFromMemory);
+			break;
+		case ds_Exclusive:
+			OnDirectoryExclusive(msg, src, *directoryData, isFromMemory);
+			break;
+		case ds_Shared:
+			OnDirectoryShared(msg, src, *directoryData, isFromMemory);
+			break;
+		case ds_SharedExclusiveMemoryAccess:
+			OnDirectorySharedExclusiveMemoryAccess(msg, src, *directoryData, isFromMemory);
+			break;
+		case ds_SharedMemoryAccess:
+			OnDirectorySharedMemoryAccess(msg, src, *directoryData, isFromMemory);
+			break;
+		case ds_Unowned:
+			OnDirectoryUnowned(msg, src, *directoryData, isFromMemory);
+			break;
+		default:
+			PrintError("OnDir",msg, "Unimplemented directory state");
+			break;
+		}
+	}
+
+	/**
+	 * Received a readResponse from the directory for the cache
+	 */
+	void OriginDirectory::OnDirectoryReadResponse(const ReadResponseMsg* m, NodeID src, CacheData* cacheData)
+   {
+   	ReadRequestState& state = cacheData->readRequestState;
+   	const ReadMsg* pendingExclusiveRead = cacheData->pendingExclusiveRead;
+   	const ReadMsg* pendingSharedRead = cacheData->pendingSharedRead;
+
+   	switch(state)
+   	{
+   	case rrs_NoPendingReads:
+   		// should not receive a read response to cache
+   		PrintError("OnDirReadRes", m, state);
+   		break;
+   	case rrs_PendingExclusiveRead:
+   		if (!m->satisfied)
+   		{
+   			state = rrs_NoPendingReads;
+   			OnCache(m, InvalidNodeID, *cacheData);
+   		}
+   		else
+   		{
+   			// retry request
+   			OnCache(m, InvalidNodeID, *cacheData);
+   		}
+   		break;
+   	case rrs_PendingSharedRead:
+   		// could be exclusive owned because it could be CEX
+   		// DebugAssert(!m.isExclusiveOwned)
+   		if (m->satisfied)
+   		{
+   			state = rrs_NoPendingReads;
+   			OnCache(m, InvalidNodeID, *cacheData);
+   			DebugAssertWithMessageID(pendingSharedRead->MsgID()==m->solicitingMessage, m->MsgID());
+   			pendingSharedRead = NULL;
+   		}
+   		else
+   		{
+   			// retry request
+   			OnCache(m, InvalidNodeID, *cacheData);
+   		}
+   		break;
+   	case rrs_PendingSharedReadExclusiveRead:
+   		if (!m->satisfied)
+   		{
+   			DebugAssertWithMessageID(pendingSharedRead->MsgID()==m->solicitingMessage, m->MsgID());
+   			OnCache(m, InvalidNodeID, *cacheData);
+   		}
+   		else if (m->satisfied && m->exclusiveOwnership)
+   		{
+   			state = rrs_NoPendingReads;
+   			DebugAssertWithMessageID(pendingExclusiveRead != NULL, m->MsgID());
+   			DebugAssertWithMessageID(pendingSharedRead != NULL, m->MsgID());
+   			DebugAssertWithMessageID(pendingSharedRead->MsgID()==m->solicitingMessage
+   					|| pendingExclusiveRead->MsgID()==m->solicitingMessage, m->MsgID());
+   			pendingExclusiveRead = NULL;
+   			pendingSharedRead = NULL;
+   		}
+   		else if (m->satisfied && !m->exclusiveOwnership)
+   		{
+				state = rrs_PendingExclusiveRead;
+				SendDirectoryRequest(pendingExclusiveRead,false);
+				OnCache(m, InvalidNodeID, *cacheData);
+   		}
+   		break;
+   	default:
+   		PrintError("OnDirReadRes", m, state);
+   		break;
+   	}
+   }
+
+	void OriginDirectory::OnDirectoryBusyExclusive(const BaseMsg* msg, NodeID src, DirectoryData& directoryData, bool isFromMemory)
+	{
+		;
+	}
+
+   void OriginDirectory::OnDirectoryBusyExclusiveMemoryAccess(const BaseMsg* msg, NodeID src, DirectoryData& directoryData, bool isFromMemory)
+	{
+		;
+	}
+
+   void OriginDirectory::OnDirectoryBusyExclusiveMemoryAccessWritebackRequest(const BaseMsg* msg, NodeID src, DirectoryData& directoryData, bool isFromMemory)
+	{
+		;
+	}
+
+   void OriginDirectory::OnDirectoryBusyShared(const BaseMsg* msg, NodeID src, DirectoryData& directoryData, bool isFromMemory)
+	{
+		;
+	}
+
+   void OriginDirectory::OnDirectoryBusySharedMemoryAccess(const BaseMsg* msg, NodeID src, DirectoryData& directoryData, bool isFromMemory)
+	{
+		;
+	}
+
+   void OriginDirectory::OnDirectoryBusySharedMemoryAccessWritebackRequest(const BaseMsg* msg, NodeID src, DirectoryData& directoryData, bool isFromMemory)
+	{
+		;
+	}
+
+   void OriginDirectory::OnDirectoryExclusive(const BaseMsg* msg, NodeID src, DirectoryData& directoryData, bool isFromMemory)
+	{
+   	DirectoryState& state = directoryData.state;
+   	HashSet<NodeID>& sharers = directoryData.sharers;
+   	NodeID& owner = directoryData.owner;
+   	NodeID& previousOwner = directoryData.previousOwner;
+
+   	DebugAssertWithMessageID(sharers.size()==0, msg->MsgID());
+
+   	if (msg->Type()==mt_Read)
+   	{
+   		const ReadMsg* m = (const ReadMsg*)msg;
+   		if (owner==src)
+   		{
+   			state = ds_ExclusiveMemoryAccess;
+   			SendMemoryRequest(m);
+   		}
+   		else if (m->requestingExclusive && owner!=src)
+   		{
+   			state = ds_BusyExclusiveMemoryAccess;
+   			SendMemoryRequest(m);
+   			previousOwner = owner;
+   			owner = src;
+   		}
+   		else if (!m->requestingExclusive && owner!=src)
+   		{ // shared read and owner!=requester
+   			state = ds_BusySharedMemoryAccess;
+   			SendMemoryRequest(m);
+   			previousOwner = owner;
+   			sharers.insert(owner);
+   			owner = src;
+   		}
+   	}
+   	else if (msg->Type()==mt_WritebackRequest)
+   	{
+   		const WritebackRequestMsg* m = (const WritebackRequestMsg*)msg;
+   		DebugAssertWithMessageID(owner==src, m->MsgID());
+   		state = ds_Unowned;
+
+   		// send writeback exclusive ack to requester
+   		WritebackAckMsg* wam = EM().CreateWritebackAckMsg(GetDeviceID(), m->GeneratingPC());
+   		EM().InitializeEvictionResponseMsg(wam,m);
+   		wam->isExclusive = true;
+   		//TODO
+   	}
+   	else
+   	{
+			PrintError("OnDirEx", msg);
+   	}
+	}
+
+	void OriginDirectory::OnDirectoryExclusiveMemoryAccess(const BaseMsg* msg, NodeID src, DirectoryData& directoryData, bool isFromMemory)
+	{
+		;
+	}
+
+	void OriginDirectory::OnDirectoryShared(const BaseMsg* msg, NodeID src, DirectoryData& directoryData, bool isFromMemory)
 	{
 		HashSet<NodeID>& sharers = directoryData.sharers;
 		NodeID& owner = directoryData.owner;
@@ -616,69 +1074,76 @@ namespace Memory
 				firstRequest = m;
 				SendMemoryRequest(m);
 			}
-			else
-			{ // is requesting exclusive
-				if (owner!=src && sharers.find(src)==sharers.end())
-				{// if m is exclusive read and requester is not owner or in sharers
-					state = ds_SharedExclusiveMemoryAccess;
-					SendMemoryRequest(m);
+			else if (m->requestingExclusive && owner!=src && sharers.find(src)==sharers.end())
+			{// if m is exclusive read and requester is not owner or in sharers
+				state = ds_SharedExclusiveMemoryAccess;
+				SendMemoryRequest(m);
+			}
+			else if (m->requestingExclusive && (owner==src || sharers.find(src)!=sharers.end()))
+			{// if requester is owner or is in sharers
+				state = ds_Exclusive;
+				pendingInvalidates = sharers.size();
+
+				// send exclusive reply (no data) with invalidates pending to requester
+				ReadReplyMsg* rrm = EM().CreateReadReplyMsg(GetDeviceID(),m->GeneratingPC());
+				EM().InitializeReadResponseMsg(rrm, m);
+				rrm->blockAttached = false;
+				rrm->exclusiveOwnership = true;
+				rrm->pendingInvalidates = pendingInvalidates;
+				rrm->satisfied = false;
+				NetworkMsg* nm = EM().CreateNetworkMsg(GetDeviceID(), m->GeneratingPC());
+				nm->sourceNode = nodeID;
+				nm->destinationNode = src;
+				nm->payloadMsg = rrm;
+				SendMsg(remoteConnectionID, nm, remoteSendTime);
+
+				DebugAssertWithMessageID(owner!=InvalidNodeID, m->MsgID());
+				// send invalidates to owner if it is not the requester
+				if (owner!=src)
+				{
+					InvalidateMsg* im = EM().CreateInvalidateMsg(GetDeviceID(),m->GeneratingPC());
+					im->addr = m->addr;
+					im->newOwner = src;
+					im->size = m->size;
+					im->solicitingMessage = m->MsgID();
+					SendNetworkMessage(im, src);
 				}
-				else if (owner==src || sharers.find(src)!=sharers.end())
-				{// if requester is owner or is in sharers
-					state = ds_Exclusive;
-					pendingInvalidates = sharers.size();
 
-					// send exclusive reply (no data) with invalidates pending to requester
-					ReadReplyMsg* rrm = EM().CreateReadReplyMsg(GetDeviceID(),m->GeneratingPC());
-					EM().InitializeReadResponseMsg(rrm, m);
-					rrm->blockAttached = false;
-					rrm->exclusiveOwnership = true;
-					rrm->originalRequestingNode = src;
-					rrm->pendingInvalidates = pendingInvalidates;
-					rrm->satisfied = false;
-					NetworkMsg* nm = EM().CreateNetworkMsg(GetDeviceID(), m->GeneratingPC());
-					nm->sourceNode = nodeID;
-					nm->destinationNode = src;
-					nm->payloadMsg = rrm;
-					SendMsg(remoteConnectionID, nm, remoteSendTime);
-
-					// send invalidates to owner if it is not the requester
-					if (owner!=src)
+				// send invalidates to sharers that are not the requester
+				for(HashSet<NodeID>::iterator i = sharers.begin(); i != sharers.end(); i++)
+				{
+					DebugAssertWithMessageID(*i!=InvalidNodeID, m->MsgID());
+					if (*i!=src)
 					{
 						InvalidateMsg* im = EM().CreateInvalidateMsg(GetDeviceID(),m->GeneratingPC());
 						im->addr = m->addr;
 						im->newOwner = src;
 						im->size = m->size;
 						im->solicitingMessage = m->MsgID();
-						SendNetworkMessage(im, src);
+						SendNetworkMessage(im, *i);
 					}
-
-					// send invalidates to sharers that are not the requester
-					for(HashSet<NodeID>::iterator i = sharers.begin(); i != sharers.end(); i++)
-					{
-						if (*i!=src)
-						{
-							InvalidateMsg* im = EM().CreateInvalidateMsg(GetDeviceID(),m->GeneratingPC());
-							im->addr = m->addr;
-							im->newOwner = src;
-							im->size = m->size;
-							im->solicitingMessage = m->MsgID();
-							SendNetworkMessage(im, *i);
-						}
-					}
-					owner = src;
-					sharers.clear();
-				}//else if (owner==src || sharers.find(src)!=sharers.end())
-			}// is requesting exclusive
+				}
+				owner = src;
+				sharers.clear();
+			}//else if (m->requestingExclusive && (owner==src || sharers.find(src)!=sharers.end()))
 		}//if (msg->Type()==mt_Read)
 		else
 		{
-			PrintError("OriginDir::OnDirSh",msg);
+			PrintError("OnDirSh",msg);
 		}// else msgType != read
 	} // OriginDirectory::OnDirectoryShared
 
-	void OriginDirectory::OnDirectoryUnowned(
-			const BaseMsg* msg, NodeID src, DirectoryData& directoryData, bool isFromMemory)
+   void OriginDirectory::OnDirectorySharedExclusiveMemoryAccess(const BaseMsg* msg, NodeID src, DirectoryData& directoryData, bool isFromMemory)
+	{
+		;
+	}
+
+   void OriginDirectory::OnDirectorySharedMemoryAccess(const BaseMsg* msg, NodeID src, DirectoryData& directoryData, bool isFromMemory)
+	{
+		;
+	}
+
+	void OriginDirectory::OnDirectoryUnowned(const BaseMsg* msg, NodeID src, DirectoryData& directoryData, bool isFromMemory)
 	{
 		DirectoryState& state = directoryData.state;
 		const BaseMsg* firstRequest = directoryData.firstRequest;
@@ -696,7 +1161,7 @@ namespace Memory
 		}
 		else
 		{
-			PrintError("OriginDir::OnDirUnowned",msg);
+			PrintError("OnDirUnowned",msg);
 		}
 	}
 	/**
@@ -719,11 +1184,18 @@ namespace Memory
 
 		if(connectionID == localCacheConnectionID)
 		{
-			//TODO 2011/01/06
+			if (msg->Type()==mt_Read)
+			{
+				OnCacheRead((const ReadMsg*)msg,&cacheData);
+			}
+			else
+			{
+				OnCache(msg,InvalidNodeID,cacheData);
+			}
 		}
 		else if (connectionID == localMemoryConnectionID)
 		{
-			;
+			OnDirectory(msg, InvalidNodeID, &directoryData, true);
 		}
 		else if(connectionID == remoteConnectionID)
 		{
@@ -733,6 +1205,33 @@ namespace Memory
 			NodeID src = m->sourceNode;
 			DebugAssert(m->destinationNode == nodeID);
 			EM().DisposeMsg(m);
+
+			if (payload->Type()==mt_ReadResponse
+				|| payload->Type()==mt_ReadReply)
+			{ // do special processing for mt_ReadResponse first
+				OnDirectoryReadResponse((const ReadResponseMsg*)msg, src, &cacheData);
+			}
+			else if (payload->Type()==mt_Read
+				|| payload->Type()==mt_WritebackRequest
+				|| payload->Type()==mt_Transfer
+				|| payload->Type()==mt_Writeback
+				|| payload->Type()==mt_DirectoryNak)
+			{
+				OnDirectory(payload, src, &directoryData, false);
+			}
+			else if (payload->Type()==mt_CacheNak
+				|| payload->Type()==mt_SpeculativeReply
+				|| payload->Type()==mt_Intervention
+				|| payload->Type()==mt_Invalidate
+				|| payload->Type()==mt_InvalidateAck
+				|| payload->Type()==mt_WritebackAck)
+			{
+				OnCache(msg, src, cacheData);
+			}
+			else
+			{
+				PrintError("RecvMsg", msg, "Unknown type received");
+			}
 		}
 		else
 		{
@@ -755,16 +1254,40 @@ namespace Memory
 
    void OriginDirectory::PrintError(const char* fromMethod, const BaseMsg *m)
    {
-		std::stringstream ss;
-		ss << fromMethod
+   	stringstream ss;
+   	PutErrorStringStream(ss, fromMethod, m);
+   	string output = ss.str();
+		DebugFail(output.c_str());
+   }
+
+   void OriginDirectory::PrintError(const char* fromMethod, const BaseMsg *m, const char* comment)
+   {
+   	stringstream ss;
+   	PutErrorStringStream(ss, fromMethod, m);
+   	ss << ": " << comment;
+   	string output = ss.str();
+		DebugFail(output.c_str());
+   }
+
+	void OriginDirectory::PrintError(const char* fromMethod, const BaseMsg *m, int state)
+   {
+   	stringstream ss;
+   	PutErrorStringStream(ss, fromMethod, m);
+   	ss << " " << state;
+   	string output = ss.str();
+   	DebugFail(output.c_str());
+   }
+
+	void OriginDirectory::PutErrorStringStream(stringstream& ss, const char* fromMethod, const BaseMsg*m)
+	{
+		ss << "OriginDir::"
+			<< fromMethod
 			<< ": msg received with id "
 			<< m->MsgID()
 			<< " type "
 			<< m->Type()
 			;
-		std::string output = ss.str();
-		DebugFail(output.c_str());
-   }
+	}
 
 	/**
 	 * readMsgArray in this method could be coupled with Eclipse's debugger to

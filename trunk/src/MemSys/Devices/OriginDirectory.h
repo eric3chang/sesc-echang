@@ -5,6 +5,9 @@
 #include "NetworkMsg.h"
 #include <vector>
 
+using std::string;
+using std::stringstream;
+
 // toggles debug messages
 //#define MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
 //#define MEMORY_3_STAGE_DIRECTORY_DEBUG_DIRECTORY_DATA
@@ -116,6 +119,7 @@ namespace Memory
 		public:
 			const BaseMsg* firstRequest;
 			NodeID owner;
+			NodeID previousOwner;
 			int pendingInvalidates;
 			HashSet<NodeID> sharers;
 			DirectoryState state;
@@ -123,6 +127,7 @@ namespace Memory
          DirectoryData() :
          	firstRequest(NULL),
          	owner(InvalidNodeID),
+         	previousOwner(InvalidNodeID),
          	pendingInvalidates(-1),
          	state(ds_Unowned)
 			{}
@@ -254,11 +259,13 @@ namespace Memory
       void PerformDirectoryFetch(const ReadMsg *msgIn,NodeID src,bool isExclusive,NodeID target);
 		//void PerformDirectoryFetchOwner(const ReadMsg *msgIn, NodeID src);
       void SendLocalReadResponse(const ReadResponseMsg *msgIn);
-      void SendDirectoryBlockRequest(const ReadMsg *msgIn);
+      void SendDirectoryNetworkMessage(const BaseMsg *msg, NodeID dest);
+      void SendDirectoryRequest(const ReadMsg *msgIn, bool isFromMemory);
       void SendMemoryRequest(const BaseMsg *msg);
       void SendNetworkMessage(const BaseMsg *msg, NodeID dest);
       void SendRemoteEviction(const EvictionMsg *m,NodeID dest,const char *fromMethod);
       void SendRemoteRead(const ReadMsg *m,NodeID dest,const char *fromMethod);
+
       void EraseDirectoryShare(Address a, NodeID id);
 		void AddDirectoryShare(Address a, NodeID id, bool exclusive);
       void AddReversePendingLocalRead(const ReadMsg *m);
@@ -272,18 +279,59 @@ namespace Memory
          OriginDirectoryMemFn func, const char* fromMethod, const char* toMethod);
 
 		void PrintError(const char* fromMethod, const BaseMsg *m);
+		void PrintError(const char* fromMethod, const BaseMsg *m, const char* comment);
+		void PrintError(const char* fromMethod, const BaseMsg *m, int state);
+	   void PutErrorStringStream(stringstream& ss, const char* fromMethod, const BaseMsg*m);
+
 		void PrintDebugInfo(const char* fromMethod, const BaseMsg &myMessage, const char* operation);
 		void PrintDebugInfo(const char* fromMethod, const BaseMsg &myMessage, const char* operation,NodeID src);
 	   void PrintDebugInfo(const char* fromMethod,Address addr,NodeID id,const char* operation="");
-	   void PrintEraseOwner(const char* fromMethod,Address addr,NodeID id,const char* operation);
-
       void PrintDirectoryData(Address myAddress, MessageID myMessageID);
+	   void PrintEraseOwner(const char* fromMethod,Address addr,NodeID id,const char* operation);
 		void PrintPendingDirectoryBusySharedReads();
 	   void PrintPendingLocalReads();
 
+	   // special treatments for cacheRead and directoryReadResponse
+	   void OnCacheRead(const ReadMsg* m, CacheData* cacheData);
+	   void OnDirectoryReadResponse(const ReadResponseMsg* m, NodeID src, CacheData* cacheData);
+
+	   void OnCache(const BaseMsg* msg, NodeID src, CacheData& cacheData);
+      void OnCacheExclusive(const BaseMsg* msg, NodeID src, CacheData& cacheData);
+      void OnCacheExclusiveWaitingForSpeculativeReply(const BaseMsg* msg, NodeID src, CacheData& cacheData);
+	   void OnCacheInvalid(const BaseMsg* msg, NodeID src, CacheData& cacheData);
+      void OnCacheShared(const BaseMsg* msg, NodeID src, CacheData& cacheData);
+      void OnCacheSharedWaitingForSpeculativeReply(const BaseMsg* msg, NodeID src, CacheData& cacheData);
+      void OnCacheWaitingForExclusiveReadResponse(const BaseMsg* msg, NodeID src, CacheData& cacheData);
+      void OnCacheWaitingForExclusiveResponseAck(const BaseMsg* msg, NodeID src, CacheData& cacheData);
+      void OnCacheWaitingForIntervention(const BaseMsg* msg, NodeID src, CacheData& cacheData);
+      void OnCacheWaitingForKInvalidatesJInvalidatesReceived(const BaseMsg* msg, NodeID src, CacheData& cacheData);
+      void OnCacheWaitingForSharedReadResponse(const BaseMsg* msg, NodeID src, CacheData& cacheData);
+      void OnCacheWaitingForSharedResponseAck(const BaseMsg* msg, NodeID src, CacheData& cacheData);
+      void OnCacheWaitingForWritebackBusyAck(const BaseMsg* msg, NodeID src, CacheData& cacheData);
+      void OnCacheWaitingForWritebackResponse(const BaseMsg* msg, NodeID src, CacheData& cacheData);
+
+	   void OnDirectory(const BaseMsg* msg, NodeID src, DirectoryData* directoryData, bool isFromMemory);
+		void OnDirectoryBusyExclusive(const BaseMsg* msg, NodeID src, DirectoryData& directoryData, bool isFromMemory);
+	   void OnDirectoryBusyExclusiveMemoryAccess(const BaseMsg* msg, NodeID src, DirectoryData& directoryData, bool isFromMemory);
+      void OnDirectoryBusyExclusiveMemoryAccessWritebackRequest(const BaseMsg* msg, NodeID src, DirectoryData& directoryData, bool isFromMemory);
+      void OnDirectoryBusyShared(const BaseMsg* msg, NodeID src, DirectoryData& directoryData, bool isFromMemory);
+	   void OnDirectoryBusySharedMemoryAccess(const BaseMsg* msg, NodeID src, DirectoryData& directoryData, bool isFromMemory);
+      void OnDirectoryBusySharedMemoryAccessWritebackRequest(const BaseMsg* msg, NodeID src, DirectoryData& directoryData, bool isFromMemory);
+	   void OnDirectoryExclusive(const BaseMsg* msg, NodeID src, DirectoryData& directoryData, bool isFromMemory);
+		void OnDirectoryExclusiveMemoryAccess(const BaseMsg* msg, NodeID src, DirectoryData& directoryData, bool isFromMemory);
 	   void OnDirectoryShared(const BaseMsg* msg, NodeID src, DirectoryData& directoryData, bool isFromMemory);
+      void OnDirectorySharedExclusiveMemoryAccess(const BaseMsg* msg, NodeID src, DirectoryData& directoryData, bool isFromMemory);
+      void OnDirectorySharedMemoryAccess(const BaseMsg* msg, NodeID src, DirectoryData& directoryData, bool isFromMemory);
 	   void OnDirectoryUnowned(const BaseMsg* msg, NodeID src, DirectoryData& directoryData, bool isFromMemory);
-	   /*
+
+		typedef PooledFunctionGenerator<StoredClassFunction4<OriginDirectory,const BaseMsg*,NodeID,DirectoryData*,bool,&OriginDirectory::OnDirectory> > CBOnDirectory;
+		CBOnDirectory cbOnDirectory;
+		/*
+		typedef PooledFunctionGenerator<StoredClassFunction3<OriginDirectory,const ReadResponseMsg*,NodeID,CacheData&,&OriginDirectory::OnDirectoryReadResponse> > CBOnDirectoryReadResponse;
+		CBOnDirectoryReadResponse cBOnDirectoryReadResponse;
+		*/
+
+		/*
 		typedef PooledFunctionGenerator<StoredClassFunction2<OriginDirectory,const BaseMsg*, NodeID, &OriginDirectory::OnDirectoryBlockRequest> > CBOnDirectoryBlockRequest;
 		CBOnDirectoryBlockRequest cbOnDirectoryBlockRequest;
       typedef PooledFunctionGenerator<StoredClassFunction2<OriginDirectory,const BaseMsg*, NodeID, &OriginDirectory::OnRemoteEviction> > CBOnRemoteEviction;

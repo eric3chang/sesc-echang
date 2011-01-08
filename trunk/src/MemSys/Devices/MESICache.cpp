@@ -930,7 +930,6 @@ void MESICache::PerformRead(const ReadMsg* m)
 	void MESICache::RecvMsg(const BaseMsg* msg, int connectionID)
 	{
 	   messagesReceived++;
-      ReadMsg* debugReadMsg = (ReadMsg*)msg;
 
 		if(connectionID == localConnectionID)
 		{
