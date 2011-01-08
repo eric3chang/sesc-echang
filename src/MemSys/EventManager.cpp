@@ -26,8 +26,12 @@ namespace Memory
 		m->SetIDInfo(currentMsgStamp++,devID,generatingPC);
       m->addr = 0;
       m->blockAttached = false;
-      m->isBlockNotFound = false;
       m->size = 0;
+	}
+	void EventManager::InitializeEvictionMsg(EvictionMsg* em, const ReadMsg* rm)
+	{
+		em->addr = rm->addr;
+		em->size = rm->size;
 	}
 	void EventManager::InitializeEvictionResponseMsg(EvictionResponseMsg* m, DeviceID devID, Address generatingPC)
 	{
@@ -35,6 +39,12 @@ namespace Memory
 		m->addr = 0;
 		m->size = 0;
 		m->solicitingMessage = 0;
+	}
+	void EventManager::InitializeEvictionResponseMsg(EvictionResponseMsg* erm, const EvictionMsg* em)
+	{
+		erm->addr = em->addr;
+		erm->size = em->size;
+		erm->solicitingMessage = em->MsgID();
 	}
 	void EventManager::InitializeInvalidateMsg(InvalidateMsg* m, DeviceID devID, Address generatingPC)
 	{
@@ -55,20 +65,19 @@ namespace Memory
       m->isWaitingForInvalidateUnlock = false;
 		m->SetIDInfo(currentMsgStamp++,devID,generatingPC);
 	}
-	void EventManager::InitializeReadResponseMsg(ReadResponseMsg* readRes, const ReadMsg* read)
-	{
-		readRes->addr = read->addr;
-		readRes->size = read->size;
-		readRes->solicitingMessage = read->MsgID();
-	}
 	void EventManager::InitializeReadResponseMsg(ReadResponseMsg* m, DeviceID devID, Address generatingPC)
 	{
 		m->directoryLookup = false;
       m->evictionMessage = 0;
       m->exclusiveOwnership = false;
       m->isDirty = false;
-		m->originalRequestingNode = InvalidNodeID;
 		m->SetIDInfo(currentMsgStamp++,devID,generatingPC);
+	}
+	void EventManager::InitializeReadResponseMsg(ReadResponseMsg* readRes, const ReadMsg* read)
+	{
+		readRes->addr = read->addr;
+		readRes->size = read->size;
+		readRes->solicitingMessage = read->MsgID();
 	}
 
 	ReadMsg* EventManager::CreateReadMsg(DeviceID devID, Address generatingPC)

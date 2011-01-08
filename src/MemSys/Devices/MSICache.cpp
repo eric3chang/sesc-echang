@@ -925,7 +925,6 @@ void MSICache::RetryMsg(const BaseMsg* m, int connectionID)
 	void MSICache::RecvMsg(const BaseMsg* msg, int connectionID)
 	{
 	   messagesReceived++;
-      ReadMsg* debugReadMsg = (ReadMsg*)msg;
 
 		if(connectionID == localConnectionID)
 		{

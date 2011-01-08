@@ -16,7 +16,6 @@ namespace Memory
 		bool exclusiveOwnership;
 		bool isDirty;
 		MessageID solicitingMessage;
-		NodeID originalRequestingNode;
 
 		virtual bool IsResponse() const { return true; }
 		virtual size_t MsgSize() const { return 1 + sizeof(Address) + (blockAttached ? size : 0); }
@@ -31,7 +30,6 @@ namespace Memory
             << " exOw=" << exclusiveOwnership
             << " dirty=" << isDirty
             << " sMsg=" << solicitingMessage
-            << " ogNode=" << BaseMsg::convertNodeIDToDeviceID(originalRequestingNode)
 		   ;
 		}
 

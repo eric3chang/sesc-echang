@@ -96,6 +96,8 @@ namespace Memory
       WritebackAckMsg* CreateWritebackAckMsg(DeviceID devID, Address generatingPC = 0);
       WritebackRequestMsg* CreateWritebackRequestMsg(DeviceID devID, Address generatingPC = 0);
 
+      void InitializeEvictionMsg(EvictionMsg* em, const ReadMsg* rm);
+      void InitializeEvictionResponseMsg(EvictionResponseMsg* erm, const EvictionMsg* em);
 		void InitializeReadResponseMsg(ReadResponseMsg* readRes, const ReadMsg* read);
 
 		BaseMsg* ReplicateMsg(const BaseMsg* msg);
