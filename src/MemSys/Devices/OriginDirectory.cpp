@@ -386,27 +386,22 @@ namespace Memory
    	}
    	else
    	{
-   		std::stringstream ss;
-   		std::string output;
-
-   		ss << "OriginDirectory::SendRequestToMemory: can't send msg with id "
-   				<< msg->MsgID()
-   				<< " and type "
-   				<< msg->Type()
-   				<< " to memory";
-   		output = ss.str();
-   		DebugFail(output.c_str());
+   		PrintError("SendMemoryRequest", msg, "can't send current message type to memory");
    	}
    }
 
-      void OriginDirectory::SendNetworkMessage(const BaseMsg *msg, NodeID dest)
+   void OriginDirectory::SendNetworkMessage(const BaseMsg *msg, NodeID dest)
    {
-		NetworkMsg* nm = EM().CreateNetworkMsg(GetDeviceID(), msg->GeneratingPC());
-		DebugAssertWithMessageID(nm,msg->MsgID());
-		nm->sourceNode = nodeID;
-		nm->destinationNode = dest;
-		nm->payloadMsg = msg;
-		SendMsg(remoteConnectionID, nm, remoteSendTime);
+   	// only send a network message if we actually need to, otherwise, we should
+   		// just schedule the event
+   	DebugAssertWithMessageID(dest!=nodeID, msg->MsgID());
+
+   	NetworkMsg* nm = EM().CreateNetworkMsg(GetDeviceID(), msg->GeneratingPC());
+   	DebugAssertWithMessageID(nm,msg->MsgID());
+   	nm->sourceNode = nodeID;
+   	nm->destinationNode = dest;
+   	nm->payloadMsg = msg;
+   	SendMsg(remoteConnectionID, nm, remoteSendTime);
    }
 
    void OriginDirectory::SendRemoteEviction(const EvictionMsg *m,NodeID dest,const char *fromMethod)
@@ -621,7 +616,123 @@ namespace Memory
 	   out << "messagesReceived:" << messagesReceived << std::endl;
 	}
 
-	void OriginDirectory::OnCache(const BaseMsg* msg, NodeID src, CacheData& cacheData)
+	void OriginDirectory::OnCacheRead(const ReadMsg* m, CacheData* cacheData)
+   {
+   	ReadRequestState& state = cacheData->readRequestState;
+   	const ReadMsg* pendingExclusiveRead = cacheData->pendingExclusiveRead;
+   	const ReadMsg* pendingSharedRead = cacheData->pendingSharedRead;
+
+   	switch(state)
+   	{
+   	case rrs_NoPendingReads:
+   		if (!m->requestingExclusive)
+   		{
+   			state = rrs_PendingSharedRead;
+   			OnCache(m, InvalidNodeID, *cacheData);
+   			DebugAssertWithMessageID(pendingSharedRead==NULL, m->MsgID());
+   			pendingSharedRead = m;
+   		}
+   		else
+   		{ // m is not requesting exclusive
+   			state = rrs_PendingExclusiveRead;
+   			OnCache(m, InvalidNodeID, *cacheData);
+   			DebugAssertWithMessageID(pendingExclusiveRead==NULL, m->MsgID());
+   			pendingExclusiveRead = m;
+   		}
+   		break;
+   	case rrs_PendingSharedRead:
+   		if (m->requestingExclusive)
+   		{
+   			state = rrs_PendingSharedReadExclusiveRead;
+   		}
+   		else
+   		{
+   			// ignore message if it's a shared read
+   		}
+   		break;
+   	case rrs_PendingSharedReadExclusiveRead:
+   		// ignore message
+   		break;
+   	case rrs_PendingExclusiveRead:
+   		// ignore message
+   		break;
+   	default:
+   		PrintError("OnCacheRead",m,state);
+   		break;
+   	}
+   }
+
+void OriginDirectory::OnDirectoryReadResponse(const ReadResponseMsg* m, NodeID src, CacheData* cacheData)
+   {
+   	ReadRequestState& state = cacheData->readRequestState;
+   	const ReadMsg* pendingExclusiveRead = cacheData->pendingExclusiveRead;
+   	const ReadMsg* pendingSharedRead = cacheData->pendingSharedRead;
+
+   	switch(state)
+   	{
+   	case rrs_NoPendingReads:
+   		// should not receive a read response to cache
+   		PrintError("OnDirReadRes", m, state);
+   		break;
+   	case rrs_PendingExclusiveRead:
+   		if (!m->satisfied)
+   		{
+   			state = rrs_NoPendingReads;
+   			OnCache(m, InvalidNodeID, *cacheData);
+   		}
+   		else
+   		{
+   			// retry request
+   			OnCache(m, InvalidNodeID, *cacheData);
+   		}
+   		break;
+   	case rrs_PendingSharedRead:
+   		// could be exclusive owned because it could be CEX
+   		// DebugAssert(!m.isExclusiveOwned)
+   		if (m->satisfied)
+   		{
+   			state = rrs_NoPendingReads;
+   			OnCache(m, InvalidNodeID, *cacheData);
+   			DebugAssertWithMessageID(pendingSharedRead->MsgID()==m->solicitingMessage, m->MsgID());
+   			pendingSharedRead = NULL;
+   		}
+   		else
+   		{
+   			// retry request
+   			OnCache(m, InvalidNodeID, *cacheData);
+   		}
+   		break;
+   	case rrs_PendingSharedReadExclusiveRead:
+   		if (!m->satisfied)
+   		{
+   			DebugAssertWithMessageID(pendingSharedRead->MsgID()==m->solicitingMessage, m->MsgID());
+   			OnCache(m, InvalidNodeID, *cacheData);
+   		}
+   		else if (m->satisfied && m->exclusiveOwnership)
+   		{
+   			state = rrs_NoPendingReads;
+   			DebugAssertWithMessageID(pendingExclusiveRead != NULL, m->MsgID());
+   			DebugAssertWithMessageID(pendingSharedRead != NULL, m->MsgID());
+   			DebugAssertWithMessageID(pendingSharedRead->MsgID()==m->solicitingMessage
+   					|| pendingExclusiveRead->MsgID()==m->solicitingMessage, m->MsgID());
+   			pendingExclusiveRead = NULL;
+   			pendingSharedRead = NULL;
+   		}
+   		else if (m->satisfied && !m->exclusiveOwnership)
+   		{
+				state = rrs_PendingExclusiveRead;
+				// send the exclusive read request that was queued up
+				SendDirectoryRequest(pendingExclusiveRead,false);
+				OnCache(m, InvalidNodeID, *cacheData);
+   		}
+   		break;
+   	default:
+   		PrintError("OnDirReadRes", m, state);
+   		break;
+   	}
+   }
+
+void OriginDirectory::OnCache(const BaseMsg* msg, NodeID src, CacheData& cacheData)
 	{
 		CacheState& state = cacheData.cacheState;
 
@@ -789,12 +900,7 @@ namespace Memory
 		;
 	}
 
-	void OriginDirectory::OnCacheWaitingForSharedResponseAck(const BaseMsg* msg, NodeID src, CacheData& cacheData)
-	{
-		;
-	}
-
-	void OriginDirectory::OnCacheWaitingForWritebackBusyAck(const BaseMsg* msg, NodeID src, CacheData& cacheData)
+		void OriginDirectory::OnCacheWaitingForWritebackBusyAck(const BaseMsg* msg, NodeID src, CacheData& cacheData)
 	{
 		;
 	}
@@ -804,51 +910,13 @@ namespace Memory
 		;
 	}
 
-   void OriginDirectory::OnCacheRead(const ReadMsg* m, CacheData* cacheData)
-   {
-   	ReadRequestState& state = cacheData->readRequestState;
-   	const ReadMsg* pendingExclusiveRead = cacheData->pendingExclusiveRead;
-   	const ReadMsg* pendingSharedRead = cacheData->pendingSharedRead;
-
-   	switch(state)
-   	{
-   	case rrs_NoPendingReads:
-   		if (!m->requestingExclusive)
-   		{
-   			state = rrs_PendingSharedRead;
-   			OnCache(m, InvalidNodeID, *cacheData);
-   			DebugAssertWithMessageID(pendingSharedRead==NULL, m->MsgID());
-   			pendingSharedRead = m;
-   		}
-   		else
-   		{ // m is not requesting exclusive
-   			state = rrs_PendingExclusiveRead;
-   			OnCache(m, InvalidNodeID, *cacheData);
-   			DebugAssertWithMessageID(pendingExclusiveRead==NULL, m->MsgID());
-   			pendingExclusiveRead = m;
-   		}
-   		break;
-   	case rrs_PendingSharedRead:
-   		if (m->requestingExclusive)
-   		{
-   			state = rrs_PendingSharedReadExclusiveRead;
-   		}
-   		else
-   		{
-   			// ignore message if it's a shared read
-   		}
-   		break;
-   	case rrs_PendingSharedReadExclusiveRead:
-   		// ignore message
-   		break;
-   	case rrs_PendingExclusiveRead:
-   		// ignore message
-   		break;
-   	default:
-   		PrintError("OnCacheRead",m,state);
-   		break;
-   	}
-   }
+		/**
+	 * Received a readResponse from the directory for the cache
+	 */
+	void OriginDirectory::OnCacheWaitingForSharedResponseAck(const BaseMsg* msg, NodeID src, CacheData& cacheData)
+	{
+		;
+	}
 
 	void OriginDirectory::OnDirectory(const BaseMsg* msg, NodeID src, DirectoryData* directoryData, bool isFromMemory)
 	{
@@ -898,79 +966,7 @@ namespace Memory
 		}
 	}
 
-	/**
-	 * Received a readResponse from the directory for the cache
-	 */
-	void OriginDirectory::OnDirectoryReadResponse(const ReadResponseMsg* m, NodeID src, CacheData* cacheData)
-   {
-   	ReadRequestState& state = cacheData->readRequestState;
-   	const ReadMsg* pendingExclusiveRead = cacheData->pendingExclusiveRead;
-   	const ReadMsg* pendingSharedRead = cacheData->pendingSharedRead;
-
-   	switch(state)
-   	{
-   	case rrs_NoPendingReads:
-   		// should not receive a read response to cache
-   		PrintError("OnDirReadRes", m, state);
-   		break;
-   	case rrs_PendingExclusiveRead:
-   		if (!m->satisfied)
-   		{
-   			state = rrs_NoPendingReads;
-   			OnCache(m, InvalidNodeID, *cacheData);
-   		}
-   		else
-   		{
-   			// retry request
-   			OnCache(m, InvalidNodeID, *cacheData);
-   		}
-   		break;
-   	case rrs_PendingSharedRead:
-   		// could be exclusive owned because it could be CEX
-   		// DebugAssert(!m.isExclusiveOwned)
-   		if (m->satisfied)
-   		{
-   			state = rrs_NoPendingReads;
-   			OnCache(m, InvalidNodeID, *cacheData);
-   			DebugAssertWithMessageID(pendingSharedRead->MsgID()==m->solicitingMessage, m->MsgID());
-   			pendingSharedRead = NULL;
-   		}
-   		else
-   		{
-   			// retry request
-   			OnCache(m, InvalidNodeID, *cacheData);
-   		}
-   		break;
-   	case rrs_PendingSharedReadExclusiveRead:
-   		if (!m->satisfied)
-   		{
-   			DebugAssertWithMessageID(pendingSharedRead->MsgID()==m->solicitingMessage, m->MsgID());
-   			OnCache(m, InvalidNodeID, *cacheData);
-   		}
-   		else if (m->satisfied && m->exclusiveOwnership)
-   		{
-   			state = rrs_NoPendingReads;
-   			DebugAssertWithMessageID(pendingExclusiveRead != NULL, m->MsgID());
-   			DebugAssertWithMessageID(pendingSharedRead != NULL, m->MsgID());
-   			DebugAssertWithMessageID(pendingSharedRead->MsgID()==m->solicitingMessage
-   					|| pendingExclusiveRead->MsgID()==m->solicitingMessage, m->MsgID());
-   			pendingExclusiveRead = NULL;
-   			pendingSharedRead = NULL;
-   		}
-   		else if (m->satisfied && !m->exclusiveOwnership)
-   		{
-				state = rrs_PendingExclusiveRead;
-				SendDirectoryRequest(pendingExclusiveRead,false);
-				OnCache(m, InvalidNodeID, *cacheData);
-   		}
-   		break;
-   	default:
-   		PrintError("OnDirReadRes", m, state);
-   		break;
-   	}
-   }
-
-	void OriginDirectory::OnDirectoryBusyExclusive(const BaseMsg* msg, NodeID src, DirectoryData& directoryData, bool isFromMemory)
+void OriginDirectory::OnDirectoryBusyExclusive(const BaseMsg* msg, NodeID src, DirectoryData& directoryData, bool isFromMemory)
 	{
 		;
 	}

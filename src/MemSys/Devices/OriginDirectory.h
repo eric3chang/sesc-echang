@@ -351,5 +351,9 @@ namespace Memory
 		virtual void DumpRunningState(RootConfigNode& node);
 		virtual void DumpStats(std::ostream& out);
 		virtual void RecvMsg(const BaseMsg* msg, int connectionID);
+
+	private:
+		typedef PooledFunctionGenerator<StoredClassFunction2<OriginDirectory,const BaseMsg*,int,&OriginDirectory::RecvMsg> > CBRecvMsg;
+		CBRecvMsg cbRecvMsg;
 	};
 }
