@@ -111,10 +111,18 @@ namespace Memory
 			b.sharers.erase(id);
 		}
 	}
+	OriginDirectory::CacheData& OriginDirectory::GetCacheData(Address addr)
+	{
+		return cacheDataMap[addr];
+	}
 	OriginDirectory::CacheData& OriginDirectory::GetCacheData(const BaseMsg* m)
 	{
 		Address currentAddress = BaseMemDevice::GetAddress(m);
 		return cacheDataMap[currentAddress];
+	}
+	OriginDirectory::DirectoryData& OriginDirectory::GetDirectoryData(Address addr)
+	{
+		return directoryDataMap[addr];
 	}
 	OriginDirectory::DirectoryData& OriginDirectory::GetDirectoryData(const BaseMsg* m)
 	{
@@ -293,6 +301,26 @@ namespace Memory
       //EM().DisposeMsg(msgIn);
 	}
 
+	void OriginDirectory::RecvMsgCache(const BaseMsg *msg, NodeID src)
+	{
+		if (msg->Type()==mt_Read)
+		{
+			DebugAssertWithMessageID(src==InvalidNodeID, msg->MsgID());
+			const ReadMsg* m = (const ReadMsg*) msg;
+			OnCacheRead(m);
+		}
+		else if (msg->Type()==mt_ReadResponse || msg->Type()==mt_ReadReply)
+		{
+			const ReadResponseMsg* m = (const ReadResponseMsg*) msg;
+			OnCacheReadResponse(m, src);
+		}
+		else
+		{
+			CacheData& cacheData = GetCacheData(msg);
+			OnCache(msg, src, cacheData);
+		}
+	}
+
    /**
    send directory request
    */
@@ -329,12 +357,11 @@ namespace Memory
    {
 		NodeID dirNode = directoryNodeCalc->CalcNodeID(msgIn->addr);
 		const ReadMsg* forward = (const ReadMsg*)EM().ReplicateMsg(msgIn);
-		DirectoryData& directoryData = GetDirectoryData(msgIn);
 
 		if(dirNode == nodeID)
 		{
 			CBOnDirectory::FunctionType* f = cbOnDirectory.Create();
-			f->Initialize(this, forward, nodeID, &directoryData, isFromMemory);
+			f->Initialize(this, forward, nodeID, isFromMemory);
 			EM().ScheduleEvent(f, localSendTime);
 		}
 		else
@@ -616,11 +643,12 @@ namespace Memory
 	   out << "messagesReceived:" << messagesReceived << std::endl;
 	}
 
-	void OriginDirectory::OnCacheRead(const ReadMsg* m, CacheData* cacheData)
+	void OriginDirectory::OnCacheRead(const ReadMsg* m)
    {
-   	ReadRequestState& state = cacheData->readRequestState;
-   	const ReadMsg* pendingExclusiveRead = cacheData->pendingExclusiveRead;
-   	const ReadMsg* pendingSharedRead = cacheData->pendingSharedRead;
+		CacheData& cacheData = GetCacheData(m->addr);
+   	ReadRequestState& state = cacheData.readRequestState;
+   	const ReadMsg* pendingExclusiveRead = cacheData.pendingExclusiveRead;
+   	const ReadMsg* pendingSharedRead = cacheData.pendingSharedRead;
 
    	switch(state)
    	{
@@ -628,14 +656,14 @@ namespace Memory
    		if (!m->requestingExclusive)
    		{
    			state = rrs_PendingSharedRead;
-   			OnCache(m, InvalidNodeID, *cacheData);
+   			OnCache(m, InvalidNodeID, cacheData);
    			DebugAssertWithMessageID(pendingSharedRead==NULL, m->MsgID());
    			pendingSharedRead = m;
    		}
    		else
    		{ // m is not requesting exclusive
    			state = rrs_PendingExclusiveRead;
-   			OnCache(m, InvalidNodeID, *cacheData);
+   			OnCache(m, InvalidNodeID, cacheData);
    			DebugAssertWithMessageID(pendingExclusiveRead==NULL, m->MsgID());
    			pendingExclusiveRead = m;
    		}
@@ -662,11 +690,12 @@ namespace Memory
    	}
    }
 
-void OriginDirectory::OnDirectoryReadResponse(const ReadResponseMsg* m, NodeID src, CacheData* cacheData)
+	void OriginDirectory::OnCacheReadResponse(const ReadResponseMsg* m, NodeID src)
    {
-   	ReadRequestState& state = cacheData->readRequestState;
-   	const ReadMsg* pendingExclusiveRead = cacheData->pendingExclusiveRead;
-   	const ReadMsg* pendingSharedRead = cacheData->pendingSharedRead;
+		CacheData& cacheData = GetCacheData(m->addr);
+   	ReadRequestState& state = cacheData.readRequestState;
+   	const ReadMsg* pendingExclusiveRead = cacheData.pendingExclusiveRead;
+   	const ReadMsg* pendingSharedRead = cacheData.pendingSharedRead;
 
    	switch(state)
    	{
@@ -678,12 +707,12 @@ void OriginDirectory::OnDirectoryReadResponse(const ReadResponseMsg* m, NodeID s
    		if (!m->satisfied)
    		{
    			state = rrs_NoPendingReads;
-   			OnCache(m, InvalidNodeID, *cacheData);
+   			OnCache(m, InvalidNodeID, cacheData);
    		}
    		else
    		{
    			// retry request
-   			OnCache(m, InvalidNodeID, *cacheData);
+   			OnCache(m, InvalidNodeID, cacheData);
    		}
    		break;
    	case rrs_PendingSharedRead:
@@ -692,21 +721,21 @@ void OriginDirectory::OnDirectoryReadResponse(const ReadResponseMsg* m, NodeID s
    		if (m->satisfied)
    		{
    			state = rrs_NoPendingReads;
-   			OnCache(m, InvalidNodeID, *cacheData);
+   			OnCache(m, InvalidNodeID, cacheData);
    			DebugAssertWithMessageID(pendingSharedRead->MsgID()==m->solicitingMessage, m->MsgID());
    			pendingSharedRead = NULL;
    		}
    		else
    		{
    			// retry request
-   			OnCache(m, InvalidNodeID, *cacheData);
+   			OnCache(m, InvalidNodeID, cacheData);
    		}
    		break;
    	case rrs_PendingSharedReadExclusiveRead:
    		if (!m->satisfied)
    		{
    			DebugAssertWithMessageID(pendingSharedRead->MsgID()==m->solicitingMessage, m->MsgID());
-   			OnCache(m, InvalidNodeID, *cacheData);
+   			OnCache(m, InvalidNodeID, cacheData);
    		}
    		else if (m->satisfied && m->exclusiveOwnership)
    		{
@@ -723,7 +752,7 @@ void OriginDirectory::OnDirectoryReadResponse(const ReadResponseMsg* m, NodeID s
 				state = rrs_PendingExclusiveRead;
 				// send the exclusive read request that was queued up
 				SendDirectoryRequest(pendingExclusiveRead,false);
-				OnCache(m, InvalidNodeID, *cacheData);
+				OnCache(m, InvalidNodeID, cacheData);
    		}
    		break;
    	default:
@@ -732,7 +761,7 @@ void OriginDirectory::OnDirectoryReadResponse(const ReadResponseMsg* m, NodeID s
    	}
    }
 
-void OriginDirectory::OnCache(const BaseMsg* msg, NodeID src, CacheData& cacheData)
+	void OriginDirectory::OnCache(const BaseMsg* msg, NodeID src, CacheData& cacheData)
 	{
 		CacheState& state = cacheData.cacheState;
 
@@ -918,47 +947,48 @@ void OriginDirectory::OnCache(const BaseMsg* msg, NodeID src, CacheData& cacheDa
 		;
 	}
 
-	void OriginDirectory::OnDirectory(const BaseMsg* msg, NodeID src, DirectoryData* directoryData, bool isFromMemory)
+	void OriginDirectory::OnDirectory(const BaseMsg* msg, NodeID src, bool isFromMemory)
 	{
-		DirectoryState& state = directoryData->state;
+		DirectoryData& directoryData = GetDirectoryData(msg);
+		DirectoryState& state = directoryData.state;
 
 		switch(state)
 		{
 		case ds_BusyExclusiveMemoryAccess:
-			OnDirectoryBusyExclusiveMemoryAccess(msg, src, *directoryData, isFromMemory);
+			OnDirectoryBusyExclusiveMemoryAccess(msg, src, directoryData, isFromMemory);
 			break;
 		case ds_BusyExclusive:
-			OnDirectoryBusyExclusive(msg, src, *directoryData, isFromMemory);
+			OnDirectoryBusyExclusive(msg, src, directoryData, isFromMemory);
 			break;
 		case ds_BusyExclusiveMemoryAccessWritebackRequest:
-			OnDirectoryBusyExclusiveMemoryAccessWritebackRequest(msg, src, *directoryData, isFromMemory);
+			OnDirectoryBusyExclusiveMemoryAccessWritebackRequest(msg, src, directoryData, isFromMemory);
 			break;
 		case ds_BusyShared:
-			OnDirectoryBusyShared(msg, src, *directoryData, isFromMemory);
+			OnDirectoryBusyShared(msg, src, directoryData, isFromMemory);
 			break;
 		case ds_BusySharedMemoryAccess:
-			OnDirectoryBusySharedMemoryAccess(msg, src, *directoryData, isFromMemory);
+			OnDirectoryBusySharedMemoryAccess(msg, src, directoryData, isFromMemory);
 			break;
 		case ds_BusySharedMemoryAccessWritebackRequest:
-			OnDirectoryBusySharedMemoryAccessWritebackRequest(msg, src, *directoryData, isFromMemory);
+			OnDirectoryBusySharedMemoryAccessWritebackRequest(msg, src, directoryData, isFromMemory);
 			break;
 		case ds_ExclusiveMemoryAccess:
-			OnDirectoryExclusiveMemoryAccess(msg, src, *directoryData, isFromMemory);
+			OnDirectoryExclusiveMemoryAccess(msg, src, directoryData, isFromMemory);
 			break;
 		case ds_Exclusive:
-			OnDirectoryExclusive(msg, src, *directoryData, isFromMemory);
+			OnDirectoryExclusive(msg, src, directoryData, isFromMemory);
 			break;
 		case ds_Shared:
-			OnDirectoryShared(msg, src, *directoryData, isFromMemory);
+			OnDirectoryShared(msg, src, directoryData, isFromMemory);
 			break;
 		case ds_SharedExclusiveMemoryAccess:
-			OnDirectorySharedExclusiveMemoryAccess(msg, src, *directoryData, isFromMemory);
+			OnDirectorySharedExclusiveMemoryAccess(msg, src, directoryData, isFromMemory);
 			break;
 		case ds_SharedMemoryAccess:
-			OnDirectorySharedMemoryAccess(msg, src, *directoryData, isFromMemory);
+			OnDirectorySharedMemoryAccess(msg, src, directoryData, isFromMemory);
 			break;
 		case ds_Unowned:
-			OnDirectoryUnowned(msg, src, *directoryData, isFromMemory);
+			OnDirectoryUnowned(msg, src, directoryData, isFromMemory);
 			break;
 		default:
 			PrintError("OnDir",msg, "Unimplemented directory state");
@@ -1175,23 +1205,13 @@ void OriginDirectory::OnDirectoryBusyExclusive(const BaseMsg* msg, NodeID src, D
 #endif
 		DebugAssert(msg);
 
-		CacheData& cacheData = GetCacheData(msg);
-		DirectoryData& directoryData = GetDirectoryData(msg);
-
 		if(connectionID == localCacheConnectionID)
 		{
-			if (msg->Type()==mt_Read)
-			{
-				OnCacheRead((const ReadMsg*)msg,&cacheData);
-			}
-			else
-			{
-				OnCache(msg,InvalidNodeID,cacheData);
-			}
+			RecvMsgCache(msg, InvalidNodeID);
 		}
 		else if (connectionID == localMemoryConnectionID)
 		{
-			OnDirectory(msg, InvalidNodeID, &directoryData, true);
+			OnDirectory(msg, InvalidNodeID, true);
 		}
 		else if(connectionID == remoteConnectionID)
 		{
@@ -1202,27 +1222,24 @@ void OriginDirectory::OnDirectoryBusyExclusive(const BaseMsg* msg, NodeID src, D
 			DebugAssert(m->destinationNode == nodeID);
 			EM().DisposeMsg(m);
 
-			if (payload->Type()==mt_ReadResponse
-				|| payload->Type()==mt_ReadReply)
-			{ // do special processing for mt_ReadResponse first
-				OnDirectoryReadResponse((const ReadResponseMsg*)msg, src, &cacheData);
-			}
-			else if (payload->Type()==mt_Read
+			if (payload->Type()==mt_Read
 				|| payload->Type()==mt_WritebackRequest
 				|| payload->Type()==mt_Transfer
 				|| payload->Type()==mt_Writeback
 				|| payload->Type()==mt_DirectoryNak)
 			{
-				OnDirectory(payload, src, &directoryData, false);
+				OnDirectory(payload, src, false);
 			}
 			else if (payload->Type()==mt_CacheNak
 				|| payload->Type()==mt_SpeculativeReply
+				|| payload->Type()==mt_ReadResponse
+				|| payload->Type()==mt_ReadReply
 				|| payload->Type()==mt_Intervention
 				|| payload->Type()==mt_Invalidate
 				|| payload->Type()==mt_InvalidateAck
 				|| payload->Type()==mt_WritebackAck)
 			{
-				OnCache(msg, src, cacheData);
+				RecvMsgCache(msg, src);
 			}
 			else
 			{

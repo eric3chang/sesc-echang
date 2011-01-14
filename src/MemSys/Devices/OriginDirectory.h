@@ -249,8 +249,10 @@ namespace Memory
 				std::cout << std::endl;
 			}
 		}
-
+		
+		CacheData& GetCacheData(Address addr);
 		CacheData& GetCacheData(const BaseMsg* m);
+		DirectoryData& GetDirectoryData(Address addr);
 		DirectoryData& GetDirectoryData(const BaseMsg* m);
       void HandleReceivedAllInvalidates(Address myAddress);
       bool IsInPendingDirectoryNormalSharedRead(const ReadMsg *m);
@@ -291,9 +293,9 @@ namespace Memory
 		void PrintPendingDirectoryBusySharedReads();
 	   void PrintPendingLocalReads();
 
-	   // special treatments for cacheRead and directoryReadResponse
-	   void OnCacheRead(const ReadMsg* m, CacheData* cacheData);
-	   void OnDirectoryReadResponse(const ReadResponseMsg* m, NodeID src, CacheData* cacheData);
+	   // special treatments for OnCacheRead and OnCacheReadResponse
+	   void OnCacheRead(const ReadMsg* m);
+	   void OnCacheReadResponse(const ReadResponseMsg* m, NodeID src);
 
 	   void OnCache(const BaseMsg* msg, NodeID src, CacheData& cacheData);
       void OnCacheExclusive(const BaseMsg* msg, NodeID src, CacheData& cacheData);
@@ -310,7 +312,7 @@ namespace Memory
       void OnCacheWaitingForWritebackBusyAck(const BaseMsg* msg, NodeID src, CacheData& cacheData);
       void OnCacheWaitingForWritebackResponse(const BaseMsg* msg, NodeID src, CacheData& cacheData);
 
-	   void OnDirectory(const BaseMsg* msg, NodeID src, DirectoryData* directoryData, bool isFromMemory);
+	   void OnDirectory(const BaseMsg* msg, NodeID src, bool isFromMemory);
 		void OnDirectoryBusyExclusive(const BaseMsg* msg, NodeID src, DirectoryData& directoryData, bool isFromMemory);
 	   void OnDirectoryBusyExclusiveMemoryAccess(const BaseMsg* msg, NodeID src, DirectoryData& directoryData, bool isFromMemory);
       void OnDirectoryBusyExclusiveMemoryAccessWritebackRequest(const BaseMsg* msg, NodeID src, DirectoryData& directoryData, bool isFromMemory);
@@ -324,7 +326,9 @@ namespace Memory
       void OnDirectorySharedMemoryAccess(const BaseMsg* msg, NodeID src, DirectoryData& directoryData, bool isFromMemory);
 	   void OnDirectoryUnowned(const BaseMsg* msg, NodeID src, DirectoryData& directoryData, bool isFromMemory);
 
-		typedef PooledFunctionGenerator<StoredClassFunction4<OriginDirectory,const BaseMsg*,NodeID,DirectoryData*,bool,&OriginDirectory::OnDirectory> > CBOnDirectory;
+		void RecvMsgCache(const BaseMsg *msg, NodeID src);
+
+		typedef PooledFunctionGenerator<StoredClassFunction3<OriginDirectory,const BaseMsg*,NodeID,bool,&OriginDirectory::OnDirectory> > CBOnDirectory;
 		CBOnDirectory cbOnDirectory;
 		/*
 		typedef PooledFunctionGenerator<StoredClassFunction3<OriginDirectory,const ReadResponseMsg*,NodeID,CacheData&,&OriginDirectory::OnDirectoryReadResponse> > CBOnDirectoryReadResponse;
@@ -351,9 +355,10 @@ namespace Memory
 		virtual void DumpRunningState(RootConfigNode& node);
 		virtual void DumpStats(std::ostream& out);
 		virtual void RecvMsg(const BaseMsg* msg, int connectionID);
-
+		/*
 	private:
 		typedef PooledFunctionGenerator<StoredClassFunction2<OriginDirectory,const BaseMsg*,int,&OriginDirectory::RecvMsg> > CBRecvMsg;
 		CBRecvMsg cbRecvMsg;
+		*/
 	};
 }
