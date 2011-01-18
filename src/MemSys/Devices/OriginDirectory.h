@@ -9,16 +9,16 @@ using std::string;
 using std::stringstream;
 
 // toggles debug messages
-//#define MEMORY_3_STAGE_DIRECTORY_DEBUG_VERBOSE
-//#define MEMORY_3_STAGE_DIRECTORY_DEBUG_DIRECTORY_DATA
-//#define MEMORY_3_STAGE_DIRECTORY_DEBUG_COUNTERS
-//#define MEMORY_3_STAGE_DIRECTORY_DEBUG_MSG_COUNT
-//#define MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_DIRECTORY_EXCLUSIVE_READS
-//#define MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_DIRECTORY_SHARED_READS
-//#define MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_EVICTION
-//#define MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_LOCAL_READS
-//#define MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_REMOTE_INVALIDATES
-//#define MEMORY_3_STAGE_DIRECTORY_DEBUG_PENDING_REMOTE_READS
+//#define MEMORY_ORIGIN_DIRECTORY_DEBUG_VERBOSE
+//#define MEMORY_ORIGIN_DIRECTORY_DEBUG_DIRECTORY_DATA
+//#define MEMORY_ORIGIN_DIRECTORY_DEBUG_COUNTERS
+//#define MEMORY_ORIGIN_DIRECTORY_DEBUG_MSG_COUNT
+//#define MEMORY_ORIGIN_DIRECTORY_DEBUG_PENDING_DIRECTORY_EXCLUSIVE_READS
+//#define MEMORY_ORIGIN_DIRECTORY_DEBUG_PENDING_DIRECTORY_SHARED_READS
+//#define MEMORY_ORIGIN_DIRECTORY_DEBUG_PENDING_EVICTION
+//#define MEMORY_ORIGIN_DIRECTORY_DEBUG_PENDING_LOCAL_READS
+//#define MEMORY_ORIGIN_DIRECTORY_DEBUG_PENDING_REMOTE_INVALIDATES
+//#define MEMORY_ORIGIN_DIRECTORY_DEBUG_PENDING_REMOTE_READS
 
 namespace Memory
 {
@@ -117,18 +117,24 @@ namespace Memory
 		class DirectoryData
 		{
 		public:
-			const BaseMsg* firstRequest;
+			const ReadMsg* firstRequest;
+			NodeID firstRequestSrc;
 			NodeID owner;
 			NodeID previousOwner;
-			int pendingInvalidates;
+			//int pendingInvalidates;
 			HashSet<NodeID> sharers;
+			const WritebackRequestMsg* secondRequest;
+			NodeID secondRequestSrc;
 			DirectoryState state;
 
          DirectoryData() :
          	firstRequest(NULL),
+         	firstRequestSrc(InvalidNodeID),
          	owner(InvalidNodeID),
          	previousOwner(InvalidNodeID),
-         	pendingInvalidates(-1),
+         	//pendingInvalidates(-1),
+         	secondRequest(NULL),
+         	secondRequestSrc(InvalidNodeID),
          	state(ds_Unowned)
 			{}
          void print(Address myAddress, MessageID myMessageID,bool isSharedBusy, bool isExclusiveBusy,
@@ -212,6 +218,8 @@ namespace Memory
 		HashMultiMap<Address, LookupData<ReadMsg> > pendingDirectoryNormalSharedReads;
 		HashMap<Address, LookupData<ReadMsg> > pendingDirectoryBusyExclusiveReads;
       HashMap<Address, std::vector<LookupData<ReadMsg> > > pendingMainMemAccesses;
+      HashMap<MessageID, const ReadMsg*> pendingMemoryReadAccesses;
+      HashMap<MessageID, const WriteMsg*> pendingMemoryWriteAccesses;
       HashSet<MessageID> pendingMemoryWrites;
       //HashSet<Address> pendingIgnoreInterventions;
       HashMap<Address, const ReadResponseMsg* >waitingForEvictionBusyAck;
@@ -260,13 +268,22 @@ namespace Memory
 		void PerformDirectoryFetch(const ReadMsg *msgIn, NodeID src);
       void PerformDirectoryFetch(const ReadMsg *msgIn,NodeID src,bool isExclusive,NodeID target);
 		//void PerformDirectoryFetchOwner(const ReadMsg *msgIn, NodeID src);
+      void PerformMemoryReadResponseCheck(const ReadResponseMsg *m, NodeID src);
+      void PerformMemoryWriteResponseCheck(const WriteResponseMsg *m, NodeID src);
+
+      // these are not used currently
       void SendLocalReadResponse(const ReadResponseMsg *msgIn);
-      void SendDirectoryNetworkMessage(const BaseMsg *msg, NodeID dest);
-      void SendDirectoryRequest(const ReadMsg *msgIn, bool isFromMemory);
-      void SendMemoryRequest(const BaseMsg *msg);
-      void SendNetworkMessage(const BaseMsg *msg, NodeID dest);
       void SendRemoteEviction(const EvictionMsg *m,NodeID dest,const char *fromMethod);
       void SendRemoteRead(const ReadMsg *m,NodeID dest,const char *fromMethod);
+
+      // these are being used currently
+      void SendCacheNak(const ReadMsg* m, NodeID dest);
+      void SendDirectoryNak(const ReadMsg* m, NodeID dest);
+      void SendInvalidateMsg(const ReadMsg* m, NodeID dest, NodeID newOwner);
+      void SendMessageToCache(const BaseMsg *msg, NodeID dest);
+      void SendMessageToDirectory(const BaseMsg *msg, bool isFromMemory);
+      void SendMessageToNetwork(const BaseMsg *msg, NodeID dest);
+      void SendRequestToMemory(const BaseMsg *msg);
 
       void EraseDirectoryShare(Address a, NodeID id);
 		void AddDirectoryShare(Address a, NodeID id, bool exclusive);
@@ -276,6 +293,8 @@ namespace Memory
       void ErasePendingDirectoryNormalSharedRead(const ReadResponseMsg *m);
       void ErasePendingLocalRead(const ReadResponseMsg *m);
       void ChangeOwnerToShare(Address a, NodeID id);
+      void ClearTempCacheData(CacheData& cacheData);
+      void ClearTempDirectoryData(DirectoryData& directoryData);
 
       void AutoDetermineDestSendMsg(const BaseMsg* msg, NodeID dest, TimeDelta sendTime,
          OriginDirectoryMemFn func, const char* fromMethod, const char* toMethod);
@@ -327,9 +346,12 @@ namespace Memory
 	   void OnDirectoryUnowned(const BaseMsg* msg, NodeID src, DirectoryData& directoryData, bool isFromMemory);
 
 		void RecvMsgCache(const BaseMsg *msg, NodeID src);
+		void RecvMsgDirectory(const BaseMsg *msg, NodeID src, bool isFromMemory);
 
-		typedef PooledFunctionGenerator<StoredClassFunction3<OriginDirectory,const BaseMsg*,NodeID,bool,&OriginDirectory::OnDirectory> > CBOnDirectory;
-		CBOnDirectory cbOnDirectory;
+		typedef PooledFunctionGenerator<StoredClassFunction3<OriginDirectory,const BaseMsg*,NodeID,bool,&OriginDirectory::RecvMsgDirectory> > CBRecvMsgDirectory;
+		CBRecvMsgDirectory cbRecvMsgDirectory;
+		typedef PooledFunctionGenerator<StoredClassFunction2<OriginDirectory,const BaseMsg*,NodeID,&OriginDirectory::RecvMsgCache> > CBRecvMsgCache;
+		CBRecvMsgCache cbRecvMsgCache;
 		/*
 		typedef PooledFunctionGenerator<StoredClassFunction3<OriginDirectory,const ReadResponseMsg*,NodeID,CacheData&,&OriginDirectory::OnDirectoryReadResponse> > CBOnDirectoryReadResponse;
 		CBOnDirectoryReadResponse cBOnDirectoryReadResponse;

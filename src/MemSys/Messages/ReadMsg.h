@@ -17,11 +17,7 @@ namespace Memory
 		bool requestingExclusive;
 		bool alreadyHasBlock;
 		bool directoryLookup;
-		bool isIntervention;
-      bool isNonBusySharedRead;
-      bool isWaitingForInvalidateUnlock;
-      //bool isSpeculative;
-		NodeID originalRequestingNode;
+		//NodeID originalRequestingNode;
 
 		StoredFunctionBase* onCompletedCallback;
 
@@ -43,11 +39,7 @@ namespace Memory
 		         << " reqEx=" << requestingExclusive
 		         << " hasBlk=" << alreadyHasBlock
 		         << " dirLook=" << directoryLookup
-               << " interv=" << isIntervention
-               << " nonBusyShRead=" << isNonBusySharedRead
-               << " invUnlock=" << isWaitingForInvalidateUnlock
-               << " ogReqNode=" << BaseMsg::convertNodeIDToDeviceID(originalRequestingNode)
-               //<< " spec=" << isSpeculative
+               //<< " ogReqNode=" << BaseMsg::convertNodeIDToDeviceID(originalRequestingNode)
 		   ;
 		}
 	};

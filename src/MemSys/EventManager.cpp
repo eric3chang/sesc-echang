@@ -15,13 +15,18 @@ namespace Memory
 	{
 		destination->RecvMsg(msg,connection);
 	}
-	void EventManager::InitializeBaseNakMsg(BaseNakMsg* m, DeviceID devID, Address generatingPC)
+	void EventManager::FillBaseNakMsg(BaseNakMsg* m, DeviceID devID, Address generatingPC)
 	{
 		m->SetIDInfo(currentMsgStamp++,devID,generatingPC);
       m->addr = 0;
       m->solicitingMsg = 0;
 	}
-	void EventManager::InitializeEvictionMsg(EvictionMsg* m, DeviceID devID, Address generatingPC)
+	void EventManager::InitializeBaseNakMsg(BaseNakMsg* bnm, const ReadMsg* rm)
+	{
+		bnm->addr = rm->addr;
+		bnm->solicitingMsg = rm->MsgID();
+	}
+	void EventManager::FillEvictionMsg(EvictionMsg* m, DeviceID devID, Address generatingPC)
 	{
 		m->SetIDInfo(currentMsgStamp++,devID,generatingPC);
       m->addr = 0;
@@ -33,57 +38,115 @@ namespace Memory
 		em->addr = rm->addr;
 		em->size = rm->size;
 	}
-	void EventManager::InitializeEvictionResponseMsg(EvictionResponseMsg* m, DeviceID devID, Address generatingPC)
+	void EventManager::FillEvictionResponseMsg(EvictionResponseMsg* m, DeviceID devID, Address generatingPC)
 	{
 		m->SetIDInfo(currentMsgStamp++,devID,generatingPC);
 		m->addr = 0;
 		m->size = 0;
 		m->solicitingMessage = 0;
 	}
+
 	void EventManager::InitializeEvictionResponseMsg(EvictionResponseMsg* erm, const EvictionMsg* em)
 	{
 		erm->addr = em->addr;
 		erm->size = em->size;
 		erm->solicitingMessage = em->MsgID();
 	}
-	void EventManager::InitializeInvalidateMsg(InvalidateMsg* m, DeviceID devID, Address generatingPC)
+
+	void EventManager::InitializeEvictionResponseMsg(EvictionResponseMsg* evictionResponse, const ReadResponseMsg* readResponse)
+	{
+		evictionResponse->addr = readResponse->addr;
+		evictionResponse->size = readResponse->size;
+	}
+
+	void EventManager::FillInvalidateMsg(InvalidateMsg* m, DeviceID devID, Address generatingPC)
 	{
 		m->SetIDInfo(currentMsgStamp++,devID,generatingPC);
       m->newOwner = InvalidNodeID;
       m->solicitingMessage = 0;
 	}
-	void EventManager::InitializeInvalidateResponseMsg(InvalidateResponseMsg* m, DeviceID devID, Address generatingPC)
+
+	void EventManager::FillInvalidateResponseMsg(InvalidateResponseMsg* m, DeviceID devID, Address generatingPC)
 	{
 		m->SetIDInfo(currentMsgStamp++,devID,generatingPC);
 	}
-	void EventManager::InitializeReadMsg(ReadMsg* m, DeviceID devID, Address generatingPC)
+
+	void EventManager::FillReadMsg(ReadMsg* m, DeviceID devID, Address generatingPC)
 	{
 		m->directoryLookup = false;
-		m->originalRequestingNode = InvalidNodeID;
-		m->isIntervention = false;
-      m->isNonBusySharedRead = false;
-      m->isWaitingForInvalidateUnlock = false;
+		//m->originalRequestingNode = InvalidNodeID;
 		m->SetIDInfo(currentMsgStamp++,devID,generatingPC);
 	}
-	void EventManager::InitializeReadResponseMsg(ReadResponseMsg* m, DeviceID devID, Address generatingPC)
+
+	void EventManager::FillReadResponseMsg(ReadResponseMsg* m, DeviceID devID, Address generatingPC)
 	{
 		m->directoryLookup = false;
-      m->evictionMessage = 0;
+     // m->evictionMessage = 0;
       m->exclusiveOwnership = false;
       m->isDirty = false;
 		m->SetIDInfo(currentMsgStamp++,devID,generatingPC);
+		m->solicitingMessage = 0;
 	}
-	void EventManager::InitializeReadResponseMsg(ReadResponseMsg* readRes, const ReadMsg* read)
+
+	void EventManager::InitializeInvalidateMsg(InvalidateMsg* invalidate, const ReadMsg* read)
 	{
-		readRes->addr = read->addr;
-		readRes->size = read->size;
-		readRes->solicitingMessage = read->MsgID();
+		invalidate->addr = read->addr;
+		invalidate->size = read->size;
+		invalidate->solicitingMessage = read->MsgID();
+	}
+
+	void EventManager::InitializeReadMsg(ReadMsg* read, const ReadResponseMsg* readResponse)
+	{
+		read->addr = readResponse->addr;
+		read->size = readResponse->size;
+	}
+
+	void EventManager::InitializeReadResponseMsg(ReadResponseMsg* readResponse, const EvictionMsg* eviction)
+	{
+		readResponse->addr = eviction->addr;
+		readResponse->blockAttached = eviction->blockAttached;
+		//readResponse->evictionMessage = eviction->MsgID();
+		readResponse->size = eviction->size;
+		readResponse->solicitingMessage = eviction->MsgID();
+	}
+
+	void EventManager::InitializeReadResponseMsg(ReadResponseMsg* readResponse, const ReadMsg* read)
+	{
+		readResponse->addr = read->addr;
+		readResponse->size = read->size;
+		readResponse->solicitingMessage = read->MsgID();
+	}
+
+	/*
+	void EventManager::InitializeReadResponseMsg(ReadResponseMsg* copy, const ReadResponseMsg* original)
+	{
+		copy->addr = original->addr;
+		copy->blockAttached = original->blockAttached;
+		copy->directoryLookup = original->directoryLookup;
+		copy->exclusiveOwnership = original->exclusiveOwnership;
+		copy->isDirty = original->isDirty;
+		copy->satisfied = original->satisfied;
+		copy->size = original->size;
+		copy->solicitingMessage = original->solicitingMessage;
+	}
+	*/
+
+	void EventManager::InitializeWriteMsg(WriteMsg* write, const EvictionMsg* evic)
+	{
+		write->addr = evic->addr;
+		write->size = evic->size;
+	}
+
+	void EventManager::InitializeWriteMsg(WriteMsg* write, const ReadResponseMsg* original)
+	{
+		write->addr = original->addr;
+		write->size = original->size;
 	}
 
 	ReadMsg* EventManager::CreateReadMsg(DeviceID devID, Address generatingPC)
 	{
 		ReadMsg* m = readPool.Take();
-		InitializeReadMsg(m,devID,generatingPC);
+		FillReadMsg(m,devID,generatingPC);
 		return m;
 	}
 	WriteMsg* EventManager::CreateWriteMsg(DeviceID devID, Address generatingPC)
@@ -95,19 +158,19 @@ namespace Memory
 	InvalidateMsg* EventManager::CreateInvalidateMsg(DeviceID devID, Address generatingPC)
 	{
 		InvalidateMsg* m = invalidatePool.Take();
-		InitializeInvalidateMsg(m,devID,generatingPC);
+		FillInvalidateMsg(m,devID,generatingPC);
 		return m;
 	}
 	EvictionMsg* EventManager::CreateEvictionMsg(DeviceID devID, Address generatingPC)
 	{
 		EvictionMsg* m = evictionPool.Take();
-		InitializeEvictionMsg(m,devID,generatingPC);
+		FillEvictionMsg(m,devID,generatingPC);
 		return m;
 	}
 	ReadResponseMsg* EventManager::CreateReadResponseMsg(DeviceID devID, Address generatingPC)
 	{
 		ReadResponseMsg* m = readResponsePool.Take();
-		InitializeReadResponseMsg(m,devID,generatingPC);
+		FillReadResponseMsg(m,devID,generatingPC);
 		return m;
 	}
 	WriteResponseMsg* EventManager::CreateWriteResponseMsg(DeviceID devID, Address generatingPC)
@@ -119,13 +182,13 @@ namespace Memory
 	InvalidateResponseMsg* EventManager::CreateInvalidateResponseMsg(DeviceID devID, Address generatingPC)
 	{
 		InvalidateResponseMsg* m = invalidateResponsePool.Take();
-		InitializeInvalidateResponseMsg(m,devID,generatingPC);
+		FillInvalidateResponseMsg(m,devID,generatingPC);
 		return m;
 	}
 	EvictionResponseMsg* EventManager::CreateEvictionResponseMsg(DeviceID devID, Address generatingPC)
 	{
 		EvictionResponseMsg* m = evictionResponsePool.Take();
-		InitializeEvictionResponseMsg(m,devID,generatingPC);
+		FillEvictionResponseMsg(m,devID,generatingPC);
 		return m;
 	}
    NetworkMsg* EventManager::CreateNetworkMsg(DeviceID devID, Address generatingPC)
@@ -139,44 +202,44 @@ namespace Memory
    CacheNakMsg* EventManager::CreateCacheNakMsg(DeviceID devID, Address generatingPC)
 	{
 		CacheNakMsg* m = cacheNakPool.Take();
-		InitializeBaseNakMsg(m,devID,generatingPC);
+		FillBaseNakMsg(m,devID,generatingPC);
 		return m;
 	}
    DirectoryNakMsg* EventManager::CreateDirectoryNakMsg(DeviceID devID, Address generatingPC)
 	{
 		DirectoryNakMsg* m = directoryNakPool.Take();
-		InitializeBaseNakMsg(m,devID,generatingPC);
+		FillBaseNakMsg(m,devID,generatingPC);
 		return m;
 	}
    InterventionMsg* EventManager::CreateInterventionMsg(DeviceID devID, Address generatingPC)
 	{
 		InterventionMsg* m = interventionPool.Take();
-		InitializeReadMsg(m,devID,generatingPC);
+		FillReadMsg(m,devID,generatingPC);
 		return m;
 	}
    InvalidateAckMsg* EventManager::CreateInvalidateAckMsg(DeviceID devID, Address generatingPC)
 	{
 		InvalidateAckMsg* m = invalidateAckPool.Take();
-		InitializeInvalidateResponseMsg(m,devID,generatingPC);
+		FillInvalidateResponseMsg(m,devID,generatingPC);
 		return m;
 	}
    ReadReplyMsg* EventManager::CreateReadReplyMsg(DeviceID devID, Address generatingPC)
 	{
 		ReadReplyMsg* m = readReplyPool.Take();
-		InitializeReadResponseMsg(m,devID,generatingPC);
+		FillReadResponseMsg(m,devID,generatingPC);
 		m->pendingInvalidates = 0;
 		return m;
 	}
    SpeculativeReplyMsg* EventManager::CreateSpeculativeReplyMsg(DeviceID devID, Address generatingPC)
 	{
 		SpeculativeReplyMsg* m = speculativeReplyPool.Take();
-		InitializeReadResponseMsg(m,devID,generatingPC);
+		FillReadResponseMsg(m,devID,generatingPC);
 		return m;
 	}
    TransferMsg* EventManager::CreateTransferMsg(DeviceID devID, Address generatingPC)
 	{
 		TransferMsg* m = transferPool.Take();
-		InitializeEvictionMsg(m,devID,generatingPC);
+		FillEvictionMsg(m,devID,generatingPC);
       m->isDirty = false;
       m->isShared = false;
 		return m;
@@ -184,7 +247,7 @@ namespace Memory
    WritebackMsg* EventManager::CreateWritebackMsg(DeviceID devID, Address generatingPC)
 	{
 		WritebackMsg* m = writebackPool.Take();
-		InitializeEvictionMsg(m,devID,generatingPC);
+		FillEvictionMsg(m,devID,generatingPC);
       m->isDirty = false;
       m->isShared = false;
 		return m;
@@ -192,13 +255,13 @@ namespace Memory
    WritebackAckMsg* EventManager::CreateWritebackAckMsg(DeviceID devID, Address generatingPC)
 	{
 		WritebackAckMsg* m = writebackAckPool.Take();
-		InitializeEvictionResponseMsg(m,devID,generatingPC);
+		FillEvictionResponseMsg(m,devID,generatingPC);
 		return m;
 	}
    WritebackRequestMsg* EventManager::CreateWritebackRequestMsg(DeviceID devID, Address generatingPC)
 	{
 		WritebackRequestMsg* m = writebackRequestPool.Take();
-		InitializeEvictionMsg(m,devID,generatingPC);
+		FillEvictionMsg(m,devID,generatingPC);
 		return m;
 	}
 

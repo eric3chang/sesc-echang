@@ -46,13 +46,13 @@ namespace Memory
 		typedef PooledFunctionGenerator<StoredClassFunction3<EventManager, BaseMemDevice*, const BaseMsg*, int, &EventManager::DeliverMsg> > CBDeliverMsg;
 		CBDeliverMsg cbDeliverMsg;
 
-		void InitializeBaseNakMsg(BaseNakMsg* m, DeviceID devID, Address generatingPC);
-		void InitializeEvictionMsg(EvictionMsg* m, DeviceID devID, Address generatingPC);
-		void InitializeEvictionResponseMsg(EvictionResponseMsg* m, DeviceID devID, Address generatingPC);
-		void InitializeInvalidateMsg(InvalidateMsg* m, DeviceID devID, Address generatingPC);
-		void InitializeInvalidateResponseMsg(InvalidateResponseMsg* m, DeviceID devID, Address generatingPC);
-		void InitializeReadMsg(ReadMsg* m, DeviceID devID, Address generatingPC);
-		void InitializeReadResponseMsg(ReadResponseMsg* m, DeviceID devID, Address generatingPC);
+		void FillBaseNakMsg(BaseNakMsg* m, DeviceID devID, Address generatingPC);
+		void FillEvictionMsg(EvictionMsg* m, DeviceID devID, Address generatingPC);
+		void FillEvictionResponseMsg(EvictionResponseMsg* m, DeviceID devID, Address generatingPC);
+		void FillInvalidateMsg(InvalidateMsg* m, DeviceID devID, Address generatingPC);
+		void FillInvalidateResponseMsg(InvalidateResponseMsg* m, DeviceID devID, Address generatingPC);
+		void FillReadMsg(ReadMsg* m, DeviceID devID, Address generatingPC);
+		void FillReadResponseMsg(ReadResponseMsg* m, DeviceID devID, Address generatingPC);
 	protected:
 		Pool<ReadMsg> readPool;
 		Pool<WriteMsg> writePool;
@@ -96,9 +96,17 @@ namespace Memory
       WritebackAckMsg* CreateWritebackAckMsg(DeviceID devID, Address generatingPC = 0);
       WritebackRequestMsg* CreateWritebackRequestMsg(DeviceID devID, Address generatingPC = 0);
 
-      void InitializeEvictionMsg(EvictionMsg* em, const ReadMsg* rm);
-      void InitializeEvictionResponseMsg(EvictionResponseMsg* erm, const EvictionMsg* em);
-		void InitializeReadResponseMsg(ReadResponseMsg* readRes, const ReadMsg* read);
+      void InitializeBaseNakMsg(BaseNakMsg* baseNak, const ReadMsg* read);
+      void InitializeEvictionMsg(EvictionMsg* eviction, const ReadMsg* read);
+      void InitializeEvictionResponseMsg(EvictionResponseMsg* evictionResponse, const EvictionMsg* eviction);
+      void InitializeEvictionResponseMsg(EvictionResponseMsg* evictionResponse, const ReadResponseMsg* readResponse);
+      void InitializeInvalidateMsg(InvalidateMsg* invalidate, const ReadMsg* read);
+      void InitializeReadMsg(ReadMsg* read, const ReadResponseMsg* readResponse);
+		void InitializeReadResponseMsg(ReadResponseMsg* readResponse, const EvictionMsg* eviction);
+		void InitializeReadResponseMsg(ReadResponseMsg* readResponse, const ReadMsg* read);
+	//	void InitializeReadResponseMsg(ReadResponseMsg* copy, const ReadResponseMsg* original);
+		void InitializeWriteMsg(WriteMsg* write, const EvictionMsg* eviction);
+		void InitializeWriteMsg(WriteMsg* write, const ReadResponseMsg* readResponse);
 
 		BaseMsg* ReplicateMsg(const BaseMsg* msg);
 
