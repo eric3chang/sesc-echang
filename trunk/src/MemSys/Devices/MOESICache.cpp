@@ -419,10 +419,12 @@ void MOESICache::PrepareFreshBlock(int setNumber, int index, AddrTag tag)
 			if(b->state == bs_Modified)
 			{
 				b->state = bs_Owned;
+				res->isDirty = true;
 			}
 			else if(b->state == bs_Exclusive)
 			{
 				b->state = bs_Shared;
+				res->isDirty = false;
 			}
 			res->exclusiveOwnership = false;
 			res->blockAttached = true;
