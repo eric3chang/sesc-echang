@@ -7,6 +7,7 @@
 
 using std::string;
 using std::stringstream;
+using std::vector;
 
 // toggles debug messages
 //#define MEMORY_ORIGIN_DIRECTORY_DEBUG_VERBOSE
@@ -114,6 +115,20 @@ namespace Memory
 				pendingSharedRead(NULL)
 			{}
 		};
+		template <class T>
+		class LookupData
+		{
+		public:
+         LookupData() : msg(NULL), sourceNode(InvalidNodeID), previousOwner(InvalidNodeID) {}
+			const T* msg;
+			NodeID sourceNode;
+         NodeID previousOwner;
+         void print() const
+         {
+         	std::cout << " srcNode=" << sourceNode
+         			<< " prevOwn=" << previousOwner;
+         }
+		};
 		class DirectoryData
 		{
 		public:
@@ -125,6 +140,7 @@ namespace Memory
 			HashSet<NodeID> sharers;
 			const WritebackRequestMsg* secondRequest;
 			NodeID secondRequestSrc;
+			vector<LookupData<ReadMsg> >pendingSharedReads;
 			DirectoryState state;
 
          DirectoryData() :
@@ -154,20 +170,6 @@ namespace Memory
                << " pendMemAccess=" << hasPendingMemAccess
                << " waitForReadRes=" << isWaitingForReadResponse
                << endl;
-         }
-		};
-		template <class T>
-		class LookupData
-		{
-		public:
-         LookupData() : msg(NULL), sourceNode(InvalidNodeID), previousOwner(InvalidNodeID) {}
-			const T* msg;
-			NodeID sourceNode;
-         NodeID previousOwner;
-         void print() const
-         {
-         	std::cout << " srcNode=" << sourceNode
-         			<< " prevOwn=" << previousOwner;
          }
 		};
       class InvalidateData
