@@ -373,11 +373,27 @@ namespace Memory
 		}
 	}
 
+	void OriginDirectory::ResendRequestToDirectory(const ReadMsg *m)
+	{
+		NodeID dirNode = directoryNodeCalc->CalcNodeID(m->addr);
+		if (dirNode==nodeID)
+		{
+			// schedule RecvMsgDirectory to be called
+			CBRecvMsgDirectory::FunctionType* f = cbRecvMsgDirectory.Create();
+			f->Initialize(this, m, nodeID, false);
+			EM().ScheduleEvent(f, lookupRetryTime);
+		}
+		else
+		{
+			SendMessageToNetwork(m, dirNode);
+		}
+	}
+
    void OriginDirectory::SendCacheNak(const ReadMsg* m, NodeID dest)
    {
    	CacheNakMsg* cnk = EM().CreateCacheNakMsg(GetDeviceID(), m->GeneratingPC());
    	EM().InitializeBaseNakMsg(cnk, m);
-   	SendMessageToCache(cnk, dest);
+   	SendMessageToRemoteCache(cnk, dest);
    } // SendCacheNak
 
    void OriginDirectory::SendDirectoryNak(const ReadMsg* m, NodeID dest)
@@ -392,12 +408,15 @@ namespace Memory
    	InvalidateMsg* im = EM().CreateInvalidateMsg(GetDeviceID(), m->GeneratingPC());
    	EM().InitializeInvalidateMsg(im, m);
    	im->newOwner = newOwner;
-   	SendMessageToCache(im, dest);
+   	SendMessageToRemoteCache(im, dest);
    } // SendInvalidateMsg
 
-	void OriginDirectory::SendMessageToCache(const BaseMsg *msg, NodeID dest)
+	void OriginDirectory::SendMessageToRemoteCache(const BaseMsg *msgIn, NodeID dest)
 	{
-		DebugAssertWithMessageID(dest!=InvalidNodeID, msg->MsgID());
+		DebugAssertWithMessageID(dest!=InvalidNodeID, msgIn->MsgID());
+
+		const BaseMsg* msg = EM().ReplicateMsg(msgIn);
+
 		if (dest==nodeID)
 		{
 			// schedule RecvMsgCache to be called
@@ -409,6 +428,16 @@ namespace Memory
 		{
 			SendMessageToNetwork(msg, dest);
 		}
+	}
+
+	void OriginDirectory::SendMessageToLocalCache(const ReadReplyMsg* msg)
+	{
+		ReadResponseMsg* m = EM().CreateReadResponseMsg(GetDeviceID(), msg->GeneratingPC());
+		EM().InitializeReadResponseMsg(m, msg);
+		// set send time to 0 because we are saying that this
+			// code in the OriginDirectory is already part of the cache
+		SendMsg(localCacheConnectionID, m, 0);
+		EM().DisposeMsg(msg);
 	}
 
    void OriginDirectory::SendMessageToDirectory(const BaseMsg *msg, bool isFromMemory)
@@ -882,11 +911,99 @@ namespace Memory
 			PrintError("OnCache",msg);
 			break;
 		}
-	}
+	}	// OnCache
+
+   void OriginDirectory::OnCacheCleanExclusive(const BaseMsg* msg, CacheData& cacheData)
+   {
+   	const BaseMsg* firstReply = cacheData.firstReply;
+   	DebugAssertWithMessageID(firstReply!=NULL, msg->MsgID());
+   	DebugAssertWithMessageID(firstReply->Type()==mt_Intervention, msg->MsgID());
+
+
+   	NodeID& firstReplySrc = cacheData.firstReplySrc;
+   	DebugAssertWithMessageID(firstReplySrc!=InvalidNodeID, msg->MsgID());
+   	CacheState& state = cacheData.cacheState;
+
+
+   }
+
+   void OriginDirectory::OnCacheDirtyExclusive(const BaseMsg* msg, CacheData& cacheData)
+   {
+   	;
+   }
 
 	void OriginDirectory::OnCacheExclusive(const BaseMsg* msg, NodeID src, CacheData& cacheData)
 	{
-		;
+		CacheState& state = cacheData.cacheState;
+		const BaseMsg* firstReply = cacheData.firstReply;
+		DebugAssertWithMessageID(firstReply==NULL, msg->MsgID());
+		NodeID& firstReplySrc = cacheData.firstReplySrc;
+		DebugAssertWithMessageID(firstReplySrc==InvalidNodeID, msg->MsgID());
+
+		if (msg->Type()==mt_Intervention)
+		{
+			const InterventionMsg* m = (const InterventionMsg*)msg;
+			// message must be from directory
+			NodeID dirNode = directoryNodeCalc->CalcNodeID(m->addr);
+			DebugAssertWithMessageID(src==dirNode, m->MsgID());
+
+			if (m->requestingExclusive)
+			{
+				firstReply = m;
+				firstReplySrc = src;
+
+				// send invalidate to cache
+				InvalidateMsg* im = EM().CreateInvalidateMsg(GetDeviceID(), m->GeneratingPC());
+				EM().InitializeInvalidateMsg(im, m);
+				// set send time to 0 because we are saying that this
+					// code in the OriginDirectory is already part of the cache
+				SendMsg(localCacheConnectionID, im, 0);
+			}
+			else
+			{
+				firstReply = m;
+				firstReplySrc = src;
+
+				// send ReadMsg to cache
+				ReadMsg* rm = EM().CreateReadMsg(GetDeviceID(), m->GeneratingPC());
+				EM().InitializeReadMsg(rm, m);
+			}
+		} // if (msg->Type()==mt_Intervention)
+		else if (msg->Type()==mt_Eviction)
+		{
+			DebugAssertWithMessageID(src==InvalidNodeID, msg->MsgID());
+			OnCacheDirtyExclusive(msg, cacheData);
+		}
+		else if (msg->Type()==mt_InvalidateResponse)
+		{
+			const InvalidateResponseMsg* m = (const InvalidateResponseMsg*)msg;
+
+			if (m->blockAttached)
+			{
+				OnCacheDirtyExclusive(msg, cacheData);
+			}
+			else
+			{
+				OnCacheCleanExclusive(msg, cacheData);
+			}
+		}
+		else if (msg->Type()==mt_ReadResponse)
+		{
+			const ReadResponseMsg* m = (const ReadResponseMsg*)msg;
+
+			if (m->isDirty)
+			{
+				OnCacheDirtyExclusive(m, cacheData);
+			}
+			else
+			{
+				OnCacheCleanExclusive(m, cacheData);
+			}
+		}
+		else
+		{
+			PrintError("OnCacheEx", msg);
+		}
 	}
 
 	void OriginDirectory::OnCacheExclusiveWaitingForSpeculativeReply(const BaseMsg* msg, NodeID src, CacheData& cacheData)
@@ -901,6 +1018,10 @@ namespace Memory
 		if (msg->Type()==mt_Intervention)
 		{
 			const InterventionMsg* m = (const InterventionMsg*)msg;
+			const ReadMsg* pendingSharedRead = cacheData.pendingSharedRead;
+			DebugAssertWithMessageID(pendingSharedRead==NULL, m->MsgID());
+			const ReadMsg* pendingExclusiveRead = cacheData.pendingExclusiveRead;
+			DebugAssertWithMessageID(pendingExclusiveRead==NULL, m->MsgID());
 
 			if (m->requestingExclusive)
 			{
@@ -910,7 +1031,7 @@ namespace Memory
 				rrm->blockAttached = false;
 				rrm->exclusiveOwnership = true;
 				rrm->satisfied = true;
-				SendMessageToCache(rrm, src);
+				SendMessageToRemoteCache(rrm, src);
 
 				// send dirty transfer to directory
 				TransferMsg* tm = EM().CreateTransferMsg(GetDeviceID(),m->GeneratingPC());
@@ -926,7 +1047,7 @@ namespace Memory
 				rrm->blockAttached = false;
 				rrm->exclusiveOwnership = false;
 				rrm->satisfied = true;
-				SendMessageToCache(rrm, src);
+				SendMessageToRemoteCache(rrm, src);
 
 				// send shared transfer to directory
 				TransferMsg* tm = EM().CreateTransferMsg(GetDeviceID(), m->GeneratingPC());
@@ -942,7 +1063,7 @@ namespace Memory
 			if (!m->requestingExclusive)
 			{
 				// must be from local
-				DebugAssert(src==InvalidNodeID);
+				DebugAssertWithMessageID(src==InvalidNodeID, m->MsgID());
 
 				state = cs_WaitingForSharedReadResponse;
 
@@ -951,7 +1072,7 @@ namespace Memory
 			}
 			else
 			{ // is requesting exclusive
-				DebugAssert(src==InvalidNodeID);
+				DebugAssertWithMessageID(src==InvalidNodeID, m->MsgID());
 
 				state = cs_WaitingForExclusiveReadResponse;
 
@@ -997,7 +1118,61 @@ namespace Memory
 
 	void OriginDirectory::OnCacheWaitingForSharedReadResponse(const BaseMsg* msg, NodeID src, CacheData& cacheData)
 	{
-		;
+		CacheState& state = cacheData.cacheState;
+		const BaseMsg* firstReply = cacheData.firstReply;
+		DebugAssertWithMessageID(firstReply==NULL, msg->MsgID());
+		NodeID& firstReplySrc = cacheData.firstReplySrc;
+		DebugAssertWithMessageID(firstReplySrc==InvalidNodeID, msg->MsgID());
+		const ReadMsg* pendingExclusiveRead = cacheData.pendingExclusiveRead;
+		const ReadMsg* pendingSharedRead = cacheData.pendingSharedRead;
+
+		if (msg->Type()==mt_CacheNak)
+		{
+			const CacheNakMsg* m = (const CacheNakMsg*)msg;
+			DebugAssertWithMessageID(pendingSharedRead!=NULL, m->MsgID());
+			DebugAssertWithMessageID(m->solicitingMsg==pendingSharedRead->MsgID(), m->MsgID())
+
+			// resend request
+			ResendRequestToDirectory(pendingSharedRead);
+
+			EM().DisposeMsg(m);
+		}
+		else if (msg->Type()==mt_ReadReply)
+		{
+			const ReadReplyMsg* m = (const ReadReplyMsg*)msg;
+
+			if (m->exclusiveOwnership)
+			{
+				state = cs_Exclusive;
+				SendMessageToLocalCache(m);
+			}
+			else
+			{
+				state = cs_Shared;
+				SendMessageToLocalCache(m);
+			}
+		}
+		else if (msg->Type()==mt_ReadResponse)
+		{
+			const ReadResponseMsg* m = (const ReadResponseMsg*)msg;
+
+			state = cs_SharedWaitingForSpeculativeReply;
+			firstReply = m;
+			firstReplySrc = src;
+		}
+		else if (msg->Type()==mt_SpeculativeReply)
+		{
+			const SpeculativeReplyMsg* m = (const SpeculativeReplyMsg*)msg;
+
+			state = cs_WaitingForSharedResponseAck;
+
+			firstReply = m;
+			firstReplySrc = src;
+		}
+		else
+		{
+			PrintError("OnCacheWaitForShReadRes", msg, "Unhandled message type");
+		}
 	}
 
 		void OriginDirectory::OnCacheWaitingForWritebackBusyAck(const BaseMsg* msg, NodeID src, CacheData& cacheData)
@@ -1099,13 +1274,13 @@ namespace Memory
 			rrm->blockAttached = true;
 			rrm->exclusiveOwnership = true;
 			rrm->satisfied = true;
-			SendMessageToCache(rrm, owner);
+			SendMessageToRemoteCache(rrm, owner);
 
 			// send writeback busy ack to requester
 			WritebackAckMsg* wam = EM().CreateWritebackAckMsg(GetDeviceID(), m->GeneratingPC());
 			EM().InitializeEvictionResponseMsg(wam, m);
 			wam->isBusy = true;
-			SendMessageToCache(wam, src);
+			SendMessageToRemoteCache(wam, src);
 
 			// send memory write
 			WriteMsg* wm = EM().CreateWriteMsg(GetDeviceID(), m->GeneratingPC());
@@ -1187,14 +1362,14 @@ namespace Memory
    		// intervention messages always fetch block
    		im->alreadyHasBlock = false;
    		im->requestingExclusive = true;
-   		SendMessageToCache(im, previousOwner);
+   		SendMessageToRemoteCache(im, previousOwner);
 
    		// send speculative reply to requester
    		SpeculativeReplyMsg* srm = EM().CreateSpeculativeReplyMsg(GetDeviceID(), m->GeneratingPC());
    		EM().InitializeReadResponseMsg(srm, firstRequest);
    		srm->blockAttached = true;
    		srm->satisfied = true;
-   		SendMessageToCache(srm, src);
+   		SendMessageToRemoteCache(srm, src);
    	} // else if (isFromMemory)
    	else
    	{
@@ -1235,14 +1410,14 @@ namespace Memory
    		rrm->blockAttached = true;
    		rrm->exclusiveOwnership = true;
    		rrm->satisfied = true;
-   		SendMessageToCache(rrm, owner);
+   		SendMessageToRemoteCache(rrm, owner);
 
    		// send writeback exclusive ack to requester
    		WritebackAckMsg* wam = EM().CreateWritebackAckMsg(GetDeviceID(), m->GeneratingPC());
    		// soliciting message id should be the same as the read response's soliciting message id
    		EM().InitializeEvictionResponseMsg(wam, m);
    		wam->isExclusive = true;
-   		SendMessageToCache(wam, src);
+   		SendMessageToRemoteCache(wam, src);
 
    		// send memory write
    		WriteMsg* wm = EM().CreateWriteMsg(GetDeviceID(), m->GeneratingPC());
@@ -1307,13 +1482,13 @@ namespace Memory
 			EM().InitializeReadResponseMsg(rrm, m);
 			rrm->exclusiveOwnership = false;
 			rrm->satisfied = true;
-			SendMessageToCache(rrm, owner);
+			SendMessageToRemoteCache(rrm, owner);
 
 			// send writeback busy ack to requester
 			WritebackAckMsg* wam = EM().CreateWritebackAckMsg(GetDeviceID(), m->GeneratingPC());
 			EM().InitializeEvictionResponseMsg(wam, m);
 			wam->isBusy = true;
-			SendMessageToCache(wam, src);
+			SendMessageToRemoteCache(wam, src);
 
 			// memory write
 			WriteMsg* wm = EM().CreateWriteMsg(GetDeviceID(), m->GeneratingPC());
@@ -1372,14 +1547,14 @@ namespace Memory
 				// intervention messages always fetch the block
 			im->alreadyHasBlock = false;
 			im->requestingExclusive = false;
-			SendMessageToCache(im, previousOwner);
+			SendMessageToRemoteCache(im, previousOwner);
 
 			// send speculative reply to requester
 			SpeculativeReplyMsg* srm = EM().CreateSpeculativeReplyMsg(GetDeviceID(), m->GeneratingPC());
 			EM().InitializeReadResponseMsg(srm, firstRequest);
 			srm->blockAttached = true;
 			srm->satisfied = true;
-			SendMessageToCache(srm, src);
+			SendMessageToRemoteCache(srm, src);
 		} // if (isFromMemory)
 		else if (msg->Type()==mt_Read)
 		{
@@ -1432,14 +1607,14 @@ namespace Memory
 			ReadReplyMsg* rrm = EM().CreateReadReplyMsg(GetDeviceID(), m->GeneratingPC());
 			EM().InitializeReadResponseMsg(rrm, firstRequest);
 			rrm->exclusiveOwnership = false;
-			SendMessageToCache(rrm, owner);
+			SendMessageToRemoteCache(rrm, owner);
 
 			// send writeback exclusive ack to requester
 			WritebackAckMsg* wam = EM().CreateWritebackAckMsg(GetDeviceID(), m->GeneratingPC());
 			// soliciting message id should be the same as the read response's soliciting message id
 			EM().InitializeEvictionResponseMsg(wam, m);
 			wam->isExclusive = true;
-			SendMessageToCache(wam, src);
+			SendMessageToRemoteCache(wam, src);
 
 			// send memory write
 			WriteMsg* wm = EM().CreateWriteMsg(GetDeviceID(), m->GeneratingPC());
@@ -1504,7 +1679,7 @@ namespace Memory
    		WritebackAckMsg* wam = EM().CreateWritebackAckMsg(GetDeviceID(), m->GeneratingPC());
    		EM().InitializeEvictionResponseMsg(wam,m);
    		wam->isExclusive = true;
-   		SendMessageToCache(wam, src);
+   		SendMessageToRemoteCache(wam, src);
 
    		// write to memory
    		WriteMsg* wm = EM().CreateWriteMsg(GetDeviceID(), m->GeneratingPC());
@@ -1545,7 +1720,7 @@ namespace Memory
 			rrm->blockAttached = true;
 			rrm->exclusiveOwnership = true;
 			rrm->satisfied = true;
-			SendMessageToCache(rrm, src);
+			SendMessageToRemoteCache(rrm, src);
 
 			// clear temp
 			EM().DisposeMsg(firstRequest);
@@ -1614,7 +1789,7 @@ namespace Memory
 					im->newOwner = src;
 					im->size = m->size;
 					im->solicitingMessage = m->MsgID();
-					SendMessageToCache(im, src);
+					SendMessageToRemoteCache(im, src);
 				}
 
 				// send invalidates to sharers that are not the requester
@@ -1628,7 +1803,7 @@ namespace Memory
 						im->newOwner = src;
 						im->size = m->size;
 						im->solicitingMessage = m->MsgID();
-						SendMessageToCache(im, *i);
+						SendMessageToRemoteCache(im, *i);
 					}
 				}
 				owner = src;
@@ -1677,7 +1852,7 @@ namespace Memory
 			rrm->exclusiveOwnership = true;
 			rrm->pendingInvalidates = sharers.size() + 1;
 			rrm->satisfied = true;
-			SendMessageToCache(rrm, firstRequestSrc);
+			SendMessageToRemoteCache(rrm, firstRequestSrc);
 
 			sharers.clear();
 			owner = firstRequestSrc;
@@ -1742,7 +1917,7 @@ namespace Memory
 				rrm->blockAttached = true;
 				rrm->exclusiveOwnership = false;
 				rrm->satisfied = true;
-				SendMessageToCache(rrm, sourceNode);
+				SendMessageToRemoteCache(rrm, sourceNode);
 
 				EM().DisposeMsg(read);
 			}

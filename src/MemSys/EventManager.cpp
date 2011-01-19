@@ -96,6 +96,16 @@ namespace Memory
 		invalidate->solicitingMessage = read->MsgID();
 	}
 
+	void EventManager::InitializeReadMsg(ReadMsg* copy, const ReadMsg* original)
+	{
+		copy->addr = original->addr;
+		copy->alreadyHasBlock = original->alreadyHasBlock;
+		copy->directoryLookup = original->directoryLookup;
+		copy->onCompletedCallback = original->onCompletedCallback;
+		copy->requestingExclusive = original->requestingExclusive;
+		copy->size = original->size;
+	}
+
 	void EventManager::InitializeReadMsg(ReadMsg* read, const ReadResponseMsg* readResponse)
 	{
 		read->addr = readResponse->addr;
@@ -118,7 +128,6 @@ namespace Memory
 		readResponse->solicitingMessage = read->MsgID();
 	}
 
-	/*
 	void EventManager::InitializeReadResponseMsg(ReadResponseMsg* copy, const ReadResponseMsg* original)
 	{
 		copy->addr = original->addr;
@@ -130,7 +139,6 @@ namespace Memory
 		copy->size = original->size;
 		copy->solicitingMessage = original->solicitingMessage;
 	}
-	*/
 
 	void EventManager::InitializeWriteMsg(WriteMsg* write, const EvictionMsg* evic)
 	{

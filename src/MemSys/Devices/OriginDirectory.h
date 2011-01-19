@@ -99,8 +99,10 @@ namespace Memory
 			CacheState cacheState;
 			ReadRequestState readRequestState;
 
-			const ReadMsg* firstReply;
+			const BaseMsg* firstReply;
 			NodeID firstReplySrc;
+			const BaseMsg* secondReply;
+			NodeID secondReplySrc;
 			int invalidAcksReceived;
 			const ReadMsg* pendingExclusiveRead;
 			const ReadMsg* pendingSharedRead;
@@ -110,6 +112,8 @@ namespace Memory
 				readRequestState(rrs_NoPendingReads),
 				firstReply(NULL),
 				firstReplySrc(InvalidNodeID),
+				secondReply(NULL),
+				secondReplySrc(InvalidNodeID),
 				invalidAcksReceived(-1),
 				pendingExclusiveRead(NULL),
 				pendingSharedRead(NULL)
@@ -282,7 +286,8 @@ namespace Memory
       void SendCacheNak(const ReadMsg* m, NodeID dest);
       void SendDirectoryNak(const ReadMsg* m, NodeID dest);
       void SendInvalidateMsg(const ReadMsg* m, NodeID dest, NodeID newOwner);
-      void SendMessageToCache(const BaseMsg *msg, NodeID dest);
+      void SendMessageToLocalCache(const ReadReplyMsg* msg);
+      void SendMessageToRemoteCache(const BaseMsg *msg, NodeID dest);
       void SendMessageToDirectory(const BaseMsg *msg, bool isFromMemory);
       void SendMessageToNetwork(const BaseMsg *msg, NodeID dest);
       void SendRequestToMemory(const BaseMsg *msg);
@@ -319,6 +324,8 @@ namespace Memory
 	   void OnCacheReadResponse(const ReadResponseMsg* m, NodeID src);
 
 	   void OnCache(const BaseMsg* msg, NodeID src, CacheData& cacheData);
+	   void OnCacheCleanExclusive(const BaseMsg* msg, CacheData& cacheData);
+	   void OnCacheDirtyExclusive(const BaseMsg* msg, CacheData& cacheData);
       void OnCacheExclusive(const BaseMsg* msg, NodeID src, CacheData& cacheData);
       void OnCacheExclusiveWaitingForSpeculativeReply(const BaseMsg* msg, NodeID src, CacheData& cacheData);
 	   void OnCacheInvalid(const BaseMsg* msg, NodeID src, CacheData& cacheData);
@@ -349,6 +356,8 @@ namespace Memory
 
 		void RecvMsgCache(const BaseMsg *msg, NodeID src);
 		void RecvMsgDirectory(const BaseMsg *msg, NodeID src, bool isFromMemory);
+
+		void ResendRequestToDirectory(const ReadMsg *m);
 
 		typedef PooledFunctionGenerator<StoredClassFunction3<OriginDirectory,const BaseMsg*,NodeID,bool,&OriginDirectory::RecvMsgDirectory> > CBRecvMsgDirectory;
 		CBRecvMsgDirectory cbRecvMsgDirectory;
