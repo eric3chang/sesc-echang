@@ -16,6 +16,7 @@
 using std::cerr;
 using std::cout;
 using std::endl;
+using std::vector;
 
 namespace Memory
 {
@@ -103,6 +104,8 @@ namespace Memory
    	directoryData.firstRequest = NULL;
    	directoryData.firstRequestSrc = InvalidNodeID;
    	directoryData.previousOwner = InvalidNodeID;
+   	directoryData.secondRequest = NULL;
+   	directoryData.secondRequestSrc = InvalidNodeID;
    }
 
 	void OriginDirectory::EraseDirectoryShare(Address a, NodeID id)
@@ -1066,12 +1069,89 @@ namespace Memory
 
 	void OriginDirectory::OnDirectoryBusyExclusive(const BaseMsg* msg, NodeID src, DirectoryData& directoryData, bool isFromMemory)
 	{
-		;
-	}
+		DirectoryState& state = directoryData.state;
+		const ReadMsg* firstRequest = directoryData.firstRequest;
+		DebugAssertWithMessageID(firstRequest!=NULL, msg->MsgID());
+		NodeID& firstRequestSrc = directoryData.firstRequestSrc;
+		DebugAssertWithMessageID(firstRequestSrc!=InvalidNodeID, msg->MsgID());
+   	NodeID& owner = directoryData.owner;
+   	NodeID& previousOwner = directoryData.previousOwner;
+		DebugAssertWithMessageID(previousOwner!=InvalidNodeID, msg->MsgID());
+   	HashSet<NodeID>& sharers =  directoryData.sharers;
+   	DebugAssertWithMessageID(sharers.size()==0, msg->MsgID());
+
+		if (msg->Type()==mt_Read)
+		{
+			const ReadMsg* m = (const ReadMsg*)msg;
+
+			// send nak to requester
+			SendCacheNak(m, src);
+		}
+		else if (msg->Type()==mt_WritebackRequest)
+		{
+			const WritebackRequestMsg* m = (const WritebackRequestMsg*)msg;
+
+			state = ds_Exclusive;
+
+			// send exclusive response to owner
+			ReadResponseMsg* rrm = EM().CreateReadResponseMsg(GetDeviceID(), m->GeneratingPC());
+			EM().InitializeReadResponseMsg(rrm, firstRequest);
+			rrm->blockAttached = true;
+			rrm->exclusiveOwnership = true;
+			rrm->satisfied = true;
+			SendMessageToCache(rrm, owner);
+
+			// send writeback busy ack to requester
+			WritebackAckMsg* wam = EM().CreateWritebackAckMsg(GetDeviceID(), m->GeneratingPC());
+			EM().InitializeEvictionResponseMsg(wam, m);
+			wam->isBusy = true;
+			SendMessageToCache(wam, src);
+
+			// send memory write
+			WriteMsg* wm = EM().CreateWriteMsg(GetDeviceID(), m->GeneratingPC());
+			EM().InitializeWriteMsg(wm, m);
+			SendRequestToMemory(wm);
+
+			EM().DisposeMsg(firstRequest);
+			ClearTempDirectoryData(directoryData);
+		}
+		else if (msg->Type()==mt_Transfer)
+		{
+			const TransferMsg* m = (const TransferMsg*)msg;
+			DebugAssertWithMessageID(m->isDirty, m->MsgID());
+
+			state = ds_Exclusive;
+
+			EM().DisposeMsg(firstRequest);
+			ClearTempDirectoryData(directoryData);
+		}
+		else if (msg->Type()==mt_DirectoryNak)
+		{
+			const DirectoryNakMsg* m = (const DirectoryNakMsg*)msg;
+
+			state = ds_Exclusive;
+
+			owner = previousOwner;
+
+			EM().DisposeMsg(firstRequest);
+			ClearTempDirectoryData(directoryData);
+		}
+		else
+		{
+			PrintError("OnDirBusyEx", msg, "Unhandled message type");
+		}
+
+		// dispose message
+		EM().DisposeMsg(msg);
+	} // OnDirectoryBusyExclusive
 
    void OriginDirectory::OnDirectoryBusyExclusiveMemoryAccess(const BaseMsg* msg, NodeID src, DirectoryData& directoryData, bool isFromMemory)
 	{
    	DirectoryState& state = directoryData.state;
+   	const ReadMsg* firstRequest = directoryData.firstRequest;
+   	DebugAssertWithMessageID(firstRequest!=NULL, msg->MsgID());
+   	NodeID& firstRequestSrc = directoryData.firstRequestSrc;
+   	DebugAssertWithMessageID(firstRequestSrc!=InvalidNodeID, msg->MsgID());
    	const WritebackRequestMsg* secondRequest = directoryData.secondRequest;
    	DebugAssertWithMessageID(secondRequest==NULL, msg->MsgID());
    	NodeID& secondRequestSrc = directoryData.secondRequestSrc;
@@ -1102,23 +1182,91 @@ namespace Memory
    		state = ds_BusyExclusive;
 
    		// send intervention exclusive request to previous owner
-
+   		InterventionMsg* im = EM().CreateInterventionMsg(GetDeviceID(), m->GeneratingPC());
+   		EM().InitializeReadMsg(im, m);
+   		// intervention messages always fetch block
+   		im->alreadyHasBlock = false;
+   		im->requestingExclusive = true;
+   		SendMessageToCache(im, previousOwner);
 
    		// send speculative reply to requester
-   		//TODO
+   		SpeculativeReplyMsg* srm = EM().CreateSpeculativeReplyMsg(GetDeviceID(), m->GeneratingPC());
+   		EM().InitializeReadResponseMsg(srm, firstRequest);
+   		srm->blockAttached = true;
+   		srm->satisfied = true;
+   		SendMessageToCache(srm, src);
+   	} // else if (isFromMemory)
+   	else
+   	{
+   		PrintError("OnDirBusyExMemAcc", msg, "Unhandled message type");
    	}
 	}
 
    void OriginDirectory::OnDirectoryBusyExclusiveMemoryAccessWritebackRequest(const BaseMsg* msg, NodeID src, DirectoryData& directoryData, bool isFromMemory)
 	{
-		;
-	}
+   	DirectoryState& state = directoryData.state;
+   	const ReadMsg* firstRequest = directoryData.firstRequest;
+   	DebugAssertWithMessageID(firstRequest!=NULL, msg->MsgID());
+   	NodeID& firstRequestSrc = directoryData.firstRequestSrc;
+   	DebugAssertWithMessageID(firstRequestSrc!=InvalidNodeID, msg->MsgID());
+   	const WritebackRequestMsg* secondRequest = directoryData.secondRequest;
+   	DebugAssertWithMessageID(secondRequest!=NULL, msg->MsgID());
+   	NodeID& secondRequestSrc = directoryData.secondRequestSrc;
+   	DebugAssertWithMessageID(secondRequestSrc!=InvalidNodeID, msg->MsgID());
+   	NodeID& owner = directoryData.owner;
+
+   	if (msg->Type()==mt_Read)
+   	{
+   		// send nak to requester
+   		const ReadMsg* m = (const ReadMsg*) msg;
+   		SendCacheNak(m, src);
+   	}
+   	else if (isFromMemory)
+   	{
+   		DebugAssertWithMessageID(msg->Type()==mt_ReadResponse, msg->MsgID());
+   		const ReadResponseMsg* m = (const ReadResponseMsg*)msg;
+   		PerformMemoryReadResponseCheck(m, src);
+
+   		state = ds_Exclusive;
+
+   		// send exclusive reply to owner
+   		ReadReplyMsg* rrm = EM().CreateReadReplyMsg(GetDeviceID(), m->GeneratingPC());
+   		EM().InitializeReadResponseMsg(rrm, firstRequest);
+   		rrm->blockAttached = true;
+   		rrm->exclusiveOwnership = true;
+   		rrm->satisfied = true;
+   		SendMessageToCache(rrm, owner);
+
+   		// send writeback exclusive ack to requester
+   		WritebackAckMsg* wam = EM().CreateWritebackAckMsg(GetDeviceID(), m->GeneratingPC());
+   		// soliciting message id should be the same as the read response's soliciting message id
+   		EM().InitializeEvictionResponseMsg(wam, m);
+   		wam->isExclusive = true;
+   		SendMessageToCache(wam, src);
+
+   		// send memory write
+   		WriteMsg* wm = EM().CreateWriteMsg(GetDeviceID(), m->GeneratingPC());
+   		EM().InitializeWriteMsg(wm, m);
+   		SendRequestToMemory(wm);
+
+   		ClearTempDirectoryData(directoryData);
+   	} // else if (isFromMemory)
+   	else
+   	{
+   		PrintError("OnDirBusyExMemAccWbReq", msg, "Unhandled message type");
+   	}
+	}// OnDirectoryBusyExclusiveMemoryAccessWritebackRequest
 
    void OriginDirectory::OnDirectoryBusyShared(const BaseMsg* msg, NodeID src, DirectoryData& directoryData, bool isFromMemory)
 	{
-   	DirectoryState& state = directoryData.state;
+		DirectoryState& state = directoryData.state;
+		const ReadMsg* firstRequest = directoryData.firstRequest;
+		DebugAssertWithMessageID(firstRequest!=NULL, msg->MsgID());
+		NodeID& firstRequestSrc = directoryData.firstRequestSrc;
+		DebugAssertWithMessageID(firstRequestSrc!=InvalidNodeID, msg->MsgID());
    	NodeID& owner = directoryData.owner;
    	NodeID& previousOwner = directoryData.previousOwner;
+   	DebugAssertWithMessageID(previousOwner!=InvalidNodeID, msg->MsgID());
    	HashSet<NodeID>& sharers =  directoryData.sharers;
 
 		if (msg->Type()==mt_Writeback)
@@ -1130,19 +1278,22 @@ namespace Memory
 			WriteMsg* wm = EM().CreateWriteMsg(GetDeviceID(), m->GeneratingPC());
 			EM().InitializeWriteMsg(wm, m);
 			SendRequestToMemory(wm);
+
+			EM().DisposeMsg(firstRequest);
+			ClearTempDirectoryData(directoryData);
 		}
 		else if (msg->Type()==mt_Transfer)
 		{
 			state = ds_Shared;
+			EM().DisposeMsg(firstRequest);
+			ClearTempDirectoryData(directoryData);
 		}
 		else if (msg->Type()==mt_Read)
 		{
 			const ReadMsg* m = (const ReadMsg*) msg;
 
 			// send cache nak to requester
-			CacheNakMsg* cnm = EM().CreateCacheNakMsg(GetDeviceID(), m->GeneratingPC());
-			EM().InitializeBaseNakMsg(cnm, m);
-			SendMessageToCache(cnm, src);
+			SendCacheNak(m, src);
 		}
 		else if (msg->Type()==mt_WritebackRequest)
 		{
@@ -1168,6 +1319,9 @@ namespace Memory
 			WriteMsg* wm = EM().CreateWriteMsg(GetDeviceID(), m->GeneratingPC());
 			EM().InitializeWriteMsg(wm, m);
 			SendRequestToMemory(wm);
+
+			EM().DisposeMsg(firstRequest);
+			ClearTempDirectoryData(directoryData);
 		}//else if (msg->Type()==mt_WritebackRequest)
 		else if (msg->Type()==mt_DirectoryNak)
 		{
@@ -1176,6 +1330,9 @@ namespace Memory
 			state = ds_Exclusive;
 			owner = previousOwner;
 			sharers.clear();
+
+			EM().DisposeMsg(firstRequest);
+			ClearTempDirectoryData(directoryData);
 		} // else if (msg->Type()==mt_DirectoryNak)
 		else
 		{
@@ -1252,6 +1409,10 @@ namespace Memory
    	DebugAssertWithMessageID(firstRequest!=NULL, msg->MsgID());
    	NodeID& firstRequestSrc = directoryData.firstRequestSrc;
    	DebugAssertWithMessageID(firstRequestSrc!=InvalidNodeID, msg->MsgID());
+   	const WritebackRequestMsg* secondRequest = directoryData.secondRequest;
+   	DebugAssertWithMessageID(secondRequest!=NULL, msg->MsgID());
+   	NodeID& secondRequestSrc = directoryData.secondRequestSrc;
+   	DebugAssertWithMessageID(secondRequestSrc!=InvalidNodeID, msg->MsgID());
    	NodeID& owner = directoryData.owner;
 
 		if (msg->Type()==mt_Read)
@@ -1275,9 +1436,9 @@ namespace Memory
 
 			// send writeback exclusive ack to requester
 			WritebackAckMsg* wam = EM().CreateWritebackAckMsg(GetDeviceID(), m->GeneratingPC());
+			// soliciting message id should be the same as the read response's soliciting message id
 			EM().InitializeEvictionResponseMsg(wam, m);
 			wam->isExclusive = true;
-			wam->solicitingMessage = firstRequest->MsgID();
 			SendMessageToCache(wam, src);
 
 			// send memory write
@@ -1358,7 +1519,44 @@ namespace Memory
 
 	void OriginDirectory::OnDirectoryExclusiveMemoryAccess(const BaseMsg* msg, NodeID src, DirectoryData& directoryData, bool isFromMemory)
 	{
-		;
+		DirectoryState& state = directoryData.state;
+		const ReadMsg* firstRequest = directoryData.firstRequest;
+		DebugAssertWithMessageID(firstRequest!=NULL, msg->MsgID());
+		NodeID& firstRequestSrc = directoryData.firstRequestSrc;
+		DebugAssertWithMessageID(firstRequestSrc!=InvalidNodeID, msg->MsgID());
+
+		if (msg->Type()==mt_Read)
+		{
+			const ReadMsg* m = (const ReadMsg*) msg;
+
+			// send cachenak to requester
+			SendCacheNak(m, src);
+		}
+		else if (isFromMemory)
+		{
+			DebugAssertWithMessageID(msg->Type()==mt_ReadResponse, msg->MsgID());
+			const ReadResponseMsg* m = (const ReadResponseMsg*)msg;
+
+			state = ds_Exclusive;
+
+			// send exclusive reply to requester
+			ReadReplyMsg* rrm = EM().CreateReadReplyMsg(GetDeviceID(), m->GeneratingPC());
+			EM().InitializeReadResponseMsg(rrm, firstRequest);
+			rrm->blockAttached = true;
+			rrm->exclusiveOwnership = true;
+			rrm->satisfied = true;
+			SendMessageToCache(rrm, src);
+
+			// clear temp
+			EM().DisposeMsg(firstRequest);
+			ClearTempDirectoryData(directoryData);
+		} // else if (isFromMemory)
+		else
+		{
+			PrintError("OnDirExMemAcc", msg, "Unhandled message type");
+		}
+
+		EM().DisposeMsg(msg);
 	}
 
 	void OriginDirectory::OnDirectoryShared(const BaseMsg* msg, NodeID src, DirectoryData& directoryData, bool isFromMemory)
@@ -1368,6 +1566,7 @@ namespace Memory
 		const BaseMsg* firstRequest = directoryData.firstRequest;
 		NodeID& firstRequestSrc = directoryData.firstRequestSrc;
 		DirectoryState& state = directoryData.state;
+		vector<LookupData <ReadMsg> >& pendingSharedReads = directoryData.pendingSharedReads;
 		//int& pendingInvalidates = directoryData.pendingInvalidates;
 
 		if (msg->Type()==mt_Read)
@@ -1377,7 +1576,10 @@ namespace Memory
 			{
 				state = ds_SharedMemoryAccess;
 				sharers.insert(src);
-				firstRequest = m;
+				LookupData <ReadMsg> ld;
+				ld.msg = m;
+				ld.sourceNode = src;
+				pendingSharedReads.push_back(ld);
 				SendRequestToMemory(m);
 			}
 			else if (m->requestingExclusive && owner!=src && sharers.find(src)==sharers.end())
@@ -1495,7 +1697,62 @@ namespace Memory
 
    void OriginDirectory::OnDirectorySharedMemoryAccess(const BaseMsg* msg, NodeID src, DirectoryData& directoryData, bool isFromMemory)
 	{
-		;
+		DirectoryState& state = directoryData.state;
+		vector<LookupData<ReadMsg> >& pendingSharedReads = directoryData.pendingSharedReads;
+		DebugAssertWithMessageID(pendingSharedReads.size()!=0, msg->MsgID());
+		HashSet<NodeID>& sharers = directoryData.sharers;
+		DebugAssertWithMessageID(sharers.size()!=0, msg->MsgID());
+
+		if (msg->Type()==mt_Read)
+		{
+			const ReadMsg* m = (const ReadMsg*)msg;
+
+			if (!m->requestingExclusive)
+			{
+				sharers.insert(src);
+				LookupData<ReadMsg> ld;
+				ld.msg = m;
+				ld.sourceNode = src;
+				pendingSharedReads.push_back(ld);
+			}
+			else
+			{
+				// send nak to requester
+				SendCacheNak(m, src);
+			}
+		} // if (msg->Type()==mt_Read)
+		else if (isFromMemory)
+		{
+			DebugAssertWithMessageID(msg->Type()==mt_ReadResponse, msg->MsgID());
+			const ReadResponseMsg* m = (const ReadResponseMsg*)msg;
+			PerformMemoryReadResponseCheck(m, src);
+
+			state = ds_Shared;
+
+			// for all messages in pending requests, send shared reply
+			vector<LookupData<ReadMsg> >::iterator i;
+			for (i=pendingSharedReads.begin(); i!=pendingSharedReads.end(); i++)
+			{
+				LookupData<ReadMsg> ld = *i;
+				const ReadMsg* read = ld.msg;
+				NodeID& sourceNode = ld.sourceNode;
+
+				ReadReplyMsg* rrm = EM().CreateReadReplyMsg(GetDeviceID(), m->GeneratingPC());
+				EM().InitializeReadResponseMsg(rrm, read);
+				rrm->blockAttached = true;
+				rrm->exclusiveOwnership = false;
+				rrm->satisfied = true;
+				SendMessageToCache(rrm, sourceNode);
+
+				EM().DisposeMsg(read);
+			}
+
+			pendingSharedReads.clear();
+		} // else if (isFromMemory)
+		else
+		{
+			PrintError("OnDirShMemAcc", msg, "Unhandled message type");
+		}
 	} // OnDirectorySharedMemoryAccess
 
 	void OriginDirectory::OnDirectoryUnowned(const BaseMsg* msg, NodeID src, DirectoryData& directoryData, bool isFromMemory)

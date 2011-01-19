@@ -57,6 +57,7 @@ namespace Memory
 	{
 		evictionResponse->addr = readResponse->addr;
 		evictionResponse->size = readResponse->size;
+		evictionResponse->solicitingMessage = readResponse->solicitingMessage;
 	}
 
 	void EventManager::FillInvalidateMsg(InvalidateMsg* m, DeviceID devID, Address generatingPC)
