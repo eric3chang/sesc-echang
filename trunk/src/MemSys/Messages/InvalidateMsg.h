@@ -8,7 +8,6 @@ namespace Memory
 	public:
 		Address addr;
       NodeID newOwner;
-      MessageID solicitingMessage;
 		size_t size;
 
 		virtual bool IsResponse() const { return false; }
@@ -19,7 +18,6 @@ namespace Memory
 		   BaseMsg::print(destinationDeviceID);
 		   cout << " adr=" << addr
             << " newOwner=" << BaseMsg::convertNodeIDToDeviceID(newOwner)
-            << " sMsg=" << solicitingMessage
 		   ;
 		}
 	};

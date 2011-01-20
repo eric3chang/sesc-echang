@@ -101,8 +101,6 @@ namespace Memory
 
 			const BaseMsg* firstReply;
 			NodeID firstReplySrc;
-			const BaseMsg* secondReply;
-			NodeID secondReplySrc;
 			int invalidAcksReceived;
 			const ReadMsg* pendingExclusiveRead;
 			const ReadMsg* pendingSharedRead;
@@ -112,8 +110,6 @@ namespace Memory
 				readRequestState(rrs_NoPendingReads),
 				firstReply(NULL),
 				firstReplySrc(InvalidNodeID),
-				secondReply(NULL),
-				secondReplySrc(InvalidNodeID),
 				invalidAcksReceived(-1),
 				pendingExclusiveRead(NULL),
 				pendingSharedRead(NULL)
@@ -218,8 +214,8 @@ namespace Memory
 
 		HashMap<MessageID, const ReadMsg*> pendingLocalReads;
       HashMap<Address, ReversePendingLocalReadData>reversePendingLocalReads;
-		HashMap<MessageID, LookupData<ReadMsg> > pendingRemoteReads;
-		HashMap<MessageID, LookupData<InvalidateMsg> > pendingRemoteInvalidates;
+		HashMap<MessageID, const ReadMsg* > pendingRemoteReads;
+		HashMap<MessageID, const InvalidateMsg* > pendingRemoteInvalidates;
 		HashMap<Address, LookupData<ReadMsg> > pendingDirectoryBusySharedReads;
 		HashMultiMap<Address, LookupData<ReadMsg> > pendingDirectoryNormalSharedReads;
 		HashMap<Address, LookupData<ReadMsg> > pendingDirectoryBusyExclusiveReads;
@@ -284,10 +280,11 @@ namespace Memory
 
       // these are being used currently
       void SendCacheNak(const ReadMsg* m, NodeID dest);
-      void SendDirectoryNak(const ReadMsg* m, NodeID dest);
+      void SendDirectoryNak(const ReadMsg* m);
       void SendInvalidateMsg(const ReadMsg* m, NodeID dest, NodeID newOwner);
       void SendMessageToLocalCache(const ReadReplyMsg* msg);
       void SendMessageToRemoteCache(const BaseMsg *msg, NodeID dest);
+      void SendMessageToDirectory(const BaseMsg *msg);
       void SendMessageToDirectory(const BaseMsg *msg, bool isFromMemory);
       void SendMessageToNetwork(const BaseMsg *msg, NodeID dest);
       void SendRequestToMemory(const BaseMsg *msg);
