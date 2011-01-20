@@ -5,6 +5,9 @@
 		LRU,
 		Random,
 	}
+
+    //public static int Get
+
 	public static void AddCache(string deviceName, int associativity, int setCount, int lineSize, int missTime, int hitTime, EvictionPolicy ev)
 	{
 		output.WriteLine("Root MemoryDevice Begin");
@@ -85,7 +88,7 @@
 	{
 		output.WriteLine("Root MemoryDevice Begin");
 		output.WriteLine("Int DeviceID " + (index++));
-		output.WriteLine("String DeviceType OriginDirectory");
+		output.WriteLine("String DeviceType Directory");
 		output.WriteLine("String DeviceName " + name);
 		output.WriteLine("Int LocalSendTime " + 4);
 		output.WriteLine("Int RemoteSendTime " + 4);
@@ -110,6 +113,32 @@
 		output.WriteLine("End");
 		output.WriteLine("End");
 	}
+
+    public static void AddOriginDirectory(string name, int totalNodes, int myNode, int memoryNode)
+    {
+        output.WriteLine("Root MemoryDevice Begin");
+        output.WriteLine("Int DeviceID " + (index++));
+        output.WriteLine("String DeviceType OriginDirectory");
+        output.WriteLine("String DeviceName " + name);
+        output.WriteLine("Int LocalSendTime " + 4);
+        output.WriteLine("Int RemoteSendTime " + 4);
+        output.WriteLine("Int LookupRetryTime " + 4);
+        output.WriteLine("Int LookupTime " + 4);
+        output.WriteLine("Int SatisfyTime " + 4);
+        output.WriteLine("Int NodeID " + myNode);
+        output.WriteLine("Root DirectoryNodeCalculator Begin");
+        output.WriteLine("String Type HashedPageCalculator");
+        output.WriteLine("Int PageSize 64");
+        output.Write("IntSet NodeIDSet " + totalNodes + " { ");
+        for (int i = 0; i < totalNodes; i++)
+        {
+            output.Write(i + " ");
+        }
+        output.WriteLine("}");
+        output.WriteLine("End");
+        output.WriteLine("End");
+    }
+
     public static void AddMainMemory(string deviceName, int readLatency, int writeLatency)
     {
         output.WriteLine("Root MemoryDevice Begin");
@@ -147,6 +176,29 @@
 		output.WriteLine("End");
 		output.WriteLine("End");
 	}
+    public static void AddNetworkWithoutMemory(string name, int totalNodes, int randomMin, int randomMax, float perPacket)
+    {
+        output.WriteLine("Root MemoryDevice Begin");
+        output.WriteLine("Int DeviceID " + (index++));
+        output.WriteLine("String DeviceType RandomLoadNetwork");
+        output.WriteLine("String DeviceName " + name);
+        for (int i = 0; i < totalNodes; i++)
+        {
+            output.WriteLine("Root Connection Begin");
+            output.WriteLine("String LinkName Connection_" + i);
+            output.WriteLine("Int NodeName " + i);
+            output.WriteLine("End");
+        }
+        output.WriteLine("Root CalculatorConfig Begin");
+        output.WriteLine("String Type RandomLoaded");
+        output.WriteLine("Int MinTime " + randomMin);
+        output.WriteLine("Int MaxTime " + randomMax);
+        output.WriteLine("Int TimePerByte 1");
+        output.WriteLine("Real TimePerPacket " + perPacket);
+        output.WriteLine("Int EnforceOrder 1");
+        output.WriteLine("End");
+        output.WriteLine("End");
+    }
 	public static void AddNetworkMemoryInterface(string name, int node)
 	{
 		output.WriteLine("Root MemoryDevice Begin");
@@ -268,13 +320,13 @@
 		output.WriteLine("End");
 		output.Close();
 	}
-    public static void OutOriginDirectoryMemory(int nodeCount, int l1, int l2)
+    public static void OutOriginDirectoryMOESIMemory(int nodeCount, int l1, int l2)
     {
-        output = new System.IO.StreamWriter("memoryConfigs\\OriginDirectory_p" + nodeCount + "_c" + l1 + "L1-" + l2 + "L2.memory");
+        output = new System.IO.StreamWriter("memoryConfigs\\OriginDirectoryMOESI_p" + nodeCount + "_c" + l1 + "L1-" + l2 + "L2.memory");
         index = 1;
         output.WriteLine("Begin");
         //MainMemory(400, 300);
-        AddNetwork("Network", nodeCount, 4, 20, 0.1f);
+        AddNetworkWithoutMemory("Network", nodeCount, 4, 20, 0.1f);
         //AddNetworkMemoryInterface("NMInt", nodeCount + 10);
         l1 *= 1024;
         l2 *= 1024;
@@ -283,13 +335,13 @@
             AddSESCInterface("ProcessorInterface_" + i);
             AddCache("L1_" + i, 4, l1 / (4 * 64), 64, 3, 1, EvictionPolicy.LRU);
             AddCache("L2_" + i, 4, l2 / (4 * 64), 64, 7, 4, EvictionPolicy.LRU);
-            AddDirectory("Directory_" + i, nodeCount, i, nodeCount + 10);
+            AddOriginDirectory("OriginDirectory_" + i, nodeCount, i, nodeCount + 10);
             AddMainMemory("MainMemory_" + i, 400, 300);
             Connection("ProcessorInterface_" + i, "L1_" + i, "Connection", "LocalConnection", 0);
             Connection("L1_" + i, "L2_" + i, "RemoteConnection", "LocalConnection", 0);
-            Connection("L2_" + i, "Directory_" + i, "RemoteConnection", "LocalCacheConnection", 0);
-            Connection("MainMemory_" + i, "Directory_" + i, "RemoteConnection", "LocalMemoryConnection", 0);
-            Connection("Directory_" + i, "Network", "RemoteConnection", "Connection_" + i, 0);
+            Connection("L2_" + i, "OriginDirectory_" + i, "RemoteConnection", "LocalCacheConnection", 0);
+            Connection("MainMemory_" + i, "OriginDirectory_" + i, "RemoteConnection", "LocalMemoryConnection", 0);
+            Connection("OriginDirectory_" + i, "Network", "RemoteConnection", "Connection_" + i, 0);
         }
         //Connection("Network", "NMInt", "MemoryConnection", "NetworkConnection", 0);
         //Connection("NMInt", "MainMemory", "MemoryConnection", "Remoteconnection", 0);
@@ -299,14 +351,19 @@
 	public static void Main(string[] args)
 	{
 		System.IO.Directory.CreateDirectory("memoryConfigs");
-		for (int i = 1; i <= 128; i *= 2)
+
+        // nodeCount also determines the total number of processors
+
+		for (int nodeCount = 2; nodeCount <= 64; nodeCount *= 2)
 		{
 			for (int l1 = 1; l1 <= 1024; l1 *= 2)
+            //for (int l1 = 1; l1 <= 2; l1 *= 2)
 			{
 //				OutSimpleMemory1(i, l1);
 				for (int l2 = l1 * 2; l2 <= 8 * 1024; l2 *= 2)
+                //for (int l2 = l1 * 2; l2 <= 8 * 2; l2 *= 2)
 				{
-					OutOriginDirectoryMemory(i, l1, l2);
+					OutOriginDirectoryMOESIMemory(nodeCount, l1, l2);
 					//OutSimpleMemory2(i, l1, l2);
 					for (int l3 = l2 * 2; l3 <= 64 * 1024; l3 *= 2)
 					{
