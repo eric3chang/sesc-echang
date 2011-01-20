@@ -26,6 +26,7 @@ namespace Memory
 		bnm->addr = rm->addr;
 		bnm->solicitingMsg = rm->MsgID();
 	}
+
 	void EventManager::FillEvictionMsg(EvictionMsg* m, DeviceID devID, Address generatingPC)
 	{
 		m->SetIDInfo(currentMsgStamp++,devID,generatingPC);
@@ -33,11 +34,20 @@ namespace Memory
       m->blockAttached = false;
       m->size = 0;
 	}
+
+	void EventManager::InitializeEvictionMsg(EvictionMsg* copy, const EvictionMsg* original)
+	{
+		copy->addr = original->addr;
+		copy->blockAttached = original->blockAttached;
+		copy->size = original->blockAttached;
+	}
+
 	void EventManager::InitializeEvictionMsg(EvictionMsg* em, const ReadMsg* rm)
 	{
 		em->addr = rm->addr;
 		em->size = rm->size;
 	}
+
 	void EventManager::FillEvictionResponseMsg(EvictionResponseMsg* m, DeviceID devID, Address generatingPC)
 	{
 		m->SetIDInfo(currentMsgStamp++,devID,generatingPC);
@@ -53,18 +63,24 @@ namespace Memory
 		erm->solicitingMessage = em->MsgID();
 	}
 
-	void EventManager::InitializeEvictionResponseMsg(EvictionResponseMsg* evictionResponse, const ReadResponseMsg* readResponse)
+	void EventManager::InitializeEvictionResponseMsg(EvictionResponseMsg* copy, const EvictionResponseMsg* original)
 	{
-		evictionResponse->addr = readResponse->addr;
-		evictionResponse->size = readResponse->size;
-		evictionResponse->solicitingMessage = readResponse->solicitingMessage;
+		copy->addr = original->addr;
+		copy->size = original->size;
+		copy->solicitingMessage = original->solicitingMessage;
+	}
+
+	void EventManager::InitializeEvictionResponseMsg(EvictionResponseMsg* evictionResponse, const ReadMsg* read)
+	{
+		evictionResponse->addr = read->addr;
+		evictionResponse->size = read->size;
+		evictionResponse->solicitingMessage = read->MsgID();
 	}
 
 	void EventManager::FillInvalidateMsg(InvalidateMsg* m, DeviceID devID, Address generatingPC)
 	{
 		m->SetIDInfo(currentMsgStamp++,devID,generatingPC);
       m->newOwner = InvalidNodeID;
-      m->solicitingMessage = 0;
 	}
 
 	void EventManager::FillInvalidateResponseMsg(InvalidateResponseMsg* m, DeviceID devID, Address generatingPC)
@@ -93,7 +109,14 @@ namespace Memory
 	{
 		invalidate->addr = read->addr;
 		invalidate->size = read->size;
-		invalidate->solicitingMessage = read->MsgID();
+	}
+
+	void EventManager::InitializeInvalidateResponseMsg(InvalidateResponseMsg* copy, const InvalidateResponseMsg* original)
+	{
+		copy->addr = original->addr;
+		copy->blockAttached = original->blockAttached;
+		copy->size = original->size;
+		copy->solicitingMessage = original->solicitingMessage;
 	}
 
 	void EventManager::InitializeReadMsg(ReadMsg* copy, const ReadMsg* original)
