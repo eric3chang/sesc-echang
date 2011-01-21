@@ -16,7 +16,7 @@ project (augSescProject)
 # to the source code
 configure_file (
   "${PROJECT_SOURCE_DIR}/sescConfig.h.in"
-  "${PROJECT_BINARY_DIR}/sescConfig.h"
+  "${PROJECT_SOURCE_DIR}/sescConfig.h"
   )
 
 # overwrite default DEBUG build
@@ -35,7 +35,6 @@ set ( CMAKE_CXX_FLAGS_RELEASE "-DADDRESS_CHK -Wno-unused-variable" CACHE STRING
    FORCE )
 MARK_AS_ADVANCED (
    CMAKE_CXX_FLAGS_RELEASE )
-
 
 # add the binary tree to the search path for include files
 # so that we will find all the header files
@@ -65,7 +64,6 @@ include_directories ("${PROJECT_SOURCE_DIR}/include")
 
 # add definitions to compiler
 # have to do this before add_subdirectory
-
 IF (UNIX)
    ADD_DEFINITIONS (-Wall)
    ADD_DEFINITIONS (-Wno-deprecated)
@@ -88,7 +86,7 @@ IF (UNIX)
    # vs specific
    #ADD_DEFINITIONS (-D_CONSOLE)
    #ADD_DEFINITIONS (-D_DEBUG)
-  
+
    #  the following definition doesn't work in older gnu compilers
    #  enable it to use new standards unordered_map and unordered_set
    #   ADD_DEFINITIONS (-std=c++0x)
@@ -103,12 +101,17 @@ add_subdirectory (libpint)
 add_subdirectory (libsuc)
 add_subdirectory (libtrans)
 add_subdirectory (MemSys)
-add_subdirectory (WorkingFolder)
+# no longer need to add WorkingFolder because we put the configurations out of it
+#add_subdirectory (WorkingFolder)
+
+# set executable path
+set (EXECUTABLE_OUTPUT_PATH "${PROJECT_SOURCE_DIR}/../WorkingFolder"
+   CACHE INTERNAL "Non-configurable executable directory.")
 
 # add all the libraries so that the linker can find them
-#set (EXTRA_LIBS ${EXTRA_LIBS} core mem suc)
 set (EXTRA_LIBS ${EXTRA_LIBS} core ll mem mint pint suc trans MemSys Devices)
 
-# do not add the executable, the executable is in WorkingFolder
-#add_executable (augSesc "${PROJECT_SOURCE_DIR}/libmem/mtst1.cpp")
-#target_link_libraries (augSesc ${EXTRA_LIBS})
+# add the executable, the executable should be put into WorkingFolder automatically
+add_executable (augSesc "${PROJECT_SOURCE_DIR}/libmem/mtst1.cpp")
+target_link_libraries (augSesc ${EXTRA_LIBS})
+
