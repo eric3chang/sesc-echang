@@ -334,7 +334,8 @@
         {
             AddSESCInterface("ProcessorInterface_" + i);
             AddCache("L1_" + i, 4, l1 / (4 * 64), 64, 3, 1, EvictionPolicy.LRU);
-            AddCache("L2_" + i, 4, l2 / (4 * 64), 64, 7, 4, EvictionPolicy.LRU);
+            // AddCache("L2_" + i, 4, l2 / (4 * 64), 64, 7, 4, EvictionPolicy.LRU);
+            AddCache("L2_" + i, 4, l2 / (4 * 64), 64, 15, 11, EvictionPolicy.LRU);
             AddOriginDirectory("OriginDirectory_" + i, nodeCount, i, nodeCount + 10);
             AddMainMemory("MainMemory_" + i, 400, 300);
             Connection("ProcessorInterface_" + i, "L1_" + i, "Connection", "LocalConnection", 0);
