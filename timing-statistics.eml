@@ -1,0 +1,787 @@
+Return-Path: mkarpeles5@ucla.edu
+Received: from smtp.cs.ucla.edu (LHLO smtp.cs.ucla.edu) (131.179.128.62) by
+ mail.cs.ucla.edu with LMTP; Sat, 4 Dec 2010 09:50:46 -0800 (PST)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by smtp.cs.ucla.edu (Postfix) with ESMTP id 73C2939E80FA
+	for <erichang@cs.ucla.edu>; Sat,  4 Dec 2010 09:50:46 -0800 (PST)
+X-Virus-Scanned: amavisd-new at smtp.cs.ucla.edu
+X-Spam-Flag: NO
+X-Spam-Score: -4.209
+X-Spam-Level: 
+X-Spam-Status: No, score=-4.209 tagged_above=-10 required=4.4
+	tests=[BAYES_00=-1.9, HTML_MESSAGE=0.001, RCVD_IN_DNSWL_MED=-2.3,
+	T_RP_MATCHES_RCVD=-0.01] autolearn=ham
+Received: from smtp.cs.ucla.edu ([127.0.0.1])
+	by localhost (smtp.cs.ucla.edu [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id hwIAtgbKOtqu for <erichang@cs.ucla.edu>;
+	Sat,  4 Dec 2010 09:50:45 -0800 (PST)
+Received: from moa.cs.ucla.edu (Moa.CS.UCLA.EDU [131.179.128.29])
+	by smtp.cs.ucla.edu (Postfix) with ESMTP id 0D18F39E80E0
+	for <erichang@smtp.cs.ucla.edu>; Sat,  4 Dec 2010 09:50:45 -0800 (PST)
+Received: by moa.cs.ucla.edu (Postfix)
+	id 0537717044; Sat,  4 Dec 2010 09:50:45 -0800 (PST)
+Delivered-To: erichang@cs.ucla.edu
+Received: from out-66.smtp.ucla.edu (out-66.smtp.ucla.edu [169.232.46.167])
+	by moa.cs.ucla.edu (Postfix) with ESMTP id DFA1A17043
+	for <erichang@cs.ucla.edu>; Sat,  4 Dec 2010 09:50:44 -0800 (PST)
+Received: from smtp-13.smtp.ucla.edu (smtp-13.smtp.ucla.edu [169.232.46.240])
+	by out-66.smtp.ucla.edu with ESMTP id oB4HoPHX020520;
+	Sat, 04 Dec 2010 09:50:25 -0800
+Received: from rigatoni.noc.ucla.edu (rigatoni.noc.ucla.edu [169.232.47.23])
+	by smtp-13.smtp.ucla.edu (8.14.3/8.14.3) with ESMTP id oB4HoPHX020520
+	for <erichang@cs.ucla.edu>; Sat, 4 Dec 2010 09:50:25 -0800
+Received: from rigatoni.noc.ucla.edu (localhost [127.0.0.1])
+	by rigatoni.noc.ucla.edu (8.14.4/8.14.4) with ESMTP id oB4HoPbb003313
+	for <erichang@cs.ucla.edu>; Sat, 4 Dec 2010 09:50:25 -0800
+Received: (from web@localhost)
+	by rigatoni.noc.ucla.edu (8.14.4/8.14.4/Submit) id oB4HoPLt003312
+	for erichang@cs.ucla.edu; Sat, 4 Dec 2010 09:50:25 -0800
+Received: from cpe-76-171-168-30.socal.res.rr.com
+ (cpe-76-171-168-30.socal.res.rr.com [76.171.168.30]) by mail.ucla.edu
+ (Horde Framework) with HTTP; Sat, 04 Dec 2010 09:50:24 -0800
+Message-ID: <20101204095024.156171qg2sr7n2g4@mail.ucla.edu>
+Date: Sat, 04 Dec 2010 09:50:24 -0800
+From: Matthew Karpeles <mkarpeles5@ucla.edu>
+To: Eric Chang <erichang@cs.ucla.edu>
+Subject: Re: Question About Splash2 Benchmarks
+References:  <1061716843.131006.1291258683411.JavaMail.root@mail.cs.ucla.edu>
+In-Reply-To:  <1061716843.131006.1291258683411.JavaMail.root@mail.cs.ucla.edu>
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+ boundary="=_5a2jf0k3ny4g"
+Content-Transfer-Encoding: 7bit
+User-Agent: Internet Messaging Program (IMP) H3 (4.3.7)
+X-UCLA-Abuse:  UmFuZG9tSVb1cCYEm23A6fOXbaNKv/RHaW+xfkf62AFw6qJEIDso3uWPG+G5SqGphvdCGqh1g8s=
+X-Probable-Spam: no
+X-Scanned-By: smtp.ucla.edu on 169.232.46.240
+
+This message is in MIME format.
+
+--=_5a2jf0k3ny4g
+Content-Type: text/plain;
+ charset=UTF-8
+Content-Description: Plaintext Version of Message
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+
+
+Okay well basically My testing was all on the snoopy cache. I used the foll=
+owing:=20
+
+TABLE 5: TESTING TIMING STATISTICS =20
+
+MAIN MEMORY   =20
+
+CACHE  =20
+
+L1  =20
+
+L2 =20
+
+Read Latency (cycles)  =20
+
+400   =20
+
+Hit Time (cycles)  =20
+
+1  =20
+
+4 =20
+
+Write Latency (cycles)  =20
+
+300   =20
+
+Miss Time (cycles)  =20
+
+3  =20
+
+7 =20
+
+Checkpoint Time (cycles)   =20
+
+1  =20
+
+TABLE 6: TESTING VARIABLES SETUP =20
+
+CARER  =20
+
+LRU =20
+
+TEST BENCH  =20
+
+Barnes, Radix, Raytrace, Ocean, FFT, Cholesky, FMM  =20
+
+Barnes, Radix, Raytrace, Ocean, FFT, Cholesky, FMM =20
+
+NUMBER OF PROCESSORS  =20
+
+4  =20
+
+16  =20
+
+64  =20
+
+4  =20
+
+16  =20
+
+64 =20
+
+L1 SIZE (KB)  =20
+
+16, 32, 64, 128  =20
+
+16, 32, 64, 128  =20
+
+16, 32, 64, 128  =20
+
+16, 128  =20
+
+16, 128  =20
+
+16, 128 =20
+
+L1 ASSOCIATIVITY  =20
+
+2, 4, 8, 16  =20
+
+2, 4, 8, 16  =20
+
+2, 4, 8, 16  =20
+
+2, 4, 8, 16  =20
+
+2, 4, 8, 16  =20
+
+2, 4, 8, 16 =20
+
+This was all with both my replacement policy of CARER and LRU for a smaller=
+ set of testing. Also I ran a total of 25 million instructions per each tes=
+t and my L2 cache size was constant for all tests at 1024kb (1MB). Hope tha=
+t helps. =20
+
+Regards, =20
+
+Matt =20
+
+Quoting Eric Chang <erichang@cs.ucla.edu>:=20
+
+> What configurations did you run it in? What I mean by that is did you
+> use Snoopy or Directory? And what cache sizes and number of
+> processors did you use? I just want to know the range. So far, only
+> fft is working well on my Directory simulator. I'm using 1kb L1 cache
+> and 2kb L2 cache to test. Although the cache sizes are small, I think
+> it's better to use for testing the Directory. My fft works up to 32
+> processors, but none of the other benchmarks are working properly.
+>
+> Eric
+>
+> ----- Mensaje original -----
+> De: "Matthew Karpeles" <mkarpeles5@ucla.edu>
+> Para: "Eric Chang" <erichang@cs.ucla.edu>
+> Enviados: Mi=C3=A9rcoles, 1 de Diciembre 2010 9:37:09
+> Asunto: Re: Question About Splash2 Benchmarks
+>
+> Not a problem. What I got working are Barnes, Radix, Raytrace, Ocean,
+> FFT, Cholesky and FMM. Let me know if you have any questions or if you
+> got anything else working.
+>
+> Regards,
+> Matt
+>
+> Quoting Eric Chang <erichang@cs.ucla.edu>:
+>
+>> Dear Matt:
+>>
+>> Hi, how are you doing? I was wondering if you could give me a list
+>> of the splash2 benchmarks that you got working on your simulator.
+>>
+>> Eric
+>>
+>
+>
+>
+
+--=_5a2jf0k3ny4g
+Content-Type: text/html;
+ charset=UTF-8
+Content-Description: HTML Version of Message
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns=3D"http://www.w3.org/1999/xhtml">
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <p class=3D"imp-signature"></p>
+        <p>
+            <br />
+            Okay well basically My testing was all on the snoopy cache. I u=
+sed the following:
+        </p>
+        <table style=3D"BORDER-BOTTOM: medium none; BORDER-LEFT: medium non=
+e; MARGIN: auto 6.75pt; WIDTH: 276.6pt; BORDER-COLLAPSE: collapse; BORDER-T=
+OP: medium none; BORDER-RIGHT: medium none" border=3D"1" cellspacing=3D"0" =
+cellpadding=3D"0" width=3D"369" align=3D"left">
+            <tbody>
+                <tr>
+                    <td style=3D"BORDER-BOTTOM: black 2.25pt solid; BORDER-=
+LEFT: black 2.25pt solid; PADDING-BOTTOM: 0in; BACKGROUND-COLOR: transparen=
+t; PADDING-LEFT: 5.4pt; WIDTH: 276.6pt; PADDING-RIGHT: 5.4pt; BORDER-TOP: b=
+lack 2.25pt solid; BORDER-RIGHT: black 2.25pt solid; PADDING-TOP: 0in" vali=
+gn=3D"top" width=3D"369" colspan=3D"6">
+                        <p style=3D"TEXT-ALIGN: center" align=3D"center">
+                            <strong><span style=3D"FONT-SIZE: 10pt">Table 5=
+: Testing Timing Statistics</span></strong>
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style=3D"BORDER-BOTTOM: windowtext 1.5pt double; BO=
+RDER-LEFT: windowtext 2.25pt solid; PADDING-BOTTOM: 0in; BACKGROUND-COLOR: =
+transparent; PADDING-LEFT: 5.4pt; WIDTH: 114.9pt; PADDING-RIGHT: 5.4pt; BOR=
+DER-TOP: #f0f0f0; BORDER-RIGHT: windowtext 2.25pt solid; PADDING-TOP: 0in" =
+valign=3D"top" width=3D"153" colspan=3D"2">
+                        <p style=3D"TEXT-ALIGN: center" align=3D"center">
+                            <strong><span style=3D"FONT-SIZE: 8pt">Main Mem=
+ory</span></strong>
+                        </p>
+                    </td>
+                    <td style=3D"BORDER-BOTTOM: windowtext 1pt solid; BORDE=
+R-LEFT: #f0f0f0; PADDING-BOTTOM: 0in; PADDING-LEFT: 5.4pt; WIDTH: 13.5pt; P=
+ADDING-RIGHT: 5.4pt; BACKGROUND: black; BORDER-TOP: #f0f0f0; BORDER-RIGHT: =
+black 2.25pt solid; PADDING-TOP: 0in" valign=3D"top" width=3D"18"></td>
+                    <td style=3D"BORDER-BOTTOM: windowtext 1.5pt double; BO=
+RDER-LEFT: #f0f0f0; PADDING-BOTTOM: 0in; BACKGROUND-COLOR: transparent; PAD=
+DING-LEFT: 5.4pt; WIDTH: 99.9pt; PADDING-RIGHT: 5.4pt; BORDER-TOP: #f0f0f0;=
+ BORDER-RIGHT: black 1pt solid; PADDING-TOP: 0in" valign=3D"top" width=3D"1=
+33">
+                        <p style=3D"TEXT-ALIGN: center" align=3D"center">
+                            <strong><span style=3D"FONT-SIZE: 10pt">Cache</=
+span></strong>
+                        </p>
+                    </td>
+                    <td style=3D"BORDER-BOTTOM: windowtext 1.5pt double; BO=
+RDER-LEFT: #f0f0f0; PADDING-BOTTOM: 0in; BACKGROUND-COLOR: transparent; PAD=
+DING-LEFT: 5.4pt; WIDTH: 24.15pt; PADDING-RIGHT: 5.4pt; BORDER-TOP: #f0f0f0=
+; BORDER-RIGHT: black 1pt solid; PADDING-TOP: 0in" valign=3D"top" width=3D"=
+32">
+                        <p style=3D"TEXT-ALIGN: center" align=3D"center">
+                            <strong><span style=3D"FONT-SIZE: 8pt">L1</span=
+></strong>
+                        </p>
+                    </td>
+                    <td style=3D"BORDER-BOTTOM: windowtext 1.5pt double; BO=
+RDER-LEFT: #f0f0f0; PADDING-BOTTOM: 0in; BACKGROUND-COLOR: transparent; PAD=
+DING-LEFT: 5.4pt; WIDTH: 24.15pt; PADDING-RIGHT: 5.4pt; BORDER-TOP: #f0f0f0=
+; BORDER-RIGHT: black 2.25pt solid; PADDING-TOP: 0in" valign=3D"top" width=
+=3D"32">
+                        <p style=3D"TEXT-ALIGN: center" align=3D"center">
+                            <strong><span style=3D"FONT-SIZE: 8pt">L2</span=
+></strong>
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style=3D"BORDER-BOTTOM: black 1pt solid; BORDER-LEF=
+T: black 2.25pt solid; PADDING-BOTTOM: 0in; BACKGROUND-COLOR: transparent; =
+PADDING-LEFT: 5.4pt; WIDTH: 88.1pt; PADDING-RIGHT: 5.4pt; BORDER-TOP: #f0f0=
+f0; BORDER-RIGHT: black 1pt solid; PADDING-TOP: 0in" valign=3D"top" width=
+=3D"117">
+                        <p style=3D"TEXT-ALIGN: center" align=3D"center">
+                            <span style=3D"FONT-SIZE: 8pt">Read Latency (cy=
+cles)</span>
+                        </p>
+                    </td>
+                    <td style=3D"BORDER-BOTTOM: windowtext 1pt solid; BORDE=
+R-LEFT: #f0f0f0; PADDING-BOTTOM: 0in; BACKGROUND-COLOR: transparent; PADDIN=
+G-LEFT: 5.4pt; WIDTH: 26.8pt; PADDING-RIGHT: 5.4pt; BORDER-TOP: #f0f0f0; BO=
+RDER-RIGHT: windowtext 2.25pt solid; PADDING-TOP: 0in" valign=3D"top" width=
+=3D"36">
+                        <p style=3D"TEXT-ALIGN: center" align=3D"center">
+                            <span style=3D"FONT-SIZE: 8pt">400</span>
+                        </p>
+                    </td>
+                    <td style=3D"BORDER-BOTTOM: windowtext 1pt solid; BORDE=
+R-LEFT: #f0f0f0; PADDING-BOTTOM: 0in; PADDING-LEFT: 5.4pt; WIDTH: 13.5pt; P=
+ADDING-RIGHT: 5.4pt; BACKGROUND: black; BORDER-TOP: #f0f0f0; BORDER-RIGHT: =
+black 2.25pt solid; PADDING-TOP: 0in" valign=3D"top" width=3D"18"></td>
+                    <td style=3D"BORDER-BOTTOM: black 1pt solid; BORDER-LEF=
+T: #f0f0f0; PADDING-BOTTOM: 0in; BACKGROUND-COLOR: transparent; PADDING-LEF=
+T: 5.4pt; WIDTH: 99.9pt; PADDING-RIGHT: 5.4pt; BORDER-TOP: #f0f0f0; BORDER-=
+RIGHT: black 1pt solid; PADDING-TOP: 0in" valign=3D"top" width=3D"133">
+                        <p style=3D"TEXT-ALIGN: center" align=3D"center">
+                            <span style=3D"FONT-SIZE: 8pt">Hit Time (cycles=
+)</span>
+                        </p>
+                    </td>
+                    <td style=3D"BORDER-BOTTOM: black 1pt solid; BORDER-LEF=
+T: #f0f0f0; PADDING-BOTTOM: 0in; BACKGROUND-COLOR: transparent; PADDING-LEF=
+T: 5.4pt; WIDTH: 24.15pt; PADDING-RIGHT: 5.4pt; BORDER-TOP: #f0f0f0; BORDER=
+-RIGHT: black 1pt solid; PADDING-TOP: 0in" valign=3D"top" width=3D"32">
+                        <p style=3D"TEXT-ALIGN: center" align=3D"center">
+                            <span style=3D"FONT-SIZE: 8pt">1</span>
+                        </p>
+                    </td>
+                    <td style=3D"BORDER-BOTTOM: black 1pt solid; BORDER-LEF=
+T: #f0f0f0; PADDING-BOTTOM: 0in; BACKGROUND-COLOR: transparent; PADDING-LEF=
+T: 5.4pt; WIDTH: 24.15pt; PADDING-RIGHT: 5.4pt; BORDER-TOP: #f0f0f0; BORDER=
+-RIGHT: black 2.25pt solid; PADDING-TOP: 0in" valign=3D"top" width=3D"32">
+                        <p style=3D"TEXT-ALIGN: center" align=3D"center">
+                            <span style=3D"FONT-SIZE: 8pt">4</span>
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style=3D"BORDER-BOTTOM: black 1pt solid; BORDER-LEF=
+T: black 2.25pt solid; PADDING-BOTTOM: 0in; BACKGROUND-COLOR: transparent; =
+PADDING-LEFT: 5.4pt; WIDTH: 88.1pt; PADDING-RIGHT: 5.4pt; BORDER-TOP: #f0f0=
+f0; BORDER-RIGHT: black 1pt solid; PADDING-TOP: 0in" valign=3D"top" width=
+=3D"117">
+                        <p style=3D"TEXT-ALIGN: center" align=3D"center">
+                            <span style=3D"FONT-SIZE: 8pt">Write Latency (c=
+ycles)</span>
+                        </p>
+                    </td>
+                    <td style=3D"BORDER-BOTTOM: black 1pt solid; BORDER-LEF=
+T: #f0f0f0; PADDING-BOTTOM: 0in; BACKGROUND-COLOR: transparent; PADDING-LEF=
+T: 5.4pt; WIDTH: 26.8pt; PADDING-RIGHT: 5.4pt; BORDER-TOP: #f0f0f0; BORDER-=
+RIGHT: windowtext 2.25pt solid; PADDING-TOP: 0in" valign=3D"top" width=3D"3=
+6">
+                        <p style=3D"TEXT-ALIGN: center" align=3D"center">
+                            <span style=3D"FONT-SIZE: 8pt">300</span>
+                        </p>
+                    </td>
+                    <td style=3D"BORDER-BOTTOM: windowtext 1pt solid; BORDE=
+R-LEFT: #f0f0f0; PADDING-BOTTOM: 0in; PADDING-LEFT: 5.4pt; WIDTH: 13.5pt; P=
+ADDING-RIGHT: 5.4pt; BACKGROUND: black; BORDER-TOP: #f0f0f0; BORDER-RIGHT: =
+black 2.25pt solid; PADDING-TOP: 0in" valign=3D"top" width=3D"18"></td>
+                    <td style=3D"BORDER-BOTTOM: black 1pt solid; BORDER-LEF=
+T: #f0f0f0; PADDING-BOTTOM: 0in; BACKGROUND-COLOR: transparent; PADDING-LEF=
+T: 5.4pt; WIDTH: 99.9pt; PADDING-RIGHT: 5.4pt; BORDER-TOP: #f0f0f0; BORDER-=
+RIGHT: black 1pt solid; PADDING-TOP: 0in" valign=3D"top" width=3D"133">
+                        <p style=3D"TEXT-ALIGN: center" align=3D"center">
+                            <span style=3D"FONT-SIZE: 8pt">Miss Time (cycle=
+s)</span>
+                        </p>
+                    </td>
+                    <td style=3D"BORDER-BOTTOM: black 1pt solid; BORDER-LEF=
+T: #f0f0f0; PADDING-BOTTOM: 0in; BACKGROUND-COLOR: transparent; PADDING-LEF=
+T: 5.4pt; WIDTH: 24.15pt; PADDING-RIGHT: 5.4pt; BORDER-TOP: #f0f0f0; BORDER=
+-RIGHT: black 1pt solid; PADDING-TOP: 0in" valign=3D"top" width=3D"32">
+                        <p style=3D"TEXT-ALIGN: center" align=3D"center">
+                            <span style=3D"FONT-SIZE: 8pt">3</span>
+                        </p>
+                    </td>
+                    <td style=3D"BORDER-BOTTOM: black 1pt solid; BORDER-LEF=
+T: #f0f0f0; PADDING-BOTTOM: 0in; BACKGROUND-COLOR: transparent; PADDING-LEF=
+T: 5.4pt; WIDTH: 24.15pt; PADDING-RIGHT: 5.4pt; BORDER-TOP: #f0f0f0; BORDER=
+-RIGHT: black 2.25pt solid; PADDING-TOP: 0in" valign=3D"top" width=3D"32">
+                        <p style=3D"TEXT-ALIGN: center" align=3D"center">
+                            <span style=3D"FONT-SIZE: 8pt">7</span>
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style=3D"BORDER-BOTTOM: black 2.25pt solid; BORDER-=
+LEFT: black 2.25pt solid; PADDING-BOTTOM: 0in; PADDING-LEFT: 5.4pt; WIDTH: =
+88.1pt; PADDING-RIGHT: 5.4pt; BACKGROUND: black; BORDER-TOP: #f0f0f0; BORDE=
+R-RIGHT: black 1pt solid; PADDING-TOP: 0in" valign=3D"top" width=3D"117"></=
+td>
+                    <td style=3D"BORDER-BOTTOM: windowtext 2.25pt solid; BO=
+RDER-LEFT: #f0f0f0; PADDING-BOTTOM: 0in; PADDING-LEFT: 5.4pt; WIDTH: 26.8pt=
+; PADDING-RIGHT: 5.4pt; BACKGROUND: black; BORDER-TOP: #f0f0f0; BORDER-RIGH=
+T: windowtext 2.25pt solid; PADDING-TOP: 0in" valign=3D"top" width=3D"36"><=
+/td>
+                    <td style=3D"BORDER-BOTTOM: black 2.25pt solid; BORDER-=
+LEFT: #f0f0f0; PADDING-BOTTOM: 0in; PADDING-LEFT: 5.4pt; WIDTH: 13.5pt; PAD=
+DING-RIGHT: 5.4pt; BACKGROUND: black; BORDER-TOP: #f0f0f0; BORDER-RIGHT: bl=
+ack 2.25pt solid; PADDING-TOP: 0in" valign=3D"top" width=3D"18"></td>
+                    <td style=3D"BORDER-BOTTOM: black 2.25pt solid; BORDER-=
+LEFT: #f0f0f0; PADDING-BOTTOM: 0in; BACKGROUND-COLOR: transparent; PADDING-=
+LEFT: 5.4pt; WIDTH: 99.9pt; PADDING-RIGHT: 5.4pt; BORDER-TOP: #f0f0f0; BORD=
+ER-RIGHT: black 1pt solid; PADDING-TOP: 0in" valign=3D"top" width=3D"133">
+                        <p style=3D"TEXT-ALIGN: center" align=3D"center">
+                            <span style=3D"FONT-SIZE: 8pt">Checkpoint Time =
+(cycles)</span>
+                        </p>
+                    </td>
+                    <td style=3D"BORDER-BOTTOM: black 2.25pt solid; BORDER-=
+LEFT: #f0f0f0; PADDING-BOTTOM: 0in; BACKGROUND-COLOR: transparent; PADDING-=
+LEFT: 5.4pt; WIDTH: 24.15pt; PADDING-RIGHT: 5.4pt; BORDER-TOP: #f0f0f0; BOR=
+DER-RIGHT: black 1pt solid; PADDING-TOP: 0in" valign=3D"top" width=3D"32">
+                        <p style=3D"TEXT-ALIGN: center" align=3D"center">
+                            <span style=3D"FONT-SIZE: 8pt">1</span>
+                        </p>
+                    </td>
+                    <td style=3D"BORDER-BOTTOM: black 2.25pt solid; BORDER-=
+LEFT: #f0f0f0; PADDING-BOTTOM: 0in; PADDING-LEFT: 5.4pt; WIDTH: 24.15pt; PA=
+DDING-RIGHT: 5.4pt; BACKGROUND: black; BORDER-TOP: #f0f0f0; BORDER-RIGHT: b=
+lack 2.25pt solid; PADDING-TOP: 0in" valign=3D"top" width=3D"32"></td>
+                </tr>
+            </tbody>
+        </table>
+        <table style=3D"BORDER-BOTTOM: medium none; BORDER-LEFT: medium non=
+e; MARGIN: auto 6.75pt; WIDTH: 445.35pt; BORDER-COLLAPSE: collapse; BORDER-=
+TOP: medium none; BORDER-RIGHT: medium none" border=3D"1" cellspacing=3D"0"=
+ cellpadding=3D"0" width=3D"594" align=3D"left">
+            <tbody>
+                <tr>
+                    <td style=3D"BORDER-BOTTOM: black 2.25pt solid; BORDER-=
+LEFT: black 2.25pt solid; PADDING-BOTTOM: 0in; PADDING-LEFT: 5.4pt; WIDTH: =
+65.25pt; PADDING-RIGHT: 5.4pt; BACKGROUND: black; BORDER-TOP: black 2.25pt =
+solid; BORDER-RIGHT: black 2.25pt solid; PADDING-TOP: 0in" valign=3D"top" w=
+idth=3D"87"></td>
+                    <td style=3D"BORDER-BOTTOM: black 2.25pt solid; BORDER-=
+LEFT: #f0f0f0; PADDING-BOTTOM: 0in; BACKGROUND-COLOR: transparent; PADDING-=
+LEFT: 5.4pt; WIDTH: 380.1pt; PADDING-RIGHT: 5.4pt; BORDER-TOP: black 2.25pt=
+ solid; BORDER-RIGHT: black 2.25pt solid; PADDING-TOP: 0in" valign=3D"top" =
+width=3D"507" colspan=3D"6">
+                        <p style=3D"TEXT-ALIGN: center" align=3D"center">
+                            <strong><span style=3D"FONT-SIZE: 10pt">Table 6=
+: Testing Variables Setup</span></strong>
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style=3D"BORDER-BOTTOM: windowtext 2.25pt solid; BO=
+RDER-LEFT: black 2.25pt solid; PADDING-BOTTOM: 0in; PADDING-LEFT: 5.4pt; WI=
+DTH: 65.25pt; PADDING-RIGHT: 5.4pt; BACKGROUND: black; BORDER-TOP: #f0f0f0;=
+ BORDER-RIGHT: black 2.25pt solid; PADDING-TOP: 0in" valign=3D"top" width=
+=3D"87"></td>
+                    <td style=3D"BORDER-BOTTOM: windowtext 1.5pt double; BO=
+RDER-LEFT: #f0f0f0; PADDING-BOTTOM: 0in; BACKGROUND-COLOR: transparent; PAD=
+DING-LEFT: 5.4pt; WIDTH: 188.4pt; PADDING-RIGHT: 5.4pt; BORDER-TOP: #f0f0f0=
+; BORDER-RIGHT: black 2.25pt solid; PADDING-TOP: 0in" valign=3D"top" width=
+=3D"251" colspan=3D"3">
+                        <p style=3D"TEXT-ALIGN: center" align=3D"center">
+                            <strong><span style=3D"FONT-SIZE: 8pt">CARER</s=
+pan></strong>
+                        </p>
+                    </td>
+                    <td style=3D"BORDER-BOTTOM: windowtext 1.5pt double; BO=
+RDER-LEFT: #f0f0f0; PADDING-BOTTOM: 0in; BACKGROUND-COLOR: transparent; PAD=
+DING-LEFT: 5.4pt; WIDTH: 191.7pt; PADDING-RIGHT: 5.4pt; BORDER-TOP: #f0f0f0=
+; BORDER-RIGHT: black 2.25pt solid; PADDING-TOP: 0in" valign=3D"top" width=
+=3D"256" colspan=3D"3">
+                        <p style=3D"TEXT-ALIGN: center" align=3D"center">
+                            <strong><span style=3D"FONT-SIZE: 8pt">LRU</spa=
+n></strong>
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style=3D"BORDER-BOTTOM: windowtext 1pt solid; BORDE=
+R-LEFT: black 2.25pt solid; PADDING-BOTTOM: 0in; BACKGROUND-COLOR: transpar=
+ent; PADDING-LEFT: 5.4pt; WIDTH: 65.25pt; PADDING-RIGHT: 5.4pt; BORDER-TOP:=
+ #f0f0f0; BORDER-RIGHT: black 2.25pt solid; PADDING-TOP: 0in" valign=3D"top=
+" width=3D"87">
+                        <p style=3D"TEXT-ALIGN: center" align=3D"center">
+                            <strong><span style=3D"FONT-SIZE: 8pt">Test Ben=
+ch</span></strong>
+                        </p>
+                    </td>
+                    <td style=3D"BORDER-BOTTOM: windowtext 1pt solid; BORDE=
+R-LEFT: #f0f0f0; PADDING-BOTTOM: 0in; BACKGROUND-COLOR: transparent; PADDIN=
+G-LEFT: 5.4pt; WIDTH: 188.4pt; PADDING-RIGHT: 5.4pt; BORDER-TOP: #f0f0f0; B=
+ORDER-RIGHT: black 2.25pt solid; PADDING-TOP: 0in" width=3D"251" colspan=3D=
+"3">
+                        <p style=3D"TEXT-ALIGN: center" align=3D"center">
+                            <span style=3D"FONT-SIZE: 8pt">Barnes, Radix, R=
+aytrace, Ocean, FFT, Cholesky, FMM</span>
+                        </p>
+                    </td>
+                    <td style=3D"BORDER-BOTTOM: windowtext 1pt solid; BORDE=
+R-LEFT: #f0f0f0; PADDING-BOTTOM: 0in; BACKGROUND-COLOR: transparent; PADDIN=
+G-LEFT: 5.4pt; WIDTH: 191.7pt; PADDING-RIGHT: 5.4pt; BORDER-TOP: #f0f0f0; B=
+ORDER-RIGHT: black 2.25pt solid; PADDING-TOP: 0in" width=3D"256" colspan=3D=
+"3">
+                        <p style=3D"TEXT-ALIGN: center" align=3D"center">
+                            <span style=3D"FONT-SIZE: 8pt">Barnes, Radix, R=
+aytrace, Ocean, FFT, Cholesky, FMM</span>
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style=3D"BORDER-BOTTOM: windowtext 1pt solid; BORDE=
+R-LEFT: black 2.25pt solid; PADDING-BOTTOM: 0in; BACKGROUND-COLOR: transpar=
+ent; PADDING-LEFT: 5.4pt; WIDTH: 65.25pt; PADDING-RIGHT: 5.4pt; BORDER-TOP:=
+ #f0f0f0; BORDER-RIGHT: black 2.25pt solid; PADDING-TOP: 0in" valign=3D"top=
+" width=3D"87">
+                        <p style=3D"TEXT-ALIGN: center" align=3D"center">
+                            <strong><span style=3D"FONT-SIZE: 8pt">Number o=
+f Processors</span></strong>
+                        </p>
+                    </td>
+                    <td style=3D"BORDER-BOTTOM: windowtext 1pt solid; BORDE=
+R-LEFT: #f0f0f0; PADDING-BOTTOM: 0in; BACKGROUND-COLOR: transparent; PADDIN=
+G-LEFT: 5.4pt; WIDTH: 62.8pt; PADDING-RIGHT: 5.4pt; BORDER-TOP: #f0f0f0; BO=
+RDER-RIGHT: black 1pt solid; PADDING-TOP: 0in" width=3D"84">
+                        <p style=3D"TEXT-ALIGN: center" align=3D"center">
+                            <span style=3D"FONT-SIZE: 8pt">4</span>
+                        </p>
+                    </td>
+                    <td style=3D"BORDER-BOTTOM: windowtext 1pt solid; BORDE=
+R-LEFT: #f0f0f0; PADDING-BOTTOM: 0in; BACKGROUND-COLOR: transparent; PADDIN=
+G-LEFT: 5.4pt; WIDTH: 62.8pt; PADDING-RIGHT: 5.4pt; BORDER-TOP: #f0f0f0; BO=
+RDER-RIGHT: black 1pt solid; PADDING-TOP: 0in" width=3D"84">
+                        <p style=3D"TEXT-ALIGN: center" align=3D"center">
+                            <span style=3D"FONT-SIZE: 8pt">16</span>
+                        </p>
+                    </td>
+                    <td style=3D"BORDER-BOTTOM: windowtext 1pt solid; BORDE=
+R-LEFT: #f0f0f0; PADDING-BOTTOM: 0in; BACKGROUND-COLOR: transparent; PADDIN=
+G-LEFT: 5.4pt; WIDTH: 62.8pt; PADDING-RIGHT: 5.4pt; BORDER-TOP: #f0f0f0; BO=
+RDER-RIGHT: black 2.25pt solid; PADDING-TOP: 0in" width=3D"84">
+                        <p style=3D"TEXT-ALIGN: center" align=3D"center">
+                            <span style=3D"FONT-SIZE: 8pt">64</span>
+                        </p>
+                    </td>
+                    <td style=3D"BORDER-BOTTOM: windowtext 1pt solid; BORDE=
+R-LEFT: #f0f0f0; PADDING-BOTTOM: 0in; BACKGROUND-COLOR: transparent; PADDIN=
+G-LEFT: 5.4pt; WIDTH: 0.65in; PADDING-RIGHT: 5.4pt; BORDER-TOP: #f0f0f0; BO=
+RDER-RIGHT: black 1pt solid; PADDING-TOP: 0in" width=3D"62">
+                        <p style=3D"TEXT-ALIGN: center" align=3D"center">
+                            <span style=3D"FONT-SIZE: 8pt">4</span>
+                        </p>
+                    </td>
+                    <td style=3D"BORDER-BOTTOM: windowtext 1pt solid; BORDE=
+R-LEFT: #f0f0f0; PADDING-BOTTOM: 0in; BACKGROUND-COLOR: transparent; PADDIN=
+G-LEFT: 5.4pt; WIDTH: 0.65in; PADDING-RIGHT: 5.4pt; BORDER-TOP: #f0f0f0; BO=
+RDER-RIGHT: black 1pt solid; PADDING-TOP: 0in" width=3D"62">
+                        <p style=3D"TEXT-ALIGN: center" align=3D"center">
+                            <span style=3D"FONT-SIZE: 8pt">16</span>
+                        </p>
+                    </td>
+                    <td style=3D"BORDER-BOTTOM: windowtext 1pt solid; BORDE=
+R-LEFT: #f0f0f0; PADDING-BOTTOM: 0in; BACKGROUND-COLOR: transparent; PADDIN=
+G-LEFT: 5.4pt; WIDTH: 98.1pt; PADDING-RIGHT: 5.4pt; BORDER-TOP: #f0f0f0; BO=
+RDER-RIGHT: black 2.25pt solid; PADDING-TOP: 0in" width=3D"131">
+                        <p style=3D"TEXT-ALIGN: center" align=3D"center">
+                            <span style=3D"FONT-SIZE: 8pt">64</span>
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style=3D"BORDER-BOTTOM: windowtext 1pt solid; BORDE=
+R-LEFT: black 2.25pt solid; PADDING-BOTTOM: 0in; BACKGROUND-COLOR: transpar=
+ent; PADDING-LEFT: 5.4pt; WIDTH: 65.25pt; PADDING-RIGHT: 5.4pt; BORDER-TOP:=
+ #f0f0f0; BORDER-RIGHT: black 2.25pt solid; PADDING-TOP: 0in" valign=3D"top=
+" width=3D"87">
+                        <p style=3D"TEXT-ALIGN: center" align=3D"center">
+                            <strong><span style=3D"FONT-SIZE: 8pt">L1 Size =
+(kb)</span></strong>
+                        </p>
+                    </td>
+                    <td style=3D"BORDER-BOTTOM: windowtext 1pt solid; BORDE=
+R-LEFT: #f0f0f0; PADDING-BOTTOM: 0in; BACKGROUND-COLOR: transparent; PADDIN=
+G-LEFT: 5.4pt; WIDTH: 62.8pt; PADDING-RIGHT: 5.4pt; BORDER-TOP: #f0f0f0; BO=
+RDER-RIGHT: black 1pt solid; PADDING-TOP: 0in" width=3D"84">
+                        <p style=3D"TEXT-ALIGN: center" align=3D"center">
+                            <span style=3D"FONT-SIZE: 8pt">16, 32, 64, 128<=
+/span>
+                        </p>
+                    </td>
+                    <td style=3D"BORDER-BOTTOM: windowtext 1pt solid; BORDE=
+R-LEFT: #f0f0f0; PADDING-BOTTOM: 0in; BACKGROUND-COLOR: transparent; PADDIN=
+G-LEFT: 5.4pt; WIDTH: 62.8pt; PADDING-RIGHT: 5.4pt; BORDER-TOP: #f0f0f0; BO=
+RDER-RIGHT: black 1pt solid; PADDING-TOP: 0in" width=3D"84">
+                        <p style=3D"TEXT-ALIGN: center" align=3D"center">
+                            <span style=3D"FONT-SIZE: 8pt">16, 32, 64, 128<=
+/span>
+                        </p>
+                    </td>
+                    <td style=3D"BORDER-BOTTOM: windowtext 1pt solid; BORDE=
+R-LEFT: #f0f0f0; PADDING-BOTTOM: 0in; BACKGROUND-COLOR: transparent; PADDIN=
+G-LEFT: 5.4pt; WIDTH: 62.8pt; PADDING-RIGHT: 5.4pt; BORDER-TOP: #f0f0f0; BO=
+RDER-RIGHT: black 2.25pt solid; PADDING-TOP: 0in" width=3D"84">
+                        <p style=3D"TEXT-ALIGN: center" align=3D"center">
+                            <span style=3D"FONT-SIZE: 8pt">16, 32, 64, 128<=
+/span>
+                        </p>
+                    </td>
+                    <td style=3D"BORDER-BOTTOM: windowtext 1pt solid; BORDE=
+R-LEFT: #f0f0f0; PADDING-BOTTOM: 0in; BACKGROUND-COLOR: transparent; PADDIN=
+G-LEFT: 5.4pt; WIDTH: 0.65in; PADDING-RIGHT: 5.4pt; BORDER-TOP: #f0f0f0; BO=
+RDER-RIGHT: black 1pt solid; PADDING-TOP: 0in" width=3D"62">
+                        <p style=3D"TEXT-ALIGN: center" align=3D"center">
+                            <span style=3D"FONT-SIZE: 8pt">16, 128</span>
+                        </p>
+                    </td>
+                    <td style=3D"BORDER-BOTTOM: windowtext 1pt solid; BORDE=
+R-LEFT: #f0f0f0; PADDING-BOTTOM: 0in; BACKGROUND-COLOR: transparent; PADDIN=
+G-LEFT: 5.4pt; WIDTH: 0.65in; PADDING-RIGHT: 5.4pt; BORDER-TOP: #f0f0f0; BO=
+RDER-RIGHT: black 1pt solid; PADDING-TOP: 0in" width=3D"62">
+                        <p style=3D"TEXT-ALIGN: center" align=3D"center">
+                            <span style=3D"FONT-SIZE: 8pt">16, 128</span>
+                        </p>
+                    </td>
+                    <td style=3D"BORDER-BOTTOM: windowtext 1pt solid; BORDE=
+R-LEFT: #f0f0f0; PADDING-BOTTOM: 0in; BACKGROUND-COLOR: transparent; PADDIN=
+G-LEFT: 5.4pt; WIDTH: 98.1pt; PADDING-RIGHT: 5.4pt; BORDER-TOP: #f0f0f0; BO=
+RDER-RIGHT: black 2.25pt solid; PADDING-TOP: 0in" width=3D"131">
+                        <p style=3D"TEXT-ALIGN: center" align=3D"center">
+                            <span style=3D"FONT-SIZE: 8pt">16, 128</span>
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style=3D"BORDER-BOTTOM: black 2.25pt solid; BORDER-=
+LEFT: black 2.25pt solid; PADDING-BOTTOM: 0in; BACKGROUND-COLOR: transparen=
+t; PADDING-LEFT: 5.4pt; WIDTH: 65.25pt; PADDING-RIGHT: 5.4pt; BORDER-TOP: #=
+f0f0f0; BORDER-RIGHT: black 2.25pt solid; PADDING-TOP: 0in" valign=3D"top" =
+width=3D"87">
+                        <p style=3D"TEXT-ALIGN: center" align=3D"center">
+                            <strong><span style=3D"FONT-SIZE: 8pt">L1 Assoc=
+iativity</span></strong>
+                        </p>
+                    </td>
+                    <td style=3D"BORDER-BOTTOM: black 2.25pt solid; BORDER-=
+LEFT: #f0f0f0; PADDING-BOTTOM: 0in; BACKGROUND-COLOR: transparent; PADDING-=
+LEFT: 5.4pt; WIDTH: 62.8pt; PADDING-RIGHT: 5.4pt; BORDER-TOP: #f0f0f0; BORD=
+ER-RIGHT: black 1pt solid; PADDING-TOP: 0in" width=3D"84">
+                        <p style=3D"TEXT-ALIGN: center" align=3D"center">
+                            <span style=3D"FONT-SIZE: 8pt">2, 4, 8, 16</spa=
+n>
+                        </p>
+                    </td>
+                    <td style=3D"BORDER-BOTTOM: black 2.25pt solid; BORDER-=
+LEFT: #f0f0f0; PADDING-BOTTOM: 0in; BACKGROUND-COLOR: transparent; PADDING-=
+LEFT: 5.4pt; WIDTH: 62.8pt; PADDING-RIGHT: 5.4pt; BORDER-TOP: #f0f0f0; BORD=
+ER-RIGHT: black 1pt solid; PADDING-TOP: 0in" width=3D"84">
+                        <p style=3D"TEXT-ALIGN: center" align=3D"center">
+                            <span style=3D"FONT-SIZE: 8pt">2, 4, 8, 16</spa=
+n>
+                        </p>
+                    </td>
+                    <td style=3D"BORDER-BOTTOM: black 2.25pt solid; BORDER-=
+LEFT: #f0f0f0; PADDING-BOTTOM: 0in; BACKGROUND-COLOR: transparent; PADDING-=
+LEFT: 5.4pt; WIDTH: 62.8pt; PADDING-RIGHT: 5.4pt; BORDER-TOP: #f0f0f0; BORD=
+ER-RIGHT: black 2.25pt solid; PADDING-TOP: 0in" width=3D"84">
+                        <p style=3D"TEXT-ALIGN: center" align=3D"center">
+                            <span style=3D"FONT-SIZE: 8pt">2, 4, 8, 16</spa=
+n>
+                        </p>
+                    </td>
+                    <td style=3D"BORDER-BOTTOM: black 2.25pt solid; BORDER-=
+LEFT: #f0f0f0; PADDING-BOTTOM: 0in; BACKGROUND-COLOR: transparent; PADDING-=
+LEFT: 5.4pt; WIDTH: 0.65in; PADDING-RIGHT: 5.4pt; BORDER-TOP: #f0f0f0; BORD=
+ER-RIGHT: black 1pt solid; PADDING-TOP: 0in" width=3D"62">
+                        <p style=3D"TEXT-ALIGN: center" align=3D"center">
+                            <span style=3D"FONT-SIZE: 8pt">2, 4, 8, 16</spa=
+n>
+                        </p>
+                    </td>
+                    <td style=3D"BORDER-BOTTOM: black 2.25pt solid; BORDER-=
+LEFT: #f0f0f0; PADDING-BOTTOM: 0in; BACKGROUND-COLOR: transparent; PADDING-=
+LEFT: 5.4pt; WIDTH: 0.65in; PADDING-RIGHT: 5.4pt; BORDER-TOP: #f0f0f0; BORD=
+ER-RIGHT: black 1pt solid; PADDING-TOP: 0in" width=3D"62">
+                        <p style=3D"TEXT-ALIGN: center" align=3D"center">
+                            <span style=3D"FONT-SIZE: 8pt">2, 4, 8, 16</spa=
+n>
+                        </p>
+                    </td>
+                    <td style=3D"BORDER-BOTTOM: black 2.25pt solid; BORDER-=
+LEFT: #f0f0f0; PADDING-BOTTOM: 0in; BACKGROUND-COLOR: transparent; PADDING-=
+LEFT: 5.4pt; WIDTH: 98.1pt; PADDING-RIGHT: 5.4pt; BORDER-TOP: #f0f0f0; BORD=
+ER-RIGHT: black 2.25pt solid; PADDING-TOP: 0in" width=3D"131">
+                        <p style=3D"TEXT-ALIGN: center" align=3D"center">
+                            <span style=3D"FONT-SIZE: 8pt">2, 4, 8, 16</spa=
+n>
+                        </p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <p>
+            &#160;
+        </p>
+        <p>
+            <br />
+            <br />
+            &#160;
+        </p>
+        <p>
+            &#160;
+        </p>
+        <p>
+            &#160;
+        </p>
+        <p>
+            This was all with both my replacement policy of CARER and LRU f=
+or a smaller set of testing. Also I ran a total of 25 million instructions =
+per each test and my L2 cache size was constant for all tests at 1024kb (1M=
+B).&#160;Hope that helps.
+        </p>
+        <p>
+            Regards,
+        </p>
+        <p>
+            Matt
+        </p>
+        <p>
+            &#160;
+        </p>
+        <p>
+            &#160;
+        </p>
+        <p>
+            Quoting Eric Chang &lt;erichang@cs.ucla.edu&gt;:<br />
+            <br />
+            &gt; What configurations did you run it in? What I mean by that=
+ is did you<br />
+            &gt; use Snoopy or Directory? And what cache sizes and number o=
+f<br />
+            &gt; processors did you use? I just want to know the range. So =
+far, only<br />
+            &gt; fft is working well on my Directory simulator. I'm using 1=
+kb L1 cache<br />
+            &gt; and 2kb L2 cache to test. Although the cache sizes are sma=
+ll, I think<br />
+            &gt; it's better to use for testing the Directory. My fft works=
+ up to 32<br />
+            &gt; processors, but none of the other benchmarks are working p=
+roperly.<br />
+            &gt;<br />
+            &gt; Eric<br />
+            &gt;<br />
+            &gt; ----- Mensaje original -----<br />
+            &gt; De: "Matthew Karpeles" &lt;mkarpeles5@ucla.edu&gt;<br />
+            &gt; Para: "Eric Chang" &lt;erichang@cs.ucla.edu&gt;<br />
+            &gt; Enviados: Mi=C3=A9rcoles, 1 de Diciembre 2010 9:37:09<br /=
+>
+            &gt; Asunto: Re: Question About Splash2 Benchmarks<br />
+            &gt;<br />
+            &gt; Not a problem. What I got working are Barnes, Radix, Raytr=
+ace, Ocean,<br />
+            &gt; FFT, Cholesky and FMM. Let me know if you have any questio=
+ns or if you<br />
+            &gt; got anything else working.<br />
+            &gt;<br />
+            &gt; Regards,<br />
+            &gt; Matt<br />
+            &gt;<br />
+            &gt; Quoting Eric Chang &lt;erichang@cs.ucla.edu&gt;:<br />
+            &gt;<br />
+            &gt;&gt; Dear Matt:<br />
+            &gt;&gt;<br />
+            &gt;&gt; Hi, how are you doing? I was wondering if you could gi=
+ve me a list<br />
+            &gt;&gt; of the splash2 benchmarks that you got working on your=
+ simulator.<br />
+            &gt;&gt;<br />
+            &gt;&gt; Eric<br />
+            &gt;&gt;<br />
+            &gt;<br />
+            &gt;<br />
+            &gt;<br />
+            <br />
+        </p>
+    </body>
+</html>
+--=_5a2jf0k3ny4g--
