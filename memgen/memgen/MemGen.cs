@@ -368,7 +368,7 @@
 	}
     public static void OutOriginDirectoryMOESIMemory(int nodeCount, int l1, int l2)
     {
-        output = new System.IO.StreamWriter("memoryConfigs\\OriginDirectoryMOESI_p" + nodeCount + "_c" + l1 + "L1-" + l2 + "L2.memory");
+        output = new System.IO.StreamWriter("memoryConfigs\\origin-mesi-p" + nodeCount + "-c" + l1 + "L1-" + l2 + "L2.memory");
         index = 1;
         output.WriteLine("Begin");
         //MainMemory(400, 300);

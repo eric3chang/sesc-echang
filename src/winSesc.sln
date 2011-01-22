@@ -31,6 +31,7 @@ Global
 		fft-dir-msi-008-0001-0002-00|Win32 = fft-dir-msi-008-0001-0002-00|Win32
 		fft-dir-msi-016-0001-0002-00|Win32 = fft-dir-msi-016-0001-0002-00|Win32
 		fft-dir-msi-032-0001-0002-00|Win32 = fft-dir-msi-032-0001-0002-00|Win32
+		fft-origin-mesi-2-1-2|Win32 = fft-origin-mesi-2-1-2|Win32
 		fft-origin-moesi-002-0001-0002|Win32 = fft-origin-moesi-002-0001-0002|Win32
 		fft-snoopy-moesi-002-0001-0002|Win32 = fft-snoopy-moesi-002-0001-0002|Win32
 		fft-snoopy-moesi-064-0016-1024|Win32 = fft-snoopy-moesi-064-0016-1024|Win32
@@ -95,6 +96,8 @@ Global
 		{A54864F1-6C99-4165-A176-888B5427ADC2}.fft-dir-msi-016-0001-0002-00|Win32.Build.0 = fft-dir-msi-016-0001-0002-00|Win32
 		{A54864F1-6C99-4165-A176-888B5427ADC2}.fft-dir-msi-032-0001-0002-00|Win32.ActiveCfg = fft-dir-msi-032-0001-0002-00|Win32
 		{A54864F1-6C99-4165-A176-888B5427ADC2}.fft-dir-msi-032-0001-0002-00|Win32.Build.0 = fft-dir-msi-032-0001-0002-00|Win32
+		{A54864F1-6C99-4165-A176-888B5427ADC2}.fft-origin-mesi-2-1-2|Win32.ActiveCfg = fft-origin-mesi-2-1-2|Win32
+		{A54864F1-6C99-4165-A176-888B5427ADC2}.fft-origin-mesi-2-1-2|Win32.Build.0 = fft-origin-mesi-2-1-2|Win32
 		{A54864F1-6C99-4165-A176-888B5427ADC2}.fft-origin-moesi-002-0001-0002|Win32.ActiveCfg = fft-origin-moesi-002-0001-0002|Win32
 		{A54864F1-6C99-4165-A176-888B5427ADC2}.fft-origin-moesi-002-0001-0002|Win32.Build.0 = fft-origin-moesi-002-0001-0002|Win32
 		{A54864F1-6C99-4165-A176-888B5427ADC2}.fft-snoopy-moesi-002-0001-0002|Win32.ActiveCfg = fft-snoopy-moesi-002-0001-0002|Win32
