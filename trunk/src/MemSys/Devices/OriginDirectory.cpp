@@ -2178,12 +2178,14 @@ namespace Memory
 
    void OriginDirectory::OnDirectoryExclusive(const BaseMsg* msg, NodeID src, DirectoryData& directoryData, bool isFromMemory)
 	{
-   	DirectoryState& state = directoryData.state;
-   	HashSet<NodeID>& sharers = directoryData.sharers;
+   	const ReadMsg* firstRequest = directoryData.firstRequest;
+		DebugAssertWithMessageID(firstRequest==NULL, msg->MsgID());
+   	NodeID& firstRequestSrc = directoryData.firstRequestSrc;
+		DebugAssertWithMessageID(firstRequestSrc==InvalidNodeID, msg->MsgID());
    	NodeID& owner = directoryData.owner;
    	NodeID& previousOwner = directoryData.previousOwner;
-   	const ReadMsg* firstRequest = directoryData.firstRequest;
-   	NodeID& firstRequestSrc = directoryData.firstRequestSrc;
+   	HashSet<NodeID>& sharers = directoryData.sharers;
+   	DirectoryState& state = directoryData.state;
 
    	DebugAssertWithMessageID(sharers.size()==0, msg->MsgID());
 
@@ -2193,6 +2195,8 @@ namespace Memory
    		if (owner==src)
    		{
    			state = ds_ExclusiveMemoryAccess;
+				firstRequest = m;
+				firstRequestSrc = src;
    			SendRequestToMemory(m);
    		}
    		else if (m->requestingExclusive && owner!=src)
@@ -2485,6 +2489,9 @@ namespace Memory
 	{
 		DirectoryState& state = directoryData.state;
 		const BaseMsg* firstRequest = directoryData.firstRequest;
+		DebugAssertWithMessageID(firstRequest==NULL, msg->MsgID());
+		NodeID& firstRequestSrc = directoryData.firstRequestSrc;
+		DebugAssertWithMessageID(firstRequestSrc==InvalidNodeID, msg->MsgID());
 		NodeID& owner = directoryData.owner;
 
 		if (msg->Type()==mt_Read)
@@ -2493,6 +2500,7 @@ namespace Memory
 			state = ds_ExclusiveMemoryAccess;
 			DebugAssertWithMessageID(firstRequest==NULL, m->MsgID());
 			firstRequest = m;
+			firstRequestSrc = src;
 			SendRequestToMemory(m);
 			DebugAssertWithMessageID(owner==InvalidNodeID,m->MsgID());
 			owner = src;
