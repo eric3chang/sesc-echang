@@ -13,8 +13,8 @@ Int NodeName 1
 End
 Root CalculatorConfig Begin
 String Type RandomLoaded
-Int MinTime 4
-Int MaxTime 20
+Int MinTime 57
+Int MaxTime 66
 Int TimePerByte 1
 Real TimePerPacket 0.1
 Int EnforceOrder 1
@@ -33,7 +33,7 @@ Int LineSize 64
 Int Associativity 4
 Int SetCount 8
 Int HitTime 1
-Int MissTime 3
+Int MissTime 2
 Int TopCache 1
 String EvictionPolicy LRU
 End
@@ -44,8 +44,8 @@ Int DeviceID 4
 Int LineSize 64
 Int Associativity 4
 Int SetCount 16
-Int HitTime 4
-Int MissTime 7
+Int HitTime 10
+Int MissTime 13
 Int TopCache 0
 String EvictionPolicy LRU
 End
@@ -69,8 +69,8 @@ Root MemoryDevice Begin
 String DeviceType TestMemory
 String DeviceName MainMemory_0
 Int DeviceID 6
-Int ReadLatency 400
-Int WriteLatency 300
+Int ReadLatency 57
+Int WriteLatency 66
 End
 Root Connection Begin
 String FromDevice ProcessorInterface_0
@@ -120,7 +120,7 @@ Int LineSize 64
 Int Associativity 4
 Int SetCount 8
 Int HitTime 1
-Int MissTime 3
+Int MissTime 2
 Int TopCache 1
 String EvictionPolicy LRU
 End
@@ -131,8 +131,8 @@ Int DeviceID 9
 Int LineSize 64
 Int Associativity 4
 Int SetCount 16
-Int HitTime 4
-Int MissTime 7
+Int HitTime 10
+Int MissTime 13
 Int TopCache 0
 String EvictionPolicy LRU
 End
@@ -156,8 +156,8 @@ Root MemoryDevice Begin
 String DeviceType TestMemory
 String DeviceName MainMemory_1
 Int DeviceID 11
-Int ReadLatency 400
-Int WriteLatency 300
+Int ReadLatency 57
+Int WriteLatency 66
 End
 Root Connection Begin
 String FromDevice ProcessorInterface_1
