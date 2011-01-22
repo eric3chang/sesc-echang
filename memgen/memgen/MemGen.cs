@@ -6,7 +6,50 @@
 		Random,
 	}
 
-    //public static int Get
+    public class NetworkTimingData
+    {
+        public int randomMin = 0;
+        public int randomMax = 0;
+    }
+
+    public static NetworkTimingData GetNetworkTimingData(int nodeCount)
+    {
+        NetworkTimingData _ret = new NetworkTimingData();
+
+        switch (nodeCount)
+        {
+            case 4:
+                _ret.randomMin = 100;
+                _ret.randomMax = 116;
+                break;
+            case 8:
+                _ret.randomMin = 131;
+                _ret.randomMax = 152;
+                break;
+            case 16:
+                _ret.randomMin = 135;
+                _ret.randomMax = 156;
+                break;
+            case 32:
+                _ret.randomMin = 143;
+                _ret.randomMax = 166;
+                break;
+            case 64:
+                _ret.randomMin = 161;
+                _ret.randomMax = 186;
+                break;
+            case 128:
+                _ret.randomMin = 175;
+                _ret.randomMax = 202;
+                break;
+            default:
+                _ret.randomMin = 57;
+                _ret.randomMax = 66;
+                break;
+        }
+
+        return _ret;
+    }
 
 	public static void AddCache(string deviceName, int associativity, int setCount, int lineSize, int missTime, int hitTime, EvictionPolicy ev)
 	{
@@ -114,7 +157,7 @@
 		output.WriteLine("End");
 	}
 
-    public static void AddOriginDirectory(string name, int totalNodes, int myNode, int memoryNode)
+    public static void AddOriginDirectory(string name, int totalNodes, int myNode)
     {
         output.WriteLine("Root MemoryDevice Begin");
         output.WriteLine("Int DeviceID " + (index++));
@@ -199,6 +242,7 @@
         output.WriteLine("End");
         output.WriteLine("End");
     }
+
 	public static void AddNetworkMemoryInterface(string name, int node)
 	{
 		output.WriteLine("Root MemoryDevice Begin");
@@ -208,8 +252,10 @@
 		output.WriteLine("Int NodeID " + node);
 		output.WriteLine("End");
 	}
+
 	static System.IO.StreamWriter output;
 	static int index;
+
 	public static void OutSimpleMemory(int nodeCount)
 	{
 		output = new System.IO.StreamWriter("memoryConfigs\\Simple" + nodeCount + ".memory");
@@ -326,18 +372,22 @@
         index = 1;
         output.WriteLine("Begin");
         //MainMemory(400, 300);
-        AddNetworkWithoutMemory("Network", nodeCount, 4, 20, 0.1f);
+        NetworkTimingData myNetworkTimingData = GetNetworkTimingData(nodeCount);
+        int randomMin = myNetworkTimingData.randomMin;
+        int randomMax = myNetworkTimingData.randomMax;
+        AddNetworkWithoutMemory("Network", nodeCount, randomMin, randomMax, 0.1f);
         //AddNetworkMemoryInterface("NMInt", nodeCount + 10);
         l1 *= 1024;
         l2 *= 1024;
         for (int i = 0; i < nodeCount; i++)
         {
             AddSESCInterface("ProcessorInterface_" + i);
-            AddCache("L1_" + i, 4, l1 / (4 * 64), 64, 3, 1, EvictionPolicy.LRU);
+            AddCache("L1_" + i, 4, l1 / (4 * 64), 64, 2, 1, EvictionPolicy.LRU);
             // AddCache("L2_" + i, 4, l2 / (4 * 64), 64, 7, 4, EvictionPolicy.LRU);
-            AddCache("L2_" + i, 4, l2 / (4 * 64), 64, 15, 11, EvictionPolicy.LRU);
-            AddOriginDirectory("OriginDirectory_" + i, nodeCount, i, nodeCount + 10);
-            AddMainMemory("MainMemory_" + i, 400, 300);
+            AddCache("L2_" + i, 4, l2 / (4 * 64), 64, 13, 10, EvictionPolicy.LRU);
+            //AddOriginDirectory("OriginDirectory_" + i, nodeCount, i, nodeCount + 10);
+            AddOriginDirectory("OriginDirectory_" + i, nodeCount, i);
+            AddMainMemory("MainMemory_" + i, 57, 66);
             Connection("ProcessorInterface_" + i, "L1_" + i, "Connection", "LocalConnection", 0);
             Connection("L1_" + i, "L2_" + i, "RemoteConnection", "LocalConnection", 0);
             Connection("L2_" + i, "OriginDirectory_" + i, "RemoteConnection", "LocalCacheConnection", 0);
@@ -354,8 +404,7 @@
 		System.IO.Directory.CreateDirectory("memoryConfigs");
 
         // nodeCount also determines the total number of processors
-
-		for (int nodeCount = 2; nodeCount <= 64; nodeCount *= 2)
+		for (int nodeCount = 2; nodeCount <= 4; nodeCount *= 2)
 		{
 			for (int l1 = 1; l1 <= 1024; l1 *= 2)
             //for (int l1 = 1; l1 <= 2; l1 *= 2)
