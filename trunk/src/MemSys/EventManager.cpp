@@ -90,9 +90,9 @@ namespace Memory
 
 	void EventManager::FillReadMsg(ReadMsg* m, DeviceID devID, Address generatingPC)
 	{
+		m->SetIDInfo(currentMsgStamp++,devID,generatingPC);
 		m->directoryLookup = false;
 		//m->originalRequestingNode = InvalidNodeID;
-		m->SetIDInfo(currentMsgStamp++,devID,generatingPC);
 	}
 
 	void EventManager::FillReadResponseMsg(ReadResponseMsg* m, DeviceID devID, Address generatingPC)

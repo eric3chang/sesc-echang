@@ -316,7 +316,8 @@ namespace Memory
 		void PrintPendingDirectoryBusySharedReads();
 	   void PrintPendingLocalReads();
 
-	   // special treatments for OnCacheRead and OnCacheReadResponse
+	   // special treatments
+		void OnCacheNak(const CacheNakMsg* m, NodeID src);
 	   void OnCacheRead(const ReadMsg* m);
 	   void OnCacheReadResponse(const ReadResponseMsg* m, NodeID src);
 
