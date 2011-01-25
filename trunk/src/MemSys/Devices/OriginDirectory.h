@@ -10,7 +10,7 @@ using std::stringstream;
 using std::vector;
 
 // toggles debug messages
-//#define MEMORY_ORIGIN_DIRECTORY_DEBUG_VERBOSE
+#define MEMORY_ORIGIN_DIRECTORY_DEBUG_VERBOSE
 //#define MEMORY_ORIGIN_DIRECTORY_DEBUG_DIRECTORY_DATA
 //#define MEMORY_ORIGIN_DIRECTORY_DEBUG_COUNTERS
 //#define MEMORY_ORIGIN_DIRECTORY_DEBUG_MSG_COUNT
@@ -315,7 +315,7 @@ namespace Memory
 		void RecvMsgCache(const BaseMsg *msg, NodeID src);
 		void RecvMsgDirectory(const BaseMsg *msg, NodeID src, bool isFromMemory);
 
-		void ResendRequestToDirectory(const ReadMsg *m);
+		void ResendRequestToDirectory(ReadMsg *m);
 
 		typedef PooledFunctionGenerator<StoredClassFunction3<OriginDirectory,const BaseMsg*,NodeID,bool,&OriginDirectory::RecvMsgDirectory> > CBRecvMsgDirectory;
 		CBRecvMsgDirectory cbRecvMsgDirectory;

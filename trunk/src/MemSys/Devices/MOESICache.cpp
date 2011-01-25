@@ -726,10 +726,12 @@ void MOESICache::PrepareFreshBlock(int setNumber, int index, AddrTag tag)
 		DebugAssertWithMessageID(pendingEviction.find(tag) != pendingEviction.end()
 		      || pendingInvalidate.find(tag) != pendingInvalidate.end()
 		      ,m->MsgID());
+
 		// if a block eviction was canceled by PrepareFreshBlock()
-		/*
-		if (canceledBlockEviction.find(tag) != canceledBlockEviction.end())
+		//if (canceledBlockEviction.find(tag) != canceledBlockEviction.end())
+		if (false)
 		{
+			/*
 		   // if the block was canceled eviction, it shouldn't be found
 		   // in pendingEviction or pendingInvalidate
 		   DebugAssertWithMessageID(pendingEviction.find(tag) == pendingEviction.end(),m->MsgID());
@@ -737,10 +739,7 @@ void MOESICache::PrepareFreshBlock(int setNumber, int index, AddrTag tag)
 		   canceledBlockEviction.erase(tag);
 		   EM().DisposeMsg(m);
 		   return;
-		}
-		*/
-		if (false)
-		{
+		   */
 		}
 		else //(canceledBlockEviction.find(tag) == canceledBlockEviction.end())
 		{
