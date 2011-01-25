@@ -317,7 +317,8 @@ namespace Memory
 	   void PrintPendingLocalReads();
 
 	   // special treatments
-		void OnCacheNak(const CacheNakMsg* m, NodeID src);
+		void OnCacheCacheNak(const CacheNakMsg* m, NodeID src);
+		void OnCacheInvalidateAck(const InvalidateAckMsg* m, NodeID src);
 	   void OnCacheRead(const ReadMsg* m);
 	   void OnCacheReadResponse(const ReadResponseMsg* m, NodeID src);
 
