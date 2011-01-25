@@ -21,6 +21,8 @@ namespace Memory
 		Address generatingPC;
 
 	public:
+		bool isCache;
+		bool isDirectory;
 		virtual ~BaseMsg(){}
 		virtual bool IsResponse() const = 0;
 		virtual size_t MsgSize() const = 0;
