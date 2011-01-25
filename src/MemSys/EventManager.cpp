@@ -63,9 +63,9 @@ namespace Memory
 
 	void EventManager::FillReadMsg(ReadMsg* m, DeviceID devID, Address generatingPC)
 	{
+		m->SetIDInfo(currentMsgStamp++,devID,generatingPC);
 		m->isCache = false;
 		m->isDirectory = false;
-		m->SetIDInfo(currentMsgStamp++,devID,generatingPC);
 		m->directoryLookup = false;
 		//m->originalRequestingNode = InvalidNodeID;
 		m->onCompletedCallback = NULL;
@@ -252,8 +252,8 @@ namespace Memory
    NetworkMsg* EventManager::CreateNetworkMsg(DeviceID devID, Address generatingPC)
 	{
 		NetworkMsg* m = networkPool.Take();
-		m->isOverrideSource = false;
 		m->SetIDInfo(currentMsgStamp++,devID,generatingPC);
+		m->isOverrideSource = false;
 		return m;
 	}
 

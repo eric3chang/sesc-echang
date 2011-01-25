@@ -154,9 +154,12 @@ namespace Memory
 		}
 	}
 
-	void OriginDirectory::ResendRequestToDirectory(const ReadMsg *m)
+	void OriginDirectory::ResendRequestToDirectory(ReadMsg *m)
 	{
 		NodeID dirNode = directoryNodeCalc->CalcNodeID(m->addr);
+
+		m->isDirectory = true;
+
 		if (dirNode==nodeID)
 		{
 			// schedule RecvMsgDirectory to be called
@@ -1077,7 +1080,8 @@ namespace Memory
 			DebugAssertWithMessageID(m->solicitingMsg==pendingExclusiveRead->MsgID(), m->MsgID())
 
 			// resend request
-			ResendRequestToDirectory(pendingExclusiveRead);
+			ReadMsg* forward  = (ReadMsg*)EM().ReplicateMsg(pendingExclusiveRead);
+			ResendRequestToDirectory(forward);
 
 			//EM().DisposeMsg(m);
 		}
@@ -1327,7 +1331,8 @@ namespace Memory
 			DebugAssertWithMessageID(m->solicitingMsg==pendingSharedRead->MsgID(), m->MsgID())
 
 			// resend request
-			ResendRequestToDirectory(pendingSharedRead);
+			ReadMsg* forward = (ReadMsg*)EM().ReplicateMsg(pendingSharedRead);
+			ResendRequestToDirectory(forward);
 
 			//EM().DisposeMsg(m);
 		}
@@ -1679,7 +1684,7 @@ namespace Memory
    		EM().InitializeReadResponseMsg(srm, firstRequest);
    		srm->blockAttached = true;
    		srm->satisfied = true;
-   		SendMessageToRemoteCache(srm, src);
+   		SendMessageToRemoteCache(srm, firstRequestSrc);
    	} // else if (isFromMemory)
    	else
    	{
@@ -1728,7 +1733,7 @@ namespace Memory
    		// soliciting message id should be the same as the read response's soliciting message id
    		EM().InitializeEvictionResponseMsg(wam, firstRequest);
    		wam->isExclusive = true;
-   		SendMessageToRemoteCache(wam, src);
+   		SendMessageToRemoteCache(wam, firstRequestSrc);
 
    		// send memory write
    		WriteMsg* wm = EM().CreateWriteMsg(GetDeviceID(), m->GeneratingPC());
@@ -1928,7 +1933,7 @@ namespace Memory
 			// soliciting message id should be the same as the read response's soliciting message id
 			EM().InitializeEvictionResponseMsg(wam, firstRequest);
 			wam->isExclusive = true;
-			SendMessageToRemoteCache(wam, src);
+			SendMessageToRemoteCache(wam, firstRequestSrc);
 
 			// send memory write
 			WriteMsg* wm = EM().CreateWriteMsg(GetDeviceID(), m->GeneratingPC());
@@ -2331,6 +2336,7 @@ namespace Memory
 				RecvMsgCache(payload, src);
 			}
 			*/
+
 			if (payload->isCache)
 			{
 				RecvMsgCache(payload, src);
