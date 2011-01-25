@@ -357,7 +357,7 @@ namespace Memory
 		else if (msg->Type()==mt_CacheNak)
 		{
 			const CacheNakMsg* m = (const CacheNakMsg*)msg;
-			OnCacheNak(m, src);
+			OnCacheCacheNak(m, src);
 		}
 		else
 		{
@@ -757,7 +757,7 @@ namespace Memory
 	   out << "messagesReceived:" << messagesReceived << std::endl;
 	}
 
-	void OriginDirectory::OnCacheNak(const CacheNakMsg* m, NodeID src)
+	void OriginDirectory::OnCacheCacheNak(const CacheNakMsg* m, NodeID src)
 	{
 		CacheData& cacheData = GetCacheData(m->addr);
 		const ReadMsg*& pendingExclusiveRead = cacheData.pendingExclusiveRead;
@@ -779,11 +779,36 @@ namespace Memory
 			DebugAssertWithMessageID(pendingSharedRead->MsgID()==m->solicitingMsg, m->solicitingMsg);
 			break;
 		default:
-			PrintError("OnCacheNak", m, "Unhandled state");
+			PrintError("OnCacheCacheNak", m, "Unhandled state");
 			break;
 		}
 
 		OnCache(m, src, cacheData);
+	}
+
+	void OriginDirectory::OnCacheInvalidateAck(const InvalidateAckMsg* m, NodeID src)
+	{
+		CacheData& cacheData = GetCacheData(m->addr);
+		CacheState& cacheState = cacheData.cacheState;
+		const ReadMsg*& pendingExclusiveRead = cacheData.pendingExclusiveRead;
+		ReadRequestState& readRequestState = cacheData.readRequestState;
+		
+		// can't check solicitingMsg of InvalidateAckMsg because it refers to InvalidateMsg,
+			// and not the ReadMsg that generated the InvalidateMsg
+
+		switch(readRequestState)
+		{
+		case rrs_PendingExclusiveRead:
+			OnCache(m, src, cacheData);
+			if (cacheState==cs_Exclusive)
+			{
+				readRequestState = rrs_NoPendingReads;
+				pendingExclusiveRead = NULL;
+			}
+			break;
+		default:
+			PrintError("OnCacheInvAck", m);
+		}
 	}
 
 	void OriginDirectory::OnCacheRead(const ReadMsg* m)
@@ -836,26 +861,34 @@ namespace Memory
 	void OriginDirectory::OnCacheReadResponse(const ReadResponseMsg* m, NodeID src)
    {
 		CacheData& cacheData = GetCacheData(m->addr);
-   	ReadRequestState& state = cacheData.readRequestState;
+		CacheState& cacheState = cacheData.cacheState;
+   	ReadRequestState& readRequestState = cacheData.readRequestState;
    	const ReadMsg*& pendingExclusiveRead = cacheData.pendingExclusiveRead;
    	const ReadMsg*& pendingSharedRead = cacheData.pendingSharedRead;
 
-   	switch(state)
+		DebugAssertWithMessageID(m->satisfied, m->solicitingMessage);
+
+   	switch(readRequestState)
    	{
    	case rrs_NoPendingReads:
    		// should not receive a read response to cache
-   		PrintError("OnDirReadRes", m, state);
+   		PrintError("OnDirReadRes", m, readRequestState);
    		break;
    	case rrs_PendingExclusiveRead:
 			// must always be satisfied because we use CacheNakMsg for unsatisfied read requests
 			DebugAssertWithMessageID(m->satisfied, m->solicitingMessage);
+			DebugAssertWithMessageID(pendingSharedRead==NULL, m->solicitingMessage);
+			DebugAssertWithMessageID(pendingExclusiveRead!=NULL, m->solicitingMessage);
 			DebugAssertWithMessageID(m->solicitingMessage==pendingExclusiveRead->MsgID(), m->solicitingMessage);
 
-   		state = rrs_NoPendingReads;
    		OnCache(m, src, cacheData);
 
-			// message gets disposed in OnCache()
-			pendingExclusiveRead = NULL;
+			if (m->exclusiveOwnership && cacheState==cs_Exclusive)
+			{
+				readRequestState = rrs_NoPendingReads;
+				// message gets disposed in OnCache()
+				pendingExclusiveRead = NULL;
+			}
    		break;
    	case rrs_PendingSharedRead:
    		// could be exclusive owned because it could be CEX
@@ -863,47 +896,51 @@ namespace Memory
 			// must always be satisfied because we use CacheNakMsg for unsatsified read requests
 			DebugAssertWithMessageID(m->satisfied, m->solicitingMessage);
 			DebugAssertWithMessageID(m->solicitingMessage==pendingSharedRead->MsgID(), m->solicitingMessage);
+			DebugAssertWithMessageID(pendingExclusiveRead==NULL, m->solicitingMessage);
 
-   		state = rrs_NoPendingReads;
    		OnCache(m, src, cacheData);
 
-			// message gets disposed in OnCache()
-   		pendingSharedRead = NULL;
+			if (cacheState==cs_Shared || cacheState==cs_Exclusive)
+			{
+   			readRequestState = rrs_NoPendingReads;
+				// message gets disposed in OnCache()
+   			pendingSharedRead = NULL;
+			}
    		break;
    	case rrs_PendingSharedReadExclusiveRead:
 			// must always be satisfied because we use CacheNakMsg for unsatsified read requests
 			DebugAssertWithMessageID(m->satisfied, m->solicitingMessage);
+			DebugAssertWithMessageID(pendingSharedRead!=NULL, m->solicitingMessage);
+			DebugAssertWithMessageID(pendingExclusiveRead!=NULL, m->solicitingMessage);
 			// can only receive response to the first shared read because we only sent the first shared read
 			DebugAssertWithMessageID(m->solicitingMessage==pendingSharedRead->MsgID(), m->solicitingMessage);
 
-   		if (m->exclusiveOwnership)
-   		{
-   			state = rrs_NoPendingReads;
-   			DebugAssertWithMessageID(pendingExclusiveRead != NULL, m->solicitingMessage);
-   			DebugAssertWithMessageID(pendingSharedRead != NULL, m->solicitingMessage);
+			OnCache(m, src, cacheData);
 
-				OnCache(m, src, cacheData);
+   		if (m->exclusiveOwnership && cacheState==cs_Exclusive)
+   		{
+   			readRequestState = rrs_NoPendingReads;
 
 				// message gets disposed in OnCache()
-   			pendingExclusiveRead = NULL;
    			pendingSharedRead = NULL;
+				EM().DisposeMsg(pendingExclusiveRead);
+   			pendingExclusiveRead = NULL;
    		}
    		else // !m->exclusiveOwnership
    		{
-				state = rrs_PendingExclusiveRead;
-				
-				OnCache(m, src, cacheData);
+				readRequestState = rrs_PendingExclusiveRead;
 
 				// message gets disposed in OnCache()
 				pendingSharedRead = NULL;
 
 				// send the exclusive read request that was queued up
+				OnCache(pendingExclusiveRead, InvalidNodeID, cacheData);
 				//const BaseMsg* forward = EM().ReplicateMsg(pendingExclusiveRead);
 				//SendMessageToDirectory(forward,false);
    		}
    		break;
    	default:
-   		PrintError("OnDirReadRes", m, state);
+   		PrintError("OnDirReadRes", m, readRequestState);
    		break;
    	}
    }
@@ -1339,7 +1376,8 @@ namespace Memory
 			// send invalidate ack to firstReplySrc
 	   	InvalidateAckMsg* iam = EM().CreateInvalidateAckMsg(GetDeviceID(), m->GeneratingPC());
 	   	EM().InitializeInvalidateResponseMsg(iam, m);
-	   	SendMessageToRemoteCache(iam, firstReplySrc);
+			DebugAssertWithMessageID(firstReply->newOwner!=InvalidNodeID, m->solicitingMessage);
+			SendMessageToRemoteCache(iam, firstReply->newOwner);
 
 	   	EM().DisposeMsg(m);
 	   	ClearTempCacheData(cacheData);
@@ -1432,6 +1470,8 @@ namespace Memory
 		else if (msg->Type()==mt_InvalidateResponse)
 		{
 			DebugAssertWithMessageID(firstReply!=NULL, msg->MsgID());
+			DebugAssertWithMessageID(firstReply->Type()==mt_Invalidate, msg->MsgID());
+			const InvalidateMsg* firstReplyCasted = (const InvalidateMsg*)firstReply;
 			DebugAssertWithMessageID(firstReplySrc!=InvalidNodeID, msg->MsgID());
 			DebugAssertWithMessageID(src==InvalidNodeID, msg->MsgID());
 			const InvalidateResponseMsg* m = (const InvalidateResponseMsg*) msg;
@@ -1440,7 +1480,8 @@ namespace Memory
 			// send invalidate ack to requester
 			InvalidateAckMsg* iam = EM().CreateInvalidateAckMsg(GetDeviceID(), m->GeneratingPC());
 			EM().InitializeInvalidateResponseMsg(iam, m);
-			SendMessageToRemoteCache(iam, firstReplySrc);
+			DebugAssertWithMessageID(firstReplyCasted->newOwner!=InvalidNodeID, m->solicitingMessage);
+			SendMessageToRemoteCache(iam, firstReplyCasted->newOwner);
 
 			EM().DisposeMsg(m);
 			ClearTempCacheData(cacheData);
