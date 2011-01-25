@@ -155,8 +155,7 @@ namespace Memory
          	secondRequestSrc(InvalidNodeID),
          	state(ds_Unowned)
 			{}
-         void print(Address myAddress, MessageID myMessageID,bool isSharedBusy, bool isExclusiveBusy,
-            bool hasPendingMemAccess,bool isWaitingForReadResponse)
+         void print(Address myAddress, MessageID myMessageID)
          {
             cout << setw(10) << " ";
             cout << " addr=" << myAddress;
@@ -167,11 +166,6 @@ namespace Memory
             {
                cout << BaseMsg::convertNodeIDToDeviceID(*i) << " ";
             }
-            cout << " isShBusy=" << isSharedBusy
-               << " isExBusy=" << isExclusiveBusy
-               << " pendMemAccess=" << hasPendingMemAccess
-               << " waitForReadRes=" << isWaitingForReadResponse
-               << endl;
          }
 		};
       class InvalidateData
@@ -214,30 +208,14 @@ namespace Memory
 		int remoteConnectionID;
 		NodeID nodeID;
 
-		HashMap<MessageID, const ReadMsg*> pendingLocalReads;
-      HashMap<Address, ReversePendingLocalReadData>reversePendingLocalReads;
 		HashMap<MessageID, const ReadMsg* > pendingRemoteReads;
 		HashMap<MessageID, const InvalidateMsg* > pendingRemoteInvalidates;
-		HashMap<Address, LookupData<ReadMsg> > pendingDirectoryBusySharedReads;
-		HashMultiMap<Address, LookupData<ReadMsg> > pendingDirectoryNormalSharedReads;
-		HashMap<Address, LookupData<ReadMsg> > pendingDirectoryBusyExclusiveReads;
-      HashMap<Address, std::vector<LookupData<ReadMsg> > > pendingMainMemAccesses;
       HashMap<MessageID, const ReadMsg*> pendingMemoryReadAccesses;
       HashMap<MessageID, const WriteMsg*> pendingMemoryWriteAccesses;
-      HashSet<MessageID> pendingMemoryWrites;
-      //HashSet<Address> pendingIgnoreInterventions;
-      HashMap<Address, const ReadResponseMsg* >waitingForEvictionBusyAck;
-      HashMap<Address, const ReadMsg*>waitingForEvictionResponse;
-      HashMap<Address, InvalidateData> waitingForInvalidates;
-      HashMap<Address, const EvictionMsg* >waitingForReadResponse;
+
 		HashMap<Address, const EvictionMsg*> pendingEviction;
-      HashMap<Address, std::vector<ReadMsg> >invalidateLock;
 		HashMap<Address, DirectoryData> directoryDataMap;
 		HashMap<Address, CacheData> cacheDataMap;
-		//HashMap<Address, BlockData> pendingDirectoryBusyExclusiveReadsDirectoryData;
-      //HashMap<MessageID, LookupData<ReadMsg> > pendingSpeculativeReads;
-      //HashMap<Address, const ReadResponseMsg* > pendingSpeculativeReadResponses;
-      //HashMap<MessageID, int> unsatisfiedRequests;
 
 		void dump(HashMap<Memory::MessageID, const Memory::BaseMsg*> &m);
 		void dump(HashMap<Address,LookupData<BaseMsg> > &m);
@@ -266,19 +244,8 @@ namespace Memory
 		CacheData& GetCacheData(const BaseMsg* m);
 		DirectoryData& GetDirectoryData(Address addr);
 		DirectoryData& GetDirectoryData(const BaseMsg* m);
-      void HandleReceivedAllInvalidates(Address myAddress);
-      bool IsInPendingDirectoryNormalSharedRead(const ReadMsg *m);
-		//void PerformDirectoryFetch(Address a, NodeID src);
-		void PerformDirectoryFetch(const ReadMsg *msgIn, NodeID src);
-      void PerformDirectoryFetch(const ReadMsg *msgIn,NodeID src,bool isExclusive,NodeID target);
-		//void PerformDirectoryFetchOwner(const ReadMsg *msgIn, NodeID src);
       void PerformMemoryReadResponseCheck(const ReadResponseMsg *m, NodeID src);
       void PerformMemoryWriteResponseCheck(const WriteResponseMsg *m, NodeID src);
-
-      // these are not used currently
-      void SendLocalReadResponse(const ReadResponseMsg *msgIn);
-      void SendRemoteEviction(const EvictionMsg *m,NodeID dest,const char *fromMethod);
-      void SendRemoteRead(const ReadMsg *m,NodeID dest,const char *fromMethod);
 
       // these are being used currently
       void SendCacheNak(const ReadMsg* m, NodeID dest);
@@ -291,14 +258,6 @@ namespace Memory
       void SendMessageToNetwork(const BaseMsg *msg, NodeID dest);
       void SendRequestToMemory(const BaseMsg *msg);
 
-      void EraseDirectoryShare(Address a, NodeID id);
-		void AddDirectoryShare(Address a, NodeID id, bool exclusive);
-      void AddReversePendingLocalRead(const ReadMsg *m);
-      void EraseReversePendingLocalRead(const ReadResponseMsg *m,const ReadMsg *ref);
-      void AddPendingDirectoryNormalSharedRead(const ReadMsg *m, NodeID src);
-      void ErasePendingDirectoryNormalSharedRead(const ReadResponseMsg *m);
-      void ErasePendingLocalRead(const ReadResponseMsg *m);
-      void ChangeOwnerToShare(Address a, NodeID id);
       void ClearTempCacheData(CacheData& cacheData);
       void ClearTempDirectoryData(DirectoryData& directoryData);
 
@@ -315,8 +274,6 @@ namespace Memory
 	   void PrintDebugInfo(const char* fromMethod,Address addr,NodeID id,const char* operation="");
       void PrintDirectoryData(Address myAddress, MessageID myMessageID);
 	   void PrintEraseOwner(const char* fromMethod,Address addr,NodeID id,const char* operation);
-		void PrintPendingDirectoryBusySharedReads();
-	   void PrintPendingLocalReads();
 
 	   // special treatments
 		void OnCacheCacheNak(const CacheNakMsg* m, NodeID src);
@@ -364,35 +321,10 @@ namespace Memory
 		CBRecvMsgDirectory cbRecvMsgDirectory;
 		typedef PooledFunctionGenerator<StoredClassFunction2<OriginDirectory,const BaseMsg*,NodeID,&OriginDirectory::RecvMsgCache> > CBRecvMsgCache;
 		CBRecvMsgCache cbRecvMsgCache;
-		/*
-		typedef PooledFunctionGenerator<StoredClassFunction3<OriginDirectory,const ReadResponseMsg*,NodeID,CacheData&,&OriginDirectory::OnDirectoryReadResponse> > CBOnDirectoryReadResponse;
-		CBOnDirectoryReadResponse cBOnDirectoryReadResponse;
-		*/
-
-		/*
-		typedef PooledFunctionGenerator<StoredClassFunction2<OriginDirectory,const BaseMsg*, NodeID, &OriginDirectory::OnDirectoryBlockRequest> > CBOnDirectoryBlockRequest;
-		CBOnDirectoryBlockRequest cbOnDirectoryBlockRequest;
-      typedef PooledFunctionGenerator<StoredClassFunction2<OriginDirectory,const BaseMsg*, NodeID, &OriginDirectory::OnRemoteEviction> > CBOnRemoteEviction;
-		CBOnRemoteEviction cbOnRemoteEviction;
-      typedef PooledFunctionGenerator<StoredClassFunction2<OriginDirectory,const BaseMsg*, NodeID, &OriginDirectory::OnRemoteRead> > CBOnRemoteRead;
-		CBOnRemoteRead cbOnRemoteRead;
-		*/
-		// 2010/08/05 Eric: seems to be unused
-		/*
-		typedef PooledFunctionGenerator<StoredClassFunction2<Directory,const ReadResponseMsg*, NodeID, &Directory::OnDirectoryBlockResponse> > CBOnDirectoryBlockResponse;
-		CBOnDirectoryBlockResponse cbOnDirectoryBlockResponse;
-		typedef PooledFunctionGenerator<StoredClassFunction2<Directory,const ReadResponseMsg*, NodeID, &Directory::OnRemoteReadResponse> > CBOnRemoteReadResponse;
-		CBOnRemoteReadResponse cbOnRemoteReadResponse;
-		*/
 	public:
 		virtual void Initialize(EventManager* em, const RootConfigNode& config, const std::vector<Connection*>& connectionSet);
 		virtual void DumpRunningState(RootConfigNode& node);
 		virtual void DumpStats(std::ostream& out);
 		virtual void RecvMsg(const BaseMsg* msg, int connectionID);
-		/*
-	private:
-		typedef PooledFunctionGenerator<StoredClassFunction2<OriginDirectory,const BaseMsg*,int,&OriginDirectory::RecvMsg> > CBRecvMsg;
-		CBRecvMsg cbRecvMsg;
-		*/
 	};
 }

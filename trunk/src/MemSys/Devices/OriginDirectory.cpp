@@ -54,45 +54,7 @@ namespace Memory
 		DumpLookupDataTemplate<Address>(m);
 	}
 
-	void OriginDirectory::AddDirectoryShare(Address a, NodeID id, bool exclusive)
-	{
-      DebugAssert(directoryNodeCalc->CalcNodeID(a)==nodeID);
-		DirectoryData& b = directoryDataMap[a];
-		DebugAssert(!exclusive || (b.sharers.size() == 0 && (b.owner == id || b.owner == InvalidNodeID)));
-		if(b.owner == id || b.owner == InvalidNodeID)
-		{
-#ifdef MEMORY_ORIGIN_DIRECTORY_DEBUG_DIRECTORY_DATA
-         PrintDebugInfo("AddDirectoryShare",a, id, "b.owner=");
-#endif
-         // unnecessary because owner is allowed to change when there are sharers
-         //DebugAssert(b.sharers.find(id)==b.sharers.end());
-			b.owner = id;
-		}
-		else if(b.sharers.find(id) == b.sharers.end())
-		{
-#ifdef MEMORY_ORIGIN_DIRECTORY_DEBUG_DIRECTORY_DATA
-         PrintDebugInfo("AddDirectoryShare",a, id,
-            ("exclusive="+to_string<bool>(exclusive)+" b.sharers.insert").c_str());
-#endif
-			b.sharers.insert(id);
-		}
-	}
-
-	void OriginDirectory::ChangeOwnerToShare(Address a, NodeID id)
-	{
-      DebugAssert(directoryNodeCalc->CalcNodeID(a)==nodeID);
-		DirectoryData& b = directoryDataMap[a];
-#ifdef MEMORY_ORIGIN_DIRECTORY_DEBUG_DIRECTORY_DATA
-         PrintDebugInfo("ChangeOwnerToShare",a, id);
-#endif
-		DebugAssert(b.owner==id);
-      DebugAssert(b.sharers.find(nodeID)==b.sharers.end());
-      b.owner = InvalidNodeID;
-      b.sharers.insert(id);
-	}
-
-
-   void OriginDirectory::ClearTempCacheData(CacheData& cacheData)
+	void OriginDirectory::ClearTempCacheData(CacheData& cacheData)
    {
    	//EM().DisposeMsg(cacheData.firstReply);
    	cacheData.firstReply = NULL;
@@ -112,217 +74,26 @@ namespace Memory
    	directoryData.secondRequestSrc = InvalidNodeID;
    }
 
-	void OriginDirectory::EraseDirectoryShare(Address a, NodeID id)
-	{
-#ifdef MEMORY_ORIGIN_DIRECTORY_DEBUG_COUNTERS
-	   threeStageDirectoryEraseDirectoryShareCounter++;
-#endif
-		DebugAssert(directoryDataMap.find(a) != directoryDataMap.end());
-		DirectoryData& b = directoryDataMap[a];
-		if(b.owner == id)
-		{
-#ifdef MEMORY_ORIGIN_DIRECTORY_DEBUG_DIRECTORY_DATA
-         PrintEraseOwner("EraseDirectoryShare",a, id,"b.owner=InvalidNodeID");
-#endif
-			b.owner = InvalidNodeID;
-			DebugAssert(b.sharers.find(id) == b.sharers.end());
-		}
-		else if(b.sharers.find(id) != b.sharers.end())
-		{
-#ifdef MEMORY_ORIGIN_DIRECTORY_DEBUG_DIRECTORY_DATA
-		   PrintDebugInfo("EraseDirectoryShare",a, id,"b.sharers.erase");
-#endif
-			b.sharers.erase(id);
-		}
-	}
-	OriginDirectory::CacheData& OriginDirectory::GetCacheData(Address addr)
+   OriginDirectory::CacheData& OriginDirectory::GetCacheData(Address addr)
 	{
 		return cacheDataMap[addr];
 	}
-	OriginDirectory::CacheData& OriginDirectory::GetCacheData(const BaseMsg* m)
+
+   OriginDirectory::CacheData& OriginDirectory::GetCacheData(const BaseMsg* m)
 	{
 		Address currentAddress = BaseMemDevice::GetAddress(m);
 		return cacheDataMap[currentAddress];
 	}
-	OriginDirectory::DirectoryData& OriginDirectory::GetDirectoryData(Address addr)
+
+   OriginDirectory::DirectoryData& OriginDirectory::GetDirectoryData(Address addr)
 	{
 		return directoryDataMap[addr];
 	}
-	OriginDirectory::DirectoryData& OriginDirectory::GetDirectoryData(const BaseMsg* m)
+
+   OriginDirectory::DirectoryData& OriginDirectory::GetDirectoryData(const BaseMsg* m)
 	{
 		Address currentAddress = BaseMemDevice::GetAddress(m);
 		return directoryDataMap[currentAddress];
-	}
-	void OriginDirectory::HandleReceivedAllInvalidates(Address myAddress)
-   {
-      DebugAssert(waitingForInvalidates.find(myAddress)!=waitingForInvalidates.end());
-      InvalidateData &id = waitingForInvalidates[myAddress];
-      DebugAssert(id.msg!=NULL);
-      ReadResponseMsg* rrm = (ReadResponseMsg*)id.msg;
-      // the block should always be attached, according to the protocol,
-         // that way, the read request can be guaranteed to be satisfied
-      rrm->blockAttached = true;
-      SendLocalReadResponse(rrm);
-      std::vector<LookupData<ReadMsg> > pendingReads = id.pendingReads;
-      // do not delete read response because it was sent to local
-      if (pendingReads.size() != 0)
-      {
-      	/*
-         for (std::vector<LookupData<ReadMsg> >::iterator i = pendingReads.begin();
-            i < pendingReads.end(); i++)
-         {// execute pending remote reads now that we sent the read response msg
-            // we need satisfyTime+localSendTime for the readResponse to get processed
-				CBOnRemoteRead::FunctionType* f = cbOnRemoteRead.Create();
-            f->Initialize(this,i->msg,i->sourceNode);
-				EM().ScheduleEvent(f,satisfyTime + localSendTime);
-         }
-         */
-      }
-      pendingReads.clear();
-      waitingForInvalidates.erase(myAddress);
-      // send invalidation complete message back to directory
-   }
-
-   // performs a directory fetch
-	void OriginDirectory::PerformDirectoryFetch(const ReadMsg* msgIn, NodeID src)
-	{
-	   ReadMsg* m = (ReadMsg*)EM().ReplicateMsg(msgIn);
-	   ////EM().DisposeMsg(msgIn);
-		m->onCompletedCallback = NULL;
-		m->alreadyHasBlock = false;
-      //m->originalRequestingNode = src;
-      m->addr = msgIn->addr;
-      m->onCompletedCallback = NULL;
-      m->requestingExclusive = msgIn->requestingExclusive;
-      m->size = msgIn->size;
-		DirectoryData& b = directoryDataMap[m->addr];
-		NodeID target;
-		bool isTargetMemory = false;
-		// directoryLookup is true only for memory because we want to return a
-		   // OnDirectoryBlockResponse from memory
-		if(b.owner != InvalidNodeID)
-		{
-		   m->directoryLookup = false;
-			target = b.owner;
-		}
-		else if(b.sharers.begin() != b.sharers.end())
-		{
-		   m->directoryLookup = false;
-			target = *(b.sharers.begin());
-		}
-		/*
-		else
-		{
-		   isTargetMemory = true;
-		   m->directoryLookup = true;
-			target = memoryNodeCalc->CalcNodeID(m->addr);
-		}
-		*/
-		if(target == nodeID)
-		{
-#ifdef MEMORY_ORIGIN_DIRECTORY_DEBUG_VERBOSE
-               PrintDebugInfo("RemRead",*m,"PerDirFet(ReadMsg,src)",nodeID);
-#endif
-         //TODO 2010/09/02 Eric, change this because of 3-stage directory
-         //OnRemoteRead should know to use m->requestingNode
-			//OnRemoteRead(m, nodeID);//ERROR
-         //OnRemoteRead(m, src);//ERROR
-		}
-		else
-		{
-			NetworkMsg* nm = EM().CreateNetworkMsg(GetDeviceID(), m->GeneratingPC());
-			nm->destinationNode = target;
-			if (isTargetMemory)
-			{
-			   // change the source due to 3-stage
-            nm->sourceNode = src;
-            if (src != nodeID)
-            {
-               nm->isOverrideSource = true;
-            }
-			}
-			else
-			{
-			   nm->sourceNode = nodeID;
-			}
-			nm->payloadMsg = m;
-			SendMsg(remoteConnectionID, nm, lookupTime + remoteSendTime);
-		}
-	}
-
-   bool OriginDirectory::IsInPendingDirectoryNormalSharedRead(const ReadMsg *m)
-   {
-      DebugAssertWithMessageID(pendingDirectoryNormalSharedReads.find(m->addr)!=pendingDirectoryNormalSharedReads.end(),m->MsgID())
-      AddrLookupIteratorPair iteratorPair = pendingDirectoryNormalSharedReads.equal_range(m->addr);
-      for (; iteratorPair.first!=iteratorPair.second; ++iteratorPair.first)
-      {
-         LookupData<ReadMsg> &ld = iteratorPair.first->second;
-         const ReadMsg *ref = ld.msg;
-         if (ref->MsgID()==m->MsgID())
-         {
-            return true;
-         }
-      }
-      return false;
-   }
-
-   // performs a directory fetch
-	void OriginDirectory::PerformDirectoryFetch(const ReadMsg* msgIn,NodeID src,bool isExclusive,NodeID target)
-	{
-      DebugAssert(src != InvalidNodeID)
-      DebugAssert(target != InvalidNodeID)
-	   ReadMsg* m = (ReadMsg*)EM().ReplicateMsg(msgIn);
-		m->alreadyHasBlock = false;
-      //m->originalRequestingNode = src;
-      m->requestingExclusive = isExclusive;
-      //TODO 2010/09/24 Eric
-      // changed the block to return to directory first before doing anything else
-      /*
-		// directoryLookup is true only for memory because we want to return a
-		   // OnDirectoryBlockResponse from memory
-		if(target==memoryNode)
-		{
-		   m->directoryLookup = true;
-		}
-		else
-      */
-		{
-		   m->directoryLookup = false;
-		}
-		if(target == nodeID)
-		{
-         DebugAssertWithMessageID(m->directoryLookup==false,m->MsgID())
-#ifdef MEMORY_ORIGIN_DIRECTORY_DEBUG_VERBOSE
-               PrintDebugInfo("RemRead",*m,"PerDirFet(m,src,isEx,targ)",nodeID);
-#endif
-			//OnRemoteRead(m, nodeID);
-		}
-		else
-		{
-			NetworkMsg* nm = EM().CreateNetworkMsg(GetDeviceID(), m->GeneratingPC());
-			nm->destinationNode = target;
-         /*
-         //TODO 2010/09/24 Eric
-         // changed it to not do 3-stage for memory
-			if (target==memoryNode)
-			{
-			   // change the source due to 3-stage
-            nm->sourceNode = src;
-            if (src != nodeID)
-            {
-               nm->isOverrideSource = true;
-            }
-			}
-			else
-         */
-			{
-			   nm->sourceNode = nodeID;
-			}
-			nm->payloadMsg = m;
-			SendMsg(remoteConnectionID, nm, lookupTime + remoteSendTime);
-		}
-      // do not dispose message here, because the original OnLocalRead might still need it
-      ////EM().DisposeMsg(msgIn);
 	}
 
 	void OriginDirectory::PerformMemoryReadResponseCheck(const ReadResponseMsg *m, NodeID src)
@@ -479,35 +250,6 @@ namespace Memory
    }
 
    /**
-   send local read response to the cache above
-   */
-   void OriginDirectory::SendLocalReadResponse(const ReadResponseMsg* m)
-   {
-      //if (!m->evictionMessage)
-   	if (true)
-      {// if m is not coming from eviction
-         //ReadResponseMsg* r = (ReadResponseMsg*)EM().ReplicateMsg(m);
-         DebugAssertWithMessageID(pendingLocalReads.find(m->solicitingMessage)!=pendingLocalReads.end(),m->MsgID())
-         const ReadMsg* ref = pendingLocalReads[m->solicitingMessage];
-         DebugAssertWithMessageID(m->solicitingMessage==ref->MsgID(),m->MsgID())
-		   //EM().DisposeMsg(ref);
-#ifdef MEMORY_ORIGIN_DIRECTORY_DEBUG_PENDING_LOCAL_READS
-		   PrintDebugInfo("DirectoryBlockResponse", *m,
-		      ("pendingLocalReads.erase("+to_string<MessageID>(m->solicitingMessage)+")").c_str());
-#endif
-		   pendingLocalReads.erase(m->solicitingMessage);
-         EraseReversePendingLocalRead(m,ref);
-		   ////EM().DisposeMsg(m);
-		   //SendMsg(localConnectionID, m, satisfyTime + localSendTime);
-      }
-      else
-      {
-         // don't erase anything if the message is an evictionMessage
-         //SendMsg(localConnectionID, m, satisfyTime + localSendTime);
-      }
-   }
-
-   /**
    send a memory access complete message
    */
    void OriginDirectory::SendRequestToMemory(const BaseMsg *msg)
@@ -548,132 +290,6 @@ namespace Memory
    	nm->destinationNode = dest;
    	nm->payloadMsg = msg;
    	SendMsg(remoteConnectionID, nm, remoteSendTime);
-   }
-
-   void OriginDirectory::SendRemoteEviction(const EvictionMsg *m,NodeID dest,const char *fromMethod)
-   {
-      if(dest == nodeID)
-      {
-      	/*
-#ifdef MEMORY_ORIGIN_DIRECTORY_DEBUG_VERBOSE
-               printDebugInfo("RemEvic",*m,"LocEvic",dest);
-#endif
-         CBOnRemoteEviction::FunctionType* f = cbOnRemoteEviction.Create();
-         f->Initialize(this,m,nodeID);
-         // stagger the events to avoid some race conditions
-         EM().ScheduleEvent(f, localSendTime);
-         */
-      }
-      else
-      {
-         NetworkMsg* nm = EM().CreateNetworkMsg(GetDeviceID(),m->GeneratingPC());
-         nm->destinationNode = dest;
-         nm->sourceNode = nodeID;
-         nm->payloadMsg = m;
-         SendMsg(remoteConnectionID, nm, remoteSendTime);
-      }
-   }
-   void OriginDirectory::SendRemoteRead(const ReadMsg *m,NodeID dest,const char *fromMethod)
-   {
-      if (dest==nodeID)
-      {
-#ifdef MEMORY_ORIGIN_DIRECTORY_DEBUG_VERBOSE
-         PrintDebugInfo("RemRead",*m,fromMethod,nodeID);
-#endif
-         //CALL_MEMBER_FN(*this,func) (msg,dest);
-         /*
-			CBOnRemoteRead::FunctionType* f = cbOnRemoteRead.Create();
-         f->Initialize(this,m,nodeID);
-			EM().ScheduleEvent(f,satisfyTime+localSendTime);
-         return;
-         */
-      }
-      else
-      {
-         NetworkMsg* nm = EM().CreateNetworkMsg(GetDeviceID(),m->GeneratingPC());
-         nm->payloadMsg = m;
-         nm->sourceNode = nodeID;
-         nm->destinationNode = dest;
-         SendMsg(remoteConnectionID, nm, remoteSendTime);
-      }
-   }
-   	/**
-	 * erase Node id as a share for Address a. If a is owned by id, check that there
-	 * are no other shares
-	 */
-   void OriginDirectory::AddReversePendingLocalRead(const ReadMsg *m)
-   {
-      ReversePendingLocalReadData &myData = reversePendingLocalReads[m->addr];
-      HashMap<MessageID,const ReadMsg*> &exclusiveRead = myData.exclusiveRead;
-      HashMap<MessageID,const ReadMsg*> &sharedRead = myData.sharedRead;
-      HashMap<MessageID,const ReadMsg*> &myMap = m->requestingExclusive ? exclusiveRead : sharedRead;
-      DebugAssertWithMessageID(myMap.find(m->MsgID())==myMap.end(),m->MsgID())
-      myMap[m->MsgID()] = (ReadMsg*)EM().ReplicateMsg(m);
-   }
-   
-   void OriginDirectory::ErasePendingDirectoryNormalSharedRead(const ReadResponseMsg *m)
-   {/*
-      BlockData &b = directoryDataMap[m->addr];
-      AddrLookupIteratorPair iteratorPair = pendingDirectoryNormalSharedReads.equal_range(m->addr);
-      bool hasFoundReadMsg = false;
-      for (; iteratorPair.first != iteratorPair.second; ++iteratorPair.first)
-      {
-         LookupData<ReadMsg> &ld = iteratorPair.first->second;
-         const ReadMsg *myReadMsg = ld.msg;
-         if (myReadMsg->MsgID()==m->solicitingMessage)
-         {
-            hasFoundReadMsg = true;
-            // because we replicated the read message that was actually sent
-               // to the owner or sharer, the original message doesn't
-               // have isNonBusySharedRead == true
-            //DebugAssertWithMessageID(myReadMsg->isNonBusySharedRead,m->MsgID())
-            //EM().DisposeMsg(myReadMsg);
-            break;
-         }
-      }
-      DebugAssertWithMessageID(hasFoundReadMsg,m->MsgID())
-      // delete from pendingDirectoryNormalSharedReads
-      pendingDirectoryNormalSharedReads.erase(iteratorPair.first);
-      return;*/
-   }
-
-   void OriginDirectory::AddPendingDirectoryNormalSharedRead(const ReadMsg *m, NodeID src)
-   {/*
-      LookupData <ReadMsg> ld;
-      ld.msg = m;
-      ld.sourceNode = src;
-      AddrLookupPair insertedPair(m->addr,ld);
-      pendingDirectoryNormalSharedReads.insert(insertedPair);
-      return;*/
-   }
-
-   void OriginDirectory::ErasePendingLocalRead(const ReadResponseMsg *m)
-   {
-      DebugAssertWithMessageID(pendingLocalReads.find(m->solicitingMessage)!=pendingLocalReads.end(),m->MsgID())
-      const ReadMsg* ref = pendingLocalReads[m->solicitingMessage];
-      //EM().DisposeMsg(ref);
-      pendingLocalReads.erase(m->solicitingMessage);
-   }
-
-   void OriginDirectory::EraseReversePendingLocalRead(const ReadResponseMsg *m,const ReadMsg *ref)
-   {
-      DebugAssertWithMessageID(reversePendingLocalReads.find(m->addr)!=reversePendingLocalReads.end(),m->MsgID())
-      ReversePendingLocalReadData &myData = reversePendingLocalReads[m->addr];
-      HashMap<MessageID,const ReadMsg*> &exclusiveRead = myData.exclusiveRead;
-      HashMap<MessageID,const ReadMsg*> &sharedRead = myData.sharedRead;
-      HashMap<MessageID,const ReadMsg*> &myMap = ref->requestingExclusive ? myData.exclusiveRead : myData.sharedRead;
-      bool &isSatisfiedByEviction = ref->requestingExclusive ?
-         myData.isExclusiveReadSatisfiedByEviction : myData.isSharedReadSatisfiedByEviction;
-      DebugAssertWithMessageID(myMap.find(m->solicitingMessage)!=myMap.end(),m->MsgID())
-      //EM().DisposeMsg(myMap[m->solicitingMessage]);
-      myMap.erase(m->solicitingMessage);
-      isSatisfiedByEviction = false;
-
-      if (exclusiveRead.size()==0 && sharedRead.size()==0)
-      {
-         reversePendingLocalReads.erase(m->addr);
-      }
-      return;
    }
 
    /**
@@ -2738,13 +2354,7 @@ namespace Memory
    {
       DebugAssert(directoryDataMap.find(myAddress)!=directoryDataMap.end());
 
-      bool isSharedBusy = (pendingDirectoryBusySharedReads.find(myAddress)!=pendingDirectoryBusySharedReads.end());
-      bool isExclusiveBusy = (pendingDirectoryBusyExclusiveReads.find(myAddress)!=pendingDirectoryBusyExclusiveReads.end());
-      bool hasPendingMemAccess = (pendingMainMemAccesses.find(myAddress)!=pendingMainMemAccesses.end());
-      bool isWaitingForReadResponse = (waitingForReadResponse.find(myAddress)!=waitingForReadResponse.end());
-      
-      directoryDataMap[myAddress].print(myAddress, myMessageID,isSharedBusy, isExclusiveBusy, hasPendingMemAccess
-         ,isWaitingForReadResponse);
+      directoryDataMap[myAddress].print(myAddress, myMessageID);
    }
 
    void OriginDirectory::PrintError(const char* fromMethod, const BaseMsg *m)
@@ -2752,7 +2362,8 @@ namespace Memory
    	stringstream ss;
    	PutErrorStringStream(ss, fromMethod, m);
    	string output = ss.str();
-		DebugFail(output.c_str());
+   	cerr << output << endl;
+		DebugFail("");
    }
 
    void OriginDirectory::PrintError(const char* fromMethod, const BaseMsg *m, const char* comment)
@@ -2761,7 +2372,8 @@ namespace Memory
    	PutErrorStringStream(ss, fromMethod, m);
    	ss << ": " << comment;
    	string output = ss.str();
-		DebugFail(output.c_str());
+   	cerr << output << endl;
+		DebugFail("");
    }
 
 	void OriginDirectory::PrintError(const char* fromMethod, const BaseMsg *m, int state)
@@ -2783,70 +2395,6 @@ namespace Memory
 			<< " type "
 			<< m->Type()
 			;
-	}
-
-	/**
-	 * readMsgArray in this method could be coupled with Eclipse's debugger to
-	 * see what elements are in pendingDirectoryBusySharedReads. The reason for using
-	 * a regular array instead of a vector is because Eclipse can view
-	 * Array elements directly, but not elements in STL containers.
-	 */
-	void OriginDirectory::PrintPendingDirectoryBusySharedReads()
-	{
-	   HashMap<Address, LookupData<ReadMsg> >::const_iterator myIterator;
-
-
-	   myIterator = pendingDirectoryBusySharedReads.begin();
-      cout << "OriginDirectory::printPendingDirectorySharedReads: ";
-
-      int size = pendingDirectoryBusySharedReads.size();
-      cout << "size=" << size << endl;
-      ReadMsg const** readMsgArray = new ReadMsg const*[size];
-      //readMsgVector[0] = new ReadMsg const;
-
-      int i = 0;
-	   for (myIterator = pendingDirectoryBusySharedReads.begin();
-	         myIterator != pendingDirectoryBusySharedReads.end(); myIterator++)
-	   {
-	      cout << "\t\tmyIterator->first=" << myIterator->first << " ";
-	      readMsgArray[i] = myIterator->second.msg;
-	      i++;
-	   }
-      delete [] readMsgArray;
-      readMsgArray = NULL;
-	}
-
-   /**
-    * readMsgArray in this method could be coupled with Eclipse's debugger to
-    * see what elements are in pendingLocalReads. The reason for using
-    * a regular array instead of a vector is because Eclipse can view
-    * Array elements directly, but not elements in STL containers.
-    */
-	void OriginDirectory::PrintPendingLocalReads()
-	{
-      HashMap<MessageID, const ReadMsg*>::const_iterator myIterator;
-
-      myIterator = pendingLocalReads.begin();
-
-      cout << "OriginDirectory::printPendingLocalReads: ";
-
-      int size = pendingLocalReads.size();
-      cout << "size=" << size;
-
-      ReadMsg const ** readMsgArray = new ReadMsg const *[size];
-
-      int i = 0;
-      for (myIterator = pendingLocalReads.begin();
-            myIterator != pendingLocalReads.end(); ++myIterator)
-      {
-         cout << "myIterator->first=" << myIterator->first << " ";
-         //const ReadMsg *myReadMsg = myIterator->second.msg;
-         readMsgArray[i] = myIterator->second;
-         i++;
-      }
-      
-      delete [] readMsgArray;
-      readMsgArray = NULL;
 	}
 
    void OriginDirectory::PrintDebugInfo(const char* fromMethod, const BaseMsg &myMessage,
