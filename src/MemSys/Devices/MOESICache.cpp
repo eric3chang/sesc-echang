@@ -247,7 +247,7 @@ void MOESICache::PrepareFreshBlock(int setNumber, int index, AddrTag tag)
 		else
 		{  // cancel pendingEviction
          // need to tell OnLocalInvalidResponse that BlockEviction was canceled
-		   canceledBlockEviction.insert(tag);
+		   //canceledBlockEviction.insert(tag);
 			mySet[index] = pendingEviction[tag];
 		#ifdef MEMORY_MOESI_CACHE_DEBUG_PENDING_EVICTION
 			PrintDebugInfo("PrepareFreshBlock",tag,"pendingEviction.erase");
@@ -717,11 +717,17 @@ void MOESICache::PrepareFreshBlock(int setNumber, int index, AddrTag tag)
 #endif
 		DebugAssertWithMessageID(m,m->MsgID());
 		AddrTag tag = CalcTag(m->addr);
+		/*
 		DebugAssertWithMessageID(pendingEviction.find(tag) != pendingEviction.end()
 		      || pendingInvalidate.find(tag) != pendingInvalidate.end()
 		      || canceledBlockEviction.find(tag) != canceledBlockEviction.end()
 		      ,m->MsgID());
+				*/
+		DebugAssertWithMessageID(pendingEviction.find(tag) != pendingEviction.end()
+		      || pendingInvalidate.find(tag) != pendingInvalidate.end()
+		      ,m->MsgID());
 		// if a block eviction was canceled by PrepareFreshBlock()
+		/*
 		if (canceledBlockEviction.find(tag) != canceledBlockEviction.end())
 		{
 		   // if the block was canceled eviction, it shouldn't be found
@@ -731,6 +737,10 @@ void MOESICache::PrepareFreshBlock(int setNumber, int index, AddrTag tag)
 		   canceledBlockEviction.erase(tag);
 		   EM().DisposeMsg(m);
 		   return;
+		}
+		*/
+		if (false)
+		{
 		}
 		else //(canceledBlockEviction.find(tag) == canceledBlockEviction.end())
 		{

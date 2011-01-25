@@ -107,6 +107,7 @@ namespace Memory
       void InitializeReadMsg(ReadMsg* copy, const ReadMsg* original);
       void InitializeReadMsg(ReadMsg* read, const ReadResponseMsg* readResponse);
 		void InitializeReadResponseMsg(ReadResponseMsg* readResponse, const EvictionMsg* eviction);
+		void InitializeReadResponseMsg(ReadResponseMsg* readResponse, const InterventionMsg* intervention);
 		void InitializeReadResponseMsg(ReadResponseMsg* readResponse, const ReadMsg* read);
 		void InitializeReadResponseMsg(ReadResponseMsg* copy, const ReadResponseMsg* original);
 		void InitializeWriteMsg(WriteMsg* write, const EvictionMsg* eviction);

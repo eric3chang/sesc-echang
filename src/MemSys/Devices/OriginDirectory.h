@@ -38,6 +38,8 @@ namespace Memory
 		// used for creating function pointers for OnRemote* methods
       typedef void (OriginDirectory::*OriginDirectoryMemFn)(const BaseMsg* msg, NodeID id);
 
+		static const int InvalidInvalidAcksReceived;
+
 		class NodeIDCalculator
 		{
 		public:
@@ -110,7 +112,7 @@ namespace Memory
 				readRequestState(rrs_NoPendingReads),
 				firstReply(NULL),
 				firstReplySrc(InvalidNodeID),
-				invalidAcksReceived(-1),
+				invalidAcksReceived(InvalidInvalidAcksReceived),
 				pendingExclusiveRead(NULL),
 				pendingSharedRead(NULL)
 			{}
@@ -284,8 +286,8 @@ namespace Memory
       void SendInvalidateMsg(const ReadMsg* m, NodeID dest, NodeID newOwner);
       void SendMessageToLocalCache(const ReadReplyMsg* msg);
       void SendMessageToRemoteCache(const BaseMsg *msg, NodeID dest);
-      void SendMessageToDirectory(const BaseMsg *msg);
-      void SendMessageToDirectory(const BaseMsg *msg, bool isFromMemory);
+      void SendMessageToDirectory(BaseMsg *msg);
+      void SendMessageToDirectory(BaseMsg *msg, bool isFromMemory);
       void SendMessageToNetwork(const BaseMsg *msg, NodeID dest);
       void SendRequestToMemory(const BaseMsg *msg);
 
