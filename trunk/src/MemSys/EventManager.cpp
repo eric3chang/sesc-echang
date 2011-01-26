@@ -129,6 +129,13 @@ namespace Memory
 		invalidate->size = read->size;
 	}
 
+	void EventManager::InitializeInvalidateResponseMsg(InvalidateResponseMsg* copy, const InvalidateMsg* original)
+	{
+		copy->addr = original->addr;
+		copy->size = original->size;
+		copy->solicitingMessage = original->MsgID();
+	}
+
 	void EventManager::InitializeInvalidateResponseMsg(InvalidateResponseMsg* copy, const InvalidateResponseMsg* original)
 	{
 		copy->addr = original->addr;

@@ -232,7 +232,7 @@ namespace Memory
 			}
 		}
 	}
-void MOESICache::PrepareFreshBlock(int setNumber, int index, AddrTag tag)
+	void MOESICache::PrepareFreshBlock(int setNumber, int index, AddrTag tag)
 	{
 		BlockState* mySet = GetSet(setNumber);
 		DebugAssert(mySet[index].locked == false);
