@@ -97,8 +97,10 @@ namespace Memory
 		};
 		class CacheData
 		{
-		public:
+		private:
 			CacheState cacheState;
+
+		public:
 			ReadRequestState readRequestState;
 
 			const BaseMsg* firstReply;
@@ -106,16 +108,11 @@ namespace Memory
 			int invalidAcksReceived;
 			const ReadMsg* pendingExclusiveRead;
 			const ReadMsg* pendingSharedRead;
+			std::vector<const ReadMsg*>cacheDataPendingLocalReads;
 
-			CacheData() :
-				cacheState(cs_Invalid),
-				readRequestState(rrs_NoPendingReads),
-				firstReply(NULL),
-				firstReplySrc(InvalidNodeID),
-				invalidAcksReceived(InvalidInvalidAcksReceived),
-				pendingExclusiveRead(NULL),
-				pendingSharedRead(NULL)
-			{}
+			CacheData();
+			CacheState GetCacheState();
+			void SetCacheState(CacheState newCacheState);
 		};
 		template <class T>
 		class LookupData
@@ -208,6 +205,7 @@ namespace Memory
 		int remoteConnectionID;
 		NodeID nodeID;
 
+		HashMap<MessageID, const ReadMsg*> pendingLocalReads;
 		HashMap<MessageID, const ReadMsg* > pendingRemoteReads;
 		HashMap<MessageID, const InvalidateMsg* > pendingRemoteInvalidates;
       HashMap<MessageID, const ReadMsg*> pendingMemoryReadAccesses;
