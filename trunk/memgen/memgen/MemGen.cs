@@ -20,27 +20,33 @@
         {
             case 4:
                 _ret.randomMin = 100;
-                _ret.randomMax = 116;
+                _ret.randomMax = 110;
+                //_ret.randomMax = 116;
                 break;
             case 8:
                 _ret.randomMin = 131;
-                _ret.randomMax = 152;
+                _ret.randomMax = 145;
+                //_ret.randomMax = 152;
                 break;
             case 16:
                 _ret.randomMin = 135;
-                _ret.randomMax = 156;
+                _ret.randomMax = 149;
+                //_ret.randomMax = 156;
                 break;
             case 32:
                 _ret.randomMin = 143;
-                _ret.randomMax = 166;
+                _ret.randomMax = 159;
+                //_ret.randomMax = 166;
                 break;
             case 64:
                 _ret.randomMin = 161;
-                _ret.randomMax = 186;
+                _ret.randomMax = 177;
+                //_ret.randomMax = 186;
                 break;
             case 128:
                 _ret.randomMin = 175;
-                _ret.randomMax = 202;
+                _ret.randomMax = 193;
+                //_ret.randomMax = 202;
                 break;
             default:
                 _ret.randomMin = 57;
