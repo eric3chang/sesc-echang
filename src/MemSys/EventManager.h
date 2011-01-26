@@ -103,6 +103,7 @@ namespace Memory
       void InitializeEvictionResponseMsg(EvictionResponseMsg* copy, const EvictionResponseMsg* original);
       void InitializeEvictionResponseMsg(EvictionResponseMsg* evictionResponse, const ReadMsg* read);
       void InitializeInvalidateMsg(InvalidateMsg* invalidate, const ReadMsg* read);
+		void InitializeInvalidateResponseMsg(InvalidateResponseMsg* copy, const InvalidateMsg* original);
       void InitializeInvalidateResponseMsg(InvalidateResponseMsg* copy, const InvalidateResponseMsg* original);
       void InitializeReadMsg(ReadMsg* copy, const ReadMsg* original);
       void InitializeReadMsg(ReadMsg* read, const ReadResponseMsg* readResponse);
