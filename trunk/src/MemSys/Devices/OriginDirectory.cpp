@@ -465,9 +465,14 @@ namespace Memory
 		pendingLocalReads[m->MsgID()] = m;
 		CacheData& cacheData = GetCacheData(m->addr);
 		vector<const ReadMsg*>& cacheDataPendingLocalReads = cacheData.cacheDataPendingLocalReads;
+		CacheState cacheState = cacheData.GetCacheState();
 
-		//cacheData.
+		cacheDataPendingLocalReads.push_back(m);
 
+		if (cacheState==cs_Invalid || cacheState==cs_Exclusive || cacheState==cs_Shared)
+		{
+			OnCache(EM().ReplicateMsg(m), InvalidNodeID, cacheData);
+		}
 	}
 
 	/*
@@ -674,8 +679,6 @@ namespace Memory
 
    	if (!firstReply->requestingExclusive)
    	{
-   		cacheData.SetCacheState(cs_Shared);
-
    		// send shared read ack to firstReply's requester
    		ReadResponseMsg* rrm = EM().CreateReadResponseMsg(GetDeviceID(), firstReply->GeneratingPC());
    		EM().InitializeReadResponseMsg(rrm, firstReply);
@@ -692,6 +695,8 @@ namespace Memory
    		SendMessageToDirectory(tm, false);
 
    		ClearTempCacheData(cacheData);
+			
+   		cacheData.SetCacheState(cs_Shared);
    	} // if (!m->requestingExclusive)
    	else
    	{
@@ -922,6 +927,17 @@ namespace Memory
 			SendMsg(localCacheConnectionID, rrm, localSendTime);
 
 			ClearTempCacheData(cacheData);
+			ProcessReadResponse(firstReply, cacheData);
+		}
+		else if (msg->Type()==mt_Intervention)
+		{
+			const InterventionMsg* m = (const InterventionMsg*)msg;
+			ProcessInterventionWhileInvalid(m, src);
+		}
+		else if (msg->Type()==mt_Invalidate)
+		{
+			const InvalidateMsg* m = (const InvalidateMsg*)msg;
+			ProcessInvalidateWhileInvalid(m, src);
 		}
 		else
 		{
@@ -936,46 +952,7 @@ namespace Memory
 		if (msg->Type()==mt_Intervention)
 		{
 			const InterventionMsg* m = (const InterventionMsg*)msg;
-			NodeID dirNode = directoryNodeCalc->CalcNodeID(m->addr);
-			DebugAssertWithMessageID(src==dirNode, m->MsgID());
-			DebugAssertWithMessageID(m->newOwner!=InvalidNodeID, m->solicitingMessage);
-			const ReadMsg*& pendingSharedRead = cacheData.pendingSharedRead;
-			DebugAssertWithMessageID(pendingSharedRead==NULL, m->MsgID());
-			const ReadMsg*& pendingExclusiveRead = cacheData.pendingExclusiveRead;
-			DebugAssertWithMessageID(pendingExclusiveRead==NULL, m->MsgID());
-
-			if (m->requestingExclusive)
-			{
-				// send exclusive ack to requester
-				ReadResponseMsg* rrm = EM().CreateReadResponseMsg(GetDeviceID(),m->GeneratingPC());
-				EM().InitializeReadResponseMsg(rrm, m);
-				rrm->blockAttached = false;
-				rrm->exclusiveOwnership = true;
-				rrm->satisfied = true;
-				SendMessageToRemoteCache(rrm, m->newOwner);
-
-				// send dirty transfer to directory
-				TransferMsg* tm = EM().CreateTransferMsg(GetDeviceID(),m->GeneratingPC());
-				EM().InitializeEvictionMsg(tm,m);
-				tm->isDirty = true;
-				SendMessageToDirectory(tm, false);
-			}
-			else
-			{ // not requesting exclusive
-				// send shared ack to requester
-				ReadResponseMsg* rrm = EM().CreateReadResponseMsg(GetDeviceID(), m->GeneratingPC());
-				EM().InitializeReadResponseMsg(rrm, m);
-				rrm->blockAttached = false;
-				rrm->exclusiveOwnership = false;
-				rrm->satisfied = true;
-				SendMessageToRemoteCache(rrm, m->newOwner);
-
-				// send shared transfer to directory
-				TransferMsg* tm = EM().CreateTransferMsg(GetDeviceID(), m->GeneratingPC());
-				EM().InitializeEvictionMsg(tm, m);
-				tm->isShared = true;
-				SendMessageToDirectory(tm, false);
-			} // if (m->requestingExclusive)
+			ProcessInterventionWhileInvalid(m, src);
 		}// if (msgType==Intervention)
 		else if (msg->Type()==mt_Read)
 		{
@@ -1009,14 +986,7 @@ namespace Memory
 		else if (msg->Type()==mt_Invalidate)
 		{
 			const InvalidateMsg* m = (const InvalidateMsg*)msg;
-			NodeID dirNode = directoryNodeCalc->CalcNodeID(m->addr);
-			DebugAssertWithMessageID(src==dirNode, m->MsgID());
-
-			// send invalidate ack to requester
-			InvalidateAckMsg* iam = EM().CreateInvalidateAckMsg(GetDeviceID(), m->GeneratingPC());
-			EM().InitializeInvalidateResponseMsg(iam, m);
-			iam->blockAttached = false;
-			SendMessageToRemoteCache(iam, m->newOwner);			
+			ProcessInvalidateWhileInvalid(m, src);
 		}
 		else
 		{
@@ -1124,6 +1094,17 @@ namespace Memory
 			SendMsg(localCacheConnectionID, rrm, localSendTime);
 
 			ClearTempCacheData(cacheData);
+			ProcessReadResponse(firstReply, cacheData);
+		}
+		else if (msg->Type()==mt_Intervention)
+		{
+			const InterventionMsg* m = (const InterventionMsg*)msg;
+			ProcessInterventionWhileInvalid(m, src);
+		}
+		else if (msg->Type()==mt_Invalidate)
+		{
+			const InvalidateMsg* m = (const InvalidateMsg*)msg;
+			ProcessInvalidateWhileInvalid(m, src);
 		}
 		else
 		{
@@ -1136,7 +1117,9 @@ namespace Memory
 		const BaseMsg*& firstReply = cacheData.firstReply;
 		NodeID& firstReplySrc = cacheData.firstReplySrc;
 		int& invalidAcksReceived = cacheData.invalidAcksReceived;
-		const ReadMsg*& pendingExclusiveRead = cacheData.pendingExclusiveRead;
+		//const ReadMsg*& pendingExclusiveRead = cacheData.pendingExclusiveRead;
+		DebugAssertWithMessageID(cacheData.cacheDataPendingLocalReads.size()>0, firstReply->MsgID());
+		const ReadMsg*& pendingRead = cacheData.cacheDataPendingLocalReads.front();
 		CacheState state = cacheData.GetCacheState();
 
 		if (msg->Type()==mt_CacheNak)
@@ -1144,11 +1127,11 @@ namespace Memory
 			DebugAssertWithMessageID(firstReply==NULL, msg->MsgID());
 			DebugAssertWithMessageID(firstReplySrc==InvalidNodeID, msg->MsgID());
 			const CacheNakMsg* m = (const CacheNakMsg*)msg;
-			DebugAssertWithMessageID(pendingExclusiveRead!=NULL, m->MsgID());
-			DebugAssertWithMessageID(m->solicitingMsg==pendingExclusiveRead->MsgID(), m->MsgID())
+			DebugAssertWithMessageID(pendingRead!=NULL, m->MsgID());
+			DebugAssertWithMessageID(m->solicitingMsg==pendingRead->MsgID(), m->MsgID())
 
 			// resend request
-			ReadMsg* forward  = (ReadMsg*)EM().ReplicateMsg(pendingExclusiveRead);
+			ReadMsg* forward  = (ReadMsg*)EM().ReplicateMsg(pendingRead);
 			ResendRequestToDirectory(forward);
 
 			//EM().DisposeMsg(m);
@@ -1195,6 +1178,7 @@ namespace Memory
 				cacheData.SetCacheState(cs_Exclusive);
 				SendMessageToLocalCache(m);
 				// shouldn't clear temp data here
+				ProcessReadResponse(m, cacheData);
 			}
 			else if (m->exclusiveOwnership && m->pendingInvalidates!=0)
 			{
@@ -1243,6 +1227,11 @@ namespace Memory
 			firstReply = m;
 			firstReplySrc = src;
 		}
+		else if (msg->Type()==mt_Intervention)
+		{
+			const InterventionMsg* m = (const InterventionMsg*)msg;
+			ProcessInterventionWhileInvalid(m, src);
+		}
 		else
 		{
 			PrintError("OnCacheWaitForExReadRes", msg, "Unhandled message type");
@@ -1273,6 +1262,17 @@ namespace Memory
 
 			//EM().DisposeMsg(m);
 			ClearTempCacheData(cacheData);
+			ProcessReadResponse(m, cacheData);
+		}
+		else if (msg->Type()==mt_Intervention)
+		{
+			const InterventionMsg* m = (const InterventionMsg*)msg;
+			ProcessInterventionWhileInvalid(m, src);
+		}
+		else if (msg->Type()==mt_Invalidate)
+		{
+			const InvalidateMsg* m = (const InvalidateMsg*)msg;
+			ProcessInvalidateWhileInvalid(m, src);
 		}
 		else
 		{
@@ -1309,6 +1309,9 @@ namespace Memory
 			// discard intervention without using it
 			//EM().DisposeMsg(m);
 			ClearTempCacheData(cacheData);
+
+			// process more pendingLocalReads if there are any
+			ProcessRemainingPendingLocalReads(cacheData);
    	}
    	else
    	{
@@ -1345,7 +1348,9 @@ namespace Memory
 				if (firstReply->pendingInvalidates==invalidateAcksReceived)
 				{
 					cacheData.SetCacheState(cs_Exclusive);
+					SendMessageToLocalCache(firstReply);
 					ClearTempCacheData(cacheData);
+					ProcessReadResponse(firstReply, cacheData);
 				}
 			} // if (cacheData.firstReply!=NULL)
 			else
@@ -1368,13 +1373,20 @@ namespace Memory
 			{
 				cacheData.SetCacheState(cs_Exclusive);
 				//EM().DisposeMsg(m);
+				SendMessageToLocalCache(m);
 				ClearTempCacheData(cacheData);
+				ProcessReadResponse(m, cacheData);
 			}
 			else
 			{
 				cacheData.firstReply = m;
 				firstReplySrc = src;
 			}
+		}
+		else if (msg->Type()==mt_Invalidate)
+		{
+			const InvalidateMsg* m = (const InvalidateMsg*)msg;
+			ProcessInvalidateWhileInvalid(m, src);
 		}
 		else
 		{
@@ -1389,16 +1401,17 @@ namespace Memory
 		DebugAssertWithMessageID(firstReply==NULL, msg->MsgID());
 		NodeID& firstReplySrc = cacheData.firstReplySrc;
 		DebugAssertWithMessageID(firstReplySrc==InvalidNodeID, msg->MsgID());
-		const ReadMsg*& pendingSharedRead = cacheData.pendingSharedRead;
+		//const ReadMsg*& pendingSharedRead = cacheData.pendingSharedRead;
+		DebugAssertWithMessageID(cacheData.cacheDataPendingLocalReads.size()>0, msg->MsgID());
+		const ReadMsg*& pendingRead = cacheData.cacheDataPendingLocalReads.front();
 
 		if (msg->Type()==mt_CacheNak)
 		{
 			const CacheNakMsg* m = (const CacheNakMsg*)msg;
-			DebugAssertWithMessageID(pendingSharedRead!=NULL, m->MsgID());
-			DebugAssertWithMessageID(m->solicitingMsg==pendingSharedRead->MsgID(), m->MsgID())
+			DebugAssertWithMessageID(m->solicitingMsg==pendingRead->MsgID(), m->MsgID())
 
 			// resend request
-			ReadMsg* forward = (ReadMsg*)EM().ReplicateMsg(pendingSharedRead);
+			ReadMsg* forward = (ReadMsg*)EM().ReplicateMsg(pendingRead);
 			ResendRequestToDirectory(forward);
 
 			//EM().DisposeMsg(m);
@@ -1411,13 +1424,15 @@ namespace Memory
 			{
 				cacheData.SetCacheState(cs_Exclusive);
 				SendMessageToLocalCache(m);
-				// don't clear temp data here since there should be any temp data
+				// don't clear temp data here since there shouldn't be any temp data
+				ProcessReadResponse(m, cacheData);
 			}
 			else
 			{
 				cacheData.SetCacheState(cs_Shared);
 				SendMessageToLocalCache(m);
-				// don't clear temp data here since there should be any temp data
+				// don't clear temp data here since there shouldn't be any temp data
+				ProcessReadResponse(m, cacheData);
 			}
 		}
 		else if (msg->Type()==mt_ReadResponse)
@@ -1437,6 +1452,16 @@ namespace Memory
 
 			firstReply = m;
 			firstReplySrc = src;
+		}
+		else if (msg->Type()==mt_Intervention)
+		{
+			const InterventionMsg* m = (const InterventionMsg*)msg;
+			ProcessInterventionWhileInvalid(m, src);
+		}
+		else if (msg->Type()==mt_Invalidate)
+		{
+			const InvalidateMsg* m = (const InvalidateMsg*)msg;
+			ProcessInvalidateWhileInvalid(m, src);
 		}
 		else
 		{
@@ -1471,6 +1496,8 @@ namespace Memory
 
    			//EM().DisposeMsg(m);
    			ClearTempCacheData(cacheData);
+				
+				ProcessRemainingPendingLocalReads(cacheData);
    		}
    		else
    		{
@@ -1510,6 +1537,8 @@ namespace Memory
 				//EM().DisposeMsg(m);
 				//EM().DisposeMsg(pendingEviction[m->addr]);
 				pendingEviction.erase(m->addr);
+
+				ProcessRemainingPendingLocalReads(cacheData);		
 			}
 			else if (m->isBusy)
 			{
@@ -1566,6 +1595,17 @@ namespace Memory
 
 			//EM().DisposeMsg(m);
 			ClearTempCacheData(cacheData);
+			ProcessReadResponse(m, cacheData);
+		}
+		else if (msg->Type()==mt_Intervention)
+		{
+			const InterventionMsg* m = (const InterventionMsg*)msg;
+			ProcessInterventionWhileInvalid(m, src);
+		}
+		else if (msg->Type()==mt_Invalidate)
+		{
+			const InvalidateMsg* m = (const InvalidateMsg*)msg;
+			ProcessInvalidateWhileInvalid(m, src);
 		}
 		else
 		{
@@ -2504,4 +2544,94 @@ namespace Memory
             << " " << operation
             << endl;
    }
+
+	void OriginDirectory::ProcessInterventionWhileInvalid(const InterventionMsg* m, NodeID src)
+	{
+		NodeID dirNode = directoryNodeCalc->CalcNodeID(m->addr);
+		DebugAssertWithMessageID(src==dirNode, m->MsgID());
+		DebugAssertWithMessageID(m->newOwner!=InvalidNodeID, m->solicitingMessage);
+		/*
+		const ReadMsg*& pendingSharedRead = cacheData.pendingSharedRead;
+		DebugAssertWithMessageID(pendingSharedRead==NULL, m->MsgID());
+		const ReadMsg*& pendingExclusiveRead = cacheData.pendingExclusiveRead;
+		DebugAssertWithMessageID(pendingExclusiveRead==NULL, m->MsgID());
+		*/
+
+		if (m->requestingExclusive)
+		{
+			// send exclusive ack to requester
+			ReadResponseMsg* rrm = EM().CreateReadResponseMsg(GetDeviceID(),m->GeneratingPC());
+			EM().InitializeReadResponseMsg(rrm, m);
+			rrm->blockAttached = false;
+			rrm->exclusiveOwnership = true;
+			rrm->satisfied = true;
+			SendMessageToRemoteCache(rrm, m->newOwner);
+
+			// send dirty transfer to directory
+			TransferMsg* tm = EM().CreateTransferMsg(GetDeviceID(),m->GeneratingPC());
+			EM().InitializeEvictionMsg(tm,m);
+			tm->isDirty = true;
+			SendMessageToDirectory(tm, false);
+		}
+		else
+		{ // not requesting exclusive
+			// send shared ack to requester
+			ReadResponseMsg* rrm = EM().CreateReadResponseMsg(GetDeviceID(), m->GeneratingPC());
+			EM().InitializeReadResponseMsg(rrm, m);
+			rrm->blockAttached = false;
+			rrm->exclusiveOwnership = false;
+			rrm->satisfied = true;
+			SendMessageToRemoteCache(rrm, m->newOwner);
+
+			// send shared transfer to directory
+			TransferMsg* tm = EM().CreateTransferMsg(GetDeviceID(), m->GeneratingPC());
+			EM().InitializeEvictionMsg(tm, m);
+			tm->isShared = true;
+			SendMessageToDirectory(tm, false);
+		} // if (m->requestingExclusive)
+	}
+
+	void OriginDirectory::ProcessInvalidateWhileInvalid(const InvalidateMsg* m, NodeID src)
+	{
+		NodeID dirNode = directoryNodeCalc->CalcNodeID(m->addr);
+		DebugAssertWithMessageID(src==dirNode, m->MsgID());
+
+		// send invalidate ack to requester
+		InvalidateAckMsg* iam = EM().CreateInvalidateAckMsg(GetDeviceID(), m->GeneratingPC());
+		EM().InitializeInvalidateResponseMsg(iam, m);
+		iam->blockAttached = false;
+		SendMessageToRemoteCache(iam, m->newOwner);	
+	}
+
+	/**
+	performs certain error checking when encountering readResponse types of messages,
+	which include ReadReplyMsg
+	*/
+	void OriginDirectory::ProcessReadResponse(const ReadResponseMsg* m, CacheData& cacheData)
+	{
+		vector<const ReadMsg*>& cacheDataPendingLocalReads = cacheData.cacheDataPendingLocalReads;
+
+		DebugAssertWithMessageID(pendingLocalReads.find(m->solicitingMessage)!=pendingLocalReads.end(), m->solicitingMessage);
+		pendingLocalReads.erase(m->solicitingMessage);
+		// there must be a message in cacheDataPendingLocalReads, so there shouldn't be an error using front()
+		DebugAssertWithMessageID(cacheDataPendingLocalReads.size()>0, m->solicitingMessage);
+		const ReadMsg* ref = cacheDataPendingLocalReads.front();
+		DebugAssertWithMessageID(ref->MsgID()==m->solicitingMessage, m->solicitingMessage);
+		EM().DisposeMsg(ref);
+		// erase the first entry
+		cacheDataPendingLocalReads.erase(cacheDataPendingLocalReads.begin());
+
+		ProcessRemainingPendingLocalReads(cacheData);
+	}
+
+	void OriginDirectory::ProcessRemainingPendingLocalReads(CacheData& cacheData)
+	{
+		vector<const ReadMsg*>& cacheDataPendingLocalReads = cacheData.cacheDataPendingLocalReads;
+
+		// process more pendingLocalReads if there are any
+		if (cacheDataPendingLocalReads.size() > 0)
+		{
+			OnCache(cacheDataPendingLocalReads.front(), InvalidNodeID, cacheData);
+		}
+	}
 }

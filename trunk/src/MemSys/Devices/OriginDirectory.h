@@ -273,6 +273,11 @@ namespace Memory
       void PrintDirectoryData(Address myAddress, MessageID myMessageID);
 	   void PrintEraseOwner(const char* fromMethod,Address addr,NodeID id,const char* operation);
 
+		void ProcessInterventionWhileInvalid(const InterventionMsg* m, NodeID src);
+		void ProcessInvalidateWhileInvalid(const InvalidateMsg* m, NodeID src);
+		void ProcessReadResponse(const ReadResponseMsg* m, CacheData& cacheData);
+		void ProcessRemainingPendingLocalReads(CacheData& cacheData);
+
 	   // special treatments
 		void OnCacheCacheNak(const CacheNakMsg* m, NodeID src);
 		void OnCacheInvalidateAck(const InvalidateAckMsg* m, NodeID src);
