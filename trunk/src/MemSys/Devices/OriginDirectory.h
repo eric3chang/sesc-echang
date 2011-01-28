@@ -246,8 +246,10 @@ namespace Memory
       void PerformMemoryWriteResponseCheck(const WriteResponseMsg *m, NodeID src);
 
       // these are being used currently
+		void SendCacheNak(const InterventionMsg* m);
       void SendCacheNak(const ReadMsg* m, NodeID dest);
-      void SendDirectoryNak(const ReadMsg* m);
+      void SendDirectoryNak(const InterventionMsg* m);
+		void SendInterventionNaks(const InterventionMsg* m);
       void SendInvalidateMsg(const ReadMsg* m, NodeID dest, NodeID newOwner);
       void SendMessageToLocalCache(const ReadReplyMsg* msg);
       void SendMessageToRemoteCache(const BaseMsg *msg, NodeID dest);
@@ -278,11 +280,15 @@ namespace Memory
 		void ProcessReadResponse(const ReadResponseMsg* m, CacheData& cacheData);
 		void ProcessRemainingPendingLocalReads(CacheData& cacheData);
 
-	   // special treatments
 		void OnCacheCacheNak(const CacheNakMsg* m, NodeID src);
+		void OnCacheIntervention(const InterventionMsg* m, NodeID src);
 		void OnCacheInvalidateAck(const InvalidateAckMsg* m, NodeID src);
 	   void OnCacheRead(const ReadMsg* m);
 	   void OnCacheReadResponse(const ReadResponseMsg* m, NodeID src);
+		void OnCacheSpeculativeReply(const SpeculativeReplyMsg* m, NodeID src);
+		void OnDirectoryRead(const ReadMsg* m, NodeID src);
+		void OnDirectoryIntervention(const InterventionMsg* m, NodeID src);
+		void OnDirectorySpeculativeReply(const SpeculativeReplyMsg* m, NodeID src);
 
 	   void OnCache(const BaseMsg* msg, NodeID src, CacheData& cacheData);
 	   void OnCacheCleanExclusive(const BaseMsg* msg, CacheData& cacheData);

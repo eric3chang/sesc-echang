@@ -83,6 +83,12 @@ namespace Memory
 		m->solicitingMessage = 0;
 	}
 
+	void EventManager::InitializeBaseNakMsg(BaseNakMsg* copy, const InterventionMsg* original)
+	{
+		copy->addr = original->addr;
+		copy->solicitingMsg = original->solicitingMessage;
+	}
+
 	void EventManager::InitializeBaseNakMsg(BaseNakMsg* bnm, const ReadMsg* rm)
 	{
 		bnm->addr = rm->addr;
