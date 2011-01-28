@@ -49,6 +49,7 @@ namespace Memory
 		int validCount = 0;
 		for(int i = 0; i < setSize; i++)
 		{
+			Memory::MOESICache::BlockState& tempSet = set[i];
 			if(set[i].valid && set[i].state != bs_Invalid && !set[i].locked)
 			{
 				TickTime t = std::max(set[i].lastWrite,set[i].lastRead);
@@ -247,7 +248,9 @@ namespace Memory
 		else
 		{  // cancel pendingEviction
          // need to tell OnLocalInvalidResponse that BlockEviction was canceled
-		   //canceledBlockEviction.insert(tag);
+			// Need to enable the following line to use canceledBlockEviction
+		   canceledBlockEviction.insert(tag);
+
 			mySet[index] = pendingEviction[tag];
 		#ifdef MEMORY_MOESI_CACHE_DEBUG_PENDING_EVICTION
 			PrintDebugInfo("PrepareFreshBlock",tag,"pendingEviction.erase");
@@ -717,21 +720,24 @@ namespace Memory
 #endif
 		DebugAssertWithMessageID(m,m->MsgID());
 		AddrTag tag = CalcTag(m->addr);
-		/*
+		
+		/* // original
+		DebugAssertWithMessageID(pendingEviction.find(tag) != pendingEviction.end()
+		      || pendingInvalidate.find(tag) != pendingInvalidate.end()
+		      ,m->MsgID());
+				*/
+		// canceledBlockEviction fix. Without this fix, the above assertion would
+			// sometimes be false, caused by a canceled eviction
 		DebugAssertWithMessageID(pendingEviction.find(tag) != pendingEviction.end()
 		      || pendingInvalidate.find(tag) != pendingInvalidate.end()
 		      || canceledBlockEviction.find(tag) != canceledBlockEviction.end()
 		      ,m->MsgID());
-				*/
-		DebugAssertWithMessageID(pendingEviction.find(tag) != pendingEviction.end()
-		      || pendingInvalidate.find(tag) != pendingInvalidate.end()
-		      ,m->MsgID());
 
+		// original
+		// if (false)
 		// if a block eviction was canceled by PrepareFreshBlock()
-		//if (canceledBlockEviction.find(tag) != canceledBlockEviction.end())
-		if (false)
+		if (canceledBlockEviction.find(tag) != canceledBlockEviction.end())
 		{
-			/*
 		   // if the block was canceled eviction, it shouldn't be found
 		   // in pendingEviction or pendingInvalidate
 		   DebugAssertWithMessageID(pendingEviction.find(tag) == pendingEviction.end(),m->MsgID());
@@ -739,7 +745,6 @@ namespace Memory
 		   canceledBlockEviction.erase(tag);
 		   EM().DisposeMsg(m);
 		   return;
-		   */
 		}
 		else //(canceledBlockEviction.find(tag) == canceledBlockEviction.end())
 		{
