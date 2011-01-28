@@ -329,6 +329,8 @@ namespace Memory
 	{
 		WritebackAckMsg* m = writebackAckPool.Take();
 		FillEvictionResponseMsg(m,devID,generatingPC);
+		m->isBusy = false;
+		m->isExclusive = false;
 		return m;
 	}
    WritebackRequestMsg* EventManager::CreateWritebackRequestMsg(DeviceID devID, Address generatingPC)

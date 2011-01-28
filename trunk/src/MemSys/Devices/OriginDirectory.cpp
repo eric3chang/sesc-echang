@@ -174,23 +174,17 @@ namespace Memory
 
 	void OriginDirectory::RecvMsgDirectory(const BaseMsg *msg, NodeID src, bool isFromMemory)
 	{
-		if (msg->Type()==mt_Intervention)
-		{
-			DebugAssertWithMessageID(!isFromMemory, msg->MsgID());
-			const InterventionMsg* m = (const InterventionMsg*)msg;
-			OnDirectoryIntervention(m, src);
-		}
-		else if (msg->Type()==mt_Read)
+		if (msg->Type()==mt_Read)
 		{
 			DebugAssertWithMessageID(!isFromMemory, msg->MsgID());
 			const ReadMsg* m = (const ReadMsg*)msg;
 			OnDirectoryRead(m, src);
 		}
-		else if (msg->Type()==mt_SpeculativeReply)
+		else if (msg->Type()==mt_WritebackRequest)
 		{
 			DebugAssertWithMessageID(!isFromMemory, msg->MsgID());
-			const SpeculativeReplyMsg* m = (const SpeculativeReplyMsg*)msg;
-			OnDirectorySpeculativeReply(m, src);
+			const WritebackRequestMsg* m = (const WritebackRequestMsg*)msg;
+			OnDirectoryWritebackRequest(m, src);
 		}
 		else if (msg->Type()==mt_WriteResponse)
 		{
@@ -1620,6 +1614,8 @@ namespace Memory
 		if (msg->Type()==mt_WritebackAck)
 		{
 			const WritebackAckMsg* m = (const WritebackAckMsg*)msg;
+			// only one of these can be true
+			DebugAssertWithMessageID( (m->isBusy&&!m->isExclusive) || (!m->isBusy&&m->isExclusive), m->solicitingMessage);
 
 			if (m->isExclusive)
 			{
@@ -1996,6 +1992,7 @@ namespace Memory
 		}
 		else if (msg->Type()==mt_Transfer)
 		{
+			const TransferMsg* m = (const TransferMsg*)msg;
 			state = ds_Shared;
 			ClearTempDirectoryData(directoryData);
 		}
@@ -2280,11 +2277,6 @@ namespace Memory
 		//EM().DisposeMsg(msg);
 	}
 
-	void OriginDirectory::OnDirectoryIntervention(const InterventionMsg* m, NodeID src)
-	{
-		OnDirectory(m, src, false);
-	}
-
 	void OriginDirectory::OnDirectoryRead(const ReadMsg* m, NodeID src)
 	{
 		OnDirectory(m, src, false);
@@ -2488,11 +2480,6 @@ namespace Memory
 		}
 	} // OnDirectorySharedMemoryAccess
 
-	void OriginDirectory::OnDirectorySpeculativeReply(const SpeculativeReplyMsg* m, NodeID src)
-	{
-		OnDirectory(m, src, false);
-	}
-
 	void OriginDirectory::OnDirectoryUnowned(const BaseMsg* msg, NodeID src, DirectoryData& directoryData, bool isFromMemory)
 	{
 		DirectoryState& state = directoryData.state;
@@ -2517,6 +2504,12 @@ namespace Memory
 			PrintError("OnDirUnowned",msg);
 		}
 	}
+
+	void OriginDirectory::OnDirectoryWritebackRequest(const WritebackRequestMsg* m, NodeID src)
+	{
+		OnDirectory(m, src, false);
+	}
+
 	/**
 	 * Handles all the messages coming into the directory
 	 * The message can come from the cache, memory, or the network

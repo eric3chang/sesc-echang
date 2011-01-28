@@ -287,8 +287,7 @@ namespace Memory
 	   void OnCacheReadResponse(const ReadResponseMsg* m, NodeID src);
 		void OnCacheSpeculativeReply(const SpeculativeReplyMsg* m, NodeID src);
 		void OnDirectoryRead(const ReadMsg* m, NodeID src);
-		void OnDirectoryIntervention(const InterventionMsg* m, NodeID src);
-		void OnDirectorySpeculativeReply(const SpeculativeReplyMsg* m, NodeID src);
+		void OnDirectoryWritebackRequest(const WritebackRequestMsg* m, NodeID src);
 
 	   void OnCache(const BaseMsg* msg, NodeID src, CacheData& cacheData);
 	   void OnCacheCleanExclusive(const BaseMsg* msg, CacheData& cacheData);
