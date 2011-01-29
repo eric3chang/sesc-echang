@@ -12,8 +12,8 @@ namespace Memory
 		bool satisfied;
 		bool blockAttached;
       bool directoryLookup;
-      //MessageID evictionMessage;
 		bool exclusiveOwnership;
+		MessageID interventionMessage;
 		bool isDirty;
 		MessageID solicitingMessage;
 
@@ -26,8 +26,8 @@ namespace Memory
 		   cout << " adr=" << addr
             <<" sat=" << satisfied
 		      << " at=" << blockAttached
-            //<< " evi=" << evictionMessage
             << " exOw=" << exclusiveOwnership
+            << " intv=" << interventionMessage
             << " dirty=" << isDirty
             << " sMsg=" << solicitingMessage
 		   ;

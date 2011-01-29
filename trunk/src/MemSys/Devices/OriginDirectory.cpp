@@ -136,10 +136,38 @@ namespace Memory
 
 	void OriginDirectory::RecvMsgCache(const BaseMsg *msg, NodeID src)
 	{
-		if (msg->Type()==mt_Intervention)
+		Address addr = BaseMemDevice::GetAddress(msg);
+		
+		if (msg->Type()==mt_CacheNak)
+		{
+			const CacheNakMsg* m = (const CacheNakMsg*)msg;
+			OnCacheCacheNak(m, src);
+		}
+		else if (msg->Type()==mt_Eviction)
+		{
+			const EvictionMsg* m = (const EvictionMsg*)msg;
+			DebugAssertWithMessageID(src==InvalidNodeID, m->MsgID());
+			OnCacheEviction(m, src);
+		}
+		else if (msg->Type()==mt_Intervention)
 		{
 			const InterventionMsg* m = (const InterventionMsg*)msg;
 			OnCacheIntervention(m, src);
+		}
+		else if (msg->Type()==mt_Invalidate)
+		{
+			const InvalidateMsg* m = (const InvalidateMsg*)msg;
+			OnCacheInvalidate(m, src);
+		}
+		else if (msg->Type()==mt_InvalidateAck)
+		{
+			const InvalidateAckMsg* m = (const InvalidateAckMsg*)msg;
+			OnCacheInvalidateAck(m, src);
+		}
+		else if (msg->Type()==mt_InvalidateResponse)
+		{
+			const InvalidateResponseMsg* m = (const InvalidateResponseMsg*)msg;
+			OnCacheInvalidateResponse(m, src);
 		}
 		else if (msg->Type()==mt_Read)
 		{
@@ -154,16 +182,26 @@ namespace Memory
 			//DebugAssertWithMessageID(src!=InvalidNodeID, m->solicitingMessage);
 			OnCacheReadResponse(m, src);
 		}
-		else if (msg->Type()==mt_CacheNak)
-		{
-			const CacheNakMsg* m = (const CacheNakMsg*)msg;
-			OnCacheCacheNak(m, src);
-		}
 		*/
 		else if (msg->Type()==mt_SpeculativeReply)
 		{
 			const SpeculativeReplyMsg* m = (const SpeculativeReplyMsg*)msg;
 			OnCacheSpeculativeReply(m, src);
+		}
+		else if (msg->Type()==mt_ReadResponse)
+		{
+			const ReadResponseMsg* m = (const ReadResponseMsg*)msg;
+			OnCacheReadResponse(m, src);
+		}
+		else if (msg->Type()==mt_ReadReply)
+		{
+			const ReadReplyMsg* m = (const ReadReplyMsg*)msg;
+			OnCacheReadReply(m, src);
+		}
+		else if (msg->Type()==mt_WritebackAck)
+		{
+			const WritebackAckMsg* m = (const WritebackAckMsg*)msg;
+			OnCacheWritebackAck(m, src);
 		}
 		else
 		{
@@ -174,11 +212,30 @@ namespace Memory
 
 	void OriginDirectory::RecvMsgDirectory(const BaseMsg *msg, NodeID src, bool isFromMemory)
 	{
-		if (msg->Type()==mt_Read)
+		if (msg->Type()==mt_DirectoryNak)
+		{
+			DebugAssertWithMessageID(!isFromMemory, msg->MsgID());
+			const DirectoryNakMsg* m = (const DirectoryNakMsg*)msg;
+			OnDirectoryDirectoryNak(m, src);
+		}
+		else if (msg->Type()==mt_Read)
 		{
 			DebugAssertWithMessageID(!isFromMemory, msg->MsgID());
 			const ReadMsg* m = (const ReadMsg*)msg;
 			OnDirectoryRead(m, src);
+		}
+		else if (msg->Type()==mt_Transfer)
+		{
+			const TransferMsg* m = (const TransferMsg*)msg;
+			DirectoryData& directoryData = GetDirectoryData(m->addr);
+			OnDirectory(m, src, directoryData, isFromMemory);
+		}
+		else if (msg->Type()==mt_ReadResponse)
+		{
+			const ReadResponseMsg* m = (const ReadResponseMsg*)msg;
+			DirectoryData& directoryData = GetDirectoryData(m->addr);
+			DebugAssertWithMessageID(isFromMemory, m->solicitingMessage);
+			OnDirectory(m, src, directoryData, isFromMemory);
 		}
 		else if (msg->Type()==mt_WritebackRequest)
 		{
@@ -188,13 +245,14 @@ namespace Memory
 		}
 		else if (msg->Type()==mt_WriteResponse)
 		{
-			DebugAssertWithMessageID(isFromMemory, msg->MsgID());
 			const WriteResponseMsg* m = (const WriteResponseMsg*)msg;
+			DebugAssertWithMessageID(isFromMemory, m->solicitingMessage);
 			PerformMemoryWriteResponseCheck(m, src);
 		}
 		else
 		{
-			OnDirectory(msg, src, isFromMemory);
+			DirectoryData& directoryData = GetDirectoryData(msg);
+			OnDirectory(msg, src, directoryData, isFromMemory);
 		}
 	}
 
@@ -221,6 +279,7 @@ namespace Memory
    {
    	CacheNakMsg* cnk = EM().CreateCacheNakMsg(GetDeviceID(), m->GeneratingPC());
    	EM().InitializeBaseNakMsg(cnk, m);
+		cnk->interventionMessage = m->MsgID();
 		SendMessageToRemoteCache(cnk, m->newOwner);
    } // SendCacheNak
 
@@ -448,6 +507,9 @@ namespace Memory
 	void OriginDirectory::OnCacheCacheNak(const CacheNakMsg* m, NodeID src)
 	{
 		CacheData& cacheData = GetCacheData(m->addr);
+		OnCache(m, src, cacheData);
+		return;
+		/*
 		const ReadMsg*& pendingExclusiveRead = cacheData.pendingExclusiveRead;
 		const ReadMsg*& pendingSharedRead = cacheData.pendingSharedRead;
 		ReadRequestState &state = cacheData.readRequestState;
@@ -455,33 +517,42 @@ namespace Memory
 		switch(state)
 		{
 		case rrs_PendingSharedRead:
-			DebugAssertWithMessageID(pendingSharedRead!=NULL, m->solicitingMsg);
-			DebugAssertWithMessageID(pendingSharedRead->MsgID()==m->solicitingMsg, m->solicitingMsg);
+			DebugAssertWithMessageID(pendingSharedRead!=NULL, m->solicitingMessage);
+			DebugAssertWithMessageID(pendingSharedRead->MsgID()==m->solicitingMessage, m->solicitingMessage);
 			break;
 		case rrs_PendingExclusiveRead:
-			DebugAssertWithMessageID(pendingExclusiveRead!=NULL, m->solicitingMsg);
-			DebugAssertWithMessageID(pendingExclusiveRead->MsgID()==m->solicitingMsg, m->solicitingMsg);
+			DebugAssertWithMessageID(pendingExclusiveRead!=NULL, m->solicitingMessage);
+			DebugAssertWithMessageID(pendingExclusiveRead->MsgID()==m->solicitingMessage, m->solicitingMessage);
 			break;
 		case rrs_PendingSharedReadExclusiveRead:
-			DebugAssertWithMessageID(pendingSharedRead!=NULL, m->solicitingMsg);
-			DebugAssertWithMessageID(pendingSharedRead->MsgID()==m->solicitingMsg, m->solicitingMsg);
+			DebugAssertWithMessageID(pendingSharedRead!=NULL, m->solicitingMessage);
+			DebugAssertWithMessageID(pendingSharedRead->MsgID()==m->solicitingMessage, m->solicitingMessage);
 			break;
 		default:
 			PrintError("OnCacheCacheNak", m, "Unhandled state");
 			break;
 		}
+		*/
+	}
 
+	void OriginDirectory::OnCacheInvalidate(const InvalidateMsg* m, NodeID src)
+	{
+		CacheData& cacheData = GetCacheData(m->addr);
 		OnCache(m, src, cacheData);
+		return;
 	}
 
 	void OriginDirectory::OnCacheInvalidateAck(const InvalidateAckMsg* m, NodeID src)
 	{
 		CacheData& cacheData = GetCacheData(m->addr);
+		OnCache(m, src, cacheData);
+		return;
+		/*
 		CacheState cacheState = cacheData.GetCacheState();
 		const ReadMsg*& pendingExclusiveRead = cacheData.pendingExclusiveRead;
 		ReadRequestState& readRequestState = cacheData.readRequestState;
 		
-		// can't check solicitingMsg of InvalidateAckMsg because it refers to InvalidateMsg,
+		// can't check solicitingMessage of InvalidateAckMsg because it refers to InvalidateMsg,
 			// and not the ReadMsg that generated the InvalidateMsg
 
 		switch(readRequestState)
@@ -497,6 +568,14 @@ namespace Memory
 		default:
 			PrintError("OnCacheInvAck", m);
 		}
+		*/
+	}
+
+	void OriginDirectory::OnCacheInvalidateResponse(const InvalidateResponseMsg* m, NodeID src)
+   {
+		CacheData& cacheData = GetCacheData(m->addr);
+		OnCache(m, src, cacheData);
+		return;
 	}
 
 	void OriginDirectory::OnCacheRead(const ReadMsg* m)
@@ -564,9 +643,19 @@ namespace Memory
    }
    */
 
+	void OriginDirectory::OnCacheReadReply(const ReadReplyMsg* m, NodeID src)
+   {
+		CacheData& cacheData = GetCacheData(m->addr);
+		OnCache(m, src, cacheData);
+		return;
+	}
+
 	void OriginDirectory::OnCacheReadResponse(const ReadResponseMsg* m, NodeID src)
    {
 		CacheData& cacheData = GetCacheData(m->addr);
+		OnCache(m, src, cacheData);
+		return;
+		/*
 		CacheState cacheState = cacheData.GetCacheState();
    	ReadRequestState& readRequestState = cacheData.readRequestState;
    	const ReadMsg*& pendingExclusiveRead = cacheData.pendingExclusiveRead;
@@ -652,6 +741,7 @@ namespace Memory
    		PrintError("OnDirReadRes", m, readRequestState);
    		break;
    	}
+		*/
    }
 
 	void OriginDirectory::OnCache(const BaseMsg* msg, NodeID src, CacheData& cacheData)
@@ -724,6 +814,7 @@ namespace Memory
    		EM().InitializeReadResponseMsg(rrm, firstReply);
    		rrm->blockAttached = false;
    		rrm->exclusiveOwnership = false;
+			rrm->interventionMessage = firstReply->MsgID();
    		rrm->satisfied = true;
    		SendMessageToRemoteCache(rrm, firstReplySrc);
 
@@ -747,6 +838,7 @@ namespace Memory
    		EM().InitializeReadResponseMsg(rrm, firstReply);
    		rrm->blockAttached = false;
    		rrm->exclusiveOwnership = true;
+			rrm->interventionMessage = firstReply->MsgID();
    		rrm->satisfied = true;
    		SendMessageToRemoteCache(rrm, firstReplySrc);
 
@@ -807,6 +899,7 @@ namespace Memory
    			EM().InitializeReadResponseMsg(rrm, firstReply);
    			rrm->blockAttached = true;
    			rrm->exclusiveOwnership = true;
+				rrm->interventionMessage = firstReply->MsgID();
    			rrm->satisfied = true;
    			SendMessageToRemoteCache(rrm, firstReplySrc);
 
@@ -829,6 +922,7 @@ namespace Memory
    			EM().InitializeReadResponseMsg(rrm, firstReply);
    			rrm->blockAttached = true;
    			rrm->exclusiveOwnership = false;
+				rrm->interventionMessage = firstReply->MsgID();
    			rrm->satisfied = true;
    			SendMessageToRemoteCache(rrm, firstReplySrc);
 
@@ -845,13 +939,21 @@ namespace Memory
    	} // else msg type is not eviction
    } // OnCacheDirtyExclusive
 
+	void OriginDirectory::OnCacheEviction(const EvictionMsg* m, NodeID src)
+	{
+		CacheData& cacheData = GetCacheData(m->addr);
+		OnCache(m, src, cacheData);
+		return;
+	}
+
 	void OriginDirectory::OnCacheExclusive(const BaseMsg* msg, NodeID src, CacheData& cacheData)
 	{
+		const BaseMsg*& firstReplyBase = cacheData.firstReply;
+		NodeID& firstReplySrc = cacheData.firstReplySrc;
+
 		if (msg->Type()==mt_Intervention)
 		{
-			const BaseMsg*& firstReply = cacheData.firstReply;
-			DebugAssertWithMessageID(firstReply==NULL, msg->MsgID());
-			NodeID& firstReplySrc = cacheData.firstReplySrc;
+			DebugAssertWithMessageID(firstReplyBase==NULL, msg->MsgID());
 			DebugAssertWithMessageID(firstReplySrc==InvalidNodeID, msg->MsgID());
 
 			const InterventionMsg* m = (const InterventionMsg*)msg;
@@ -862,7 +964,7 @@ namespace Memory
 
 			if (m->requestingExclusive)
 			{
-				firstReply = m;
+				firstReplyBase = m;
 				firstReplySrc = m->newOwner;
 
 				// send invalidate to cache
@@ -877,7 +979,7 @@ namespace Memory
 			} // if (m->requestingExclusive)
 			else // !m->requestingExclusiv
 			{
-				firstReply = m;
+				firstReplyBase = m;
 				firstReplySrc = m->newOwner;
 
 				// send ReadMsg to cache
@@ -893,9 +995,7 @@ namespace Memory
 		} // if (msg->Type()==mt_Intervention)
 		else if (msg->Type()==mt_Eviction)
 		{
-			const BaseMsg*& firstReply = cacheData.firstReply;
-			DebugAssertWithMessageID(firstReply==NULL, msg->MsgID());
-			NodeID& firstReplySrc = cacheData.firstReplySrc;
+			DebugAssertWithMessageID(firstReplyBase==NULL, msg->MsgID());
 			DebugAssertWithMessageID(firstReplySrc==InvalidNodeID, msg->MsgID());
 			DebugAssertWithMessageID(src==InvalidNodeID, msg->MsgID());
 
@@ -1174,54 +1274,62 @@ namespace Memory
 
 	void OriginDirectory::OnCacheWaitingForExclusiveReadResponse(const BaseMsg* msg, NodeID src, CacheData& cacheData)
 	{
-		const BaseMsg*& firstReply = cacheData.firstReply;
+		const BaseMsg*& firstReplyBase = cacheData.firstReply;
 		NodeID& firstReplySrc = cacheData.firstReplySrc;
 		int& invalidAcksReceived = cacheData.invalidAcksReceived;
 		//const ReadMsg*& pendingExclusiveRead = cacheData.pendingExclusiveRead;
-		DebugAssertWithMessageID(cacheData.cacheDataPendingLocalReads.size()>0, firstReply->MsgID());
+		DebugAssertWithMessageID(cacheData.cacheDataPendingLocalReads.size()>0, firstReplyBase->MsgID());
 		const ReadMsg*& pendingRead = cacheData.cacheDataPendingLocalReads.front();
 		//CacheState state = cacheData.GetCacheState();
 
 		if (msg->Type()==mt_CacheNak)
 		{
-			DebugAssertWithMessageID(firstReply==NULL, msg->MsgID());
-			DebugAssertWithMessageID(firstReplySrc==InvalidNodeID, msg->MsgID());
 			const CacheNakMsg* m = (const CacheNakMsg*)msg;
-			DebugAssertWithMessageID(pendingRead!=NULL, m->MsgID());
-			DebugAssertWithMessageID(m->solicitingMsg==pendingRead->MsgID(), m->MsgID())
+			DebugAssertWithMessageID(pendingRead!=NULL, m->solicitingMessage);
+			DebugAssertWithMessageID(m->solicitingMessage==pendingRead->MsgID(), m->solicitingMessage);
+			DebugAssertWithMessageID(firstReplyBase==NULL, m->solicitingMessage);
+			DebugAssertWithMessageID(firstReplySrc==InvalidNodeID, m->solicitingMessage);
 
-			// resend request
-			ReadMsg* forward  = (ReadMsg*)EM().ReplicateMsg(pendingRead);
-			ResendRequestToDirectory(forward);
-
-			//EM().DisposeMsg(m);
+			if (m->interventionMessage==0)
+			{
+				// resend request
+				ReadMsg* forward  = (ReadMsg*)EM().ReplicateMsg(pendingRead);
+				ResendRequestToDirectory(forward);
+				EM().DisposeMsg(m);
+			}
+			else
+			{
+				firstReplyBase = m;
+			}
 		}
 		else if (msg->Type()==mt_Invalidate)
 		{
-			DebugAssertWithMessageID(firstReply==NULL, msg->MsgID());
+			const InvalidateMsg* m = (const InvalidateMsg*)msg;
+
+			DebugAssertWithMessageID(firstReplyBase==NULL, msg->MsgID());
 			DebugAssertWithMessageID(firstReplySrc==InvalidNodeID, msg->MsgID());
 			DebugAssertWithMessageID(src!=InvalidNodeID, msg->MsgID());
 
-			firstReply = msg;
+			firstReplyBase = msg;
 			firstReplySrc = src;
 
-			SendMsg(localCacheConnectionID, msg, localSendTime);
+			SendMsg(localCacheConnectionID, m, localSendTime);
 		}
 		else if (msg->Type()==mt_InvalidateResponse)
 		{
-			DebugAssertWithMessageID(firstReply!=NULL, msg->MsgID());
-			DebugAssertWithMessageID(firstReply->Type()==mt_Invalidate, msg->MsgID());
-			const InvalidateMsg* firstReplyCasted = (const InvalidateMsg*)firstReply;
+			DebugAssertWithMessageID(firstReplyBase!=NULL, msg->MsgID());
+			DebugAssertWithMessageID(firstReplyBase->Type()==mt_Invalidate, msg->MsgID());
+			const InvalidateMsg* firstReply = (const InvalidateMsg*)firstReplyBase;
 			DebugAssertWithMessageID(firstReplySrc!=InvalidNodeID, msg->MsgID());
 			DebugAssertWithMessageID(src==InvalidNodeID, msg->MsgID());
 			const InvalidateResponseMsg* m = (const InvalidateResponseMsg*) msg;
-			DebugAssertWithMessageID(m->solicitingMessage==firstReply->MsgID(), firstReply->MsgID());
+			DebugAssertWithMessageID(m->solicitingMessage==firstReplyBase->MsgID(), firstReplyBase->MsgID());
 
 			// send invalidate ack to requester
 			InvalidateAckMsg* iam = EM().CreateInvalidateAckMsg(GetDeviceID(), m->GeneratingPC());
 			EM().InitializeInvalidateResponseMsg(iam, m);
-			DebugAssertWithMessageID(firstReplyCasted->newOwner!=InvalidNodeID, m->solicitingMessage);
-			SendMessageToRemoteCache(iam, firstReplyCasted->newOwner);
+			DebugAssertWithMessageID(firstReply->newOwner!=InvalidNodeID, m->solicitingMessage);
+			SendMessageToRemoteCache(iam, firstReply->newOwner);
 
 			//EM().DisposeMsg(m);
 			ClearTempCacheData(cacheData);
@@ -1229,7 +1337,7 @@ namespace Memory
 		else if (msg->Type()==mt_ReadReply)
 		{
 			const ReadReplyMsg* m = (const ReadReplyMsg*)msg;
-			DebugAssertWithMessageID(firstReply==NULL, m->solicitingMessage);
+			DebugAssertWithMessageID(firstReplyBase==NULL, m->solicitingMessage);
 			DebugAssertWithMessageID(firstReplySrc==InvalidNodeID, m->solicitingMessage);
 			DebugAssertWithMessageID(src!=InvalidNodeID, m->solicitingMessage);
 
@@ -1249,7 +1357,7 @@ namespace Memory
 			else if (m->pendingInvalidates > 0)
 			{
 				cacheData.SetCacheState(cs_WaitingForKInvalidatesJInvalidatesReceived);
-				firstReply = m;
+				firstReplyBase = m;
 				firstReplySrc = src;
 			}
 		} // else if (msg->Type()==mt_ReadReply)
@@ -1257,9 +1365,9 @@ namespace Memory
 		{
 			const InvalidateAckMsg* m = (const InvalidateAckMsg*)msg;
 
-			DebugAssertWithMessageID(firstReply==NULL, m->solicitingMessage);
+			DebugAssertWithMessageID(firstReplyBase==NULL, m->solicitingMessage);
 			DebugAssertWithMessageID(firstReplySrc==InvalidNodeID, m->solicitingMessage);
-			// don't put anything in firstReply because that's to be used by Exclusive Reply
+			// don't put anything in firstReplyBase because that's to be used by Exclusive Reply
 			DebugAssertWithMessageID(invalidAcksReceived==InvalidInvalidAcksReceived, m->solicitingMessage);
 
 			invalidAcksReceived++;
@@ -1269,24 +1377,37 @@ namespace Memory
 		}
 		else if (msg->Type()==mt_SpeculativeReply)
 		{
-			DebugAssertWithMessageID(firstReply==NULL, msg->MsgID());
-			DebugAssertWithMessageID(firstReplySrc==InvalidNodeID, msg->MsgID());
-			DebugAssertWithMessageID(src!=InvalidNodeID, msg->MsgID());
 			const SpeculativeReplyMsg* m = (const SpeculativeReplyMsg*)msg;
+			NodeID dirNode = directoryNodeCalc->CalcNodeID(m->addr);
+			DebugAssertWithMessageID(src==dirNode, m->solicitingMessage);
 
-			cacheData.SetCacheState(cs_WaitingForExclusiveResponseAck);
+			if (firstReplyBase==NULL)
+			{
+				cacheData.SetCacheState(cs_WaitingForExclusiveResponseAck);
 
-			firstReply = m;
-			firstReplySrc = src;
+				firstReplyBase = m;
+				firstReplySrc = src;
+			}
+			else
+			{// if we received a cache nak, discard the speculativeReply and resend request
+				DebugAssertWithMessageID(firstReplyBase->Type()==mt_CacheNak, m->solicitingMessage);
+				const CacheNakMsg* firstReply = (const CacheNakMsg*)firstReplyBase;
+				
+				// resend read request to directory
+				ReadMsg* forward  = (ReadMsg*)EM().ReplicateMsg(pendingRead);
+				ResendRequestToDirectory(forward);
+				EM().DisposeMsg(m);
+				ClearTempCacheData(cacheData);
+			}
 		}
 		else if (msg->Type()==mt_ReadResponse)
 		{
 			const ReadResponseMsg* m = (const ReadResponseMsg*)msg;
-			DebugAssertWithMessageID(src!=InvalidNodeID, msg->MsgID());
-			DebugAssertWithMessageID(m->exclusiveOwnership==true, m->MsgID());
+			DebugAssertWithMessageID(src!=InvalidNodeID, m->solicitingMessage);
+			DebugAssertWithMessageID(m->exclusiveOwnership==true, m->solicitingMessage);
 
 			cacheData.SetCacheState(cs_ExclusiveWaitingForSpeculativeReply);
-			firstReply = m;
+			firstReplyBase = m;
 			firstReplySrc = src;
 		}
 		// don't know if I should enable this or not
@@ -1336,9 +1457,9 @@ namespace Memory
 		else if (msg->Type()==mt_CacheNak)
 		{
 			const CacheNakMsg* m = (const CacheNakMsg*)msg;
-			DebugAssertWithMessageID(cacheData.cacheDataPendingLocalReads.size()>0, m->solicitingMsg);
+			DebugAssertWithMessageID(cacheData.cacheDataPendingLocalReads.size()>0, m->solicitingMessage);
 			const ReadMsg* ref = cacheData.cacheDataPendingLocalReads.front();
-			DebugAssertWithMessageID(ref->MsgID()==m->solicitingMsg, m->solicitingMsg);
+			DebugAssertWithMessageID(ref->MsgID()==m->solicitingMessage, m->solicitingMessage);
 
 			// resend read request
 			ReadMsg* forward = (ReadMsg*)EM().ReplicateMsg(ref);
@@ -1409,6 +1530,8 @@ namespace Memory
 	{
 		//CacheState state = cacheData.GetCacheState();
 		int& invalidateAcksReceived = cacheData.invalidAcksReceived;
+		const BaseMsg*& firstReplyBase = cacheData.firstReply;
+		NodeID& firstReplySrc = cacheData.firstReplySrc;
 
 		if (msg->Type()==mt_Intervention)
 		{
@@ -1419,8 +1542,8 @@ namespace Memory
 		{
 			if (cacheData.firstReply!=NULL)
 			{
-				DebugAssertWithMessageID(cacheData.firstReply->Type()==mt_ReadReply, msg->MsgID());
-				const ReadReplyMsg* firstReply = (const ReadReplyMsg*) cacheData.firstReply;
+				DebugAssertWithMessageID(firstReplyBase->Type()==mt_ReadReply, msg->MsgID());
+				const ReadReplyMsg* firstReply = (const ReadReplyMsg*) firstReplyBase;
 				DebugAssertWithMessageID(firstReply->exclusiveOwnership, firstReply->solicitingMessage);
 				DebugAssertWithMessageID(firstReply->pendingInvalidates > invalidateAcksReceived, firstReply->solicitingMessage);
 
@@ -1445,8 +1568,7 @@ namespace Memory
 			const ReadReplyMsg* m = (const ReadReplyMsg*)msg;
 			DebugAssertWithMessageID(m->exclusiveOwnership, m->solicitingMessage);
 			DebugAssertWithMessageID(m->pendingInvalidates>0, m->solicitingMessage);
-			DebugAssertWithMessageID(cacheData.firstReply==NULL, m->solicitingMessage);
-			NodeID& firstReplySrc = cacheData.firstReplySrc;
+			DebugAssertWithMessageID(firstReplyBase==NULL, m->solicitingMessage);
 			DebugAssertWithMessageID(firstReplySrc==InvalidNodeID, m->solicitingMessage);
 
 			if (m->pendingInvalidates==invalidateAcksReceived)
@@ -1479,10 +1601,8 @@ namespace Memory
 	void OriginDirectory::OnCacheWaitingForSharedReadResponse(const BaseMsg* msg, NodeID src, CacheData& cacheData)
 	{
 		//CacheState state = cacheData.GetCacheState();
-		const BaseMsg*& firstReply = cacheData.firstReply;
-		DebugAssertWithMessageID(firstReply==NULL, msg->MsgID());
+		const BaseMsg*& firstReplyBase = cacheData.firstReply;
 		NodeID& firstReplySrc = cacheData.firstReplySrc;
-		DebugAssertWithMessageID(firstReplySrc==InvalidNodeID, msg->MsgID());
 		//const ReadMsg*& pendingSharedRead = cacheData.pendingSharedRead;
 		DebugAssertWithMessageID(cacheData.cacheDataPendingLocalReads.size()>0, msg->MsgID());
 		const ReadMsg*& pendingRead = cacheData.cacheDataPendingLocalReads.front();
@@ -1490,17 +1610,27 @@ namespace Memory
 		if (msg->Type()==mt_CacheNak)
 		{
 			const CacheNakMsg* m = (const CacheNakMsg*)msg;
-			DebugAssertWithMessageID(m->solicitingMsg==pendingRead->MsgID(), m->MsgID())
+			DebugAssertWithMessageID(m->solicitingMessage==pendingRead->MsgID(), m->MsgID());
+			DebugAssertWithMessageID(firstReplyBase==NULL, m->solicitingMessage);
+			DebugAssertWithMessageID(firstReplySrc==InvalidNodeID, m->solicitingMessage);
 
-			// resend request
-			ReadMsg* forward = (ReadMsg*)EM().ReplicateMsg(pendingRead);
-			ResendRequestToDirectory(forward);
-
-			//EM().DisposeMsg(m);
+			if (m->interventionMessage==0)
+			{
+				// resend request
+				ReadMsg* forward  = (ReadMsg*)EM().ReplicateMsg(pendingRead);
+				ResendRequestToDirectory(forward);
+				EM().DisposeMsg(m);
+			}
+			else
+			{
+				firstReplyBase = m;
+			}
 		}
 		else if (msg->Type()==mt_ReadReply)
 		{
 			const ReadReplyMsg* m = (const ReadReplyMsg*)msg;
+			DebugAssertWithMessageID(firstReplyBase==NULL, m->solicitingMessage);
+			DebugAssertWithMessageID(firstReplySrc==InvalidNodeID, m->solicitingMessage);
 
 			if (m->exclusiveOwnership)
 			{
@@ -1520,10 +1650,12 @@ namespace Memory
 		else if (msg->Type()==mt_ReadResponse)
 		{
 			const ReadResponseMsg* m = (const ReadResponseMsg*)msg;
-			DebugAssertWithMessageID(m->exclusiveOwnership==false, m->MsgID());
+			DebugAssertWithMessageID(m->exclusiveOwnership==false, m->solicitingMessage);
+			DebugAssertWithMessageID(firstReplyBase==NULL, m->solicitingMessage);
+			DebugAssertWithMessageID(firstReplySrc==InvalidNodeID, m->solicitingMessage);
 
 			cacheData.SetCacheState(cs_SharedWaitingForSpeculativeReply);
-			firstReply = m;
+			firstReplyBase = m;
 			firstReplySrc = src;
 		}
 		else if (msg->Type()==mt_SpeculativeReply)
@@ -1532,14 +1664,30 @@ namespace Memory
 			NodeID dirNode = directoryNodeCalc->CalcNodeID(m->addr);
 			DebugAssertWithMessageID(src==dirNode, m->solicitingMessage);
 
-			cacheData.SetCacheState(cs_WaitingForSharedResponseAck);
+			if (firstReplyBase==NULL)
+			{
+				cacheData.SetCacheState(cs_WaitingForSharedResponseAck);
 
-			firstReply = m;
-			firstReplySrc = src;
+				firstReplyBase = m;
+				firstReplySrc = src;
+			}
+			else
+			{// if we received a cache nak, discard the speculativeReply and resend request
+				DebugAssertWithMessageID(firstReplyBase->Type()==mt_CacheNak, m->solicitingMessage);
+				const CacheNakMsg* firstReply = (const CacheNakMsg*)firstReplyBase;
+				
+				// resend read request to directory
+				ReadMsg* forward  = (ReadMsg*)EM().ReplicateMsg(pendingRead);
+				ResendRequestToDirectory(forward);
+				EM().DisposeMsg(m);
+				ClearTempCacheData(cacheData);
+			}
 		}
 		else if (msg->Type()==mt_Intervention)
 		{
 			const InterventionMsg* m = (const InterventionMsg*)msg;
+			DebugAssertWithMessageID(firstReplyBase==NULL, m->solicitingMessage);
+			DebugAssertWithMessageID(firstReplySrc==InvalidNodeID, m->solicitingMessage);
 			//ProcessInterventionWhileInvalid(m, src);
 			SendInterventionNaks(m);
 		}
@@ -1681,9 +1829,9 @@ namespace Memory
 		else if (msg->Type()==mt_CacheNak)
 		{
 			const CacheNakMsg* m = (const CacheNakMsg*)msg;
-			DebugAssertWithMessageID(cacheData.cacheDataPendingLocalReads.size()>0, m->solicitingMsg);
+			DebugAssertWithMessageID(cacheData.cacheDataPendingLocalReads.size()>0, m->solicitingMessage);
 			const ReadMsg* ref = cacheData.cacheDataPendingLocalReads.front();
-			DebugAssertWithMessageID(ref->MsgID()==m->solicitingMsg, m->solicitingMsg);
+			DebugAssertWithMessageID(ref->MsgID()==m->solicitingMessage, m->solicitingMessage);
 
 			// resend read request
 			ReadMsg* forward = (ReadMsg*)EM().ReplicateMsg(ref);
@@ -1711,9 +1859,15 @@ namespace Memory
 		}
 	}
 
-	void OriginDirectory::OnDirectory(const BaseMsg* msg, NodeID src, bool isFromMemory)
+	void OriginDirectory::OnCacheWritebackAck(const WritebackAckMsg* m, NodeID src)
+   {
+		CacheData& cacheData = GetCacheData(m->addr);
+		OnCache(m, src, cacheData);
+		return;
+	}
+
+	void OriginDirectory::OnDirectory(const BaseMsg* msg, NodeID src, DirectoryData& directoryData, bool isFromMemory)
 	{
-		DirectoryData& directoryData = GetDirectoryData(msg);
 		DirectoryState& state = directoryData.state;
 
 		switch(state)
@@ -1935,10 +2089,10 @@ namespace Memory
 
    		// send writeback exclusive ack to requester
    		WritebackAckMsg* wam = EM().CreateWritebackAckMsg(GetDeviceID(), m->GeneratingPC());
-   		// soliciting message id should be the same as the read response's soliciting message id
-   		EM().InitializeEvictionResponseMsg(wam, firstRequest);
+   		// soliciting message id should be the same as the WritebackMsg's id
+   		EM().InitializeEvictionResponseMsg(wam, secondRequest);
    		wam->isExclusive = true;
-   		SendMessageToRemoteCache(wam, firstRequestSrc);
+   		SendMessageToRemoteCache(wam, secondRequestSrc);
 
    		// send memory write
    		WriteMsg* wm = EM().CreateWriteMsg(GetDeviceID(), m->GeneratingPC());
@@ -2136,10 +2290,10 @@ namespace Memory
 
 			// send writeback exclusive ack to requester
 			WritebackAckMsg* wam = EM().CreateWritebackAckMsg(GetDeviceID(), m->GeneratingPC());
-			// soliciting message id should be the same as the read response's soliciting message id
-			EM().InitializeEvictionResponseMsg(wam, firstRequest);
+			// soliciting message id should be the same as the WritebackMsg's id
+			EM().InitializeEvictionResponseMsg(wam, secondRequest);
 			wam->isExclusive = true;
-			SendMessageToRemoteCache(wam, firstRequestSrc);
+			SendMessageToRemoteCache(wam, secondRequestSrc);
 
 			// send memory write
 			WriteMsg* wm = EM().CreateWriteMsg(GetDeviceID(), m->GeneratingPC());
@@ -2154,6 +2308,12 @@ namespace Memory
 		{
 			PrintError("OnDirBusyShMemAccWbReq", msg, "Unhandled message type");
 		}
+	}
+
+	void OriginDirectory::OnDirectoryDirectoryNak(const DirectoryNakMsg* m, NodeID src)
+	{
+		DirectoryData& directoryData = GetDirectoryData(m->addr);
+		OnDirectory(m, src, directoryData, false);
 	}
 
    void OriginDirectory::OnDirectoryExclusive(const BaseMsg* msg, NodeID src, DirectoryData& directoryData, bool isFromMemory)
@@ -2268,7 +2428,8 @@ namespace Memory
 
 	void OriginDirectory::OnDirectoryRead(const ReadMsg* m, NodeID src)
 	{
-		OnDirectory(m, src, false);
+		DirectoryData& directoryData = GetDirectoryData(m->addr);
+		OnDirectory(m, src, directoryData, false);
 	}
 
 	void OriginDirectory::OnDirectoryShared(const BaseMsg* msg, NodeID src, DirectoryData& directoryData, bool isFromMemory)
@@ -2496,7 +2657,8 @@ namespace Memory
 
 	void OriginDirectory::OnDirectoryWritebackRequest(const WritebackRequestMsg* m, NodeID src)
 	{
-		OnDirectory(m, src, false);
+		DirectoryData& directoryData = GetDirectoryData(m->addr);
+		OnDirectory(m, src, directoryData, false);
 	}
 
 	/**

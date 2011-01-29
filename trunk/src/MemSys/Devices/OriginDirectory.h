@@ -281,11 +281,17 @@ namespace Memory
 		void ProcessRemainingPendingLocalReads(CacheData& cacheData);
 
 		void OnCacheCacheNak(const CacheNakMsg* m, NodeID src);
+		void OnCacheEviction(const EvictionMsg* m, NodeID src);
 		void OnCacheIntervention(const InterventionMsg* m, NodeID src);
+		void OnCacheInvalidate(const InvalidateMsg* m, NodeID src);
 		void OnCacheInvalidateAck(const InvalidateAckMsg* m, NodeID src);
+		void OnCacheInvalidateResponse(const InvalidateResponseMsg* m, NodeID src);
 	   void OnCacheRead(const ReadMsg* m);
-	   void OnCacheReadResponse(const ReadResponseMsg* m, NodeID src);
+	   void OnCacheReadReply(const ReadReplyMsg* m, NodeID src);
+		void OnCacheReadResponse(const ReadResponseMsg* m, NodeID src);
 		void OnCacheSpeculativeReply(const SpeculativeReplyMsg* m, NodeID src);
+		void OnCacheWritebackAck(const WritebackAckMsg* m, NodeID src);
+		void OnDirectoryDirectoryNak(const DirectoryNakMsg* m, NodeID src);
 		void OnDirectoryRead(const ReadMsg* m, NodeID src);
 		void OnDirectoryWritebackRequest(const WritebackRequestMsg* m, NodeID src);
 
@@ -306,7 +312,7 @@ namespace Memory
       void OnCacheWaitingForWritebackBusyAck(const BaseMsg* msg, NodeID src, CacheData& cacheData);
       void OnCacheWaitingForWritebackResponse(const BaseMsg* msg, NodeID src, CacheData& cacheData);
 
-	   void OnDirectory(const BaseMsg* msg, NodeID src, bool isFromMemory);
+	   void OnDirectory(const BaseMsg* msg, NodeID src, DirectoryData& directoryData, bool isFromMemory);
 		void OnDirectoryBusyExclusive(const BaseMsg* msg, NodeID src, DirectoryData& directoryData, bool isFromMemory);
 	   void OnDirectoryBusyExclusiveMemoryAccess(const BaseMsg* msg, NodeID src, DirectoryData& directoryData, bool isFromMemory);
       void OnDirectoryBusyExclusiveMemoryAccessWritebackRequest(const BaseMsg* msg, NodeID src, DirectoryData& directoryData, bool isFromMemory);
