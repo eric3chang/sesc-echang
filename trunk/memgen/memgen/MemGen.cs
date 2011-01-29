@@ -410,14 +410,14 @@
 		System.IO.Directory.CreateDirectory("memoryConfigs");
 
         // nodeCount also determines the total number of processors
-		for (int nodeCount = 2; nodeCount <= 4; nodeCount *= 2)
+		for (int nodeCount = 2; nodeCount <= 128; nodeCount *= 2)
 		{
-			for (int l1 = 1; l1 <= 1024; l1 *= 2)
-            //for (int l1 = 1; l1 <= 2; l1 *= 2)
+			//for (int l1 = 1; l1 <= 1024; l1 *= 2)
+            for (int l1 = 1; l1 <= 1; l1 *= 2)
 			{
 //				OutSimpleMemory1(i, l1);
-				for (int l2 = l1 * 2; l2 <= 8 * 1024; l2 *= 2)
-                //for (int l2 = l1 * 2; l2 <= 8 * 2; l2 *= 2)
+				//for (int l2 = l1 * 2; l2 <= 8 * 1024; l2 *= 2)
+                for (int l2 = l1 * 2; l2 <= 2; l2 *= 2)
 				{
 					OutOriginDirectoryMOESIMemory(nodeCount, l1, l2);
 					//OutSimpleMemory2(i, l1, l2);

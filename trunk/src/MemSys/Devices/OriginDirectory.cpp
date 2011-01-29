@@ -946,7 +946,7 @@ namespace Memory
 		}
 		else
 		{
-			PrintError("OnCacheEx", msg);
+			PrintError("OnCacheEx", msg, "Unhandled message type");
 		}
 	}
 
@@ -1047,7 +1047,7 @@ namespace Memory
 		}
 		else
 		{
-			PrintError("OnCacheInvalid",msg);
+			PrintError("OnCacheInvalid",msg,"Unhandled message type");
 		}
 	}
 
@@ -1096,17 +1096,12 @@ namespace Memory
 		{
 			const ReadMsg* m = (const ReadMsg*)msg;
 
-			if (m->requestingExclusive)
-			{
-				cacheData.SetCacheState(cs_WaitingForExclusiveReadResponse);
+			DebugAssertWithMessageID(m->requestingExclusive, m->MsgID());
 
-				// forward to directory
-				SendMessageToDirectory(EM().ReplicateMsg(m));
-			}
-			else
-			{
-				PrintError("OnCacheSh", m, "Should not receive shared read here");
-			}
+			cacheData.SetCacheState(cs_WaitingForExclusiveReadResponse);
+
+			// forward to directory
+			SendMessageToDirectory(EM().ReplicateMsg(m));
 		}
 		else if (msg->Type()==mt_Eviction)
 		{
@@ -1122,7 +1117,7 @@ namespace Memory
 		}
 		else
 		{
-			PrintError("OnCacheSh", msg);
+			PrintError("OnCacheSh", msg, "Unhandled message type");
 		}
 	}
 
@@ -1233,27 +1228,29 @@ namespace Memory
 		}
 		else if (msg->Type()==mt_ReadReply)
 		{
-			DebugAssertWithMessageID(firstReply==NULL, msg->MsgID());
-			DebugAssertWithMessageID(firstReplySrc==InvalidNodeID, msg->MsgID());
-			DebugAssertWithMessageID(src!=InvalidNodeID, msg->MsgID());
 			const ReadReplyMsg* m = (const ReadReplyMsg*)msg;
+			DebugAssertWithMessageID(firstReply==NULL, m->solicitingMessage);
+			DebugAssertWithMessageID(firstReplySrc==InvalidNodeID, m->solicitingMessage);
+			DebugAssertWithMessageID(src!=InvalidNodeID, m->solicitingMessage);
 
-			if (m->exclusiveOwnership && m->pendingInvalidates==0)
+			// has to be exclusively owned
+			DebugAssertWithMessageID(m->exclusiveOwnership, m->solicitingMessage);
+			
+			// pendingInvalidates has to be greater than or equal to 0
+			DebugAssertWithMessageID(m->pendingInvalidates>=0, m->solicitingMessage);
+
+			if (m->pendingInvalidates==0)
 			{
 				cacheData.SetCacheState(cs_Exclusive);
 				SendMessageToLocalCache(m);
 				// shouldn't clear temp data here
 				ProcessReadResponse(m, cacheData);
 			}
-			else if (m->exclusiveOwnership && m->pendingInvalidates!=0)
+			else if (m->pendingInvalidates > 0)
 			{
 				cacheData.SetCacheState(cs_WaitingForKInvalidatesJInvalidatesReceived);
 				firstReply = m;
 				firstReplySrc = src;
-			}
-			else
-			{
-				PrintError("OnCacheWaitForExReadRes", m, "Should not receive shared read reply");
 			}
 		} // else if (msg->Type()==mt_ReadReply)
 		else if (msg->Type()==mt_InvalidateAck)
@@ -1404,7 +1401,7 @@ namespace Memory
    	}
    	else
    	{
-   		PrintError("OnCacheWaitForIntv", msg);
+   		PrintError("OnCacheWaitForIntv", msg, "Unhandled message type");
    	}
 	}
 
@@ -1475,7 +1472,7 @@ namespace Memory
 		*/
 		else
 		{
-			PrintError("OnCacheWaitForKInvalidatesJInvalidatesReceived", msg);
+			PrintError("OnCacheWaitForKInvalidatesJInvalidatesReceived", msg, "Unhandled message type");
 		}
 	} // OnCacheWaitingForKInvalidatesJInvalidatesReceived
 
@@ -1570,33 +1567,29 @@ namespace Memory
    	if (msg->Type()==mt_WritebackAck)
    	{
    		const WritebackAckMsg* m = (const WritebackAckMsg*)msg;
+
+			// it has to be a writeback busy ack
+			DebugAssertWithMessageID(m->isBusy && !m->isExclusive, m->solicitingMessage);
 			
 			DebugAssertWithMessageID(pendingEviction.find(m->addr)!=pendingEviction.end(), m->solicitingMessage);
 			//EM().DisposeMsg(pendingEviction[m->addr]);
 			pendingEviction.erase(m->addr);
 
-   		if (m->isBusy)
-   		{
-   			cacheData.SetCacheState(cs_Invalid);
+   		cacheData.SetCacheState(cs_Invalid);
 
-				// send writeback response to cache
-				EvictionResponseMsg* erm = EM().CreateEvictionResponseMsg(GetDeviceID(), m->GeneratingPC());
-				EM().InitializeEvictionResponseMsg(erm, m);
-				SendMsg(localCacheConnectionID, erm, localSendTime);
+			// send writeback response to cache
+			EvictionResponseMsg* erm = EM().CreateEvictionResponseMsg(GetDeviceID(), m->GeneratingPC());
+			EM().InitializeEvictionResponseMsg(erm, m);
+			SendMsg(localCacheConnectionID, erm, localSendTime);
 
-   			//EM().DisposeMsg(m);
-   			ClearTempCacheData(cacheData);
+   		//EM().DisposeMsg(m);
+   		ClearTempCacheData(cacheData);
 				
-				ProcessRemainingPendingLocalReads(cacheData);
-   		}
-   		else
-   		{
-   			PrintError("OnCacheWaitForWbBusyAck", m);
-   		}
+			ProcessRemainingPendingLocalReads(cacheData);
    	}
    	else
    	{
-   		PrintError("OnCacheWaitForWbBusyAck", msg);
+   		PrintError("OnCacheWaitForWbBusyAck", msg, "Unhandled message type");
    	}
 	}
 
@@ -1614,7 +1607,7 @@ namespace Memory
 		if (msg->Type()==mt_WritebackAck)
 		{
 			const WritebackAckMsg* m = (const WritebackAckMsg*)msg;
-			// only one of these can be true
+			// the message should only have one of these flags enabled
 			DebugAssertWithMessageID( (m->isBusy&&!m->isExclusive) || (!m->isBusy&&m->isExclusive), m->solicitingMessage);
 
 			if (m->isExclusive)
@@ -1639,10 +1632,6 @@ namespace Memory
 				firstReply = m;
 				firstReplySrc = src;
 			}
-			else
-			{
-				PrintError("OnCacheWaitingForWbRes", m);
-			}
 		} // if (msg->Type()==mt_WritebackAck)
 		else if (msg->Type()==mt_Intervention)
 		{
@@ -1656,7 +1645,7 @@ namespace Memory
 		}
 		else
 		{
-			PrintError("OnCacheWaitForWbRes", msg);
+			PrintError("OnCacheWaitForWbRes", msg, "Unhandled message type");
 		}
 	} // OnCacheWaitingForWritebackResponse
 
@@ -2232,7 +2221,7 @@ namespace Memory
    	}
    	else
    	{
-			PrintError("OnDirEx", msg);
+			PrintError("OnDirEx", msg, "Unhandled message type");
    	}
 	}
 
@@ -2366,7 +2355,7 @@ namespace Memory
 		} // if (msg->Type()==mt_Read)
 		else
 		{
-			PrintError("OnDirSh",msg);
+			PrintError("OnDirSh",msg, "Unhandled message type");
 		}
 	} // OriginDirectory::OnDirectoryShared
 
@@ -2501,7 +2490,7 @@ namespace Memory
 		}
 		else
 		{
-			PrintError("OnDirUnowned",msg);
+			PrintError("OnDirUnowned",msg, "Unhandled message type");
 		}
 	}
 
