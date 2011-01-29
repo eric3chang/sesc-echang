@@ -8,13 +8,13 @@ namespace Memory
 	class BaseNakMsg : public BaseDeviceMsg
 	{
 	public:
-		MessageID solicitingMsg;
+		MessageID solicitingMessage;
 
 		virtual void print(DeviceID destinationDeviceID) const
 		{
 			BaseDeviceMsg::print(destinationDeviceID);
          cout
-				<< " sMsg=" << solicitingMsg
+				<< " sMsg=" << solicitingMessage
 		   ;
 		}
 	};

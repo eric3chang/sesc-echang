@@ -23,7 +23,7 @@ namespace Memory
 		m->isDirectory = false;
 		m->SetIDInfo(currentMsgStamp++,devID,generatingPC);
       m->addr = 0;
-      m->solicitingMsg = 0;
+      m->solicitingMessage = 0;
 	}
 
 	void EventManager::FillEvictionMsg(EvictionMsg* m, DeviceID devID, Address generatingPC)
@@ -77,8 +77,8 @@ namespace Memory
 		m->isDirectory = false;
 		m->SetIDInfo(currentMsgStamp++,devID,generatingPC);
 		m->directoryLookup = false;
-     // m->evictionMessage = 0;
       m->exclusiveOwnership = false;
+      m->interventionMessage = 0;
       m->isDirty = false;
 		m->solicitingMessage = 0;
 	}
@@ -86,13 +86,13 @@ namespace Memory
 	void EventManager::InitializeBaseNakMsg(BaseNakMsg* copy, const InterventionMsg* original)
 	{
 		copy->addr = original->addr;
-		copy->solicitingMsg = original->solicitingMessage;
+		copy->solicitingMessage = original->solicitingMessage;
 	}
 
 	void EventManager::InitializeBaseNakMsg(BaseNakMsg* bnm, const ReadMsg* rm)
 	{
 		bnm->addr = rm->addr;
-		bnm->solicitingMsg = rm->MsgID();
+		bnm->solicitingMessage = rm->MsgID();
 	}
 
 	void EventManager::InitializeEvictionMsg(EvictionMsg* copy, const EvictionMsg* original)
@@ -274,6 +274,7 @@ namespace Memory
 	{
 		CacheNakMsg* m = cacheNakPool.Take();
 		FillBaseNakMsg(m,devID,generatingPC);
+		m->interventionMessage = 0;
 		return m;
 	}
    DirectoryNakMsg* EventManager::CreateDirectoryNakMsg(DeviceID devID, Address generatingPC)
