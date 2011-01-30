@@ -80,6 +80,8 @@ namespace Memory
    	cacheData.firstReply = NULL;
    	cacheData.firstReplySrc = InvalidNodeID;
    	cacheData.invalidAcksReceived = InvalidInvalidAcksReceived;
+		// cannot dispose secondReply because we usually don't have secondReply
+		cacheData.secondReply = NULL;
    }
 
    void OriginDirectory::ClearTempDirectoryData(DirectoryData& directoryData)
@@ -224,17 +226,17 @@ namespace Memory
 			const ReadMsg* m = (const ReadMsg*)msg;
 			OnDirectoryRead(m, src);
 		}
-		else if (msg->Type()==mt_Transfer)
-		{
-			const TransferMsg* m = (const TransferMsg*)msg;
-			DirectoryData& directoryData = GetDirectoryData(m->addr);
-			OnDirectory(m, src, directoryData, isFromMemory);
-		}
 		else if (msg->Type()==mt_ReadResponse)
 		{
 			const ReadResponseMsg* m = (const ReadResponseMsg*)msg;
 			DirectoryData& directoryData = GetDirectoryData(m->addr);
 			DebugAssertWithMessageID(isFromMemory, m->solicitingMessage);
+			OnDirectory(m, src, directoryData, isFromMemory);
+		}
+		else if (msg->Type()==mt_Transfer)
+		{
+			const TransferMsg* m = (const TransferMsg*)msg;
+			DirectoryData& directoryData = GetDirectoryData(m->addr);
 			OnDirectory(m, src, directoryData, isFromMemory);
 		}
 		else if (msg->Type()==mt_WritebackRequest)
@@ -590,7 +592,8 @@ namespace Memory
 
 		if (cacheState==cs_Invalid || cacheState==cs_Exclusive || cacheState==cs_Shared)
 		{
-			OnCache(EM().ReplicateMsg(m), InvalidNodeID, cacheData);
+			const ReadMsg* forward = (const ReadMsg*)EM().ReplicateMsg(m);
+			OnCache(forward, InvalidNodeID, cacheData);
 		}
 	}
 
@@ -692,7 +695,7 @@ namespace Memory
 			DebugAssertWithMessageID(m->satisfied, m->solicitingMessage);
 
 			// solicitingMessage might not have to be messageID? Because it could be a speculativeReply or something else
-			//TODO fix fix fix
+			
 			DebugAssertWithMessageID(m->solicitingMessage==pendingSharedRead->MsgID(), m->solicitingMessage);
 			DebugAssertWithMessageID(pendingExclusiveRead==NULL, m->solicitingMessage);
 
@@ -721,7 +724,7 @@ namespace Memory
 
 				// message gets disposed in OnCache()
    			pendingSharedRead = NULL;
-				//TODO maybe enable this //EM().DisposeMsg(pendingExclusiveRead);
+				
    			pendingExclusiveRead = NULL;
    		}
    		else // !m->exclusiveOwnership
@@ -747,11 +750,17 @@ namespace Memory
 	void OriginDirectory::OnCache(const BaseMsg* msg, NodeID src, CacheData& cacheData)
 	{
 		//CacheState state = cacheData.GetCacheState();
+		cacheData.previousMessage = cacheData.currentMessage;
+		cacheData.currentMessage = msg;
+		Address addr = BaseMemDevice::GetAddress(msg);
 
 		switch(cacheData.GetCacheState())
 		{
 		case cs_Exclusive:
 			OnCacheExclusive(msg,src,cacheData);
+			break;
+		case cs_ExclusiveInterventionEviction:
+			OnCacheExclusiveInterventionEviction(msg, src, cacheData);
 			break;
 		case cs_ExclusiveWaitingForSpeculativeReply:
 			OnCacheExclusiveWaitingForSpeculativeReply(msg, src, cacheData);
@@ -795,69 +804,93 @@ namespace Memory
 		}
 	}	// OnCache
 
-   void OriginDirectory::OnCacheCleanExclusive(const BaseMsg* msg, CacheData& cacheData)
+   void OriginDirectory::OnCacheCleanExclusive(const BaseMsg* msg, NodeID src, CacheData& cacheData)
    {
-   	DebugAssertWithMessageID(cacheData.firstReply!=NULL, msg->MsgID());
-		DebugAssertWithMessageID(cacheData.firstReply->Type()==mt_Intervention, msg->MsgID());
-		const InterventionMsg* firstReply = (const InterventionMsg*)cacheData.firstReply;
-   	NodeID& firstReplySrc = cacheData.firstReplySrc;
-		DebugAssertWithMessageID(firstReplySrc!=InvalidNodeID, firstReply->MsgID());
-   	//CacheState state = cacheData.GetCacheState();
+		//const BaseMsg*& firstReplyBase = cacheData.firstReply;
+   	//DebugAssertWithMessageID(firstReplyBase!=NULL, msg->MsgID());
+   	//NodeID& firstReplySrc = cacheData.firstReplySrc;
+		//DebugAssertWithMessageID(firstReplySrc!=InvalidNodeID, firstReplyBase->MsgID());
+		//const EvictionMsg*& secondReply = cacheData.secondReply;
 
-   	//const InterventionMsg* m = (const InterventionMsg*)msg;
-   	DebugAssertWithMessageID(pendingEviction.find(firstReply->addr)==pendingEviction.end(), firstReply->MsgID());
+		if (msg->Type()==mt_Eviction)
+		{
+			const EvictionMsg* m = (const EvictionMsg*)msg;			
+   		const BaseMsg*& firstReplyBase = cacheData.firstReply;
+   		DebugAssertWithMessageID(pendingEviction.find(m->addr)==pendingEviction.end(), msg->MsgID());
+   		DebugAssertWithMessageID(firstReplyBase==NULL, msg->MsgID());
+   		DebugAssertWithMessageID(src==InvalidNodeID, msg->MsgID());
 
-   	if (!firstReply->requestingExclusive)
-   	{
-   		// send shared read ack to firstReply's requester
-   		ReadResponseMsg* rrm = EM().CreateReadResponseMsg(GetDeviceID(), firstReply->GeneratingPC());
-   		EM().InitializeReadResponseMsg(rrm, firstReply);
-   		rrm->blockAttached = false;
-   		rrm->exclusiveOwnership = false;
-			rrm->interventionMessage = firstReply->MsgID();
-   		rrm->satisfied = true;
-   		SendMessageToRemoteCache(rrm, firstReplySrc);
+			// send eviction response to cache
+			EvictionResponseMsg* erm = EM().CreateEvictionResponseMsg(GetDeviceID(), m->GeneratingPC());
+			EM().InitializeEvictionResponseMsg(erm, m);
+			SendMsg(localCacheConnectionID, erm, localSendTime);
 
-   		// send shared transfer to directory
-   		TransferMsg* tm = EM().CreateTransferMsg(GetDeviceID(), firstReply->GeneratingPC());
-   		EM().InitializeEvictionMsg(tm, firstReply);
-   		tm->blockAttached = false;
-   		tm->isShared = true;
-   		SendMessageToDirectory(tm, false);
+			cacheData.SetCacheState(cs_Invalid);
+		}
+		else if (msg->Type()==mt_Intervention)
+		{
+			const InterventionMsg* m = (const InterventionMsg*)msg;
+			NodeID dirNode = directoryNodeCalc->CalcNodeID(m->addr);
+			DebugAssertWithMessageID(src==dirNode, m->solicitingMessage);
+   		//CacheState state = cacheData.GetCacheState();
 
-   		ClearTempCacheData(cacheData);
+   		//const InterventionMsg* m = (const InterventionMsg*)msg;
+			DebugAssertWithMessageID(pendingEviction.find(m->addr)==pendingEviction.end(), m->solicitingMessage);
+
+   		if (!m->requestingExclusive)
+   		{
+   			// send shared read ack to the requester, which is the new owner
+   			ReadResponseMsg* rrm = EM().CreateReadResponseMsg(GetDeviceID(), m->GeneratingPC());
+   			EM().InitializeReadResponseMsg(rrm, m);
+   			rrm->blockAttached = false;
+   			rrm->exclusiveOwnership = false;
+				rrm->interventionMessage = m->MsgID();
+   			rrm->satisfied = true;
+				SendMessageToRemoteCache(rrm, m->newOwner);
+
+   			// send shared transfer to directory
+   			TransferMsg* tm = EM().CreateTransferMsg(GetDeviceID(), m->GeneratingPC());
+   			EM().InitializeEvictionMsg(tm, m);
+   			tm->blockAttached = false;
+   			tm->isShared = true;
+   			SendMessageToDirectory(tm, false);
+
+   			ClearTempCacheData(cacheData);
 			
-   		cacheData.SetCacheState(cs_Shared);
-   	} // if (!m->requestingExclusive)
-   	else
-   	{
-   		cacheData.SetCacheState(cs_Invalid);
+   			cacheData.SetCacheState(cs_Shared);
+   		} // if (!m->requestingExclusive)
+   		else
+   		{
+   			// send exclusive read ack to the requester, which is the new owner
+   			ReadResponseMsg* rrm = EM().CreateReadResponseMsg(GetDeviceID(), m->GeneratingPC());
+   			EM().InitializeReadResponseMsg(rrm, m);
+   			rrm->blockAttached = false;
+   			rrm->exclusiveOwnership = true;
+				rrm->interventionMessage = m->MsgID();
+   			rrm->satisfied = true;
+				SendMessageToRemoteCache(rrm, m->newOwner);
 
-   		// send exclusive read ack to firstReplySrc
-   		ReadResponseMsg* rrm = EM().CreateReadResponseMsg(GetDeviceID(), firstReply->GeneratingPC());
-   		EM().InitializeReadResponseMsg(rrm, firstReply);
-   		rrm->blockAttached = false;
-   		rrm->exclusiveOwnership = true;
-			rrm->interventionMessage = firstReply->MsgID();
-   		rrm->satisfied = true;
-   		SendMessageToRemoteCache(rrm, firstReplySrc);
+   			// send dirty transfer to directory
+   			TransferMsg* tm = EM().CreateTransferMsg(GetDeviceID(), m->GeneratingPC());
+   			EM().InitializeEvictionMsg(tm, m);
+   			tm->blockAttached = false;
+   			tm->isDirty = true;
+   			SendMessageToDirectory(tm, false);
 
-   		// send dirty transfer to directory
-   		TransferMsg* tm = EM().CreateTransferMsg(GetDeviceID(), firstReply->GeneratingPC());
-   		EM().InitializeEvictionMsg(tm, firstReply);
-   		tm->blockAttached = false;
-   		tm->isDirty = true;
-   		SendMessageToDirectory(tm, false);
-
-   		ClearTempCacheData(cacheData);
-   	} // else m is requesting exclusive
-
-		//EM().DisposeMsg(msg);
+   			ClearTempCacheData(cacheData);
+				
+   			cacheData.SetCacheState(cs_Invalid);
+   		} // else m is requesting exclusive
+		} // if (msg->Type()==mt_Intervention)
+		else
+		{
+			PrintError("OnCacheCleanEx", msg, "Unhandled message type");
+		}
    } // OnCacheCleanExclusive
 
-   void OriginDirectory::OnCacheDirtyExclusive(const BaseMsg* msg, CacheData& cacheData)
+   void OriginDirectory::OnCacheDirtyExclusive(const BaseMsg* msg, NodeID src, CacheData& cacheData)
    {
-   	NodeID& firstReplySrc = cacheData.firstReplySrc;
+   	//NodeID& firstReplySrc = cacheData.firstReplySrc;
    	//CacheState state = cacheData.GetCacheState();
 
    	Address addr = BaseMemDevice::GetAddress(msg);
@@ -866,10 +899,10 @@ namespace Memory
    	if (msg->Type()==mt_Eviction)
    	{
    		const EvictionMsg* m = (const EvictionMsg*)msg;			
-   		const BaseMsg*& firstReply = cacheData.firstReply;
+   		const BaseMsg*& firstReplyBase = cacheData.firstReply;
    		DebugAssertWithMessageID(pendingEviction.find(m->addr)==pendingEviction.end(), msg->MsgID());
-   		DebugAssertWithMessageID(firstReply==NULL, msg->MsgID());
-   		DebugAssertWithMessageID(firstReplySrc==InvalidNodeID, msg->MsgID());
+   		DebugAssertWithMessageID(firstReplyBase==NULL, msg->MsgID());
+   		DebugAssertWithMessageID(src==InvalidNodeID, msg->MsgID());
 
    		cacheData.SetCacheState(cs_WaitingForWritebackResponse);
 
@@ -880,32 +913,30 @@ namespace Memory
 
    		pendingEviction[m->addr] = m;
    	} // if (msg->Type()==mt_Eviction)
-   	else
+   	else if (msg->Type()==mt_Intervention)
 		{
-			DebugAssertWithMessageID(cacheData.firstReply!=NULL, msg->MsgID());
-   		// firstReply must be intervention
-			DebugAssertWithMessageID(cacheData.firstReply->Type()==mt_Intervention, msg->MsgID());
-			const InterventionMsg* firstReply = (const InterventionMsg*)cacheData.firstReply;
-   		DebugAssertWithMessageID(firstReplySrc!=InvalidNodeID, msg->MsgID());
+			const InterventionMsg* m = (const InterventionMsg*)msg;
+			NodeID dirNode = directoryNodeCalc->CalcNodeID(m->addr);
+			DebugAssertWithMessageID(src==dirNode, m->solicitingMessage);
 			
-   		DebugAssertWithMessageID(pendingEviction.find(firstReply->addr)==pendingEviction.end(), msg->MsgID());
+   		DebugAssertWithMessageID(pendingEviction.find(m->addr)==pendingEviction.end(), msg->MsgID());
 
-   		if (firstReply->requestingExclusive)
+   		if (m->requestingExclusive)
    		{
    			cacheData.SetCacheState(cs_Invalid);
 
-   			// send exclusive response to firstReplySrc
-   			ReadResponseMsg* rrm = EM().CreateReadResponseMsg(GetDeviceID(), firstReply->GeneratingPC());
-   			EM().InitializeReadResponseMsg(rrm, firstReply);
+   			// send exclusive response to the requester, which is the new owner
+   			ReadResponseMsg* rrm = EM().CreateReadResponseMsg(GetDeviceID(), m->GeneratingPC());
+   			EM().InitializeReadResponseMsg(rrm, m);
    			rrm->blockAttached = true;
    			rrm->exclusiveOwnership = true;
-				rrm->interventionMessage = firstReply->MsgID();
+				rrm->interventionMessage = m->MsgID();
    			rrm->satisfied = true;
-   			SendMessageToRemoteCache(rrm, firstReplySrc);
+				SendMessageToRemoteCache(rrm, m->newOwner);
 
    			// send dirty transfer to directory
-   			TransferMsg* tm = EM().CreateTransferMsg(GetDeviceID(), firstReply->GeneratingPC());
-   			EM().InitializeEvictionMsg(tm, firstReply);
+   			TransferMsg* tm = EM().CreateTransferMsg(GetDeviceID(), m->GeneratingPC());
+   			EM().InitializeEvictionMsg(tm, m);
    			tm->blockAttached = false;
    			tm->isDirty = true;
    			SendMessageToDirectory(tm, false);
@@ -917,26 +948,30 @@ namespace Memory
    		{
    			cacheData.SetCacheState(cs_Shared);
 
-   			// send shared response to firstReplySrc
-   			ReadResponseMsg* rrm = EM().CreateReadResponseMsg(GetDeviceID(), firstReply->GeneratingPC());
-   			EM().InitializeReadResponseMsg(rrm, firstReply);
+   			// send shared response to the requester, which is the new owner
+   			ReadResponseMsg* rrm = EM().CreateReadResponseMsg(GetDeviceID(), m->GeneratingPC());
+   			EM().InitializeReadResponseMsg(rrm, m);
    			rrm->blockAttached = true;
    			rrm->exclusiveOwnership = false;
-				rrm->interventionMessage = firstReply->MsgID();
+				rrm->interventionMessage = m->MsgID();
    			rrm->satisfied = true;
-   			SendMessageToRemoteCache(rrm, firstReplySrc);
+				SendMessageToRemoteCache(rrm, m->newOwner);
 
    			// send shared writeback to directory
-   			WritebackMsg* wm = EM().CreateWritebackMsg(GetDeviceID(), firstReply->GeneratingPC());
-   			EM().InitializeEvictionMsg(wm, firstReply);
+   			WritebackMsg* wm = EM().CreateWritebackMsg(GetDeviceID(), m->GeneratingPC());
+   			EM().InitializeEvictionMsg(wm, m);
    			wm->blockAttached = true;
    			wm->isShared = true;
    			SendMessageToDirectory(wm, false);
 
    			//EM().DisposeMsg(msg);
    			ClearTempCacheData(cacheData);
-   		} // else !(firstReply->requestingExclusive)
-   	} // else msg type is not eviction
+   		} // else !(if (m->requestingExclusive)
+   	} // else if (msg->Type()==mt_Intervention)
+		else
+		{
+			PrintError("OnCacheEvic", msg, "Unhandled message type");
+		}
    } // OnCacheDirtyExclusive
 
 	void OriginDirectory::OnCacheEviction(const EvictionMsg* m, NodeID src)
@@ -950,6 +985,7 @@ namespace Memory
 	{
 		const BaseMsg*& firstReplyBase = cacheData.firstReply;
 		NodeID& firstReplySrc = cacheData.firstReplySrc;
+		const EvictionMsg*& secondReply = cacheData.secondReply;
 
 		if (msg->Type()==mt_Intervention)
 		{
@@ -965,7 +1001,7 @@ namespace Memory
 			if (m->requestingExclusive)
 			{
 				firstReplyBase = m;
-				firstReplySrc = m->newOwner;
+				firstReplySrc = src;
 
 				// send invalidate to cache
 				InvalidateMsg* im = EM().CreateInvalidateMsg(GetDeviceID(), m->GeneratingPC());
@@ -980,7 +1016,7 @@ namespace Memory
 			else // !m->requestingExclusiv
 			{
 				firstReplyBase = m;
-				firstReplySrc = m->newOwner;
+				firstReplySrc = src;
 
 				// send ReadMsg to cache
 				ReadMsg* rm = EM().CreateReadMsg(GetDeviceID(), m->GeneratingPC());
@@ -995,15 +1031,38 @@ namespace Memory
 		} // if (msg->Type()==mt_Intervention)
 		else if (msg->Type()==mt_Eviction)
 		{
-			DebugAssertWithMessageID(firstReplyBase==NULL, msg->MsgID());
-			DebugAssertWithMessageID(firstReplySrc==InvalidNodeID, msg->MsgID());
-			DebugAssertWithMessageID(src==InvalidNodeID, msg->MsgID());
+			const EvictionMsg* m = (const EvictionMsg*)msg;
+			DebugAssertWithMessageID(src==InvalidNodeID, m->MsgID());
 
-			OnCacheDirtyExclusive(msg, cacheData);
+			if (firstReplyBase==NULL)
+			{
+				if (m->blockAttached)
+				{
+					OnCacheDirtyExclusive(m, src, cacheData);
+				}
+				else
+				{
+					//TODO!!!!!
+					//OnCacheDirtyExclusive(m, src, cacheData);
+					OnCacheCleanExclusive(m, src, cacheData);
+				}
+			}
+			else
+			{// if first reply is not null, then an intervention was received and processed
+				// before the eviction message arrived, so we have to wait for a
+				// response to the cache read/invalidate before proceeding
+				DebugAssertWithMessageID(firstReplyBase->Type()==mt_Intervention, m->MsgID());
+
+				secondReply = m;
+				cacheData.SetCacheState(cs_ExclusiveInterventionEviction);
+			}
 		}
 		else if (msg->Type()==mt_InvalidateResponse)
 		{
 			const InvalidateResponseMsg* m = (const InvalidateResponseMsg*)msg;
+			DebugAssertWithMessageID(firstReplyBase!=NULL, m->solicitingMessage);
+			NodeID dirNode = directoryNodeCalc->CalcNodeID(m->addr);
+			DebugAssertWithMessageID(firstReplySrc==dirNode, m->solicitingMessage);
 			DebugAssertWithMessageID(pendingRemoteInvalidates.find(m->solicitingMessage)!=pendingRemoteInvalidates.end(), m->MsgID());
 			const InvalidateMsg*& im = pendingRemoteInvalidates[m->solicitingMessage];
 			//EM().DisposeMsg(im);
@@ -1011,16 +1070,19 @@ namespace Memory
 
 			if (m->blockAttached)
 			{
-				OnCacheDirtyExclusive(msg, cacheData);
+				OnCacheDirtyExclusive(firstReplyBase, firstReplySrc, cacheData);
 			}
 			else
 			{
-				OnCacheCleanExclusive(msg, cacheData);
+				OnCacheCleanExclusive(firstReplyBase, firstReplySrc, cacheData);
 			}
 		}
 		else if (msg->Type()==mt_ReadResponse)
 		{
 			const ReadResponseMsg* m = (const ReadResponseMsg*)msg;
+			DebugAssertWithMessageID(firstReplyBase!=NULL, m->solicitingMessage);
+			NodeID dirNode = directoryNodeCalc->CalcNodeID(m->addr);
+			DebugAssertWithMessageID(firstReplySrc==dirNode, m->solicitingMessage);
 			DebugAssertWithMessageID(pendingRemoteReads.find(m->solicitingMessage)!=pendingRemoteReads.end(), m->MsgID());
 			const ReadMsg*& rm = pendingRemoteReads[m->solicitingMessage];
 			//EM().DisposeMsg(rm);
@@ -1028,11 +1090,11 @@ namespace Memory
 
 			if (m->isDirty)
 			{
-				OnCacheDirtyExclusive(m, cacheData);
+				OnCacheDirtyExclusive(firstReplyBase, firstReplySrc, cacheData);
 			}
 			else
 			{
-				OnCacheCleanExclusive(m, cacheData);
+				OnCacheCleanExclusive(firstReplyBase, firstReplySrc, cacheData);
 			}
 		}
 		else if (msg->Type()==mt_Read)
@@ -1047,6 +1109,123 @@ namespace Memory
 		else
 		{
 			PrintError("OnCacheEx", msg, "Unhandled message type");
+		}
+	}
+
+	void OriginDirectory::OnCacheExclusiveInterventionEviction(const BaseMsg* msg, NodeID src, CacheData& cacheData)
+	{
+		const BaseMsg*& firstReplyBase = cacheData.firstReply;
+		NodeID& firstReplySrc = cacheData.firstReplySrc;
+		const EvictionMsg*& secondReply = cacheData.secondReply;
+		DebugAssertWithMessageID(secondReply!=NULL, secondReply->MsgID());
+
+		if (msg->Type()==mt_InvalidateResponse)
+		{
+			const InvalidateResponseMsg* m = (const InvalidateResponseMsg*)msg;
+			DebugAssertWithMessageID(pendingRemoteInvalidates.find(m->solicitingMessage)!=pendingRemoteInvalidates.end(), m->MsgID());
+			const InvalidateMsg*& im = pendingRemoteInvalidates[m->solicitingMessage];
+			//EM().DisposeMsg(im);
+			pendingRemoteInvalidates.erase(m->solicitingMessage);
+
+			// send response to cache
+			EvictionResponseMsg* erm = EM().CreateEvictionResponseMsg(GetDeviceID(), m->GeneratingPC());
+			EM().InitializeEvictionResponseMsg(erm, secondReply);
+			SendMsg(localCacheConnectionID, erm, localSendTime);
+
+			DebugAssertWithMessageID(firstReplyBase->Type()==mt_Intervention, firstReplyBase->MsgID());
+			const InterventionMsg* firstReply = (const InterventionMsg*)firstReplyBase;
+			NodeID dirNode = directoryNodeCalc->CalcNodeID(m->addr);
+			DebugAssertWithMessageID(firstReplySrc==dirNode, firstReply->solicitingMessage);
+			// the intervention has to be exclusive, because we received an InvalidateResponseMsg
+			DebugAssertWithMessageID(firstReply->requestingExclusive, firstReply->solicitingMessage);
+			
+   		DebugAssertWithMessageID(pendingEviction.find(m->addr)==pendingEviction.end(), firstReply->solicitingMessage);
+			
+			// send exclusive read ack to the requester, which is the new owner
+   		ReadResponseMsg* rrm = EM().CreateReadResponseMsg(GetDeviceID(), firstReply->GeneratingPC());
+   		EM().InitializeReadResponseMsg(rrm, firstReply);
+			rrm->blockAttached = secondReply->blockAttached;
+   		rrm->exclusiveOwnership = true;
+			rrm->interventionMessage = firstReply->MsgID();
+   		rrm->satisfied = true;
+			SendMessageToRemoteCache(rrm, firstReply->newOwner);
+
+   		// send dirty transfer to directory
+   		TransferMsg* tm = EM().CreateTransferMsg(GetDeviceID(), firstReply->GeneratingPC());
+   		EM().InitializeEvictionMsg(tm, firstReply);
+   		tm->blockAttached = false;
+   		tm->isDirty = true;
+   		SendMessageToDirectory(tm, false);
+
+			EM().DisposeMsg(secondReply);
+   		ClearTempCacheData(cacheData);
+			
+			// should be set to invalid always regardless of the interventionMessage because
+				// we received an eviction from the local cache
+   		cacheData.SetCacheState(cs_Invalid);
+		}
+		else if (msg->Type()==mt_ReadResponse)
+		{
+			const ReadResponseMsg* m = (const ReadResponseMsg*)msg;
+			DebugAssertWithMessageID(pendingRemoteReads.find(m->solicitingMessage)!=pendingRemoteReads.end(), m->MsgID());
+			const ReadMsg*& rm = pendingRemoteReads[m->solicitingMessage];
+			//EM().DisposeMsg(rm);
+			pendingRemoteReads.erase(m->solicitingMessage);
+
+			// send response to cache
+			EvictionResponseMsg* erm = EM().CreateEvictionResponseMsg(GetDeviceID(), m->GeneratingPC());
+			EM().InitializeEvictionResponseMsg(erm, secondReply);
+			SendMsg(localCacheConnectionID, erm, localSendTime);
+
+			DebugAssertWithMessageID(firstReplyBase->Type()==mt_Intervention, firstReplyBase->MsgID());
+			const InterventionMsg* firstReply = (const InterventionMsg*)firstReplyBase;
+			NodeID dirNode = directoryNodeCalc->CalcNodeID(m->addr);
+			DebugAssertWithMessageID(firstReplySrc==dirNode, firstReply->solicitingMessage);
+			// the intervention has to be shared, because we received an ReadResponseMsg
+			DebugAssertWithMessageID(!firstReply->requestingExclusive, firstReply->solicitingMessage);
+			
+   		DebugAssertWithMessageID(pendingEviction.find(m->addr)==pendingEviction.end(), firstReply->solicitingMessage);
+
+   		// send shared response to the requester, which is the new owner
+   		ReadResponseMsg* rrm = EM().CreateReadResponseMsg(GetDeviceID(), firstReply->GeneratingPC());
+   		EM().InitializeReadResponseMsg(rrm, firstReply);
+			rrm->blockAttached = secondReply->blockAttached;
+   		rrm->exclusiveOwnership = false;
+			rrm->interventionMessage = firstReply->MsgID();
+   		rrm->satisfied = true;
+			SendMessageToRemoteCache(rrm, firstReply->newOwner);
+
+			if (secondReply->blockAttached)
+			{
+   			// send shared writeback to directory
+   			WritebackMsg* wm = EM().CreateWritebackMsg(GetDeviceID(), firstReply->GeneratingPC());
+   			EM().InitializeEvictionMsg(wm, firstReply);
+   			wm->blockAttached = true;
+   			wm->isShared = true;
+   			SendMessageToDirectory(wm, false);
+			}
+			else
+			{
+				// send shared transfer to directory
+				TransferMsg* tm = EM().CreateTransferMsg(GetDeviceID(), firstReply->GeneratingPC());
+				EM().InitializeEvictionMsg(tm, firstReply);
+				tm->isShared = true;
+				tm->isDirty = false;
+				tm->blockAttached = false;
+				SendMessageToDirectory(tm, false);
+			}
+
+   		//EM().DisposeMsg(msg);
+			EM().DisposeMsg(secondReply);
+   		ClearTempCacheData(cacheData);
+
+			// should be set to invalid always regardless of the interventionMessage because
+				// we received an eviction from the local cache			
+   		cacheData.SetCacheState(cs_Invalid);
+		} // else if (msg->Type()==mt_ReadResponse)
+		else
+		{
+			PrintError("OnCacheExIntvEvic", msg, "Unhandled message type");
 		}
 	}
 
@@ -1299,6 +1478,11 @@ namespace Memory
 			}
 			else
 			{
+				// if CacheNak comes from an intervention, then it means that a SpecReply from
+					// the directory was also sent, but we are still in WaitingForExReadRes state,
+					// which means that the SpeculativeReply has not arrived, yet, so we
+					// have to wait for the SpeculativeReply to arrive before we can resend
+					// the read request
 				firstReplyBase = m;
 			}
 		}
@@ -1422,6 +1606,14 @@ namespace Memory
 			SendInterventionNaks(m);
 		}
 		*/
+		else if (msg->Type()==mt_Intervention)
+		{
+			const InterventionMsg* m = (const InterventionMsg*)msg;
+			DebugAssertWithMessageID(firstReplyBase==NULL, m->solicitingMessage);
+			DebugAssertWithMessageID(firstReplySrc==InvalidNodeID, m->solicitingMessage);
+			//ProcessInterventionWhileInvalid(m, src);
+			SendInterventionNaks(m);
+		}
 		else
 		{
 			PrintError("OnCacheWaitForExReadRes", msg, "Unhandled message type");
@@ -1469,12 +1661,12 @@ namespace Memory
 
 			cacheData.SetCacheState(cs_WaitingForExclusiveReadResponse);
 		}
-		/*
 		else if (msg->Type()==mt_Intervention)
 		{
 			const InterventionMsg* m = (const InterventionMsg*)msg;
-			ProcessInterventionWhileInvalid(m, src);
+			SendInterventionNaks(m);
 		}
+		/*
 		else if (msg->Type()==mt_Invalidate)
 		{
 			const InvalidateMsg* m = (const InvalidateMsg*)msg;
@@ -1623,6 +1815,11 @@ namespace Memory
 			}
 			else
 			{
+				// if CacheNak comes from an intervention, then it means that a SpecReply from
+					// the directory was also sent, but we are still in WaitingForShReadRes state,
+					// which means that the SpeculativeReply has not arrived, yet, so we
+					// have to wait for the SpeculativeReply to arrive before we can resend
+					// the read request
 				firstReplyBase = m;
 			}
 		}
@@ -1841,12 +2038,12 @@ namespace Memory
 
 			cacheData.SetCacheState(cs_WaitingForSharedReadResponse);
 		}
-		/*
 		else if (msg->Type()==mt_Intervention)
 		{
 			const InterventionMsg* m = (const InterventionMsg*)msg;
-			ProcessInterventionWhileInvalid(m, src);
+			SendInterventionNaks(m);
 		}
+		/*
 		else if (msg->Type()==mt_Invalidate)
 		{
 			const InvalidateMsg* m = (const InvalidateMsg*)msg;
@@ -1868,7 +2065,10 @@ namespace Memory
 
 	void OriginDirectory::OnDirectory(const BaseMsg* msg, NodeID src, DirectoryData& directoryData, bool isFromMemory)
 	{
+		Address addr = BaseMemDevice::GetAddress(msg);
 		DirectoryState& state = directoryData.state;
+		directoryData.previousMessage = directoryData.currentMessage;
+		directoryData.currentMessage = msg;
 
 		switch(state)
 		{
@@ -1937,6 +2137,7 @@ namespace Memory
 		else if (msg->Type()==mt_WritebackRequest)
 		{
 			const WritebackRequestMsg* m = (const WritebackRequestMsg*)msg;
+			DebugAssertWithMessageID(src==previousOwner, m->MsgID());
 
 			state = ds_Exclusive;
 
@@ -1965,6 +2166,7 @@ namespace Memory
 		else if (msg->Type()==mt_Transfer)
 		{
 			const TransferMsg* m = (const TransferMsg*)msg;
+			DebugAssertWithMessageID(src==previousOwner, m->MsgID());
 			DebugAssertWithMessageID(m->isDirty, m->MsgID());
 
 			state = ds_Exclusive;
@@ -2123,6 +2325,7 @@ namespace Memory
 		if (msg->Type()==mt_Writeback)
 		{
 			const WritebackMsg* m = (const WritebackMsg*) msg;
+			DebugAssertWithMessageID(src==previousOwner, m->MsgID());
 			state = ds_Shared;
 
 			// write to memory
@@ -2136,6 +2339,7 @@ namespace Memory
 		else if (msg->Type()==mt_Transfer)
 		{
 			const TransferMsg* m = (const TransferMsg*)msg;
+			DebugAssertWithMessageID(src==previousOwner, m->MsgID());
 			state = ds_Shared;
 			ClearTempDirectoryData(directoryData);
 		}
@@ -2149,6 +2353,7 @@ namespace Memory
 		else if (msg->Type()==mt_WritebackRequest)
 		{
 			const WritebackRequestMsg* m = (const WritebackRequestMsg*)msg;
+			DebugAssertWithMessageID(src==previousOwner, m->MsgID());
 
 			state = ds_Shared;
 
