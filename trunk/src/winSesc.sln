@@ -10,6 +10,7 @@ Global
 		cholesky-dir-moesi-002-0001-0002-00|Win32 = cholesky-dir-moesi-002-0001-0002-00|Win32
 		Debug|Win32 = Debug|Win32
 		fft-dir-moesi-002-0001-0002-00|Win32 = fft-dir-moesi-002-0001-0002-00|Win32
+		fft-origin-mesi-16-1-2|Win32 = fft-origin-mesi-16-1-2|Win32
 		fft-origin-mesi-2-1-2|Win32 = fft-origin-mesi-2-1-2|Win32
 		fft-origin-mesi-4-1-2|Win32 = fft-origin-mesi-4-1-2|Win32
 		fft-origin-mesi-8-1-2|Win32 = fft-origin-mesi-8-1-2|Win32
@@ -29,6 +30,8 @@ Global
 		{A54864F1-6C99-4165-A176-888B5427ADC2}.Debug|Win32.Build.0 = Release|Win32
 		{A54864F1-6C99-4165-A176-888B5427ADC2}.fft-dir-moesi-002-0001-0002-00|Win32.ActiveCfg = fft-dir-moesi-002-0001-0002-00|Win32
 		{A54864F1-6C99-4165-A176-888B5427ADC2}.fft-dir-moesi-002-0001-0002-00|Win32.Build.0 = fft-dir-moesi-002-0001-0002-00|Win32
+		{A54864F1-6C99-4165-A176-888B5427ADC2}.fft-origin-mesi-16-1-2|Win32.ActiveCfg = fft-origin-mesi-16-1-2|Win32
+		{A54864F1-6C99-4165-A176-888B5427ADC2}.fft-origin-mesi-16-1-2|Win32.Build.0 = fft-origin-mesi-16-1-2|Win32
 		{A54864F1-6C99-4165-A176-888B5427ADC2}.fft-origin-mesi-2-1-2|Win32.ActiveCfg = fft-origin-mesi-2-1-2|Win32
 		{A54864F1-6C99-4165-A176-888B5427ADC2}.fft-origin-mesi-2-1-2|Win32.Build.0 = fft-origin-mesi-2-1-2|Win32
 		{A54864F1-6C99-4165-A176-888B5427ADC2}.fft-origin-mesi-4-1-2|Win32.ActiveCfg = fft-origin-mesi-4-1-2|Win32

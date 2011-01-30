@@ -59,6 +59,7 @@ namespace Memory
 		enum CacheState
 		{
 			cs_Exclusive,
+			cs_ExclusiveInterventionEviction,
 			cs_ExclusiveWaitingForSpeculativeReply,
 			cs_Invalid,
 			cs_Shared,
@@ -103,8 +104,11 @@ namespace Memory
 		public:
 			ReadRequestState readRequestState;
 
+			const BaseMsg* currentMessage;
+			const BaseMsg* previousMessage;
 			const BaseMsg* firstReply;
 			NodeID firstReplySrc;
+			const EvictionMsg* secondReply;
 			int invalidAcksReceived;
 			const ReadMsg* pendingExclusiveRead;
 			const ReadMsg* pendingSharedRead;
@@ -131,6 +135,8 @@ namespace Memory
 		class DirectoryData
 		{
 		public:
+			const BaseMsg* currentMessage;
+			const BaseMsg* previousMessage;
 			const ReadMsg* firstRequest;
 			NodeID firstRequestSrc;
 			NodeID owner;
@@ -296,9 +302,10 @@ namespace Memory
 		void OnDirectoryWritebackRequest(const WritebackRequestMsg* m, NodeID src);
 
 	   void OnCache(const BaseMsg* msg, NodeID src, CacheData& cacheData);
-	   void OnCacheCleanExclusive(const BaseMsg* msg, CacheData& cacheData);
-	   void OnCacheDirtyExclusive(const BaseMsg* msg, CacheData& cacheData);
+	   void OnCacheCleanExclusive(const BaseMsg* msg, NodeID src, CacheData& cacheData);
+	   void OnCacheDirtyExclusive(const BaseMsg* msg, NodeID src, CacheData& cacheData);
       void OnCacheExclusive(const BaseMsg* msg, NodeID src, CacheData& cacheData);
+		void OnCacheExclusiveInterventionEviction(const BaseMsg* msg, NodeID src, CacheData& cacheData);
       void OnCacheExclusiveWaitingForSpeculativeReply(const BaseMsg* msg, NodeID src, CacheData& cacheData);
 	   void OnCacheInvalid(const BaseMsg* msg, NodeID src, CacheData& cacheData);
       void OnCacheShared(const BaseMsg* msg, NodeID src, CacheData& cacheData);
