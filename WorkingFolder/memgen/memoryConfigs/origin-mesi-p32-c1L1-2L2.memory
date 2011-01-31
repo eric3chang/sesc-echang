@@ -137,7 +137,7 @@ Int MinTime 143
 Int MaxTime 159
 Int TimePerByte 1
 Real TimePerPacket 0.1
-Int EnforceOrder 1
+Int EnforceOrder 0
 End
 End
 Root MemoryDevice Begin
