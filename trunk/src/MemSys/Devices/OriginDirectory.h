@@ -104,6 +104,7 @@ namespace Memory
 		public:
 			ReadRequestState readRequestState;
 
+			bool isCanceledReadRequest;
 			const BaseMsg* currentMessage;
 			const BaseMsg* previousMessage;
 			const BaseMsg* firstReply;
