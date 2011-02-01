@@ -48,6 +48,7 @@ namespace Memory
 	OriginDirectory::CacheData::CacheData() :
 						cacheState(cs_Invalid),
 						readRequestState(rrs_NoPendingReads),
+						isCanceledReadRequest(false),
 						firstReply(NULL),
 						firstReplySrc(InvalidNodeID),
 						invalidAcksReceived(InvalidInvalidAcksReceived),
@@ -1346,7 +1347,8 @@ namespace Memory
 
 			firstReply = msg;
 			firstReplySrc = m->newOwner;
-			SendMsg(localCacheConnectionID, EM().ReplicateMsg(msg), localSendTime);
+			const BaseMsg* forward = EM().ReplicateMsg(m);
+			SendMsg(localCacheConnectionID, forward, localSendTime);
 		}
 		else if (msg->Type()==mt_InvalidateResponse)
 		{
@@ -1459,31 +1461,43 @@ namespace Memory
 		//const ReadMsg*& pendingExclusiveRead = cacheData.pendingExclusiveRead;
 		DebugAssertWithMessageID(cacheData.cacheDataPendingLocalReads.size()>0, firstReplyBase->MsgID());
 		const ReadMsg*& pendingRead = cacheData.cacheDataPendingLocalReads.front();
-		//CacheState state = cacheData.GetCacheState();
+		bool& isCanceledReadRequest = cacheData.isCanceledReadRequest;
 
 		if (msg->Type()==mt_CacheNak)
 		{
 			const CacheNakMsg* m = (const CacheNakMsg*)msg;
 			DebugAssertWithMessageID(pendingRead!=NULL, m->solicitingMessage);
 			DebugAssertWithMessageID(m->solicitingMessage==pendingRead->MsgID(), m->solicitingMessage);
-			DebugAssertWithMessageID(firstReplyBase==NULL, m->solicitingMessage);
-			DebugAssertWithMessageID(firstReplySrc==InvalidNodeID, m->solicitingMessage);
 
-			if (m->interventionMessage==0)
+			if (firstReplyBase==NULL)
 			{
-				// resend request
-				ReadMsg* forward  = (ReadMsg*)EM().ReplicateMsg(pendingRead);
-				ResendRequestToDirectory(forward);
-				EM().DisposeMsg(m);
+				DebugAssertWithMessageID(firstReplySrc==InvalidNodeID, m->solicitingMessage);
+
+				if (m->interventionMessage==0)
+				{
+					// resend request
+					ReadMsg* forward  = (ReadMsg*)EM().ReplicateMsg(pendingRead);
+					ResendRequestToDirectory(forward);
+					EM().DisposeMsg(m);
+				}
+				else
+				{
+					// if CacheNak comes from an intervention, then it means that a SpecReply from
+						// the directory was also sent, but we are still in WaitingForExReadRes state,
+						// which means that the SpeculativeReply has not arrived, yet, so we
+						// have to wait for the SpeculativeReply to arrive before we can resend
+						// the read request
+					firstReplyBase = m;
+				}
 			}
 			else
 			{
-				// if CacheNak comes from an intervention, then it means that a SpecReply from
-					// the directory was also sent, but we are still in WaitingForExReadRes state,
-					// which means that the SpeculativeReply has not arrived, yet, so we
-					// have to wait for the SpeculativeReply to arrive before we can resend
-					// the read request
-				firstReplyBase = m;
+				// if firstReplyBase is not NULL, it means that an invalidate has arrived into the cache,
+					// and we are waiting for the invalidate to complete before resending the read request
+				DebugAssertWithMessageID(firstReplyBase->Type()==mt_Invalidate, m->solicitingMessage);
+				DebugAssertWithMessageID(firstReplySrc!=InvalidNodeID, m->solicitingMessage);
+				DebugAssertWithMessageID(!isCanceledReadRequest, m->solicitingMessage);
+				isCanceledReadRequest = true;
 			}
 		}
 		else if (msg->Type()==mt_Invalidate)
@@ -1494,10 +1508,12 @@ namespace Memory
 			DebugAssertWithMessageID(firstReplySrc==InvalidNodeID, msg->MsgID());
 			DebugAssertWithMessageID(src!=InvalidNodeID, msg->MsgID());
 
-			firstReplyBase = msg;
+			firstReplyBase = m;
 			firstReplySrc = src;
 
-			SendMsg(localCacheConnectionID, m, localSendTime);
+			const InvalidateMsg* forward = (const InvalidateMsg*)EM().ReplicateMsg(m);
+
+			SendMsg(localCacheConnectionID, forward, localSendTime);
 		}
 		else if (msg->Type()==mt_InvalidateResponse)
 		{
@@ -1517,6 +1533,15 @@ namespace Memory
 
 			//EM().DisposeMsg(m);
 			ClearTempCacheData(cacheData);
+
+			// if a read request has been canceled because we were processing an invalidate
+				// resend the read request
+			if (isCanceledReadRequest)
+			{
+				isCanceledReadRequest = false;
+				ReadMsg* forward = (ReadMsg*)EM().ReplicateMsg(pendingRead);
+				ResendRequestToDirectory(forward);
+			}
 		}
 		else if (msg->Type()==mt_ReadReply)
 		{
@@ -1888,13 +1913,11 @@ namespace Memory
 			//ProcessInterventionWhileInvalid(m, src);
 			SendInterventionNaks(m);
 		}
-		/*
 		else if (msg->Type()==mt_Invalidate)
 		{
 			const InvalidateMsg* m = (const InvalidateMsg*)msg;
 			ProcessInvalidateWhileInvalid(m, src);
 		}
-		*/
 		else
 		{
 			PrintError("OnCacheWaitForShReadRes", msg, "Unhandled message type");
@@ -3108,7 +3131,8 @@ namespace Memory
 		// process more pendingLocalReads if there are any
 		if (cacheDataPendingLocalReads.size() > 0)
 		{
-			OnCache(cacheDataPendingLocalReads.front(), InvalidNodeID, cacheData);
+			const ReadMsg* pendingRead = cacheDataPendingLocalReads.front();
+			OnCache(pendingRead, InvalidNodeID, cacheData);
 		}
 	}
 }
