@@ -1,7 +1,7 @@
 //#include <pthread.h>
 #include "sescapi.h"
 #include <stdio.h>
-#define NUM_THREADS        5
+#define NUM_THREADS        4
 
 void *print_hello_world(void *threadid)
 {
