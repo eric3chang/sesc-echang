@@ -348,11 +348,17 @@
 	}
 	public static void OutDirectoryMemory(int nodeCount, int l1, int l2)
 	{
-		output = new System.IO.StreamWriter("memoryConfigs\\Directory_p" + nodeCount + "_c" + l1 + "L1-" + l2 + "L2.memory");
+        output = new System.IO.StreamWriter("memoryConfigs\\directory-moesi-p" + nodeCount + "-c" + l1 + "L1-" + l2 + "L2.memory");
 		index = 1;
 		output.WriteLine("Begin");
 		MainMemory(400, 300);
-		AddNetwork("Network", nodeCount, 4, 20, 0.1f);
+		
+        NetworkTimingData myNetworkTimingData = GetNetworkTimingData(nodeCount);
+        int randomMin = myNetworkTimingData.randomMin;
+        int randomMax = myNetworkTimingData.randomMax;
+        //AddNetwork("Network", nodeCount, 4, 20, 0.1f);
+        AddNetwork("Network", nodeCount, randomMin, randomMax, 0.1f);
+
 		AddNetworkMemoryInterface("NMInt", nodeCount + 10);
 		l1 *= 1024;
 		l2 *= 1024;
@@ -410,16 +416,17 @@
 		System.IO.Directory.CreateDirectory("memoryConfigs");
 
         // nodeCount also determines the total number of processors
-		for (int nodeCount = 2; nodeCount <= 128; nodeCount *= 2)
+		for (int nodeCount = 2; nodeCount <= 32; nodeCount *= 2)
 		{
-			for (int l1 = 1; l1 <= 1024; l1 *= 2)
-            //for (int l1 = 1; l1 <= 1; l1 *= 2)
+			//for (int l1 = 1; l1 <= 1024; l1 *= 2)
+            for (int l1 = 8; l1 <= 1024; l1 *= 2)
 			{
 //				OutSimpleMemory1(i, l1);
 				for (int l2 = l1 * 2; l2 <= 8 * 1024; l2 *= 2)
                 //for (int l2 = l1 * 2; l2 <= 2; l2 *= 2)
 				{
-					OutOriginDirectoryMOESIMemory(nodeCount, l1, l2);
+                    OutDirectoryMemory(nodeCount, l1, l2);
+					//OutOriginDirectoryMOESIMemory(nodeCount, l1, l2);
 					//OutSimpleMemory2(i, l1, l2);
 					for (int l3 = l2 * 2; l3 <= 64 * 1024; l3 *= 2)
 					{
