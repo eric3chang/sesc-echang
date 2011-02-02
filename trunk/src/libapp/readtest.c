@@ -112,7 +112,7 @@ int main(int argc, char** argv)
    // wait for thread to finish
    sesc_wait();
 //    pthread_exit(NULL);
-   free(myCharArray);
+//   free(myCharArray);
 	sesc_exit(0);
 }
 
