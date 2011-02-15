@@ -1,0 +1,4117 @@
+#LyX 1.6.9 created this file. For more info see http://www.lyx.org/
+\lyxformat 345
+\begin_document
+\begin_header
+\textclass article
+\begin_preamble
+% This file was converted to LaTeX by Writer2LaTeX ver. 1.0.2
+% see http://writer2latex.sourceforge.net for more info
+
+\usepackage{amsfonts}\@ifundefined{definecolor}
+ {\usepackage{color}}{}
+\usepackage{array}\usepackage{supertabular}\usepackage{hhline}\usepackage{hyperref}\hypersetup{colorlinks=true, linkcolor=blue, citecolor=blue, filecolor=blue, urlcolor=blue}
+% Outline numbering
+
+\renewcommand{\thesection}{\arabic{section}}
+\renewcommand{\thesubsection}{\arabic{section}.\arabic{subsection}}
+\renewcommand{\thesubsubsection}{\arabic{section}.\arabic{subsection}.\arabic{subsubsection}}
+\makeatletter
+\newcommand{\arraybslash}{\let\\\@arraycr}
+\makeatother
+% Page layout (geometry)
+\setlength{\voffset}{-1in}
+\setlength{\hoffset}{-1in}
+\setlength{\topmargin}{1in}
+\setlength{\oddsidemargin}{1in}
+\setlength{\textheight}{9.036833in}
+\setlength{\textwidth}{6.5in}
+\setlength{\footskip}{26.148pt}
+\setlength{\headheight}{0cm}
+\setlength{\headsep}{0cm}
+% Footnote rule
+\setlength{\skip\footins}{0.0469in}
+\renewcommand{\footnoterule}{\vspace*{-0.0071in}\setlength\leftskip{0pt}\setlength\rightskip{0pt plus 1fil}\noindent\textcolor{black}{\rule{0.25\columnwidth}{0.0071in}}\vspace*{0.0398in}}
+% Pages styles
+\makeatletter
+\newcommand{\ps@Standard}{
+  \renewcommand\@oddhead{}
+  \renewcommand\@evenhead{}
+  \renewcommand\@oddfoot{\thepage{}}
+  \renewcommand\@evenfoot{\@oddfoot}
+  \renewcommand\thepage{\arabic{page}}
+}
+\makeatother
+
+\setlength{\tabcolsep}{1mm}
+\renewcommand{\arraystretch}{1.3}
+\newcounter{Figure}
+\renewcommand{\theFigure}{\arabic{Figure}}
+\title{}
+\end_preamble
+\use_default_options false
+\language english
+\inputencoding latin1
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize letterpaper
+\use_geometry false
+\use_amsmath 2
+\use_esint 1
+\cite_engine basic
+\use_bibtopic false
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle Standard
+\tracking_changes false
+\output_changes false
+\author "" 
+\end_header
+
+\begin_body
+
+\begin_layout Title
+
+\series bold
+An Analysis of Directory-Based Cache-Coherence Protocols on Multi-Core Processor
+s Using the SESC: SuperESCalar Simulator
+\end_layout
+
+\begin_layout Author
+Eric Chang
+\end_layout
+
+\begin_layout Standard
+\noindent
+
+\series bold
+Abstract
+\end_layout
+
+\begin_layout Standard
+\noindent
+
+\shape italic
+Directory-based cache-coherence protocols are based on the central concept
+ of having the states of any particular cache block located in a known,
+ fixed, location.
+ This report will discuss the advantages and disadvantages of two different
+ directory-based cache-coherence protocols.
+ I will introduce cache-coherence protocols in general with some of the
+ basic ideologies behind the different protocols.
+ Then, I will introduce the specific protocols that will be compared, which
+ are the regular directory-based cache-coherence protocol where all requests
+ and responses must pass through the home node, and a different protocol
+ based on the protocol used in the SGI Origin 2000-based systems.
+ I will then go into detail about simulating and implementing the differences
+ between the protocols using the SESC: SuperESCalar Simulator.
+ In addition, results from simulations using SPLASH2 benchmarks are presented.
+ We show that the Origin directory-based cache-coherence protocol has several
+ advantages over the regular directory-based cache-coherence protocol.
+\end_layout
+
+\begin_layout Section
+\begin_inset OptArg
+status collapsed
+
+\begin_layout Plain Layout
+Introduction
+\end_layout
+
+\end_inset
+
+
+\family roman
+Introduction
+\end_layout
+
+\begin_layout Standard
+Computers today are moving increasingly towards multi-core architectures
+ because we have reached a thermal barrier in increasing transistor switching
+ speeds.
+ As such, it is important to figure out ways to implement effective multi-core
+ architectures and how schemes offer different tradeoffs between speed and
+ memory consistency.
+ In particular, the cache-coherence schemes used by multi-core processors
+ have a huge impact on the performance of a multi-core architecture.
+\end_layout
+
+\begin_layout Standard
+Cache-coherence protocols require mechanisms like snoopy buses and directories
+ to function.
+ It is important to understand how underlying mechanisms such as buses and
+ directories allow multiple caches to communicate with each other.
+ 
+\begin_inset Quotes eld
+\end_inset
+
+In a coherent multiprocessor, the caches provide both migration and replication
+ of shared data items
+\begin_inset Quotes erd
+\end_inset
+
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "HEN00"
+
+\end_inset
+
+.
+ It is important for the architect of the processor to design these features
+ into the processor as to take advantage of the speedup available in having
+ multiple blocks of the same data across different nodes, while still giving
+ the correct results.
+\end_layout
+
+\begin_layout Standard
+There are two major categories of cache-coherence protocols available today,
+ snoopy-based cache-coherence protocol and directory-based cache-coherence
+ protocol.
+ Although the simplicity of snoopy-based cache-coherence protocols allow
+ manufacturers to easily convert single-core processors to be used as multi-core
+ processors, snoopy-based cache-coherence protocols have problems with scaling
+ up to meet higher core counts than directory-based cache-coherence protocols.
+ For that reason, this report will be focusing mainly on directory-based
+ cache-coherence protocols.
+\end_layout
+
+\begin_layout Section
+\begin_inset OptArg
+status collapsed
+
+\begin_layout Plain Layout
+Background
+\end_layout
+
+\end_inset
+
+
+\family roman
+Background
+\end_layout
+
+\begin_layout Standard
+
+\family roman
+There are several different types of cache-coherence protocols, and each
+ of them provide their own advantages and disadvantages.
+ I will first introduce the states that the caches need to store to permit
+ cache-coherence protocols to function, then I will go into the differences
+ between the two major cache-coherence protocols that are in use today,
+ which are the snoopy-based cache-coherence protocol and the directory-based
+ cache-coherence protocol, as well as modifications to the directory-based
+ cache-coherence protocol based on the Origin protocol.
+\end_layout
+
+\begin_layout Subsection
+\begin_inset OptArg
+status collapsed
+
+\begin_layout Plain Layout
+Cache States
+\end_layout
+
+\end_inset
+
+
+\family roman
+Cache States
+\end_layout
+
+\begin_layout Standard
+There are several states that has to be stored by the cache in order to
+ enable the rest of the system to function properly.
+ I will go over the states stored in the MSI cache protocol first.
+ This protocol allows the least amount of information to be stored, yet
+ it still provides enough information for a cache to acquire exclusive access.
+ An improvement upon this protocol can be found in the MESI protocol, which
+ uses one more state than the MSI protocol.
+\end_layout
+
+\begin_layout Subsubsection
+MSI Cache
+\end_layout
+
+\begin_layout Standard
+The MSI protocol is the most basic of the cache-coherence protocols, using
+ only three stages to ensure cache coherency.
+ The three states stand for Modified(M), Shared(S), and Invalid(I).
+ The Modified state signifies that the cache block is in a Dirty Exclusive
+ mode and that no other cache contains the entry.
+ This is necessary whenever the processor needs to perform a write operation.
+ The Shared state means that the cache block can exist in caches other than
+ the current one, and Invalid means that there are no usable data in this
+ particular cache line.
+\end_layout
+
+\begin_layout Standard
+Because this protocol contains only three states, it can save space on storage
+ as compared to some more advanced schemes.
+ In addition, the protocol for a cache-coherence protocol designed using
+ less cache states can be simpler.
+ The disadvantage is that this protocol requires more messages and higher
+ latency on average as compared to protocols where the cache utilizes more
+ states.
+\end_layout
+
+\begin_layout Subsubsection
+MESI Cache
+\end_layout
+
+\begin_layout Standard
+The MESI protocol is an improvement upon the MSI protocol in that it adds
+ an Exclusive(E) state to the protocol.
+ Whenever a cache holds a block in the Exclusive state, it means that the
+ cache has Exclusive access to the block, but had no intention of altering
+ the block at the time of request.
+ In other words, the Exclusive state indicates Clean Exclusive.
+ Adding the Exclusive state is advantageous in that it reduces the traffic
+ caused by writes of blocks that only exist in one cache.
+ This state allows the protocol to send fewer messages and achieve lower
+ latency in certain operations.
+ A disadvantage of this protocol is that it requires more space to store
+ this additional information as compared to the MSI protocol.
+\end_layout
+
+\begin_layout Standard
+Once we add this state into the protocol, certain cases that required an
+ additional request into the network in the MSI protocol becomes an operation
+ where no additional messages are emitted.
+ For example, the MSI protocol fills a Clean Exclusive reply as Shared,
+ so it becomes necessary to send an additional network message to request
+ for exclusive ownership when transitioning from Shared to Dirty Exclusive.
+ In a MESI cache, since it has the Clean Exclusive state, the same transition
+ would go from Clean Exclusive to Dirty Exclusive without emitting any messages
+ on the network.
+ In addition, it is easy to see that adding the Exclusive state means the
+ cache does not have to write back its block to memory when downgrading
+ from Clean Exclusive to Shared.
+ In the MSI protocol, there is no way to distinguish between a Dirty Exclusive
+ and a Clean Exclusive, meaning there are situations where we will write
+ a clean block to memory.
+\end_layout
+
+\begin_layout Subsection
+\begin_inset OptArg
+status collapsed
+
+\begin_layout Plain Layout
+Snoopy
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{}
+\end_layout
+
+\end_inset
+
+-Based Versus Directory
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{}
+\end_layout
+
+\end_inset
+
+-Based Cache
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{}
+\end_layout
+
+\end_inset
+
+-Coherence Protocols
+\end_layout
+
+\end_inset
+
+
+\family roman
+Snoopy-Based Versus Directory-Based Cache-Coherence Protocols
+\end_layout
+
+\begin_layout Standard
+
+\family roman
+The most important job of any cache-coherence protocols is to maintain data
+ coherency.
+ In order to maintain data coherency, the protocols all need to make sure
+ that whenever a cache writes to its block, it has exclusive access to it.
+ Given that constraint, one can perform myriad varieties of modifications
+ to the cache-coherence protocols to achieve the best performance.
+ This section will go over the snoopy-based cache-coherence protocol, the
+ regular directory-based cache-coherence protocol, and the Origin-based
+ cache-coherence protocol that are presented in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:cache-coherence-protocols"
+
+\end_inset
+
+.
+ All of these cache-coherence protocols can use the MESI protocol for their
+ cache portion.
+ This means that they all can support the Clean Exclusive state in their
+ caches.
+ Although the two directory-based cache-coherence protocols that will be
+ analyzed in detail in this report will both be using the MESI protocol
+ for their caches, the interactions they have is still vastly different.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename diagrams/cache-coherence-protocol-combined.emf
+	width 100text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+\shape italic
+\emph on
+Top: snoopy-based cache-coherence protocol.
+ Middle: regular directory-based cache-coherence protocol.
+ Bottom: SGI Origin-based cache-coherence protocol.
+\shape default
+\emph default
+
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:cache-coherence-protocols"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The snoopy-based cache-coherence protocols only logically have two different
+ nodes, the requesting node and the data node.
+ So all the communication that occur is basically one-to-one.
+ In any directory-based cache-coherence protocol, there are three logical
+ nodes in any request: the requesting node, the directory node, and the
+ data node.
+ These logical nodes can all be the same physical nodes or they can all
+ be different, but it is easier to think of them logically as three separate
+ nodes.
+ Requesting node is the node that sends out the original read or write request.
+ In a directory-based protocol, it is necessary to send the request to the
+ directory node in order to find out where the data actually is, what state
+ the directory block is in, and whether or not the request can be satisfied
+ immediately.
+ In the Origin cache-coherence protocol, there are also three logical nodes,
+ but occasionally, the data node needs to send two messages at once, one
+ to the directory node, and one to the requesting node.
+ This should decrease the overall latency in the system because it eliminates
+ the time going from the data node to the directory node to complete requests.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+centering
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Box Frameless
+position "c"
+hor_pos "c"
+has_inner_box 1
+inner_pos "c"
+use_parbox 0
+width "6.5in"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+
+\shape italic
+Figure 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+refstepcounter{Figure}
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+theFigure
+\end_layout
+
+\end_inset
+
+
+\begin_inset CommandInset label
+LatexCommand label
+name "seq:refFigure0"
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+ Top: snoopy-based cache-coherence protocol.
+ Middle: regular directory-based cache-coherence protocol.
+ Bottom: SGI Origin-based cache-coherence protocol.
+\end_layout
+
+\begin_layout Plain Layout
+[Warning: Image ignored] 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+% Unhandled or unsupported graphics:
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+%
+\backslash
+includegraphics[width=6.5in,height=6.0953in]{report2-img1}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset VSpace bigskip
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+\begin_inset OptArg
+status collapsed
+
+\begin_layout Plain Layout
+Snoopy
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{}
+\end_layout
+
+\end_inset
+
+-Based Cache
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{}
+\end_layout
+
+\end_inset
+
+-Coherence Protocol
+\end_layout
+
+\end_inset
+
+Snoopy
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{}
+\end_layout
+
+\end_inset
+
+-Based Cache-Coherence Protocol
+\end_layout
+
+\begin_layout Standard
+The snoopy-based cache-coherence protocol relies on the bus to transfer
+ necessary information.
+ 
+\begin_inset space \space{}
+\end_inset
+
+All messages are broadcast on a common bus, which is monitored by each processor
+ and its cache; therefore, each processor needs a controller to snoop the
+ bus.
+ Anytime a node encounters an important message that pertains to itself,
+ the controller makes sure to forward the request to the cache so that it
+ can further process it.
+ When the processor requires something, it sends its request on the bus,
+ and this broadcast message is heard by every processor connected to the
+ bus.
+\end_layout
+
+\begin_layout Standard
+Snoopy-based protocols have an advantage when it comes to manufacturing
+ because they can use the existing bus to memory as the broadcast medium
+ for communicating information about cache coherence 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "HEN00"
+
+\end_inset
+
+.
+ However, a snoopy-based protocol is not as scalable as a directory-based
+ protocol.
+ The main problem with scaling up snoopy-based protocols is that since all
+ the processors are sharing the same medium, the bus, unless the bandwidth
+ and speed of the bus can be scaled infinitely high, the number of processors
+ cannot be scaled arbitrarily high.
+ Although there are many cache-coherence protocols fundamentally based on
+ the snoopy-based cache-coherence protocol, this cache-coherence protocol
+ will not be presented in the final results because this report is focused
+ on comparing differences in directory-based cache-coherence protocols.
+\end_layout
+
+\begin_layout Subsubsection
+Directory-Based Cache-Coherence Protocol
+\end_layout
+
+\begin_layout Standard
+Directory-based cache-coherence protocols are a class of widely used cache-coher
+ence protocols that has been proven in the past to be able to scale up compared
+ to cache-coherence protocols based on the snoopy method.
+ 
+\begin_inset Quotes eld
+\end_inset
+
+As processor speeds and the number of cores per processor increase, more
+ designers are likely to opt for [directory-based cache coherence] protocols
+ to avoid the broadcast limit of a snoopy protocol
+\begin_inset Quotes erd
+\end_inset
+
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "HEN00"
+
+\end_inset
+
+.
+ Directory-based protocols are interesting because it can achieve higher
+ speeds performing the same amount of work than snoopy-based protocols.
+ Nevertheless, there are still some characteristics of directory-based cache-coh
+erence protocols that can cause problems when designing a system.
+ A snoopy-based protocol has very few problems with consistency because
+ all messages are broadcast on a bus, meaning all processors know whenever
+ changes occur in the system.
+ However, in a directory-based protocol, it is possible for the directory
+ to be in an inconsistent state for a longer time.
+ For example, when we are evicting a block from a processor, this is broadcast
+ across the bus in a snoopy-protocol, and each node knows right away if
+ it needs to change its cache state.
+ In a directory-based cache-coherence protocol, there is some time between
+ when the eviction message is sent from the owner to when the message arrives
+ at the directory.
+ In this time, it is possible for some other request to come in to the directory
+, allowing the directory to possibly fetch the invalidated data from the
+ owner that just evicted its data if care is not taken when designing the
+ protocol.
+\end_layout
+
+\begin_layout Standard
+A directory-based cache-coherence protocol can be designed several ways.
+ The directory needs to keep track of which CPU has which cache line.
+ This is necessary since the directory acts as the communication channel
+ between each CPU.
+ In a snoopy system, we do not keep track of which CPU has which cache block
+ in a centralized location.
+ This is the advantage in the directory-based cache-coherence protocol that
+ allows fewer messages to be sent.
+ One of the easiest ways to keep track of the directories is to keep a bit
+ vector in each distributed directory about which CPU has which cache block.
+ Using bit vector to keep track of the CPU that has a specific cache block
+ is an efficient way to implement directory-based cache-coherence protocol,
+ but it has a limit on how many CPUs can be used together with the system
+ since the bit vector would grow too large in a system with too many CPUs.
+ Another way would be to keep track of the node ID in the directory.
+ The advantage of using a node ID is that it can potentially take up less
+ space in the directory when we have a large number of processors, since
+ we do not have to keep track of all processors.
+ However, there is a disadvantage to keeping track of the node ID.
+ Usually, in a node ID based directory-based cache-coherence system, we
+ do not keep track of all the node IDs, because that would defeat the primary
+ purpose of using the node IDs, which is to save space.
+ Therefore, when we have a system that keeps track of the cache block using
+ node ID, we are unable to keep track of all the CPUs that might potentially
+ request for a cache block.
+ In that case, we would have to invalidate a CPU when we want more space
+ in the directory.
+\end_layout
+
+\begin_layout Standard
+The directory is required to store more than just which CPU currently contains
+ a cache line from the current directory.
+ It is also necessary for the directory to store the owners and sharers
+ in order to find out which processors own or share a block.
+ If we did not store these in the state of the directory, we would have
+ to query all the processors to find out what state they are all storing,
+ which would be incredibly inefficient.
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+tablename
+\end_layout
+
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "seq:refTable0"
+
+\end_inset
+
+ lists the possible data that the directory can hold compared to the cache
+ state in any cache that has the block.
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+bottomcaption
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{
+\end_layout
+
+\end_inset
+
+Correspondence between cache state and directory data structure
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset CommandInset label
+LatexCommand label
+name "seq:refTable0"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In both the 
+\begin_inset Quotes eld
+\end_inset
+
+Modified
+\begin_inset Quotes erd
+\end_inset
+
+ state and the 
+\begin_inset Quotes eld
+\end_inset
+
+Exclusive
+\begin_inset Quotes erd
+\end_inset
+
+ state, the directory would store only the node ID of the processor that
+ is the owner.
+ Nevertheless, the directory does not know for certain whether or not the
+ owner is actually clean or dirty until it has sent a request to the cache.
+ It is the job of the protocol to take advantage of having the 
+\begin_inset Quotes eld
+\end_inset
+
+Exclusive
+\begin_inset Quotes erd
+\end_inset
+
+ state by not writing the block to memory if the block is clean.
+ If the directory is in a 
+\begin_inset Quotes eld
+\end_inset
+
+Shared
+\begin_inset Quotes erd
+\end_inset
+
+ state, then it would have a node ID in the owner slot and any number of
+ node IDs in the sharers list.
+ The reason that there would be a node ID in the owner slot is because any
+ transition into the 
+\begin_inset Quotes eld
+\end_inset
+
+Shared
+\begin_inset Quotes erd
+\end_inset
+
+ state must have transitioned from a 
+\begin_inset Quotes eld
+\end_inset
+
+Modified
+\begin_inset Quotes erd
+\end_inset
+
+ or 
+\begin_inset Quotes eld
+\end_inset
+
+Exclusive
+\begin_inset Quotes erd
+\end_inset
+
+ state, which must already have stored a node ID in the owner slot.
+\end_layout
+
+\begin_layout Standard
+Keeping track of the owner could be done by either adding a bit to each
+ directory entry, and turning on the extra bit to indicate ownership.
+ There could also be an extra entry dedicated to holding the owner.
+ The advantage of adding a bit to each directory entry that holds the node
+ ID is that it could potentially save bits if there are many nodes in the
+ system and each node ID list is short.
+ However, using an extra entry strictly for holding the owner is more intuitive,
+ and it can also be faster to access since the processor always know which
+ entry is the owner.
+ We can also have a combined owner-sharers list, where one entry implies
+ 
+\begin_inset Quotes eld
+\end_inset
+
+Exclusive,
+\begin_inset Quotes erd
+\end_inset
+
+ and multiple entries imply that the directory is in the 
+\begin_inset Quotes eld
+\end_inset
+
+Shared
+\begin_inset Quotes erd
+\end_inset
+
+ state.
+ In this last method, the system would have to be able to quickly scan through
+ all the entries it has to determine whether it has no valid entries, one
+ valid entry, or multiple valid entries.
+ Since in either of the protocols that will be tested in this report, the
+ owner entry becomes essentially an additional entry for the sharers list,
+ there is not truly a need for the directory to have different slots for
+ holding the owner versus a list of sharers.
+ Therefore, sometimes in the discussion of protocols in this report, sharers
+ will imply both the sharers list and also the node ID in the owner slot.
+\end_layout
+
+\begin_layout Subsubsection
+Modifications to the Directory-Based Cache-Coherence Protocol
+\end_layout
+
+\begin_layout Standard
+There is an optimized version of the basic directory protocol mentioned
+ in the previous section.
+ The SGI Origin 2000 implemented this protocol, which is based on an altered
+ version of the protocol used in the Stanford DASH multiprocessor 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "LAU00"
+
+\end_inset
+
+.
+ This protocol tries to be more optimized by reducing latency between the
+ data node and the directory node.
+ It achieves this by assuming that all read requests to the directory can
+ be satisfied, and if it cannot, it is up to the owner of the data instead
+ of the directory to send an additional invalidate back to the directory
+ as well as the data response to the original requesting node.
+ We save time by allowing the data packet retrieved to go directly to the
+ requester without the additional latency of going to the directory first.
+\end_layout
+
+\begin_layout Standard
+This type of protocol introduce many opportunities for the messages to arrive
+ out-of-order.
+ A requesting message goes to the directory, which can be different than
+ the node that ultimately supplies the response back to the requester.
+ There are situations where the directory completes its transition into
+ a non-busy state before knowing for certain that the new owner has received
+ its request, making it possible for the directory to send another request
+ to the new owner when the new owner has not even received its response
+ from the previous transaction.
+ In addition, the system sometimes need to send out two messages simultaneously,
+ as opposed to the regular directory, where all operations can only cause
+ one outgoing message to be sent on every incoming message.
+ The protocol deals with this situation by having the directory change to
+ a busy state whenever the directory state and the request cannot be satisfied
+ immediately.
+ This situation can happen, for example, when the directory state is Exclusive
+ with another owner, and a read request comes in.
+ Any further requests that arrive, regardless of their origin or type, will
+ be denied via a nak by the directory.
+ This ensures that the directory stays in a consistent state and is not
+ modified based on invalid directory state.
+\end_layout
+
+\begin_layout Section
+Cache-Coherence Protocols
+\end_layout
+
+\begin_layout Standard
+This section will present the specific operations of the two different types
+ of directory-based cache-coherence protocols.
+ First, I will be showing the regular directory-based cache-coherence protocol
+ where all requests pass through the home node and each node can only emit
+ one response in reply to a request.
+ Then, I will be showing a more optimized version of the cache-coherence
+ protocol, based on the SGI Origin protocol, where it is possible for each
+ node to emit two messages in response to a request, and not all requests
+ have to pass through the directory before being satisfied.
+\end_layout
+
+\begin_layout Subsection
+Regular Protocol
+\end_layout
+
+\begin_layout Standard
+The regular directory-based cache-coherence protocol is a traditional directory-
+based cache-coherence protocol where the requester first sends a message
+ to the directory, followed by the directory sending another request to
+ the data node, with the data node returning a response to the directory.
+ Finally, the directory is responsible for forwarding the response back
+ to the requester.
+ In general, two bilateral interactions occur in this protocol to form a
+ complete transaction.
+\end_layout
+
+\begin_layout Standard
+The basic directory protocol is easier to implement than some of the more
+ advanced and newer version of the protocol, but it is also unoptimized.
+ This protocol makes sure that each request has a corresponding reply and
+ that no operations can proceed until the responding message has been received.
+ No assumptions are made when deciding the directory state because we wait
+ for the owner or shared block to return to the directory before we forward
+ it back to the requester.
+\end_layout
+
+\begin_layout Subsubsection
+Regular Protocol Directory FSM
+\end_layout
+
+\begin_layout Standard
+Figure
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "seq:refFigure1"
+
+\end_inset
+
+ illustrates the directory FSM for the regular directory-based cache-coherence
+ protocol.
+ The directory for any address starts in the 
+\begin_inset Quotes eld
+\end_inset
+
+Unowned
+\begin_inset Quotes erd
+\end_inset
+
+ state initially.
+ When the directory receives a read request, it would set requester as the
+ owner, forward the request to the memory node, and transition to 
+\begin_inset Quotes eld
+\end_inset
+
+Exclusive Waiting for Reply.
+\begin_inset Quotes erd
+\end_inset
+
+ In that state, the directory has to wait for a response from the memory
+ node before it can do anything else, so any read requests that arrive gets
+ nakked.
+ No writeback requests can arrive in 
+\begin_inset Quotes eld
+\end_inset
+
+Unowned
+\begin_inset Quotes erd
+\end_inset
+
+ or 
+\begin_inset Quotes eld
+\end_inset
+
+Exclusive Waiting for Reply,
+\begin_inset Quotes erd
+\end_inset
+
+ because no node has the block, yet.
+ When the directory receives a reply from the memory node in 
+\begin_inset Quotes eld
+\end_inset
+
+Exclusive Waiting for Reply,
+\begin_inset Quotes erd
+\end_inset
+
+ an exclusive reply is sent to the requester, and the directory transitions
+ into the 
+\begin_inset Quotes eld
+\end_inset
+
+Exclusive
+\begin_inset Quotes erd
+\end_inset
+
+ state.
+\end_layout
+
+\begin_layout Standard
+From the 
+\begin_inset Quotes eld
+\end_inset
+
+Exclusive
+\begin_inset Quotes erd
+\end_inset
+
+ state, there are a myriad of situations that can occur.
+ The first can happen when an exclusive read request arrives at the directory
+ and the requester is the owner.
+ This situation occurs when the cache has the block in its 
+\begin_inset Quotes eld
+\end_inset
+
+Shared
+\begin_inset Quotes erd
+\end_inset
+
+ state, but it wants exclusive access to it for a write.
+ The directory has to send a read ack (no data) to the requester when this
+ happens.
+ The second can happen when a writeback request is emitted from the owner.
+ In this case, the directory will clear the owner list, send the write to
+ memory, send a writeback ack to the requester, and transition to 
+\begin_inset Quotes eld
+\end_inset
+
+Unowned.
+\begin_inset Quotes erd
+\end_inset
+
+ The third is when the directory receives an eviction request in this state.
+ The directory is required to send an eviction ack to the requester, clear
+ the owner list, and transition to 
+\begin_inset Quotes eld
+\end_inset
+
+Unowned.
+\begin_inset Quotes erd
+\end_inset
+
+ It is not necessary to write to memory in this case, because an eviction
+ request indicates that the message came from a cache whose state was 
+\begin_inset Quotes eld
+\end_inset
+
+Clean Exclusive.
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+\shape italic
+\emph on
+Regular protocol directory FSM
+\shape default
+\emph default
+
+\begin_inset CommandInset label
+LatexCommand label
+name "Flo:regular-protocol-directory-fsm"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Another type of transition that occurs from the 
+\begin_inset Quotes eld
+\end_inset
+
+Exclusive
+\begin_inset Quotes erd
+\end_inset
+
+ state is when the directory receives an exclusive read and the requester
+ is not the owner.
+ In this situation, the directory would set the requester as the owner and
+ send an invalidate to the previous owner, while transitioning to 
+\begin_inset Quotes eld
+\end_inset
+
+Waiting for Invalidate Response,
+\begin_inset Quotes erd
+\end_inset
+
+ where it waits for a writeback request, an eviction request, or an invalidate
+ ack to cause it to transition back to 
+\begin_inset Quotes eld
+\end_inset
+
+Exclusive.
+\begin_inset Quotes erd
+\end_inset
+
+ If a read request arrives while the directory is in 
+\begin_inset Quotes eld
+\end_inset
+
+Waiting for Invalidate Response,
+\begin_inset Quotes erd
+\end_inset
+
+ the directory would send a nak to the 
+\begin_inset Box Frameless
+position "c"
+hor_pos "c"
+has_inner_box 1
+inner_pos "c"
+use_parbox 0
+width "6.5in"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+[Warning: Image ignored] 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+% Unhandled or unsupported graphics:
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+%
+\backslash
+includegraphics[width=6.5in,height=8.1228in]{report2-img2.wmf}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\shape italic
+Figure 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+refstepcounter{Figure}
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+theFigure
+\end_layout
+
+\end_inset
+
+
+\begin_inset CommandInset label
+LatexCommand label
+name "seq:refFigure1"
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+ Regular protocol directory FSM
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset VSpace bigskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset VSpace bigskip
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+requester.
+ If the directory receives a writeback request, it would send an exclusive
+ reply to the new owner, a writeback ack to the requester, send a write
+ to memory, and transition to 
+\begin_inset Quotes eld
+\end_inset
+
+Exclusive.
+\begin_inset Quotes erd
+\end_inset
+
+ On the other hand, if only an eviction request was received, the directory
+ would send an exclusive reply to the new owner, send an eviction ack to
+ the requester, and transition to 
+\begin_inset Quotes eld
+\end_inset
+
+Exclusive
+\begin_inset Quotes erd
+\end_inset
+
+ without sending a write to memory.
+ In 
+\begin_inset Quotes eld
+\end_inset
+
+Waiting for Invalidate Response,
+\begin_inset Quotes erd
+\end_inset
+
+ the directory could also receive an invalidate response or an invalidate
+ ack.
+ In both cases, the directory would send an exclusive reply to the new owner
+ and transition to 
+\begin_inset Quotes eld
+\end_inset
+
+Exclusive,
+\begin_inset Quotes erd
+\end_inset
+
+ but it would only send a write to memory if it received an invalidate response,
+ indicating that the cache was in the 
+\begin_inset Quotes eld
+\end_inset
+
+Dirty Exclusive
+\begin_inset Quotes erd
+\end_inset
+
+ state.
+\end_layout
+
+\begin_layout Standard
+It is also possible to transition from the 
+\begin_inset Quotes eld
+\end_inset
+
+Exclusive
+\begin_inset Quotes erd
+\end_inset
+
+ state to 
+\begin_inset Quotes eld
+\end_inset
+
+Exclusive Shared Waiting for Reply
+\begin_inset Quotes erd
+\end_inset
+
+ when the directory receives a shared read.
+ This shared read has to come from a requester that is not the owner.
+ The directory has to forward the request to the previous owner and add
+ the requester as a sharer.
+ In 
+\begin_inset Quotes eld
+\end_inset
+
+Exclusive Shared Waiting for Reply,
+\begin_inset Quotes erd
+\end_inset
+
+ several things can happen.
+ If the directory receives a read, it would send a nak to the requester.
+ If a writeback request arrives from the previous owner, then the directory
+ would set the owner to be the read requester, send a writeback ack to the
+ writeback requester, send an exclusive read reply to the read requester,
+ send a write to memory, and transition back to 
+\begin_inset Quotes eld
+\end_inset
+
+Exclusive.
+\begin_inset Quotes erd
+\end_inset
+
+ Receiving an eviction request is similar to receiving a writeback request,
+ except the directory does not have to send a write to memory.
+ Otherwise, if it receives a read reply from the previous owner, then the
+ directory would forward a shared reply to the requester and transition
+ to 
+\begin_inset Quotes eld
+\end_inset
+
+Shared.
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In the 
+\begin_inset Quotes eld
+\end_inset
+
+Shared
+\begin_inset Quotes erd
+\end_inset
+
+ state, if the directory receives an eviction request from a sharer and
+ there are more than two sharers, then the directory would simply remove
+ the requester from the sharers list and send an eviction ack to the requester.
+ If the directory receives a writeback request and the size of the sharers
+ list is 2, then the directory would set the owner to the remaining sharer,
+ clear the sharers list, send an eviction ack to the requester, and transition
+ to 
+\begin_inset Quotes eld
+\end_inset
+
+Exclusive.
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+When a shared read arrives in the 
+\begin_inset Quotes eld
+\end_inset
+
+Shared
+\begin_inset Quotes erd
+\end_inset
+
+ state, the directory would add the requester into the sharers list, forward
+ the request to a sharer S, which can be any node among the available sharers,
+ and transition to 
+\begin_inset Quotes eld
+\end_inset
+
+Shared Waiting for Reply.
+\begin_inset Quotes erd
+\end_inset
+
+ In this state, the directory adds any new shared requesters into the sharers
+ list and naks any exclusive reads and eviction requests that are not from
+ sharer S.
+ If the directory receives a shared reply from sharer S in this state, it
+ would send shared replies to all requesters.
+ However, if an eviction request from sharer S was received, then the directory
+ would send shared replies to all read requesters, send an eviction ack
+ to the eviction requester, remove the eviction requester from the sharers
+ list, and transition back to 
+\begin_inset Quotes eld
+\end_inset
+
+Shared.
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+While in 
+\begin_inset Quotes eld
+\end_inset
+
+Shared
+\begin_inset Quotes erd
+\end_inset
+
+ state, it is also possible to receive an exclusive read request.
+ This request causes the requester to be set as the owner, a transition
+ to 
+\begin_inset Quotes eld
+\end_inset
+
+Waiting to Send Invalidates,
+\begin_inset Quotes erd
+\end_inset
+
+ and the request to be forwarded to a sharer S, which can be any node among
+ the available sharers.
+ In the 
+\begin_inset Quotes eld
+\end_inset
+
+Waiting to Send Invalidates
+\begin_inset Quotes erd
+\end_inset
+
+ state, if the directory receives an eviction request not from sharer S,
+ it would send a nak to the requester.
+ Likewise, if the directory receives a read request in this state, it would
+ send a nak to the requester.
+ If a read reply arrives from sharer S, the directory would send invalidates
+ to all sharers and transition to 
+\begin_inset Quotes eld
+\end_inset
+
+Waiting for K Invalidates, J Invalidates Received So Far,
+\begin_inset Quotes erd
+\end_inset
+
+ where K is the number of invalidates sent, and J is the number of invalidate
+ acks received so far.
+ However, if an eviction request from sharer S arrives, then the directory
+ would remove the requester from the sharers list, send invalidates to the
+ remaining sharers, send an eviction ack to the requester, then transition
+ to 
+\begin_inset Quotes eld
+\end_inset
+
+Waiting for K Invalidates, J Invalidates Received So Far.
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The directory's primary purpose is to wait for invalidate acks in 
+\begin_inset Quotes eld
+\end_inset
+
+Waiting for K Invalidates, J Invalidates Received So Far.
+\begin_inset Quotes erd
+\end_inset
+
+ If a read request or an eviction request was received, the directory has
+ to send a nak to the requester.
+ If an invalidate ack was received, the directory checks if J (the number
+ of invalidate acks received so far) is equal to K (the number of invalidates
+ sent).
+ If they are not the same, then the directory continues to wait in this
+ state.
+ However, if J = K, then the directory would send an exclusive reply to
+ the requester and transition to 
+\begin_inset Quotes eld
+\end_inset
+
+Exclusive.
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Regular Protocol Cache FSM
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "seq:refFigure2"
+
+\end_inset
+
+ illustrates the cache FSM for the regular directory-based cache-coherence
+ protocol.
+ All caches start initially in the 
+\begin_inset Quotes eld
+\end_inset
+
+Invalid
+\begin_inset Quotes erd
+\end_inset
+
+ state.
+ From this state, the cache can receive a request from the processor for
+ either a shared read or an exclusive read.
+ If the cache receives a shared read, then it would transition to 
+\begin_inset Quotes eld
+\end_inset
+
+Waiting for Shared Read Reply
+\begin_inset Quotes erd
+\end_inset
+
+ after forwarding the request to the directory.
+ However, if the cache receives an exclusive read, it would transition to
+ 
+\begin_inset Quotes eld
+\end_inset
+
+Waiting for Exclusive Reply
+\begin_inset Quotes erd
+\end_inset
+
+ after forwarding the request to the directory.
+\end_layout
+
+\begin_layout Standard
+In 
+\begin_inset Quotes eld
+\end_inset
+
+Waiting for Shared Read Reply,
+\begin_inset Quotes erd
+\end_inset
+
+ the cache waits for either type of read replies and transitions depending
+ on which type of read reply it receives.
+ If it receives a nak, it has to resend the shared read request.
+ If the cache receives a shared reply, it would fill the cache with the
+ block and transition to 
+\begin_inset Quotes eld
+\end_inset
+
+Shared.
+\begin_inset Quotes erd
+\end_inset
+
+ However, if the cache receives an exclusive reply, it would transition
+ to 
+\begin_inset Quotes eld
+\end_inset
+
+Clean Exclusive,
+\begin_inset Quotes erd
+\end_inset
+
+ instead.
+\end_layout
+
+\begin_layout Standard
+Once in 
+\begin_inset Quotes eld
+\end_inset
+
+Clean Exclusive,
+\begin_inset Quotes erd
+\end_inset
+
+ the cache can receive an invalidate message from the directory, when it
+ has to reply with an invalidate ack and transition to 
+\begin_inset Quotes eld
+\end_inset
+
+Invalid.
+\begin_inset Quotes erd
+\end_inset
+
+ In this state, the cache could also decide to evict the block by sending
+ an eviction request to the directory and transitioning to 
+\begin_inset Quotes eld
+\end_inset
+
+Clean Exclusive Waiting for Eviction Ack,
+\begin_inset Quotes erd
+\end_inset
+
+ where it waits for an eviction ack before transitioning to 
+\begin_inset Quotes eld
+\end_inset
+
+Invalid.
+\begin_inset Quotes erd
+\end_inset
+
+ Otherwise, the cache can also transition into the 
+\begin_inset Quotes eld
+\end_inset
+
+Dirty Exclusive
+\begin_inset Quotes erd
+\end_inset
+
+ state if it receives an exclusive read request from the processor.
+\end_layout
+
+\begin_layout Standard
+After arriving in the 
+\begin_inset Quotes eld
+\end_inset
+
+Dirty Exclusive
+\begin_inset Quotes erd
+\end_inset
+
+ state, several things can happen.
+ The cache can receive an invalidate from the directory, when it would have
+ to transition to 
+\begin_inset Quotes eld
+\end_inset
+
+Invalid
+\begin_inset Quotes erd
+\end_inset
+
+ and send an invalidate response with the block attached to the directory.
+ If the cache has to evict the block, it would send a writeback request
+ to the directory and transition into 
+\begin_inset Quotes eld
+\end_inset
+
+Dirty Exclusive Waiting for Writeback Ack,
+\begin_inset Quotes erd
+\end_inset
+
+ where it waits for a writeback ack from the directory before transitioning
+ to 
+\begin_inset Quotes eld
+\end_inset
+
+Invalid.
+\begin_inset Quotes erd
+\end_inset
+
+ In 
+\begin_inset Quotes eld
+\end_inset
+
+Dirty Exclusive,
+\begin_inset Quotes erd
+\end_inset
+
+ the cache could also receive a shared read request from the directory,
+ indicating that the cache should transition into the 
+\begin_inset Quotes eld
+\end_inset
+
+Shared
+\begin_inset Quotes erd
+\end_inset
+
+ state.
+\end_layout
+
+\begin_layout Standard
+Once the cache transitions into the 
+\begin_inset Quotes eld
+\end_inset
+
+Shared
+\begin_inset Quotes erd
+\end_inset
+
+ state, several transitions could happen.
+ The directory could 
+\begin_inset space \space{}
+\end_inset
+
+receive an invalidate message from the directory, indicating that the cache
+ should transition to 
+\begin_inset Quotes eld
+\end_inset
+
+Invalid
+\begin_inset Quotes erd
+\end_inset
+
+ and send an invalidate ack to the directory.
+ If this cache received an invalidate, then this cache could not have been
+ the sharer S that the directory chose to read from, since the directory
+ is required to obtain the first read reply from sharer S before sending
+ out its invalidates.
+ In addition, if the cache has to evict a block in the 
+\begin_inset Quotes eld
+\end_inset
+
+Shared
+\begin_inset Quotes erd
+\end_inset
+
+ state for any reason, it would send an eviction request to the directory
+ and transition to 
+\begin_inset Quotes eld
+\end_inset
+
+Shared Waiting for Eviction Ack.
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+After transitioning to 
+\begin_inset Quotes eld
+\end_inset
+
+Shared Waiting for Eviction Ack,
+\begin_inset Quotes erd
+\end_inset
+
+ the cache has to wait for one of two messages.
+ If the cache receives an invalidate message from the directory, then it
+ means that the eviction request has not arrived at the directory before
+ the invalidate message was sent, so it has to transition to 
+\begin_inset Quotes eld
+\end_inset
+
+Waiting for Nak,
+\begin_inset Quotes erd
+\end_inset
+
+ since the directory would send a nak in response to the cache's eviction
+ request.
+ Once the cache receives a nak in 
+\begin_inset Quotes eld
+\end_inset
+
+Waiting for Nak,
+\begin_inset Quotes erd
+\end_inset
+
+ it would send an invalidate ack and transition to 
+\begin_inset Quotes eld
+\end_inset
+
+Invalid.
+\begin_inset Quotes erd
+\end_inset
+
+ It is also possible for the cache to receive an eviction ack while in 
+\begin_inset Quotes eld
+\end_inset
+
+Shared Waiting for Eviction Ack,
+\begin_inset Quotes erd
+\end_inset
+
+ where the cache can transition to 
+\begin_inset Quotes eld
+\end_inset
+
+Invalid
+\begin_inset Quotes erd
+\end_inset
+
+ without doing anything else.
+\end_layout
+
+\begin_layout Standard
+In 
+\begin_inset Quotes eld
+\end_inset
+
+Shared,
+\begin_inset Quotes erd
+\end_inset
+
+ it is also possible for the cache to receive an exclusive read request
+ from the processor, where it would forward the request to the directory
+ and transition to 
+\begin_inset Quotes eld
+\end_inset
+
+Waiting for Exclusive Read Reply.
+\begin_inset Quotes erd
+\end_inset
+
+ In this state, the cache can receive a nak from the directory, telling
+ the cache that the directory is busy and that it should resend its request.
+ Only the exclusive reply message from the directory will transition the
+ cache out of this state and into the 
+\begin_inset Quotes eld
+\end_inset
+
+Dirty Exclusive
+\begin_inset Quotes erd
+\end_inset
+
+ state.
+\end_layout
+
+\begin_layout Subsection
+Origin Protocol
+\end_layout
+
+\begin_layout Standard
+The Origin directory-based cache-coherence protocol uses a three-way interaction
+ that sends less messages than the regular directory protocol does.
+ Because of this change, the finite-state machines for this protocol is
+ substantially different than the regular protocol, both in the directory
+ and in the cache.
+\end_layout
+
+\begin_layout Subsubsection
+Origin Protocol Directory FSM
+\end_layout
+
+\begin_layout Standard
+Figure
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "seq:refFigure3"
+
+\end_inset
+
+ illustrates the directory FSM for the Origin directory-based cache-coherence
+ protocol and shows all the states in a directory.
+ Any block will start in the 
+\begin_inset Quotes eld
+\end_inset
+
+Unowned
+\begin_inset Quotes erd
+\end_inset
+
+ state.
+ From here, if the directory receives either type of read request, the directory
+ would transition to 
+\begin_inset Quotes eld
+\end_inset
+
+Exclusive (Memory-Access),
+\begin_inset Quotes erd
+\end_inset
+
+ make requester owner, and perform memory fetch.
+ If the directory receives another read request in 
+\begin_inset Quotes eld
+\end_inset
+
+Exclusive (Memory-Access),
+\begin_inset Quotes erd
+\end_inset
+
+ the directory would send a nak to the requester.
+ When the request from memory returns in the 
+\begin_inset Quotes eld
+\end_inset
+
+Exclusive (Memory-Access)
+\begin_inset Quotes erd
+\end_inset
+
+ state, the directory would send an exclusive reply to the requester and
+ transition to the 
+\begin_inset Quotes eld
+\end_inset
+
+Exclusive
+\begin_inset Quotes erd
+\end_inset
+
+ state.
+ It should be impossible for a writeback request to arrive during 
+\begin_inset Quotes eld
+\end_inset
+
+Unowned
+\begin_inset Quotes erd
+\end_inset
+
+ or 
+\begin_inset Quotes eld
+\end_inset
+
+Exclusive (Memory-Access)
+\begin_inset Quotes erd
+\end_inset
+
+ states because no node should have the block in these two states.
+\end_layout
+
+\begin_layout Standard
+From the 
+\begin_inset Quotes eld
+\end_inset
+
+Shared
+\begin_inset Quotes erd
+\end_inset
+
+ state, there are several states the directory can transition into.
+ The first is 
+\begin_inset Quotes eld
+\end_inset
+
+Shared (Memory-Access)
+\begin_inset Quotes erd
+\end_inset
+
+, which occurs if a shared read request comes in while in the 
+\begin_inset Quotes eld
+\end_inset
+
+Shared
+\begin_inset Quotes erd
+\end_inset
+
+ state.
+ During the transition, the directory would perform a memory fetch and add
+ the requester to sharers.
+ In 
+\begin_inset Quotes eld
+\end_inset
+
+Shared (Memory-Access)
+\begin_inset Quotes erd
+\end_inset
+
+, the directory would queue up any more shared read requests that might
+ come in while sending a nak to any exclusive reads.
+ When the memory returns, the directory will send shared replies to all
+ requesters.
+ There could also be a transition to the 
+\begin_inset Quotes eld
+\end_inset
+
+Shared Exclusive (Memory-Access)
+\begin_inset Quotes erd
+\end_inset
+
+ state or the 
+\begin_inset Quotes eld
+\end_inset
+
+Exclusive
+\begin_inset Quotes erd
+\end_inset
+
+ state from the 
+\begin_inset Quotes eld
+\end_inset
+
+Shared
+\begin_inset Quotes erd
+\end_inset
+
+ state when it receives an exclusive read request, depending on whether
+ or not the requester can be found in the owner or sharers of the directory
+ block.
+ If the requester is the owner or in sharers, then the directory has received
+ an upgrade request, which means that the requester already has the data.
+ Otherwise, the directory has to fetch the block from memory before it can
+ send out invalidates to sharers and previous owner, send out exclusive
+ reply with invalidates pending to the requester, set the requester as the
+ owner, and clear sharers.
+ It is impossible to receive a writeback request in the 
+\begin_inset Quotes eld
+\end_inset
+
+Shared
+\begin_inset Quotes erd
+\end_inset
+
+ state or any of the states that transitions from the 
+\begin_inset Quotes eld
+\end_inset
+
+Shared
+\begin_inset Quotes erd
+\end_inset
+
+ state because no node has exclusive access to the block.
+ If more read requests arrive while in the 
+\begin_inset Quotes eld
+\end_inset
+
+Shared Exclusive (Memory-Access)
+\begin_inset Quotes erd
+\end_inset
+
+ state, then the directory has to send a nak to that request.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Box Frameless
+position "c"
+hor_pos "c"
+has_inner_box 1
+inner_pos "c"
+use_parbox 0
+width "6.5in"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+[Warning: Image ignored] 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+% Unhandled or unsupported graphics:
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+%
+\backslash
+includegraphics[width=6.5in,height=8.2134in]{report2-img3.wmf}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\shape italic
+Figure 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+refstepcounter{Figure}
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+theFigure
+\end_layout
+
+\end_inset
+
+
+\begin_inset CommandInset label
+LatexCommand label
+name "seq:refFigure3"
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+ Origin protocol directory FSM
+\shape default
+ 
+\end_layout
+
+\end_inset
+
+In the 
+\begin_inset Quotes eld
+\end_inset
+
+Exclusive
+\begin_inset Quotes erd
+\end_inset
+
+ state, the home memory could transition to the 
+\begin_inset Quotes eld
+\end_inset
+
+Exclusive (Memory-Access)
+\begin_inset Quotes erd
+\end_inset
+
+ state if the requester is the owner, while also performing a fetch from
+ memory.
+ It could also transition to 
+\begin_inset Quotes eld
+\end_inset
+
+Unowned
+\begin_inset Quotes erd
+\end_inset
+
+ if it receives a writeback request.
+ However, from 
+\begin_inset Quotes eld
+\end_inset
+
+Exclusive,
+\begin_inset Quotes erd
+\end_inset
+
+ it could also transition to the two busy memory-access states.
+\end_layout
+
+\begin_layout Standard
+In all of the busy states, naks are sent in response to any requests, since
+ the directory cannot process any additional requests when it is busy.
+ The directory will transition to the busy memory-access states when a read
+ request arrives during the 
+\begin_inset Quotes eld
+\end_inset
+
+Exclusive
+\begin_inset Quotes erd
+\end_inset
+
+ state and the owner is not the requester.
+ It is necessary, both when transitioning to 
+\begin_inset Quotes eld
+\end_inset
+
+Busy-Shared (Memory-Access)
+\begin_inset Quotes erd
+\end_inset
+
+ and when transitioning to 
+\begin_inset Quotes eld
+\end_inset
+
+Busy-Exclusive (Memory-Access),
+\begin_inset Quotes erd
+\end_inset
+
+ to send a memory fetch and set the owner as the requester; however, it
+ is only necessary to set the sharers as the previous owner when transitioning
+ to 
+\begin_inset Quotes eld
+\end_inset
+
+Busy-Shared (Memory-Access)
+\begin_inset Quotes erd
+\end_inset
+
+ since 
+\begin_inset Quotes eld
+\end_inset
+
+Busy-Exclusive (Memory-Access) transitions eventually to the 
+\begin_inset Quotes eld
+\end_inset
+
+Exclusive
+\begin_inset Quotes erd
+\end_inset
+
+ state.
+ In the 
+\begin_inset Quotes eld
+\end_inset
+
+Busy-Shared (Memory-Access)
+\begin_inset Quotes erd
+\end_inset
+
+ state, we usually would wait for the memory to return before performing
+ any other operations.
+ If the directory receives a memory return first, then it would send an
+ intervention request to the previous owner, send a speculative reply to
+ the requester, and transition to the 
+\begin_inset Quotes eld
+\end_inset
+
+Busy-Shared
+\begin_inset Quotes erd
+\end_inset
+
+ state.
+ Should a writeback request occur before the memory return, however, the
+ directory would transition to the 
+\begin_inset Quotes eld
+\end_inset
+
+Busy-Shared (Memory-Access Writeback-Request)
+\begin_inset Quotes erd
+\end_inset
+
+ state, where we would wait for the memory return and not send any messages
+ that we would send when we transition to the 
+\begin_inset Quotes eld
+\end_inset
+
+Busy-Shared
+\begin_inset Quotes erd
+\end_inset
+
+ state.
+ In the 
+\begin_inset Quotes eld
+\end_inset
+
+Busy-Shared (Memory-Access Writeback-Request)
+\begin_inset Quotes erd
+\end_inset
+
+ state, we would wait for the memory return message, then send a regular
+ shared reply to the owner and a writeback exclusive ack to the requester.
+ Another writeback request could not arrive while in the 
+\begin_inset Quotes eld
+\end_inset
+
+Busy-Shared (Memory-Access Writeback-Request)
+\begin_inset Quotes erd
+\end_inset
+
+ state because the directory just received a writeback request from the
+ only node that had the block.
+ The 
+\begin_inset Quotes eld
+\end_inset
+
+Busy-Exclusive (Memory-Access)
+\begin_inset Quotes erd
+\end_inset
+
+ state transitions are similar, except we send exclusive messages instead
+ of shared messages and we transition to exclusive states.
+\end_layout
+
+\begin_layout Standard
+In the 
+\begin_inset Quotes eld
+\end_inset
+
+Busy-Shared
+\begin_inset Quotes erd
+\end_inset
+
+ state, the directory is waiting for a message from the previous owner of
+ the block before transitioning to the 
+\begin_inset Quotes eld
+\end_inset
+
+Shared
+\begin_inset Quotes erd
+\end_inset
+
+ state.
+ This could come in the form of a writeback request (if the owner evicted
+ the block before the intervention arrives), a shared writeback, or a shared
+ transfer (no data).
+ If a writeback request or a shared writeback arrives, the directory also
+ has to write the block to memory.
+ Additionally, a writeback request means that the directory would forward
+ that data to the new owner and return a writeback busy ack to the requester.
+ It is possible for the intervention to be unsuccessful, however, which
+ is indicated by a nak from the previous owner.
+ When this happens, the directory would return to 
+\begin_inset Quotes eld
+\end_inset
+
+Exclusive
+\begin_inset Quotes erd
+\end_inset
+
+ while setting the owner to the previous owner and clear the sharers.
+ The 
+\begin_inset Quotes eld
+\end_inset
+
+Busy-Exclusive
+\begin_inset Quotes erd
+\end_inset
+
+ state is similar, except exclusive messages are sent instead of shared
+ messages, the directory transitions back to 
+\begin_inset Quotes eld
+\end_inset
+
+Exclusive
+\begin_inset Quotes erd
+\end_inset
+
+ upon successful completion, and upon receiving a nak in 
+\begin_inset Quotes eld
+\end_inset
+
+Busy-Exclusive,
+\begin_inset Quotes erd
+\end_inset
+
+ it is not necessary to clear the sharers.
+\end_layout
+
+\begin_layout Subsubsection
+Origin Protocol Cache FSM
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "seq:refFigure4"
+
+\end_inset
+
+ illustrates the cache FSM for the Origin directory-based cache-coherence
+ protocol.
+ This diagram shows the state transitions for the cache.
+ Any cache line for an address starts in the 
+\begin_inset Quotes eld
+\end_inset
+
+Invalid
+\begin_inset Quotes erd
+\end_inset
+
+ state.
+ If the cache receives a shared read from the processor, it transitions
+ to 
+\begin_inset Quotes eld
+\end_inset
+
+Waiting for Shared Read Response
+\begin_inset Quotes erd
+\end_inset
+
+ and forwards the request to the home memory; if it receives an exclusive
+ read instead, it transitions to 
+\begin_inset Quotes eld
+\end_inset
+
+Waiting for Exclusive Read Response.
+\begin_inset Quotes erd
+\end_inset
+
+ In addition, if the cache receives an intervention, it sends an ack to
+ the requester and a transfer to the directory.
+ The type of the ack and the transfer will be dependent upon whether or
+ not a shared intervention is received or an exclusive intervention is received.
+ If the cache receives an invalidate in the 
+\begin_inset Quotes eld
+\end_inset
+
+Invalid
+\begin_inset Quotes erd
+\end_inset
+
+ state, then it means that the cache has evicted the block because of a
+ capacity miss, which means that there is no need to invalidate the block
+ again because the cache does not have the block.
+ However, it is still necessary to send an invalidate ack to the requester
+ in accordance with the protocol.
+\end_layout
+
+\begin_layout Standard
+Once the cache transitions to 
+\begin_inset Quotes eld
+\end_inset
+
+Waiting for Shared Read Response,
+\begin_inset Quotes erd
+\end_inset
+
+ it is possible for the cache to receive a nak from the directory, indicating
+ that the directory is currently busy and cannot handle the request, and
+ the cache will have to resend its request.
+ If it receives a shared reply, the cache would transition to the 
+\begin_inset Quotes eld
+\end_inset
+
+Shared
+\begin_inset Quotes erd
+\end_inset
+
+ state, while receiving an exclusive reply would transition the cache into
+ 
+\begin_inset Quotes eld
+\end_inset
+
+Clean Exclusive.
+\begin_inset Quotes erd
+\end_inset
+
+ If the cache receives an intervention message while in the 
+\begin_inset Quotes eld
+\end_inset
+
+Clean Exclusive
+\begin_inset Quotes erd
+\end_inset
+
+ state, it has to send an ack to the requester, and send a transfer to the
+ directory, before transitioning to 
+\begin_inset Quotes eld
+\end_inset
+
+Shared
+\begin_inset Quotes erd
+\end_inset
+
+ or 
+\begin_inset Quotes eld
+\end_inset
+
+Invalid,
+\begin_inset Quotes erd
+\end_inset
+
+ depending on whether or not it was a shared intervention or an exclusive
+ intervention.
+ It is also possible, while in 
+\begin_inset Quotes eld
+\end_inset
+
+Clean Exclusive,
+\begin_inset Quotes erd
+\end_inset
+
+ to receive an exclusive read request, in which case the cache would transition
+ to 
+\begin_inset Quotes eld
+\end_inset
+
+Dirty Exclusive.
+\begin_inset Quotes erd
+\end_inset
+
+ Finally, if the cache needs to evict a block while in 
+\begin_inset Quotes eld
+\end_inset
+
+Clean Exclusive,
+\begin_inset Quotes erd
+\end_inset
+
+ it would transition to 
+\begin_inset Quotes eld
+\end_inset
+
+Invalid
+\begin_inset Quotes erd
+\end_inset
+
+ without sending any messages.
+\end_layout
+
+\begin_layout Standard
+However, if a cache receives a speculative reply or a shared response/ack
+ in 
+\begin_inset Quotes eld
+\end_inset
+
+Waiting for Shared Read Response,
+\begin_inset Quotes erd
+\end_inset
+
+ then it would transition to 
+\begin_inset Quotes eld
+\end_inset
+
+Waiting for Shared Response/Ack
+\begin_inset Quotes erd
+\end_inset
+
+ or 
+\begin_inset Quotes eld
+\end_inset
+
+Shared Waiting for Speculative Reply,
+\begin_inset Quotes erd
+\end_inset
+
+ respectively.
+ Receiving either of these messages mean that the directory block state
+ was Exclusive and that the requester needs to wait for both messages before
+ it can fill its cache and transition to the 
+\begin_inset Quotes eld
+\end_inset
+
+Shared
+\begin_inset Quotes erd
+\end_inset
+
+ state.
+ However, it is possible to get a nak from the previous owner while in the
+ 
+\begin_inset Quotes eld
+\end_inset
+
+Waiting for Shared Response/Ack
+\begin_inset Quotes erd
+\end_inset
+
+ state, in which case, the cache has to start all over and resend the request
+ while transitioning back to 
+\begin_inset Quotes eld
+\end_inset
+
+Waiting for Shared Read Response.
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In the 
+\begin_inset Quotes eld
+\end_inset
+
+Shared
+\begin_inset Quotes erd
+\end_inset
+
+ state, if the cache receives an invalidate from the directory, the cache
+ would have to invalidate the block, send an invalidate ack to the requester,
+ and transition to the 
+\begin_inset Quotes eld
+\end_inset
+
+Invalid
+\begin_inset Quotes erd
+\end_inset
+
+ state.
+ If the cache needs to evict the block, it would also have to transition
+ to 
+\begin_inset Quotes eld
+\end_inset
+
+Invalid,
+\begin_inset Quotes erd
+\end_inset
+
+ but without sending any messages.
+ It is also possible to receive an exclusive read request from the processor
+ in this state, when the cache would have to forward the request to the
+ directory and transition to 
+\begin_inset Quotes eld
+\end_inset
+
+Waiting for Exclusive Read Response.
+\begin_inset Quotes erd
+\end_inset
+
+ Since the cache might have received the exclusive read request before receiving
+ an invalidate from the directory, it is necessary to send an invalidate
+ ack to the requester when receiving an invalidate in the 
+\begin_inset Quotes eld
+\end_inset
+
+Waiting for Exclusive Read Response
+\begin_inset Quotes erd
+\end_inset
+
+ state.
+ If the cache receives a nak in 
+\begin_inset Quotes eld
+\end_inset
+
+Waiting for Exclusive Read Response,
+\begin_inset Quotes erd
+\end_inset
+
+ the directory could not fulfill the request and the cache must resend its
+ request.
+ Typically, the cache would receive an exclusive reply in this state and
+ transition to 
+\begin_inset Quotes eld
+\end_inset
+
+Dirty Exclusive.
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+However, if there were any sharers when the cache requested exclusive read,
+ the cache would receive an exclusive reply with invalidates pending or
+ an invalidate ack and transition to 
+\begin_inset Quotes eld
+\end_inset
+
+Waiting for K Invalidates, J Invalidates Received So Far.
+\begin_inset Quotes erd
+\end_inset
+
+ The reason that an exclusive reply with invalidates pending or an invalidate
+ ack could be received from the 
+\begin_inset Quotes eld
+\end_inset
+
+Waiting for Exclusive Read Response
+\begin_inset Quotes erd
+\end_inset
+
+ state is illustrated in 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "seq:refFigure5"
+
+\end_inset
+
+.
+ The exclusive reply with invalidates pending and invalidations are sent
+ at the same time to the requester and the sharers, respectively, in both
+ scenarios.
+ In the expected case, scenario 1, the exclusive reply with invalidates
+ pending would arrive at the requester before any invalidate acks.
+ However, if any sharers are on the same node as the directory, it can receive
+ its invalidate before the exclusive reply with invalidates pending arrives
+ at the requester.
+ The sharer would then send an invalidate ack to the requester.
+ Since the invalidate ack has to traverse the network, there is no guarantee
+ that the exclusive reply with invalidates pending would arrive first.
+ Therefore, the requester has to prepare for both scenarios by transitioning
+ into the 
+\begin_inset Quotes eld
+\end_inset
+
+Waiting for K Invalidates, J Invalidates Received So Far
+\begin_inset Quotes erd
+\end_inset
+
+ state on the arrival of either types of messages.
+ In this state, the cache waits for the arrival of invalidate acks and/or
+ exclusive reply with invalidates pending and transitions to 
+\begin_inset Quotes eld
+\end_inset
+
+Dirty Exclusive
+\begin_inset Quotes erd
+\end_inset
+
+ only when all invalidate acks and the exclusive reply with invalidates
+ pending have been received.
+ It is also possible to receive an intervention while in 
+\begin_inset Quotes eld
+\end_inset
+
+Waiting for K Invalidates, J Invalidates Received So Far,
+\begin_inset Quotes erd
+\end_inset
+
+ when the cache would have to respond with a nak to the directory and a
+ nak to the requester.
+\end_layout
+
+\begin_layout Standard
+In the 
+\begin_inset Quotes eld
+\end_inset
+
+Waiting for Exclusive Read Response
+\begin_inset Quotes erd
+\end_inset
+
+ state, it is also possible that the cache has to wait for two messages
+ before it can transition to 
+\begin_inset Quotes eld
+\end_inset
+
+Dirty Exclusive.
+\begin_inset Quotes erd
+\end_inset
+
+ When the cache receives an exclusive response/ack or a speculative reply,
+ it would transition to 
+\begin_inset Quotes eld
+\end_inset
+
+Exclusive Waiting for Speculative Reply
+\begin_inset Quotes erd
+\end_inset
+
+ or 
+\begin_inset Quotes eld
+\end_inset
+
+Waiting for Exclusive Response/Ack,
+\begin_inset Quotes erd
+\end_inset
+
+ respectively, while it waits for the other message of this two-message
+ exchange to arrive.
+ When the other message arrives, the cache would fill the cache with the
+ exclusive response (if exclusive response) or speculative reply (if exclusive
+ ack) and transition to 
+\begin_inset Quotes eld
+\end_inset
+
+Dirty Exclusive.
+\begin_inset Quotes erd
+\end_inset
+
+ However, it is possible that the cache receives a nak from the previous
+ owner in the 
+\begin_inset Quotes eld
+\end_inset
+
+Waiting for Exclusive Response/Ack
+\begin_inset Quotes erd
+\end_inset
+
+ state, when the cache would have to start over by resending its request
+ to the directory and transitioning to 
+\begin_inset Quotes eld
+\end_inset
+
+Waiting for Exclusive Read Response.
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Once in the 
+\begin_inset Quotes eld
+\end_inset
+
+Dirty Exclusive
+\begin_inset Quotes erd
+\end_inset
+
+ state, the cache can receive three types of messages.
+ If the cache receives a shared intervention, it would send a shared response
+ to the requester and send a shared writeback to the directory while transitioni
+ng to 
+\begin_inset Quotes eld
+\end_inset
+
+Shared.
+\begin_inset Quotes erd
+\end_inset
+
+ Similarly, if the message was an exclusive intervention, it would send
+ an exclusive response to the requester and a dirty transfer to the directory
+ while transitioning to 
+\begin_inset Quotes eld
+\end_inset
+
+Invalid
+\begin_inset Quotes erd
+\end_inset
+
+.
+ Furthermore, the cache can also receive a writeback request from the processor
+ in this state, where it has to forward the request to the directory and
+ transition to 
+\begin_inset Quotes eld
+\end_inset
+
+Waiting for Writeback Response.
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+If the cache receives a simple writeback exclusive ack in 
+\begin_inset Quotes eld
+\end_inset
+
+Waiting for Writeback Response,
+\begin_inset Quotes erd
+\end_inset
+
+ the cache can transition to 
+\begin_inset Quotes eld
+\end_inset
+
+Invalid
+\begin_inset Quotes erd
+\end_inset
+
+ without any other operations.
+ If the cache receives an intervention, it would transition to 
+\begin_inset Quotes eld
+\end_inset
+
+Waiting for Writeback Busy Ack,
+\begin_inset Quotes erd
+\end_inset
+
+ where it would wait for a writeback busy ack before transitioning to 
+\begin_inset Quotes eld
+\end_inset
+
+Invalid
+\begin_inset Quotes erd
+\end_inset
+
+.
+ Similarly, if the cache receives a writeback busy ack first, it would transitio
+n to 
+\begin_inset Quotes eld
+\end_inset
+
+Waiting for Intervention
+\begin_inset Quotes erd
+\end_inset
+
+ and wait for the intervention before it can transition to 
+\begin_inset Quotes eld
+\end_inset
+
+Invalid
+\begin_inset Quotes erd
+\end_inset
+
+.
+ It is also possible that the directory is in one of the busy states while
+ the cache is 
+\begin_inset Quotes eld
+\end_inset
+
+Waiting for Writeback Response,
+\begin_inset Quotes erd
+\end_inset
+
+ and the cache has to resend its writeback request if that happens.
+\end_layout
+
+\begin_layout Section
+\begin_inset OptArg
+status collapsed
+
+\begin_layout Plain Layout
+Methodology and Implementation
+\end_layout
+
+\end_inset
+
+
+\family roman
+Methodology and Implementation
+\end_layout
+
+\begin_layout Standard
+The implementation of the code was done SESC Simulator, which uses C++ as
+ its programming language.
+ It supports various features of a computer system that allows us to simulate
+ the differences between different directory-based protocols.
+\end_layout
+
+\begin_layout Subsection
+Directory
+\end_layout
+
+\begin_layout Standard
+In the simulator, we make sure that whenever a message is being sent to
+ a remote node that has the same node ID as the current node, we send the
+ message to itself.
+ For example, if processor 1 requests a block A, where processor 1 is block
+ A's home node, sending a network message from a node to itself it pointless
+ and just results in needless network traffic.
+ We perform a check to see if the destination for a message is the same
+ as the source of the message, previous to sending the network message.
+ If this is the case, it just forwards it straight on to the function that
+ would handle it on the local directory node rather than emitting something
+ on the network.
+\end_layout
+
+\begin_layout Subsection
+\begin_inset OptArg
+status collapsed
+
+\begin_layout Plain Layout
+Cache
+\end_layout
+
+\end_inset
+
+
+\family roman
+Cache
+\end_layout
+
+\begin_layout Standard
+Since directories and buses are basically ways for multiple caches to communicat
+e with each other, it is important to understand what caches are and what
+ kind of requests they can send to each directory.
+ 
+\begin_inset Quotes eld
+\end_inset
+
+In a coherent multiprocessor, the caches provide both migration and replication
+ of shared data items
+\begin_inset Quotes erd
+\end_inset
+
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "HEN00"
+
+\end_inset
+
+.
+ It is important for the architect of the processor to design these features
+ into the processor as to allow the programmer to take advantage of the
+ speedup available in having multiple data.
+ Having multiple data allows for multiple reads at the same time.
+ The two protocols introduced here serves as an example of some of the protocols
+ that can be used to achieve cache coherency.
+ The MSI protocol is the most basic one and only uses three stages.
+ The MESI protocol adds an 
+\begin_inset Quotes eld
+\end_inset
+
+Exclusive
+\begin_inset Quotes erd
+\end_inset
+
+ state to reduce the traffic caused by writes of blocks that only exist
+ in one cache.
+ The MOSI protocol adds an 
+\begin_inset Quotes eld
+\end_inset
+
+Owned
+\begin_inset Quotes erd
+\end_inset
+
+ state to reduce the traffic caused by write-backs of blocks that are read
+ by other caches.
+ The MOESI protocol implements both the Exclusive and Owned state to take
+ on both characteristics.
+\end_layout
+
+\begin_layout Subsubsection
+\begin_inset OptArg
+status collapsed
+
+\begin_layout Plain Layout
+Changing Cache Size
+\end_layout
+
+\end_inset
+
+
+\family roman
+Changing Cache Size
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+bottomcaption
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{
+\end_layout
+
+\end_inset
+
+Acceptable states for MOESI cache
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+tablehead
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{supertabular}
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{
+\end_layout
+
+\end_inset
+
+|m
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{
+\end_layout
+
+\end_inset
+
+1.2212598in
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+|m
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{
+\end_layout
+
+\end_inset
+
+1.2212598in
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+|m
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{
+\end_layout
+
+\end_inset
+
+1.2212598in
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+|m
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{
+\end_layout
+
+\end_inset
+
+1.2212598in
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+|m
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{
+\end_layout
+
+\end_inset
+
+1.2212598in
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+|
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hline
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset space ~
+\end_inset
+
+ & Main Memory & Cache Line & Other Processor & Snoop Request
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hline
+\end_layout
+
+\end_inset
+
+ Modified & Stale & Most recent, correct copy & Hold no copy & Modified
+ cache responds
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hline
+\end_layout
+
+\end_inset
+
+ Owner & Can be stale & Most recent, correct copy & Shared state & Owned
+ cache responds
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hline
+\end_layout
+
+\end_inset
+
+ Exclusive & Most recent, correct copy & Most recent, correct copy & Hold
+ no copy & Exclusive cache or main memory responds
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hline
+\end_layout
+
+\end_inset
+
+ Shared & Can hold most recent, correct copy & Can hold most recent, correct
+ copy & Shared or owned & May not respond
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hline
+\end_layout
+
+\end_inset
+
+ Invalid & May hold valid or invalid & Invalid copy & May hold valid or
+ invalid copy & May not respond
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hline
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{supertabular}
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+The cache size can be determined by associativity * number of sets * width.
+ Therefore, in the configuration file, it is only necessary to give these
+ three parameters and not the total size of the cache.
+ For example, in my system, this could be 4 * 4 * 64, in the case of the
+ L1 cache.
+ This gives it 16 blocks of 64-bit data to have a 1kB L1 cache.
+ In the case of the L2 cache, I used an associativity of 4 with 8 sets to
+ get 32 blocks.
+ this equates to a 2kB cache.
+\end_layout
+
+\begin_layout Standard
+Increasing cache size increases coherence misses because more invalidates
+ occur because fewer blocks are bumped due to capacity misses.
+ Of course, capacity misses decrease because the cache has more spaces to
+ put blocks 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "HEN00"
+
+\end_inset
+
+.
+ Increasing block size means capacity miss decreases and compulsory miss
+ decreases for certain applications.
+ When this happens, it most likely means that there is a lot of spatial
+ locality in the code, such as when running kernel code.
+ Because increasing block size grabs more of the code in the same area together,
+ which directly reduces compulsory misses.
+ The capacity miss is reduced because we're storing more of the necessary
+ code in the cache 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "HEN00"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection
+\begin_inset OptArg
+status collapsed
+
+\begin_layout Plain Layout
+Network
+\end_layout
+
+\end_inset
+
+Network
+\end_layout
+
+\begin_layout Standard
+The underlying network in use for this simulator is a simple black box model.
+ It does not model a real network with routing.
+ Instead it models messages going in and out of the network using a random
+ delay with a lower-bound of 4 and an upper-bound of 20.
+ When more messages arrive, the delay coming from the random delay generator
+ will be shifted higher as to model the higher traffic conditions.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+centering
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Box Frameless
+position "c"
+hor_pos "c"
+has_inner_box 1
+inner_pos "c"
+use_parbox 0
+width "3.15in"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+ 
+\shape italic
+Figure 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+stepcounter{Figure}
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+theFigure
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+ Node connections to the network
+\shape default
+ [Warning: Image ignored] 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+% Unhandled or unsupported graphics:
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+%
+\backslash
+includegraphics[width=3.15in,height=1.9429in]{report2-img4}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We could have used a more complicated network, one that simulates router-router
+ connection and uses routing protocols, but such a network was not available
+ at the time in the simulator, and the black box network serves its purpose
+ for delivering messages to and from all the directories, as well as the
+ main memory.
+ Although the SESC simulator has the capability to model a more complicated
+ network, a simple network, such as the one used here, can illustrate our
+ point.
+\end_layout
+
+\begin_layout Subsection
+\begin_inset OptArg
+status collapsed
+
+\begin_layout Plain Layout
+Main Memory
+\end_layout
+
+\end_inset
+
+
+\family roman
+Main Memory
+\end_layout
+
+\begin_layout Standard
+In the simulator, the main memory is simulated as a node in the network.
+ Therefore, when a directory wants to request something from main memory,
+ it sends a messages across the network to the main memory.
+ This design simplifies the design of the memory while still keeping the
+ protocol intact.
+\end_layout
+
+\begin_layout Subsection
+\begin_inset OptArg
+status collapsed
+
+\begin_layout Plain Layout
+SESC Simulator
+\end_layout
+
+\end_inset
+
+
+\family roman
+SESC Simulator
+\end_layout
+
+\begin_layout Standard
+The connections in the SESC Simulator are shown in Figure 3.2.
+ We are using an architecture with a 1K L1 cache and a 2K L2 cache.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+centering
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Box Frameless
+position "c"
+hor_pos "c"
+has_inner_box 1
+inner_pos "c"
+use_parbox 0
+width "3.15in"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+ 
+\shape italic
+Figure 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+stepcounter{Figure}
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+theFigure
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+ Connections in a single node
+\shape default
+ [Warning: Image ignored] 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+% Unhandled or unsupported graphics:
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+%
+\backslash
+includegraphics[width=3.15in,height=3.8661in]{report2-img5}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+\begin_inset OptArg
+status collapsed
+
+\begin_layout Plain Layout
+Results
+\end_layout
+
+\end_inset
+
+
+\family roman
+Results
+\end_layout
+
+\begin_layout Standard
+In this section, I will discuss the results of running the simulation on
+ the Sesc simulator.
+ The results are shown in Table 2 for the results using the benchmark fft
+ in the SPLASH-2 benchmark suite with 32 processors.
+ The fft benchmark is a complex 1-D version of the radix-
+\begin_inset Formula ${\surd}$
+\end_inset
+
+n six-step FFT algorithm, which is optimized to minimize inter-processor
+ communication 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "WOO00"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection
+\begin_inset OptArg
+status collapsed
+
+\begin_layout Plain Layout
+Verifying Correctness
+\end_layout
+
+\end_inset
+
+
+\family roman
+Verifying Correctness
+\end_layout
+
+\begin_layout Standard
+To verify whether or not the simulator is correct, we run the benchmark
+ on a normal machine to find out what the output is, then run the program
+ on SESC.
+ The output produced from SESC should be identical to that produced by running
+ the benchmark on a real processor.
+ If not, then it means that the program that simulates the directory protocol
+ is not running correctly.
+ In addition, the SPLASH2 benchmarks' kernel programs provide self-test
+ that we can invoke to ensure that our protocols were implemented directly.
+ It achieves this self-test using inherent tests to the data structure.
+\end_layout
+
+\begin_layout Subsection
+\begin_inset OptArg
+status collapsed
+
+\begin_layout Plain Layout
+SPLASH2 benchmarks
+\end_layout
+
+\end_inset
+
+
+\family roman
+SPLASH2 benchmarks
+\end_layout
+
+\begin_layout Standard
+Using these results, we can see that the MSI protocol takes longer to complete.
+ Although there are more read misses for the MOESI cache, it is offset by
+ the amount of read hits for L2 cache.
+ 
+\begin_inset space \space{}
+\end_inset
+
+It could also be possible that the additional read misses do not incur as
+ much penalty in a MOESI cache because in a MOESI cache, there is a greater
+ opportunity for the cache to fetch the data from another node in that directory
+ instead of from the memory.
+\end_layout
+
+\begin_layout Standard
+
+\family roman
+We also see that for both MOESI and MSI caches, as the CPU count increases,
+ the run-time decreases, this is to be expected as more work can be done
+ in the same amount of time when one has more processors that can be used
+ at the same time.
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+bottomcaption
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{
+\end_layout
+
+\end_inset
+
+Results for fft
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Section
+\begin_inset OptArg
+status collapsed
+
+\begin_layout Plain Layout
+Problems
+\end_layout
+
+\end_inset
+
+
+\family roman
+Problems
+\end_layout
+
+\begin_layout Standard
+In implementing the directory-based cache-coherence protocol, there were
+ some problems.
+ One was simply that debugging such a large system is inherently hard, especiall
+y since the bugs often surface after tens of thousands of messages are sent.
+ It is useful to print out each message that pass around the system.
+ To debug these problems, it is useful to know which messages cause which
+ transitions.
+ For example, if we see that a message is being sent to the directory node
+ when it should be sent to the requesting node, we know that there is a
+ problem.
+ The debugging system works by various lines of assertions that should always
+ hold true if the system is working.
+ They can easily be turned off to increase speed of the simulator by not
+ defining DEBUG when compiling.
+\end_layout
+
+\begin_layout Subsection
+Further Work
+\end_layout
+
+\begin_layout Standard
+The memory system in the current system is implemented in a way such that
+ it is in one location.
+ In the future, we could modify the the simulator such that the memory system
+ is distributed just like the directory system.
+ With a distributed memory system, there would be much more issue with coherence
+, scaling, performance, and correctness.
+\end_layout
+
+\begin_layout Standard
+We can compare the protocol we have to a snarfing protocol.
+ In this protocol, the cache controller watches both address and data in
+ an attempt to update its own copy of a memory location when a second master
+ modifies a location in main memory.
+ When a write operation is observed to a location that a cache has a copy
+ of, the cache controller updates its own copy of the snarfed memory location
+ with the new data.
+\begin_inset CommandInset citation
+LatexCommand cite
+key "FAR00"
+
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "LAU00"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Conclusion
+\end_layout
+
+\begin_layout Standard
+We have arrived at the conclusion that the Origin-based directory protocol
+ is superior, since a few of its transactions can be done using a three-way
+ interaction instead of two bilateral interactions.
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+bibliographystyle{plain}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset CommandInset bibtex
+LatexCommand bibtex
+bibfiles "report2"
+options "plain"
+
+\end_inset
+
+ 
+\end_layout
+
+\end_body
+\end_document
