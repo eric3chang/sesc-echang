@@ -143,7 +143,7 @@ Introduction
 \end_layout
 
 \begin_layout Standard
-Computers today are moving increasingly towards multi-core architectures
+Computers today are moving increasingly towards multiprocessing architectures
  because we have reached a thermal barrier in increasing transistor switching
  speeds.
  As such, it is important to figure out ways to implement effective multi-core
