@@ -78,7 +78,7 @@
 \quotes_language english
 \papercolumns 1
 \papersides 1
-\paperpagestyle Standard
+\paperpagestyle default
 \tracking_changes false
 \output_changes false
 \author "" 
@@ -90,7 +90,7 @@
 \begin_layout Title
 
 \series bold
-An Analysis of Directory-Based Cache-Coherence Protocols on Multiprocessors
+An Analysis of Directory-Based Cache Coherence Protocols on Multiprocessors
  Using the SESC: SuperESCalar Simulator
 \end_layout
 
@@ -109,34 +109,24 @@ Abstract
 \noindent
 
 \shape italic
-Directory-based cache-coherence protocols are based on the central concept
+Directory-based cache coherence protocols are based on the central concept
  of having the states of any particular cache block located in a known,
  fixed, location.
  This report will discuss the advantages and disadvantages of two different
- directory-based cache-coherence protocols.
- I will introduce cache-coherence protocols in general with some of the
- basic ideologies behind the different protocols.
+ directory-based cache coherence protocols.
+ I will introduce various cache coherence protocols in general.
  Then, I will introduce the specific protocols that will be compared, which
- are the regular directory-based cache-coherence protocol where all requests
+ are the regular directory-based cache coherence protocol where all requests
  and responses must pass through the home node, and a different protocol
  based on the protocol used in the SGI Origin 2000-based systems.
  I will then go into detail about simulating and implementing the differences
  between the protocols using the SESC: SuperESCalar Simulator.
  In addition, results from simulations using SPLASH2 benchmarks are presented.
- We show that the Origin directory-based cache-coherence protocol has several
- advantages over the regular directory-based cache-coherence protocol.
+ We show that the Origin directory-based cache coherence protocol has several
+ advantages over the regular directory-based cache coherence protocol.
 \end_layout
 
 \begin_layout Section
-\begin_inset OptArg
-status collapsed
-
-\begin_layout Plain Layout
-Introduction
-\end_layout
-
-\end_inset
-
 
 \family roman
 Introduction
@@ -146,11 +136,11 @@ Introduction
 Computers today are moving increasingly towards multiprocessing architectures
  because we have reached a thermal barrier in increasing transistor switching
  speeds.
- As such, it is important to figure out ways to implement effective multi-core
- architectures and how schemes offer different tradeoffs between speed and
- memory consistency.
- In particular, the cache-coherence schemes used by multi-core processors
- have a huge impact on the performance of a multi-core architecture.
+ As such, it is important to figure out ways to implement effective multiprocess
+ing architectures and how schemes offer different tradeoffs between speed
+ and memory consistency.
+ In particular, the cache coherence schemes used for communication by processors
+ have a huge impact on the performance of a multiprocessing architecture.
 \end_layout
 
 \begin_layout Standard
@@ -182,58 +172,424 @@ key "HEN00"
 \end_layout
 
 \begin_layout Standard
-There are two major categories of cache-coherence protocols available today,
- snoopy-based cache-coherence protocol and directory-based cache-coherence
- protocol.
- Although the simplicity of snoopy-based cache-coherence protocols allow
- manufacturers to easily convert single-core processors to be used as multi-core
- processors, snoopy-based cache-coherence protocols have problems with scaling
- up to meet higher core counts than directory-based cache-coherence protocols.
- For that reason, this report will be focusing mainly on directory-based
- cache-coherence protocols.
-\end_layout
-
-\begin_layout Section
-\begin_inset OptArg
-status collapsed
-
-\begin_layout Plain Layout
-Background
-\end_layout
-
-\end_inset
-
-
-\family roman
-Background
+The Origin 2000 system is not directly applicable to CMPs (chip multiprocessors)
+, but it was designed for older systems.
+ In particular, this system has a part of the main memory with every node,
+ which is not the case on a CMP.
+ For the report, I am considering a CMP where the last-level cache is distribute
+d across the nodes (cores) and I am ignoring misses from the last-level
+ cache.
 \end_layout
 
 \begin_layout Standard
+In the following section of the paper, the outlines for different cache
+ coherence protocols are presented.
+ Section 3 details the designs for the two cache coherence protocols that
+ I will be comparing.
+ The implementation of the two protocols is presented in Section 4.
+ Performance of the two types of protocols is presented in Section 5.
+ Section 6 describes some of the problems faced in simulating the protocols.
+ Finally, section 7 concludes the report.
+\end_layout
 
-\family roman
-There are several different types of cache-coherence protocols, and each
- of them provide their own advantages and disadvantages.
- I will first introduce the states that the caches need to store to permit
- cache-coherence protocols to function, then I will go into the differences
- between the two major cache-coherence protocols that are in use today,
- which are the snoopy-based cache-coherence protocol and the directory-based
- cache-coherence protocol, as well as modifications to the directory-based
- cache-coherence protocol based on the Origin protocol.
+\begin_layout Section
+Architectures
+\end_layout
+
+\begin_layout Standard
+Here I will introduce the layouts of the two architectures that I will be
+ comparing.
 \end_layout
 
 \begin_layout Subsection
-\begin_inset OptArg
+Regular Directory-Based Cache Coherence Protocol Architecture
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
 status collapsed
 
 \begin_layout Plain Layout
-Cache States
+\begin_inset Graphics
+	filename diagrams/connections-regular-protocol.emf
+	width 100text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Connections in regular protocol
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Connections-in-Regular"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
 
 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Wrap figure
+lines 0
+placement o
+overhang 0col%
+width "50col%"
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename diagrams/node-regular-protocol.emf
+	width 33text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Node in regular protocol
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Node-in-regular"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The regular directory-based cache coherence architecture is shown in 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+figurename
+\end_layout
+
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Connections-in-Regular"
+
+\end_inset
+
+.
+ This figure shows the connections between all the individual components
+ in the regular protocol.
+ Each component will be introduced one by one.
+ The hubs that connect to the network are shown in 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+figurename
+\end_layout
+
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Node-in-regular"
+
+\end_inset
+
+.
+ There is one contiguous memory in this system, and all accesses to main
+ memory goes to this node.
+ Each node other than the memory node is a hub, where requests either go
+ to the directory, or to the cache.
+ The cache is two-level, with the processor on the very top.
+\end_layout
+
+\begin_layout Subsection
+Origin Directory-Based Cache Coherence Protocol Architecture
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename diagrams/connections-origin-protocol.emf
+	width 100text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Connections in Origin protocol
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Connections-in-Origin"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Wrap figure
+lines 0
+placement o
+overhang 0col%
+width "50col%"
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename diagrams/node-origin-protocol.emf
+	width 33text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Node in Origin protocol
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Node-in-Origin"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The Origin directory-based cache coherence architecture is shown in 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+figurename
+\end_layout
+
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Connections-in-Origin"
+
+\end_inset
+
+.
+ From the fiture, we can see that the network connects identical nodes together
+ to form the system.
+ The mrmoyis distributed across each node, and is attached to each directory,
+ such that each directory is responsible for accessing the memory it is
+ attached to.
+ From 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+figurename
+\end_layout
+
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Node-in-Origin"
+
+\end_inset
+
+, we can see that each node is formed from a hub that directs incoming traffic
+ to the directory or to the L2 cache.
+ The cache is, in turn, connected to the L1 cache and the processor to form
+ the complete node.
+\end_layout
+
+\begin_layout Section
+Implementation
+\end_layout
+
+\begin_layout Standard
+In this part, I will be going into the implementation details of the protocols.
+ There are several different types of cache coherence protocols, and each
+ of them provide their own advantages and disadvantages.
+ I will first introduce the states that the caches need to store to permit
+ cache coherence protocols to function, then I will go into the differences
+ between the two major cache coherence protocols that are in use today,
+ which are the snoopy-based cache coherence protocol and the directory-based
+ cache coherence protocol, as well as modifications to the directory-based
+ cache coherence protocol based on the Origin protocol.
+\end_layout
+
+\begin_layout Subsection
+Purpose of Cache Coherence Protocol
+\end_layout
+
+\begin_layout Standard
+A coherence protocol involves maintaining states for the blocks in the caches.
+ The most important job of any cache coherence protocols is to maintain
+ data coherency.
+ In order to maintain data coherency, the protocols all need to make sure
+ that whenever a cache writes to its block, it has exclusive access to it.
+ Given that constraint, one can perform myriad varieties of modifications
+ to the cache coherence protocols to achieve the best performance.
+ 
+\end_layout
+
+\begin_layout Subsection
+
 \family roman
 Cache States
+\end_layout
+
+\begin_layout Standard
+Since directories and buses are basically ways for multiple caches to communicat
+e with each other, it is important to understand what caches are and what
+ kind of requests they can send to each directory.
+ 
+\begin_inset Quotes eld
+\end_inset
+
+In a coherent multiprocessor, the caches provide both migration and replication
+ of shared data items
+\begin_inset Quotes erd
+\end_inset
+
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "HEN00"
+
+\end_inset
+
+.
+ It is important for the architect of the processor to design these features
+ into the processor as to allow the programmer to take advantage of the
+ speedup available in having multiple data.
+ Having multiple data allows for multiple reads at the same time.
+ The two protocols introduced here serves as an example of some of the protocols
+ that can be used to achieve cache coherency.
+ The MSI protocol is the most basic one and only uses three states.
+ The MESI protocol adds an 
+\begin_inset Quotes eld
+\end_inset
+
+Exclusive
+\begin_inset Quotes erd
+\end_inset
+
+ state to reduce the traffic caused by writes of blocks that only exist
+ in one cache.
+ The MOSI protocol adds an 
+\begin_inset Quotes eld
+\end_inset
+
+Owned
+\begin_inset Quotes erd
+\end_inset
+
+ state to reduce the traffic caused by write-backs of blocks that are read
+ by other caches.
+ The MOESI protocol implements both the Exclusive and Owned state to take
+ on both characteristics.
 \end_layout
 
 \begin_layout Standard
@@ -251,8 +607,8 @@ MSI Cache
 \end_layout
 
 \begin_layout Standard
-The MSI protocol is the most basic of the cache-coherence protocols, using
- only three stages to ensure cache coherency.
+The MSI protocol is the most basic of the cache coherence protocols, using
+ only three states to ensure cache coherency.
  The three states stand for Modified(M), Shared(S), and Invalid(I).
  The Modified state signifies that the cache block is in a Dirty Exclusive
  mode and that no other cache contains the entry.
@@ -265,7 +621,7 @@ The MSI protocol is the most basic of the cache-coherence protocols, using
 \begin_layout Standard
 Because this protocol contains only three states, it can save space on storage
  as compared to some more advanced schemes.
- In addition, the protocol for a cache-coherence protocol designed using
+ In addition, the protocol for a cache coherence protocol designed using
  less cache states can be simpler.
  The disadvantage is that this protocol requires more messages and higher
  latency on average as compared to protocols where the cache utilizes more
@@ -274,6 +630,278 @@ Because this protocol contains only three states, it can save space on storage
 
 \begin_layout Subsubsection
 MESI Cache
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+placement htbp
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Tabular
+<lyxtabular version="3" rows="5" columns="5">
+<features>
+<column alignment="left" valignment="middle" width="10text%">
+<column alignment="left" valignment="middle" width="20text%">
+<column alignment="left" valignment="middle" width="20text%">
+<column alignment="left" valignment="middle" width="20text%">
+<column alignment="left" valignment="middle" width="20text%">
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Main Memory 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Cache Line 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Other Processor 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Snoop Request 
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Modified 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Stale 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Most recent, correct copy 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Hold no copy 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Modified cache responds 
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Exclusive 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Most recent, correct copy 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Most recent, correct copy 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Hold no copy 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Exclusive cache or main memory responds 
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Shared 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Can hold most recent, correct copy 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Can hold most recent, correct copy 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Shared or owned 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+May not respond 
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Invalid 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" bottomline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+May hold valid or invalid 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" bottomline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Invalid copy 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" bottomline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+May hold valid or invalid copy 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" bottomline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+May not respond 
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+States in MESI cache
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -309,207 +937,36 @@ Once we add this state into the protocol, certain cases that required an
  a clean block to memory.
 \end_layout
 
+\begin_layout Standard
+The MESI cache can be used by either a snoopy-based or a directory-based
+ cache coherence protocol.
+ This is the cache that will be used in both of the directory-based cache
+ coherence protocols presented in this report.
+\end_layout
+
 \begin_layout Subsection
-\begin_inset OptArg
-status collapsed
-
-\begin_layout Plain Layout
-Snoopy
-\begin_inset ERT
-status collapsed
-
-\begin_layout Plain Layout
-
-{}
-\end_layout
-
-\end_inset
-
--Based Versus Directory
-\begin_inset ERT
-status collapsed
-
-\begin_layout Plain Layout
-
-{}
-\end_layout
-
-\end_inset
-
--Based Cache
-\begin_inset ERT
-status collapsed
-
-\begin_layout Plain Layout
-
-{}
-\end_layout
-
-\end_inset
-
--Coherence Protocols
-\end_layout
-
-\end_inset
-
-
-\family roman
-Snoopy-Based Versus Directory-Based Cache-Coherence Protocols
+Message Types
 \end_layout
 
 \begin_layout Standard
-
-\family roman
-The most important job of any cache-coherence protocols is to maintain data
- coherency.
- In order to maintain data coherency, the protocols all need to make sure
- that whenever a cache writes to its block, it has exclusive access to it.
- Given that constraint, one can perform myriad varieties of modifications
- to the cache-coherence protocols to achieve the best performance.
- This section will go over the snoopy-based cache-coherence protocol, the
- regular directory-based cache-coherence protocol, and the Origin-based
- cache-coherence protocol that are presented in 
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-figurename
+Here I will introduce the basic message types that will be used in the system.
 \end_layout
 
-\end_inset
-
-
-\begin_inset space \space{}
-\end_inset
-
-
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "fig:cache-coherence-protocols"
-
-\end_inset
-
-.
- All of these cache-coherence protocols can use the MESI protocol for their
- cache portion.
- This means that they all can support the Clean Exclusive state in their
- caches.
- Although the two directory-based cache-coherence protocols that will be
- analyzed in detail in this report will both be using the MESI protocol
- for their caches, the interactions they have is still vastly different.
- 
+\begin_layout Subsection
+Snoopy-Based Cache Coherence Protocol
 \end_layout
 
 \begin_layout Standard
-\begin_inset Float figure
-wide false
-sideways false
-status open
-
-\begin_layout Plain Layout
-\begin_inset Graphics
-	filename diagrams/cache-coherence-protocol-combined.wmf
-	width 100text%
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset Caption
-
-\begin_layout Plain Layout
-
-\shape italic
-\emph on
-Top: snoopy-based cache-coherence protocol.
- Middle: regular directory-based cache-coherence protocol.
- Bottom: SGI Origin-based cache-coherence protocol.
-\shape default
-\emph default
-
-\begin_inset CommandInset label
-LatexCommand label
-name "fig:cache-coherence-protocols"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-The snoopy-based cache-coherence protocols only logically have two different
+The snoopy-based cache coherence protocols only logically have two different
  nodes, the requesting node and the data node.
- So all the communication that occur is basically one-to-one.
- In any directory-based cache-coherence protocol, there are three logical
- nodes in any request: the requesting node, the directory node, and the
- data node.
- These logical nodes can all be the same physical nodes or they can all
- be different, but it is easier to think of them logically as three separate
- nodes.
- Requesting node is the node that sends out the original read or write request.
- In a directory-based protocol, it is necessary to send the request to the
- directory node in order to find out where the data actually is, what state
- the directory block is in, and whether or not the request can be satisfied
- immediately.
- In the Origin cache-coherence protocol, there are also three logical nodes,
- but occasionally, the data node needs to send two messages at once, one
- to the directory node, and one to the requesting node.
- This should decrease the overall latency in the system because it eliminates
- the time going from the data node to the directory node to complete requests.
-\end_layout
-
-\begin_layout Subsubsection
-\begin_inset OptArg
-status collapsed
-
-\begin_layout Plain Layout
-Snoopy
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-{}
-\end_layout
-
-\end_inset
-
--Based Cache
-\begin_inset ERT
-status collapsed
-
-\begin_layout Plain Layout
-
-{}
-\end_layout
-
-\end_inset
-
--Coherence Protocol
-\end_layout
-
-\end_inset
-
-Snoopy-Based Cache-Coherence Protocol
+ Every message is broadcast to all the nodes.
+ There are two major categories of cache coherence protocols available today,
+ snoopy-based cache coherence protocol and directory-based cache coherence
+ protocol.
 \end_layout
 
 \begin_layout Standard
-The snoopy-based cache-coherence protocol relies on the bus to transfer
+The snoopy-based cache coherence protocol relies on the bus to transfer
  necessary information.
  
 \begin_inset space \space{}
@@ -543,20 +1000,29 @@ key "HEN00"
  the processors are sharing the same medium, the bus, unless the bandwidth
  and speed of the bus can be scaled infinitely high, the number of processors
  cannot be scaled arbitrarily high.
- Although there are many cache-coherence protocols fundamentally based on
- the snoopy-based cache-coherence protocol, this cache-coherence protocol
+ Although there are many cache coherence protocols fundamentally based on
+ the snoopy-based cache coherence protocol, this cache coherence protocol
  will not be presented in the final results because this report is focused
- on comparing differences in directory-based cache-coherence protocols.
-\end_layout
-
-\begin_layout Subsubsection
-Directory-Based Cache-Coherence Protocol
+ on comparing differences in directory-based cache coherence protocols.
 \end_layout
 
 \begin_layout Standard
-Directory-based cache-coherence protocols are a class of widely used cache-coher
-ence protocols that has been proven in the past to be able to scale up compared
- to cache-coherence protocols based on the snoopy method.
+Although the simplicity of snoopy-based cache coherence protocols allow
+ manufacturers to easily convert single-core processors to be used as multiproce
+ssors, snoopy-based cache coherence protocols have problems with scaling
+ up to meet higher core counts than directory-based cache coherence protocols.
+ For that reason, this report will be focusing mainly on directory-based
+ cache coherence protocols.
+\end_layout
+
+\begin_layout Subsection
+Directory-Based Cache Coherence Protocol
+\end_layout
+
+\begin_layout Standard
+Directory-based cache coherence protocols are a class of widely used cache
+ coherence protocols that has been proven in the past to be able to scale
+ up compared to cache coherence protocols based on the snoopy method.
  
 \begin_inset Quotes eld
 \end_inset
@@ -577,8 +1043,8 @@ key "HEN00"
 .
  Directory-based protocols are interesting because it can achieve higher
  speeds performing the same amount of work than snoopy-based protocols.
- Nevertheless, there are still some characteristics of directory-based cache-coh
-erence protocols that can cause problems when designing a system.
+ Nevertheless, there are still some characteristics of directory-based cache
+ coherence protocols that can cause problems when designing a system.
  A snoopy-based protocol has very few problems with consistency because
  all messages are broadcast on a bus, meaning all processors know whenever
  changes occur in the system.
@@ -587,7 +1053,7 @@ erence protocols that can cause problems when designing a system.
  For example, when we are evicting a block from a processor, this is broadcast
  across the bus in a snoopy-protocol, and each node knows right away if
  it needs to change its cache state.
- In a directory-based cache-coherence protocol, there is some time between
+ In a directory-based cache coherence protocol, there is some time between
  when the eviction message is sent from the owner to when the message arrives
  at the directory.
  In this time, it is possible for some other request to come in to the directory
@@ -597,18 +1063,32 @@ erence protocols that can cause problems when designing a system.
 \end_layout
 
 \begin_layout Standard
-A directory-based cache-coherence protocol can be designed several ways.
+In any directory-based cache coherence protocol, there are three logical
+ nodes in any request: the requesting node, the directory node, and the
+ data node.
+ These logical nodes can all be the same physical nodes or they can all
+ be different, but it is easier to think of them logically as three separate
+ nodes.
+ Requesting node is the node that sends out the original read or write request.
+ In a directory-based protocol, it is necessary to send the request to the
+ directory node in order to find out where the data actually is, what state
+ the directory block is in, and whether or not the request can be satisfied
+ immediately.
+\end_layout
+
+\begin_layout Standard
+A directory-based cache coherence protocol can be designed several ways.
  The directory needs to keep track of which CPU has which cache line.
  This is necessary since the directory acts as the communication channel
  between each CPU.
  In a snoopy system, we do not keep track of which CPU has which cache block
  in a centralized location.
- This is the advantage in the directory-based cache-coherence protocol that
+ This is the advantage in the directory-based cache coherence protocol that
  allows fewer messages to be sent.
  One of the easiest ways to keep track of the directories is to keep a bit
  vector in each distributed directory about which CPU has which cache block.
  Using bit vector to keep track of the CPU that has a specific cache block
- is an efficient way to implement directory-based cache-coherence protocol,
+ is an efficient way to implement directory-based cache coherence protocol,
  but it has a limit on how many CPUs can be used together with the system
  since the bit vector would grow too large in a system with too many CPUs.
  Another way would be to keep track of the node ID in the directory.
@@ -616,7 +1096,7 @@ A directory-based cache-coherence protocol can be designed several ways.
  space in the directory when we have a large number of processors, since
  we do not have to keep track of all processors.
  However, there is a disadvantage to keeping track of the node ID.
- Usually, in a node ID based directory-based cache-coherence system, we
+ Usually, in a node ID based directory-based cache coherence system, we
  do not keep track of all the node IDs, because that would defeat the primary
  purpose of using the node IDs, which is to save space.
  Therefore, when we have a system that keeps track of the cache block using
@@ -915,7 +1395,7 @@ Shared
 \end_layout
 
 \begin_layout Subsubsection
-Modifications to the Directory-Based Cache-Coherence Protocol
+Modifications to the Directory-Based Cache Coherence Protocol
 \end_layout
 
 \begin_layout Standard
@@ -938,6 +1418,14 @@ key "LAU00"
  as well as the data response to the original requesting node.
  We save time by allowing the data packet retrieved to go directly to the
  requester without the additional latency of going to the directory first.
+\end_layout
+
+\begin_layout Standard
+In the Origin cache coherence protocol, there are also three logical nodes,
+ but occasionally, the data node needs to send two messages at once, one
+ to the directory node, and one to the requesting node.
+ This should decrease the overall latency in the system because it eliminates
+ the time going from the data node to the directory node to complete requests.
 \end_layout
 
 \begin_layout Standard
@@ -964,29 +1452,16 @@ This type of protocol introduce many opportunities for the messages to arrive
  modified based on invalid directory state.
 \end_layout
 
-\begin_layout Section
-Cache-Coherence Protocols
-\end_layout
-
-\begin_layout Standard
-This section will present the specific operations of the two different types
- of directory-based cache-coherence protocols.
- First, I will be showing the regular directory-based cache-coherence protocol
- where all requests pass through the home node and each node can only emit
- one response in reply to a request.
- Then, I will be showing a more optimized version of the cache-coherence
- protocol, based on the SGI Origin protocol, where it is possible for each
- node to emit two messages in response to a request, and not all requests
- have to pass through the directory before being satisfied.
-\end_layout
-
 \begin_layout Subsection
 Regular Protocol
 \end_layout
 
 \begin_layout Standard
-The regular directory-based cache-coherence protocol is a traditional directory-
-based cache-coherence protocol where the requester first sends a message
+I will be showing the regular directory-based cache coherence protocol first.
+ In this protocol, all requests pass through the home node and each node
+ can only emit one response in reply to a request.
+ The regular directory-based cache coherence protocol is a traditional directory
+-based cache coherence protocol where the requester first sends a message
  to the directory, followed by the directory sending another request to
  the data node, with the data node returning a response to the directory.
  Finally, the directory is responsible for forwarding the response back
@@ -1007,6 +1482,52 @@ The basic directory protocol is easier to implement than some of the more
 
 \begin_layout Subsubsection
 Regular Protocol Directory FSM
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename diagrams/regular-directory-fsm-1.emf
+	width 100text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+\shape italic
+\emph on
+Regular protocol directory FSM
+\shape default
+\emph default
+
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:regular-protocol-directory-fsm"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -1033,7 +1554,7 @@ reference "fig:regular-protocol-directory-fsm"
 
 \end_inset
 
- illustrates the directory FSM for the regular directory-based cache-coherence
+ illustrates the directory FSM for the regular directory-based cache coherence
  protocol.
  The directory for any address starts in the 
 \begin_inset Quotes eld
@@ -1091,52 +1612,6 @@ Exclusive
 \end_inset
 
  state.
-\end_layout
-
-\begin_layout Standard
-\begin_inset Float figure
-wide false
-sideways false
-status open
-
-\begin_layout Plain Layout
-\begin_inset Graphics
-	filename diagrams/regular-directory-fsm-1.emf
-	width 100text%
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset Caption
-
-\begin_layout Plain Layout
-
-\shape italic
-\emph on
-Regular protocol directory FSM
-\shape default
-\emph default
-
-\begin_inset CommandInset label
-LatexCommand label
-name "fig:regular-protocol-directory-fsm"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
 \end_layout
 
 \begin_layout Standard
@@ -1496,68 +1971,10 @@ Regular Protocol Cache FSM
 \end_layout
 
 \begin_layout Standard
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-figurename
-\end_layout
-
-\end_inset
-
-
-\begin_inset space ~
-\end_inset
-
-
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "fig:Regular-protocol-cache"
-
-\end_inset
-
-illustrates the cache FSM for the regular directory-based cache-coherence
- protocol.
- All caches start initially in the 
-\begin_inset Quotes eld
-\end_inset
-
-Invalid
-\begin_inset Quotes erd
-\end_inset
-
- state.
- From this state, the cache can receive a request from the processor for
- either a shared read or an exclusive read.
- If the cache receives a shared read, then it would transition to 
-\begin_inset Quotes eld
-\end_inset
-
-Waiting for Shared Read Reply
-\begin_inset Quotes erd
-\end_inset
-
- after forwarding the request to the directory.
- However, if the cache receives an exclusive read, it would transition to
- 
-\begin_inset Quotes eld
-\end_inset
-
-Waiting for Exclusive Reply
-\begin_inset Quotes erd
-\end_inset
-
- after forwarding the request to the directory.
-\end_layout
-
-\begin_layout Standard
 \begin_inset Float figure
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \begin_inset Graphics
@@ -1591,6 +2008,64 @@ name "fig:Regular-protocol-cache"
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+figurename
+\end_layout
+
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Regular-protocol-cache"
+
+\end_inset
+
+ illustrates the cache FSM for the regular directory-based cache coherence
+ protocol.
+ All caches start initially in the 
+\begin_inset Quotes eld
+\end_inset
+
+Invalid
+\begin_inset Quotes erd
+\end_inset
+
+ state.
+ From this state, the cache can receive a request from the processor for
+ either a shared read or an exclusive read.
+ If the cache receives a shared read, then it would transition to 
+\begin_inset Quotes eld
+\end_inset
+
+Waiting for Shared Read Reply
+\begin_inset Quotes erd
+\end_inset
+
+ after forwarding the request to the directory.
+ However, if the cache receives an exclusive read, it would transition to
+ 
+\begin_inset Quotes eld
+\end_inset
+
+Waiting for Exclusive Reply
+\begin_inset Quotes erd
+\end_inset
+
+ after forwarding the request to the directory.
 \end_layout
 
 \begin_layout Standard
@@ -1873,8 +2348,12 @@ Origin Protocol
 \end_layout
 
 \begin_layout Standard
-The Origin directory-based cache-coherence protocol uses a three-way interaction
- that sends less messages than the regular directory protocol does.
+In this section, I will be showing a more optimized version of the cache
+ coherence protocol, based on the SGI Origin protocol, where it is possible
+ for each node to emit two messages in response to a request, and not all
+ requests have to pass through the directory before being satisfied.
+ The Origin directory-based cache coherence protocol uses a three-way interactio
+n that sends less messages than the regular directory protocol does.
  Because of this change, the finite-state machines for this protocol is
  substantially different than the regular protocol, both in the directory
  and in the cache.
@@ -1882,6 +2361,46 @@ The Origin directory-based cache-coherence protocol uses a three-way interaction
 
 \begin_layout Subsubsection
 Origin Protocol Directory FSM
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename diagrams/origin-fsm-directory-03-combined.emf
+	width 100text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Origin protocol directory FSM
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Origin-protocol-directory"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -1908,7 +2427,7 @@ reference "fig:Origin-protocol-directory"
 
 \end_inset
 
- illustrates the directory FSM for the Origin directory-based cache-coherence
+ illustrates the directory FSM for the Origin directory-based cache coherence
  protocol and shows all the states in a directory.
  Any block will start in the 
 \begin_inset Quotes eld
@@ -1973,46 +2492,6 @@ Exclusive (Memory-Access)
 \end_inset
 
  states because no node should have the block in these two states.
-\end_layout
-
-\begin_layout Standard
-\begin_inset Float figure
-wide false
-sideways false
-status open
-
-\begin_layout Plain Layout
-\begin_inset Graphics
-	filename diagrams/origin-fsm-directory-03-combined.emf
-	width 100text%
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset Caption
-
-\begin_layout Plain Layout
-Origin protocol directory FSM
-\begin_inset CommandInset label
-LatexCommand label
-name "fig:Origin-protocol-directory"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
 \end_layout
 
 \begin_layout Standard
@@ -2350,6 +2829,46 @@ Origin Protocol Cache FSM
 \end_layout
 
 \begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename diagrams/origin-fsm-cache-02.emf
+	width 100text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Origin protocol cache FSM
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Origin-protocol-cache"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
 \begin_inset ERT
 status open
 
@@ -2373,7 +2892,7 @@ reference "fig:Origin-protocol-cache"
 
 \end_inset
 
- illustrates the cache FSM for the Origin directory-based cache-coherence
+ illustrates the cache FSM for the Origin directory-based cache coherence
  protocol.
  This diagram shows the state transitions for the cache.
  Any cache line for an address starts in the 
@@ -2420,50 +2939,6 @@ Invalid
  again because the cache does not have the block.
  However, it is still necessary to send an invalidate ack to the requester
  in accordance with the protocol.
-\end_layout
-
-\begin_layout Standard
-\begin_inset Float figure
-wide false
-sideways false
-status open
-
-\begin_layout Plain Layout
-\begin_inset Graphics
-	filename diagrams/origin-fsm-cache-02.emf
-	width 100text%
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset Caption
-
-\begin_layout Plain Layout
-Origin protocol cache FSM
-\begin_inset CommandInset label
-LatexCommand label
-name "fig:Origin-protocol-cache"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-
-
 \end_layout
 
 \begin_layout Standard
@@ -2691,6 +3166,54 @@ Dirty Exclusive.
 \end_layout
 
 \begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename diagrams/waiting-for-k-invalidates-j-invalidates-received.emf
+	width 100text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Scenarios When Transitioning into 
+\begin_inset Quotes eld
+\end_inset
+
+Waiting for K Invalidates, J Invalidates Received So Far
+\begin_inset Quotes erd
+\end_inset
+
+
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Scenarios-When-Transitioning"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
 However, if there were any sharers when the cache requested exclusive read,
  the cache would receive an exclusive reply with invalidates pending or
  an invalidate ack and transition to 
@@ -2721,6 +3244,10 @@ status open
 figurename
 \end_layout
 
+\end_inset
+
+
+\begin_inset space \space{}
 \end_inset
 
 
@@ -2773,58 +3300,6 @@ Waiting for K Invalidates, J Invalidates Received So Far,
 
  when the cache would have to respond with a nak to the directory and a
  nak to the requester.
-\end_layout
-
-\begin_layout Standard
-\begin_inset Float figure
-wide false
-sideways false
-status open
-
-\begin_layout Plain Layout
-\begin_inset Graphics
-	filename diagrams/waiting-for-k-invalidates-j-invalidates-received.emf
-	width 100text%
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset Caption
-
-\begin_layout Plain Layout
-Scenarios When Transitioning into 
-\begin_inset Quotes eld
-\end_inset
-
-Waiting for K Invalidates, J Invalidates Received So Far
-\begin_inset Quotes erd
-\end_inset
-
-
-\begin_inset CommandInset label
-LatexCommand label
-name "fig:Scenarios-When-Transitioning"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-
-
 \end_layout
 
 \begin_layout Standard
@@ -3005,397 +3480,143 @@ Waiting for Writeback Response,
 \end_layout
 
 \begin_layout Section
-\begin_inset OptArg
-status collapsed
-
-\begin_layout Plain Layout
-Methodology and Implementation
-\end_layout
-
-\end_inset
-
 
 \family roman
-Methodology and Implementation
+Results
 \end_layout
 
 \begin_layout Standard
-The implementation of the code was done SESC Simulator, which uses C++ as
- its programming language.
+In this section, I will discuss the results of running the simulation on
+ the Sesc simulator.
+ The results are shown in Table 2 for the results using the benchmark fft
+ in the SPLASH-2 benchmark suite with 32 processors.
+ The fft benchmark is a complex 1-D version of the radix-
+\begin_inset Formula ${\surd}$
+\end_inset
+
+n six-step FFT algorithm, which is optimized to minimize inter-processor
+ communication 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "WOO00"
+
+\end_inset
+
+.
+ The implementation of the code was done SESC Simulator, which uses C++
+ as its programming language.
  It supports various features of a computer system that allows us to simulate
  the differences between different directory-based protocols.
 \end_layout
 
 \begin_layout Subsection
-Directory
-\end_layout
-
-\begin_layout Standard
-In the simulator, we make sure that whenever a message is being sent to
- a remote node that has the same node ID as the current node, we send the
- message to itself.
- For example, if processor 1 requests a block A, where processor 1 is block
- A's home node, sending a network message from a node to itself it pointless
- and just results in needless network traffic.
- We perform a check to see if the destination for a message is the same
- as the source of the message, previous to sending the network message.
- If this is the case, it just forwards it straight on to the function that
- would handle it on the local directory node rather than emitting something
- on the network.
-\end_layout
-
-\begin_layout Subsection
-\begin_inset OptArg
-status collapsed
-
-\begin_layout Plain Layout
-Cache
-\end_layout
-
-\end_inset
-
 
 \family roman
-Cache
+SESC Simulator
 \end_layout
 
 \begin_layout Standard
-Since directories and buses are basically ways for multiple caches to communicat
-e with each other, it is important to understand what caches are and what
- kind of requests they can send to each directory.
- 
-\begin_inset Quotes eld
-\end_inset
-
-In a coherent multiprocessor, the caches provide both migration and replication
- of shared data items
-\begin_inset Quotes erd
-\end_inset
-
- 
-\begin_inset CommandInset citation
-LatexCommand cite
-key "HEN00"
-
-\end_inset
-
-.
- It is important for the architect of the processor to design these features
- into the processor as to allow the programmer to take advantage of the
- speedup available in having multiple data.
- Having multiple data allows for multiple reads at the same time.
- The two protocols introduced here serves as an example of some of the protocols
- that can be used to achieve cache coherency.
- The MSI protocol is the most basic one and only uses three stages.
- The MESI protocol adds an 
-\begin_inset Quotes eld
-\end_inset
-
-Exclusive
-\begin_inset Quotes erd
-\end_inset
-
- state to reduce the traffic caused by writes of blocks that only exist
- in one cache.
- The MOSI protocol adds an 
-\begin_inset Quotes eld
-\end_inset
-
-Owned
-\begin_inset Quotes erd
-\end_inset
-
- state to reduce the traffic caused by write-backs of blocks that are read
- by other caches.
- The MOESI protocol implements both the Exclusive and Owned state to take
- on both characteristics.
-\end_layout
-
-\begin_layout Subsubsection
-\begin_inset OptArg
-status collapsed
-
-\begin_layout Plain Layout
-Changing Cache Size
-\end_layout
-
-\end_inset
-
-
-\family roman
-Changing Cache Size
-\end_layout
-
-\begin_layout Standard
-\begin_inset Float table
-placement htbp
-wide false
-sideways false
+The connections in the SESC Simulator are shown in 
+\begin_inset ERT
 status open
 
 \begin_layout Plain Layout
-\begin_inset Tabular
-<lyxtabular version="3" rows="5" columns="5">
-<features>
-<column alignment="left" valignment="middle" width="10text%">
-<column alignment="left" valignment="middle" width="20text%">
-<column alignment="left" valignment="middle" width="20text%">
-<column alignment="left" valignment="middle" width="20text%">
-<column alignment="left" valignment="middle" width="20text%">
-<row>
-<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
+
+
+\backslash
+figurename
+\end_layout
+
+\end_inset
+
+ [still have to add this].
+ We are using an architecture with a 1K L1 cache and a 2K L2 cache.
+\end_layout
+
+\begin_layout Subsection
+
+\family roman
+Verifying Correctness
+\end_layout
+
+\begin_layout Standard
+To verify whether or not the simulator is correct, we run the benchmark
+ on a normal machine to find out what the output is, then run the program
+ on SESC.
+ The output produced from SESC should be identical to that produced by running
+ the benchmark on a real processor.
+ If not, then it means that the program that simulates the directory protocol
+ is not running correctly.
+ In addition, the SPLASH2 benchmarks' kernel programs provide self-test
+ that we can invoke to ensure that our protocols were implemented directly.
+ It achieves this self-test using inherent tests to the data structure.
+\end_layout
+
+\begin_layout Subsection
+Synthetic Benchmark
+\end_layout
+
+\begin_layout Standard
+This section introduces synthetic benchmarks.
+ The synthetic banrhmark show in 
+\begin_inset ERT
+status open
 
 \begin_layout Plain Layout
 
-\end_layout
 
-\end_inset
-</cell>
-<cell alignment="left" valignment="top" topline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Main Memory 
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="left" valignment="top" topline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Cache Line 
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="left" valignment="top" topline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Other Processor 
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="left" valignment="top" topline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Snoop Request 
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Modified 
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="left" valignment="top" topline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Stale 
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="left" valignment="top" topline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Most recent, correct copy 
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="left" valignment="top" topline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Hold no copy 
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="left" valignment="top" topline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Modified cache responds 
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Exclusive 
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="left" valignment="top" topline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Most recent, correct copy 
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="left" valignment="top" topline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Most recent, correct copy 
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="left" valignment="top" topline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Hold no copy 
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="left" valignment="top" topline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Exclusive cache or main memory responds 
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Shared 
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="left" valignment="top" topline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Can hold most recent, correct copy 
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="left" valignment="top" topline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Can hold most recent, correct copy 
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="left" valignment="top" topline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Shared or owned 
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="left" valignment="top" topline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-May not respond 
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Invalid 
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="left" valignment="top" topline="true" bottomline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-May hold valid or invalid 
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="left" valignment="top" topline="true" bottomline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Invalid copy 
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="left" valignment="top" topline="true" bottomline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-May hold valid or invalid copy 
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="left" valignment="top" topline="true" bottomline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-May not respond 
-\end_layout
-
-\end_inset
-</cell>
-</row>
-</lyxtabular>
-
-\end_inset
-
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-Acceptable states for MESI Cache
+\backslash
+figurename
 \end_layout
 
 \end_inset
 
 
-\end_layout
-
+\begin_inset space \space{}
 \end_inset
 
+? is a program that performs a very large number of writes.
+ The test systems using either types of protocols have two processors, and
+ both the processors are trying to write to the same location.
+ This should force the block to continuously get evicted, which will test
+ the effectiveness of the Origin protocol in reducing latency by allowing
+ the data node to reply directly to the requesting node, without having
+ to send the message first to the directory.
+\end_layout
 
+\begin_layout Subsection
+
+\family roman
+SPLASH2 benchmarks
+\end_layout
+
+\begin_layout Standard
+Using these results, we can see that the MSI protocol takes longer to complete.
+ Although there are more read misses for the MOESI cache, it is offset by
+ the amount of read hits for L2 cache.
+ 
+\begin_inset space \space{}
+\end_inset
+
+It could also be possible that the additional read misses do not incur as
+ much penalty in a MOESI cache because in a MOESI cache, there is a greater
+ opportunity for the cache to fetch the data from another node in that directory
+ instead of from the memory.
+\end_layout
+
+\begin_layout Standard
+
+\family roman
+We also see that for both MOESI and MSI caches, as the CPU count increases,
+ the run-time decreases, this is to be expected as more work can be done
+ in the same amount of time when one has more processors that can be used
+ at the same time.
+\end_layout
+
+\begin_layout Subsubsection
+
+\family roman
+Changing Cache Size
 \end_layout
 
 \begin_layout Standard
@@ -3439,252 +3660,14 @@ key "HEN00"
 .
 \end_layout
 
-\begin_layout Subsection
-\begin_inset OptArg
-status collapsed
-
-\begin_layout Plain Layout
-Network
-\end_layout
-
-\end_inset
-
-Network
-\end_layout
-
-\begin_layout Standard
-The underlying network in use for this simulator is a simple black box model.
- It does not model a real network with routing.
- Instead it models messages going in and out of the network using a random
- delay with a lower-bound of 4 and an upper-bound of 20.
- When more messages arrive, the delay coming from the random delay generator
- will be shifted higher as to model the higher traffic conditions.
-\end_layout
-
-\begin_layout Standard
-We could have used a more complicated network, one that simulates router-router
- connection and uses routing protocols, but such a network was not available
- at the time in the simulator, and the black box network serves its purpose
- for delivering messages to and from all the directories, as well as the
- main memory.
- Although the SESC simulator has the capability to model a more complicated
- network, a simple network, such as the one used here, can illustrate our
- point.
-\end_layout
-
-\begin_layout Subsection
-\begin_inset OptArg
-status collapsed
-
-\begin_layout Plain Layout
-Main Memory
-\end_layout
-
-\end_inset
-
-
-\family roman
-Main Memory
-\end_layout
-
-\begin_layout Standard
-In the simulator, the main memory is simulated as a node in the network.
- Therefore, when a directory wants to request something from main memory,
- it sends a messages across the network to the main memory.
- This design simplifies the design of the memory while still keeping the
- protocol intact.
-\end_layout
-
-\begin_layout Subsection
-\begin_inset OptArg
-status collapsed
-
-\begin_layout Plain Layout
-SESC Simulator
-\end_layout
-
-\end_inset
-
-
-\family roman
-SESC Simulator
-\end_layout
-
-\begin_layout Standard
-The connections in the SESC Simulator are shown in 
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-figurename
-\end_layout
-
-\end_inset
-
- [still have to add this].
- We are using an architecture with a 1K L1 cache and a 2K L2 cache.
-\end_layout
-
 \begin_layout Section
-\begin_inset OptArg
-status collapsed
-
-\begin_layout Plain Layout
-Results
-\end_layout
-
-\end_inset
-
 
 \family roman
-Results
+Further Work
 \end_layout
 
 \begin_layout Standard
-In this section, I will discuss the results of running the simulation on
- the Sesc simulator.
- The results are shown in Table 2 for the results using the benchmark fft
- in the SPLASH-2 benchmark suite with 32 processors.
- The fft benchmark is a complex 1-D version of the radix-
-\begin_inset Formula ${\surd}$
-\end_inset
-
-n six-step FFT algorithm, which is optimized to minimize inter-processor
- communication 
-\begin_inset CommandInset citation
-LatexCommand cite
-key "WOO00"
-
-\end_inset
-
-.
-\end_layout
-
-\begin_layout Subsection
-\begin_inset OptArg
-status collapsed
-
-\begin_layout Plain Layout
-Verifying Correctness
-\end_layout
-
-\end_inset
-
-
-\family roman
-Verifying Correctness
-\end_layout
-
-\begin_layout Standard
-To verify whether or not the simulator is correct, we run the benchmark
- on a normal machine to find out what the output is, then run the program
- on SESC.
- The output produced from SESC should be identical to that produced by running
- the benchmark on a real processor.
- If not, then it means that the program that simulates the directory protocol
- is not running correctly.
- In addition, the SPLASH2 benchmarks' kernel programs provide self-test
- that we can invoke to ensure that our protocols were implemented directly.
- It achieves this self-test using inherent tests to the data structure.
-\end_layout
-
-\begin_layout Subsection
-\begin_inset OptArg
-status collapsed
-
-\begin_layout Plain Layout
-SPLASH2 benchmarks
-\end_layout
-
-\end_inset
-
-
-\family roman
-SPLASH2 benchmarks
-\end_layout
-
-\begin_layout Standard
-Using these results, we can see that the MSI protocol takes longer to complete.
- Although there are more read misses for the MOESI cache, it is offset by
- the amount of read hits for L2 cache.
- 
-\begin_inset space \space{}
-\end_inset
-
-It could also be possible that the additional read misses do not incur as
- much penalty in a MOESI cache because in a MOESI cache, there is a greater
- opportunity for the cache to fetch the data from another node in that directory
- instead of from the memory.
-\end_layout
-
-\begin_layout Standard
-
-\family roman
-We also see that for both MOESI and MSI caches, as the CPU count increases,
- the run-time decreases, this is to be expected as more work can be done
- in the same amount of time when one has more processors that can be used
- at the same time.
-\end_layout
-
-\begin_layout Standard
-\align center
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-bottomcaption
-\end_layout
-
-\end_inset
-
-
-\begin_inset ERT
-status collapsed
-
-\begin_layout Plain Layout
-
-{
-\end_layout
-
-\end_inset
-
-Results for fft
-\begin_inset ERT
-status collapsed
-
-\begin_layout Plain Layout
-
-}
-\end_layout
-
-\end_inset
-
- 
-\end_layout
-
-\begin_layout Section
-\begin_inset OptArg
-status collapsed
-
-\begin_layout Plain Layout
-Problems
-\end_layout
-
-\end_inset
-
-
-\family roman
-Problems
-\end_layout
-
-\begin_layout Standard
-In implementing the directory-based cache-coherence protocol, there were
+In implementing the directory-based cache coherence protocol, there were
  some problems.
  One was simply that debugging such a large system is inherently hard, especiall
 y since the bugs often surface after tens of thousands of messages are sent.
@@ -3700,13 +3683,9 @@ y since the bugs often surface after tens of thousands of messages are sent.
  defining DEBUG when compiling.
 \end_layout
 
-\begin_layout Subsection
-Further Work
-\end_layout
-
 \begin_layout Standard
-The memory system in the current system is implemented in a way such that
- it is in one location.
+In addition, the memory system in the current system is implemented in a
+ way such that it is in one location.
  In the future, we could modify the the simulator such that the memory system
  is distributed just like the directory system.
  With a distributed memory system, there would be much more issue with coherence
@@ -3735,6 +3714,33 @@ key "LAU00"
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+One of the bugs that was extermely hard to find was one caused by various
+ interactions within the system.
+ To decrease the number of messages sent, it is possible for the block allocator
+ in MOESI Cache to allocate a block as soon as it is evicted.
+ Normally, when a block is evicted, the system will undergo this cycle:
+ 1.
+ An OnLocalRead gets called, and AllocateBlock puts tag1 into pendingEviction.
+ 2.
+ OnLocalInvalidateResponse gets called, and removes tag1 from pendingEviction,
+ doing the necessary cleanup.
+\end_layout
+
+\begin_layout Standard
+However, it is possible for the system to undergo the following cycle, especiall
+y when faced with a larger number of invalidates and evictions: 1.
+ An OnLocalRead gets called, and AllocateBlock puts tag1 into pendingEviction.
+ 2.
+ Another OnLocalRead gets called before OnLocalInvalidateResponse gets called,
+ and PrepareFreshBlock finds the same tag1 inside pendingEviction.
+ So it cancels the eviction and prepares that block for use.
+ 3.
+ OnLocalInvalidateResponse gets called for tag1, but it cannot find tag1
+ inside pendingInvalidate or pendingEviction because pendingEviction.erase(tag1)
+ was called during PrepareFreshBlock.
 \end_layout
 
 \begin_layout Section

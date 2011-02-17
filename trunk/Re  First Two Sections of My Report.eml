@@ -1,0 +1,100 @@
+Delivered-To: eric3chang@gmail.com
+Received: by 10.227.10.31 with SMTP id n31cs596871wbn;
+        Mon, 14 Feb 2011 20:27:22 -0800 (PST)
+Received: by 10.42.164.73 with SMTP id f9mr6100490icy.113.1297744038775;
+        Mon, 14 Feb 2011 20:27:18 -0800 (PST)
+Return-Path: <tamir@cs.ucla.edu>
+Received: from smtp.cs.ucla.edu (smtp.cs.ucla.edu [131.179.128.62])
+        by mx.google.com with ESMTP id gy42si8620766ibb.62.2011.02.14.20.27.17;
+        Mon, 14 Feb 2011 20:27:18 -0800 (PST)
+Received-SPF: pass (google.com: domain of tamir@cs.ucla.edu designates 131.179.128.62 as permitted sender) client-ip=131.179.128.62;
+Authentication-Results: mx.google.com; spf=pass (google.com: domain of tamir@cs.ucla.edu designates 131.179.128.62 as permitted sender) smtp.mail=tamir@cs.ucla.edu
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by smtp.cs.ucla.edu (Postfix) with ESMTP id B33A439E80F0
+	for <eric3chang@gmail.com>; Mon, 14 Feb 2011 20:27:17 -0800 (PST)
+X-Virus-Scanned: amavisd-new at smtp.cs.ucla.edu
+Received: from smtp.cs.ucla.edu ([127.0.0.1])
+	by localhost (smtp.cs.ucla.edu [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id DrzKB+-wsUfy; Mon, 14 Feb 2011 20:27:16 -0800 (PST)
+Received: from moa.cs.ucla.edu (Moa.CS.UCLA.EDU [131.179.128.29])
+	by smtp.cs.ucla.edu (Postfix) with ESMTP id DAFDB39E8083
+	for <erichang@smtp.cs.ucla.edu>; Mon, 14 Feb 2011 20:27:16 -0800 (PST)
+Received: by moa.cs.ucla.edu (Postfix)
+	id CCF9C17844; Mon, 14 Feb 2011 20:27:16 -0800 (PST)
+Delivered-To: erichang@cs.ucla.edu
+Received: from chaos.cs.ucla.edu (chaos.cs.ucla.edu [131.179.64.48])
+	by moa.cs.ucla.edu (Postfix) with ESMTP id C74F817843
+	for <erichang@CS.UCLA.EDU>; Mon, 14 Feb 2011 20:27:16 -0800 (PST)
+Received: from chaos.cs.ucla.edu (localhost.localdomain [127.0.0.1])
+	by chaos.cs.ucla.edu (8.13.8/8.13.8/UCLA-CSL-2.4) with ESMTP id p1F4RGZU026593;
+	Mon, 14 Feb 2011 20:27:16 -0800
+Message-Id: <201102150427.p1F4RGZU026593@chaos.cs.ucla.edu>
+To: Eric Chang <erichang@CS.UCLA.EDU>
+Subject: Re: First Two Sections of My Report 
+In-reply-to: Your message of Thu, 10 Feb 2011 19:45:14 PST.
+Date: Mon, 14 Feb 2011 20:27:16 -0800
+From: Yuval Tamir <tamir@cs.ucla.edu>
+
+Eric,
+
+A few comments on what you submitted:
+
+* In general, I think it will help you to write an
+  outline of the text before actually writing the text.
+  You need to "play" with the flow of the text
+  to make sure that it is strictly top-down and
+  avoids repetition.
+
+* The protocols you are looking at are not really directly
+  applicable to CMPs (chip multiprocessors) but were
+  designed for older systems.  In particular, note that
+  with the Origin 2000 there is part of main memory with
+  every node.  This is not the case on a CMP.
+  The way you can "adapt" the Origin 2000 protocol to CMPs
+  is to consider a CMP where the last-level cache
+  is distributed across the nodes (cores) and you are
+  ignoring misses from the last-level cache.
+  So, if you want to talk about CMPs, you will need
+  to explain the "mapping" of the Origin 2000 protocol
+  to CMPs along the lines of the text above.
+
+* There are no "ideologies" behind different protocols.
+
+* The introduction needs to provide details about what
+  you have actually done -- this is the critical part
+  of the intro.  In addition, it needs to provide a
+  "roadmap" for the rest of the report.
+  Look at published papers for examples of what
+  you need in the intro.
+
+* I assume that the material in the Background section
+  is based on a textbook.  You need to cite your references.
+  Obviously, this also includes the paper about
+  the Origin system.
+
+* Do a search for "stages" -- in at least one place you
+  use "stages" instead of "states".
+
+* Before you get into the details of the protocols, you
+  need to set the stage by explaining that a coherence
+  protocol involves maintaining states for the blocks
+  in the caches as well as request and reply message
+  types exchanged among the nodes of the system.
+  You should then explain the basic states as well
+  as the basic message types.
+
+* Why do you need a section "snoopy vs. directory-based"?
+  Just have a section where you very briefly discuss
+  snoopy and dismiss it as not interesting (scalable).
+  Then start discussing directory-based in a different section.
+  The current presentation is very confusing.
+
+* The top of page 4 is misleading.  With snoopy protocols,
+  there is no 1-1 communication -- every message (transaction)
+  is broadcast to all the nodes.
+
+* When you begin discussing directory-based protocols you
+  must do so top-down.  First, explain what is the directory,
+  what information is stored there, how is this information used.
+  Only then can you get into details.
+
