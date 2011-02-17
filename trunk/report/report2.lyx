@@ -199,6 +199,9 @@ Architectures
 \begin_layout Standard
 Here I will introduce the layouts of the two architectures that I will be
  comparing.
+ The two different architectures are very similar because most of the components
+ are connected in the same way.
+ This similar
 \end_layout
 
 \begin_layout Subsection
@@ -360,7 +363,7 @@ Origin Directory-Based Cache Coherence Protocol Architecture
 \begin_inset Float figure
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \begin_inset Graphics
@@ -468,9 +471,9 @@ reference "fig:Connections-in-Origin"
 \end_inset
 
 .
- From the fiture, we can see that the network connects identical nodes together
+ From the figure, we can see that the network connects identical nodes together
  to form the system.
- The mrmoyis distributed across each node, and is attached to each directory,
+ The memory is distributed across each node, and is attached to each directory,
  such that each directory is responsible for accessing the memory it is
  attached to.
  From 
@@ -501,6 +504,33 @@ reference "fig:Node-in-Origin"
  to the directory or to the L2 cache.
  The cache is, in turn, connected to the L1 cache and the processor to form
  the complete node.
+\end_layout
+
+\begin_layout Standard
+The basic building block of the Origin system is the node.
+ The nodes can be connected in any types of network, since the protocol
+ guarantees the correct operation even for out-of-order delivery of messages
+\begin_inset CommandInset citation
+LatexCommand cite
+key "LAU00"
+
+\end_inset
+
+.
+ Each memory is addressible from any node.
+ If any request arrives at the directory where it is necessary to retrieve
+ the memory, the directory is guaranteed to have that memory and does not
+ have to ask any other node, since each directory is responsible for its
+ own memory.
+\end_layout
+
+\begin_layout Standard
+For remote requests, the hub will direct the message to the directory or
+ the cache, depending on the message type.
+ This will be discussed in more detail in the later sections.
+ When the directory sends a message to a local cache, or vice versa, the
+ hub will redirect the message to the receiver without sending this message
+ on the network.
 \end_layout
 
 \begin_layout Section
@@ -3558,7 +3588,7 @@ Synthetic Benchmark
 
 \begin_layout Standard
 This section introduces synthetic benchmarks.
- The synthetic banrhmark show in 
+ The synthetic benchmark show in 
 \begin_inset ERT
 status open
 
@@ -3717,7 +3747,7 @@ key "LAU00"
 \end_layout
 
 \begin_layout Standard
-One of the bugs that was extermely hard to find was one caused by various
+One of the bugs that was extremely hard to find was one caused by various
  interactions within the system.
  To decrease the number of messages sent, it is possible for the block allocator
  in MOESI Cache to allocate a block as soon as it is evicted.
