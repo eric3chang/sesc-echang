@@ -1,5 +1,6 @@
 add_library (Devices
    BaseMemDevice.cpp
+   BIPDirectory.cpp
    Directory.cpp
    OriginDirectory.cpp
    MSICache.cpp

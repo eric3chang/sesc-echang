@@ -67,6 +67,7 @@ namespace Memory
 		m->isCache = false;
 		m->isDirectory = false;
 		m->directoryLookup = false;
+		//m->isMemory = false;
 		//m->originalRequestingNode = InvalidNodeID;
 		m->onCompletedCallback = NULL;
 	}

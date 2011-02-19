@@ -1,6 +1,7 @@
 #pragma once
 #include "BaseMemDevice.h"
 #include "Directory.h"
+#include "BIPDirectory.h"
 #include "OriginDirectory.h"
 #include "MSICache.h"
 #include "MESICache.h"

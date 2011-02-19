@@ -222,65 +222,10 @@ Overview of System
 \end_layout
 
 \begin_layout Standard
-A block diagram of the system is shown in 
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-figurename
-\end_layout
-
-\end_inset
-
-
-\begin_inset space \space{}
-\end_inset
-
-?.
- Here, we can see that the nodes are connected together with a network that
- forwards message to the correect node.
- The basic building block of this system is the node, which is shown in
- 
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-figurename
-\end_layout
-
-\end_inset
-
-
-\begin_inset space \space{}
-\end_inset
-
-?.
- This system is composed of the directory, the memory, the L2 and L1 cache,
- and the processor.
-\end_layout
-
-\begin_layout Standard
-This figure shows the connections between all the individual components
- in the BIP.
- Each component will be introduced one by one.
- There is one contiguous memory in this system, and all accesses to main
- memory goes to this node.
- Each node other than the memory node is a hub, where requests either go
- to the directory, or to the cache.
- The cache is two-level, with the processor on the very top.
-\end_layout
-
-\begin_layout Standard
 \begin_inset Float figure
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \begin_inset Graphics
@@ -322,7 +267,7 @@ lines 0
 placement o
 overhang 0col%
 width "50col%"
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \begin_inset Graphics
@@ -359,7 +304,7 @@ name "fig:Node-in-Origin"
 \end_layout
 
 \begin_layout Standard
-The Origin directory-based cache coherence architecture is shown in 
+A block diagram of the system is shown in 
 \begin_inset ERT
 status open
 
@@ -384,12 +329,10 @@ reference "fig:Connections-in-Origin"
 \end_inset
 
 .
- From the figure, we can see that the network connects identical nodes together
- to form the system.
- The memory is distributed across each node, and is attached to each directory,
- such that each directory is responsible for accessing the memory it is
- attached to.
- From 
+ Here, we can see that the nodes are connected together with a network that
+ forwards message to the correect node.
+ The basic building block of this system is the node, which is shown in
+ 
 \begin_inset ERT
 status open
 
@@ -413,7 +356,29 @@ reference "fig:Node-in-Origin"
 
 \end_inset
 
-, we can see that each node is formed from a hub that directs incoming traffic
+.
+ This system is composed of the directory, the memory, the L2 and L1 cache,
+ and the processor.
+ As can be seen in the figure, the system does not have a system similar
+ to today's system because it uses a DSM.
+\end_layout
+
+\begin_layout Standard
+Each component will be introduced one by one.
+ There is one contiguous memory in this system, and all accesses to main
+ memory goes to this node.
+ Each node other than the memory node is a hub, where requests either go
+ to the directory, or to the cache.
+ The cache is two-level, with the processor on the very top.
+\end_layout
+
+\begin_layout Standard
+From the figure, we can see that the network connects identical nodes together
+ to form the system.
+ The memory is distributed across each node, and is attached to each directory,
+ such that each directory is responsible for accessing the memory it is
+ attached to.
+ We can see that each node is formed from a hub that directs incoming traffic
  to the directory or to the L2 cache.
  The cache is, in turn, connected to the L1 cache and the processor to form
  the complete node.
@@ -447,15 +412,8 @@ For remote requests, the hub will direct the message to the directory or
 \end_layout
 
 \begin_layout Standard
-As can be seen in the figure, the system does not have a system similar
- to today's system, it has a distributed shared memory (DSM) system
-\begin_inset CommandInset citation
-LatexCommand cite
-key "LAU00"
-
-\end_inset
-
-.
+The individual components in this system will be introduced in more detail
+ in the next section.
 \end_layout
 
 \begin_layout Section
