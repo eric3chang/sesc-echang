@@ -34,6 +34,7 @@ namespace Memory
 	MemorySystem::MemorySystem()
 	{
 	   deviceFactory.RegisterNode("Directory",new Factory<std::string,BaseMemDevice>::GenericFactoryNode<Directory>());
+	   deviceFactory.RegisterNode("BIPDirectory",new Factory<std::string,BaseMemDevice>::GenericFactoryNode<BIPDirectory>());
 	   deviceFactory.RegisterNode("OriginDirectory",new Factory<std::string,BaseMemDevice>::GenericFactoryNode<OriginDirectory>());
       deviceFactory.RegisterNode("MSICache",new Factory<std::string,BaseMemDevice>::GenericFactoryNode<MSICache>());
       deviceFactory.RegisterNode("MESICache",new Factory<std::string,BaseMemDevice>::GenericFactoryNode<MESICache>());

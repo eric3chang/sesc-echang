@@ -17,6 +17,7 @@ namespace Memory
 		bool requestingExclusive;
 		bool alreadyHasBlock;
 		bool directoryLookup;
+		//bool isMemory;
 		//NodeID originalRequestingNode;
 
 		StoredFunctionBase* onCompletedCallback;
@@ -39,6 +40,7 @@ namespace Memory
 		         << " reqEx=" << requestingExclusive
 		         << " hasBlk=" << alreadyHasBlock
 		         << " dirLook=" << directoryLookup
+		         //<< " mem=" << isMemory
                //<< " ogReqNode=" << BaseMsg::convertNodeIDToDeviceID(originalRequestingNode)
 		   ;
 		}
