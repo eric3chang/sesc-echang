@@ -17,22 +17,23 @@ def convertToInt(incoming):
         quit()
     return outgoing
 
-def generateAllBenchmarks(benchmarkNames, directoryType, cacheType, processorCountLow, processorCountHi, L1Low, L1Hi):
+def generateAllBenchmarks(benchmarkNames, directoryType, processorCountLow, processorCountHi, L1Low, L1Hi):
     for benchmark in benchmarkNames:
-        GenerateMultipleConfigs.generateConfigs(benchmark, directoryType, cacheType, processorCountLow, processorCountHi, L1Low, L1Hi)
+        GenerateMultipleConfigs.generateConfigs(benchmark, directoryType, processorCountLow, processorCountHi, L1Low, L1Hi)
 
 def main():
     benchmarkNames = ['barnes', 'cholesky', 'fft', 'fmm', 'radix', 'raytrace', 'ocean']
     #directoryType = 'origin'
-    directoryType = 'directory'
+    #directoryType = 'directory'
+    directoryType = 'bip'
     #cacheType = 'mesi'
-    cacheType = 'moesi'
+    #cacheType = ''
     processorCountLow = '2'
     processorCountHi = '32'
     L1Low = '8'
     L1Hi = '1024'
 
-    generateAllBenchmarks(benchmarkNames, directoryType, cacheType, processorCountLow, processorCountHi, L1Low, L1Hi)
+    generateAllBenchmarks(benchmarkNames, directoryType, processorCountLow, processorCountHi, L1Low, L1Hi)
 
 if __name__ == "__main__":
     main()

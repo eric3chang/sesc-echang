@@ -139,7 +139,9 @@
 		output.WriteLine("Int DeviceID " + (index++));
 		output.WriteLine("String DeviceType Directory");
 		output.WriteLine("String DeviceName " + name);
-		output.WriteLine("Int LocalSendTime " + 4);
+		//output.WriteLine("Int LocalSendTime " + 4);
+        // use the following one to simulate against Origin
+        output.WriteLine("Int LocalSendTime " + 60);
 		output.WriteLine("Int RemoteSendTime " + 4);
 		output.WriteLine("Int LookupRetryTime " + 4);
 		output.WriteLine("Int LookupTime " + 4);
@@ -168,6 +170,31 @@
         output.WriteLine("Root MemoryDevice Begin");
         output.WriteLine("Int DeviceID " + (index++));
         output.WriteLine("String DeviceType OriginDirectory");
+        output.WriteLine("String DeviceName " + name);
+        output.WriteLine("Int LocalSendTime " + 4);
+        output.WriteLine("Int RemoteSendTime " + 4);
+        output.WriteLine("Int LookupRetryTime " + 4);
+        output.WriteLine("Int LookupTime " + 4);
+        output.WriteLine("Int SatisfyTime " + 4);
+        output.WriteLine("Int NodeID " + myNode);
+        output.WriteLine("Root DirectoryNodeCalculator Begin");
+        output.WriteLine("String Type HashedPageCalculator");
+        output.WriteLine("Int PageSize 64");
+        output.Write("IntSet NodeIDSet " + totalNodes + " { ");
+        for (int i = 0; i < totalNodes; i++)
+        {
+            output.Write(i + " ");
+        }
+        output.WriteLine("}");
+        output.WriteLine("End");
+        output.WriteLine("End");
+    }
+
+    public static void AddBIPDirectory(string name, int totalNodes, int myNode)
+    {
+        output.WriteLine("Root MemoryDevice Begin");
+        output.WriteLine("Int DeviceID " + (index++));
+        output.WriteLine("String DeviceType BIPDirectory");
         output.WriteLine("String DeviceName " + name);
         output.WriteLine("Int LocalSendTime " + 4);
         output.WriteLine("Int RemoteSendTime " + 4);
@@ -346,12 +373,13 @@
 		output.WriteLine("End");
 		output.Close();
 	}
+
 	public static void OutDirectoryMemory(int nodeCount, int l1, int l2)
 	{
-        output = new System.IO.StreamWriter("memoryConfigs\\directory-moesi-p" + nodeCount + "-c" + l1 + "L1-" + l2 + "L2.memory");
+        output = new System.IO.StreamWriter("memoryConfigs\\directory-p" + nodeCount + "-c" + l1 + "L1-" + l2 + "L2.memory");
 		index = 1;
 		output.WriteLine("Begin");
-		MainMemory(400, 300);
+        MainMemory(57, 66);
 		
         NetworkTimingData myNetworkTimingData = GetNetworkTimingData(nodeCount);
         int randomMin = myNetworkTimingData.randomMin;
@@ -378,9 +406,10 @@
 		output.WriteLine("End");
 		output.Close();
 	}
+
     public static void OutOriginDirectoryMOESIMemory(int nodeCount, int l1, int l2)
     {
-        output = new System.IO.StreamWriter("memoryConfigs\\origin-mesi-p" + nodeCount + "-c" + l1 + "L1-" + l2 + "L2.memory");
+        output = new System.IO.StreamWriter("memoryConfigs\\origin-p" + nodeCount + "-c" + l1 + "L1-" + l2 + "L2.memory");
         index = 1;
         output.WriteLine("Begin");
         //MainMemory(400, 300);
@@ -411,6 +440,41 @@
         output.WriteLine("End");
         output.Close();
     }
+
+    public static void OutBIPDirectoryMemory(int nodeCount, int l1, int l2)
+    {
+        output = new System.IO.StreamWriter("memoryConfigs\\bip-p" + nodeCount + "-c" + l1 + "L1-" + l2 + "L2.memory");
+        index = 1;
+        output.WriteLine("Begin");
+        //MainMemory(400, 300);
+        NetworkTimingData myNetworkTimingData = GetNetworkTimingData(nodeCount);
+        int randomMin = myNetworkTimingData.randomMin;
+        int randomMax = myNetworkTimingData.randomMax;
+        AddOriginNetwork("Network", nodeCount, randomMin, randomMax, 0.1f);
+        //AddNetworkMemoryInterface("NMInt", nodeCount + 10);
+        l1 *= 1024;
+        l2 *= 1024;
+        for (int i = 0; i < nodeCount; i++)
+        {
+            AddSESCInterface("ProcessorInterface_" + i);
+            AddCache("L1_" + i, 4, l1 / (4 * 64), 64, 2, 1, EvictionPolicy.LRU);
+            // AddCache("L2_" + i, 4, l2 / (4 * 64), 64, 7, 4, EvictionPolicy.LRU);
+            AddCache("L2_" + i, 4, l2 / (4 * 64), 64, 13, 10, EvictionPolicy.LRU);
+            //AddOriginDirectory("OriginDirectory_" + i, nodeCount, i, nodeCount + 10);
+            AddBIPDirectory("BIPDirectory_" + i, nodeCount, i);
+            AddMainMemory("MainMemory_" + i, 57, 66);
+            Connection("ProcessorInterface_" + i, "L1_" + i, "Connection", "LocalConnection", 0);
+            Connection("L1_" + i, "L2_" + i, "RemoteConnection", "LocalConnection", 0);
+            Connection("L2_" + i, "BIPDirectory_" + i, "RemoteConnection", "LocalCacheConnection", 0);
+            Connection("MainMemory_" + i, "BIPDirectory_" + i, "RemoteConnection", "LocalMemoryConnection", 0);
+            Connection("BIPDirectory_" + i, "Network", "RemoteConnection", "Connection_" + i, 0);
+        }
+        //Connection("Network", "NMInt", "MemoryConnection", "NetworkConnection", 0);
+        //Connection("NMInt", "MainMemory", "MemoryConnection", "Remoteconnection", 0);
+        output.WriteLine("End");
+        output.Close();
+    }
+
 	public static void Main(string[] args)
 	{
 		System.IO.Directory.CreateDirectory("memoryConfigs");
@@ -425,7 +489,8 @@
 				for (int l2 = l1 * 2; l2 <= 8 * 1024; l2 *= 2)
                 //for (int l2 = l1 * 2; l2 <= 2; l2 *= 2)
 				{
-                    OutDirectoryMemory(nodeCount, l1, l2);
+                    OutBIPDirectoryMemory(nodeCount, l1, l2);
+                    //OutDirectoryMemory(nodeCount, l1, l2);
 					//OutOriginDirectoryMOESIMemory(nodeCount, l1, l2);
 					//OutSimpleMemory2(i, l1, l2);
 					for (int l3 = l2 * 2; l3 <= 64 * 1024; l3 *= 2)

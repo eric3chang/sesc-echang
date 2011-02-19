@@ -21,7 +21,7 @@ def convertToInt(incoming):
         quit()
     return outgoing
 
-def generateConfigs(benchmarkName, directoryType, cacheType, processorCountLow, processorCountHi, L1Low, L1Hi):
+def generateConfigs(benchmarkName, directoryType, processorCountLow, processorCountHi, L1Low, L1Hi):
     # check if these variables are numbers before using them
     processorCountLowInt = convertToInt(processorCountLow)
     processorCountHiInt = convertToInt(processorCountHi)
@@ -35,25 +35,24 @@ def generateConfigs(benchmarkName, directoryType, cacheType, processorCountLow, 
             L2Index = L1Index * 2
             while (L2Index <= L1HiInt*8):
                 GenerateSingleConfig.generateConfig(benchmarkName, directoryType, \
-                    cacheType, str(processorIndex), str(L1Index), str(L2Index))
+                    str(processorIndex), str(L1Index), str(L2Index))
                 #print(str(processorIndex) + ' ' + str(L1Index) + ' ' + str(L2Index))
                 L2Index *= 2
             L1Index *= 2
         processorIndex *=2
 
 def main():
-    if (len(sys.argv) != 8):
+    if (len(sys.argv) != 7):
         printError()
 
     benchmarkName = sys.argv[1]
     directoryType = sys.argv[2]
-    cacheType = sys.argv[3]
-    processorCountLow = sys.argv[4]
-    processorCountHi = sys.argv[5]
-    L1Low = sys.argv[6]
-    L1Hi = sys.argv[7]
+    processorCountLow = sys.argv[3]
+    processorCountHi = sys.argv[4]
+    L1Low = sys.argv[5]
+    L1Hi = sys.argv[6]
 
-    generateConfigs(benchmarkName, directoryType, cacheType, processorCountLow, processorCountHi, L1Low, L1Hi)
+    generateConfigs(benchmarkName, directoryType, processorCountLow, processorCountHi, L1Low, L1Hi)
 
 if __name__ == "__main__":
     main()

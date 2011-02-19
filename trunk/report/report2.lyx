@@ -201,10 +201,7 @@ key "LAU00"
 \end_inset
 
 .
- This is not the case on a CMP.
- For the report, I am considering a CMP where the last-level cache is distribute
-d across the nodes (cores) and I am ignoring misses from the last-level
- cache.
+ More details will be provided in the next section about this situation.
 \end_layout
 
 \begin_layout Standard
@@ -225,7 +222,7 @@ Overview of System
 \begin_inset Float figure
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \begin_inset Graphics
@@ -267,12 +264,11 @@ lines 0
 placement o
 overhang 0col%
 width "50col%"
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \begin_inset Graphics
-	filename diagrams/node-origin-protocol.emf
-	width 33text%
+	filename diagrams/node-2.emf
 
 \end_inset
 
@@ -283,10 +279,10 @@ status collapsed
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Inside the node
+Inside the Node
 \begin_inset CommandInset label
 LatexCommand label
-name "fig:Node-in-Origin"
+name "fig:Inside-the-Node"
 
 \end_inset
 
@@ -295,6 +291,10 @@ name "fig:Node-in-Origin"
 
 \end_inset
 
+
+\end_layout
+
+\begin_layout Plain Layout
 
 \end_layout
 
@@ -330,7 +330,7 @@ reference "fig:Connections-in-Origin"
 
 .
  Here, we can see that the nodes are connected together with a network that
- forwards message to the correect node.
+ forwards message to the correct node.
  The basic building block of this system is the node, which is shown in
  
 \begin_inset ERT
@@ -352,42 +352,37 @@ figurename
 
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "fig:Node-in-Origin"
+reference "fig:Inside-the-Node"
 
 \end_inset
 
 .
- This system is composed of the directory, the memory, the L2 and L1 cache,
- and the processor.
- As can be seen in the figure, the system does not have a system similar
- to today's system because it uses a DSM.
-\end_layout
-
-\begin_layout Standard
-Each component will be introduced one by one.
- There is one contiguous memory in this system, and all accesses to main
- memory goes to this node.
- Each node other than the memory node is a hub, where requests either go
- to the directory, or to the cache.
- The cache is two-level, with the processor on the very top.
-\end_layout
-
-\begin_layout Standard
-From the figure, we can see that the network connects identical nodes together
- to form the system.
- The memory is distributed across each node, and is attached to each directory,
- such that each directory is responsible for accessing the memory it is
- attached to.
- We can see that each node is formed from a hub that directs incoming traffic
- to the directory or to the L2 cache.
+ This system is composed of the hub, the directory, the memory, the L2 and
+ L1 cache, and the processor.
+ The hub directs incoming traffic to the directory or to the L2 cache.
  The cache is, in turn, connected to the L1 cache and the processor to form
  the complete node.
+ The cache is two-level, with the processor on the very top.
+ From the figure, we can see that the network connects identical nodes together
+ to form the system.
+ Since the memory is distributed across each node, and is attached to each
+ directory, each directory is responsible for accessing the memory it is
+ attached to.
+\end_layout
+
+\begin_layout Standard
+As can be seen in the figure, the system is not similar to today's system
+ because it uses a DSM, where memory is distributed across each node.
+ This is not the case on a modern CMP.
+ However, if we consider a CMP where the last-level cache is distributed
+ across the nodes (cores) and I am ignoring misses from the last-level cache.
 \end_layout
 
 \begin_layout Standard
 The basic building block of the Origin system is the node.
- The nodes can be connected in any types of network, since the protocol
- guarantees the correct operation even for out-of-order delivery of messages
+ The nodes in the Origin system can be connected in any types of network,
+ since the protocol guarantees the correct operation even for out-of-order
+ delivery of messages
 \begin_inset CommandInset citation
 LatexCommand cite
 key "LAU00"
@@ -409,10 +404,7 @@ For remote requests, the hub will direct the message to the directory or
  When the directory sends a message to a local cache, or vice versa, the
  hub will redirect the message to the receiver without sending this message
  on the network.
-\end_layout
-
-\begin_layout Standard
-The individual components in this system will be introduced in more detail
+ The individual components in this system will be introduced in more detail
  in the next section.
 \end_layout
 

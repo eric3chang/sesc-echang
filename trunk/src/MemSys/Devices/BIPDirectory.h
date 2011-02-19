@@ -102,6 +102,7 @@ namespace Memory
 		HashMap<Address, LookupData<ReadMsg> > pendingDirectoryExclusiveReads;
 		HashSet<Address> pendingEviction;
 		HashMap<MessageID, const ReadMsg*> pendingMemoryReadAccesses;
+      HashMap<MessageID, const EvictionMsg*> pendingMemoryEvictionAccesses;
       HashMap<MessageID, const WriteMsg*> pendingMemoryWriteAccesses;
 		HashMap<Address, BlockData> directoryData;
 
@@ -121,6 +122,7 @@ namespace Memory
 		// local memory methods
 		void OnLocalMemoryReadResponse(const ReadResponseMsg* m);
 		void OnLocalMemoryWriteResponse(const WriteResponseMsg* m);
+		//void OnLocalMemoryEvictionResponse(const EvictionResponseMsg* m);
 
 		void OnRemoteReadCache(const ReadMsg* m, NodeID src);
 		//void OnRemoteReadMemory(const ReadMsg* m, NodeID src);

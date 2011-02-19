@@ -27,13 +27,13 @@ def convertToInt(incoming):
         quit()
     return outgoing
 
-def generateConfig(benchmarkName, directoryType, cacheType, processorCount, L1Size, L2Size):
+def generateConfig(benchmarkName, directoryType, processorCount, L1Size, L2Size):
     # check if these variables are numbers before using them
     processorCountInt = convertToInt(processorCount)
     L1SizeInt = convertToInt(L1Size)
     L2SizeInt = convertToInt(L2Size)
 
-    outFilename = benchmarkName + '-' + directoryType + '-' + cacheType + '-' \
+    outFilename = benchmarkName + '-' + directoryType + '-' \
         + processorCount + '-' + L1Size + '-' + L2Size
     outFilenameFull = outFilename + OUTPUT_EXTENSION
 
@@ -50,25 +50,24 @@ def generateConfig(benchmarkName, directoryType, cacheType, processorCount, L1Si
     outFile.write("MemDeviceReportFile = 'results/" + outFilename + ".memDevResults'\n")
     outFile.write("CompositionResultFile = 'results/" + outFilename + ".dat'\n")
     outFile.write("BenchName = '" + benchmarkName + "'\n")
-    outFile.write('MemorySystemConfig = "' + MEMORY_SYSTEM_CONFIG_DIRECTORY + directoryType + '-' \
-        + cacheType + '-p' + processorCount + '-c' + L1Size + 'L1-' + L2Size + 'L2.memory"\n')
+    outFile.write('MemorySystemConfig = "' + MEMORY_SYSTEM_CONFIG_DIRECTORY + directoryType \
+        + '-p' + processorCount + '-c' + L1Size + 'L1-' + L2Size + 'L2.memory"\n')
     outFile.write('<base_' + processorCount + 'cpu.conf>\n')
     outFile.write('\n')
 
     outFile.close()
 
 def main():
-    if (len(sys.argv) != 7):
+    if (len(sys.argv) != 6):
         printError()
 
     benchmarkName = sys.argv[1]
     directoryType = sys.argv[2]
-    cacheType = sys.argv[3]
-    processorCount = sys.argv[4]
-    L1Size = sys.argv[5]
-    L2Size = sys.argv[6]
+    processorCount = sys.argv[3]
+    L1Size = sys.argv[4]
+    L2Size = sys.argv[5]
 
-    generateConfig(benchmarkName, directoryType, cacheType, processorCount, L1Size, L2Size)
+    generateConfig(benchmarkName, directoryType, processorCount, L1Size, L2Size)
 
 if __name__ == "__main__":
     main()
