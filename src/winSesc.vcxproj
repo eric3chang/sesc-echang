@@ -1,112 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
-    <ProjectConfiguration Include="barnes-3sd-msi-032-0001-0002-00|Win32">
-      <Configuration>barnes-3sd-msi-032-0001-0002-00</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="barnes-dir-moesi-002-0001-0002-00|Win32">
-      <Configuration>barnes-dir-moesi-002-0001-0002-00</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="cholesky-dir-moesi-002-0001-0002-00|Win32">
-      <Configuration>cholesky-dir-moesi-002-0001-0002-00</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="fft-002-0001-0002-00|Win32">
-      <Configuration>fft-002-0001-0002-00</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="fft-3sd-mesi-032-0001-0002-00|Win32">
-      <Configuration>fft-3sd-mesi-032-0001-0002-00</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="fft-3sd-moesi-002-0001-0002-00|Win32">
-      <Configuration>fft-3sd-moesi-002-0001-0002-00</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="fft-3sd-moesi-004-0001-0002-00|Win32">
-      <Configuration>fft-3sd-moesi-004-0001-0002-00</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="fft-3sd-moesi-008-0001-0002-00|Win32">
-      <Configuration>fft-3sd-moesi-008-0001-0002-00</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="fft-3sd-moesi-016-0001-0002-00|Win32">
-      <Configuration>fft-3sd-moesi-016-0001-0002-00</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="fft-3sd-moesi-032-0001-0002-00|Win32">
-      <Configuration>fft-3sd-moesi-032-0001-0002-00</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="fft-3sd-msi-002-0001-0002-00|Win32">
-      <Configuration>fft-3sd-msi-002-0001-0002-00</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="fft-3sd-msi-004-0001-0002-00|Win32">
-      <Configuration>fft-3sd-msi-004-0001-0002-00</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="fft-3sd-msi-008-0001-0002-00|Win32">
-      <Configuration>fft-3sd-msi-008-0001-0002-00</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="fft-3sd-msi-016-0001-0002-00|Win32">
-      <Configuration>fft-3sd-msi-016-0001-0002-00</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="fft-3sd-msi-032-0001-0002-00|Win32">
-      <Configuration>fft-3sd-msi-032-0001-0002-00</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="fft-dir-mesi-032-0001-0002-00|Win32">
-      <Configuration>fft-dir-mesi-032-0001-0002-00</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="fft-dir-moesi-002-0001-0002-00|Win32">
-      <Configuration>fft-dir-moesi-002-0001-0002-00</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="fft-dir-moesi-004-0001-0002-00|Win32">
-      <Configuration>fft-dir-moesi-004-0001-0002-00</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="fft-dir-moesi-008-0001-0002-00|Win32">
-      <Configuration>fft-dir-moesi-008-0001-0002-00</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="fft-dir-moesi-016-0001-0002-00|Win32">
-      <Configuration>fft-dir-moesi-016-0001-0002-00</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="fft-dir-moesi-032-0001-0002-00|Win32">
-      <Configuration>fft-dir-moesi-032-0001-0002-00</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="fft-dir-msi-002-0001-0002-00|Win32">
-      <Configuration>fft-dir-msi-002-0001-0002-00</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="fft-dir-msi-004-0001-0002-00|Win32">
-      <Configuration>fft-dir-msi-004-0001-0002-00</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="fft-dir-msi-008-0001-0002-00|Win32">
-      <Configuration>fft-dir-msi-008-0001-0002-00</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="fft-dir-msi-016-0001-0002-00|Win32">
-      <Configuration>fft-dir-msi-016-0001-0002-00</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="fft-dir-msi-032-0001-0002-00|Win32">
-      <Configuration>fft-dir-msi-032-0001-0002-00</Configuration>
+    <ProjectConfiguration Include="fft-bip-2-8-16|Win32">
+      <Configuration>fft-bip-2-8-16</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
     <ProjectConfiguration Include="fft-origin-mesi-128-1-2|Win32">
@@ -137,52 +37,12 @@
       <Configuration>fft-origin-mesi-8-1-2</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="fft-origin-moesi-002-0001-0002|Win32">
-      <Configuration>fft-origin-moesi-002-0001-0002</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="fft-snoopy-moesi-002-0001-0002|Win32">
-      <Configuration>fft-snoopy-moesi-002-0001-0002</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="fft-snoopy-moesi-032-0001-0002-00|Win32">
-      <Configuration>fft-snoopy-moesi-032-0001-0002-00</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="fft-snoopy-moesi-032-0016-1024|Win32">
-      <Configuration>fft-snoopy-moesi-032-0016-1024</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="fft-snoopy-moesi-064-0016-1024|Win32">
-      <Configuration>fft-snoopy-moesi-064-0016-1024</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="memtest-002-3sd-moesi|Win32">
-      <Configuration>memtest-002-3sd-moesi</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="radix-3sd-moesi-004-0001-0002-00|Win32">
-      <Configuration>radix-3sd-moesi-004-0001-0002-00</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="radix-3sd-moesi-008-0001-0002-00|Win32">
-      <Configuration>radix-3sd-moesi-008-0001-0002-00</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="radix-3sd-msi-002-0001-0002-00|Win32">
-      <Configuration>radix-3sd-msi-002-0001-0002-00</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
     <ProjectConfiguration Include="Release|Win32">
       <Configuration>Release</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
     <ProjectConfiguration Include="temp|Win32">
       <Configuration>temp</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="water-dir-moesi-002-0001-0002-00|Win32">
-      <Configuration>water-dir-moesi-002-0001-0002-00</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
@@ -198,112 +58,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='fft-002-0001-0002-00|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='temp|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='fft-dir-moesi-004-0001-0002-00|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='water-dir-moesi-002-0001-0002-00|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='cholesky-dir-moesi-002-0001-0002-00|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='fft-dir-msi-002-0001-0002-00|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='fft-dir-msi-004-0001-0002-00|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='fft-dir-msi-008-0001-0002-00|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='fft-3sd-msi-008-0001-0002-00|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='fft-3sd-msi-002-0001-0002-00|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='radix-3sd-msi-002-0001-0002-00|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='radix-3sd-moesi-008-0001-0002-00|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='radix-3sd-moesi-004-0001-0002-00|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='fft-dir-moesi-008-0001-0002-00|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='fft-3sd-moesi-002-0001-0002-00|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='fft-origin-moesi-002-0001-0002|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='fft-dir-moesi-002-0001-0002-00|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='fft-snoopy-moesi-064-0016-1024|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='fft-snoopy-moesi-002-0001-0002|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='fft-snoopy-moesi-032-0016-1024|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='barnes-dir-moesi-002-0001-0002-00|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='barnes-3sd-msi-032-0001-0002-00|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='fft-3sd-msi-004-0001-0002-00|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='memtest-002-3sd-moesi|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='fft-3sd-moesi-004-0001-0002-00|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='fft-3sd-moesi-008-0001-0002-00|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='fft-3sd-moesi-016-0001-0002-00|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='fft-dir-moesi-016-0001-0002-00|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='fft-dir-msi-016-0001-0002-00|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='fft-dir-msi-032-0001-0002-00|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='fft-3sd-msi-032-0001-0002-00|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='fft-3sd-msi-016-0001-0002-00|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='fft-dir-moesi-032-0001-0002-00|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='fft-dir-mesi-032-0001-0002-00|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='fft-3sd-mesi-032-0001-0002-00|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='fft-origin-mesi-2-1-2|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='fft-bip-2-8-16|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='fft-origin-mesi-64-1-2|Win32'" Label="Configuration">
@@ -324,12 +85,6 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='fft-origin-mesi-32-1-2|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='fft-snoopy-moesi-032-0001-0002-00|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='fft-3sd-moesi-032-0001-0002-00|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-  </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
@@ -339,112 +94,13 @@
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='fft-002-0001-0002-00|Win32'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='temp|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='fft-dir-moesi-004-0001-0002-00|Win32'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='water-dir-moesi-002-0001-0002-00|Win32'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='cholesky-dir-moesi-002-0001-0002-00|Win32'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='fft-dir-msi-002-0001-0002-00|Win32'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='fft-dir-msi-004-0001-0002-00|Win32'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='fft-dir-msi-008-0001-0002-00|Win32'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='fft-3sd-msi-008-0001-0002-00|Win32'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='fft-3sd-msi-002-0001-0002-00|Win32'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='radix-3sd-msi-002-0001-0002-00|Win32'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='radix-3sd-moesi-008-0001-0002-00|Win32'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='radix-3sd-moesi-004-0001-0002-00|Win32'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='fft-dir-moesi-008-0001-0002-00|Win32'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='fft-3sd-moesi-002-0001-0002-00|Win32'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='fft-origin-moesi-002-0001-0002|Win32'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='fft-dir-moesi-002-0001-0002-00|Win32'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='fft-snoopy-moesi-064-0016-1024|Win32'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='fft-snoopy-moesi-002-0001-0002|Win32'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='fft-snoopy-moesi-032-0016-1024|Win32'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='barnes-dir-moesi-002-0001-0002-00|Win32'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='barnes-3sd-msi-032-0001-0002-00|Win32'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='fft-3sd-msi-004-0001-0002-00|Win32'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='memtest-002-3sd-moesi|Win32'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='fft-3sd-moesi-004-0001-0002-00|Win32'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='fft-3sd-moesi-008-0001-0002-00|Win32'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='fft-3sd-moesi-016-0001-0002-00|Win32'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='fft-dir-moesi-016-0001-0002-00|Win32'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='fft-dir-msi-016-0001-0002-00|Win32'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='fft-dir-msi-032-0001-0002-00|Win32'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='fft-3sd-msi-032-0001-0002-00|Win32'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='fft-3sd-msi-016-0001-0002-00|Win32'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='fft-dir-moesi-032-0001-0002-00|Win32'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='fft-dir-mesi-032-0001-0002-00|Win32'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='fft-3sd-mesi-032-0001-0002-00|Win32'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='fft-origin-mesi-2-1-2|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='fft-bip-2-8-16|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='fft-origin-mesi-64-1-2|Win32'" Label="PropertySheets">
@@ -465,197 +121,51 @@
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='fft-origin-mesi-32-1-2|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='fft-snoopy-moesi-032-0001-0002-00|Win32'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='fft-3sd-moesi-032-0001-0002-00|Win32'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Debug\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='fft-002-0001-0002-00|Win32'">Debug\</OutDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='temp|Win32'">Debug\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='fft-dir-moesi-004-0001-0002-00|Win32'">Debug\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='water-dir-moesi-002-0001-0002-00|Win32'">Debug\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='cholesky-dir-moesi-002-0001-0002-00|Win32'">Debug\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='fft-dir-msi-002-0001-0002-00|Win32'">Debug\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='fft-dir-msi-004-0001-0002-00|Win32'">Debug\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='fft-dir-msi-008-0001-0002-00|Win32'">Debug\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='fft-3sd-msi-008-0001-0002-00|Win32'">Debug\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='fft-3sd-msi-002-0001-0002-00|Win32'">Debug\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='radix-3sd-msi-002-0001-0002-00|Win32'">Debug\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='radix-3sd-moesi-008-0001-0002-00|Win32'">Debug\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='radix-3sd-moesi-004-0001-0002-00|Win32'">Debug\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='fft-dir-moesi-008-0001-0002-00|Win32'">Debug\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='fft-3sd-moesi-002-0001-0002-00|Win32'">Debug\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='fft-origin-moesi-002-0001-0002|Win32'">Debug\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='fft-dir-moesi-002-0001-0002-00|Win32'">Debug\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='fft-snoopy-moesi-064-0016-1024|Win32'">Debug\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='fft-snoopy-moesi-002-0001-0002|Win32'">Debug\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='fft-snoopy-moesi-032-0016-1024|Win32'">Debug\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='barnes-dir-moesi-002-0001-0002-00|Win32'">Debug\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='barnes-3sd-msi-032-0001-0002-00|Win32'">Debug\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='fft-3sd-msi-004-0001-0002-00|Win32'">Debug\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='memtest-002-3sd-moesi|Win32'">Debug\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='fft-3sd-moesi-004-0001-0002-00|Win32'">Debug\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='fft-3sd-moesi-008-0001-0002-00|Win32'">Debug\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='fft-3sd-moesi-016-0001-0002-00|Win32'">Debug\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='fft-dir-moesi-016-0001-0002-00|Win32'">Debug\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='fft-dir-msi-016-0001-0002-00|Win32'">Debug\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='fft-dir-msi-032-0001-0002-00|Win32'">Debug\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='fft-3sd-msi-032-0001-0002-00|Win32'">Debug\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='fft-3sd-msi-016-0001-0002-00|Win32'">Debug\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='fft-dir-moesi-032-0001-0002-00|Win32'">Debug\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='fft-dir-mesi-032-0001-0002-00|Win32'">Debug\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='fft-3sd-mesi-032-0001-0002-00|Win32'">Debug\</OutDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='fft-origin-mesi-2-1-2|Win32'">Debug\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='fft-bip-2-8-16|Win32'">Debug\</OutDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='fft-origin-mesi-64-1-2|Win32'">Debug\</OutDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='fft-origin-mesi-4-1-2|Win32'">Debug\</OutDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='fft-origin-mesi-8-1-2|Win32'">Debug\</OutDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='fft-origin-mesi-128-1-2|Win32'">Debug\</OutDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='fft-origin-mesi-16-1-2|Win32'">Debug\</OutDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='fft-origin-mesi-32-1-2|Win32'">Debug\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='fft-snoopy-moesi-032-0001-0002-00|Win32'">Debug\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='fft-3sd-moesi-032-0001-0002-00|Win32'">Debug\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Debug\</IntDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='fft-002-0001-0002-00|Win32'">Debug\</IntDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='temp|Win32'">Debug\</IntDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='fft-dir-moesi-004-0001-0002-00|Win32'">Debug\</IntDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='water-dir-moesi-002-0001-0002-00|Win32'">Debug\</IntDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='cholesky-dir-moesi-002-0001-0002-00|Win32'">Debug\</IntDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='fft-dir-msi-002-0001-0002-00|Win32'">Debug\</IntDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='fft-dir-msi-004-0001-0002-00|Win32'">Debug\</IntDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='fft-dir-msi-008-0001-0002-00|Win32'">Debug\</IntDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='fft-3sd-msi-008-0001-0002-00|Win32'">Debug\</IntDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='fft-3sd-msi-002-0001-0002-00|Win32'">Debug\</IntDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='radix-3sd-msi-002-0001-0002-00|Win32'">Debug\</IntDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='radix-3sd-moesi-008-0001-0002-00|Win32'">Debug\</IntDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='radix-3sd-moesi-004-0001-0002-00|Win32'">Debug\</IntDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='fft-dir-moesi-008-0001-0002-00|Win32'">Debug\</IntDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='fft-3sd-moesi-002-0001-0002-00|Win32'">Debug\</IntDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='fft-origin-moesi-002-0001-0002|Win32'">Debug\</IntDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='fft-dir-moesi-002-0001-0002-00|Win32'">Debug\</IntDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='fft-snoopy-moesi-064-0016-1024|Win32'">Debug\</IntDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='fft-snoopy-moesi-002-0001-0002|Win32'">Debug\</IntDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='fft-snoopy-moesi-032-0016-1024|Win32'">Debug\</IntDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='barnes-dir-moesi-002-0001-0002-00|Win32'">Debug\</IntDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='barnes-3sd-msi-032-0001-0002-00|Win32'">Debug\</IntDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='fft-3sd-msi-004-0001-0002-00|Win32'">Debug\</IntDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='memtest-002-3sd-moesi|Win32'">Debug\</IntDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='fft-3sd-moesi-004-0001-0002-00|Win32'">Debug\</IntDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='fft-3sd-moesi-008-0001-0002-00|Win32'">Debug\</IntDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='fft-3sd-moesi-016-0001-0002-00|Win32'">Debug\</IntDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='fft-dir-moesi-016-0001-0002-00|Win32'">Debug\</IntDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='fft-dir-msi-016-0001-0002-00|Win32'">Debug\</IntDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='fft-dir-msi-032-0001-0002-00|Win32'">Debug\</IntDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='fft-3sd-msi-032-0001-0002-00|Win32'">Debug\</IntDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='fft-3sd-msi-016-0001-0002-00|Win32'">Debug\</IntDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='fft-dir-moesi-032-0001-0002-00|Win32'">Debug\</IntDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='fft-dir-mesi-032-0001-0002-00|Win32'">Debug\</IntDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='fft-3sd-mesi-032-0001-0002-00|Win32'">Debug\</IntDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='fft-origin-mesi-2-1-2|Win32'">Debug\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='fft-bip-2-8-16|Win32'">Debug\</IntDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='fft-origin-mesi-64-1-2|Win32'">Debug\</IntDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='fft-origin-mesi-4-1-2|Win32'">Debug\</IntDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='fft-origin-mesi-8-1-2|Win32'">Debug\</IntDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='fft-origin-mesi-128-1-2|Win32'">Debug\</IntDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='fft-origin-mesi-16-1-2|Win32'">Debug\</IntDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='fft-origin-mesi-32-1-2|Win32'">Debug\</IntDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='fft-snoopy-moesi-032-0001-0002-00|Win32'">Debug\</IntDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='fft-3sd-moesi-032-0001-0002-00|Win32'">Debug\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='fft-002-0001-0002-00|Win32'">true</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='temp|Win32'">true</LinkIncremental>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='fft-dir-moesi-004-0001-0002-00|Win32'">true</LinkIncremental>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='water-dir-moesi-002-0001-0002-00|Win32'">true</LinkIncremental>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='cholesky-dir-moesi-002-0001-0002-00|Win32'">true</LinkIncremental>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='fft-dir-msi-002-0001-0002-00|Win32'">true</LinkIncremental>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='fft-dir-msi-004-0001-0002-00|Win32'">true</LinkIncremental>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='fft-dir-msi-008-0001-0002-00|Win32'">true</LinkIncremental>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='fft-3sd-msi-008-0001-0002-00|Win32'">true</LinkIncremental>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='fft-3sd-msi-002-0001-0002-00|Win32'">true</LinkIncremental>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='radix-3sd-msi-002-0001-0002-00|Win32'">true</LinkIncremental>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='radix-3sd-moesi-008-0001-0002-00|Win32'">true</LinkIncremental>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='radix-3sd-moesi-004-0001-0002-00|Win32'">true</LinkIncremental>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='fft-dir-moesi-008-0001-0002-00|Win32'">true</LinkIncremental>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='fft-3sd-moesi-002-0001-0002-00|Win32'">true</LinkIncremental>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='fft-origin-moesi-002-0001-0002|Win32'">true</LinkIncremental>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='fft-dir-moesi-002-0001-0002-00|Win32'">true</LinkIncremental>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='fft-snoopy-moesi-064-0016-1024|Win32'">true</LinkIncremental>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='fft-snoopy-moesi-002-0001-0002|Win32'">true</LinkIncremental>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='fft-snoopy-moesi-032-0016-1024|Win32'">true</LinkIncremental>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='barnes-dir-moesi-002-0001-0002-00|Win32'">true</LinkIncremental>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='barnes-3sd-msi-032-0001-0002-00|Win32'">true</LinkIncremental>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='fft-3sd-msi-004-0001-0002-00|Win32'">true</LinkIncremental>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='memtest-002-3sd-moesi|Win32'">true</LinkIncremental>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='fft-3sd-moesi-004-0001-0002-00|Win32'">true</LinkIncremental>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='fft-3sd-moesi-008-0001-0002-00|Win32'">true</LinkIncremental>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='fft-3sd-moesi-016-0001-0002-00|Win32'">true</LinkIncremental>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='fft-dir-moesi-016-0001-0002-00|Win32'">true</LinkIncremental>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='fft-dir-msi-016-0001-0002-00|Win32'">true</LinkIncremental>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='fft-dir-msi-032-0001-0002-00|Win32'">true</LinkIncremental>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='fft-3sd-msi-032-0001-0002-00|Win32'">true</LinkIncremental>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='fft-3sd-msi-016-0001-0002-00|Win32'">true</LinkIncremental>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='fft-dir-moesi-032-0001-0002-00|Win32'">true</LinkIncremental>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='fft-dir-mesi-032-0001-0002-00|Win32'">true</LinkIncremental>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='fft-3sd-mesi-032-0001-0002-00|Win32'">true</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='fft-origin-mesi-2-1-2|Win32'">true</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='fft-bip-2-8-16|Win32'">true</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='fft-origin-mesi-64-1-2|Win32'">true</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='fft-origin-mesi-4-1-2|Win32'">true</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='fft-origin-mesi-8-1-2|Win32'">true</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='fft-origin-mesi-128-1-2|Win32'">true</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='fft-origin-mesi-16-1-2|Win32'">true</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='fft-origin-mesi-32-1-2|Win32'">true</LinkIncremental>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='fft-snoopy-moesi-032-0001-0002-00|Win32'">true</LinkIncremental>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='fft-3sd-moesi-032-0001-0002-00|Win32'">true</LinkIncremental>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Release\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Release\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='fft-002-0001-0002-00|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='temp|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='fft-dir-moesi-004-0001-0002-00|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='water-dir-moesi-002-0001-0002-00|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='cholesky-dir-moesi-002-0001-0002-00|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='fft-dir-msi-002-0001-0002-00|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='fft-dir-msi-004-0001-0002-00|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='fft-dir-msi-008-0001-0002-00|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='fft-3sd-msi-008-0001-0002-00|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='fft-3sd-msi-002-0001-0002-00|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='radix-3sd-msi-002-0001-0002-00|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='radix-3sd-moesi-008-0001-0002-00|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='radix-3sd-moesi-004-0001-0002-00|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='fft-dir-moesi-008-0001-0002-00|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='fft-3sd-moesi-002-0001-0002-00|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='fft-origin-moesi-002-0001-0002|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='fft-dir-moesi-002-0001-0002-00|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='fft-snoopy-moesi-064-0016-1024|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='fft-snoopy-moesi-002-0001-0002|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='fft-snoopy-moesi-032-0016-1024|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='barnes-dir-moesi-002-0001-0002-00|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='barnes-3sd-msi-032-0001-0002-00|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='fft-3sd-msi-004-0001-0002-00|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='memtest-002-3sd-moesi|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='fft-3sd-moesi-004-0001-0002-00|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='fft-3sd-moesi-008-0001-0002-00|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='fft-3sd-moesi-016-0001-0002-00|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='fft-dir-moesi-016-0001-0002-00|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='fft-dir-msi-016-0001-0002-00|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='fft-dir-msi-032-0001-0002-00|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='fft-3sd-msi-032-0001-0002-00|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='fft-3sd-msi-016-0001-0002-00|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='fft-dir-moesi-032-0001-0002-00|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='fft-dir-mesi-032-0001-0002-00|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='fft-3sd-mesi-032-0001-0002-00|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='fft-origin-mesi-2-1-2|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='fft-bip-2-8-16|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='fft-origin-mesi-64-1-2|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='fft-origin-mesi-4-1-2|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='fft-origin-mesi-8-1-2|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='fft-origin-mesi-128-1-2|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='fft-origin-mesi-16-1-2|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='fft-origin-mesi-32-1-2|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='fft-snoopy-moesi-032-0001-0002-00|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='fft-3sd-moesi-032-0001-0002-00|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;$(IncludePath)</IncludePath>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Messages;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\PersonalTools\includes;$(IncludePath)</IncludePath>
     <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\PersonalTools\libraries;$(LibraryPath)</LibraryPath>
@@ -667,31 +177,6 @@
       <WholeProgramOptimization>false</WholeProgramOptimization>
       <AdditionalIncludeDirectories>MemSys\Messages\;PersonalTools\includes\;libtrans\;libvmem\;libtm\;libsuperlu\;libsuc\;libsmp\;libsesctherm\;libsescspot\;librst\;libpower\;libpint\;libnet\;libmem\;libemul\;libcore\;libll\;libmint\;libapp\;libAugMem\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;HANGING_ASSERT;_DEBUG;SYSTEM_SESC;DEBUG;_CONSOLE;LENDIAN;__i386__;DEBUG_DUMP_PROGRAM;TRANSACTIONAL_MEMORY;TRANSACTIONAL_ONLY;ADDRESS_CHK;TRANSACTIONAL_COMPOSITION_TRACKING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MinimalRebuild>true</MinimalRebuild>
-      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
-      <WarningLevel>TurnOffAllWarnings</WarningLevel>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-    </ClCompile>
-    <Link>
-      <AdditionalOptions>zdll.exp zdll.lib %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalLibraryDirectories>PersonalTools\libraries\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <SubSystem>Console</SubSystem>
-      <LinkTimeCodeGeneration>
-      </LinkTimeCodeGeneration>
-      <TargetMachine>MachineX86</TargetMachine>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='fft-002-0001-0002-00|Win32'">
-    <ClCompile>
-      <Optimization>Disabled</Optimization>
-      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
-      <WholeProgramOptimization>false</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>MemSys\Messages\;PersonalTools\includes\;libtrans\;libvmem\;libtm\;libsuperlu\;libsuc\;libsmp\;libsesctherm\;libsescspot\;librst\;libpower\;libpint\;libnet\;libmem\;libemul\;libcore\;libll\;libmint\;libapp\;libAugMem\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;HANGING_ASSERT;_DEBUG;SYSTEM_SESC;DEBUG;_CONSOLE;LENDIAN;__i386__;DEBUG_DUMP_PROGRAM;ADDRESS_CHK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -735,832 +220,32 @@
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='fft-dir-moesi-004-0001-0002-00|Win32'">
-    <ClCompile>
-      <Optimization>Disabled</Optimization>
-      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
-      <WholeProgramOptimization>false</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>MemSys\Messages\;PersonalTools\includes\;libtrans\;libvmem\;libtm\;libsuperlu\;libsuc\;libsmp\;libsesctherm\;libsescspot\;librst\;libpower\;libpint\;libnet\;libmem\;libemul\;libcore\;libll\;libmint\;libapp\;libAugMem\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;HANGING_ASSERT;_DEBUG;SYSTEM_SESC;DEBUG;_CONSOLE;LENDIAN;__i386__;DEBUG_DUMP_PROGRAM;ADDRESS_CHK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MinimalRebuild>true</MinimalRebuild>
-      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
-      <WarningLevel>TurnOffAllWarnings</WarningLevel>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-    </ClCompile>
-    <Link>
-      <AdditionalOptions>zdll.exp zdll.lib %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalLibraryDirectories>PersonalTools\libraries\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <SubSystem>Console</SubSystem>
-      <LinkTimeCodeGeneration>
-      </LinkTimeCodeGeneration>
-      <TargetMachine>MachineX86</TargetMachine>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='water-dir-moesi-002-0001-0002-00|Win32'">
-    <ClCompile>
-      <Optimization>Disabled</Optimization>
-      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
-      <WholeProgramOptimization>false</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>MemSys\Messages\;PersonalTools\includes\;libtrans\;libvmem\;libtm\;libsuperlu\;libsuc\;libsmp\;libsesctherm\;libsescspot\;librst\;libpower\;libpint\;libnet\;libmem\;libemul\;libcore\;libll\;libmint\;libapp\;libAugMem\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;HANGING_ASSERT;_DEBUG;SYSTEM_SESC;DEBUG;_CONSOLE;LENDIAN;__i386__;DEBUG_DUMP_PROGRAM;ADDRESS_CHK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MinimalRebuild>true</MinimalRebuild>
-      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
-      <WarningLevel>TurnOffAllWarnings</WarningLevel>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-    </ClCompile>
-    <Link>
-      <AdditionalOptions>zdll.exp zdll.lib %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalLibraryDirectories>PersonalTools\libraries\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <SubSystem>Console</SubSystem>
-      <LinkTimeCodeGeneration>
-      </LinkTimeCodeGeneration>
-      <TargetMachine>MachineX86</TargetMachine>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='cholesky-dir-moesi-002-0001-0002-00|Win32'">
-    <ClCompile>
-      <Optimization>Disabled</Optimization>
-      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
-      <WholeProgramOptimization>false</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>MemSys\Messages\;PersonalTools\includes\;libtrans\;libvmem\;libtm\;libsuperlu\;libsuc\;libsmp\;libsesctherm\;libsescspot\;librst\;libpower\;libpint\;libnet\;libmem\;libemul\;libcore\;libll\;libmint\;libapp\;libAugMem\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;HANGING_ASSERT;_DEBUG;SYSTEM_SESC;DEBUG;_CONSOLE;LENDIAN;__i386__;DEBUG_DUMP_PROGRAM;ADDRESS_CHK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MinimalRebuild>true</MinimalRebuild>
-      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
-      <WarningLevel>TurnOffAllWarnings</WarningLevel>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-    </ClCompile>
-    <Link>
-      <AdditionalOptions>zdll.exp zdll.lib %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalLibraryDirectories>PersonalTools\libraries\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <SubSystem>Console</SubSystem>
-      <LinkTimeCodeGeneration>
-      </LinkTimeCodeGeneration>
-      <TargetMachine>MachineX86</TargetMachine>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='fft-dir-msi-002-0001-0002-00|Win32'">
-    <ClCompile>
-      <Optimization>Disabled</Optimization>
-      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
-      <WholeProgramOptimization>false</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>MemSys\Messages\;PersonalTools\includes\;libtrans\;libvmem\;libtm\;libsuperlu\;libsuc\;libsmp\;libsesctherm\;libsescspot\;librst\;libpower\;libpint\;libnet\;libmem\;libemul\;libcore\;libll\;libmint\;libapp\;libAugMem\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;HANGING_ASSERT;_DEBUG;SYSTEM_SESC;DEBUG;_CONSOLE;LENDIAN;__i386__;DEBUG_DUMP_PROGRAM;ADDRESS_CHK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MinimalRebuild>true</MinimalRebuild>
-      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
-      <WarningLevel>TurnOffAllWarnings</WarningLevel>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-    </ClCompile>
-    <Link>
-      <AdditionalOptions>zdll.exp zdll.lib %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalLibraryDirectories>PersonalTools\libraries\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <SubSystem>Console</SubSystem>
-      <LinkTimeCodeGeneration>
-      </LinkTimeCodeGeneration>
-      <TargetMachine>MachineX86</TargetMachine>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='fft-dir-msi-004-0001-0002-00|Win32'">
-    <ClCompile>
-      <Optimization>Disabled</Optimization>
-      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
-      <WholeProgramOptimization>false</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>MemSys\Messages\;PersonalTools\includes\;libtrans\;libvmem\;libtm\;libsuperlu\;libsuc\;libsmp\;libsesctherm\;libsescspot\;librst\;libpower\;libpint\;libnet\;libmem\;libemul\;libcore\;libll\;libmint\;libapp\;libAugMem\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;HANGING_ASSERT;_DEBUG;SYSTEM_SESC;DEBUG;_CONSOLE;LENDIAN;__i386__;DEBUG_DUMP_PROGRAM;ADDRESS_CHK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MinimalRebuild>true</MinimalRebuild>
-      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
-      <WarningLevel>TurnOffAllWarnings</WarningLevel>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-    </ClCompile>
-    <Link>
-      <AdditionalOptions>zdll.exp zdll.lib %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalLibraryDirectories>PersonalTools\libraries\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <SubSystem>Console</SubSystem>
-      <LinkTimeCodeGeneration>
-      </LinkTimeCodeGeneration>
-      <TargetMachine>MachineX86</TargetMachine>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='fft-dir-msi-008-0001-0002-00|Win32'">
-    <ClCompile>
-      <Optimization>Disabled</Optimization>
-      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
-      <WholeProgramOptimization>false</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>MemSys\Messages\;PersonalTools\includes\;libtrans\;libvmem\;libtm\;libsuperlu\;libsuc\;libsmp\;libsesctherm\;libsescspot\;librst\;libpower\;libpint\;libnet\;libmem\;libemul\;libcore\;libll\;libmint\;libapp\;libAugMem\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;HANGING_ASSERT;_DEBUG;SYSTEM_SESC;DEBUG;_CONSOLE;LENDIAN;__i386__;DEBUG_DUMP_PROGRAM;ADDRESS_CHK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MinimalRebuild>true</MinimalRebuild>
-      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
-      <WarningLevel>TurnOffAllWarnings</WarningLevel>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-    </ClCompile>
-    <Link>
-      <AdditionalOptions>zdll.exp zdll.lib %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalLibraryDirectories>PersonalTools\libraries\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <SubSystem>Console</SubSystem>
-      <LinkTimeCodeGeneration>
-      </LinkTimeCodeGeneration>
-      <TargetMachine>MachineX86</TargetMachine>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='fft-3sd-msi-008-0001-0002-00|Win32'">
-    <ClCompile>
-      <Optimization>Disabled</Optimization>
-      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
-      <WholeProgramOptimization>false</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>MemSys\Messages\;PersonalTools\includes\;libtrans\;libvmem\;libtm\;libsuperlu\;libsuc\;libsmp\;libsesctherm\;libsescspot\;librst\;libpower\;libpint\;libnet\;libmem\;libemul\;libcore\;libll\;libmint\;libapp\;libAugMem\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;HANGING_ASSERT;_DEBUG;SYSTEM_SESC;DEBUG;_CONSOLE;LENDIAN;__i386__;DEBUG_DUMP_PROGRAM;ADDRESS_CHK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MinimalRebuild>true</MinimalRebuild>
-      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
-      <WarningLevel>TurnOffAllWarnings</WarningLevel>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-    </ClCompile>
-    <Link>
-      <AdditionalOptions>zdll.exp zdll.lib %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalLibraryDirectories>PersonalTools\libraries\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <SubSystem>Console</SubSystem>
-      <LinkTimeCodeGeneration>
-      </LinkTimeCodeGeneration>
-      <TargetMachine>MachineX86</TargetMachine>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='fft-3sd-msi-002-0001-0002-00|Win32'">
-    <ClCompile>
-      <Optimization>Disabled</Optimization>
-      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
-      <WholeProgramOptimization>false</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>MemSys\Messages\;PersonalTools\includes\;libtrans\;libvmem\;libtm\;libsuperlu\;libsuc\;libsmp\;libsesctherm\;libsescspot\;librst\;libpower\;libpint\;libnet\;libmem\;libemul\;libcore\;libll\;libmint\;libapp\;libAugMem\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;HANGING_ASSERT;_DEBUG;SYSTEM_SESC;DEBUG;_CONSOLE;LENDIAN;__i386__;DEBUG_DUMP_PROGRAM;ADDRESS_CHK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MinimalRebuild>true</MinimalRebuild>
-      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
-      <WarningLevel>TurnOffAllWarnings</WarningLevel>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-    </ClCompile>
-    <Link>
-      <AdditionalOptions>zdll.exp zdll.lib %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalLibraryDirectories>PersonalTools\libraries\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <SubSystem>Console</SubSystem>
-      <LinkTimeCodeGeneration>
-      </LinkTimeCodeGeneration>
-      <TargetMachine>MachineX86</TargetMachine>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='radix-3sd-msi-002-0001-0002-00|Win32'">
-    <ClCompile>
-      <Optimization>Disabled</Optimization>
-      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
-      <WholeProgramOptimization>false</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>MemSys\Messages\;PersonalTools\includes\;libtrans\;libvmem\;libtm\;libsuperlu\;libsuc\;libsmp\;libsesctherm\;libsescspot\;librst\;libpower\;libpint\;libnet\;libmem\;libemul\;libcore\;libll\;libmint\;libapp\;libAugMem\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;HANGING_ASSERT;_DEBUG;SYSTEM_SESC;DEBUG;_CONSOLE;LENDIAN;__i386__;DEBUG_DUMP_PROGRAM;ADDRESS_CHK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MinimalRebuild>true</MinimalRebuild>
-      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
-      <WarningLevel>TurnOffAllWarnings</WarningLevel>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-    </ClCompile>
-    <Link>
-      <AdditionalOptions>zdll.exp zdll.lib %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalLibraryDirectories>PersonalTools\libraries\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <SubSystem>Console</SubSystem>
-      <LinkTimeCodeGeneration>
-      </LinkTimeCodeGeneration>
-      <TargetMachine>MachineX86</TargetMachine>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='radix-3sd-moesi-008-0001-0002-00|Win32'">
-    <ClCompile>
-      <Optimization>Disabled</Optimization>
-      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
-      <WholeProgramOptimization>false</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>MemSys\Messages\;PersonalTools\includes\;libtrans\;libvmem\;libtm\;libsuperlu\;libsuc\;libsmp\;libsesctherm\;libsescspot\;librst\;libpower\;libpint\;libnet\;libmem\;libemul\;libcore\;libll\;libmint\;libapp\;libAugMem\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;HANGING_ASSERT;_DEBUG;SYSTEM_SESC;DEBUG;_CONSOLE;LENDIAN;__i386__;DEBUG_DUMP_PROGRAM;ADDRESS_CHK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MinimalRebuild>true</MinimalRebuild>
-      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
-      <WarningLevel>TurnOffAllWarnings</WarningLevel>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-    </ClCompile>
-    <Link>
-      <AdditionalOptions>zdll.exp zdll.lib %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalLibraryDirectories>PersonalTools\libraries\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <SubSystem>Console</SubSystem>
-      <LinkTimeCodeGeneration>
-      </LinkTimeCodeGeneration>
-      <TargetMachine>MachineX86</TargetMachine>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='radix-3sd-moesi-004-0001-0002-00|Win32'">
-    <ClCompile>
-      <Optimization>Disabled</Optimization>
-      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
-      <WholeProgramOptimization>false</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>MemSys\Messages\;PersonalTools\includes\;libtrans\;libvmem\;libtm\;libsuperlu\;libsuc\;libsmp\;libsesctherm\;libsescspot\;librst\;libpower\;libpint\;libnet\;libmem\;libemul\;libcore\;libll\;libmint\;libapp\;libAugMem\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;HANGING_ASSERT;_DEBUG;SYSTEM_SESC;DEBUG;_CONSOLE;LENDIAN;__i386__;DEBUG_DUMP_PROGRAM;ADDRESS_CHK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MinimalRebuild>true</MinimalRebuild>
-      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
-      <WarningLevel>TurnOffAllWarnings</WarningLevel>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-    </ClCompile>
-    <Link>
-      <AdditionalOptions>zdll.exp zdll.lib %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalLibraryDirectories>PersonalTools\libraries\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <SubSystem>Console</SubSystem>
-      <LinkTimeCodeGeneration>
-      </LinkTimeCodeGeneration>
-      <TargetMachine>MachineX86</TargetMachine>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='fft-dir-moesi-008-0001-0002-00|Win32'">
-    <ClCompile>
-      <Optimization>Disabled</Optimization>
-      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
-      <WholeProgramOptimization>false</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>MemSys\Messages\;PersonalTools\includes\;libtrans\;libvmem\;libtm\;libsuperlu\;libsuc\;libsmp\;libsesctherm\;libsescspot\;librst\;libpower\;libpint\;libnet\;libmem\;libemul\;libcore\;libll\;libmint\;libapp\;libAugMem\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;HANGING_ASSERT;_DEBUG;SYSTEM_SESC;DEBUG;_CONSOLE;LENDIAN;__i386__;DEBUG_DUMP_PROGRAM;ADDRESS_CHK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MinimalRebuild>true</MinimalRebuild>
-      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
-      <WarningLevel>TurnOffAllWarnings</WarningLevel>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-    </ClCompile>
-    <Link>
-      <AdditionalOptions>zdll.exp zdll.lib %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalLibraryDirectories>PersonalTools\libraries\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <SubSystem>Console</SubSystem>
-      <LinkTimeCodeGeneration>
-      </LinkTimeCodeGeneration>
-      <TargetMachine>MachineX86</TargetMachine>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='fft-3sd-moesi-002-0001-0002-00|Win32'">
-    <ClCompile>
-      <Optimization>Disabled</Optimization>
-      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
-      <WholeProgramOptimization>false</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>MemSys\Messages\;PersonalTools\includes\;libtrans\;libvmem\;libtm\;libsuperlu\;libsuc\;libsmp\;libsesctherm\;libsescspot\;librst\;libpower\;libpint\;libnet\;libmem\;libemul\;libcore\;libll\;libmint\;libapp\;libAugMem\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;HANGING_ASSERT;_DEBUG;SYSTEM_SESC;DEBUG;_CONSOLE;LENDIAN;__i386__;DEBUG_DUMP_PROGRAM;ADDRESS_CHK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MinimalRebuild>true</MinimalRebuild>
-      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
-      <WarningLevel>TurnOffAllWarnings</WarningLevel>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-    </ClCompile>
-    <Link>
-      <AdditionalOptions>zdll.exp zdll.lib %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalLibraryDirectories>PersonalTools\libraries\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <SubSystem>Console</SubSystem>
-      <LinkTimeCodeGeneration>
-      </LinkTimeCodeGeneration>
-      <TargetMachine>MachineX86</TargetMachine>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='fft-origin-moesi-002-0001-0002|Win32'">
-    <ClCompile>
-      <Optimization>Disabled</Optimization>
-      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
-      <WholeProgramOptimization>false</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>MemSys\Messages\;PersonalTools\includes\;libtrans\;libvmem\;libtm\;libsuperlu\;libsuc\;libsmp\;libsesctherm\;libsescspot\;librst\;libpower\;libpint\;libnet\;libmem\;libemul\;libcore\;libll\;libmint\;libapp\;libAugMem\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;HANGING_ASSERT;_DEBUG;SYSTEM_SESC;DEBUG;_CONSOLE;LENDIAN;__i386__;DEBUG_DUMP_PROGRAM;ADDRESS_CHK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MinimalRebuild>true</MinimalRebuild>
-      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
-      <WarningLevel>TurnOffAllWarnings</WarningLevel>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-    </ClCompile>
-    <Link>
-      <AdditionalOptions>zdll.exp zdll.lib %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalLibraryDirectories>PersonalTools\libraries\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <SubSystem>Console</SubSystem>
-      <LinkTimeCodeGeneration>
-      </LinkTimeCodeGeneration>
-      <TargetMachine>MachineX86</TargetMachine>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='fft-dir-moesi-002-0001-0002-00|Win32'">
-    <ClCompile>
-      <Optimization>Disabled</Optimization>
-      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
-      <WholeProgramOptimization>false</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>MemSys\Messages\;PersonalTools\includes\;libtrans\;libvmem\;libtm\;libsuperlu\;libsuc\;libsmp\;libsesctherm\;libsescspot\;librst\;libpower\;libpint\;libnet\;libmem\;libemul\;libcore\;libll\;libmint\;libapp\;libAugMem\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;HANGING_ASSERT;_DEBUG;SYSTEM_SESC;DEBUG;_CONSOLE;LENDIAN;__i386__;DEBUG_DUMP_PROGRAM;ADDRESS_CHK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MinimalRebuild>true</MinimalRebuild>
-      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
-      <WarningLevel>TurnOffAllWarnings</WarningLevel>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-    </ClCompile>
-    <Link>
-      <AdditionalOptions>zdll.exp zdll.lib %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalLibraryDirectories>PersonalTools\libraries\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <SubSystem>Console</SubSystem>
-      <LinkTimeCodeGeneration>
-      </LinkTimeCodeGeneration>
-      <TargetMachine>MachineX86</TargetMachine>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='fft-snoopy-moesi-064-0016-1024|Win32'">
-    <ClCompile>
-      <Optimization>Disabled</Optimization>
-      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
-      <WholeProgramOptimization>false</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>MemSys\Messages\;PersonalTools\includes\;libtrans\;libvmem\;libtm\;libsuperlu\;libsuc\;libsmp\;libsesctherm\;libsescspot\;librst\;libpower\;libpint\;libnet\;libmem\;libemul\;libcore\;libll\;libmint\;libapp\;libAugMem\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;HANGING_ASSERT;_DEBUG;SYSTEM_SESC;DEBUG;_CONSOLE;LENDIAN;__i386__;DEBUG_DUMP_PROGRAM;ADDRESS_CHK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MinimalRebuild>true</MinimalRebuild>
-      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
-      <WarningLevel>TurnOffAllWarnings</WarningLevel>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-    </ClCompile>
-    <Link>
-      <AdditionalOptions>zdll.exp zdll.lib %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalLibraryDirectories>PersonalTools\libraries\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <SubSystem>Console</SubSystem>
-      <LinkTimeCodeGeneration>
-      </LinkTimeCodeGeneration>
-      <TargetMachine>MachineX86</TargetMachine>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='fft-snoopy-moesi-002-0001-0002|Win32'">
-    <ClCompile>
-      <Optimization>Disabled</Optimization>
-      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
-      <WholeProgramOptimization>false</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>MemSys\Messages\;PersonalTools\includes\;libtrans\;libvmem\;libtm\;libsuperlu\;libsuc\;libsmp\;libsesctherm\;libsescspot\;librst\;libpower\;libpint\;libnet\;libmem\;libemul\;libcore\;libll\;libmint\;libapp\;libAugMem\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;HANGING_ASSERT;_DEBUG;SYSTEM_SESC;DEBUG;_CONSOLE;LENDIAN;__i386__;DEBUG_DUMP_PROGRAM;ADDRESS_CHK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MinimalRebuild>true</MinimalRebuild>
-      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
-      <WarningLevel>TurnOffAllWarnings</WarningLevel>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-    </ClCompile>
-    <Link>
-      <AdditionalOptions>zdll.exp zdll.lib %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalLibraryDirectories>PersonalTools\libraries\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <SubSystem>Console</SubSystem>
-      <LinkTimeCodeGeneration>
-      </LinkTimeCodeGeneration>
-      <TargetMachine>MachineX86</TargetMachine>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='fft-snoopy-moesi-032-0016-1024|Win32'">
-    <ClCompile>
-      <Optimization>Disabled</Optimization>
-      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
-      <WholeProgramOptimization>false</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>MemSys\Messages\;PersonalTools\includes\;libtrans\;libvmem\;libtm\;libsuperlu\;libsuc\;libsmp\;libsesctherm\;libsescspot\;librst\;libpower\;libpint\;libnet\;libmem\;libemul\;libcore\;libll\;libmint\;libapp\;libAugMem\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;HANGING_ASSERT;_DEBUG;SYSTEM_SESC;DEBUG;_CONSOLE;LENDIAN;__i386__;DEBUG_DUMP_PROGRAM;ADDRESS_CHK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MinimalRebuild>true</MinimalRebuild>
-      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
-      <WarningLevel>TurnOffAllWarnings</WarningLevel>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-    </ClCompile>
-    <Link>
-      <AdditionalOptions>zdll.exp zdll.lib %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalLibraryDirectories>PersonalTools\libraries\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <SubSystem>Console</SubSystem>
-      <LinkTimeCodeGeneration>
-      </LinkTimeCodeGeneration>
-      <TargetMachine>MachineX86</TargetMachine>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='barnes-dir-moesi-002-0001-0002-00|Win32'">
-    <ClCompile>
-      <Optimization>Disabled</Optimization>
-      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
-      <WholeProgramOptimization>false</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>MemSys\Messages\;PersonalTools\includes\;libtrans\;libvmem\;libtm\;libsuperlu\;libsuc\;libsmp\;libsesctherm\;libsescspot\;librst\;libpower\;libpint\;libnet\;libmem\;libemul\;libcore\;libll\;libmint\;libapp\;libAugMem\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;HANGING_ASSERT;_DEBUG;SYSTEM_SESC;DEBUG;_CONSOLE;LENDIAN;__i386__;DEBUG_DUMP_PROGRAM;ADDRESS_CHK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MinimalRebuild>true</MinimalRebuild>
-      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
-      <WarningLevel>TurnOffAllWarnings</WarningLevel>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-    </ClCompile>
-    <Link>
-      <AdditionalOptions>zdll.exp zdll.lib %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalLibraryDirectories>PersonalTools\libraries\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <SubSystem>Console</SubSystem>
-      <LinkTimeCodeGeneration>
-      </LinkTimeCodeGeneration>
-      <TargetMachine>MachineX86</TargetMachine>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='barnes-3sd-msi-032-0001-0002-00|Win32'">
-    <ClCompile>
-      <Optimization>Disabled</Optimization>
-      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
-      <WholeProgramOptimization>false</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>MemSys\Messages\;PersonalTools\includes\;libtrans\;libvmem\;libtm\;libsuperlu\;libsuc\;libsmp\;libsesctherm\;libsescspot\;librst\;libpower\;libpint\;libnet\;libmem\;libemul\;libcore\;libll\;libmint\;libapp\;libAugMem\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;HANGING_ASSERT;_DEBUG;SYSTEM_SESC;DEBUG;_CONSOLE;LENDIAN;__i386__;DEBUG_DUMP_PROGRAM;ADDRESS_CHK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MinimalRebuild>true</MinimalRebuild>
-      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
-      <WarningLevel>TurnOffAllWarnings</WarningLevel>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-    </ClCompile>
-    <Link>
-      <AdditionalOptions>zdll.exp zdll.lib %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalLibraryDirectories>PersonalTools\libraries\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <SubSystem>Console</SubSystem>
-      <LinkTimeCodeGeneration>
-      </LinkTimeCodeGeneration>
-      <TargetMachine>MachineX86</TargetMachine>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='fft-3sd-msi-004-0001-0002-00|Win32'">
-    <ClCompile>
-      <Optimization>Disabled</Optimization>
-      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
-      <WholeProgramOptimization>false</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>MemSys\Messages\;PersonalTools\includes\;libtrans\;libvmem\;libtm\;libsuperlu\;libsuc\;libsmp\;libsesctherm\;libsescspot\;librst\;libpower\;libpint\;libnet\;libmem\;libemul\;libcore\;libll\;libmint\;libapp\;libAugMem\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;HANGING_ASSERT;_DEBUG;SYSTEM_SESC;DEBUG;_CONSOLE;LENDIAN;__i386__;DEBUG_DUMP_PROGRAM;ADDRESS_CHK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MinimalRebuild>true</MinimalRebuild>
-      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
-      <WarningLevel>TurnOffAllWarnings</WarningLevel>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-    </ClCompile>
-    <Link>
-      <AdditionalOptions>zdll.exp zdll.lib %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalLibraryDirectories>PersonalTools\libraries\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <SubSystem>Console</SubSystem>
-      <LinkTimeCodeGeneration>
-      </LinkTimeCodeGeneration>
-      <TargetMachine>MachineX86</TargetMachine>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='memtest-002-3sd-moesi|Win32'">
-    <ClCompile>
-      <Optimization>Disabled</Optimization>
-      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
-      <WholeProgramOptimization>false</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>MemSys\Messages\;PersonalTools\includes\;libtrans\;libvmem\;libtm\;libsuperlu\;libsuc\;libsmp\;libsesctherm\;libsescspot\;librst\;libpower\;libpint\;libnet\;libmem\;libemul\;libcore\;libll\;libmint\;libapp\;libAugMem\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;HANGING_ASSERT;_DEBUG;SYSTEM_SESC;DEBUG;_CONSOLE;LENDIAN;__i386__;DEBUG_DUMP_PROGRAM;ADDRESS_CHK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MinimalRebuild>true</MinimalRebuild>
-      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
-      <WarningLevel>TurnOffAllWarnings</WarningLevel>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-    </ClCompile>
-    <Link>
-      <AdditionalOptions>zdll.exp zdll.lib %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalLibraryDirectories>PersonalTools\libraries\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <SubSystem>Console</SubSystem>
-      <LinkTimeCodeGeneration>
-      </LinkTimeCodeGeneration>
-      <TargetMachine>MachineX86</TargetMachine>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='fft-3sd-moesi-004-0001-0002-00|Win32'">
-    <ClCompile>
-      <Optimization>Disabled</Optimization>
-      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
-      <WholeProgramOptimization>false</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>MemSys\Messages\;PersonalTools\includes\;libtrans\;libvmem\;libtm\;libsuperlu\;libsuc\;libsmp\;libsesctherm\;libsescspot\;librst\;libpower\;libpint\;libnet\;libmem\;libemul\;libcore\;libll\;libmint\;libapp\;libAugMem\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;HANGING_ASSERT;_DEBUG;SYSTEM_SESC;DEBUG;_CONSOLE;LENDIAN;__i386__;DEBUG_DUMP_PROGRAM;ADDRESS_CHK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MinimalRebuild>true</MinimalRebuild>
-      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
-      <WarningLevel>TurnOffAllWarnings</WarningLevel>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-    </ClCompile>
-    <Link>
-      <AdditionalOptions>zdll.exp zdll.lib %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalLibraryDirectories>PersonalTools\libraries\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <SubSystem>Console</SubSystem>
-      <LinkTimeCodeGeneration>
-      </LinkTimeCodeGeneration>
-      <TargetMachine>MachineX86</TargetMachine>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='fft-3sd-moesi-008-0001-0002-00|Win32'">
-    <ClCompile>
-      <Optimization>Disabled</Optimization>
-      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
-      <WholeProgramOptimization>false</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>MemSys\Messages\;PersonalTools\includes\;libtrans\;libvmem\;libtm\;libsuperlu\;libsuc\;libsmp\;libsesctherm\;libsescspot\;librst\;libpower\;libpint\;libnet\;libmem\;libemul\;libcore\;libll\;libmint\;libapp\;libAugMem\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;HANGING_ASSERT;_DEBUG;SYSTEM_SESC;DEBUG;_CONSOLE;LENDIAN;__i386__;DEBUG_DUMP_PROGRAM;ADDRESS_CHK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MinimalRebuild>true</MinimalRebuild>
-      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
-      <WarningLevel>TurnOffAllWarnings</WarningLevel>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-    </ClCompile>
-    <Link>
-      <AdditionalOptions>zdll.exp zdll.lib %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalLibraryDirectories>PersonalTools\libraries\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <SubSystem>Console</SubSystem>
-      <LinkTimeCodeGeneration>
-      </LinkTimeCodeGeneration>
-      <TargetMachine>MachineX86</TargetMachine>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='fft-3sd-moesi-016-0001-0002-00|Win32'">
-    <ClCompile>
-      <Optimization>Disabled</Optimization>
-      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
-      <WholeProgramOptimization>false</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>MemSys\Messages\;PersonalTools\includes\;libtrans\;libvmem\;libtm\;libsuperlu\;libsuc\;libsmp\;libsesctherm\;libsescspot\;librst\;libpower\;libpint\;libnet\;libmem\;libemul\;libcore\;libll\;libmint\;libapp\;libAugMem\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;HANGING_ASSERT;_DEBUG;SYSTEM_SESC;DEBUG;_CONSOLE;LENDIAN;__i386__;DEBUG_DUMP_PROGRAM;ADDRESS_CHK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MinimalRebuild>true</MinimalRebuild>
-      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
-      <WarningLevel>TurnOffAllWarnings</WarningLevel>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-    </ClCompile>
-    <Link>
-      <AdditionalOptions>zdll.exp zdll.lib %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalLibraryDirectories>PersonalTools\libraries\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <SubSystem>Console</SubSystem>
-      <LinkTimeCodeGeneration>
-      </LinkTimeCodeGeneration>
-      <TargetMachine>MachineX86</TargetMachine>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='fft-dir-moesi-016-0001-0002-00|Win32'">
-    <ClCompile>
-      <Optimization>Disabled</Optimization>
-      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
-      <WholeProgramOptimization>false</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>MemSys\Messages\;PersonalTools\includes\;libtrans\;libvmem\;libtm\;libsuperlu\;libsuc\;libsmp\;libsesctherm\;libsescspot\;librst\;libpower\;libpint\;libnet\;libmem\;libemul\;libcore\;libll\;libmint\;libapp\;libAugMem\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;HANGING_ASSERT;_DEBUG;SYSTEM_SESC;DEBUG;_CONSOLE;LENDIAN;__i386__;DEBUG_DUMP_PROGRAM;ADDRESS_CHK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MinimalRebuild>true</MinimalRebuild>
-      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
-      <WarningLevel>TurnOffAllWarnings</WarningLevel>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-    </ClCompile>
-    <Link>
-      <AdditionalOptions>zdll.exp zdll.lib %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalLibraryDirectories>PersonalTools\libraries\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <SubSystem>Console</SubSystem>
-      <LinkTimeCodeGeneration>
-      </LinkTimeCodeGeneration>
-      <TargetMachine>MachineX86</TargetMachine>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='fft-dir-msi-016-0001-0002-00|Win32'">
-    <ClCompile>
-      <Optimization>Disabled</Optimization>
-      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
-      <WholeProgramOptimization>false</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>MemSys\Messages\;PersonalTools\includes\;libtrans\;libvmem\;libtm\;libsuperlu\;libsuc\;libsmp\;libsesctherm\;libsescspot\;librst\;libpower\;libpint\;libnet\;libmem\;libemul\;libcore\;libll\;libmint\;libapp\;libAugMem\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;HANGING_ASSERT;_DEBUG;SYSTEM_SESC;DEBUG;_CONSOLE;LENDIAN;__i386__;DEBUG_DUMP_PROGRAM;ADDRESS_CHK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MinimalRebuild>true</MinimalRebuild>
-      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
-      <WarningLevel>TurnOffAllWarnings</WarningLevel>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-    </ClCompile>
-    <Link>
-      <AdditionalOptions>zdll.exp zdll.lib %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalLibraryDirectories>PersonalTools\libraries\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <SubSystem>Console</SubSystem>
-      <LinkTimeCodeGeneration>
-      </LinkTimeCodeGeneration>
-      <TargetMachine>MachineX86</TargetMachine>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='fft-dir-msi-032-0001-0002-00|Win32'">
-    <ClCompile>
-      <Optimization>Disabled</Optimization>
-      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
-      <WholeProgramOptimization>false</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>MemSys\Messages\;PersonalTools\includes\;libtrans\;libvmem\;libtm\;libsuperlu\;libsuc\;libsmp\;libsesctherm\;libsescspot\;librst\;libpower\;libpint\;libnet\;libmem\;libemul\;libcore\;libll\;libmint\;libapp\;libAugMem\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;HANGING_ASSERT;_DEBUG;SYSTEM_SESC;DEBUG;_CONSOLE;LENDIAN;__i386__;DEBUG_DUMP_PROGRAM;ADDRESS_CHK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MinimalRebuild>true</MinimalRebuild>
-      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
-      <WarningLevel>TurnOffAllWarnings</WarningLevel>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-    </ClCompile>
-    <Link>
-      <AdditionalOptions>zdll.exp zdll.lib %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalLibraryDirectories>PersonalTools\libraries\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <SubSystem>Console</SubSystem>
-      <LinkTimeCodeGeneration>
-      </LinkTimeCodeGeneration>
-      <TargetMachine>MachineX86</TargetMachine>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='fft-3sd-msi-032-0001-0002-00|Win32'">
-    <ClCompile>
-      <Optimization>Disabled</Optimization>
-      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
-      <WholeProgramOptimization>false</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>MemSys\Messages\;PersonalTools\includes\;libtrans\;libvmem\;libtm\;libsuperlu\;libsuc\;libsmp\;libsesctherm\;libsescspot\;librst\;libpower\;libpint\;libnet\;libmem\;libemul\;libcore\;libll\;libmint\;libapp\;libAugMem\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;HANGING_ASSERT;_DEBUG;SYSTEM_SESC;DEBUG;_CONSOLE;LENDIAN;__i386__;DEBUG_DUMP_PROGRAM;ADDRESS_CHK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MinimalRebuild>true</MinimalRebuild>
-      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
-      <WarningLevel>TurnOffAllWarnings</WarningLevel>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-    </ClCompile>
-    <Link>
-      <AdditionalOptions>zdll.exp zdll.lib %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalLibraryDirectories>PersonalTools\libraries\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <SubSystem>Console</SubSystem>
-      <LinkTimeCodeGeneration>
-      </LinkTimeCodeGeneration>
-      <TargetMachine>MachineX86</TargetMachine>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='fft-3sd-msi-016-0001-0002-00|Win32'">
-    <ClCompile>
-      <Optimization>Disabled</Optimization>
-      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
-      <WholeProgramOptimization>false</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>MemSys\Messages\;PersonalTools\includes\;libtrans\;libvmem\;libtm\;libsuperlu\;libsuc\;libsmp\;libsesctherm\;libsescspot\;librst\;libpower\;libpint\;libnet\;libmem\;libemul\;libcore\;libll\;libmint\;libapp\;libAugMem\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;HANGING_ASSERT;_DEBUG;SYSTEM_SESC;DEBUG;_CONSOLE;LENDIAN;__i386__;DEBUG_DUMP_PROGRAM;ADDRESS_CHK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MinimalRebuild>true</MinimalRebuild>
-      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
-      <WarningLevel>TurnOffAllWarnings</WarningLevel>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-    </ClCompile>
-    <Link>
-      <AdditionalOptions>zdll.exp zdll.lib %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalLibraryDirectories>PersonalTools\libraries\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <SubSystem>Console</SubSystem>
-      <LinkTimeCodeGeneration>
-      </LinkTimeCodeGeneration>
-      <TargetMachine>MachineX86</TargetMachine>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='fft-dir-moesi-032-0001-0002-00|Win32'">
-    <ClCompile>
-      <Optimization>Disabled</Optimization>
-      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
-      <WholeProgramOptimization>false</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>MemSys\Messages\;PersonalTools\includes\;libtrans\;libvmem\;libtm\;libsuperlu\;libsuc\;libsmp\;libsesctherm\;libsescspot\;librst\;libpower\;libpint\;libnet\;libmem\;libemul\;libcore\;libll\;libmint\;libapp\;libAugMem\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;HANGING_ASSERT;_DEBUG;SYSTEM_SESC;DEBUG;_CONSOLE;LENDIAN;__i386__;DEBUG_DUMP_PROGRAM;ADDRESS_CHK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MinimalRebuild>true</MinimalRebuild>
-      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
-      <WarningLevel>TurnOffAllWarnings</WarningLevel>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-    </ClCompile>
-    <Link>
-      <AdditionalOptions>zdll.exp zdll.lib %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalLibraryDirectories>PersonalTools\libraries\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <SubSystem>Console</SubSystem>
-      <LinkTimeCodeGeneration>
-      </LinkTimeCodeGeneration>
-      <TargetMachine>MachineX86</TargetMachine>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='fft-dir-mesi-032-0001-0002-00|Win32'">
-    <ClCompile>
-      <Optimization>Disabled</Optimization>
-      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
-      <WholeProgramOptimization>false</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>MemSys\Messages\;PersonalTools\includes\;libtrans\;libvmem\;libtm\;libsuperlu\;libsuc\;libsmp\;libsesctherm\;libsescspot\;librst\;libpower\;libpint\;libnet\;libmem\;libemul\;libcore\;libll\;libmint\;libapp\;libAugMem\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;HANGING_ASSERT;_DEBUG;SYSTEM_SESC;DEBUG;_CONSOLE;LENDIAN;__i386__;DEBUG_DUMP_PROGRAM;ADDRESS_CHK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MinimalRebuild>true</MinimalRebuild>
-      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
-      <WarningLevel>TurnOffAllWarnings</WarningLevel>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-    </ClCompile>
-    <Link>
-      <AdditionalOptions>zdll.exp zdll.lib %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalLibraryDirectories>PersonalTools\libraries\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <SubSystem>Console</SubSystem>
-      <LinkTimeCodeGeneration>
-      </LinkTimeCodeGeneration>
-      <TargetMachine>MachineX86</TargetMachine>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='fft-3sd-mesi-032-0001-0002-00|Win32'">
-    <ClCompile>
-      <Optimization>Disabled</Optimization>
-      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
-      <WholeProgramOptimization>false</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>MemSys\Messages\;PersonalTools\includes\;libtrans\;libvmem\;libtm\;libsuperlu\;libsuc\;libsmp\;libsesctherm\;libsescspot\;librst\;libpower\;libpint\;libnet\;libmem\;libemul\;libcore\;libll\;libmint\;libapp\;libAugMem\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;HANGING_ASSERT;_DEBUG;SYSTEM_SESC;DEBUG;_CONSOLE;LENDIAN;__i386__;DEBUG_DUMP_PROGRAM;ADDRESS_CHK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MinimalRebuild>true</MinimalRebuild>
-      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
-      <WarningLevel>TurnOffAllWarnings</WarningLevel>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-    </ClCompile>
-    <Link>
-      <AdditionalOptions>zdll.exp zdll.lib %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalLibraryDirectories>PersonalTools\libraries\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <SubSystem>Console</SubSystem>
-      <LinkTimeCodeGeneration>
-      </LinkTimeCodeGeneration>
-      <TargetMachine>MachineX86</TargetMachine>
-    </Link>
-  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='fft-origin-mesi-2-1-2|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <AdditionalIncludeDirectories>MemSys\Messages\;PersonalTools\includes\;libtrans\;libvmem\;libtm\;libsuperlu\;libsuc\;libsmp\;libsesctherm\;libsescspot\;librst\;libpower\;libpint\;libnet\;libmem\;libemul\;libcore\;libll\;libmint\;libapp\;libAugMem\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;HANGING_ASSERT;_DEBUG;SYSTEM_SESC;DEBUG;_CONSOLE;LENDIAN;__i386__;DEBUG_DUMP_PROGRAM;ADDRESS_CHK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <AdditionalOptions>zdll.exp zdll.lib %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalLibraryDirectories>PersonalTools\libraries\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <LinkTimeCodeGeneration>
+      </LinkTimeCodeGeneration>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='fft-bip-2-8-16|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
@@ -1735,56 +420,6 @@
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='fft-snoopy-moesi-032-0001-0002-00|Win32'">
-    <ClCompile>
-      <Optimization>Disabled</Optimization>
-      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
-      <WholeProgramOptimization>false</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>MemSys\Messages\;PersonalTools\includes\;libtrans\;libvmem\;libtm\;libsuperlu\;libsuc\;libsmp\;libsesctherm\;libsescspot\;librst\;libpower\;libpint\;libnet\;libmem\;libemul\;libcore\;libll\;libmint\;libapp\;libAugMem\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;HANGING_ASSERT;_DEBUG;SYSTEM_SESC;DEBUG;_CONSOLE;LENDIAN;__i386__;DEBUG_DUMP_PROGRAM;ADDRESS_CHK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MinimalRebuild>true</MinimalRebuild>
-      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
-      <WarningLevel>TurnOffAllWarnings</WarningLevel>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-    </ClCompile>
-    <Link>
-      <AdditionalOptions>zdll.exp zdll.lib %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalLibraryDirectories>PersonalTools\libraries\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <SubSystem>Console</SubSystem>
-      <LinkTimeCodeGeneration>
-      </LinkTimeCodeGeneration>
-      <TargetMachine>MachineX86</TargetMachine>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='fft-3sd-moesi-032-0001-0002-00|Win32'">
-    <ClCompile>
-      <Optimization>Disabled</Optimization>
-      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
-      <WholeProgramOptimization>false</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>MemSys\Messages\;PersonalTools\includes\;libtrans\;libvmem\;libtm\;libsuperlu\;libsuc\;libsmp\;libsesctherm\;libsescspot\;librst\;libpower\;libpint\;libnet\;libmem\;libemul\;libcore\;libll\;libmint\;libapp\;libAugMem\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;HANGING_ASSERT;_DEBUG;SYSTEM_SESC;DEBUG;_CONSOLE;LENDIAN;__i386__;DEBUG_DUMP_PROGRAM;ADDRESS_CHK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MinimalRebuild>true</MinimalRebuild>
-      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
-      <WarningLevel>TurnOffAllWarnings</WarningLevel>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-    </ClCompile>
-    <Link>
-      <AdditionalOptions>zdll.exp zdll.lib %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalLibraryDirectories>PersonalTools\libraries\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <SubSystem>Console</SubSystem>
-      <LinkTimeCodeGeneration>
-      </LinkTimeCodeGeneration>
-      <TargetMachine>MachineX86</TargetMachine>
-    </Link>
-  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <Optimization>Full</Optimization>
@@ -1818,6 +453,7 @@
     <ClInclude Include="include\dump.h" />
     <ClInclude Include="include\hash_fun_extra.h" />
     <ClInclude Include="include\to_string.h" />
+    <ClInclude Include="MemSys\Devices\BIPDirectory.h" />
     <ClInclude Include="MemSys\Devices\MESICache.h" />
     <ClInclude Include="MemSys\Devices\OriginDirectory.h" />
     <ClInclude Include="libmint\Addressing.h" />
@@ -2012,6 +648,7 @@
     <ClCompile Include="libmint\dump.cpp" />
     <ClCompile Include="libmint\elf.cpp" />
     <ClCompile Include="libmint\error_ops.cpp" />
+    <ClCompile Include="MemSys\Devices\BIPDirectory.cpp" />
     <ClCompile Include="MemSys\Devices\Directory.cpp" />
     <ClCompile Include="MemSys\Devices\MESICache.cpp" />
     <ClCompile Include="MemSys\Devices\MSICache.cpp" />

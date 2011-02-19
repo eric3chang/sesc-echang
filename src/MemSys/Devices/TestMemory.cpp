@@ -63,7 +63,7 @@ namespace Memory
 				EvictionResponseMsg* m = EM().CreateEvictionResponseMsg(GetDeviceID(),msg->GeneratingPC());
 				m->addr = em->addr;
 				m->size = em->size;
-				m->solicitingMessage = m->MsgID();
+				m->solicitingMessage = em->MsgID();
 				reply = m;
 				break;
 			}

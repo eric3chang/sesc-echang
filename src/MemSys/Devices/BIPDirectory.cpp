@@ -79,6 +79,7 @@ namespace Memory
 		else
 		{
 			SendRequestToMemory(m);
+			return;
 		}
 		if(target == nodeID)
 		{// if target == nodeID, it could mean that the block was evicted or invalidated
@@ -170,6 +171,17 @@ namespace Memory
    		// using 0 for send time because the time is taken care of in TestMemory
    		SendMsg(localMemoryConnectionID,forward,localSendTime);
    	}
+		/*
+		else if (msg->Type()==mt_Eviction)
+   	{
+   		DebugAssertWithMessageID(pendingMemoryEvictionAccesses.find(msg->MsgID())==pendingMemoryEvictionAccesses.end(),msg->MsgID());
+   		const EvictionMsg* m = (const EvictionMsg*) msg;
+   		pendingMemoryEvictionAccesses[msg->MsgID()] = m;
+   		BaseMsg *forward = EM().ReplicateMsg(msg);
+   		// using 0 for send time because the time is taken care of in TestMemory
+   		SendMsg(localMemoryConnectionID,forward,localSendTime);
+   	}
+		*/
    	else
    	{
    		PrintError("SendMemoryRequest", msg, "can't send current message type to memory");
@@ -337,7 +349,14 @@ namespace Memory
 		pendingMemoryWriteAccesses.erase(m->solicitingMessage);
 		OnRemoteWriteResponse(m, InvalidNodeID);
 	}
-
+	/*
+	void BIPDirectory::OnLocalMemoryEvictionResponse(const EvictionResponseMsg* m)
+	{
+		DebugAssertWithMessageID(pendingMemoryEvictionAccesses.find(m->solicitingMessage)!=pendingMemoryEvictionAccesses.end(), m->MsgID());
+		pendingMemoryEvictionAccesses.erase(m->solicitingMessage);
+		OnRemoteEvictionResponse(m, InvalidNodeID);
+	}
+	*/
 	void BIPDirectory::OnRemoteReadCache(const ReadMsg* m, NodeID src)
 	{
 #ifdef MEMORY_BIP_DIRECTORY_DEBUG_VERBOSE
@@ -570,7 +589,7 @@ namespace Memory
 			wm->size = m->size;
 			wm->onCompletedCallback = NULL;
 
-			SendRequestToMemory(m);
+			SendRequestToMemory(wm);
 
 			/*
 			NetworkMsg* nm = EM().CreateNetworkMsg(GetDeviceID(), m->GeneratingPC());
@@ -959,16 +978,26 @@ namespace Memory
 		}
 		else if (connectionID == localMemoryConnectionID)
 		{
-			switch(msg->Type())
+			if (msg->Type()==mt_ReadResponse)
 			{
-			case mt_ReadResponse:
-				//OnLocalMemoryRead
-				break;
-			case mt_WriteResponse:
-				break;
-			default:
+				const ReadResponseMsg* m = (const ReadResponseMsg*)msg;
+				OnLocalMemoryReadResponse(m);
+			}
+			else if (msg->Type()==mt_WriteResponse)
+			{
+				const WriteResponseMsg* m = (const WriteResponseMsg*)msg;
+				OnLocalMemoryWriteResponse(m);
+			}
+			/*
+			else if (msg->Type()==mt_EvictionResponse)
+			{
+				const EvictionResponseMsg* m = (const EvictionResponseMsg*)msg;
+				OnLocalMemoryEvictionResponse(m);
+			}
+			*/
+			else
+			{
 				PrintError("RecvMsg", msg, "local memory should only emit ReadResponse or WriteResponse");
-				break;
 			}
 		}
 		else if(connectionID == remoteConnectionID)
@@ -991,17 +1020,13 @@ namespace Memory
 #endif
 						OnDirectoryBlockRequest(m,src);
 					}
-					/*
-					 * should never happen because we always get the block
-					 * from memory
-					else if (m->isCache)
+					else
 					{
 #ifdef MEMORY_BIP_DIRECTORY_DEBUG_VERBOSE_OLD
                PrintDebugInfo("RemoteRead",*m,"RecvMsg",src);
 #endif
 						OnRemoteReadCache(m,src);
 					}
-					*/
 					/*
 					 * should never happen because memory is always on directory
 					else if (m->isMemory)
@@ -1009,10 +1034,6 @@ namespace Memory
 						OnRemoteReadMemory(m,src);
 					}
 					*/
-					else
-					{
-						PrintError("RecvMsg", m);
-					}
 					break;
 				}
 			case(mt_ReadResponse):
