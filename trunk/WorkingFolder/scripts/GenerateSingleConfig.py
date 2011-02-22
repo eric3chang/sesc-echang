@@ -15,7 +15,7 @@ thisFileName = os.path.basename(thisFileName)
 
 def printError():
     print ("usage: " + 'GenerateSingleConfig' +
-        " benchmarkName directoryType cacheType processorCount L1Size L2Size")
+        " benchmarkName directoryType processorCount L1Size L2Size")
     quit()
 
 # converts the parameter to int with error checking
