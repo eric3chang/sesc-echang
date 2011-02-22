@@ -9,7 +9,7 @@ thisFileName = os.path.basename(thisFileName)
 
 def printError():
     print ("usage: " + 'GenerateMultipleConfigs' +
-        " benchmarkName directoryType cacheType processorCountLow processorCountHi L1Low L1Hi")
+        " benchmarkName directoryType processorCountLow processorCountHi L1Low L1Hi")
     quit()
 
 # converts the parameter to int with error checking
