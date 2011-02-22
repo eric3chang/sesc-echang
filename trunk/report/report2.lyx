@@ -294,10 +294,6 @@ name "fig:Inside-the-Node"
 
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
 \end_inset
 
 
@@ -329,8 +325,8 @@ reference "fig:Connections-in-Origin"
 \end_inset
 
 .
- Here, we can see that the nodes are connected together with a network that
- forwards message to the correct node.
+ From the figure, we can see that a network connects identical nodes together
+ to form the system.
  The basic building block of this system is the node, which is shown in
  
 \begin_inset ERT
@@ -359,30 +355,20 @@ reference "fig:Inside-the-Node"
 .
  This system is composed of the hub, the directory, the memory, the L2 and
  L1 cache, and the processor.
- The hub directs incoming traffic to the directory or to the L2 cache.
- The cache is, in turn, connected to the L1 cache and the processor to form
- the complete node.
- The cache is two-level, with the processor on the very top.
- From the figure, we can see that the network connects identical nodes together
- to form the system.
- Since the memory is distributed across each node, and is attached to each
- directory, each directory is responsible for accessing the memory it is
- attached to.
+ The hub is responsible for directing incoming network messages to the directory
+ or to the L2 cache.
+ The hub is also responsible for any messages that might be sent between
+ the directory and the cache of a single node.
+ When the directory sends a message to a local cache, or vice versa, the
+ hub will redirect the message to the receiver without sending this message
+ on the network.
+ The L2 cache is connected to the L1 cache, and the L1 cache to the processor,
+ to form the complete node.
 \end_layout
 
 \begin_layout Standard
-As can be seen in the figure, the system is not similar to today's system
- because it uses a DSM, where memory is distributed across each node.
- This is not the case on a modern CMP.
- However, if we consider a CMP where the last-level cache is distributed
- across the nodes (cores) and I am ignoring misses from the last-level cache.
-\end_layout
-
-\begin_layout Standard
-The basic building block of the Origin system is the node.
- The nodes in the Origin system can be connected in any types of network,
- since the protocol guarantees the correct operation even for out-of-order
- delivery of messages
+This system is a close approximation of the Origin system, and it will be
+ used to run the simulations in the comparison of protocols
 \begin_inset CommandInset citation
 LatexCommand cite
 key "LAU00"
@@ -390,20 +376,18 @@ key "LAU00"
 \end_inset
 
 .
- Each memory is addressible from any node.
+ This system uses a DSM, and each memory is addressible from any node.
  If any request arrives at the directory where it is necessary to retrieve
- the memory, the directory is guaranteed to have that memory and does not
- have to ask any other node, since each directory is responsible for its
- own memory.
-\end_layout
-
-\begin_layout Standard
-For remote requests, the hub will direct the message to the directory or
- the cache, depending on the message type.
- This will be discussed in more detail in the later sections.
- When the directory sends a message to a local cache, or vice versa, the
- hub will redirect the message to the receiver without sending this message
- on the network.
+ the memory, the directory is guaranteed to be attached to that memory and
+ does not have to ask any other node, since each directory is responsible
+ for accessing its own memory.
+ This system is not similar to today's systems because it uses a DSM, where
+ memory is distributed across each node.
+ This is not the case on a modern CMP.
+ However, if we consider a CMP where the last-level cache is distributed
+ across the nodes (cores) and ignore misses from the last-level cache, then
+ the interactions of the protocol becomes similar to what can happen in
+ a modern CMP system.
  The individual components in this system will be introduced in more detail
  in the next section.
 \end_layout
@@ -413,323 +397,34 @@ Components of System
 \end_layout
 
 \begin_layout Standard
-In this part, I will be going into the implementation details of the protocols.
- There are several different types of cache coherence protocols, and each
- of them provide their own advantages and disadvantages.
- I will first introduce the states that the caches need to store to permit
- cache coherence protocols to function, then I will go into the differences
- between the two major cache coherence protocols that are in use today,
- which are the snoopy-based cache coherence protocol and the directory-based
- cache coherence protocol, as well as modifications to the directory-based
- cache coherence protocol based on the Origin protocol.
-\end_layout
-
-\begin_layout Subsection
-Directory
+The most important job of any cache coherence protocols is to maintain data
+ coherency.
+ In order to maintain data coherency, the protocols all need to make sure
+ that whenever a cache writes to its block, it has exclusive access to it.
+ Because of that, any cache coherence protocol involves maintaining states
+ for the blocks in the caches.
 \end_layout
 
 \begin_layout Standard
-The directory is responsible for storing its own states.
-\end_layout
-
-\begin_layout Standard
-The directory is required to store more than just which CPU currently contains
- a cache line from the current directory.
- It is also necessary for the directory to store the owners and sharers
- in order to find out which processors own or share a block.
- If we did not store these in the state of the directory, we would have
- to query all the processors to find out what state they are all storing,
- which would be incredibly inefficient.
- 
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-tablename
-\end_layout
-
-\end_inset
-
-
-\begin_inset space ~
-\end_inset
-
-
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "tab:Correspondence-between-cache"
-
-\end_inset
-
- lists the possible data that the directory can hold compared to the cache
- state in any cache that has the block.
-\end_layout
-
-\begin_layout Standard
-\begin_inset Float table
-wide false
-sideways false
-status collapsed
-
-\begin_layout Plain Layout
-\align center
-\begin_inset Tabular
-<lyxtabular version="3" rows="5" columns="2">
-<features>
-<column alignment="center" valignment="top" width="0">
-<column alignment="center" valignment="top" width="0">
-<row>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Cache State 
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Directory Data Structure 
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Modified (Dirty Exclusive)
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Owner = {P}, Sharers = {}
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Exclusive (Clean Exclusive)
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Owner = {P}, Sharers = {}
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Shared
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Owner = {P}, Sharers = {Any number of P}
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Invalid
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Owner = {}, Sharers = {}
-\end_layout
-
-\end_inset
-</cell>
-</row>
-</lyxtabular>
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset Caption
-
-\begin_layout Plain Layout
-\align center
-Correspondence between cache state and directory data structure
-\begin_inset CommandInset label
-LatexCommand label
-name "tab:Correspondence-between-cache"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-In both the 
-\begin_inset Quotes eld
-\end_inset
-
-Modified
-\begin_inset Quotes erd
-\end_inset
-
- state and the 
-\begin_inset Quotes eld
-\end_inset
-
-Exclusive
-\begin_inset Quotes erd
-\end_inset
-
- state, the directory would store only the node ID of the processor that
- is the owner.
- Nevertheless, the directory does not know for certain whether or not the
- owner is actually clean or dirty until it has sent a request to the cache.
- It is the job of the protocol to take advantage of having the 
-\begin_inset Quotes eld
-\end_inset
-
-Exclusive
-\begin_inset Quotes erd
-\end_inset
-
- state by not writing the block to memory if the block is clean.
- If the directory is in a 
-\begin_inset Quotes eld
-\end_inset
-
-Shared
-\begin_inset Quotes erd
-\end_inset
-
- state, then it would have a node ID in the owner slot and any number of
- node IDs in the sharers list.
- The reason that there would be a node ID in the owner slot is because any
- transition into the 
-\begin_inset Quotes eld
-\end_inset
-
-Shared
-\begin_inset Quotes erd
-\end_inset
-
- state must have transitioned from a 
-\begin_inset Quotes eld
-\end_inset
-
-Modified
-\begin_inset Quotes erd
-\end_inset
-
- or 
-\begin_inset Quotes eld
-\end_inset
-
-Exclusive
-\begin_inset Quotes erd
-\end_inset
-
- state, which must already have stored a node ID in the owner slot.
-\end_layout
-
-\begin_layout Standard
-Keeping track of the owner could be done by either adding a bit to each
- directory entry, and turning on the extra bit to indicate ownership.
- There could also be an extra entry dedicated to holding the owner.
- The advantage of adding a bit to each directory entry that holds the node
- ID is that it could potentially save bits if there are many nodes in the
- system and each node ID list is short.
- However, using an extra entry strictly for holding the owner is more intuitive,
- and it can also be faster to access since the processor always know which
- entry is the owner.
- We can also have a combined owner-sharers list, where one entry implies
- 
-\begin_inset Quotes eld
-\end_inset
-
-Exclusive,
-\begin_inset Quotes erd
-\end_inset
-
- and multiple entries imply that the directory is in the 
-\begin_inset Quotes eld
-\end_inset
-
-Shared
-\begin_inset Quotes erd
-\end_inset
-
- state.
- In this last method, the system would have to be able to quickly scan through
- all the entries it has to determine whether it has no valid entries, one
- valid entry, or multiple valid entries.
- Since in either of the protocols that will be tested in this report, the
- owner entry becomes essentially an additional entry for the sharers list,
- there is not truly a need for the directory to have different slots for
- holding the owner versus a list of sharers.
- Therefore, sometimes in the discussion of protocols in this report, sharers
- will imply both the sharers list and also the node ID in the owner slot.
+Each individual cache needs to know the state of its own block, but the
+ caches also need to communicate to each other about block states by sending
+ messages to each other.
+ In a directory-based cache coherence protocol, the directory is also responsibl
+e for storing some of these states.
+ I will introduce the cache and the directory first, followed by the basic
+ message types that will be sent in the protocol.
 \end_layout
 
 \begin_layout Subsection
 
 \family roman
-Cache States
+Cache
 \end_layout
 
 \begin_layout Standard
-Since directories and buses are basically ways for multiple caches to communicat
-e with each other, it is important to understand what caches are and what
- kind of requests they can send to each directory.
+Since the cache is an integral in a coherence protocol, it is important
+ to understand what caches are and what kind of requests they can send to
+ each other and to the directory.
  
 \begin_inset Quotes eld
 \end_inset
@@ -751,10 +446,18 @@ key "HEN00"
  into the processor as to allow the programmer to take advantage of the
  speedup available in having multiple data.
  Having multiple data allows for multiple reads at the same time.
- The two protocols introduced here serves as an example of some of the protocols
+ There are several states that has to be stored by the cache in order to
+ enable the rest of the system to function properly.
+\end_layout
+
+\begin_layout Standard
+The two protocols introduced here serves as an example of some of the protocols
  that can be used to achieve cache coherency.
- The MSI protocol is the most basic one and only uses three states.
- The MESI protocol adds an 
+ I will go over the states stored in the MSI cache protocol first.
+ This protocol allows the least amount of information to be stored, yet
+ it still provides enough information for a cache to acquire exclusive access.
+ An improvement over this protocol can be found in the MESI protocol, which
+ adds an 
 \begin_inset Quotes eld
 \end_inset
 
@@ -762,30 +465,8 @@ Exclusive
 \begin_inset Quotes erd
 \end_inset
 
- state to reduce the traffic caused by writes of blocks that only exist
+ state to reduce the traffic caused by evictions of blocks that only exist
  in one cache.
- The MOSI protocol adds an 
-\begin_inset Quotes eld
-\end_inset
-
-Owned
-\begin_inset Quotes erd
-\end_inset
-
- state to reduce the traffic caused by write-backs of blocks that are read
- by other caches.
- The MOESI protocol implements both the Exclusive and Owned state to take
- on both characteristics.
-\end_layout
-
-\begin_layout Standard
-There are several states that has to be stored by the cache in order to
- enable the rest of the system to function properly.
- I will go over the states stored in the MSI cache protocol first.
- This protocol allows the least amount of information to be stored, yet
- it still provides enough information for a cache to acquire exclusive access.
- An improvement upon this protocol can be found in the MESI protocol, which
- uses one more state than the MSI protocol.
 \end_layout
 
 \begin_layout Subsubsection
@@ -1121,13 +802,322 @@ Once we add this state into the protocol, certain cases that required an
  In the MSI protocol, there is no way to distinguish between a Dirty Exclusive
  and a Clean Exclusive, meaning there are situations where we will write
  a clean block to memory.
+ Although directory-based cache coherence protocols can use the MSI cache,
+ the MESI cache is the cache that will be used in both of the directory-based
+ cache coherence protocols presented in this report.
+\end_layout
+
+\begin_layout Subsection
+Directory
 \end_layout
 
 \begin_layout Standard
-The MESI cache can be used by either a snoopy-based or a directory-based
- cache coherence protocol.
- This is the cache that will be used in both of the directory-based cache
- coherence protocols presented in this report.
+The directory is responsible for tracking the state of each cache block
+ in order to implement these two operations: 
+\begin_inset Quotes eld
+\end_inset
+
+handling a read miss and handling a write to a shared, clean cache block
+\begin_inset Quotes erd
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "HEN00"
+
+\end_inset
+
+.
+ Therefore, it needs to have a list of nodes that have the cache block.
+ If we did not store these in the state of the directory, we would have
+ to query all the processors to find out what state they are all storing,
+ which would be incredibly inefficient.
+ It might also be necessary for the directory to store the owners and sharers
+ separately in order to find out whether processors own or share a block.
+ However, it is not enough to just store the owner and the sharers of the
+ block, because there are situations where the directory is in the middle
+ of a transaction, and the owner and sharers of the block has not actually
+ received the block, yet.
+ Such additional states can be used to indicate that the directory is busy
+ and cannot fulfil the request at the moment.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="5" columns="2">
+<features>
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Cache State 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Directory Data Structure 
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Modified (Dirty Exclusive)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Owner = {P}, Sharers = {}
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Exclusive (Clean Exclusive)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Owner = {P}, Sharers = {}
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Shared
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Owner = {P}, Sharers = {Any number of P}
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Invalid
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Owner = {}, Sharers = {}
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\align center
+Correspondence between cache state and directory data structure
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:Correspondence-between-cache"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+tablename
+\end_layout
+
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:Correspondence-between-cache"
+
+\end_inset
+
+ lists the possible data that the directory can hold compared to the cache
+ state in any cache that has the block.
+ In both the 
+\begin_inset Quotes eld
+\end_inset
+
+Modified
+\begin_inset Quotes erd
+\end_inset
+
+ state and the 
+\begin_inset Quotes eld
+\end_inset
+
+Exclusive
+\begin_inset Quotes erd
+\end_inset
+
+ state, the directory would store only the node ID of the processor that
+ is the owner.
+ Nevertheless, the directory does not know for certain whether or not the
+ owner is actually clean or dirty until it has sent a request to the cache.
+ It is the job of the protocol to take advantage of having the 
+\begin_inset Quotes eld
+\end_inset
+
+Exclusive
+\begin_inset Quotes erd
+\end_inset
+
+ state by not writing the block to memory if the block is clean.
+ If the directory is in a 
+\begin_inset Quotes eld
+\end_inset
+
+Shared
+\begin_inset Quotes erd
+\end_inset
+
+ state, then it would have a node ID in the owner slot and any number of
+ node IDs in the sharers list.
+ The reason that there would be a node ID in the owner slot is because any
+ transition into the 
+\begin_inset Quotes eld
+\end_inset
+
+Shared
+\begin_inset Quotes erd
+\end_inset
+
+ state must have transitioned from a 
+\begin_inset Quotes eld
+\end_inset
+
+Modified
+\begin_inset Quotes erd
+\end_inset
+
+ or 
+\begin_inset Quotes eld
+\end_inset
+
+Exclusive
+\begin_inset Quotes erd
+\end_inset
+
+ state, which must already have stored a node ID in the owner slot.
+\end_layout
+
+\begin_layout Standard
+Keeping track of the owner could be done by either adding a bit to each
+ directory entry, and turning on the extra bit to indicate ownership.
+ There could also be an extra entry dedicated to holding the owner.
+ The advantage of adding a bit to each directory entry that holds the node
+ ID is that it could potentially save bits if there are many nodes in the
+ system and each node ID list is short.
+ However, using an extra entry strictly for holding the owner is more intuitive,
+ and it can also be faster to access since the processor always know which
+ entry is the owner.
+ We can also have a combined owner-sharers list, where one entry implies
+ 
+\begin_inset Quotes eld
+\end_inset
+
+Exclusive,
+\begin_inset Quotes erd
+\end_inset
+
+ and multiple entries imply that the directory is in the 
+\begin_inset Quotes eld
+\end_inset
+
+Shared
+\begin_inset Quotes erd
+\end_inset
+
+ state.
+ In this last method, the system would have to be able to quickly scan through
+ all the entries it has to determine whether it has no valid entries, one
+ valid entry, or multiple valid entries.
+ Since in either of the protocols that will be tested in this report, the
+ owner entry becomes essentially an additional entry for the sharers list,
+ there is not truly a need for the directory to have different slots for
+ holding the owner versus a list of sharers.
+ Therefore, sometimes in the discussion of protocols in this report, sharers
+ will imply both the sharers list and also the node ID in the owner slot.
 \end_layout
 
 \begin_layout Subsection
@@ -1135,7 +1125,118 @@ Message Types
 \end_layout
 
 \begin_layout Standard
-Here I will introduce the basic message types that will be used in the system.
+In this section, I will introduce the basic message types used in the system.
+ To begin with, every cache coherence system needs a read request message
+ type.
+ In a directory-based cache coherence system, this message would be sent
+ from the cache to the directory.
+ There are two types of read request messages, exclusive and shared.
+ The exclusive read request message is sent when the cache receives a write
+ from the processor, and the shared read request message is if the cache
+ receives a read from the processor.
+ Another message that is similar to the read request message is the intervention
+ message, used only by the Origin protocol but not by BIP.
+ The intervention message is used to indicate that the exclusive owner,
+ whether it owns the block in Clean Exclusive or Dirty Exclusive, should
+ give up its block, either by evicting it, or by sending a copy to the requester.
+ When the intervention message is shared, the exclusive owner transitions
+ to the Shared state, whereas the exclusive owner transitions to the Invalid
+ state if the intervention request was exclusive.
+ BIP accomplishes the transition out of the exclusive state using a regular
+ read message.
+\end_layout
+
+\begin_layout Standard
+After sending the read request message, the sending cache would wait for
+ a response to the read request.
+ The four read response types used amongst the two protocols are read response,
+ read reply, read ack, and speculative reply.
+ A read response indicates a response from another cache, whereas the read
+ reply message indicates a response from the directory.
+ Since the BIP only supports bilateral interactions between a cache and
+ a directory, and never between two caches, there are no read response messages
+ sent in the BIP protocol.
+ It is also possible for a read ack to be sent, in the case where the block
+ does not need to be attached.
+ For all three of the read response message types mentioned above, the message
+ can be additionally qualified with whether or not it is a response to an
+ exclusive or a shared request.
+ The final read response type is the speculative reply, used only by the
+ directory for sending a block reply in the Origin protocol.
+ The speculative reply is used when the directory does not know in advance
+ whether or not the owner of the block is in Clean Exclusive or Dirty Exclusive,
+ and the directory expects the owner to send its block to the requester,
+ as well, if it was in the Dirty Exclusive state.
+\end_layout
+
+\begin_layout Standard
+The third message type is the writeback request message type.
+ There are two types of writeback requests: writeback request and eviction
+ request.
+ Writeback request is sent when the cache needs to evict a dirty block,
+ but it needs to notify the directory and wait for a response before it
+ can evict it without causing any possible errors in coherency.
+ Eviction request is sent when the cache needs to evict a clean block, and
+ it is only used in BIP because the directory in a Origin protocol does
+ not need to know when a clean exclusive block is evicted.
+\end_layout
+
+\begin_layout Standard
+After sending a writeback request or an eviction request, writeback responses
+ need to be sent to the requesters.
+ The three types of writeback responses are writeback exclusive ack, writeback
+ busy ack and eviction ack.
+ Writeback busy acks are only used in the Origin protocol and eviction acks
+ are only used in BIP.
+ Writeback exclusive acks are sent normally by the directory after receiving
+ a writeback request.
+ However, a writeback busy ack would be used if an intervention message
+ arrives after a writeback request was sent.
+ Eviction acks would be sent in response to eviction requests.
+\end_layout
+
+\begin_layout Standard
+Besides the writeback request messages, there are also the writeback and
+ transfer messages, used only in the Origin protocol.
+ These messages are used whenever an intervention message is sent by the
+ directory to the previous owner.
+ The previous owner needs to notify the directory that it has received the
+ intervention, and it will do so by sending either a writeback message or
+ a transfer message.
+ A writeback message has the block attached and indicates that the directory
+ should write the block to memory.
+ A transfer message can be either dirty or shared, depending on whether
+ or not the request was exclusive or shared, but it would have no data in
+ either case.
+\end_layout
+
+\begin_layout Standard
+The next message type is Invalidate.
+ This message is sent whenever an exclusive request arrives when the cache
+ block is in the Shared state.
+ In this case, the directory needs to invalidate all of the shared block
+ by sending invalidates to all of them.
+ The caches that receive the invalidate have to send an invalidate ack after
+ invalidating their cache.
+ Depending on the protocol, the invalidate ack would either go to the directory
+ or the new owner.
+\end_layout
+
+\begin_layout Standard
+The final message type is the nak message type.
+ The nak message is further divided into directory nak message and cache
+ nak message, since it is important for the hub to know whether to send
+ the nak message to the directory or the cache.
+ The nak message is sent whenever the directory or the cache is busy, and
+ it cannot process the request at the time.
+ The component that receives a nak message would retry its request
+\begin_inset CommandInset citation
+LatexCommand cite
+key "HEN00,LAU00"
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Section
@@ -1143,19 +1244,11 @@ Cache Coherence Protocol
 \end_layout
 
 \begin_layout Standard
-A coherence protocol involves maintaining states for the blocks in the caches.
- The most important job of any cache coherence protocols is to maintain
- data coherency.
- In order to maintain data coherency, the protocols all need to make sure
- that whenever a cache writes to its block, it has exclusive access to it.
- Given that constraint, one can perform myriad varieties of modifications
- to the cache coherence protocols to achieve the best performance.
-\end_layout
-
-\begin_layout Standard
-This section will present the specific operations of the two different types
- of directory-based cache coherence protocols.
- First, I will be showing the regular directory-based cache coherence protocol
+In this section, I will be going into protocol details.
+ There are several different types of cache coherence protocols, and each
+ of them provide their own advantages and disadvantages.
+ I will first introduce the snoopy-based cache coherence protocol.
+ Next, I will be showing the regular directory-based cache coherence protocol
  where all requests pass through the home node and each node can only emit
  one response in reply to a request.
  Then, I will be showing a more optimized version of the cache coherence
@@ -1169,7 +1262,7 @@ Snoopy-Based Cache Coherence Protocol
 \end_layout
 
 \begin_layout Standard
-The snoopy-based cache coherence protocols only logically have two different
+In the snoopy-based cache coherence protocols only logically have two different
  nodes, the requesting node and the data node.
  Every message is broadcast to all the nodes.
  There are two major categories of cache coherence protocols available today,
@@ -3528,6 +3621,19 @@ We also see that for both MOESI and MSI caches, as the CPU count increases,
  the run-time decreases, this is to be expected as more work can be done
  in the same amount of time when one has more processors that can be used
  at the same time.
+\end_layout
+
+\begin_layout Standard
+The speedup is caused by increases in cache size.
+ The increase in cache size resulted in a reduction of misses.
+ As we can see, the misses in the system can directly affect the runtime
+ of the system.
+ The higher the number of misses there are, the longer the system takes
+ to finish.
+ The results from averaging the benchmarks show that the Origin protocol
+ is superior in virtually all cases.
+ Unless otherwise specified, the resultant runs from simulations are done
+ with 32 processors, with 
 \end_layout
 
 \begin_layout Subsubsection
