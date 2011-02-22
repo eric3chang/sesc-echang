@@ -105,8 +105,8 @@ namespace Memory
 			ReadRequestState readRequestState;
 
 			bool isCanceledReadRequest;
-			const BaseMsg* currentMessage;
-			const BaseMsg* previousMessage;
+			MessageID currentMessage;
+			MessageID previousMessage;
 			const BaseMsg* firstReply;
 			NodeID firstReplySrc;
 			const EvictionMsg* secondReply;
