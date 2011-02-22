@@ -752,7 +752,7 @@ namespace Memory
 	{
 		//CacheState state = cacheData.GetCacheState();
 		cacheData.previousMessage = cacheData.currentMessage;
-		cacheData.currentMessage = msg;
+		cacheData.currentMessage = msg->MsgID();
 		Address addr = BaseMemDevice::GetAddress(msg);
 
 		switch(cacheData.GetCacheState())
@@ -1325,6 +1325,15 @@ namespace Memory
 			const InvalidateMsg* m = (const InvalidateMsg*)msg;
 			ProcessInvalidateWhileInvalid(m, src);
 		}
+		/*
+		 * this fix doesn't work
+		else if (msg->Type()==mt_InvalidateResponse)
+		{
+			// ignore this message
+			const InvalidateResponseMsg* m = (const InvalidateResponseMsg*)msg;
+			EM().DisposeMsg(m);
+		}
+		*/
 		else
 		{
 			PrintError("OnCacheInvalid",msg,"Unhandled message type");
