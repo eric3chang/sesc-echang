@@ -13,12 +13,12 @@ COMBINED_OUT='runfile-all'
 EXE_EXT='.mips'
 OUT_EXT='.sh'
 OUT_PRE='runfile-'
-HEADER='#!/bin/bash\nHOSTNAME=$(hostname)\n\n'
+HEADER='#!/bin/bash\nDATE=$(date "+%m%d%H%M")\nHOSTNAME=$(hostname)\n\n'
 STRING1='nice -10 ./augSesc-' + BUILD_TYPE + ' -cconfigs/workFile/'
 STRING2='.conf -dconfigs/workFile/'
 STRING3='.conf.report benchmarks-splash2-sesc/'
 STRING4=' &> console-outputs/'
-STRING5='.out.$HOSTNAME'
+STRING5='.out.$HOSTNAME.$DATE'
 
 # parameters for benchmarks
 BARNES_PARAMS_PRE='< benchmarks-splash2-sesc/barnes-inputs/cpu'
@@ -119,13 +119,7 @@ processorCountHi, L1Low, L1Hi, L2Low):
 
 def main():
     benchmarkNames = ['barnes', 'cholesky', 'fft', 'fmm', 'radix', 'raytrace', 'ocean']
-    benchmarkName = 'fmm'
-    #directoryType = 'origin'
-    #directoryType = 'directory'
     directoryTypes = ['origin', 'bip']
-    #directoryType = 'bip'
-    #cacheType = 'mesi'
-    #cacheType = ''
     processorCountLow = '2'
     processorCountHi = '32'
     L1Low = '16'

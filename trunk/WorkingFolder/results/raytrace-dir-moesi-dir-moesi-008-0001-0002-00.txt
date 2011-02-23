@@ -1,3 +1,0 @@
-Group string ReportFileName results/raytrace-dir-moesi-dir-moesi-008-0001-0002-00.txt string BenchName raytrace int ProcessorSkew0 46 int ProcessorSkew1 344 int ProcessorSkew2 166 int ProcessorSkew3 31 int ProcessorSkew4 329 int ProcessorSkew5 457 int ProcessorSkew6 308 int ProcessorSkew7 252 #
-int TotalRunTime 19855 #
-EndGroup #
