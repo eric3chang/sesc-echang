@@ -1,4 +1,5 @@
 #!/bin/bash
+DATE=$(date "+%m%d%H%M")
 HOSTNAME=$(hostname)
 
 ./runfile-barnes-origin-all.sh
