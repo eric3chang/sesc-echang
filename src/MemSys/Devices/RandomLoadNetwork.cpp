@@ -18,11 +18,13 @@ namespace Memory
 	{}
 	void RandomLoadNetwork::ConstantCalculator::OnMsgDelivered(const NetworkMsg* msg, int fromNode, int toNode, TickTime time)
 	{}
+
 	void RandomLoadNetwork::ConstantCalculator::Initialize(const RootConfigNode& config, int nodeCount)
 	{
 		timeTaken = (TimeDelta)Config::GetInt(config, "TimeTaken");
 		perByte = (TimeDelta)Config::GetInt(config, "TimePerByte");
 	}
+
 	TimeDelta RandomLoadNetwork::RandomCalculator::CalcTime(const NetworkMsg* msg, int fromNode, int toNode, TickTime time)
 	{
 		TimeDelta dtBase = initialTime + (rand() % randomRange);
@@ -37,6 +39,7 @@ namespace Memory
 		}
 		return  dtBase + dtPacket;
 	}
+
 	void RandomLoadNetwork::RandomCalculator::OnMsgSend(const NetworkMsg* msg, int fromNode, int toNode, TickTime time)
 	{}
 	void RandomLoadNetwork::RandomCalculator::OnMsgDelivered(const NetworkMsg* msg, int fromNode, int toNode, TickTime time)
@@ -169,11 +172,21 @@ namespace Memory
 			DebugFail("Bad latency calculator type");
 		}
 		delayCalc->Initialize(calcConfig,(int)cNames.size());
+
+		totalMessagesReceived = 0;
+		totalLatency = 0;
 	}
+
 	void RandomLoadNetwork::DumpRunningState(RootConfigNode& node)
 	{}
+
 	void RandomLoadNetwork::DumpStats(std::ostream& out)
-	{}
+	{
+		out << "TotalMessagesReceived:" << totalMessagesReceived << endl;
+		double averageLatency = ((double)totalLatency)/((double)totalMessagesReceived);
+		out << "AverageLatency:" << averageLatency << endl;
+	}
+
 	void RandomLoadNetwork::RecvMsg(const BaseMsg* msg, int connectionID)
 	{
 		DebugAssert(msg);
@@ -188,5 +201,8 @@ namespace Memory
 		CBDeliverMsg::FunctionType* f = cbDeliverMsg.Create();
 		f->Initialize(this,m);
 		EM().ScheduleEvent(f,delay);
+
+		totalMessagesReceived++;
+		totalLatency += delay;
 	}
 }

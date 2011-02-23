@@ -1,12 +1,18 @@
+#define USE_SESC
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-//#include <pthread.h>
-#include "sescapi.h"
+#ifdef USE_SESC
+   #include "sescapi.h"
+#else
+   #include <pthread.h>
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
-//#define NUM_THREADS        5
+#define NUM_THREADS        2
 
 #define SIM_CHECKPOINT 2
 #define SIM_START_RABBIT 0
@@ -22,6 +28,7 @@ extern "C" {
 
 //unsigned char myCharArray [2];
 unsigned char myChar = 'a';
+unsigned char myChar2 = 'A';
 //int counter = 0;
 unsigned char *myCharArray;
 //int counter = -1;
@@ -42,19 +49,56 @@ char myString9[8] = "9999999";
 /* cannot use any for loops in child threads for some reason
  * even trivial for loops cause the program to fail
  */
-void *readChar(int *numberOfLoops)
+void *readChar(int *threadid)
 {
    int i=0;
-	printf("number of loops=%d\n", *numberOfLoops);
-   printf("%s\n", myCharArray);
-//    pthread_exit(NULL);
-	sesc_exit(0);
+	printf("threadid=%d\n", *threadid);
+   for (i=0; i<100; i++)
+   {
+      if (*threadid)
+      {
+         myChar = myChar + 1;
+         // uppercase letters
+         if (myChar<65 || myChar>90)
+         {
+            myChar = 65;
+            printf("\n");
+         }
+         //myChar = myChar % 93;
+         //myChar += 33;
+         printf("%c", myChar);
+      }
+      else
+      {
+         myChar2 = myChar2 + 1;
+         // lowercase letters
+         if (myChar2<97 || myChar2>122)
+         {
+            myChar2 = 97;
+            printf("\n");
+         }
+         //myChar2 = myChar2 % 93;
+         //myChar2 += 33;
+         printf("%c", myChar2);
+      }
+   }
+
+   printf("\n");
+//   printf("%s\n", myCharArray);
+#ifdef USE_SESC
+   sesc_exit(0);
+#else
+    pthread_exit(NULL);
+#endif
 }
 
 int main(int argc, char** argv)
 {
+#ifdef USE_SESC
 	sesc_init();
-//    pthread_t threads[NUM_THREADS];
+#else
+    pthread_t threads[NUM_THREADS];
+#endif
 	int t = 0;
    int processorCount = 0;
    int numberOfLoops = 1;
@@ -81,7 +125,9 @@ int main(int argc, char** argv)
    if (!processorCount || !numberOfLoops)
    {
       printf("Usage: readtest -p[number of processors] -n[number of loops]\n");
+#ifdef USE_SESC
       sesc_exit(1);
+#endif
    }
 
    //TM_SIMOP(SIM_STOP_RABBIT);
@@ -100,20 +146,27 @@ int main(int argc, char** argv)
 
    sesc_sema_init(sema, 1);
 */
-   for(t=0;t<processorCount;t++){
+   for(t=0;t<processorCount;t++)
+   {
        printf("Creating thread %d\n", t);
-//       pthread_create(&threads[t], NULL, print_hello_world, (void *)t);
-	    sesc_spawn((void (*)(void*)) *readChar, &numberOfLoops , 0);
+#ifdef USE_SESC
+	    sesc_spawn((void (*)(void*)) *readChar, &t, 0);
+	    //sesc_spawn((void (*)(void*)) *readChar, &numberOfLoops , 0);
+#else
+       pthread_create(&threads[t], NULL, readChar, 5);
+#endif
 //	    sesc_spawn((void (*)(void*)) *readChar, myIntArray, 0);
 //       *args[0] = t;
 //	    sesc_spawn((void (*)(void*)) *readChar, args, 0);
 //	    sesc_spawn((void (*)(void*)) *readChar, sema, 0);
     }
-   // wait for thread to finish
-   sesc_wait();
-//    pthread_exit(NULL);
-//   free(myCharArray);
+#ifdef USE_SESC
+   sesc_wait(); // wait for thread to finish
 	sesc_exit(0);
+#else
+    pthread_exit(NULL);
+#endif
+//   free(myCharArray);
 }
 
 #ifdef __cplusplus

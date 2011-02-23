@@ -63,6 +63,9 @@ namespace Memory
 		MsgDelayCalculator* delayCalc;
 		HashMap<NodeID, int> nodeToConnection;
 
+		unsigned long long int totalMessagesReceived;
+		unsigned long long int totalLatency;
+
 		void DeliverMsg(const NetworkMsg* m);
 		typedef PooledFunctionGenerator<StoredClassFunction1<RandomLoadNetwork,const NetworkMsg*, &RandomLoadNetwork::DeliverMsg> > CBDeliverMsg;
 		CBDeliverMsg cbDeliverMsg;
