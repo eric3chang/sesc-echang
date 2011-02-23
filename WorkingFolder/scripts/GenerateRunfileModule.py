@@ -9,6 +9,7 @@ OUT_DIR='../'
 # don't need to change these when moving this script
 BUILD_TYPE='Debug'
 
+COMBINED_OUT='runfile-all'
 EXE_EXT='.mips'
 OUT_EXT='.sh'
 OUT_PRE='runfile-'
@@ -77,7 +78,8 @@ def generateOneRunfile(benchmarkName, directoryType, processorCount, L1Size, L2S
         + ' ' + parameters + STRING4 + confFilename + STRING5
     return returnString
 
-def generateMultipleRunfiles(benchmarkName, directoryType, processorCountLow, processorCountHi, L1Low, L1Hi, L2Low):
+def generateMultipleRunfiles(combinedOutfile, benchmarkName, directoryType, processorCountLow,\
+processorCountHi, L1Low, L1Hi, L2Low):
     # check if these variables are numbers before using them
     processorCountLowInt = convertToInt(processorCountLow)
     processorCountHiInt = convertToInt(processorCountHi)
@@ -89,6 +91,7 @@ def generateMultipleRunfiles(benchmarkName, directoryType, processorCountLow, pr
     outFilenameFull = outFilename + OUT_EXT
 
     outPath = OUT_DIR + outFilenameFull
+    combinedOutfile.write('./'+outFilenameFull+'\n')
     outFile = open(outPath, 'wb')
 
     # start inputting data
@@ -129,12 +132,18 @@ def main():
     L1Hi = '128'
     L2Low = '1024'
 
-    #generateMultipleRunfiles(benchmarkName, directoryType, processorCountLow, processorCountHi, L1Low, L1Hi, L2Low)
+    combinedOutfilename = OUT_DIR+COMBINED_OUT+OUT_EXT
+    combinedOutfile = open(combinedOutfilename, 'wb')
+    combinedOutfile.write(HEADER)
+
+    #generateMultipleRunfiles(benchmarkName, directoryType, processorCountLow,\
+        #processorCountHi, L1Low, L1Hi, L2Low)
 
     for name in benchmarkNames:
         for directory in directoryTypes:
-            generateMultipleRunfiles(name, directory, processorCountLow, processorCountHi, L1Low, L1Hi, L2Low)
-
+            generateMultipleRunfiles(combinedOutfile, name, directory, processorCountLow,\
+                processorCountHi, L1Low, L1Hi, L2Low)
+    combinedOutfile.close()
 
 if __name__ == "__main__":
     main()
