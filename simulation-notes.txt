@@ -21,7 +21,7 @@ NOT USED
 radiosity   # doesn't seem to drop out of rabbit mode
 water-nsquared, water-spatial     # seg-faults on ThreadContext.h line 336
 
-order for benchmarks on number of total instructions
+order for benchmarks on number of total instructions (size)
 fft, fmm (256 particles), radix, ocean, cholesky (lshp.O), lu, volrend(head), raytrace(car), barnes (16K particles)
 
 BARNES
