@@ -2,6 +2,6 @@
 HOSTNAME=$(hostname)
 
 ./runfile-raytrace-origin-all.sh
-./runfile-raytrace-directory-all.sh
+./runfile-raytrace-bip-all.sh
 ./runfile-ocean-origin-all.sh
-./runfile-ocean-directory-all.sh
+./runfile-ocean-bip-all.sh
