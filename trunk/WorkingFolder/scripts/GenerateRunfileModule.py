@@ -18,7 +18,7 @@ STRING1='nice -10 ./augSesc-' + BUILD_TYPE + ' -cconfigs/workFile/'
 STRING2='.conf -dconfigs/workFile/'
 STRING3='.conf.report benchmarks-splash2-sesc/'
 STRING4=' &> console-outputs/'
-STRING5='.out.$HOSTNAME.$DATE'
+STRING5='.$DATE.$HOSTNAME'
 
 # parameters for benchmarks
 BARNES_PARAMS_PRE='< benchmarks-splash2-sesc/barnes-inputs/cpu'
