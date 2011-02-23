@@ -21,38 +21,21 @@
  * Calling TM_SIMOP(SIM_START_RABBIT) will start rabbit mode.
  * */
 
-unsigned char myChar = 'a';
-//unsigned char myChar2 = 'A';
+int finalOutput[65535];
+int *finalOutputPtr = finalOutput;
+int myChar = 1;
 
 void *readChar(int *threadid)
 {
    int i=0;
-	printf("threadid=%d\n", *threadid);
-   for (i=0; i<100; i++)
+   int threadidCopy = *threadid;
+   myChar = myChar + 1;
+	printf("threadid=%d\n", threadidCopy);
+   for (i=0; i<10000; i++)
    {
-      if ((*threadid)>>1)
-      {
-         myChar = myChar + 1;
-         // uppercase letters
-         if (myChar<65 || myChar>90)
-         {
-            myChar = 65;
-            printf("\n");
-         }
-         //printf("0%c ", myChar);
-      }
-      else
-      {
-         myChar = myChar + 1;
-         // lowercase letters
-         if (myChar<97 || myChar>122)
-         {
-            myChar = 97;
-            printf("\n");
-         }
-         //printf("1%d ", myChar);
-         printf("1%d ", 7);
-      }
+      //printf("%d", threadidCopy);
+      *finalOutputPtr = threadidCopy;
+      finalOutputPtr++;
    }
 
    printf("\n");
@@ -70,6 +53,7 @@ int main(int argc, char** argv)
 #else
     pthread_t threads[NUM_THREADS];
 #endif
+   int* index = 0;
 	int t = 0;
    int processorCount = 0;
    int numberOfLoops = 0;
@@ -111,9 +95,20 @@ int main(int argc, char** argv)
     }
 #ifdef USE_SESC
    sesc_wait(); // wait for thread to finish
+#endif
+
+   /*
+   for (index=finalOutput; index<finalOutputPtr; index++)
+   {
+      printf("%d", *index);
+   }
+   */
+   printf("\n");
+
+#ifdef USE_SESC
 	sesc_exit(0);
 #else
-    pthread_exit(NULL);
+   pthread_exit(NULL);
 #endif
 }
 
