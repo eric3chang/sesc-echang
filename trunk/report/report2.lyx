@@ -208,10 +208,12 @@ key "LAU00"
 In the following section of the paper, an overview of how each components
  are connected together to form the complete system is presented.
  Section 3 shows the details of each individual component in the system.
- Implementation and comparison of protocols is presented in Section 4.
- Performance of the two types of protocols is presented in Section 5.
- Section 6 describes some of the problems faced in simulating the protocols.
- Finally, section 7 concludes the report.
+ Section 4 talks about the basic message types that will be sent in the
+ system.
+ Implementation and comparison of protocols is presented in Section 5.
+ Performance of the two types of protocols is presented in Section 6.
+ Section 7 describes some of the problems faced in simulating the protocols.
+ Finally, section 8 concludes the report.
 \end_layout
 
 \begin_layout Section
@@ -403,16 +405,12 @@ The most important job of any cache coherence protocols is to maintain data
  that whenever a cache writes to its block, it has exclusive access to it.
  Because of that, any cache coherence protocol involves maintaining states
  for the blocks in the caches.
-\end_layout
-
-\begin_layout Standard
-Each individual cache needs to know the state of its own block, but the
+ Each individual cache needs to know the state of its own block, but the
  caches also need to communicate to each other about block states by sending
  messages to each other.
- In a directory-based cache coherence protocol, the directory is also responsibl
-e for storing some of these states.
- I will introduce the cache and the directory first, followed by the basic
- message types that will be sent in the protocol.
+ In a directory-based cache coherence protocol, the directory is responsible
+ for storing some of these states.
+ I will introduce the cache and the directory in the following sections.
 \end_layout
 
 \begin_layout Subsection
@@ -1120,7 +1118,7 @@ Shared
  will imply both the sharers list and also the node ID in the owner slot.
 \end_layout
 
-\begin_layout Subsection
+\begin_layout Section
 Message Types
 \end_layout
 
@@ -1262,7 +1260,7 @@ Snoopy-Based Cache Coherence Protocol
 \end_layout
 
 \begin_layout Standard
-In the snoopy-based cache coherence protocols only logically have two different
+The snoopy-based cache coherence protocols only logically have two different
  nodes, the requesting node and the data node.
  Every message is broadcast to all the nodes.
  There are two major categories of cache coherence protocols available today,
@@ -3696,7 +3694,7 @@ key "HEN00"
 \begin_layout Section
 
 \family roman
-Further Work
+Problems
 \end_layout
 
 \begin_layout Standard
