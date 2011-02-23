@@ -1264,15 +1264,15 @@ namespace Memory
 			const InterventionMsg* m = (const InterventionMsg*)msg;
 			ProcessInterventionWhileInvalid(m, src);
 		}
+		*/
 		else if (msg->Type()==mt_Invalidate)
 		{
 			const InvalidateMsg* m = (const InvalidateMsg*)msg;
 			ProcessInvalidateWhileInvalid(m, src);
 		}
-		*/
 		else
 		{
-			PrintError("OnCacheShWaitForSpecReply", msg, "Unhandled message type");
+			PrintError("OnCacheExWaitForSpecReply", msg, "Unhandled message type");
 		}
 	}
 
@@ -1444,12 +1444,12 @@ namespace Memory
 			const InterventionMsg* m = (const InterventionMsg*)msg;
 			ProcessInterventionWhileInvalid(m, src);
 		}
+		*/
 		else if (msg->Type()==mt_Invalidate)
 		{
 			const InvalidateMsg* m = (const InvalidateMsg*)msg;
 			ProcessInvalidateWhileInvalid(m, src);
 		}
-		*/
 		else
 		{
 			PrintError("OnCacheShWaitForSpecReply", msg, "Unhandled message type");
@@ -1700,13 +1700,11 @@ namespace Memory
 			const InterventionMsg* m = (const InterventionMsg*)msg;
 			SendInterventionNaks(m);
 		}
-		/*
 		else if (msg->Type()==mt_Invalidate)
 		{
 			const InvalidateMsg* m = (const InvalidateMsg*)msg;
 			ProcessInvalidateWhileInvalid(m, src);
 		}
-		*/
 		else
 		{
 			PrintError("OnCacheWaitForExResAck", msg, "Unhandled message type");
@@ -2075,13 +2073,11 @@ namespace Memory
 			const InterventionMsg* m = (const InterventionMsg*)msg;
 			SendInterventionNaks(m);
 		}
-		/*
 		else if (msg->Type()==mt_Invalidate)
 		{
 			const InvalidateMsg* m = (const InvalidateMsg*)msg;
 			ProcessInvalidateWhileInvalid(m, src);
 		}
-		*/
 		else
 		{
 			PrintError("OnCacheWaitForShResAck", msg, "Unhandled message type");
