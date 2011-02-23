@@ -3,7 +3,7 @@
 - For all the cache structures, we have hitDelay and missDelay. hitDelay is the time that it takes to return the data (data + tag access). missDelay is the time that it takes to detect a cache miss (tag). Most L1 caches, the hitDelay is the same as the misDelay. This is not true for L2 caches, and for other cache configuration (phased cache).
 - use lion or osprey to run simulations. lion is a 8-core system with 12GB of memory
 - src/libapp contains files related to compiling custom multi-threaded programs
-- - use readtest for synthetic benchmark
+- - use smalltest for SYNTHETIC BENCHMARK
 - nothing useful in libvmem
 - print *(iter._M_current)   // command to print the current iterator in gdb
 - use the following splash2 benchmarks:
