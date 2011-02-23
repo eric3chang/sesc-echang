@@ -122,7 +122,7 @@ def main():
     benchmarkName = 'fmm'
     #directoryType = 'origin'
     #directoryType = 'directory'
-    directoryTypes = ['origin', 'directory']
+    directoryTypes = ['origin', 'bip']
     #directoryType = 'bip'
     #cacheType = 'mesi'
     #cacheType = ''
