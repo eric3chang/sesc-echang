@@ -998,7 +998,10 @@ void OSSim::simFinish()
         }
      }
      out << " #" << std::endl;
-     out << "int TotalRunTime " << globalClock << " #" << std::endl;
+     //out << "int TotalRunTime " << globalClock << " #" << std::endl;
+     out << endl;
+     out << "TotalRunTime:" << globalClock << std::endl;
+     out << endl;
      std::cout << "Dumping stats" << std::endl;
 
      using Memory::BaseMemDevice;
@@ -1139,6 +1142,8 @@ void OSSim::simFinish()
 		out << "totalCacheReadMisses:" << totalCacheReadMisses << std::endl;
 		out << "totalCacheWriteHits:" << totalCacheWriteHits << std::endl;
 		out << "totalCacheWriteMisses:" << totalCacheWriteMisses << std::endl;
+
+		out << endl;
 
      //TMInterface::DumpStats(out);
      out << "EndGroup #" << std::endl;
