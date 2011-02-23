@@ -3,7 +3,7 @@ import os
 import sys
 
 # need to change this when moving this script
-#OUTPUT_DIRECTORY='./'
+#OUTPUT_DIRECTORY='./configs/'
 OUTPUT_DIRECTORY='../configs/workFile/'
 
 # don't need to change these when moving this script
@@ -57,17 +57,43 @@ def generateConfig(benchmarkName, directoryType, processorCount, L1Size, L2Size)
 
     outFile.close()
 
+def generateMultipleConfigs(benchmarkName, directoryType, processorCountLow, processorCountHi, L1Low, L1Hi):
+    # check if these variables are numbers before using them
+    processorCountLowInt = convertToInt(processorCountLow)
+    processorCountHiInt = convertToInt(processorCountHi)
+    L1LowInt = convertToInt(L1Low)
+    L1HiInt = convertToInt(L1Hi)
+
+    processorIndex = processorCountLowInt
+    while (processorIndex <= processorCountHiInt):
+        L1Index = L1LowInt
+        while (L1Index <= L1HiInt):
+            L2Index = L1Index * 2
+            while (L2Index <= L1HiInt*8):
+                generateConfig(benchmarkName, directoryType, \
+                    str(processorIndex), str(L1Index), str(L2Index))
+                #print(str(processorIndex) + ' ' + str(L1Index) + ' ' + str(L2Index))
+                L2Index *= 2
+            L1Index *= 2
+        processorIndex *=2
+
+def generateAllBenchmarks(benchmarkNames, directoryType, processorCountLow, processorCountHi, L1Low, L1Hi):
+    for benchmark in benchmarkNames:
+        generateMultipleConfigs(benchmark, directoryType, processorCountLow, processorCountHi, L1Low, L1Hi)
+
 def main():
-    if (len(sys.argv) != 6):
-        printError()
+    benchmarkNames = ['barnes', 'cholesky', 'fft', 'fmm', 'radix', 'raytrace', 'ocean']
+    directoryType = 'origin'
+    #directoryType = 'directory'
+    #directoryType = 'bip'
+    #cacheType = 'mesi'
+    #cacheType = ''
+    processorCountLow = '2'
+    processorCountHi = '32'
+    L1Low = '8'
+    L1Hi = '1024'
 
-    benchmarkName = sys.argv[1]
-    directoryType = sys.argv[2]
-    processorCount = sys.argv[3]
-    L1Size = sys.argv[4]
-    L2Size = sys.argv[5]
-
-    generateConfig(benchmarkName, directoryType, processorCount, L1Size, L2Size)
+    generateAllBenchmarks(benchmarkNames, directoryType, processorCountLow, processorCountHi, L1Low, L1Hi)
 
 if __name__ == "__main__":
     main()
