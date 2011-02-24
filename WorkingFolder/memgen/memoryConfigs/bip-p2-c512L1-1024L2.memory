@@ -53,7 +53,7 @@ Root MemoryDevice Begin
 Int DeviceID 5
 String DeviceType BIPDirectory
 String DeviceName BIPDirectory_0
-Int LocalSendTime 4
+Int LocalSendTime 60
 Int RemoteSendTime 4
 Int LookupRetryTime 4
 Int LookupTime 4
@@ -140,7 +140,7 @@ Root MemoryDevice Begin
 Int DeviceID 10
 String DeviceType BIPDirectory
 String DeviceName BIPDirectory_1
-Int LocalSendTime 4
+Int LocalSendTime 60
 Int RemoteSendTime 4
 Int LookupRetryTime 4
 Int LookupTime 4
