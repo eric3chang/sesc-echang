@@ -109,7 +109,7 @@ namespace Memory
       void dump(HashMap<Memory::MessageID, const Memory::BaseMsg*> &m);
 
 		void PerformDirectoryFetch(Address a);
-		void EraseDirectoryShare(Address a, NodeID id);
+		bool EraseDirectoryShare(Address a, NodeID id);
 		void AddDirectoryShare(Address a, NodeID id, bool exclusive);
 
 		// local cache methods

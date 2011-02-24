@@ -105,9 +105,10 @@ namespace Memory
 	 * erase Node id as a share for Address a. If a is owned by id, check that there
 	 * are no other shares
 	 */
-	void BIPDirectory::EraseDirectoryShare(Address a, NodeID id)
+	bool BIPDirectory::EraseDirectoryShare(Address a, NodeID id)
 	{
 		DebugAssert(directoryData.find(a) != directoryData.end());
+		bool isInDirectory = false;
 		BlockData& b = directoryData[a];
 		if(b.owner == id)
 		{
@@ -115,6 +116,7 @@ namespace Memory
          PrintEraseOwner("EraseDirectoryShare",a, id,"b.owner=InvalidNodeID");
 #endif
 			b.owner = InvalidNodeID;
+			isInDirectory = true;
 			DebugAssert(b.sharers.find(id) == b.sharers.end());
 		}
 		else if(b.sharers.find(id) != b.sharers.end())
@@ -123,7 +125,10 @@ namespace Memory
 		   PrintDebugInfo("EraseDirectoryShare",a, id,"b.sharers.erase");
 #endif
 			b.sharers.erase(id);
+			isInDirectory = true;
 		}
+
+		return isInDirectory;
 	}
 
 	void BIPDirectory::AddDirectoryShare(Address a, NodeID id, bool exclusive)
@@ -485,9 +490,14 @@ namespace Memory
 		}// if(m->satisfied)
 		else  // !m->satisfied
 		{
-			EraseDirectoryShare(m->addr,src);
-			DebugAssertWithMessageID(directoryData[m->addr].owner == InvalidNodeID,m->MsgID());
-			PerformDirectoryFetch(m->addr);
+			bool isInDirectory = EraseDirectoryShare(m->addr,src);
+			// 2011/02/23 Commented out the following line
+			if (directoryData[m->addr].owner==InvalidNodeID)
+			//if (isInDirectory)
+			{
+				//DebugAssertWithMessageID(directoryData[m->addr].owner == InvalidNodeID,m->MsgID());
+				PerformDirectoryFetch(m->addr);
+			}
 			EM().DisposeMsg(m);
 		}
 #ifdef MEMORY_BIP_DIRECTORY_DEBUG_DIRECTORY_DATA
