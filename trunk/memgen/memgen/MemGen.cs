@@ -171,7 +171,7 @@
         output.WriteLine("Int DeviceID " + (index++));
         output.WriteLine("String DeviceType OriginDirectory");
         output.WriteLine("String DeviceName " + name);
-        output.WriteLine("Int LocalSendTime " + 4);
+        output.WriteLine("Int LocalSendTime " + 60);
         output.WriteLine("Int RemoteSendTime " + 4);
         output.WriteLine("Int LookupRetryTime " + 4);
         output.WriteLine("Int LookupTime " + 4);
@@ -196,7 +196,7 @@
         output.WriteLine("Int DeviceID " + (index++));
         output.WriteLine("String DeviceType BIPDirectory");
         output.WriteLine("String DeviceName " + name);
-        output.WriteLine("Int LocalSendTime " + 4);
+        output.WriteLine("Int LocalSendTime " + 60);
         output.WriteLine("Int RemoteSendTime " + 4);
         output.WriteLine("Int LookupRetryTime " + 4);
         output.WriteLine("Int LookupTime " + 4);
@@ -489,8 +489,8 @@
 				for (int l2 = l1 * 2; l2 <= 8 * 1024; l2 *= 2)
                 //for (int l2 = l1 * 2; l2 <= 2; l2 *= 2)
 				{
-                    //OutBIPDirectoryMemory(nodeCount, l1, l2);
-                    //OutDirectoryMemory(nodeCount, l1, l2);
+                    OutBIPDirectoryMemory(nodeCount, l1, l2);
+                    OutDirectoryMemory(nodeCount, l1, l2);
 					OutOriginDirectoryMOESIMemory(nodeCount, l1, l2);
 					//OutSimpleMemory2(i, l1, l2);
 					for (int l3 = l2 * 2; l3 <= 64 * 1024; l3 *= 2)

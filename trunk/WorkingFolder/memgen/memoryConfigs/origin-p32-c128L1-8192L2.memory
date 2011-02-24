@@ -173,7 +173,7 @@ Root MemoryDevice Begin
 Int DeviceID 5
 String DeviceType OriginDirectory
 String DeviceName OriginDirectory_0
-Int LocalSendTime 4
+Int LocalSendTime 60
 Int RemoteSendTime 4
 Int LookupRetryTime 4
 Int LookupTime 4
@@ -260,7 +260,7 @@ Root MemoryDevice Begin
 Int DeviceID 10
 String DeviceType OriginDirectory
 String DeviceName OriginDirectory_1
-Int LocalSendTime 4
+Int LocalSendTime 60
 Int RemoteSendTime 4
 Int LookupRetryTime 4
 Int LookupTime 4
@@ -347,7 +347,7 @@ Root MemoryDevice Begin
 Int DeviceID 15
 String DeviceType OriginDirectory
 String DeviceName OriginDirectory_2
-Int LocalSendTime 4
+Int LocalSendTime 60
 Int RemoteSendTime 4
 Int LookupRetryTime 4
 Int LookupTime 4
@@ -434,7 +434,7 @@ Root MemoryDevice Begin
 Int DeviceID 20
 String DeviceType OriginDirectory
 String DeviceName OriginDirectory_3
-Int LocalSendTime 4
+Int LocalSendTime 60
 Int RemoteSendTime 4
 Int LookupRetryTime 4
 Int LookupTime 4
@@ -521,7 +521,7 @@ Root MemoryDevice Begin
 Int DeviceID 25
 String DeviceType OriginDirectory
 String DeviceName OriginDirectory_4
-Int LocalSendTime 4
+Int LocalSendTime 60
 Int RemoteSendTime 4
 Int LookupRetryTime 4
 Int LookupTime 4
@@ -608,7 +608,7 @@ Root MemoryDevice Begin
 Int DeviceID 30
 String DeviceType OriginDirectory
 String DeviceName OriginDirectory_5
-Int LocalSendTime 4
+Int LocalSendTime 60
 Int RemoteSendTime 4
 Int LookupRetryTime 4
 Int LookupTime 4
@@ -695,7 +695,7 @@ Root MemoryDevice Begin
 Int DeviceID 35
 String DeviceType OriginDirectory
 String DeviceName OriginDirectory_6
-Int LocalSendTime 4
+Int LocalSendTime 60
 Int RemoteSendTime 4
 Int LookupRetryTime 4
 Int LookupTime 4
@@ -782,7 +782,7 @@ Root MemoryDevice Begin
 Int DeviceID 40
 String DeviceType OriginDirectory
 String DeviceName OriginDirectory_7
-Int LocalSendTime 4
+Int LocalSendTime 60
 Int RemoteSendTime 4
 Int LookupRetryTime 4
 Int LookupTime 4
@@ -869,7 +869,7 @@ Root MemoryDevice Begin
 Int DeviceID 45
 String DeviceType OriginDirectory
 String DeviceName OriginDirectory_8
-Int LocalSendTime 4
+Int LocalSendTime 60
 Int RemoteSendTime 4
 Int LookupRetryTime 4
 Int LookupTime 4
@@ -956,7 +956,7 @@ Root MemoryDevice Begin
 Int DeviceID 50
 String DeviceType OriginDirectory
 String DeviceName OriginDirectory_9
-Int LocalSendTime 4
+Int LocalSendTime 60
 Int RemoteSendTime 4
 Int LookupRetryTime 4
 Int LookupTime 4
@@ -1043,7 +1043,7 @@ Root MemoryDevice Begin
 Int DeviceID 55
 String DeviceType OriginDirectory
 String DeviceName OriginDirectory_10
-Int LocalSendTime 4
+Int LocalSendTime 60
 Int RemoteSendTime 4
 Int LookupRetryTime 4
 Int LookupTime 4
@@ -1130,7 +1130,7 @@ Root MemoryDevice Begin
 Int DeviceID 60
 String DeviceType OriginDirectory
 String DeviceName OriginDirectory_11
-Int LocalSendTime 4
+Int LocalSendTime 60
 Int RemoteSendTime 4
 Int LookupRetryTime 4
 Int LookupTime 4
@@ -1217,7 +1217,7 @@ Root MemoryDevice Begin
 Int DeviceID 65
 String DeviceType OriginDirectory
 String DeviceName OriginDirectory_12
-Int LocalSendTime 4
+Int LocalSendTime 60
 Int RemoteSendTime 4
 Int LookupRetryTime 4
 Int LookupTime 4
@@ -1304,7 +1304,7 @@ Root MemoryDevice Begin
 Int DeviceID 70
 String DeviceType OriginDirectory
 String DeviceName OriginDirectory_13
-Int LocalSendTime 4
+Int LocalSendTime 60
 Int RemoteSendTime 4
 Int LookupRetryTime 4
 Int LookupTime 4
@@ -1391,7 +1391,7 @@ Root MemoryDevice Begin
 Int DeviceID 75
 String DeviceType OriginDirectory
 String DeviceName OriginDirectory_14
-Int LocalSendTime 4
+Int LocalSendTime 60
 Int RemoteSendTime 4
 Int LookupRetryTime 4
 Int LookupTime 4
@@ -1478,7 +1478,7 @@ Root MemoryDevice Begin
 Int DeviceID 80
 String DeviceType OriginDirectory
 String DeviceName OriginDirectory_15
-Int LocalSendTime 4
+Int LocalSendTime 60
 Int RemoteSendTime 4
 Int LookupRetryTime 4
 Int LookupTime 4
@@ -1565,7 +1565,7 @@ Root MemoryDevice Begin
 Int DeviceID 85
 String DeviceType OriginDirectory
 String DeviceName OriginDirectory_16
-Int LocalSendTime 4
+Int LocalSendTime 60
 Int RemoteSendTime 4
 Int LookupRetryTime 4
 Int LookupTime 4
@@ -1652,7 +1652,7 @@ Root MemoryDevice Begin
 Int DeviceID 90
 String DeviceType OriginDirectory
 String DeviceName OriginDirectory_17
-Int LocalSendTime 4
+Int LocalSendTime 60
 Int RemoteSendTime 4
 Int LookupRetryTime 4
 Int LookupTime 4
@@ -1739,7 +1739,7 @@ Root MemoryDevice Begin
 Int DeviceID 95
 String DeviceType OriginDirectory
 String DeviceName OriginDirectory_18
-Int LocalSendTime 4
+Int LocalSendTime 60
 Int RemoteSendTime 4
 Int LookupRetryTime 4
 Int LookupTime 4
@@ -1826,7 +1826,7 @@ Root MemoryDevice Begin
 Int DeviceID 100
 String DeviceType OriginDirectory
 String DeviceName OriginDirectory_19
-Int LocalSendTime 4
+Int LocalSendTime 60
 Int RemoteSendTime 4
 Int LookupRetryTime 4
 Int LookupTime 4
@@ -1913,7 +1913,7 @@ Root MemoryDevice Begin
 Int DeviceID 105
 String DeviceType OriginDirectory
 String DeviceName OriginDirectory_20
-Int LocalSendTime 4
+Int LocalSendTime 60
 Int RemoteSendTime 4
 Int LookupRetryTime 4
 Int LookupTime 4
@@ -2000,7 +2000,7 @@ Root MemoryDevice Begin
 Int DeviceID 110
 String DeviceType OriginDirectory
 String DeviceName OriginDirectory_21
-Int LocalSendTime 4
+Int LocalSendTime 60
 Int RemoteSendTime 4
 Int LookupRetryTime 4
 Int LookupTime 4
@@ -2087,7 +2087,7 @@ Root MemoryDevice Begin
 Int DeviceID 115
 String DeviceType OriginDirectory
 String DeviceName OriginDirectory_22
-Int LocalSendTime 4
+Int LocalSendTime 60
 Int RemoteSendTime 4
 Int LookupRetryTime 4
 Int LookupTime 4
@@ -2174,7 +2174,7 @@ Root MemoryDevice Begin
 Int DeviceID 120
 String DeviceType OriginDirectory
 String DeviceName OriginDirectory_23
-Int LocalSendTime 4
+Int LocalSendTime 60
 Int RemoteSendTime 4
 Int LookupRetryTime 4
 Int LookupTime 4
@@ -2261,7 +2261,7 @@ Root MemoryDevice Begin
 Int DeviceID 125
 String DeviceType OriginDirectory
 String DeviceName OriginDirectory_24
-Int LocalSendTime 4
+Int LocalSendTime 60
 Int RemoteSendTime 4
 Int LookupRetryTime 4
 Int LookupTime 4
@@ -2348,7 +2348,7 @@ Root MemoryDevice Begin
 Int DeviceID 130
 String DeviceType OriginDirectory
 String DeviceName OriginDirectory_25
-Int LocalSendTime 4
+Int LocalSendTime 60
 Int RemoteSendTime 4
 Int LookupRetryTime 4
 Int LookupTime 4
@@ -2435,7 +2435,7 @@ Root MemoryDevice Begin
 Int DeviceID 135
 String DeviceType OriginDirectory
 String DeviceName OriginDirectory_26
-Int LocalSendTime 4
+Int LocalSendTime 60
 Int RemoteSendTime 4
 Int LookupRetryTime 4
 Int LookupTime 4
@@ -2522,7 +2522,7 @@ Root MemoryDevice Begin
 Int DeviceID 140
 String DeviceType OriginDirectory
 String DeviceName OriginDirectory_27
-Int LocalSendTime 4
+Int LocalSendTime 60
 Int RemoteSendTime 4
 Int LookupRetryTime 4
 Int LookupTime 4
@@ -2609,7 +2609,7 @@ Root MemoryDevice Begin
 Int DeviceID 145
 String DeviceType OriginDirectory
 String DeviceName OriginDirectory_28
-Int LocalSendTime 4
+Int LocalSendTime 60
 Int RemoteSendTime 4
 Int LookupRetryTime 4
 Int LookupTime 4
@@ -2696,7 +2696,7 @@ Root MemoryDevice Begin
 Int DeviceID 150
 String DeviceType OriginDirectory
 String DeviceName OriginDirectory_29
-Int LocalSendTime 4
+Int LocalSendTime 60
 Int RemoteSendTime 4
 Int LookupRetryTime 4
 Int LookupTime 4
@@ -2783,7 +2783,7 @@ Root MemoryDevice Begin
 Int DeviceID 155
 String DeviceType OriginDirectory
 String DeviceName OriginDirectory_30
-Int LocalSendTime 4
+Int LocalSendTime 60
 Int RemoteSendTime 4
 Int LookupRetryTime 4
 Int LookupTime 4
@@ -2870,7 +2870,7 @@ Root MemoryDevice Begin
 Int DeviceID 160
 String DeviceType OriginDirectory
 String DeviceName OriginDirectory_31
-Int LocalSendTime 4
+Int LocalSendTime 60
 Int RemoteSendTime 4
 Int LookupRetryTime 4
 Int LookupTime 4
