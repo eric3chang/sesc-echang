@@ -527,7 +527,7 @@ namespace Memory
 	 */
 	void OriginDirectory::DumpStats(std::ostream& out)
 	{
-	   out << "messagesReceived:" << messagesReceived << std::endl;
+	   out << "TotalMessagesReceived:" << messagesReceived << std::endl;
 		out << "cacheNaksReceived:" << cacheNaksReceived << std::endl;
 		out << "cacheEvictionsReceived:" << cacheEvictionsReceived << std::endl;
 		out << "cacheInterventionsReceived:" << cacheInterventionsReceived << std::endl;

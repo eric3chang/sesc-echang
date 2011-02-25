@@ -74,13 +74,21 @@ namespace Memory
       BlockState *myBlockState = &(cacheContents[i * associativity]);
       return myBlockState;
 	}
-	unsigned int MOESICache::getReadHits()
+	unsigned int MOESICache::getExclusiveReadHits()
 	{
-		return readHits;
+		return exclusiveReadHits;
 	}
-	unsigned int MOESICache::getReadMisses()
+	unsigned int MOESICache::getExclusiveReadMisses()
 	{
-		return readMisses;
+		return exclusiveReadMisses;
+	}
+	unsigned int MOESICache::getSharedReadHits()
+	{
+		return sharedReadHits;
+	}
+	unsigned int MOESICache::getSharedReadMisses()
+	{
+		return sharedReadMisses;
 	}
 	unsigned int MOESICache::getWriteHits()
 	{
@@ -356,7 +364,14 @@ namespace Memory
 			if(!b->locked)
 			{
 				LockBlock(tag);
-				readMisses++;
+            if (m->requestingExclusive)
+            {
+               exclusiveReadMisses++;
+            }
+            else
+            {
+               sharedReadMisses++;
+            }
 				ReadMsg* forward = EM().CreateReadMsg(GetDeviceID(),m->GeneratingPC());
 				forward->addr = CalcAddr(tag);
 				forward->size = lineSize;
@@ -371,7 +386,14 @@ namespace Memory
 		}
 		else
 		{  //hit
-		   readHits++;
+         if (m->requestingExclusive)
+         {
+            exclusiveReadHits++;
+         }
+         else
+         {
+            sharedReadHits++;
+         }
 			ReadResponseMsg* res = EM().CreateReadResponseMsg(GetDeviceID(),m->GeneratingPC());
 			m->SignalComplete();
 			res->addr = m->addr;
@@ -919,14 +941,22 @@ namespace Memory
 			DebugFail("Bad eviction policy specified");
 		}
 
-      messagesReceived = readHits = readMisses = writeHits = writeMisses = 0;
+      messagesReceived = 0;
+      exclusiveReadHits = 0;
+      exclusiveReadMisses = 0;
+      sharedReadHits = 0;
+      sharedReadMisses = 0;
+      writeHits = 0;
+      writeMisses = 0;
 	}
 	void MOESICache::DumpRunningState(RootConfigNode& node){}
 	void MOESICache::DumpStats(std::ostream& out)
 	{
 	   out << "messagesReceived:" << messagesReceived << std::endl;
-	   out << "readHits:" << readHits << std::endl;
-	   out << "readMisses:" << readMisses << std::endl;
+	   out << "exclusiveReadHits:" << exclusiveReadHits << std::endl;
+	   out << "sharedReadHits:" << sharedReadHits << std::endl;
+	   out << "exclusiveReadMisses:" << exclusiveReadMisses << std::endl;
+	   out << "sharedReadMisses:" << sharedReadMisses << std::endl;
 	   out << "writeHits:" << writeHits << std::endl;
 	   out << "writeMisses:" << writeMisses << std::endl;
 	}

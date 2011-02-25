@@ -69,8 +69,10 @@ namespace Memory
 			virtual int Evict(BlockState* set, int setSize);
 		};
 		unsigned int messagesReceived;
-		unsigned int readHits;
-		unsigned int readMisses;
+		unsigned int exclusiveReadHits;
+		unsigned int sharedReadHits;
+		unsigned int exclusiveReadMisses;
+		unsigned int sharedReadMisses;
 		unsigned int writeHits;
 		unsigned int writeMisses;
 
@@ -167,8 +169,10 @@ namespace Memory
       void printDebugInfo(const char* fromMethod,const AddrTag tag,const char* operation);
 	public:
 		virtual ~MESICache();
-		virtual unsigned int getReadHits();
-		virtual unsigned int getReadMisses();
+		virtual unsigned int getExclusiveReadHits();
+		virtual unsigned int getSharedReadHits();
+		virtual unsigned int getExclusiveReadMisses();
+		virtual unsigned int getSharedReadMisses();
 		virtual unsigned int getWriteHits();
 		virtual unsigned int getWriteMisses();
 		virtual void Initialize(EventManager* em, const RootConfigNode& config, const std::vector<Connection*>& connectionSet);
