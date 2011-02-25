@@ -1034,26 +1034,34 @@ void OSSim::simFinish()
      using Memory::BaseMemDevice;
      std::vector<BaseMemDevice*>deviceSet = MemSys_system.getDeviceSet();
 
-		long long unsigned int totalCacheReadHits = 0;
-		long long unsigned int totalCacheReadMisses = 0;
+		long long unsigned int totalCacheExclusiveReadHits = 0;
+		long long unsigned int totalCacheSharedReadHits = 0;
+		long long unsigned int totalCacheExclusiveReadMisses = 0;
+		long long unsigned int totalCacheSharedReadMisses = 0;
 		long long unsigned int totalCacheWriteHits = 0;
 		long long unsigned int totalCacheWriteMisses = 0;
 
-		long long unsigned int totalL1CacheReadHits = 0;
-		long long unsigned int totalL1CacheReadMisses = 0;
+		long long unsigned int totalL1CacheExclusiveReadHits = 0;
+		long long unsigned int totalL1CacheSharedReadHits = 0;
+		long long unsigned int totalL1CacheExclusiveReadMisses = 0;
+		long long unsigned int totalL1CacheSharedReadMisses = 0;
 		long long unsigned int totalL1CacheWriteHits = 0;
 		long long unsigned int totalL1CacheWriteMisses = 0;
 
-		long long unsigned int totalL2CacheReadHits = 0;
-		long long unsigned int totalL2CacheReadMisses = 0;
+		long long unsigned int totalL2CacheExclusiveReadHits = 0;
+		long long unsigned int totalL2CacheSharedReadHits = 0;
+		long long unsigned int totalL2CacheExclusiveReadMisses = 0;
+		long long unsigned int totalL2CacheSharedReadMisses = 0;
 		long long unsigned int totalL2CacheWriteHits = 0;
 		long long unsigned int totalL2CacheWriteMisses = 0;
 
 		for (std::vector<BaseMemDevice*>::iterator i=deviceSet.begin(); i!=deviceSet.end(); i++)
 		{
 			BaseMemDevice* ptr = *i;
-			unsigned int cacheReadHits = 0;
-			unsigned int cacheReadMisses = 0;
+			unsigned int cacheExclusiveReadHits = 0;
+			unsigned int cacheExclusiveReadMisses = 0;
+			unsigned int cacheSharedReadHits = 0;
+			unsigned int cacheSharedReadMisses = 0;
 			unsigned int cacheWriteHits = 0;
 			unsigned int cacheWriteMisses = 0;
 			bool isL1Cache = false;
@@ -1080,8 +1088,10 @@ void OSSim::simFinish()
 					isL2Cache = true;
 				}
 
-				cacheReadHits = tempCache->getReadHits();
-				cacheReadMisses = tempCache->getReadMisses();
+				cacheExclusiveReadHits = tempCache->getExclusiveReadHits();
+				cacheSharedReadHits = tempCache->getSharedReadHits();
+				cacheExclusiveReadMisses = tempCache->getExclusiveReadMisses();
+				cacheSharedReadMisses = tempCache->getSharedReadMisses();
 				cacheWriteHits = tempCache->getWriteHits();
 				cacheWriteMisses = tempCache->getWriteMisses();
 			}
@@ -1101,8 +1111,10 @@ void OSSim::simFinish()
 					isL2Cache = true;
 				}
 
-				cacheReadHits = tempCache->getReadHits();
-				cacheReadMisses = tempCache->getReadMisses();
+				cacheExclusiveReadHits = tempCache->getExclusiveReadHits();
+				cacheSharedReadHits = tempCache->getSharedReadHits();
+				cacheExclusiveReadMisses = tempCache->getExclusiveReadMisses();
+				cacheSharedReadMisses = tempCache->getSharedReadMisses();
 				cacheWriteHits = tempCache->getWriteHits();
 				cacheWriteMisses = tempCache->getWriteMisses();
 			}
@@ -1122,8 +1134,10 @@ void OSSim::simFinish()
 					isL2Cache = true;
 				}
 
-				cacheReadHits = tempCache->getReadHits();
-				cacheReadMisses = tempCache->getReadMisses();
+				cacheExclusiveReadHits = tempCache->getExclusiveReadHits();
+				cacheExclusiveReadMisses = tempCache->getExclusiveReadMisses();
+				cacheSharedReadHits = tempCache->getSharedReadHits();
+				cacheSharedReadMisses = tempCache->getSharedReadMisses();
 				cacheWriteHits = tempCache->getWriteHits();
 				cacheWriteMisses = tempCache->getWriteMisses();
 			}
@@ -1136,37 +1150,49 @@ void OSSim::simFinish()
 			{
 				if (isL1Cache)
 				{
-					totalL1CacheReadHits += cacheReadHits;
-					totalL1CacheReadMisses += cacheReadMisses;
+					totalL1CacheExclusiveReadHits += cacheExclusiveReadHits;
+					totalL1CacheSharedReadHits += cacheSharedReadHits;
+					totalL1CacheExclusiveReadMisses += cacheExclusiveReadMisses;
+					totalL1CacheSharedReadMisses += cacheSharedReadMisses;
 					totalL1CacheWriteHits += cacheWriteHits;
 					totalL1CacheWriteMisses += cacheWriteMisses;
 				}
 				if (isL2Cache)
 				{
-					totalL2CacheReadHits += cacheReadHits;
-					totalL2CacheReadMisses += cacheReadMisses;
+					totalL2CacheExclusiveReadHits += cacheExclusiveReadHits;
+					totalL2CacheSharedReadHits += cacheSharedReadHits;
+					totalL2CacheExclusiveReadMisses += cacheExclusiveReadMisses;
+					totalL2CacheSharedReadMisses += cacheSharedReadMisses;
 					totalL2CacheWriteHits += cacheWriteHits;
 					totalL2CacheWriteMisses += cacheWriteMisses;
 				}
-				totalCacheReadHits += cacheReadHits;
-				totalCacheReadMisses += cacheReadMisses;
+				totalCacheExclusiveReadHits += cacheExclusiveReadHits;
+				totalCacheSharedReadHits += cacheSharedReadHits;
+				totalCacheExclusiveReadMisses += cacheExclusiveReadMisses;
+				totalCacheSharedReadMisses += cacheSharedReadMisses;
 				totalCacheWriteHits += cacheWriteHits;
 				totalCacheWriteMisses += cacheWriteMisses;
 			}
 		} // end memdevice for loops
 
-		out << "totalL1CacheReadHits:" << totalL1CacheReadHits << std::endl;
-		out << "totalL1CacheReadMisses:" << totalL1CacheReadMisses << std::endl;
+		out << "totalL1CacheExclusiveReadHits:" << totalL1CacheExclusiveReadHits << std::endl;
+		out << "totalL1CacheExclusiveReadMisses:" << totalL1CacheExclusiveReadMisses << std::endl;
+		out << "totalL1CacheSharedReadHits:" << totalL1CacheSharedReadHits << std::endl;
+		out << "totalL1CacheSharedReadMisses:" << totalL1CacheSharedReadMisses << std::endl;
 		out << "totalL1CacheWriteHits:" << totalL1CacheWriteHits << std::endl;
 		out << "totalL1CacheWriteMisses:" << totalL1CacheWriteMisses << std::endl;
 		out << std::endl;
-		out << "totalL2CacheReadHits:" << totalL2CacheReadHits << std::endl;
-		out << "totalL2CacheReadMisses:" << totalL2CacheReadMisses << std::endl;
+		out << "totalL2CacheExclusiveReadHits:" << totalL2CacheExclusiveReadHits << std::endl;
+		out << "totalL2CacheExclusiveReadMisses:" << totalL2CacheExclusiveReadMisses << std::endl;
+		out << "totalL2CacheSharedReadHits:" << totalL2CacheSharedReadHits << std::endl;
+		out << "totalL2CacheSharedReadMisses:" << totalL2CacheSharedReadMisses << std::endl;
 		out << "totalL2CacheWriteHits:" << totalL2CacheWriteHits << std::endl;
 		out << "totalL2CacheWriteMisses:" << totalL2CacheWriteMisses << std::endl;
 		out << std::endl;
-		out << "totalCacheReadHits:" << totalCacheReadHits << std::endl;
-		out << "totalCacheReadMisses:" << totalCacheReadMisses << std::endl;
+		out << "totalCacheExclusiveReadHits:" << totalCacheExclusiveReadHits << std::endl;
+		out << "totalCacheExclusiveReadMisses:" << totalCacheExclusiveReadMisses << std::endl;
+		out << "totalCacheSharedReadHits:" << totalCacheSharedReadHits << std::endl;
+		out << "totalCacheSharedReadMisses:" << totalCacheSharedReadMisses << std::endl;
 		out << "totalCacheWriteHits:" << totalCacheWriteHits << std::endl;
 		out << "totalCacheWriteMisses:" << totalCacheWriteMisses << std::endl;
 

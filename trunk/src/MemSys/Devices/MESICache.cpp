@@ -78,13 +78,21 @@ namespace Memory
       BlockState *myBlockState = &(cacheContents[i * associativity]);
       return myBlockState;
 	}
-	unsigned int MESICache::getReadHits()
+	unsigned int MESICache::getExclusiveReadHits()
 	{
-		return readHits;
+		return exclusiveReadHits;
 	}
-	unsigned int MESICache::getReadMisses()
+	unsigned int MESICache::getSharedReadHits()
 	{
-		return readMisses;
+		return sharedReadHits;
+	}
+	unsigned int MESICache::getExclusiveReadMisses()
+	{
+		return exclusiveReadMisses;
+	}
+	unsigned int MESICache::getSharedReadMisses()
+	{
+		return sharedReadMisses;
 	}
 	unsigned int MESICache::getWriteHits()
 	{
@@ -360,7 +368,14 @@ void MESICache::PerformRead(const ReadMsg* m)
 			if(!b->locked)
 			{
 				LockBlock(tag);
-				readMisses++;
+            if (m->requestingExclusive)
+            {
+               exclusiveReadMisses++;
+            }
+            else
+            {
+               sharedReadMisses++;
+            }
 				ReadMsg* forward = EM().CreateReadMsg(GetDeviceID(),m->GeneratingPC());
 				forward->addr = CalcAddr(tag);
 				forward->size = lineSize;
@@ -375,7 +390,14 @@ void MESICache::PerformRead(const ReadMsg* m)
 		}
 		else
 		{  //hit
-		   readHits++;
+         if (m->requestingExclusive)
+         {
+            exclusiveReadHits++;
+         }
+         else
+         {
+            sharedReadHits++;
+         }
 			ReadResponseMsg* res = EM().CreateReadResponseMsg(GetDeviceID(),m->GeneratingPC());
 			m->SignalComplete();
 			res->addr = m->addr;
@@ -916,14 +938,22 @@ void MESICache::PerformRead(const ReadMsg* m)
 			DebugFail("Bad eviction policy specified");
 		}
 
-      messagesReceived = readHits = readMisses = writeHits = writeMisses = 0;
+      messagesReceived = 0;
+      exclusiveReadHits = 0;
+      sharedReadHits = 0;
+      exclusiveReadMisses = 0;
+      sharedReadMisses = 0;
+      writeHits = 0;
+      writeMisses = 0;
 	}
 	void MESICache::DumpRunningState(RootConfigNode& node){}
 	void MESICache::DumpStats(std::ostream& out)
 	{
 	   out << "messagesReceived:" << messagesReceived << std::endl;
-	   out << "readHits:" << readHits << std::endl;
-	   out << "readMisses:" << readMisses << std::endl;
+	   out << "exclusiveReadHits:" << exclusiveReadHits << std::endl;
+	   out << "sharedReadHits:" << sharedReadHits << std::endl;
+	   out << "exclusiveReadMisses:" << exclusiveReadMisses << std::endl;
+	   out << "sharedReadMisses:" << sharedReadMisses << std::endl;
 	   out << "writeHits:" << writeHits << std::endl;
 	   out << "writeMisses:" << writeMisses << std::endl;
 	}
