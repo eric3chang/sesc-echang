@@ -80,6 +80,21 @@ namespace Memory
 		};
 
 		unsigned int messagesReceived;
+		unsigned long long directoryRequestsReceived;
+		unsigned long long directoryResponsesReceived;
+		unsigned long long localEvictionsReceived;
+		unsigned long long localInvalidateResponsesReceived;
+		unsigned long long localReadsReceived;
+		unsigned long long localReadResponsesReceived;
+		unsigned long long localWritesReceived;
+		unsigned long long remoteEvictionsReceived;
+		unsigned long long remoteEvictionResponsesReceived;
+		unsigned long long remoteInvalidatesReceived;
+		unsigned long long remoteInvalidateResponsesReceived;
+		unsigned long long remoteReadsReceived;
+		unsigned long long remoteReadResponsesReceived;
+		unsigned long long remoteWritesReceived;
+		unsigned long long remoteWriteResponsesReceived;
 
 		TimeDelta localSendTime;
 		TimeDelta remoteSendTime;

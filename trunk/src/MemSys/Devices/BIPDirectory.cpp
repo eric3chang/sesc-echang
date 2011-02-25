@@ -202,6 +202,8 @@ namespace Memory
 		PrintDebugInfo("LocalRead", *m,
 		      ("pendingLocalReads.insert("+to_string<MessageID>(m->MsgID())+")").c_str());
 #endif
+		localReadsReceived++;
+		
 		DebugAssertWithMessageID(pendingLocalReads.find(m->MsgID()) == pendingLocalReads.end(),m->MsgID())
 		pendingLocalReads[m->MsgID()] = m;
 		ReadMsg* forward = (ReadMsg*)EM().ReplicateMsg(m);
@@ -228,6 +230,8 @@ namespace Memory
 #ifdef MEMORY_BIP_DIRECTORY_DEBUG_VERBOSE
                PrintDebugInfo("LocReadRes",*m,"");
 #endif
+		localReadResponsesReceived++;
+
 		DebugAssertWithMessageID(m,m->MsgID())
 		DebugAssertWithMessageID(pendingRemoteReads.find(m->solicitingMessage) != pendingRemoteReads.end(),m->MsgID())
 		LookupData<ReadMsg>& d = pendingRemoteReads[m->solicitingMessage];
@@ -253,6 +257,8 @@ namespace Memory
 #ifdef MEMORY_BIP_DIRECTORY_DEBUG_VERBOSE
       PrintDebugInfo("LocWrite",*m,"");
 #endif
+		localWritesReceived++;
+		
 		DebugAssertWithMessageID(m,m->MsgID())
 		NodeID id = directoryNodeCalc->CalcNodeID(m->addr);
 		WriteResponseMsg* wrm = EM().CreateWriteResponseMsg(GetDeviceID(),m->GeneratingPC());
@@ -284,6 +290,8 @@ namespace Memory
       PrintDebugInfo("LocalEviction", *m,
          ("pendingEviction.insert("+to_string<Address>(m->addr)+")").c_str());
 #endif
+		localEvictionsReceived++;
+
 		DebugAssert(pendingEviction.find(m->addr) == pendingEviction.end())
 		pendingEviction.insert(m->addr);
 		EvictionResponseMsg* erm = EM().CreateEvictionResponseMsg(GetDeviceID(),m->GeneratingPC());
@@ -313,6 +321,8 @@ namespace Memory
 #ifdef MEMORY_BIP_DIRECTORY_DEBUG_VERBOSE
                PrintDebugInfo("LocInvRes",*m,"");
 #endif
+		localInvalidateResponsesReceived++;
+
 		DebugAssertWithMessageID(m,m->MsgID())
 		DebugAssertWithMessageID(pendingRemoteInvalidates.find(m->addr) != pendingRemoteInvalidates.end(),m->MsgID())
 		LookupData<InvalidateMsg>& d = pendingRemoteInvalidates[m->addr];
@@ -359,6 +369,7 @@ namespace Memory
 	*/
 	void BIPDirectory::OnRemoteReadCache(const ReadMsg* m, NodeID src)
 	{
+		remoteReadsReceived++;
 #ifdef MEMORY_BIP_DIRECTORY_DEBUG_VERBOSE
       PrintDebugInfo("RemRead",*m,"",src);
 #endif
@@ -383,6 +394,7 @@ namespace Memory
 
 	void BIPDirectory::OnRemoteReadResponse(const ReadResponseMsg* m, NodeID src)
 	{
+		remoteReadResponsesReceived++;
 #ifdef MEMORY_BIP_DIRECTORY_DEBUG_VERBOSE
       PrintDebugInfo("RemReadRes",*m,"",src);
 #endif
@@ -504,6 +516,7 @@ namespace Memory
 
 	void BIPDirectory::OnRemoteWrite(const WriteMsg* m, NodeID src)
 	{
+		remoteWritesReceived++;
 #ifdef MEMORY_BIP_DIRECTORY_DEBUG_VERBOSE
       PrintDebugInfo("RemWrite",*m,"",src);
 #endif
@@ -537,6 +550,7 @@ namespace Memory
 
 	void BIPDirectory::OnRemoteWriteResponse(const WriteResponseMsg* m, NodeID src)
 	{
+		remoteWriteResponsesReceived++;
 #ifdef MEMORY_BIP_DIRECTORY_DEBUG_VERBOSE
       PrintDebugInfo("RemWriteRes",*m,"",src);
 #endif
@@ -549,6 +563,8 @@ namespace Memory
 #ifdef MEMORY_BIP_DIRECTORY_DEBUG_VERBOSE
       PrintDebugInfo("RemEvic",*m,"",src);
 #endif
+		remoteEvictionsReceived++;
+		
 		DebugAssertWithMessageID(m,m->MsgID())
 		DebugAssertWithMessageID(directoryData.find(m->addr) != directoryData.end(),m->MsgID())
 		BlockData& b = directoryData[m->addr];
@@ -613,6 +629,7 @@ namespace Memory
 
 	void BIPDirectory::OnRemoteEvictionResponse(const EvictionResponseMsg* m, NodeID src)
 	{
+		remoteEvictionResponsesReceived++;
 #ifdef MEMORY_BIP_DIRECTORY_DEBUG_VERBOSE
       PrintDebugInfo("RemEvicRes",*m,"",src);
 #endif
@@ -628,6 +645,7 @@ namespace Memory
 
 	void BIPDirectory::OnRemoteInvalidate(const InvalidateMsg* m, NodeID src)
 	{
+		remoteInvalidatesReceived++;
 #ifdef MEMORY_BIP_DIRECTORY_DEBUG_VERBOSE
       PrintDebugInfo("RemInv",*m,"",src);
 #endif
@@ -644,6 +662,7 @@ namespace Memory
 
 	void BIPDirectory::OnRemoteInvalidateResponse(const InvalidateResponseMsg* m, NodeID src)
 	{
+		remoteInvalidateResponsesReceived++;
 #ifdef MEMORY_BIP_DIRECTORY_DEBUG_VERBOSE
       PrintDebugInfo("RemInvRes",*m,"",src);
 #endif
@@ -739,7 +758,8 @@ namespace Memory
 #ifdef MEMORY_BIP_DIRECTORY_DEBUG_VERBOSE
                PrintDebugInfo("DirBlkReq",*m,"",src);
 #endif
-		DebugAssertWithMessageID(m,m->MsgID())
+		DebugAssertWithMessageID(m,m->MsgID());
+		directoryRequestsReceived++;
       // if the address is in pendingDirectoryExclusiveReads or
 		// we are requesting for exclusive access and the address is in pendingDirectorySharedReads
 		if(pendingDirectoryExclusiveReads.find(m->addr) != pendingDirectoryExclusiveReads.end() ||
@@ -805,7 +825,8 @@ namespace Memory
 #ifdef MEMORY_BIP_DIRECTORY_DEBUG_VERBOSE
                PrintDebugInfo("DirBlkRes",*m,"",src);
 #endif
-		DebugAssertWithMessageID(m,m->MsgID())
+		DebugAssertWithMessageID(m,m->MsgID());
+		directoryResponsesReceived++;
 
 #ifdef MEMORY_BIP_DIRECTORY_DEBUG_PENDING_DIRECTORY_SHARED_READS
 		PrintPendingDirectorySharedReads();
@@ -911,6 +932,21 @@ namespace Memory
 		//memoryNodeCalc->Initialize(memCalc);
 
       messagesReceived = 0;
+		directoryRequestsReceived = 0;
+		directoryResponsesReceived = 0;
+		localEvictionsReceived = 0;
+		localInvalidateResponsesReceived = 0;
+		localReadsReceived = 0;
+		localReadResponsesReceived = 0;
+		localWritesReceived = 0;
+		remoteEvictionsReceived = 0;
+		remoteEvictionResponsesReceived = 0;
+		remoteInvalidatesReceived = 0;
+		remoteInvalidateResponsesReceived = 0;
+		remoteReadsReceived = 0;
+		remoteReadResponsesReceived = 0;
+		remoteWritesReceived = 0;
+		remoteWriteResponsesReceived = 0;
 	}  // BIPDirectory::Initialize()
 	/**
 	 * this is used for checkpoint purposes
@@ -922,7 +958,22 @@ namespace Memory
 	 */
 	void BIPDirectory::DumpStats(std::ostream& out)
 	{
-	   out << "messagesReceived:" << messagesReceived << std::endl;
+	   out << "TotalMessagesReceived:" << messagesReceived << std::endl;
+		out << "directoryRequestsReceived:" << directoryRequestsReceived << std::endl;
+		out << "directoryResponsesReceived:" << directoryResponsesReceived << std::endl;
+		out << "localEvictionsReceived:" << localEvictionsReceived << std::endl;
+		out << "localInvalidateResponsesReceived:" << localInvalidateResponsesReceived << std::endl;
+		out << "localReadsReceived:" << localReadsReceived << std::endl;
+		out << "localReadResponsesReceived:" << localReadResponsesReceived << std::endl;
+		out << "localWritesReceived:" << localWritesReceived << std::endl;
+		out << "remoteEvictionsReceived:" << remoteEvictionsReceived << std::endl;
+		out << "remoteEvictionResponsesReceived:" << remoteEvictionResponsesReceived << std::endl;
+		out << "remoteInvalidatesReceived:" << remoteInvalidatesReceived << std::endl;
+		out << "remoteInvalidateResponsesReceived:" << remoteInvalidateResponsesReceived << std::endl;
+		out << "remoteReadsReceived:" << remoteReadsReceived << std::endl;
+		out << "remoteReadResponsesReceived:" << remoteReadResponsesReceived << std::endl;
+		out << "remoteWritesReceived:" << remoteWritesReceived << std::endl;
+		out << "remoteWriteResponsesReceived:" << remoteWriteResponsesReceived << std::endl;
 	}
 	/**
 	 * Handles all the incoming messages from outside of the directory.
