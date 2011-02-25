@@ -39,6 +39,7 @@ Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #endif
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <typeinfo>
 
 #include "icode.h"
@@ -973,6 +974,11 @@ void OSSim::simFinish()
   // Work finished, dump statistics
   report("Final");
 
+  time_t currentTime;
+  struct tm * timeInfo;
+  time ( &currentTime );
+  timeInfo = localtime ( &currentTime );
+
   time_t t = time(0);
   Report::field("OSSim:endTime=%s", ctime(&t));
 
@@ -980,7 +986,26 @@ void OSSim::simFinish()
 
   if(SescConf->checkCharPtr("","MemDeviceReportFile"))
   {
-     std::ofstream out(SescConf->getCharPtr("","MemDeviceReportFile"),std::ios::out);
+	  stringstream tempBuffer;
+	  tempBuffer << SescConf->getCharPtr("","MemDeviceReportFile");
+	  tempBuffer << ".";
+	  tempBuffer.width(2);
+	  tempBuffer.fill('0');
+	  tempBuffer << std::right << (timeInfo->tm_mon+1);
+	  tempBuffer.width(2);
+	  tempBuffer.fill('0');
+	  tempBuffer << std::right << timeInfo->tm_mday;
+	  tempBuffer.width(2);
+	  tempBuffer.fill('0');
+	  tempBuffer << std::right << timeInfo->tm_hour;
+	  tempBuffer.width(2);
+	  tempBuffer.fill('0');
+	  tempBuffer << std::right << timeInfo->tm_min;
+
+	  string filename = tempBuffer.str();
+     std::ofstream out(filename.c_str(),std::ios::out);
+
+	  //std::ofstream out(SescConf->getCharPtr("","MemDeviceReportFile"),std::ios::out);
      out << "Group string ReportFileName " << SescConf->getCharPtr("","MemDeviceReportFile");
      if(SescConf->checkCharPtr("","BenchName"))
      {
