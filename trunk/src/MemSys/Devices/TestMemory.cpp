@@ -17,9 +17,20 @@ namespace Memory
 		DebugAssert(config.ContainsSubNode("WriteLatency"));
 		DebugAssert(config.SubNode("WriteLatency").IsA<IntConfigNode>());
 		writeTime = (TimeDelta)((const IntConfigNode&)config.SubNode("WriteLatency")).Value();
+		evictionsReceived = 0;
+		readsReceived = 0;
+		writesReceived = 0;
 	}
+
 	void TestMemory::DumpRunningState(RootConfigNode& node){}
-	void TestMemory::DumpStats(std::ostream& out){}
+
+	void TestMemory::DumpStats(std::ostream& out)
+	{
+		out << "EvictionsReceived:" << evictionsReceived << endl;
+		out << "ReadsReceived:" << readsReceived << endl;
+		out << "WritessReceived:" << writesReceived << endl;
+	}
+
 	void TestMemory::RecvMsg(const BaseMsg* msg, int connectionID)
 	{
 		DebugAssert(msg);
@@ -30,6 +41,7 @@ namespace Memory
 		{
 		case(mt_Read):
 			{
+				readsReceived++;
 				ReadMsg* rm = (ReadMsg*)msg;
 				replyTime = readTime;
 				ReadResponseMsg* m = EM().CreateReadResponseMsg(GetDeviceID(),msg->GeneratingPC());
@@ -47,6 +59,7 @@ namespace Memory
 			}
 		case(mt_Write):
 			{
+				writesReceived++;
 				WriteMsg* wm = (WriteMsg*)msg;
 				replyTime = writeTime;
 				WriteResponseMsg* m = EM().CreateWriteResponseMsg(GetDeviceID(),msg->GeneratingPC());
@@ -59,6 +72,7 @@ namespace Memory
 			}
 		case(mt_Eviction):
 			{
+				evictionsReceived++;
 				EvictionMsg* em = (EvictionMsg*)msg;
 				EvictionResponseMsg* m = EM().CreateEvictionResponseMsg(GetDeviceID(),msg->GeneratingPC());
 				m->addr = em->addr;

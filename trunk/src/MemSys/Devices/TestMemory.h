@@ -8,6 +8,9 @@ namespace Memory
 	{
 		TimeDelta writeTime;
 		TimeDelta readTime;
+		unsigned long long evictionsReceived;
+		unsigned long long readsReceived;
+		unsigned long long writesReceived;
 	public:
 		virtual void Initialize(EventManager* em, const RootConfigNode& config, const std::vector<Connection*>& connectionSet);
 		virtual void DumpRunningState(RootConfigNode& node);
