@@ -29,13 +29,14 @@ void *readChar(int *threadid)
 {
    int i=0;
    int threadidCopy = *threadid;
-   myChar = myChar + 1;
 	printf("threadid=%d\n", threadidCopy);
+   
    for (i=0; i<10000; i++)
    {
+      myChar = myChar + 1;
       //printf("%d", threadidCopy);
-      *finalOutputPtr = threadidCopy;
-      finalOutputPtr++;
+      //*finalOutputPtr = threadidCopy;
+      //finalOutputPtr++;
    }
 
    printf("\n");

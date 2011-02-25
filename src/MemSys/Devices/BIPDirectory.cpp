@@ -487,11 +487,14 @@ namespace Memory
 		{
 			EraseDirectoryShare(m->addr,src);
 			// 2011/02/23 Commented out the following line and replaced it with the one below
-			//DebugAssertWithMessageID(directoryData[m->addr].owner == InvalidNodeID,m->MsgID());
+			DebugAssertWithMessageID(directoryData[m->addr].owner == InvalidNodeID,m->MsgID());
+			PerformDirectoryFetch(m->addr);
+			/*
 			if (directoryData[m->addr].owner==InvalidNodeID)
 			{
-				PerformDirectoryFetch(m->addr);
+
 			}
+			*/
 			EM().DisposeMsg(m);
 		}
 #ifdef MEMORY_BIP_DIRECTORY_DEBUG_DIRECTORY_DATA
