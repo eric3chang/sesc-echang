@@ -83,9 +83,9 @@ def generateAllBenchmarks(benchmarkNames, directoryType, processorCountLow, proc
 
 def main():
     benchmarkNames = ['barnes', 'cholesky', 'fft', 'fmm', 'radix', 'raytrace', 'ocean']
-    #directoryType = 'origin'
+    directoryType = 'origin'
     directoryType = 'directory'
-    #directoryType = 'bip'
+    directoryType = 'bip'
     #cacheType = 'mesi'
     #cacheType = ''
     processorCountLow = '2'
