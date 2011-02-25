@@ -111,13 +111,15 @@ Directory-based cache coherence protocols are based on the central concept
  Next, I will introduce select components and message types in more detail.
  Then, I will introduce various cache coherence protocols in general, as
  well as the specific protocols that will be compared with each other, which
- are the Unoptimized directory-based cache coherence protocol and a different
- protocol based on the one used in the SGI Origin 2000-based systems.
+ are a drectory-based cache coherence protocol based on bilateral interactions
+ and a different protocol based on the one used in the SGI Origin 2000-based
+ systems.
  I will then go into detail about simulating and implementing the differences
  between the protocols using the SESC: SuperESCalar Simulator.
  In addition, results from simulations using SPLASH2 benchmarks are presented.
  We show that the Origin directory-based cache coherence protocol has several
- advantages over the Unoptimized directory-based cache coherence protocol.
+ advantages over the directory-based cache coherence protocol based on bilateral
+ interactions.
 \end_layout
 
 \begin_layout Section
@@ -453,9 +455,9 @@ MSI Cache
 \begin_layout Standard
 The MSI protocol is the most basic of the cache coherence protocols, using
  only three states to ensure cache coherency.
- The three states stand for Modified(M), Shared(S), and Invalid(I).
- The Modified state signifies that the cache block is in a Dirty Exclusive
- mode and that no other cache contains the entry.
+ The three letters stand for Modified, Shared, and Invalid.
+ The Modified state signifies that the cache block is in a dirty exclusive
+ state and that no other cache contains the entry.
  This is necessary whenever the processor needs to perform a write operation.
  The Shared state means that the cache block can exist in caches other than
  the current one, and Invalid means that there are no usable data in this
@@ -488,14 +490,13 @@ MESI Cache
 placement htbp
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \begin_inset Tabular
-<lyxtabular version="3" rows="5" columns="5">
+<lyxtabular version="3" rows="5" columns="4">
 <features>
-<column alignment="left" valignment="middle" width="10text%">
-<column alignment="left" valignment="middle" width="20text%">
+<column alignment="left" valignment="middle" width="15text%">
 <column alignment="left" valignment="middle" width="20text%">
 <column alignment="left" valignment="middle" width="20text%">
 <column alignment="left" valignment="middle" width="20text%">
@@ -536,15 +537,6 @@ Other Processor
 
 \end_inset
 </cell>
-<cell alignment="left" valignment="top" topline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Snoop Request 
-\end_layout
-
-\end_inset
-</cell>
 </row>
 <row>
 <cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
@@ -574,20 +566,11 @@ Most recent, correct copy
 
 \end_inset
 </cell>
-<cell alignment="left" valignment="top" topline="true" rightline="true" usebox="none">
+<cell multicolumn="1" alignment="left" valignment="top" topline="true" rightline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
 Hold no copy 
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="left" valignment="top" topline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Modified cache responds 
 \end_layout
 
 \end_inset
@@ -630,15 +613,6 @@ Hold no copy
 
 \end_inset
 </cell>
-<cell alignment="left" valignment="top" topline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Exclusive cache or main memory responds 
-\end_layout
-
-\end_inset
-</cell>
 </row>
 <row>
 <cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
@@ -672,16 +646,7 @@ Can hold most recent, correct copy
 \begin_inset Text
 
 \begin_layout Plain Layout
-Shared or owned 
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="left" valignment="top" topline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-May not respond 
+Shared
 \end_layout
 
 \end_inset
@@ -724,15 +689,6 @@ May hold valid or invalid copy
 
 \end_inset
 </cell>
-<cell alignment="left" valignment="top" topline="true" bottomline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-May not respond 
-\end_layout
-
-\end_inset
-</cell>
 </row>
 </lyxtabular>
 
@@ -765,7 +721,7 @@ name "tab:States-in-MESI"
 \begin_layout Standard
 The MESI protocol is an improvement upon the MSI protocol in that it adds
  an Exclusive(E) state to the protocol.
- 
+ In a system that uses the MESI cache, 
 \begin_inset ERT
 status open
 
@@ -789,16 +745,22 @@ reference "tab:States-in-MESI"
 
 \end_inset
 
- illustrates all the states that other caches can be in when we have knowledge
- of what the current cache holds.
+ illustrates all the states that other components can be in when we have
+ knowledge of what the current cache holds.
+ The Modified state means that only the cache that holds the block has the
+ correct copy, and it has to supply that block to certain requests.
+ The Exclusive state means that the main memory and the cache both have
+ the same correct copy, so either can respond, depending on the protocol.
+ When the block is Shared, all caches that has the block and the main memory
+ has the most updated copy.
+ When the block is Invalid, the current cache does not know anything about
+ the block and does not own the block.
  Whenever a cache holds a block in the Exclusive state, it means that the
  cache has Exclusive access to the block, but had no intention of altering
  the block at the time of request.
- In other words, the Exclusive state indicates Clean Exclusive.
- Adding the Exclusive state is advantageous in that it reduces the traffic
- caused by writes of blocks that only exist in one cache.
- This state allows the protocol to send fewer messages and achieve lower
- latency in certain operations.
+ In other words, the Exclusive state indicates a clean exclusive state.
+ Adding the Exclusive state is advantageous in that it has the potential
+ to reduce traffic when it comes to writes and exclusive read operations.
  A disadvantage of this protocol is that it requires more space to store
  this additional information as compared to the MSI protocol.
 \end_layout
@@ -807,18 +769,16 @@ reference "tab:States-in-MESI"
 Once we add this state into the protocol, certain cases that required an
  additional request into the network in the MSI protocol becomes an operation
  where no additional messages are emitted.
- For example, the MSI protocol fills a Clean Exclusive reply as Shared,
- so it becomes necessary to send an additional network message to request
- for exclusive ownership when transitioning from Shared to Dirty Exclusive.
- In a MESI cache, since it has the Clean Exclusive state, the same transition
- would go from Clean Exclusive to Dirty Exclusive without emitting any messages
- on the network.
- In addition, it is easy to see that adding the Exclusive state means the
- cache does not have to write back its block to memory when downgrading
- from Clean Exclusive to Shared.
- In the MSI protocol, there is no way to distinguish between a Dirty Exclusive
- and a Clean Exclusive, meaning there are situations where we will write
- a clean block to memory.
+ For example, the MSI protocol could fill an Exclusive reply as Shared,
+ and it would become necessary to send an additional network message to
+ request for exclusive ownership when transitioning from Shared to Modified.
+ In a MESI cache, since it has the Exclusive state, the same transition
+ would go from Exclusive to Modified without emitting any messages on the
+ network.
+ If instead, the MSI protocol fills an Exclusive reply as Modified, there
+ would be situations where we would write a clean block to memory.
+ With an additional Exclusive state, the cache does not have to write back
+ its block to memory when downgrading from Clean Exclusive to Shared.
  Although directory-based cache coherence protocols can use the MSI cache,
  the MESI cache is the cache that will be used in both of the directory-based
  cache coherence protocols presented in this report.
@@ -846,6 +806,12 @@ key "HEN00"
 \end_inset
 
 .
+ This is necessary since the directory acts as the communication channel
+ between each CPU.
+ In a snoopy system, we do not keep track of which CPU has which cache block
+ in a centralized location.
+ This is the advantage in the directory-based cache coherence protocol that
+ allows fewer messages to be sent.
  Therefore, it needs to have a list of nodes that have the cache block.
  If we did not store these in the state of the directory, we would have
  to query all the processors to find out what state they are all storing,
@@ -864,7 +830,7 @@ key "HEN00"
 \begin_inset Float table
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \align center
@@ -1031,71 +997,41 @@ reference "tab:Correspondence-between-cache"
 
  lists the possible data that the directory can hold compared to the cache
  state in any cache that has the block.
- In both the 
-\begin_inset Quotes eld
-\end_inset
-
-Modified
-\begin_inset Quotes erd
-\end_inset
-
- state and the 
-\begin_inset Quotes eld
-\end_inset
-
-Exclusive
-\begin_inset Quotes erd
-\end_inset
-
- state, the directory would store only the node ID of the processor that
- is the owner.
+ In both the Modified state and the Exclusive state, the directory would
+ store only the node ID of the processor that is the owner.
  Nevertheless, the directory does not know for certain whether or not the
  owner is actually clean or dirty until it has sent a request to the cache.
- It is the job of the protocol to take advantage of having the 
-\begin_inset Quotes eld
-\end_inset
-
-Exclusive
-\begin_inset Quotes erd
-\end_inset
-
+ It is the job of the protocol to take advantage of having the Exclusive
  state by not writing the block to memory if the block is clean.
- If the directory is in a 
-\begin_inset Quotes eld
-\end_inset
-
-Shared
-\begin_inset Quotes erd
-\end_inset
-
- state, then it would have a node ID in the owner slot and any number of
- node IDs in the sharers list.
+ If the directory is in a Shared state, then it would have a node ID in
+ the owner slot and any number of node IDs in the sharers list.
  The reason that there would be a node ID in the owner slot is because any
- transition into the 
-\begin_inset Quotes eld
-\end_inset
+ transition into the Shared state must have transitioned from a Modified
+ or Exclusive state, which must already have stored a node ID in the owner
+ slot.
+\end_layout
 
-Shared
-\begin_inset Quotes erd
-\end_inset
-
- state must have transitioned from a 
-\begin_inset Quotes eld
-\end_inset
-
-Modified
-\begin_inset Quotes erd
-\end_inset
-
- or 
-\begin_inset Quotes eld
-\end_inset
-
-Exclusive
-\begin_inset Quotes erd
-\end_inset
-
- state, which must already have stored a node ID in the owner slot.
+\begin_layout Standard
+One of the easiest ways to keep track of nodes inside directories is to
+ keep a bit vector in each distributed directory about which CPU has which
+ cache block.
+ Using bit vector to keep track of the CPU that has a specific cache block
+ is an efficient way to implement directory-based cache coherence protocol,
+ but it has a limit on how many CPUs can be used together with the system
+ since the bit vector would grow too large in a system with too many CPUs.
+ Another way would be to keep track of the node ID in the directory.
+ The advantage of using a node ID is that it can potentially take up less
+ space in the directory when we have a large number of processors, since
+ we do not have to keep track of all processors.
+ However, there is a disadvantage to keeping track of the node ID.
+ Usually, in a node ID based directory-based cache coherence system, we
+ do not keep track of all the node IDs, because that would defeat the primary
+ purpose of using the node IDs, which is to save space.
+ Therefore, when we have a system that keeps track of the cache block using
+ node ID, we are unable to keep track of all the CPUs that might potentially
+ request for a cache block.
+ In that case, we would have to invalidate a CPU when we want more space
+ in the directory.
 \end_layout
 
 \begin_layout Standard
@@ -1109,22 +1045,7 @@ Keeping track of the owner could be done by either adding a bit to each
  and it can also be faster to access since the processor always know which
  entry is the owner.
  We can also have a combined owner-sharers list, where one entry implies
- 
-\begin_inset Quotes eld
-\end_inset
-
-Exclusive,
-\begin_inset Quotes erd
-\end_inset
-
- and multiple entries imply that the directory is in the 
-\begin_inset Quotes eld
-\end_inset
-
-Shared
-\begin_inset Quotes erd
-\end_inset
-
+ Exclusive, and multiple entries imply that the directory is in the Shared
  state.
  In this last method, the system would have to be able to quickly scan through
  all the entries it has to determine whether it has no valid entries, one
@@ -1149,8 +1070,8 @@ In this section, I will introduce the basic message types used in the system.
  from the cache to the directory.
  There are two types of read request messages, exclusive and shared.
  The exclusive read request message is sent when the cache receives a write
- from the processor, and the shared read request message is if the cache
- receives a read from the processor.
+ from the processor, and the shared read request occurs if the cache receives
+ a read from the processor.
  Another message that is similar to the read request message is the intervention
  message, used only by the Origin protocol but not by BIP.
  The intervention message is used to indicate that the exclusive owner,
@@ -1169,7 +1090,7 @@ After sending the read request message, the sending cache would wait for
  The four read response types used amongst the two protocols are read response,
  read reply, read ack, and speculative reply.
  A read response indicates a response from another cache, whereas the read
- reply message indicates a response from the directory.
+ reply message indicates a response from the memory.
  Since the BIP only supports bilateral interactions between a cache and
  a directory, and never between two caches, there are no read response messages
  sent in the BIP protocol.
@@ -1228,7 +1149,7 @@ Besides the writeback request messages, there are also the writeback and
 \end_layout
 
 \begin_layout Standard
-The next message type is Invalidate.
+The next message type is invalidate.
  This message is sent whenever an exclusive request arrives when the cache
  block is in the Shared state.
  In this case, the directory needs to invalidate all of the shared block
@@ -1236,7 +1157,7 @@ The next message type is Invalidate.
  The caches that receive the invalidate have to send an invalidate ack after
  invalidating their cache.
  Depending on the protocol, the invalidate ack would either go to the directory
- or the new owner.
+ or the cache of the new owner.
 \end_layout
 
 \begin_layout Standard
@@ -1249,7 +1170,14 @@ The final message type is the nak message type.
  The component that receives a nak message would retry its request
 \begin_inset CommandInset citation
 LatexCommand cite
-key "HEN00,LAU00"
+key "HEN00"
+
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "LAU00"
 
 \end_inset
 
@@ -1323,7 +1251,8 @@ name "fig:Snoopy-based-cache-coherence"
 \end_layout
 
 \begin_layout Standard
-A simplified diagram of a snoopy-based cache coherence protocol is shown
+There are many cache coherence protocols that are snoopy-based.
+ A simplified diagram of a snoopy-based cache coherence protocol is shown
  in 
 \begin_inset ERT
 status open
@@ -1350,7 +1279,7 @@ reference "fig:Snoopy-based-cache-coherence"
 
 .
  The snoopy-based cache coherence protocol relies on the bus to transfer
- necessary information.
+ the necessary information.
  In this protocol, there are only two logical nodes, the requesting node
  and the data node.
  However, even though the nodes only need to communicate directly with each
@@ -1368,7 +1297,11 @@ reference "fig:Snoopy-based-cache-coherence"
 \begin_layout Standard
 Snoopy-based protocols have an advantage when it comes to manufacturing
  because they can use the existing bus to memory as the broadcast medium
- for communicating information about cache coherence
+ for communicating information about cache coherence; therefore, manufacturers
+ can easily convert single-core processors to be used as multiprocessors.
+ However, snoopy-based cache coherence protocols have more problems with
+ scaling up to meet higher core counts than directory-based cache coherence
+ protocols
 \begin_inset CommandInset citation
 LatexCommand cite
 key "HEN00"
@@ -1376,30 +1309,10 @@ key "HEN00"
 \end_inset
 
 .
- However, a snoopy-based protocol is not as scalable as a directory-based
- protocol.
- The main problem with scaling up snoopy-based protocols is that since all
- the processors are sharing the same medium, the bus, unless the bandwidth
- and speed of the bus can be scaled infinitely high, the number of processors
- cannot be scaled arbitrarily high.
- Although there are many cache coherence protocols fundamentally based on
- the snoopy-based cache coherence protocol, this cache coherence protocol
- will not be presented in the final results because this report is focused
- on comparing differences in directory-based cache coherence protocols.
-\end_layout
-
-\begin_layout Standard
-Although the simplicity of snoopy-based cache coherence protocols allow
- manufacturers to easily convert single-core processors to be used as multiproce
-ssors, snoopy-based cache coherence protocols have problems with scaling
- up to meet higher core counts than directory-based cache coherence protocols
-\begin_inset CommandInset citation
-LatexCommand cite
-key "HEN00"
-
-\end_inset
-
-.
+ The main problem with scaling up snoopy-based protocols is that all the
+ processors are sharing the same medium, the bus.
+ Unless the bandwidth and speed of the bus can be scaled infinitely high,
+ the number of processors cannot be scaled arbitrarily high.
  For that reason, this report will be focusing mainly on directory-based
  cache coherence protocols.
 \end_layout
@@ -1521,52 +1434,7 @@ key "HEN00"
 \end_layout
 
 \begin_layout Standard
-In any directory-based cache coherence protocol, there are three logical
- nodes in any request: the requesting node, the directory node, and the
- data node.
- These logical nodes can all be the same physical nodes or they can all
- be different, but it is easier to think of them logically as three separate
- nodes.
- Requesting node is the node that sends out the original read or write request.
- In a directory-based protocol, it is necessary to send the request to the
- directory node in order to find out where the data actually is, what state
- the directory block is in, and whether or not the request can be satisfied
- immediately.
-\end_layout
-
-\begin_layout Standard
-A directory-based cache coherence protocol can be designed several ways.
- The directory needs to keep track of which CPU has which cache line.
- This is necessary since the directory acts as the communication channel
- between each CPU.
- In a snoopy system, we do not keep track of which CPU has which cache block
- in a centralized location.
- This is the advantage in the directory-based cache coherence protocol that
- allows fewer messages to be sent.
- One of the easiest ways to keep track of the directories is to keep a bit
- vector in each distributed directory about which CPU has which cache block.
- Using bit vector to keep track of the CPU that has a specific cache block
- is an efficient way to implement directory-based cache coherence protocol,
- but it has a limit on how many CPUs can be used together with the system
- since the bit vector would grow too large in a system with too many CPUs.
- Another way would be to keep track of the node ID in the directory.
- The advantage of using a node ID is that it can potentially take up less
- space in the directory when we have a large number of processors, since
- we do not have to keep track of all processors.
- However, there is a disadvantage to keeping track of the node ID.
- Usually, in a node ID based directory-based cache coherence system, we
- do not keep track of all the node IDs, because that would defeat the primary
- purpose of using the node IDs, which is to save space.
- Therefore, when we have a system that keeps track of the cache block using
- node ID, we are unable to keep track of all the CPUs that might potentially
- request for a cache block.
- In that case, we would have to invalidate a CPU when we want more space
- in the directory.
-\end_layout
-
-\begin_layout Standard
-I will be showing the Unoptimized directory-based cache coherence protocol
- first.
+I will be showing the BIP first.
  In this protocol, all requests pass through the home node and each node
  can only emit one response in reply to a request.
  The Unoptimized directory-based cache coherence protocol is a traditional
@@ -1587,6 +1455,20 @@ The basic directory protocol is easier to implement than some of the more
  No assumptions are made when deciding the directory state because we wait
  for the owner or shared block to return to the directory before we forward
  it back to the requester.
+\end_layout
+
+\begin_layout Standard
+In any directory-based cache coherence protocol, there are three logical
+ nodes in any request: the requesting node, the directory node, and the
+ data node.
+ These logical nodes can all be the same physical nodes or they can all
+ be different, but it is easier to think of them logically as three separate
+ nodes.
+ Requesting node is the node that sends out the original read or write request.
+ In a directory-based protocol, it is necessary to send the request to the
+ directory node in order to find out where the data actually is, what state
+ the directory block is in, and whether or not the request can be satisfied
+ immediately.
 \end_layout
 
 \begin_layout Subsubsection
