@@ -240,6 +240,12 @@ namespace Memory
 			DirectoryData& directoryData = GetDirectoryData(m->addr);
 			OnDirectory(m, src, directoryData, isFromMemory);
 		}
+		else if (msg->Type()==mt_Writeback)
+		{
+			DebugAssertWithMessageID(!isFromMemory, msg->MsgID());
+			const WritebackMsg* m = (const WritebackMsg*)msg;
+			OnDirectoryWriteback(m, src);
+		}
 		else if (msg->Type()==mt_WritebackRequest)
 		{
 			DebugAssertWithMessageID(!isFromMemory, msg->MsgID());
@@ -491,6 +497,23 @@ namespace Memory
 		directoryNodeCalc->Initialize(dirCalc);
 
 		messagesReceived = 0;
+		cacheNaksReceived = 0;
+		cacheEvictionsReceived = 0;
+		cacheInterventionsReceived = 0;
+		cacheInvalidatesReceived = 0;
+		cacheInvalidateAcksReceived = 0;
+		cacheInvalidateResponsesReceived = 0;
+		cacheSpeculativeRepliesReceived = 0;
+		cacheReadsReceived = 0;
+		cacheReadResponsesReceived = 0;
+		cacheReadRepliesReceived = 0;
+		directoryNaksReceived = 0;
+		directoryReadsReceived = 0;
+		directoryReadResponsesReceived = 0;
+		directoryTransfersReceived = 0;
+		directoryWritebacksReceived = 0;
+		directoryWritebackRequestsReceived = 0;
+		directoryWriteResponsesReceived = 0;
 	}
 
 	/**
@@ -505,10 +528,27 @@ namespace Memory
 	void OriginDirectory::DumpStats(std::ostream& out)
 	{
 	   out << "messagesReceived:" << messagesReceived << std::endl;
+		out << "cacheNaksReceived:" << cacheNaksReceived << std::endl;
+		out << "cacheEvictionsReceived:" << cacheEvictionsReceived << std::endl;
+		out << "cacheInterventionsReceived:" << cacheInterventionsReceived << std::endl;
+		out << "cacheInvalidatesReceived:" << cacheInvalidatesReceived << std::endl;
+		out << "cacheInvalidateAcksReceived:" << cacheInvalidateAcksReceived << std::endl;
+		out << "cacheInvalidateResponsesReceived:" << cacheInvalidateResponsesReceived << std::endl;
+		out << "cacheSpeculativeRepliesReceived:" << cacheSpeculativeRepliesReceived << std::endl;
+		out << "cacheReadResponsesReceived:" << cacheReadResponsesReceived << std::endl;
+		out << "cacheReadRepliesReceived:" << cacheReadRepliesReceived << std::endl;
+		out << "directoryNaksReceived:" << directoryNaksReceived << std::endl;
+		out << "directoryReadsReceived:" << directoryReadsReceived << std::endl;
+		out << "directoryReadResponsesReceived:" << directoryReadResponsesReceived << std::endl;
+		out << "directoryTransfersReceived:" << directoryTransfersReceived << std::endl;
+		out << "directoryWritebacksReceived:" << directoryWritebacksReceived << std::endl;
+		out << "directoryWritebackRequestsReceived:" << directoryWritebackRequestsReceived << std::endl;
+		out << "directoryWriteResponsesReceived:" << directoryWriteResponsesReceived << std::endl;
 	}
 
 	void OriginDirectory::OnCacheCacheNak(const CacheNakMsg* m, NodeID src)
 	{
+		cacheNaksReceived++;
 		CacheData& cacheData = GetCacheData(m->addr);
 		OnCache(m, src, cacheData);
 		return;
@@ -540,6 +580,7 @@ namespace Memory
 
 	void OriginDirectory::OnCacheInvalidate(const InvalidateMsg* m, NodeID src)
 	{
+		cacheInvalidatesReceived++;
 		CacheData& cacheData = GetCacheData(m->addr);
 		OnCache(m, src, cacheData);
 		return;
@@ -547,6 +588,7 @@ namespace Memory
 
 	void OriginDirectory::OnCacheInvalidateAck(const InvalidateAckMsg* m, NodeID src)
 	{
+		cacheInvalidateAcksReceived++;
 		CacheData& cacheData = GetCacheData(m->addr);
 		OnCache(m, src, cacheData);
 		return;
@@ -576,6 +618,7 @@ namespace Memory
 
 	void OriginDirectory::OnCacheInvalidateResponse(const InvalidateResponseMsg* m, NodeID src)
    {
+		cacheInvalidateResponsesReceived++;
 		CacheData& cacheData = GetCacheData(m->addr);
 		OnCache(m, src, cacheData);
 		return;
@@ -583,6 +626,7 @@ namespace Memory
 
 	void OriginDirectory::OnCacheRead(const ReadMsg* m)
 	{
+		cacheReadsReceived++;
 		DebugAssertWithMessageID(pendingLocalReads.find(m->MsgID())==pendingLocalReads.end(), m->MsgID());
 		pendingLocalReads[m->MsgID()] = m;
 		CacheData& cacheData = GetCacheData(m->addr);
@@ -649,6 +693,7 @@ namespace Memory
 
 	void OriginDirectory::OnCacheReadReply(const ReadReplyMsg* m, NodeID src)
    {
+		cacheReadRepliesReceived++;
 		CacheData& cacheData = GetCacheData(m->addr);
 		OnCache(m, src, cacheData);
 		return;
@@ -656,6 +701,7 @@ namespace Memory
 
 	void OriginDirectory::OnCacheReadResponse(const ReadResponseMsg* m, NodeID src)
    {
+		cacheReadResponsesReceived++;
 		CacheData& cacheData = GetCacheData(m->addr);
 		OnCache(m, src, cacheData);
 		return;
@@ -977,6 +1023,7 @@ namespace Memory
 
 	void OriginDirectory::OnCacheEviction(const EvictionMsg* m, NodeID src)
 	{
+		cacheEvictionsReceived++;
 		CacheData& cacheData = GetCacheData(m->addr);
 		OnCache(m, src, cacheData);
 		return;
@@ -1278,6 +1325,7 @@ namespace Memory
 
 	void OriginDirectory::OnCacheIntervention(const InterventionMsg* m, NodeID src)
 	{
+		cacheInterventionsReceived++;
 		CacheData& cacheData = GetCacheData(m->addr);
 		OnCache(m, src, cacheData);
 	}
@@ -1458,6 +1506,7 @@ namespace Memory
 
 	void OriginDirectory::OnCacheSpeculativeReply(const SpeculativeReplyMsg* m, NodeID src)
 	{
+		cacheSpeculativeRepliesReceived++;
 		CacheData& cacheData = GetCacheData(m->addr);
 		OnCache(m, src, cacheData);
 	}
@@ -2545,6 +2594,7 @@ namespace Memory
 
 	void OriginDirectory::OnDirectoryDirectoryNak(const DirectoryNakMsg* m, NodeID src)
 	{
+		directoryNaksReceived++;
 		DirectoryData& directoryData = GetDirectoryData(m->addr);
 		OnDirectory(m, src, directoryData, false);
 	}
@@ -2661,6 +2711,7 @@ namespace Memory
 
 	void OriginDirectory::OnDirectoryRead(const ReadMsg* m, NodeID src)
 	{
+		directoryReadsReceived++;
 		DirectoryData& directoryData = GetDirectoryData(m->addr);
 		OnDirectory(m, src, directoryData, false);
 	}
@@ -2888,8 +2939,16 @@ namespace Memory
 		}
 	}
 
+	void OriginDirectory::OnDirectoryWriteback(const WritebackMsg* m, NodeID src)
+	{
+		directoryWritebacksReceived++;
+		DirectoryData& directoryData = GetDirectoryData(m->addr);
+		OnDirectory(m, src, directoryData, false);
+	}
+
 	void OriginDirectory::OnDirectoryWritebackRequest(const WritebackRequestMsg* m, NodeID src)
 	{
+		directoryWritebackRequestsReceived++;
 		DirectoryData& directoryData = GetDirectoryData(m->addr);
 		OnDirectory(m, src, directoryData, false);
 	}

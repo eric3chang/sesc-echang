@@ -1001,12 +1001,14 @@ void OSSim::simFinish()
 	  tempBuffer.width(2);
 	  tempBuffer.fill('0');
 	  tempBuffer << std::right << timeInfo->tm_min;
+	  tempBuffer << ".memDevResults";
 
 	  string filename = tempBuffer.str();
      std::ofstream out(filename.c_str(),std::ios::out);
 
 	  //std::ofstream out(SescConf->getCharPtr("","MemDeviceReportFile"),std::ios::out);
-     out << "Group string ReportFileName " << SescConf->getCharPtr("","MemDeviceReportFile");
+     //out << "Group string ReportFileName " << SescConf->getCharPtr("","MemDeviceReportFile");
+	  out << "Group string ReportFileName " << filename;
      if(SescConf->checkCharPtr("","BenchName"))
      {
         out << " string BenchName " << SescConf->getCharPtr("","BenchName");

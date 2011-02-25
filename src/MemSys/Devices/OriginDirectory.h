@@ -198,6 +198,23 @@ namespace Memory
       typedef std::pair<AddrLookupHashMultiMap::iterator,AddrLookupHashMultiMap::iterator> AddrLookupIteratorPair;
 
       unsigned int messagesReceived;
+		unsigned long long cacheNaksReceived;
+		unsigned long long cacheEvictionsReceived;
+		unsigned long long cacheInterventionsReceived;
+		unsigned long long cacheInvalidatesReceived;
+		unsigned long long cacheInvalidateAcksReceived;
+		unsigned long long cacheInvalidateResponsesReceived;
+		unsigned long long cacheSpeculativeRepliesReceived;
+		unsigned long long cacheReadsReceived;
+		unsigned long long cacheReadResponsesReceived;
+		unsigned long long cacheReadRepliesReceived;
+		unsigned long long directoryNaksReceived;
+		unsigned long long directoryReadsReceived;
+		unsigned long long directoryReadResponsesReceived;
+		unsigned long long directoryTransfersReceived;
+		unsigned long long directoryWritebacksReceived;
+		unsigned long long directoryWritebackRequestsReceived;
+		unsigned long long directoryWriteResponsesReceived;
 
 		TimeDelta localSendTime;
 		TimeDelta remoteSendTime;
@@ -300,6 +317,7 @@ namespace Memory
 		void OnCacheWritebackAck(const WritebackAckMsg* m, NodeID src);
 		void OnDirectoryDirectoryNak(const DirectoryNakMsg* m, NodeID src);
 		void OnDirectoryRead(const ReadMsg* m, NodeID src);
+		void OnDirectoryWriteback(const WritebackMsg* m, NodeID src);
 		void OnDirectoryWritebackRequest(const WritebackRequestMsg* m, NodeID src);
 
 	   void OnCache(const BaseMsg* msg, NodeID src, CacheData& cacheData);

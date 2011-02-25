@@ -41,6 +41,14 @@
       <Configuration>Release</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="smalltest-bip|Win32">
+      <Configuration>smalltest-bip</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="smalltest-origin-4-256-4096|Win32">
+      <Configuration>smalltest-origin-4-256-4096</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="temp|Win32">
       <Configuration>temp</Configuration>
       <Platform>Win32</Platform>
@@ -65,6 +73,12 @@
     <ConfigurationType>Application</ConfigurationType>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='fft-bip-2-8-16|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='smalltest-bip|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='smalltest-origin-4-256-4096|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='fft-origin-mesi-64-1-2|Win32'" Label="Configuration">
@@ -103,6 +117,12 @@
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='fft-bip-2-8-16|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='smalltest-bip|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='smalltest-origin-4-256-4096|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='fft-origin-mesi-64-1-2|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
@@ -128,6 +148,8 @@
     <OutDir Condition="'$(Configuration)|$(Platform)'=='temp|Win32'">Debug\</OutDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='fft-origin-mesi-2-1-2|Win32'">Debug\</OutDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='fft-bip-2-8-16|Win32'">Debug\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='smalltest-bip|Win32'">Debug\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='smalltest-origin-4-256-4096|Win32'">Debug\</OutDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='fft-origin-mesi-64-1-2|Win32'">Debug\</OutDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='fft-origin-mesi-4-1-2|Win32'">Debug\</OutDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='fft-origin-mesi-8-1-2|Win32'">Debug\</OutDir>
@@ -138,6 +160,8 @@
     <IntDir Condition="'$(Configuration)|$(Platform)'=='temp|Win32'">Debug\</IntDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='fft-origin-mesi-2-1-2|Win32'">Debug\</IntDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='fft-bip-2-8-16|Win32'">Debug\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='smalltest-bip|Win32'">Debug\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='smalltest-origin-4-256-4096|Win32'">Debug\</IntDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='fft-origin-mesi-64-1-2|Win32'">Debug\</IntDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='fft-origin-mesi-4-1-2|Win32'">Debug\</IntDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='fft-origin-mesi-8-1-2|Win32'">Debug\</IntDir>
@@ -148,6 +172,8 @@
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='temp|Win32'">true</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='fft-origin-mesi-2-1-2|Win32'">true</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='fft-bip-2-8-16|Win32'">true</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='smalltest-bip|Win32'">true</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='smalltest-origin-4-256-4096|Win32'">true</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='fft-origin-mesi-64-1-2|Win32'">true</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='fft-origin-mesi-4-1-2|Win32'">true</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='fft-origin-mesi-8-1-2|Win32'">true</LinkIncremental>
@@ -160,6 +186,8 @@
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='temp|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='fft-origin-mesi-2-1-2|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='fft-bip-2-8-16|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='smalltest-bip|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='smalltest-origin-4-256-4096|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='fft-origin-mesi-64-1-2|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='fft-origin-mesi-4-1-2|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='fft-origin-mesi-8-1-2|Win32'">C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\include;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys\Devices;C:\Documents and Settings\echang\My Documents\Visual Studio 2010\Projects\sesc-echang\src\MemSys;$(IncludePath)</IncludePath>
@@ -246,6 +274,56 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='fft-bip-2-8-16|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <AdditionalIncludeDirectories>MemSys\Messages\;PersonalTools\includes\;libtrans\;libvmem\;libtm\;libsuperlu\;libsuc\;libsmp\;libsesctherm\;libsescspot\;librst\;libpower\;libpint\;libnet\;libmem\;libemul\;libcore\;libll\;libmint\;libapp\;libAugMem\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;HANGING_ASSERT;_DEBUG;SYSTEM_SESC;DEBUG;_CONSOLE;LENDIAN;__i386__;DEBUG_DUMP_PROGRAM;ADDRESS_CHK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <AdditionalOptions>zdll.exp zdll.lib %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalLibraryDirectories>PersonalTools\libraries\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <LinkTimeCodeGeneration>
+      </LinkTimeCodeGeneration>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='smalltest-bip|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <AdditionalIncludeDirectories>MemSys\Messages\;PersonalTools\includes\;libtrans\;libvmem\;libtm\;libsuperlu\;libsuc\;libsmp\;libsesctherm\;libsescspot\;librst\;libpower\;libpint\;libnet\;libmem\;libemul\;libcore\;libll\;libmint\;libapp\;libAugMem\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;HANGING_ASSERT;_DEBUG;SYSTEM_SESC;DEBUG;_CONSOLE;LENDIAN;__i386__;DEBUG_DUMP_PROGRAM;ADDRESS_CHK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <AdditionalOptions>zdll.exp zdll.lib %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalLibraryDirectories>PersonalTools\libraries\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <LinkTimeCodeGeneration>
+      </LinkTimeCodeGeneration>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='smalltest-origin-4-256-4096|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>

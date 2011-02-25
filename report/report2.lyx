@@ -108,7 +108,7 @@ Directory-based cache coherence protocols are based on the central concept
  This report will discuss the advantages and disadvantages of two different
  directory-based cache coherence protocols.
  I will first give an overview of all the components in the system.
- Next, I will introduce each individual components in more detail.
+ Next, I will introduce select components and message types in more detail.
  Then, I will introduce various cache coherence protocols in general, as
  well as the specific protocols that will be compared with each other, which
  are the Unoptimized directory-based cache coherence protocol and a different
@@ -134,33 +134,12 @@ Computers today are moving increasingly towards multiprocessing architectures
 ing architectures and how schemes offer different tradeoffs between speed
  and memory consistency.
  In particular, the different schemes used for cache coherence by processors
- have a huge impact on the performance of a multiprocessing architecture.
+ have a noticeable impact on the performance of a multiprocessing architecture.
  Cache coherence protocols require mechanisms like snoopy buses or directories
  to function.
  Therefore, it is also important to understand how underlying mechanisms
  such as buses and directories allow multiple caches to communicate with
  each other.
- 
-\begin_inset Quotes eld
-\end_inset
-
-In a coherent multiprocessor, the caches provide both migration and replication
- of shared data items
-\begin_inset Quotes erd
-\end_inset
-
-
-\begin_inset CommandInset citation
-LatexCommand cite
-key "HEN00"
-
-\end_inset
-
-.
- It is important for the architect of the processor to design these features
- into the processor as to take advantage of the speedup available in having
- multiple blocks of the same data across different nodes, while still giving
- the correct results.
 \end_layout
 
 \begin_layout Standard
@@ -208,8 +187,7 @@ key "LAU00"
 In the following section of the paper, an overview of how each components
  are connected together to form the complete system is presented.
  Section 3 shows the details of each individual component in the system.
- Section 4 talks about the basic message types that will be sent in the
- system.
+ Section 4 talks about the basic message types that are present in the system.
  Implementation and comparison of protocols is presented in Section 5.
  Performance of the two types of protocols is presented in Section 6.
  Section 7 describes some of the problems faced in simulating the protocols.
@@ -442,9 +420,9 @@ key "HEN00"
 
 .
  It is important for the architect of the processor to design these features
- into the processor as to allow the programmer to take advantage of the
- speedup available in having multiple data.
- Having multiple data allows for multiple reads at the same time.
+ into the processor to take advantage of the speedup available in having
+ multiple blocks of the same data across different nodes, while still giving
+ the correct results.
  There are several states that has to be stored by the cache in order to
  enable the rest of the system to function properly.
 \end_layout
@@ -491,7 +469,14 @@ Because this protocol contains only three states, it can save space on storage
  less cache states can be simpler.
  The disadvantage is that this protocol requires more messages and higher
  latency on average as compared to protocols where the cache utilizes more
- states.
+ states
+\begin_inset CommandInset citation
+LatexCommand cite
+key "HEN00"
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Subsubsection
@@ -503,7 +488,7 @@ MESI Cache
 placement htbp
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \begin_inset Tabular
@@ -1297,7 +1282,7 @@ Snoopy-Based Cache Coherence Protocol
 \begin_inset Float figure
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \begin_inset Graphics
@@ -1364,24 +1349,14 @@ reference "fig:Snoopy-based-cache-coherence"
 \end_inset
 
 .
- The snoopy-based cache coherence protocols only logically have two different
- nodes, the requesting node and the data node.
- Every message is broadcast to all the nodes.
- There are two major categories of cache coherence protocols available today,
- snoopy-based cache coherence protocol and directory-based cache coherence
- protocol.
-\end_layout
-
-\begin_layout Standard
-The snoopy-based cache coherence protocol relies on the bus to transfer
+ The snoopy-based cache coherence protocol relies on the bus to transfer
  necessary information.
- 
-\begin_inset space \space{}
-\end_inset
-
-All messages are broadcast on a common bus, which is monitored by each processor
- and its cache; therefore, each processor needs a controller to snoop the
- bus.
+ In this protocol, there are only two logical nodes, the requesting node
+ and the data node.
+ However, even though the nodes only need to communicate directly with each
+ other, because they are connected by a bus, all messages are broadcast.
+ These messages are monitored by each processor and its cache; therefore,
+ each processor needs a controller to snoop the bus.
  Anytime a node encounters an important message that pertains to itself,
  the controller makes sure to forward the request to the cache so that it
  can further process it.
@@ -1417,7 +1392,14 @@ key "HEN00"
 Although the simplicity of snoopy-based cache coherence protocols allow
  manufacturers to easily convert single-core processors to be used as multiproce
 ssors, snoopy-based cache coherence protocols have problems with scaling
- up to meet higher core counts than directory-based cache coherence protocols.
+ up to meet higher core counts than directory-based cache coherence protocols
+\begin_inset CommandInset citation
+LatexCommand cite
+key "HEN00"
+
+\end_inset
+
+.
  For that reason, this report will be focusing mainly on directory-based
  cache coherence protocols.
 \end_layout
@@ -1430,7 +1412,7 @@ BIP
 \begin_inset Float figure
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \begin_inset Graphics
@@ -2101,7 +2083,7 @@ BIP Cache FSM
 \begin_inset Float figure
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \begin_inset Graphics
@@ -2488,7 +2470,7 @@ Origin Protocol
 \begin_inset Float figure
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \begin_inset Graphics
@@ -2592,6 +2574,19 @@ This type of protocol introduce many opportunities for the messages to arrive
  be denied via a nak by the directory.
  This ensures that the directory stays in a consistent state and is not
  modified based on invalid directory state.
+\end_layout
+
+\begin_layout Standard
+This protocol is also different from BIP in the way it handles invalidations.
+ Invalidates have to be sent when transitioning out of the shared state
+ into the exclusive state or the invalid state.
+ When this occurs in BIP, the invalidate acks return to the directory, and
+ the directory would only send out a response to the read request when it
+ receives all the invalidate acks.
+ If the same thing occurs in the Origin protocol, the invalidate acks return
+ to the new owner.
+ Therefore, the cache is the component that needs to remember the number
+ of invalidate acks received in the Origin protocol.
 \end_layout
 
 \begin_layout Subsubsection

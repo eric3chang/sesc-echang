@@ -47,7 +47,7 @@ def generateConfig(benchmarkName, directoryType, processorCount, L1Size, L2Size)
     outFile.write('HeapMemorySize = 334217728\n')
     outFile.write('FilterSize = 64\n')
     outFile.write("ReportFile = 'results/" + outFilename + ".report'\n")
-    outFile.write("MemDeviceReportFile = 'results/" + outFilename + ".memDevResults'\n")
+    outFile.write("MemDeviceReportFile = 'results/" + outFilename + "'\n")
     outFile.write("CompositionResultFile = 'results/" + outFilename + ".dat'\n")
     outFile.write("BenchName = '" + benchmarkName + "'\n")
     outFile.write('MemorySystemConfig = "' + MEMORY_SYSTEM_CONFIG_DIRECTORY + directoryType \
