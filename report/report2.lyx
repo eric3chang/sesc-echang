@@ -111,7 +111,7 @@ Directory-based cache coherence protocols are based on the central concept
  Next, I will introduce select components and message types in more detail.
  Then, I will introduce various cache coherence protocols in general, as
  well as the specific protocols that will be compared with each other, which
- are a drectory-based cache coherence protocol based on bilateral interactions
+ are a directory-based cache coherence protocol based on bilateral interactions
  and a different protocol based on the one used in the SGI Origin 2000-based
  systems.
  I will then go into detail about simulating and implementing the differences
@@ -164,7 +164,7 @@ key "LAU00"
 .
  In this report, I will go in depth into the Origin system to show how the
  cache coherence protocol in this system operates.
- For comparison, I will also present a detailed analysis about a less optimized
+ For comparison, I will also present a detailed analysis about an unoptimized
  protocol based on bilateral interactions, or Bilateral Interaction Protocol
  (BIP).
  Cache coherence protocols based the Origin protocol and BIP are both programmed
@@ -359,7 +359,7 @@ key "LAU00"
 \end_inset
 
 .
- This system uses a DSM, and each memory is addressible from any node.
+ This system uses a DSM, and each memory is addressable from any node.
  If any request arrives at the directory where it is necessary to retrieve
  the memory, the directory is guaranteed to be attached to that memory and
  does not have to ask any other node, since each directory is responsible
@@ -444,8 +444,7 @@ Exclusive
 \begin_inset Quotes erd
 \end_inset
 
- state to reduce the traffic caused by evictions of blocks that only exist
- in one cache.
+ state to reduce the amount of unnecessary operations in the system.
 \end_layout
 
 \begin_layout Subsubsection
@@ -490,7 +489,7 @@ MESI Cache
 placement htbp
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \begin_inset Tabular
@@ -778,7 +777,7 @@ Once we add this state into the protocol, certain cases that required an
  If instead, the MSI protocol fills an Exclusive reply as Modified, there
  would be situations where we would write a clean block to memory.
  With an additional Exclusive state, the cache does not have to write back
- its block to memory when downgrading from Clean Exclusive to Shared.
+ its block to memory when downgrading from Exclusive to Shared.
  Although directory-based cache coherence protocols can use the MSI cache,
  the MESI cache is the cache that will be used in both of the directory-based
  cache coherence protocols presented in this report.
@@ -823,14 +822,14 @@ key "HEN00"
  of a transaction, and the owner and sharers of the block has not actually
  received the block, yet.
  Such additional states can be used to indicate that the directory is busy
- and cannot fulfil the request at the moment.
+ and cannot fulfill the request at the moment.
 \end_layout
 
 \begin_layout Standard
 \begin_inset Float table
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -1009,6 +1008,7 @@ reference "tab:Correspondence-between-cache"
  transition into the Shared state must have transitioned from a Modified
  or Exclusive state, which must already have stored a node ID in the owner
  slot.
+ If the state of the block is Invalid, there would be no owner or sharers.
 \end_layout
 
 \begin_layout Standard
@@ -1028,8 +1028,8 @@ One of the easiest ways to keep track of nodes inside directories is to
  do not keep track of all the node IDs, because that would defeat the primary
  purpose of using the node IDs, which is to save space.
  Therefore, when we have a system that keeps track of the cache block using
- node ID, we are unable to keep track of all the CPUs that might potentially
- request for a cache block.
+ node ID, we might be unable to keep track of all the CPUs that might potentiall
+y request for a cache block.
  In that case, we would have to invalidate a CPU when we want more space
  in the directory.
 \end_layout
@@ -1193,9 +1193,10 @@ In this section, I will be going into protocol details.
  There are several different types of cache coherence protocols, and each
  of them provide their own advantages and disadvantages.
  I will first introduce the snoopy-based cache coherence protocol.
- Next, I will be showing the regular directory-based cache coherence protocol
- where all requests pass through the home node and each node can only emit
- one response in reply to a request.
+ Next, I will present directory-based cache coherence protocols in general
+ and also show a directory-based cache coherence protocol where all requests
+ and replies pass through the home node and each node can only emit one
+ response in reply to a request.
  Then, I will be showing a more optimized version of the cache coherence
  protocol, based on the SGI Origin protocol, where it is possible for each
  node to emit two messages in response to a request, and not all requests
@@ -1322,6 +1323,50 @@ BIP
 \end_layout
 
 \begin_layout Standard
+Directory-based cache coherence protocols such as the BIP are a class of
+ widely used cache coherence protocols that has been proven in the past
+ to be able to scale up compared to cache coherence protocols based on the
+ snoopy method.
+ 
+\begin_inset Quotes eld
+\end_inset
+
+As processor speeds and the number of cores per processor increase, more
+ designers are likely to opt for [directory-based cache coherence] protocols
+ to avoid the broadcast limit of a snoopy protocol
+\begin_inset Quotes erd
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "HEN00"
+
+\end_inset
+
+.
+ Directory-based protocols are interesting because it can achieve higher
+ speeds performing the same amount of work than snoopy-based protocols.
+ Nevertheless, there are still some characteristics of directory-based cache
+ coherence protocols that can cause problems when designing a system.
+ A snoopy-based protocol has very few problems with consistency because
+ all messages are broadcast on a bus, meaning all processors know whenever
+ changes occur in the system.
+ However, in a directory-based protocol, it is possible for the directory
+ to be in an inconsistent state for a longer time.
+ For example, when we are evicting a block from a processor, this is broadcast
+ across the bus in a snoopy-protocol, and each node knows right away if
+ it needs to change its cache state.
+ In a directory-based cache coherence protocol, there is some time between
+ when the eviction message is sent from the owner to when the message arrives
+ at the directory.
+ In this time, it is possible for some other request to arrive at the directory,
+ allowing the directory to possibly fetch the invalidated data from the
+ owner that just evicted its data if care is not taken when designing the
+ protocol.
+\end_layout
+
+\begin_layout Standard
 \begin_inset Float figure
 wide false
 sideways false
@@ -1356,20 +1401,14 @@ name "fig:Protocol-based-on-bilateral"
 
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
 \end_inset
 
 
 \end_layout
 
 \begin_layout Standard
-Directory-based cache coherence protocols are a class of widely used cache
- coherence protocols that has been proven in the past to be able to scale
- up compared to cache coherence protocols based on the snoopy method.
- A simplified version is shown in 
+A simple request of a directory-based cache coherence protocol based on
+ BIP is shown in 
 \begin_inset ERT
 status open
 
@@ -1394,81 +1433,36 @@ reference "fig:Protocol-based-on-bilateral"
 \end_inset
 
 .
- 
-\begin_inset Quotes eld
-\end_inset
-
-As processor speeds and the number of cores per processor increase, more
- designers are likely to opt for [directory-based cache coherence] protocols
- to avoid the broadcast limit of a snoopy protocol
-\begin_inset Quotes erd
-\end_inset
-
-
-\begin_inset CommandInset citation
-LatexCommand cite
-key "HEN00"
-
-\end_inset
-
-.
- Directory-based protocols are interesting because it can achieve higher
- speeds performing the same amount of work than snoopy-based protocols.
- Nevertheless, there are still some characteristics of directory-based cache
- coherence protocols that can cause problems when designing a system.
- A snoopy-based protocol has very few problems with consistency because
- all messages are broadcast on a bus, meaning all processors know whenever
- changes occur in the system.
- However, in a directory-based protocol, it is possible for the directory
- to be in an inconsistent state for a longer time.
- For example, when we are evicting a block from a processor, this is broadcast
- across the bus in a snoopy-protocol, and each node knows right away if
- it needs to change its cache state.
- In a directory-based cache coherence protocol, there is some time between
- when the eviction message is sent from the owner to when the message arrives
- at the directory.
- In this time, it is possible for some other request to come in to the directory
-, allowing the directory to possibly fetch the invalidated data from the
- owner that just evicted its data if care is not taken when designing the
- protocol.
-\end_layout
-
-\begin_layout Standard
-I will be showing the BIP first.
- In this protocol, all requests pass through the home node and each node
- can only emit one response in reply to a request.
- The Unoptimized directory-based cache coherence protocol is a traditional
- directory-based cache coherence protocol where the requester first sends
- a message to the directory, followed by the directory sending another request
- to the data node, with the data node returning a response to the directory.
+ The BIP is a traditional directory-based cache coherence protocol where
+ the requester first sends a message to the directory, followed by the directory
+ sending another request to the data node, with the data node returning
+ a response to the directory.
  Finally, the directory is responsible for forwarding the response back
  to the requester.
  In general, two bilateral interactions occur in this protocol to form a
  complete transaction.
+ In the BIP, there are three logical nodes in any request: the requesting
+ node, the directory node, and the data node.
+ These logical nodes can all be the same physical nodes or they can all
+ be different, but it is easier to think of them logically as three separate
+ nodes.
+ Requesting node is the node that sends out the original read or write request.
+ Like in any other directory-based protocol, it is necessary to send the
+ request to the directory node in order to find out where the data actually
+ is, what state the directory block is in, and whether or not the request
+ can be satisfied immediately.
+ In the BIP, all requests pass through the home node and each node can only
+ emit one response in reply to a request.
 \end_layout
 
 \begin_layout Standard
-The basic directory protocol is easier to implement than some of the more
+This basic directory protocol is easier to implement than some of the more
  advanced and newer version of the protocol, but it is also unoptimized.
  This protocol makes sure that each request has a corresponding reply and
  that no operations can proceed until the responding message has been received.
  No assumptions are made when deciding the directory state because we wait
  for the owner or shared block to return to the directory before we forward
  it back to the requester.
-\end_layout
-
-\begin_layout Standard
-In any directory-based cache coherence protocol, there are three logical
- nodes in any request: the requesting node, the directory node, and the
- data node.
- These logical nodes can all be the same physical nodes or they can all
- be different, but it is easier to think of them logically as three separate
- nodes.
- Requesting node is the node that sends out the original read or write request.
- In a directory-based protocol, it is necessary to send the request to the
- directory node in order to find out where the data actually is, what state
- the directory block is in, and whether or not the request can be satisfied
- immediately.
 \end_layout
 
 \begin_layout Subsubsection
@@ -1545,8 +1539,7 @@ reference "fig:regular-protocol-directory-fsm"
 
 \end_inset
 
- illustrates the directory FSM for the Unoptimized directory-based cache
- coherence protocol.
+ illustrates the directory FSM for the BIP.
  The directory for any address starts in the 
 \begin_inset Quotes eld
 \end_inset
@@ -2025,8 +2018,7 @@ reference "fig:Regular-protocol-cache"
 
 \end_inset
 
- illustrates the cache FSM for the Unoptimized directory-based cache coherence
- protocol.
+ illustrates the cache FSM for the BIP.
  All caches start initially in the 
 \begin_inset Quotes eld
 \end_inset
@@ -2349,6 +2341,33 @@ Origin Protocol
 \end_layout
 
 \begin_layout Standard
+In this section, I will be showing a more optimized version of the cache
+ coherence protocol.
+ The SGI Origin 2000 implemented this protocol, which is based on an altered
+ version of the protocol used in the Stanford DASH multiprocessor
+\begin_inset CommandInset citation
+LatexCommand cite
+key "LAU00"
+
+\end_inset
+
+.
+ In this protocol, it is possible for each node to emit two messages in
+ response to a request, and not all requests have to pass through the directory
+ before being satisfied.
+ This allows the Origin protocol to send less messages into the network
+ than BIP.
+ This decreases the overall latency in the system because it eliminates
+ the time going from the data node to the directory node to complete requests.
+ The protocol assumes that all read requests to the directory can be satisfied,
+ and if it cannot, it is up to the owner of the data instead of the directory
+ to send an additional invalidate back to the directory as well as the data
+ response to the original requesting node.
+ We save time by allowing the data packet retrieved to go directly to the
+ requester without the additional latency of going to the directory first.
+\end_layout
+
+\begin_layout Standard
 \begin_inset Float figure
 wide false
 sideways false
@@ -2383,60 +2402,41 @@ name "fig:Origin-protocol"
 
 \end_layout
 
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
 \begin_layout Plain Layout
 
+
+\backslash
+figurename
 \end_layout
 
 \end_inset
 
 
-\end_layout
+\begin_inset space \space{}
+\end_inset
 
-\begin_layout Standard
-In this section, I will be showing a more optimized version of the cache
- coherence protocol, based on the SGI Origin protocol, where it is possible
- for each node to emit two messages in response to a request, and not all
- requests have to pass through the directory before being satisfied.
- The Origin directory-based cache coherence protocol uses a three-way interactio
-n that sends less messages than the Unoptimized directory protocol does.
- Because of this change, the finite-state machines for this protocol is
- substantially different than the BIP, both in the directory and in the
- cache.
-\end_layout
 
-\begin_layout Standard
-There is an optimized version of the basic directory protocol mentioned
- in the previous section.
- The SGI Origin 2000 implemented this protocol, which is based on an altered
- version of the protocol used in the Stanford DASH multiprocessor
-\begin_inset CommandInset citation
-LatexCommand cite
-key "LAU00"
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Origin-protocol"
 
 \end_inset
 
-.
- This protocol tries to be more optimized by reducing latency between the
- data node and the directory node.
- It achieves this by assuming that all read requests to the directory can
- be satisfied, and if it cannot, it is up to the owner of the data instead
- of the directory to send an additional invalidate back to the directory
- as well as the data response to the original requesting node.
- We save time by allowing the data packet retrieved to go directly to the
- requester without the additional latency of going to the directory first.
-\end_layout
-
-\begin_layout Standard
-In the Origin cache coherence protocol, there are also three logical nodes,
+ shows a simple request that could occur in the Origin protocol.
+ In the Origin protocol, there are also three logical nodes, like in BIP,
  but occasionally, the data node needs to send two messages at once, one
  to the directory node, and one to the requesting node.
- This should decrease the overall latency in the system because it eliminates
- the time going from the data node to the directory node to complete requests.
-\end_layout
-
-\begin_layout Standard
-This type of protocol introduce many opportunities for the messages to arrive
- out-of-order.
+ This type of protocol introduce many opportunities for the messages to
+ arrive out-of-order.
  A requesting message goes to the directory, which can be different than
  the node that ultimately supplies the response back to the requester.
  There are situations where the directory completes its transition into
@@ -2445,17 +2445,17 @@ This type of protocol introduce many opportunities for the messages to arrive
  to the new owner when the new owner has not even received its response
  from the previous transaction.
  In addition, the system sometimes need to send out two messages simultaneously,
- as opposed to the Unoptimized directory, where all operations can only
- cause one outgoing message to be sent on every incoming message.
+ as opposed to the BIP, where all operations can only cause one outgoing
+ message to be sent on every incoming message.
  The protocol deals with this situation by having the directory change to
  a busy state whenever the directory state and the request cannot be satisfied
  immediately.
- This situation can happen, for example, when the directory state is Exclusive
- with another owner, and a read request comes in.
- Any further requests that arrive, regardless of their origin or type, will
- be denied via a nak by the directory.
+ For example, this situation can happen when the directory state is Exclusive
+ with another owner, and a read request arrives.
+ Any further requests that the directory receives, regardless of their origin
+ or type, will be denied via a nak by the directory.
  This ensures that the directory stays in a consistent state and is not
- modified based on invalid directory state.
+ modified based on an invalid directory state.
 \end_layout
 
 \begin_layout Standard
@@ -2469,6 +2469,9 @@ This protocol is also different from BIP in the way it handles invalidations.
  to the new owner.
  Therefore, the cache is the component that needs to remember the number
  of invalidate acks received in the Origin protocol.
+ Because of these changes, the finite-state machines for this protocol is
+ substantially different than the BIP, both in the directory and in the
+ cache.
 \end_layout
 
 \begin_layout Subsubsection
@@ -3706,14 +3709,14 @@ SPLASH2 benchmarks
 
 \begin_layout Standard
 Using these results, we can see that the MSI protocol takes longer to complete.
- Although there are more read misses for the MOESI cache, it is offset by
+ Although there are more read misses for the MESI cache, it is offset by
  the amount of read hits for L2 cache.
  
 \begin_inset space \space{}
 \end_inset
 
 It could also be possible that the additional read misses do not incur as
- much penalty in a MOESI cache because in a MOESI cache, there is a greater
+ much penalty in a MESI cache because in a MESI cache, there is a greater
  opportunity for the cache to fetch the data from another node in that directory
  instead of from the memory.
 \end_layout
@@ -3721,7 +3724,7 @@ It could also be possible that the additional read misses do not incur as
 \begin_layout Standard
 
 \family roman
-We also see that for both MOESI and MSI caches, as the CPU count increases,
+We also see that for both MESI and MSI caches, as the CPU count increases,
  the run-time decreases, this is to be expected as more work can be done
  in the same amount of time when one has more processors that can be used
  at the same time.
@@ -3841,33 +3844,6 @@ key "LAU00"
 \end_inset
 
 .
-\end_layout
-
-\begin_layout Standard
-One of the bugs that was extremely hard to find was one caused by various
- interactions within the system.
- To decrease the number of messages sent, it is possible for the block allocator
- in MOESI Cache to allocate a block as soon as it is evicted.
- Normally, when a block is evicted, the system will undergo this cycle:
- 1.
- An OnLocalRead gets called, and AllocateBlock puts tag1 into pendingEviction.
- 2.
- OnLocalInvalidateResponse gets called, and removes tag1 from pendingEviction,
- doing the necessary cleanup.
-\end_layout
-
-\begin_layout Standard
-However, it is possible for the system to undergo the following cycle, especiall
-y when faced with a larger number of invalidates and evictions: 1.
- An OnLocalRead gets called, and AllocateBlock puts tag1 into pendingEviction.
- 2.
- Another OnLocalRead gets called before OnLocalInvalidateResponse gets called,
- and PrepareFreshBlock finds the same tag1 inside pendingEviction.
- So it cancels the eviction and prepares that block for use.
- 3.
- OnLocalInvalidateResponse gets called for tag1, but it cannot find tag1
- inside pendingInvalidate or pendingEviction because pendingEviction.erase(tag1)
- was called during PrepareFreshBlock.
 \end_layout
 
 \begin_layout Section
