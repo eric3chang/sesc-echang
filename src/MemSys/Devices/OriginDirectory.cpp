@@ -1,3 +1,18 @@
+// toggles debug messages
+#define MEMORY_ORIGIN_DIRECTORY_DEBUG_VERBOSE
+//#define MEMORY_ORIGIN_DIRECTORY_DEBUG_DIRECTORY_DATA
+//#define MEMORY_ORIGIN_DIRECTORY_DEBUG_COUNTERS
+//#define MEMORY_ORIGIN_DIRECTORY_DEBUG_MSG_COUNT
+//#define MEMORY_ORIGIN_DIRECTORY_DEBUG_PENDING_DIRECTORY_EXCLUSIVE_READS
+//#define MEMORY_ORIGIN_DIRECTORY_DEBUG_PENDING_DIRECTORY_SHARED_READS
+//#define MEMORY_ORIGIN_DIRECTORY_DEBUG_PENDING_EVICTION
+//#define MEMORY_ORIGIN_DIRECTORY_DEBUG_PENDING_LOCAL_READS
+//#define MEMORY_ORIGIN_DIRECTORY_DEBUG_PENDING_REMOTE_INVALIDATES
+//#define MEMORY_ORIGIN_DIRECTORY_DEBUG_PENDING_REMOTE_READS
+
+// used in AutoDetermineDestSendMsg's member function calling
+#define CALL_MEMBER_FN(object,ptrToMember)  ((object).*(ptrToMember))
+
 #include "OriginDirectory.h"
 #include "../Debug.h"
 #include "../MSTypes.h"
@@ -9,9 +24,6 @@
 // debugging utilities
 #include <sstream>
 #include "to_string.h"
-
-// used in AutoDetermineDestSendMsg's member function calling
-#define CALL_MEMBER_FN(object,ptrToMember)  ((object).*(ptrToMember))
 
 using std::cerr;
 using std::cout;
@@ -548,6 +560,9 @@ namespace Memory
 
 	void OriginDirectory::OnCacheCacheNak(const CacheNakMsg* m, NodeID src)
 	{
+#ifdef MEMORY_ORIGIN_DIRECTORY_DEBUG_VERBOSE
+		PrintDebugInfo("CacheCacheNak",*m,"",src);
+#endif
 		cacheNaksReceived++;
 		CacheData& cacheData = GetCacheData(m->addr);
 		OnCache(m, src, cacheData);
@@ -580,6 +595,9 @@ namespace Memory
 
 	void OriginDirectory::OnCacheInvalidate(const InvalidateMsg* m, NodeID src)
 	{
+#ifdef MEMORY_ORIGIN_DIRECTORY_DEBUG_VERBOSE
+		PrintDebugInfo("CacheInvalidate",*m,"",src);
+#endif
 		cacheInvalidatesReceived++;
 		CacheData& cacheData = GetCacheData(m->addr);
 		OnCache(m, src, cacheData);
@@ -588,6 +606,9 @@ namespace Memory
 
 	void OriginDirectory::OnCacheInvalidateAck(const InvalidateAckMsg* m, NodeID src)
 	{
+#ifdef MEMORY_ORIGIN_DIRECTORY_DEBUG_VERBOSE
+		PrintDebugInfo("CacheInvalidateAck",*m,"",src);
+#endif
 		cacheInvalidateAcksReceived++;
 		CacheData& cacheData = GetCacheData(m->addr);
 		OnCache(m, src, cacheData);
@@ -618,6 +639,9 @@ namespace Memory
 
 	void OriginDirectory::OnCacheInvalidateResponse(const InvalidateResponseMsg* m, NodeID src)
    {
+#ifdef MEMORY_ORIGIN_DIRECTORY_DEBUG_VERBOSE
+		PrintDebugInfo("CacheInvalidateResponse",*m,"",src);
+#endif
 		cacheInvalidateResponsesReceived++;
 		CacheData& cacheData = GetCacheData(m->addr);
 		OnCache(m, src, cacheData);
@@ -626,6 +650,9 @@ namespace Memory
 
 	void OriginDirectory::OnCacheRead(const ReadMsg* m)
 	{
+#ifdef MEMORY_ORIGIN_DIRECTORY_DEBUG_VERBOSE
+		PrintDebugInfo("CacheRead",*m,"");
+#endif
 		cacheReadsReceived++;
 		DebugAssertWithMessageID(pendingLocalReads.find(m->MsgID())==pendingLocalReads.end(), m->MsgID());
 		pendingLocalReads[m->MsgID()] = m;
@@ -693,6 +720,9 @@ namespace Memory
 
 	void OriginDirectory::OnCacheReadReply(const ReadReplyMsg* m, NodeID src)
    {
+#ifdef MEMORY_ORIGIN_DIRECTORY_DEBUG_VERBOSE
+		PrintDebugInfo("CacheReadReply",*m,"",src);
+#endif
 		cacheReadRepliesReceived++;
 		CacheData& cacheData = GetCacheData(m->addr);
 		OnCache(m, src, cacheData);
@@ -701,6 +731,9 @@ namespace Memory
 
 	void OriginDirectory::OnCacheReadResponse(const ReadResponseMsg* m, NodeID src)
    {
+#ifdef MEMORY_ORIGIN_DIRECTORY_DEBUG_VERBOSE
+		PrintDebugInfo("CacheReadResponse",*m,"",src);
+#endif
 		cacheReadResponsesReceived++;
 		CacheData& cacheData = GetCacheData(m->addr);
 		OnCache(m, src, cacheData);
@@ -853,6 +886,9 @@ namespace Memory
 
    void OriginDirectory::OnCacheCleanExclusive(const BaseMsg* msg, NodeID src, CacheData& cacheData)
    {
+#ifdef MEMORY_ORIGIN_DIRECTORY_DEBUG_VERBOSE
+		PrintDebugInfo("CacheCleanEx",*msg,"",src);
+#endif
 		//const BaseMsg*& firstReplyBase = cacheData.firstReply;
    	//DebugAssertWithMessageID(firstReplyBase!=NULL, msg->MsgID());
    	//NodeID& firstReplySrc = cacheData.firstReplySrc;
@@ -937,6 +973,9 @@ namespace Memory
 
    void OriginDirectory::OnCacheDirtyExclusive(const BaseMsg* msg, NodeID src, CacheData& cacheData)
    {
+#ifdef MEMORY_ORIGIN_DIRECTORY_DEBUG_VERBOSE
+		PrintDebugInfo("CacheDirtyEx",*msg,"",src);
+#endif
    	//NodeID& firstReplySrc = cacheData.firstReplySrc;
    	//CacheState state = cacheData.GetCacheState();
 
@@ -1023,6 +1062,9 @@ namespace Memory
 
 	void OriginDirectory::OnCacheEviction(const EvictionMsg* m, NodeID src)
 	{
+#ifdef MEMORY_ORIGIN_DIRECTORY_DEBUG_VERBOSE
+		PrintDebugInfo("CacheEviction",*m,"",src);
+#endif
 		cacheEvictionsReceived++;
 		CacheData& cacheData = GetCacheData(m->addr);
 		OnCache(m, src, cacheData);
@@ -1031,6 +1073,9 @@ namespace Memory
 
 	void OriginDirectory::OnCacheExclusive(const BaseMsg* msg, NodeID src, CacheData& cacheData)
 	{
+#ifdef MEMORY_ORIGIN_DIRECTORY_DEBUG_VERBOSE
+		PrintDebugInfo("CacheEx",*msg,"",src);
+#endif
 		const BaseMsg*& firstReplyBase = cacheData.firstReply;
 		NodeID& firstReplySrc = cacheData.firstReplySrc;
 		const EvictionMsg*& secondReply = cacheData.secondReply;
@@ -1162,6 +1207,9 @@ namespace Memory
 
 	void OriginDirectory::OnCacheExclusiveInterventionEviction(const BaseMsg* msg, NodeID src, CacheData& cacheData)
 	{
+#ifdef MEMORY_ORIGIN_DIRECTORY_DEBUG_VERBOSE
+		PrintDebugInfo("CacheExIntvEvic",*msg,"",src);
+#endif
 		const BaseMsg*& firstReplyBase = cacheData.firstReply;
 		NodeID& firstReplySrc = cacheData.firstReplySrc;
 		const EvictionMsg*& secondReply = cacheData.secondReply;
@@ -1279,6 +1327,9 @@ namespace Memory
 
 	void OriginDirectory::OnCacheExclusiveWaitingForSpeculativeReply(const BaseMsg* msg, NodeID src, CacheData& cacheData)
 	{
+#ifdef MEMORY_ORIGIN_DIRECTORY_DEBUG_VERBOSE
+		PrintDebugInfo("CacheExWaitForSpecRep",*msg,"",src);
+#endif
 		DebugAssertWithMessageID(cacheData.firstReply!=NULL, msg->MsgID());
 		DebugAssertWithMessageID(cacheData.firstReply->Type()==mt_ReadResponse, msg->MsgID());
 		// this is okay, because we don't reassign cacheData.firstReply here
@@ -1325,6 +1376,9 @@ namespace Memory
 
 	void OriginDirectory::OnCacheIntervention(const InterventionMsg* m, NodeID src)
 	{
+#ifdef MEMORY_ORIGIN_DIRECTORY_DEBUG_VERBOSE
+		PrintDebugInfo("CacheIntv",*m,"",src);
+#endif
 		cacheInterventionsReceived++;
 		CacheData& cacheData = GetCacheData(m->addr);
 		OnCache(m, src, cacheData);
@@ -1332,6 +1386,9 @@ namespace Memory
 	
 	void OriginDirectory::OnCacheInvalid(const BaseMsg* msg, NodeID src, CacheData& cacheData)
 	{
+#ifdef MEMORY_ORIGIN_DIRECTORY_DEBUG_VERBOSE
+		PrintDebugInfo("CacheInvalid",*msg,"",src);
+#endif
 		//CacheState state = cacheData.GetCacheState();
 
 		if (msg->Type()==mt_Intervention)
@@ -1390,6 +1447,9 @@ namespace Memory
 
 	void OriginDirectory::OnCacheShared(const BaseMsg* msg, NodeID src, CacheData& cacheData)
 	{
+#ifdef MEMORY_ORIGIN_DIRECTORY_DEBUG_VERBOSE
+		PrintDebugInfo("CacheShared",*msg,"",src);
+#endif
 		//CacheState state = cacheData.GetCacheState();
 
 		if (msg->Type()==mt_Invalidate)
@@ -1461,6 +1521,9 @@ namespace Memory
 
 	void OriginDirectory::OnCacheSharedWaitingForSpeculativeReply(const BaseMsg* msg, NodeID src, CacheData& cacheData)
 	{
+#ifdef MEMORY_ORIGIN_DIRECTORY_DEBUG_VERBOSE
+		PrintDebugInfo("CacheSharedWaitForSpecReply",*msg,"",src);
+#endif
 		DebugAssertWithMessageID(cacheData.firstReply!=NULL, msg->MsgID());
 		DebugAssertWithMessageID(cacheData.firstReply->Type()==mt_ReadResponse, msg->MsgID());
 		const ReadResponseMsg* firstReply = (const ReadResponseMsg*)cacheData.firstReply;
@@ -1506,6 +1569,9 @@ namespace Memory
 
 	void OriginDirectory::OnCacheSpeculativeReply(const SpeculativeReplyMsg* m, NodeID src)
 	{
+#ifdef MEMORY_ORIGIN_DIRECTORY_DEBUG_VERBOSE
+		PrintDebugInfo("CacheSpecReply",*m,"",src);
+#endif
 		cacheSpeculativeRepliesReceived++;
 		CacheData& cacheData = GetCacheData(m->addr);
 		OnCache(m, src, cacheData);
@@ -1513,6 +1579,9 @@ namespace Memory
 
 	void OriginDirectory::OnCacheWaitingForExclusiveReadResponse(const BaseMsg* msg, NodeID src, CacheData& cacheData)
 	{
+#ifdef MEMORY_ORIGIN_DIRECTORY_DEBUG_VERBOSE
+		PrintDebugInfo("CacheWaitForExReadRes",*msg,"",src);
+#endif
 		const BaseMsg*& firstReplyBase = cacheData.firstReply;
 		NodeID& firstReplySrc = cacheData.firstReplySrc;
 		int& invalidAcksReceived = cacheData.invalidAcksReceived;
@@ -1705,6 +1774,9 @@ namespace Memory
 
 	void OriginDirectory::OnCacheWaitingForExclusiveResponseAck(const BaseMsg* msg, NodeID src, CacheData& cacheData)
 	{
+#ifdef MEMORY_ORIGIN_DIRECTORY_DEBUG_VERBOSE
+		PrintDebugInfo("CacheWaitForExReadAck",*msg,"",src);
+#endif
    	const BaseMsg*& firstReply = cacheData.firstReply;
    	DebugAssertWithMessageID(firstReply!=NULL, msg->MsgID());
    	NodeID& firstReplySrc = cacheData.firstReplySrc;
@@ -1762,6 +1834,9 @@ namespace Memory
 
 	void OriginDirectory::OnCacheWaitingForIntervention(const BaseMsg* msg, NodeID src, CacheData& cacheData)
 	{
+#ifdef MEMORY_ORIGIN_DIRECTORY_DEBUG_VERBOSE
+		PrintDebugInfo("CacheWaitForIntv",*msg,"",src);
+#endif
    	DebugAssertWithMessageID(cacheData.firstReply!=NULL, msg->MsgID());
    	DebugAssertWithMessageID(cacheData.firstReply->Type()==mt_WritebackAck, msg->MsgID());
    	const WritebackAckMsg* firstReply = (const WritebackAckMsg*)cacheData.firstReply;
@@ -1801,6 +1876,9 @@ namespace Memory
 
 	void OriginDirectory::OnCacheWaitingForKInvalidatesJInvalidatesReceived(const BaseMsg* msg, NodeID src, CacheData& cacheData)
 	{
+#ifdef MEMORY_ORIGIN_DIRECTORY_DEBUG_VERBOSE
+		PrintDebugInfo("CacheWaitForKIJIR",*msg,"",src);
+#endif
 		//CacheState state = cacheData.GetCacheState();
 		int& invalidateAcksReceived = cacheData.invalidAcksReceived;
 		const BaseMsg*& firstReplyBase = cacheData.firstReply;
@@ -1873,6 +1951,9 @@ namespace Memory
 
 	void OriginDirectory::OnCacheWaitingForSharedReadResponse(const BaseMsg* msg, NodeID src, CacheData& cacheData)
 	{
+#ifdef MEMORY_ORIGIN_DIRECTORY_DEBUG_VERBOSE
+		PrintDebugInfo("CacheWaitForShReadRes",*msg,"",src);
+#endif
 		//CacheState state = cacheData.GetCacheState();
 		const BaseMsg*& firstReplyBase = cacheData.firstReply;
 		NodeID& firstReplySrc = cacheData.firstReplySrc;
@@ -1982,6 +2063,9 @@ namespace Memory
 
 	void OriginDirectory::OnCacheWaitingForWritebackBusyAck(const BaseMsg* msg, NodeID src, CacheData& cacheData)
 	{
+#ifdef MEMORY_ORIGIN_DIRECTORY_DEBUG_VERBOSE
+		PrintDebugInfo("CacheWaitForWbBusyAck",*msg,"",src);
+#endif
    	DebugAssertWithMessageID(cacheData.firstReply!=NULL, msg->MsgID());
    	DebugAssertWithMessageID(cacheData.firstReply->Type()==mt_Intervention, msg->MsgID());
    	NodeID& firstReplySrc = cacheData.firstReplySrc;
@@ -2019,6 +2103,9 @@ namespace Memory
 
 	void OriginDirectory::OnCacheWaitingForWritebackResponse(const BaseMsg* msg, NodeID src, CacheData& cacheData)
 	{
+#ifdef MEMORY_ORIGIN_DIRECTORY_DEBUG_VERBOSE
+		PrintDebugInfo("CacheWaitForWbRes",*msg,"",src);
+#endif
    	const BaseMsg*& firstReply = cacheData.firstReply;
    	DebugAssertWithMessageID(firstReply==NULL, msg->MsgID());
    	NodeID& firstReplySrc = cacheData.firstReplySrc;
@@ -2078,6 +2165,9 @@ namespace Memory
 	 */
 	void OriginDirectory::OnCacheWaitingForSharedResponseAck(const BaseMsg* msg, NodeID src, CacheData& cacheData)
 	{
+#ifdef MEMORY_ORIGIN_DIRECTORY_DEBUG_VERBOSE
+		PrintDebugInfo("CacheWaitForShReadAck",*msg,"",src);
+#endif
    	const BaseMsg*& firstReply = cacheData.firstReply;
    	DebugAssertWithMessageID(firstReply!=NULL, msg->MsgID());
    	NodeID& firstReplySrc = cacheData.firstReplySrc;
@@ -2135,6 +2225,9 @@ namespace Memory
 
 	void OriginDirectory::OnCacheWritebackAck(const WritebackAckMsg* m, NodeID src)
    {
+#ifdef MEMORY_ORIGIN_DIRECTORY_DEBUG_VERBOSE
+		PrintDebugInfo("CacheWbAck",*m,"",src);
+#endif
 		CacheData& cacheData = GetCacheData(m->addr);
 		OnCache(m, src, cacheData);
 		return;
@@ -2193,6 +2286,9 @@ namespace Memory
 
 	void OriginDirectory::OnDirectoryBusyExclusive(const BaseMsg* msg, NodeID src, DirectoryData& directoryData, bool isFromMemory)
 	{
+#ifdef MEMORY_ORIGIN_DIRECTORY_DEBUG_VERBOSE
+		PrintDebugInfo("DirBusyEx",*msg,"",src);
+#endif
 		DirectoryState& state = directoryData.state;
 		const ReadMsg*& firstRequest = directoryData.firstRequest;
 		DebugAssertWithMessageID(firstRequest!=NULL, msg->MsgID());
@@ -2273,6 +2369,9 @@ namespace Memory
 
    void OriginDirectory::OnDirectoryBusyExclusiveMemoryAccess(const BaseMsg* msg, NodeID src, DirectoryData& directoryData, bool isFromMemory)
 	{
+#ifdef MEMORY_ORIGIN_DIRECTORY_DEBUG_VERBOSE
+		PrintDebugInfo("DirBusyExMemAcc",*msg,"",src);
+#endif
    	DirectoryState& state = directoryData.state;
    	const ReadMsg*& firstRequest = directoryData.firstRequest;
    	DebugAssertWithMessageID(firstRequest!=NULL, msg->MsgID());
@@ -2332,6 +2431,9 @@ namespace Memory
 
    void OriginDirectory::OnDirectoryBusyExclusiveMemoryAccessWritebackRequest(const BaseMsg* msg, NodeID src, DirectoryData& directoryData, bool isFromMemory)
 	{
+#ifdef MEMORY_ORIGIN_DIRECTORY_DEBUG_VERBOSE
+		PrintDebugInfo("DirBusyExMemAccWbReq",*msg,"",src);
+#endif
    	DirectoryState& state = directoryData.state;
    	const ReadMsg*& firstRequest = directoryData.firstRequest;
    	DebugAssertWithMessageID(firstRequest!=NULL, msg->MsgID());
@@ -2389,6 +2491,9 @@ namespace Memory
 
    void OriginDirectory::OnDirectoryBusyShared(const BaseMsg* msg, NodeID src, DirectoryData& directoryData, bool isFromMemory)
 	{
+#ifdef MEMORY_ORIGIN_DIRECTORY_DEBUG_VERBOSE
+		PrintDebugInfo("DirBusySh",*msg,"",src);
+#endif
 		DirectoryState& state = directoryData.state;
 		const ReadMsg*& firstRequest = directoryData.firstRequest;
 		DebugAssertWithMessageID(firstRequest!=NULL, msg->MsgID());
@@ -2478,6 +2583,9 @@ namespace Memory
 
    void OriginDirectory::OnDirectoryBusySharedMemoryAccess(const BaseMsg* msg, NodeID src, DirectoryData& directoryData, bool isFromMemory)
 	{
+#ifdef MEMORY_ORIGIN_DIRECTORY_DEBUG_VERBOSE
+		PrintDebugInfo("DirBusyShMemAcc",*msg,"",src);
+#endif
    	const ReadMsg*& firstRequest = directoryData.firstRequest;
    	DebugAssertWithMessageID(firstRequest!=NULL, msg->MsgID());
    	NodeID& firstRequestSrc = directoryData.firstRequestSrc;
@@ -2539,6 +2647,9 @@ namespace Memory
 
    void OriginDirectory::OnDirectoryBusySharedMemoryAccessWritebackRequest(const BaseMsg* msg, NodeID src, DirectoryData& directoryData, bool isFromMemory)
 	{
+#ifdef MEMORY_ORIGIN_DIRECTORY_DEBUG_VERBOSE
+		PrintDebugInfo("DirBusyShMemAccWbReq",*msg,"",src);
+#endif
    	DirectoryState& state = directoryData.state;
    	const ReadMsg*& firstRequest = directoryData.firstRequest;
    	DebugAssertWithMessageID(firstRequest!=NULL, msg->MsgID());
@@ -2594,6 +2705,9 @@ namespace Memory
 
 	void OriginDirectory::OnDirectoryDirectoryNak(const DirectoryNakMsg* m, NodeID src)
 	{
+#ifdef MEMORY_ORIGIN_DIRECTORY_DEBUG_VERBOSE
+		PrintDebugInfo("DirDirNak",*m,"",src);
+#endif
 		directoryNaksReceived++;
 		DirectoryData& directoryData = GetDirectoryData(m->addr);
 		OnDirectory(m, src, directoryData, false);
@@ -2601,6 +2715,9 @@ namespace Memory
 
    void OriginDirectory::OnDirectoryExclusive(const BaseMsg* msg, NodeID src, DirectoryData& directoryData, bool isFromMemory)
 	{
+#ifdef MEMORY_ORIGIN_DIRECTORY_DEBUG_VERBOSE
+		PrintDebugInfo("DirEx",*msg,"",src);
+#endif
    	const ReadMsg*& firstRequest = directoryData.firstRequest;
 		DebugAssertWithMessageID(firstRequest==NULL, msg->MsgID());
    	NodeID& firstRequestSrc = directoryData.firstRequestSrc;
@@ -2670,6 +2787,9 @@ namespace Memory
 
 	void OriginDirectory::OnDirectoryExclusiveMemoryAccess(const BaseMsg* msg, NodeID src, DirectoryData& directoryData, bool isFromMemory)
 	{
+#ifdef MEMORY_ORIGIN_DIRECTORY_DEBUG_VERBOSE
+		PrintDebugInfo("DirExMemAcc",*msg,"",src);
+#endif
 		DirectoryState& state = directoryData.state;
 		const ReadMsg*& firstRequest = directoryData.firstRequest;
 		DebugAssertWithMessageID(firstRequest!=NULL, msg->MsgID());
@@ -2711,6 +2831,9 @@ namespace Memory
 
 	void OriginDirectory::OnDirectoryRead(const ReadMsg* m, NodeID src)
 	{
+#ifdef MEMORY_ORIGIN_DIRECTORY_DEBUG_VERBOSE
+		PrintDebugInfo("DirRead",*m,"",src);
+#endif
 		directoryReadsReceived++;
 		DirectoryData& directoryData = GetDirectoryData(m->addr);
 		OnDirectory(m, src, directoryData, false);
@@ -2718,6 +2841,9 @@ namespace Memory
 
 	void OriginDirectory::OnDirectoryShared(const BaseMsg* msg, NodeID src, DirectoryData& directoryData, bool isFromMemory)
 	{
+#ifdef MEMORY_ORIGIN_DIRECTORY_DEBUG_VERBOSE
+		PrintDebugInfo("DirSh",*msg,"",src);
+#endif
 		const ReadMsg*& firstRequest = directoryData.firstRequest;
 		DebugAssertWithMessageID(firstRequest==NULL, msg->MsgID());
 		NodeID& firstRequestSrc = directoryData.firstRequestSrc;
@@ -2806,6 +2932,9 @@ namespace Memory
 
    void OriginDirectory::OnDirectorySharedExclusiveMemoryAccess(const BaseMsg* msg, NodeID src, DirectoryData& directoryData, bool isFromMemory)
 	{
+#ifdef MEMORY_ORIGIN_DIRECTORY_DEBUG_VERBOSE
+		PrintDebugInfo("DirShExMemAcc",*msg,"",src);
+#endif
    	DirectoryState& state = directoryData.state;
    	const ReadMsg*& firstRequest = directoryData.firstRequest;
    	DebugAssertWithMessageID(firstRequest!=NULL, msg->MsgID());
@@ -2856,6 +2985,9 @@ namespace Memory
 
    void OriginDirectory::OnDirectorySharedMemoryAccess(const BaseMsg* msg, NodeID src, DirectoryData& directoryData, bool isFromMemory)
 	{
+#ifdef MEMORY_ORIGIN_DIRECTORY_DEBUG_VERBOSE
+		PrintDebugInfo("DirShMemAcc",*msg,"",src);
+#endif
 		DirectoryState& state = directoryData.state;
 		vector<LookupData<ReadMsg> >& pendingSharedReads = directoryData.pendingSharedReads;
 		DebugAssertWithMessageID(pendingSharedReads.size()!=0, msg->MsgID());
@@ -2916,6 +3048,9 @@ namespace Memory
 
 	void OriginDirectory::OnDirectoryUnowned(const BaseMsg* msg, NodeID src, DirectoryData& directoryData, bool isFromMemory)
 	{
+#ifdef MEMORY_ORIGIN_DIRECTORY_DEBUG_VERBOSE
+		PrintDebugInfo("DirUnowned",*msg,"",src);
+#endif
 		DirectoryState& state = directoryData.state;
 		const ReadMsg*& firstRequest = directoryData.firstRequest;
 		DebugAssertWithMessageID(firstRequest==NULL, msg->MsgID());
@@ -2941,6 +3076,9 @@ namespace Memory
 
 	void OriginDirectory::OnDirectoryWriteback(const WritebackMsg* m, NodeID src)
 	{
+#ifdef MEMORY_ORIGIN_DIRECTORY_DEBUG_VERBOSE
+		PrintDebugInfo("DirWb",*m,"",src);
+#endif
 		directoryWritebacksReceived++;
 		DirectoryData& directoryData = GetDirectoryData(m->addr);
 		OnDirectory(m, src, directoryData, false);
@@ -2948,6 +3086,9 @@ namespace Memory
 
 	void OriginDirectory::OnDirectoryWritebackRequest(const WritebackRequestMsg* m, NodeID src)
 	{
+#ifdef MEMORY_ORIGIN_DIRECTORY_DEBUG_VERBOSE
+		PrintDebugInfo("DirWbReq",*m,"",src);
+#endif
 		directoryWritebackRequestsReceived++;
 		DirectoryData& directoryData = GetDirectoryData(m->addr);
 		OnDirectory(m, src, directoryData, false);
