@@ -1,3 +1,14 @@
+// toggles debug messages
+#define MEMORY_BIP_DIRECTORY_DEBUG_VERBOSE
+//#define MEMORY_BIP_DIRECTORY_DEBUG_DIRECTORY_DATA
+//#define MEMORY_BIP_DIRECTORY_DEBUG_VERBOSE_OLD
+//#define MEMORY_BIP_DIRECTORY_DEBUG_MSG_COUNT
+//#define MEMORY_BIP_DIRECTORY_DEBUG_PENDING_DIRECTORY_SHARED_READS
+//#define MEMORY_BIP_DIRECTORY_DEBUG_PENDING_EVICTION
+//#define MEMORY_BIP_DIRECTORY_DEBUG_PENDING_LOCAL_READS
+//#define MEMORY_BIP_DIRECTORY_DEBUG_PENDING_REMOTE_INVALIDATES
+//#define MEMORY_BIP_DIRECTORY_DEBUG_PENDING_REMOTE_READS
+
 #include "BIPDirectory.h"
 #include "../Debug.h"
 #include "../MSTypes.h"
@@ -194,7 +205,7 @@ namespace Memory
 	void BIPDirectory::OnLocalRead(const ReadMsg* m)
 	{
 #ifdef MEMORY_BIP_DIRECTORY_DEBUG_VERBOSE
-               PrintDebugInfo("LocRead",*m,"");
+		PrintDebugInfo("LocRead",*m,"");
 #endif
 		DebugAssertWithMessageID(m,m->MsgID())
 		NodeID remoteNode = directoryNodeCalc->CalcNodeID(m->addr);
@@ -228,7 +239,7 @@ namespace Memory
 	void BIPDirectory::OnLocalReadResponse(const ReadResponseMsg* m)
 	{
 #ifdef MEMORY_BIP_DIRECTORY_DEBUG_VERBOSE
-               PrintDebugInfo("LocReadRes",*m,"");
+		PrintDebugInfo("LocReadRes",*m,"");
 #endif
 		localReadResponsesReceived++;
 
@@ -319,7 +330,7 @@ namespace Memory
 	void BIPDirectory::OnLocalInvalidateResponse(const InvalidateResponseMsg* m)
 	{
 #ifdef MEMORY_BIP_DIRECTORY_DEBUG_VERBOSE
-               PrintDebugInfo("LocInvRes",*m,"");
+      PrintDebugInfo("LocInvRes",*m,"");
 #endif
 		localInvalidateResponsesReceived++;
 
@@ -348,6 +359,9 @@ namespace Memory
 
 	void BIPDirectory::OnLocalMemoryReadResponse(const ReadResponseMsg* m)
 	{
+#ifdef MEMORY_BIP_DIRECTORY_DEBUG_VERBOSE
+		PrintDebugInfo("LocMemReadRes",*m,"");
+#endif
 		DebugAssertWithMessageID(pendingMemoryReadAccesses.find(m->solicitingMessage)!=pendingMemoryReadAccesses.end(), m->MsgID());
 		pendingMemoryReadAccesses.erase(m->solicitingMessage);
 		OnRemoteReadResponse(m, InvalidNodeID);
@@ -355,6 +369,9 @@ namespace Memory
 
 	void BIPDirectory::OnLocalMemoryWriteResponse(const WriteResponseMsg* m)
 	{
+#ifdef MEMORY_BIP_DIRECTORY_DEBUG_VERBOSE
+		PrintDebugInfo("LocMemWriteRes",*m,"");
+#endif
 		DebugAssertWithMessageID(pendingMemoryWriteAccesses.find(m->solicitingMessage)!=pendingMemoryWriteAccesses.end(), m->MsgID());
 		pendingMemoryWriteAccesses.erase(m->solicitingMessage);
 		OnRemoteWriteResponse(m, InvalidNodeID);
@@ -371,7 +388,7 @@ namespace Memory
 	{
 		remoteReadsReceived++;
 #ifdef MEMORY_BIP_DIRECTORY_DEBUG_VERBOSE
-      PrintDebugInfo("RemRead",*m,"",src);
+      PrintDebugInfo("RemReadCache",*m,"",src);
 #endif
 		DebugAssertWithMessageID(m,m->MsgID())
 		DebugAssertWithMessageID(!m->directoryLookup,m->MsgID())
@@ -444,7 +461,7 @@ namespace Memory
 				pendingDirectorySharedReads.erase(pendingDirectorySharedReads.equal_range(m->addr).first,pendingDirectorySharedReads.equal_range(m->addr).second);
 			}  //if(pendingDirectorySharedReads.find(m->addr) != pendingDirectorySharedReads.end())
 			else // pendingDirectorySharedReads.find(m->addr) == pendingDirectorySharedReads.end())
-			{  // there is no pending shared read on this address
+			{  // there is no pending shared read on this address, then we have an exclusive pending read
 				DebugAssertWithMessageID(m->exclusiveOwnership,m->MsgID())
 				DebugAssertWithMessageID(m->blockAttached,m->MsgID())
 				DebugAssertWithMessageID(directoryData[m->addr].owner == InvalidNodeID || directoryData[m->addr].owner == src,m->MsgID())
@@ -561,7 +578,7 @@ namespace Memory
 	void BIPDirectory::OnRemoteEviction(const EvictionMsg* m, NodeID src)
 	{
 #ifdef MEMORY_BIP_DIRECTORY_DEBUG_VERBOSE
-      PrintDebugInfo("RemEvic",*m,"",src);
+		PrintDebugInfo("RemEvic",*m,"",src);
 #endif
 		remoteEvictionsReceived++;
 		
@@ -756,7 +773,7 @@ namespace Memory
 	void BIPDirectory::OnDirectoryBlockRequest(const ReadMsg* m, NodeID src)
 	{
 #ifdef MEMORY_BIP_DIRECTORY_DEBUG_VERBOSE
-               PrintDebugInfo("DirBlkReq",*m,"",src);
+      PrintDebugInfo("DirBlkReq",*m,"",src);
 #endif
 		DebugAssertWithMessageID(m,m->MsgID());
 		directoryRequestsReceived++;
@@ -823,7 +840,7 @@ namespace Memory
 	void BIPDirectory::OnDirectoryBlockResponse(const ReadResponseMsg* m, NodeID src)
 	{
 #ifdef MEMORY_BIP_DIRECTORY_DEBUG_VERBOSE
-               PrintDebugInfo("DirBlkRes",*m,"",src);
+      PrintDebugInfo("DirBlkRes",*m,"",src);
 #endif
 		DebugAssertWithMessageID(m,m->MsgID());
 		directoryResponsesReceived++;
@@ -1235,13 +1252,13 @@ namespace Memory
    void BIPDirectory::PrintDebugInfo(const char* fromMethod, const BaseMsg &myMessage,
          const char* operation)
    {
-      printBaseMemDeviceDebugInfo("4", fromMethod, myMessage, operation);
+      printBaseMemDeviceDebugInfo("BIP", fromMethod, myMessage, operation);
    }
 
    void BIPDirectory::PrintDebugInfo(const char* fromMethod, const BaseMsg &myMessage,
          const char* operation, NodeID src)
    {
-      printBaseMemDeviceDebugInfo("4", fromMethod, myMessage, operation, src);
+      printBaseMemDeviceDebugInfo("BIP", fromMethod, myMessage, operation, src);
    }
 
    void BIPDirectory::PrintDebugInfo(const char* fromMethod,Address addr,NodeID id,const char* operation)

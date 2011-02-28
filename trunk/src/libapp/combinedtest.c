@@ -7,13 +7,15 @@
 #endif
 
 #include <stdio.h>
-#include <stdlib.h>
+//#include <stdlib.h>
 
+/*
 #define SIM_CHECKPOINT 2
 #define SIM_START_RABBIT 0
 #define SIM_STOP_RABBIT 1
 
 #define TM_SIMOP(x) asm __volatile__ ("andi $0, $0, %0\n\t"::"i"(x): "memory")
+*/
 
 /*
  * Calling TM_SIMOP(SIM_CHECKPOINT) will take a chekcpoint.
@@ -21,18 +23,18 @@
  * Calling TM_SIMOP(SIM_START_RABBIT) will start rabbit mode.
  * */
 
-int myInt = 1;
+volatile int myInt = 1;
 
 void *readInt(void *threadid)
 {
    int i=0;
-   int localInt = 0;
+   //int localInt = 0;
 	printf("readIntThreadid=%d\n", *((int*)threadid));
    
    for (i=0; i<10000; i++)
    {
-      localInt = myInt;
-      //printf("%d", myInt);
+      //localInt = myInt;
+      printf("%d", myInt);
    }
 
    printf("\n");

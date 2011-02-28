@@ -15,11 +15,6 @@
 #include "InvalidateResponseMsg.h"
 #include "EvictionResponseMsg.h"
 
-// toggles debug output
-//#define MEMORY_MOESI_CACHE_DEBUG_VERBOSE
-//#define MEMORY_MOESI_CACHE_DEBUG_PENDING_EVICTION
-//#define MEMORY_MOESI_CACHE_DEBUG_PENDING_INVALIDATE
-
 namespace Memory
 {
 /*
