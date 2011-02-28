@@ -28,13 +28,13 @@ volatile int myInt = 1;
 void *readInt(void *threadid)
 {
    int i=0;
-   int localInt = 0;
+   //int localInt = 0;
 	printf("readIntThreadid=%d\n", *((int*)threadid));
    
    for (i=0; i<10000; i++)
    {
-      localInt = myInt;
-      //printf("%d", myInt);
+      //localInt = myInt;
+      fprintf(stderr, "%d", myInt);
    }
 
    printf("\n");
