@@ -9,6 +9,8 @@
     <LocalDebuggerWorkingDirectory Condition="'$(Configuration)|$(Platform)'=='fft-bip-2-8-16|Win32'">..\WorkingFolder</LocalDebuggerWorkingDirectory>
     <LocalDebuggerWorkingDirectory Condition="'$(Configuration)|$(Platform)'=='smalltest-bip|Win32'">..\WorkingFolder</LocalDebuggerWorkingDirectory>
     <LocalDebuggerWorkingDirectory Condition="'$(Configuration)|$(Platform)'=='smalltest-origin-4-256-4096|Win32'">..\WorkingFolder</LocalDebuggerWorkingDirectory>
+    <LocalDebuggerWorkingDirectory Condition="'$(Configuration)|$(Platform)'=='combinedtest-origin-4-256-4096|Win32'">..\WorkingFolder</LocalDebuggerWorkingDirectory>
+    <LocalDebuggerWorkingDirectory Condition="'$(Configuration)|$(Platform)'=='combinedtest-bip-4-256-4096|Win32'">..\WorkingFolder</LocalDebuggerWorkingDirectory>
     <LocalDebuggerWorkingDirectory Condition="'$(Configuration)|$(Platform)'=='fft-origin-mesi-64-1-2|Win32'">..\WorkingFolder</LocalDebuggerWorkingDirectory>
     <LocalDebuggerWorkingDirectory Condition="'$(Configuration)|$(Platform)'=='fft-origin-mesi-4-1-2|Win32'">..\WorkingFolder</LocalDebuggerWorkingDirectory>
     <LocalDebuggerWorkingDirectory Condition="'$(Configuration)|$(Platform)'=='fft-origin-mesi-8-1-2|Win32'">..\WorkingFolder</LocalDebuggerWorkingDirectory>
@@ -22,6 +24,8 @@
     <DebuggerFlavor Condition="'$(Configuration)|$(Platform)'=='fft-bip-2-8-16|Win32'">WindowsLocalDebugger</DebuggerFlavor>
     <DebuggerFlavor Condition="'$(Configuration)|$(Platform)'=='smalltest-bip|Win32'">WindowsLocalDebugger</DebuggerFlavor>
     <DebuggerFlavor Condition="'$(Configuration)|$(Platform)'=='smalltest-origin-4-256-4096|Win32'">WindowsLocalDebugger</DebuggerFlavor>
+    <DebuggerFlavor Condition="'$(Configuration)|$(Platform)'=='combinedtest-origin-4-256-4096|Win32'">WindowsLocalDebugger</DebuggerFlavor>
+    <DebuggerFlavor Condition="'$(Configuration)|$(Platform)'=='combinedtest-bip-4-256-4096|Win32'">WindowsLocalDebugger</DebuggerFlavor>
     <DebuggerFlavor Condition="'$(Configuration)|$(Platform)'=='fft-origin-mesi-64-1-2|Win32'">WindowsLocalDebugger</DebuggerFlavor>
     <DebuggerFlavor Condition="'$(Configuration)|$(Platform)'=='fft-origin-mesi-4-1-2|Win32'">WindowsLocalDebugger</DebuggerFlavor>
     <DebuggerFlavor Condition="'$(Configuration)|$(Platform)'=='fft-origin-mesi-8-1-2|Win32'">WindowsLocalDebugger</DebuggerFlavor>
@@ -35,6 +39,8 @@
     <LocalDebuggerCommandArguments Condition="'$(Configuration)|$(Platform)'=='fft-bip-2-8-16|Win32'">-cconfigs\workFile\fft-bip-2-8-16.conf -dconfigs\workFile\fft-bip-2-8-16.report benchmarks-splash2-sesc\fft.mips  -m10 -p2 -n65536 -l4 -t &gt; console-outputs\fft-bip-2-8-16.out</LocalDebuggerCommandArguments>
     <LocalDebuggerCommandArguments Condition="'$(Configuration)|$(Platform)'=='smalltest-bip|Win32'">-cconfigs\workFile\smalltest-bip-4-256-4096.conf -dconfigs\workFile\smalltest-bip-4-256-4096.report ..\src\libapp\smalltest.sesc  -p3 -n100 &gt; console-outputs\smalltest-bip-4-256-4096.out</LocalDebuggerCommandArguments>
     <LocalDebuggerCommandArguments Condition="'$(Configuration)|$(Platform)'=='smalltest-origin-4-256-4096|Win32'">-cconfigs\workFile\smalltest-origin-4-256-4096.conf -dconfigs\workFile\smalltest-origin-4-256-4096.report ..\src\libapp\smalltest.sesc  -p3 -n100 &gt; console-outputs\smalltest-origin-4-256-4096.out</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments Condition="'$(Configuration)|$(Platform)'=='combinedtest-origin-4-256-4096|Win32'">-cconfigs\workFile\combinedtest-origin-4-256-4096.conf -dconfigs\workFile\combinedtest-origin-4-256-4096.report ..\src\libapp\combinedtest.sesc &gt; console-outputs\combinedtest-origin-4-256-4096.out</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments Condition="'$(Configuration)|$(Platform)'=='combinedtest-bip-4-256-4096|Win32'">-cconfigs\workFile\combinedtest-bip-4-256-4096.conf -dconfigs\workFile\combinedtest-bip-4-256-4096.report ..\src\libapp\combinedtest.sesc &gt; console-outputs\combinedtest-bip-4-256-4096.out</LocalDebuggerCommandArguments>
     <LocalDebuggerCommandArguments Condition="'$(Configuration)|$(Platform)'=='fft-origin-mesi-64-1-2|Win32'">-cconfigs\workFile\fft-origin-mesi-64-1-2.conf -dconfigs\workFile\fft-origin-mesi-64-1-2.report benchmarks-splash2-sesc\fft.mips  -m12 -p64 -n65536 -l4 -t &gt; console-outputs\fft-origin-mesi-64-1-2.out</LocalDebuggerCommandArguments>
     <LocalDebuggerCommandArguments Condition="'$(Configuration)|$(Platform)'=='fft-origin-mesi-4-1-2|Win32'">-cconfigs\workFile\fft-origin-mesi-4-1-2.conf -dconfigs\workFile\fft-origin-mesi-4-1-2.report benchmarks-splash2-sesc\fft.mips  -m10 -p4 -n65536 -l4 -t &gt; console-outputs\fft-origin-mesi-4-1-2.out</LocalDebuggerCommandArguments>
     <LocalDebuggerCommandArguments Condition="'$(Configuration)|$(Platform)'=='fft-origin-mesi-8-1-2|Win32'">-cconfigs\workFile\fft-origin-mesi-8-1-2.conf -dconfigs\workFile\fft-origin-mesi-8-1-2.report benchmarks-splash2-sesc\fft.mips  -m10 -p8 -n65536 -l4 -t &gt; console-outputs\fft-origin-mesi-8-1-2.out</LocalDebuggerCommandArguments>

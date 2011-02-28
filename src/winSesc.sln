@@ -5,6 +5,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "winSesc", "winSesc.vcxproj"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		combinedtest-bip-4-256-4096|Win32 = combinedtest-bip-4-256-4096|Win32
+		combinedtest-origin-4-256-4096|Win32 = combinedtest-origin-4-256-4096|Win32
 		Debug|Win32 = Debug|Win32
 		fft-bip-2-8-16|Win32 = fft-bip-2-8-16|Win32
 		fft-origin-mesi-128-1-2|Win32 = fft-origin-mesi-128-1-2|Win32
@@ -19,6 +21,10 @@ Global
 		smalltest-origin-4-256-4096|Win32 = smalltest-origin-4-256-4096|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A54864F1-6C99-4165-A176-888B5427ADC2}.combinedtest-bip-4-256-4096|Win32.ActiveCfg = combinedtest-bip-4-256-4096|Win32
+		{A54864F1-6C99-4165-A176-888B5427ADC2}.combinedtest-bip-4-256-4096|Win32.Build.0 = combinedtest-bip-4-256-4096|Win32
+		{A54864F1-6C99-4165-A176-888B5427ADC2}.combinedtest-origin-4-256-4096|Win32.ActiveCfg = combinedtest-origin-4-256-4096|Win32
+		{A54864F1-6C99-4165-A176-888B5427ADC2}.combinedtest-origin-4-256-4096|Win32.Build.0 = combinedtest-origin-4-256-4096|Win32
 		{A54864F1-6C99-4165-A176-888B5427ADC2}.Debug|Win32.ActiveCfg = Release|Win32
 		{A54864F1-6C99-4165-A176-888B5427ADC2}.Debug|Win32.Build.0 = Release|Win32
 		{A54864F1-6C99-4165-A176-888B5427ADC2}.fft-bip-2-8-16|Win32.ActiveCfg = fft-bip-2-8-16|Win32
