@@ -83,9 +83,8 @@ def generateAllBenchmarks(benchmarkNames, directoryType, processorCountLow, proc
 
 def main():
     benchmarkNames = ['barnes', 'cholesky', 'fft', 'fmm', 'radix', 'raytrace', 'ocean']
-    directoryType = 'origin'
-    directoryType = 'directory'
-    directoryType = 'bip'
+    #directoryTypes = ['bip', 'directory', 'origin']
+    directoryTypes = ['directory']
     #cacheType = 'mesi'
     #cacheType = ''
     processorCountLow = '2'
@@ -93,7 +92,8 @@ def main():
     L1Low = '8'
     L1Hi = '1024'
 
-    generateAllBenchmarks(benchmarkNames, directoryType, processorCountLow, processorCountHi, L1Low, L1Hi)
+    for directory in directoryTypes:
+       generateAllBenchmarks(benchmarkNames, directory, processorCountLow, processorCountHi, L1Low, L1Hi)
 
 if __name__ == "__main__":
     main()
