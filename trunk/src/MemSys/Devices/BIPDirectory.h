@@ -68,7 +68,7 @@ namespace Memory
 			NodeID sourceNode;
 		};
 
-		unsigned int messagesReceived;
+		unsigned long long messagesReceived;
 		unsigned long long directoryRequestsReceived;
 		unsigned long long directoryResponsesReceived;
 		unsigned long long localEvictionsReceived;

@@ -185,7 +185,7 @@ namespace Memory
       typedef std::pair<Address,LookupData<ReadMsg> > AddrLookupPair;
       typedef std::pair<AddrLookupHashMultiMap::iterator,AddrLookupHashMultiMap::iterator> AddrLookupIteratorPair;
 
-      unsigned int messagesReceived;
+      unsigned long long messagesReceived;
 		unsigned long long cacheNaksReceived;
 		unsigned long long cacheEvictionsReceived;
 		unsigned long long cacheInterventionsReceived;

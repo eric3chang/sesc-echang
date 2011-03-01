@@ -5,17 +5,6 @@
 #include "NetworkMsg.h"
 #include <vector>
 
-// toggles debug messages
-//#define MEMORY_DIRECTORY_DEBUG_VERBOSE
-//#define MEMORY_DIRECTORY_DEBUG_DIRECTORY_DATA
-//#define MEMORY_DIRECTORY_DEBUG_VERBOSE_OLD
-//#define MEMORY_DIRECTORY_DEBUG_MSG_COUNT
-//#define MEMORY_DIRECTORY_DEBUG_PENDING_DIRECTORY_SHARED_READS
-//#define MEMORY_DIRECTORY_DEBUG_PENDING_EVICTION
-//#define MEMORY_DIRECTORY_DEBUG_PENDING_LOCAL_READS
-//#define MEMORY_DIRECTORY_DEBUG_PENDING_REMOTE_INVALIDATES
-//#define MEMORY_DIRECTORY_DEBUG_PENDING_REMOTE_READS
-
 namespace Memory
 {
 	class ReadMsg;
@@ -77,7 +66,22 @@ namespace Memory
 			NodeID sourceNode;
 		};
 
-		unsigned int messagesReceived;
+		unsigned long long messagesReceived;
+		unsigned long long directoryRequestsReceived;
+		unsigned long long directoryResponsesReceived;
+		unsigned long long localEvictionsReceived;
+		unsigned long long localInvalidateResponsesReceived;
+		unsigned long long localReadsReceived;
+		unsigned long long localReadResponsesReceived;
+		unsigned long long localWritesReceived;
+		unsigned long long remoteEvictionsReceived;
+		unsigned long long remoteEvictionResponsesReceived;
+		unsigned long long remoteInvalidatesReceived;
+		unsigned long long remoteInvalidateResponsesReceived;
+		unsigned long long remoteReadsReceived;
+		unsigned long long remoteReadResponsesReceived;
+		unsigned long long remoteWritesReceived;
+		unsigned long long remoteWriteResponsesReceived;
 
 		TimeDelta localSendTime;
 		TimeDelta remoteSendTime;

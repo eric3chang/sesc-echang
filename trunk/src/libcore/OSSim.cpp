@@ -1013,6 +1013,8 @@ void OSSim::simFinish()
      {
         out << " string BenchName " << SescConf->getCharPtr("","BenchName");
      }
+     /*
+      * //don't really care about processorSkews right now
      for(unsigned int i = 0; i < cpus.size(); i++)
      {
         if(SescConf->checkInt("","ProcessorSkew",i))
@@ -1024,7 +1026,8 @@ void OSSim::simFinish()
            out << " int ProcessorSkew" << i << " 0";
         }
      }
-     out << " #" << std::endl;
+     */
+     //out << " #" << std::endl;
      //out << "int TotalRunTime " << globalClock << " #" << std::endl;
      out << endl;
      out << "TotalRunTime:" << globalClock << std::endl;
