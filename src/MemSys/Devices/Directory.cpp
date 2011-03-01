@@ -1,3 +1,14 @@
+// toggles debug messages
+//#define MEMORY_DIRECTORY_DEBUG_VERBOSE
+//#define MEMORY_DIRECTORY_DEBUG_DIRECTORY_DATA
+//#define MEMORY_DIRECTORY_DEBUG_VERBOSE_OLD
+//#define MEMORY_DIRECTORY_DEBUG_MSG_COUNT
+//#define MEMORY_DIRECTORY_DEBUG_PENDING_DIRECTORY_SHARED_READS
+//#define MEMORY_DIRECTORY_DEBUG_PENDING_EVICTION
+//#define MEMORY_DIRECTORY_DEBUG_PENDING_LOCAL_READS
+//#define MEMORY_DIRECTORY_DEBUG_PENDING_REMOTE_INVALIDATES
+//#define MEMORY_DIRECTORY_DEBUG_PENDING_REMOTE_READS
+
 #include "Directory.h"
 #include "../Debug.h"
 #include "../MSTypes.h"
@@ -147,6 +158,7 @@ namespace Memory
 	 */
 	void Directory::OnLocalRead(const ReadMsg* m)
 	{
+		localReadsReceived++;
 #ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE
                PrintDebugInfo("LocRead",*m,"");
 #endif
@@ -179,6 +191,7 @@ namespace Memory
 	}
 	void Directory::OnLocalReadResponse(const ReadResponseMsg* m)
 	{
+		localReadResponsesReceived++;
 #ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE
                PrintDebugInfo("LocReadRes",*m,"");
 #endif
@@ -204,6 +217,7 @@ namespace Memory
 	}
 	void Directory::OnLocalWrite(const WriteMsg* m)
 	{
+		localWritesReceived++;
 #ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE
       PrintDebugInfo("LocWrite",*m,"");
 #endif
@@ -230,6 +244,7 @@ namespace Memory
 	}
 	void Directory::OnLocalEviction(const EvictionMsg* m)
 	{
+		localEvictionsReceived++;
 #ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE
                PrintDebugInfo("LocEvic",*m,"");
 #endif
@@ -264,6 +279,7 @@ namespace Memory
 	}
 	void Directory::OnLocalInvalidateResponse(const InvalidateResponseMsg* m)
 	{
+		localInvalidateResponsesReceived++;
 #ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE
                PrintDebugInfo("LocInvRes",*m,"");
 #endif
@@ -291,6 +307,7 @@ namespace Memory
 	}
 	void Directory::OnRemoteRead(const ReadMsg* m, NodeID src)
 	{
+		remoteReadsReceived++;
 #ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE
       PrintDebugInfo("RemRead",*m,"",src);
 #endif
@@ -307,6 +324,7 @@ namespace Memory
 	}
 	void Directory::OnRemoteReadResponse(const ReadResponseMsg* m, NodeID src)
 	{
+		remoteReadResponsesReceived++;
 #ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE
       PrintDebugInfo("RemReadRes",*m,"",src);
 #endif
@@ -421,6 +439,7 @@ namespace Memory
 
 	void Directory::OnRemoteWrite(const WriteMsg* m, NodeID src)
 	{
+		remoteWritesReceived++;
 #ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE
       PrintDebugInfo("RemWrite",*m,"",src);
 #endif
@@ -447,6 +466,7 @@ namespace Memory
 	}
 	void Directory::OnRemoteWriteResponse(const WriteResponseMsg* m, NodeID src)
 	{
+		remoteWriteResponsesReceived++;
 #ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE
       PrintDebugInfo("RemWriteRes",*m,"",src);
 #endif
@@ -455,6 +475,7 @@ namespace Memory
 	}
 	void Directory::OnRemoteEviction(const EvictionMsg* m, NodeID src)
 	{
+		remoteEvictionsReceived++;
 #ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE
       PrintDebugInfo("RemEvic",*m,"",src);
 #endif
@@ -516,6 +537,7 @@ namespace Memory
 
 	void Directory::OnRemoteEvictionResponse(const EvictionResponseMsg* m, NodeID src)
 	{
+		remoteEvictionResponsesReceived++;
 #ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE
       PrintDebugInfo("RemEvicRes",*m,"",src);
 #endif
@@ -531,6 +553,7 @@ namespace Memory
 
 	void Directory::OnRemoteInvalidate(const InvalidateMsg* m, NodeID src)
 	{
+		remoteInvalidatesReceived++;
 #ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE
       PrintDebugInfo("RemInv",*m,"",src);
 #endif
@@ -547,6 +570,7 @@ namespace Memory
 
 	void Directory::OnRemoteInvalidateResponse(const InvalidateResponseMsg* m, NodeID src)
 	{
+		remoteInvalidateResponsesReceived++;
 #ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE
       PrintDebugInfo("RemInvRes",*m,"",src);
 #endif
@@ -635,6 +659,7 @@ namespace Memory
 
 	void Directory::OnDirectoryBlockRequest(const ReadMsg* m, NodeID src)
 	{
+		directoryRequestsReceived++;
 #ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE
                PrintDebugInfo("DirBlkReq",*m,"",src);
 #endif
@@ -701,6 +726,7 @@ namespace Memory
 	}
 	void Directory::OnDirectoryBlockResponse(const ReadResponseMsg* m, NodeID src)
 	{
+		directoryResponsesReceived++;
 #ifdef MEMORY_DIRECTORY_DEBUG_VERBOSE
                PrintDebugInfo("DirBlkRes",*m,"",src);
 #endif
@@ -802,6 +828,21 @@ namespace Memory
 		memoryNodeCalc->Initialize(memCalc);
 
       messagesReceived = 0;
+		directoryRequestsReceived = 0;
+		directoryResponsesReceived = 0;
+		localEvictionsReceived = 0;
+		localInvalidateResponsesReceived = 0;
+		localReadsReceived = 0;
+		localReadResponsesReceived = 0;
+		localWritesReceived = 0;
+		remoteEvictionsReceived = 0;
+		remoteEvictionResponsesReceived = 0;
+		remoteInvalidatesReceived = 0;
+		remoteInvalidateResponsesReceived = 0;
+		remoteReadsReceived = 0;
+		remoteReadResponsesReceived = 0;
+		remoteWritesReceived = 0;
+		remoteWriteResponsesReceived = 0;
 	}  // Directory::Initialize()
 	/**
 	 * this is used for checkpoint purposes
@@ -813,7 +854,28 @@ namespace Memory
 	 */
 	void Directory::DumpStats(std::ostream& out)
 	{
-	   out << "messagesReceived:" << messagesReceived << std::endl;
+		out << "localSendTime:" << localSendTime << std::endl;
+		out << "remoteSendTime:" << remoteSendTime << std::endl;
+		out << "lookupRetryTime:" << lookupRetryTime << std::endl;
+		out << "lookupTime:" << lookupTime << std::endl;
+		out << "satisfyTime:" << satisfyTime << std::endl;
+		out << "nodeID:" << nodeID << std::endl;
+	   out << "TotalMessagesReceived:" << messagesReceived << std::endl;
+		out << "directoryRequestsReceived:" << directoryRequestsReceived << std::endl;
+		out << "directoryResponsesReceived:" << directoryResponsesReceived << std::endl;
+		out << "localEvictionsReceived:" << localEvictionsReceived << std::endl;
+		out << "localInvalidateResponsesReceived:" << localInvalidateResponsesReceived << std::endl;
+		out << "localReadsReceived:" << localReadsReceived << std::endl;
+		out << "localReadResponsesReceived:" << localReadResponsesReceived << std::endl;
+		out << "localWritesReceived:" << localWritesReceived << std::endl;
+		out << "remoteEvictionsReceived:" << remoteEvictionsReceived << std::endl;
+		out << "remoteEvictionResponsesReceived:" << remoteEvictionResponsesReceived << std::endl;
+		out << "remoteInvalidatesReceived:" << remoteInvalidatesReceived << std::endl;
+		out << "remoteInvalidateResponsesReceived:" << remoteInvalidateResponsesReceived << std::endl;
+		out << "remoteReadsReceived:" << remoteReadsReceived << std::endl;
+		out << "remoteReadResponsesReceived:" << remoteReadResponsesReceived << std::endl;
+		out << "remoteWritesReceived:" << remoteWritesReceived << std::endl;
+		out << "remoteWriteResponsesReceived:" << remoteWriteResponsesReceived << std::endl;
 	}
 	/**
 	 * Handles all the incoming messages from outside of the directory.

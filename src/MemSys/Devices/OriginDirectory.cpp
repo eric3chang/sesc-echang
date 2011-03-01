@@ -539,6 +539,12 @@ namespace Memory
 	 */
 	void OriginDirectory::DumpStats(std::ostream& out)
 	{
+		out << "localSendTime:" << localSendTime << std::endl;
+		out << "remoteSendTime:" << remoteSendTime << std::endl;
+		out << "lookupRetryTime:" << lookupRetryTime << std::endl;
+		out << "lookupTime:" << lookupTime << std::endl;
+		out << "satisfyTime:" << satisfyTime << std::endl;
+		out << "nodeID:" << nodeID << std::endl;
 	   out << "TotalMessagesReceived:" << messagesReceived << std::endl;
 		out << "cacheNaksReceived:" << cacheNaksReceived << std::endl;
 		out << "cacheEvictionsReceived:" << cacheEvictionsReceived << std::endl;

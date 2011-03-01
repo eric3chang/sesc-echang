@@ -975,6 +975,12 @@ namespace Memory
 	 */
 	void BIPDirectory::DumpStats(std::ostream& out)
 	{
+		out << "localSendTime:" << localSendTime << std::endl;
+		out << "remoteSendTime:" << remoteSendTime << std::endl;
+		out << "lookupRetryTime:" << lookupRetryTime << std::endl;
+		out << "lookupTime:" << lookupTime << std::endl;
+		out << "satisfyTime:" << satisfyTime << std::endl;
+		out << "nodeID:" << nodeID << std::endl;
 	   out << "TotalMessagesReceived:" << messagesReceived << std::endl;
 		out << "directoryRequestsReceived:" << directoryRequestsReceived << std::endl;
 		out << "directoryResponsesReceived:" << directoryResponsesReceived << std::endl;
