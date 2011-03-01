@@ -986,24 +986,24 @@ void OSSim::simFinish()
 
   if(SescConf->checkCharPtr("","MemDeviceReportFile"))
   {
-	  stringstream tempBuffer;
-	  tempBuffer << SescConf->getCharPtr("","MemDeviceReportFile");
-	  tempBuffer << ".";
-	  tempBuffer.width(2);
-	  tempBuffer.fill('0');
-	  tempBuffer << std::right << (timeInfo->tm_mon+1);
-	  tempBuffer.width(2);
-	  tempBuffer.fill('0');
-	  tempBuffer << std::right << timeInfo->tm_mday;
-	  tempBuffer.width(2);
-	  tempBuffer.fill('0');
-	  tempBuffer << std::right << timeInfo->tm_hour;
-	  tempBuffer.width(2);
-	  tempBuffer.fill('0');
-	  tempBuffer << std::right << timeInfo->tm_min;
-	  tempBuffer << ".memDevResults";
+	  stringstream filenameBuffer, timeBuffer;
+	  filenameBuffer << SescConf->getCharPtr("","MemDeviceReportFile");
 
-	  string filename = tempBuffer.str();
+	  timeBuffer.width(2);
+	  timeBuffer.fill('0');
+	  timeBuffer << std::right << (timeInfo->tm_mon+1);
+	  timeBuffer.width(2);
+	  timeBuffer.fill('0');
+	  timeBuffer << std::right << timeInfo->tm_mday;
+	  timeBuffer.width(2);
+	  timeBuffer.fill('0');
+	  timeBuffer << std::right << timeInfo->tm_hour;
+	  timeBuffer.width(2);
+	  timeBuffer.fill('0');
+	  timeBuffer << std::right << timeInfo->tm_min;
+	  //tempBuffer << ".memDevResults";
+
+	  string filename = filenameBuffer.str();
      std::ofstream out(filename.c_str(),std::ios::out);
 
 	  //std::ofstream out(SescConf->getCharPtr("","MemDeviceReportFile"),std::ios::out);
@@ -1013,6 +1013,10 @@ void OSSim::simFinish()
      {
         out << " string BenchName " << SescConf->getCharPtr("","BenchName");
      }
+
+     out << endl << endl;
+     out << "DateTime" << endl;
+     out << "DateTime:" << timeBuffer.str() << endl;
      /*
       * //don't really care about processorSkews right now
      for(unsigned int i = 0; i < cpus.size(); i++)
@@ -1030,6 +1034,7 @@ void OSSim::simFinish()
      //out << " #" << std::endl;
      //out << "int TotalRunTime " << globalClock << " #" << std::endl;
      out << endl;
+     out << "Overall" << endl;
      out << "TotalRunTime:" << globalClock << std::endl;
      out << endl;
      std::cout << "Dumping stats" << std::endl;
