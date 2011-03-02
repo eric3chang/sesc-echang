@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/users/erichang/csl/opt/bin/python
 import os
 import sys
 
@@ -148,41 +148,6 @@ def getGraphResults(benchmarks, dirtypes, benchmarkResults, minimum, maximum):
             i *= 2
     return dirtypeResults
 
-def main():
-    #benchmarks = ['barnes', 'cholesky', 'fft', 'fmm', 'radix', 'raytrace', 'ocean']
-    #benchmarks = ['combinedtest']
-    benchmarks = ['fft']
-    #dirtypes = ['bip', 'directory', 'origin']
-    dirtypes = ['bip', 'origin']
-    #cacheType = 'mesi'
-    #cacheType = ''
-    mincpu = '2'
-    maxcpu = '32'
-    minl1 = '16'
-    maxl1 = '128'
-    l1 = '128'
-    l2 = '1024'
-    #componentKey = ['TotalRunTime', 'TotalRunTime']
-    componentKey = ['Network', 'AverageLatency']
-
-    myXlabel='Number of Processors'
-    myYlabel='% Runtime'
-
-    #dictionary = getDictionary('combinedtest', 'bip', '4', '256', '4096')
-    #dictionary = getDictionary('fft', 'bip', '2', '8', '16')
-    #print (dictionary)
-    '''
-    cpuResults = getCpuResults(benchmarks, dirtypes, mincpu, maxcpu, l1, l2, component, key)
-    graphResults = getGraphResults(benchmarks, dirtypes, cpuResults, mincpu, maxcpu)
-    plotGraph(dirtypes, graphResults, mincpu, maxcpu, myXlabel, myYlabel)
-    print (graphResults)
-    '''
-    plotCpu(benchmarks, dirtypes, mincpu, maxcpu, componentKey[0], componentKey[1])
-    #plotL1(benchmarks, dirtypes, minl1, maxl1, componentKey[0], componentKey[1])
-    show()
-    #for directory in directoryTypes:
-       #generateAllBenchmarks(benchmarkNames, directory, processorCountLow, processorCountHi, L1Low, L1Hi)
-
 def plotCpu(benchmarks, dirtypes, mincpu, maxcpu, component, key):
     myXlabel='Number of Processors'
     myYlabel='% Runtime'
@@ -218,6 +183,8 @@ def plotGraph(dirtypes, graphResults, minimum, maximum, myXlabel, myYlabel):
     xlabel(myXlabel)
     ylabel(myYlabel)
     xticks(ticks)
+    grid(True)
+    title('myTitle')
     axis([0, maxInt*1.1, 0, 110])
 
 def plotL1(benchmarks, dirtypes, minimum, maximum, component, key):
@@ -234,6 +201,40 @@ def plotMessages(benchmarks, dirtypes, mincpu, maxcpu, component, key):
     graphResults = getGraphResults(benchmarks, dirtypes, cpuResults, mincpu, maxcpu)
     plotGraph(dirtypes, graphResults, mincpu, maxcpu, myXlabel, myYlabel)
     '''
+def main():
+    #benchmarks = ['barnes', 'cholesky', 'fft', 'fmm', 'radix', 'raytrace', 'ocean']
+    #benchmarks = ['combinedtest']
+    benchmarks = ['fft']
+    #dirtypes = ['bip', 'directory', 'origin']
+    dirtypes = ['bip', 'origin']
+    #cacheType = 'mesi'
+    #cacheType = ''
+    mincpu = '2'
+    maxcpu = '32'
+    minl1 = '16'
+    maxl1 = '128'
+    l1 = '128'
+    l2 = '1024'
+    #componentKey = ['TotalRunTime', 'TotalRunTime']
+    componentKey = ['Network', 'AverageLatency']
+
+    myXlabel='Number of Processors'
+    myYlabel='% Runtime'
+
+    #dictionary = getDictionary('combinedtest', 'bip', '4', '256', '4096')
+    #dictionary = getDictionary('fft', 'bip', '2', '8', '16')
+    #print (dictionary)
+    '''
+    cpuResults = getCpuResults(benchmarks, dirtypes, mincpu, maxcpu, l1, l2, component, key)
+    graphResults = getGraphResults(benchmarks, dirtypes, cpuResults, mincpu, maxcpu)
+    plotGraph(dirtypes, graphResults, mincpu, maxcpu, myXlabel, myYlabel)
+    print (graphResults)
+    '''
+    plotCpu(benchmarks, dirtypes, mincpu, maxcpu, componentKey[0], componentKey[1])
+    #plotL1(benchmarks, dirtypes, minl1, maxl1, componentKey[0], componentKey[1])
+    show()
+    #for directory in directoryTypes:
+       #generateAllBenchmarks(benchmarkNames, directory, processorCountLow, processorCountHi, L1Low, L1Hi)
 
 if __name__ == "__main__":
     main()
