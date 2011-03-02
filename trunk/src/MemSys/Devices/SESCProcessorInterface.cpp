@@ -133,9 +133,9 @@ namespace Memory
 	void SESCProcessorInterface::DumpRunningState(RootConfigNode& node){}
 	void SESCProcessorInterface::DumpStats(std::ostream& out)
 	{
-	   out << "readCount:" << readCount << std::endl;
-	   out << "writeCount:" << writeCount << std::endl;
-	   out << "totalOperations:" << readCount+writeCount << std::endl;
+	   out << DeviceName() << ":readCount:" << readCount << std::endl;
+	   out << DeviceName() << ":writeCount:" << writeCount << std::endl;
+	   out << DeviceName() << ":totalOperations:" << readCount+writeCount << std::endl;
 	}
 	void SESCProcessorInterface::RecvMsg(const BaseMsg* msg, int connectionID)
 	{

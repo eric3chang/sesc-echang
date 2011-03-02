@@ -854,28 +854,28 @@ namespace Memory
 	 */
 	void Directory::DumpStats(std::ostream& out)
 	{
-		out << "localSendTime:" << localSendTime << std::endl;
-		out << "remoteSendTime:" << remoteSendTime << std::endl;
-		out << "lookupRetryTime:" << lookupRetryTime << std::endl;
-		out << "lookupTime:" << lookupTime << std::endl;
-		out << "satisfyTime:" << satisfyTime << std::endl;
-		out << "nodeID:" << nodeID << std::endl;
-	   out << "TotalMessagesReceived:" << messagesReceived << std::endl;
-		out << "directoryRequestsReceived:" << directoryRequestsReceived << std::endl;
-		out << "directoryResponsesReceived:" << directoryResponsesReceived << std::endl;
-		out << "localEvictionsReceived:" << localEvictionsReceived << std::endl;
-		out << "localInvalidateResponsesReceived:" << localInvalidateResponsesReceived << std::endl;
-		out << "localReadsReceived:" << localReadsReceived << std::endl;
-		out << "localReadResponsesReceived:" << localReadResponsesReceived << std::endl;
-		out << "localWritesReceived:" << localWritesReceived << std::endl;
-		out << "remoteEvictionsReceived:" << remoteEvictionsReceived << std::endl;
-		out << "remoteEvictionResponsesReceived:" << remoteEvictionResponsesReceived << std::endl;
-		out << "remoteInvalidatesReceived:" << remoteInvalidatesReceived << std::endl;
-		out << "remoteInvalidateResponsesReceived:" << remoteInvalidateResponsesReceived << std::endl;
-		out << "remoteReadsReceived:" << remoteReadsReceived << std::endl;
-		out << "remoteReadResponsesReceived:" << remoteReadResponsesReceived << std::endl;
-		out << "remoteWritesReceived:" << remoteWritesReceived << std::endl;
-		out << "remoteWriteResponsesReceived:" << remoteWriteResponsesReceived << std::endl;
+		out << DeviceName() << ":localSendTime:" << localSendTime << std::endl;
+		out << DeviceName() << ":remoteSendTime:" << remoteSendTime << std::endl;
+		out << DeviceName() << ":lookupRetryTime:" << lookupRetryTime << std::endl;
+		out << DeviceName() << ":lookupTime:" << lookupTime << std::endl;
+		out << DeviceName() << ":satisfyTime:" << satisfyTime << std::endl;
+		out << DeviceName() << ":nodeID:" << nodeID << std::endl;
+	   out << DeviceName() << ":TotalMessagesReceived:" << messagesReceived << std::endl;
+		out << DeviceName() << ":directoryRequestsReceived:" << directoryRequestsReceived << std::endl;
+		out << DeviceName() << ":directoryResponsesReceived:" << directoryResponsesReceived << std::endl;
+		out << DeviceName() << ":localEvictionsReceived:" << localEvictionsReceived << std::endl;
+		out << DeviceName() << ":localInvalidateResponsesReceived:" << localInvalidateResponsesReceived << std::endl;
+		out << DeviceName() << ":localReadsReceived:" << localReadsReceived << std::endl;
+		out << DeviceName() << ":localReadResponsesReceived:" << localReadResponsesReceived << std::endl;
+		out << DeviceName() << ":localWritesReceived:" << localWritesReceived << std::endl;
+		out << DeviceName() << ":remoteEvictionsReceived:" << remoteEvictionsReceived << std::endl;
+		out << DeviceName() << ":remoteEvictionResponsesReceived:" << remoteEvictionResponsesReceived << std::endl;
+		out << DeviceName() << ":remoteInvalidatesReceived:" << remoteInvalidatesReceived << std::endl;
+		out << DeviceName() << ":remoteInvalidateResponsesReceived:" << remoteInvalidateResponsesReceived << std::endl;
+		out << DeviceName() << ":remoteReadsReceived:" << remoteReadsReceived << std::endl;
+		out << DeviceName() << ":remoteReadResponsesReceived:" << remoteReadResponsesReceived << std::endl;
+		out << DeviceName() << ":remoteWritesReceived:" << remoteWritesReceived << std::endl;
+		out << DeviceName() << ":remoteWriteResponsesReceived:" << remoteWriteResponsesReceived << std::endl;
 	}
 	/**
 	 * Handles all the incoming messages from outside of the directory.
