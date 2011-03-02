@@ -2,21 +2,31 @@
 import os
 import sys
 
+from matplotlib.pyplot import *
+
 # need to change this when moving this script
 IN_DIR='../results/'
 OUT_DIR='./graphs/'
 #OUT_DIR='../configs/workFile/'
 
 # don't need to change these when moving this script
+DEFAULT_CPU='32'
+#DEFAULT_L1='256'
+DEFAULT_L1='128'
+#DEFAULT_L2='4096'
+DEFAULT_L2='1024'
 IN_EXT='.memDevResults'
+#LINESTYLES=['k--','k:']
+LINESTYLES=['ko','k^']
+#LINESTYLES=['k*','kD']
+#LINESTYLES=['kp','kd']
 OUT_EXT='.png'
 
 thisFileName = sys.argv[0]
 thisFileName = os.path.basename(thisFileName)
 
-def printError():
-    print ("usage: " + 'GenerateSingleConfig' +
-        " benchmarkName directoryType processorCount L1Size L2Size")
+def printError(errorMessage):
+    print ('Error: ' + errorMessage)
     quit()
 
 # converts the parameter to int with error checking
@@ -28,19 +38,76 @@ def convertToInt(incoming):
         quit()
     return outgoing
 
+def getCpuResults(benchmarks, dirtypes, minCpu, maxCpu, l1, l2, component, key):
+    benchmarkResults = {}
+    mincpuInt = convertToInt(minCpu)
+    maxcpuInt = convertToInt(maxCpu)
+    for benchmark in benchmarks:
+        dirtypeResults = {}
+        for dirtype in dirtypes:
+            cpuResults = {}
+            cpu = mincpuInt
+            while (cpu <= maxcpuInt):
+                dictionary = getDictionary(benchmark, dirtype, str(cpu), l1, l2)
+                if component not in dictionary:
+                    printError(component + ' should be in the file')
+                else:
+                    subDictionary = dictionary[component]
+                if key not in subDictionary:
+                    printError(key + ' should be in the file')
+                else:
+                    value = subDictionary[key]
+                    cpuResults[cpu] = value
+                cpu *= 2
+            dirtypeResults[dirtype] = cpuResults
+        benchmarkResults[benchmark] = dirtypeResults
+    return benchmarkResults
+
+def getL1Results(benchmarks, dirtypes, cpu, minimum, maximum, l2, component, key):
+    benchmarkResults = {}
+    minInt = convertToInt(minimum)
+    maxInt = convertToInt(maximum)
+    for benchmark in benchmarks:
+        dirtypeResults = {}
+        for dirtype in dirtypes:
+            iResults = {}
+            i = minInt
+            while (i <= maxInt):
+                dictionary = getDictionary(benchmark, dirtype, cpu, str(i), l2)
+                if component not in dictionary:
+                    printError(component + ' should be in the file')
+                else:
+                    subDictionary = dictionary[component]
+                if key not in subDictionary:
+                    printError(key + ' should be in the file')
+                else:
+                    value = subDictionary[key]
+                    iResults[i] = value
+                i *= 2
+            dirtypeResults[dirtype] = iResults
+        benchmarkResults[benchmark] = dirtypeResults
+    return benchmarkResults
+
 def getDictionary(benchmark, dirtype, cpu, l1, l2):
     fullpath = getFilename(benchmark, dirtype, cpu, l1, l2)
     filein = open(fullpath, 'r')
-    dictionary = []
+    dictionary = {}
     line = ''
     for line in filein:
         line = line.strip()
         if (line.count(':')):
             splitlines = line.split(':')
-            key = splitlines[0]
-            value = splitlines[1]
-            keyvalue = [key, value]
-            dictionary.append(keyvalue)
+            if (len(splitlines)!=3):
+                printError('input file format should have dictionary of 3')
+            component = splitlines[0]
+            key = splitlines[1]
+            value = splitlines[2]
+            if component in dictionary:
+                subDictionary = dictionary[component]
+            else:
+                subDictionary = {}
+                dictionary[component] = subDictionary
+            subDictionary[key] = value
     return dictionary
 
 def getFilename(benchmark, dirtype, cpu, l1, l2):
@@ -48,23 +115,125 @@ def getFilename(benchmark, dirtype, cpu, l1, l2):
     fullpath = IN_DIR+filename
     return fullpath
 
+def getGraphResults(benchmarks, dirtypes, benchmarkResults, minimum, maximum):
+    dirtypeResults = {}
+    minInt = convertToInt(minimum)
+    maxInt = convertToInt(maximum)
+    maxValue = 0.0
+    for dirtype in dirtypes:
+        iResults = {}
+        i = minInt
+        while (i <= maxInt):
+            total = 0
+            for benchmark in benchmarks:
+                dirtypeSources = benchmarkResults[benchmark]
+                iSources = dirtypeSources[dirtype]
+                value = iSources[i]
+                total += float(value)
+            average = total/len(benchmarks)
+            iResults[i] = average
+            if (average > maxValue):
+                maxValue = average
+            i *= 2
+        dirtypeResults[dirtype] = iResults
+    # normalize values
+    for dirtype in dirtypes:
+        i = minInt
+        iSources = dirtypeResults[dirtype]
+        while (i <= maxInt):
+            value = iSources[i]
+            value /= maxValue
+            value *= 100
+            iSources[i] = value
+            i *= 2
+    return dirtypeResults
+
 def main():
-    #benchmarkNames = ['barnes', 'cholesky', 'fft', 'fmm', 'radix', 'raytrace', 'ocean']
-    benchmarkNames = ['fft']
-    #directoryTypes = ['bip', 'directory', 'origin']
-    directoryTypes = ['bip']
+    #benchmarks = ['barnes', 'cholesky', 'fft', 'fmm', 'radix', 'raytrace', 'ocean']
+    #benchmarks = ['combinedtest']
+    benchmarks = ['fft']
+    #dirtypes = ['bip', 'directory', 'origin']
+    dirtypes = ['bip', 'origin']
     #cacheType = 'mesi'
     #cacheType = ''
-    processorCountLow = '2'
-    processorCountHi = '32'
-    L1Low = '8'
-    L1Hi = '1024'
+    mincpu = '2'
+    maxcpu = '32'
+    minl1 = '16'
+    maxl1 = '128'
+    l1 = '128'
+    l2 = '1024'
+    #componentKey = ['TotalRunTime', 'TotalRunTime']
+    componentKey = ['Network', 'AverageLatency']
 
-    dictionary = getDictionary('fft', 'bip', '2', '8', '16')
-    print (dictionary)
+    myXlabel='Number of Processors'
+    myYlabel='% Runtime'
 
+    #dictionary = getDictionary('combinedtest', 'bip', '4', '256', '4096')
+    #dictionary = getDictionary('fft', 'bip', '2', '8', '16')
+    #print (dictionary)
+    '''
+    cpuResults = getCpuResults(benchmarks, dirtypes, mincpu, maxcpu, l1, l2, component, key)
+    graphResults = getGraphResults(benchmarks, dirtypes, cpuResults, mincpu, maxcpu)
+    plotGraph(dirtypes, graphResults, mincpu, maxcpu, myXlabel, myYlabel)
+    print (graphResults)
+    '''
+    plotCpu(benchmarks, dirtypes, mincpu, maxcpu, componentKey[0], componentKey[1])
+    #plotL1(benchmarks, dirtypes, minl1, maxl1, componentKey[0], componentKey[1])
+    show()
     #for directory in directoryTypes:
        #generateAllBenchmarks(benchmarkNames, directory, processorCountLow, processorCountHi, L1Low, L1Hi)
+
+def plotCpu(benchmarks, dirtypes, mincpu, maxcpu, component, key):
+    myXlabel='Number of Processors'
+    myYlabel='% Runtime'
+    cpuResults = getCpuResults(benchmarks, dirtypes, mincpu, maxcpu, DEFAULT_L1, DEFAULT_L2, component, key)
+    graphResults = getGraphResults(benchmarks, dirtypes, cpuResults, mincpu, maxcpu)
+    plotGraph(dirtypes, graphResults, mincpu, maxcpu, myXlabel, myYlabel)
+
+def plotGraph(dirtypes, graphResults, minimum, maximum, myXlabel, myYlabel):
+    minInt = convertToInt(minimum)
+    maxInt = convertToInt(maximum)
+    linestyleIndex = 0
+    linestyle = LINESTYLES[linestyleIndex]
+    ticks = []
+    for dirtype in dirtypes:
+        iSources = graphResults[dirtype]
+        i = minInt
+        xValues = []
+        yValues = []
+        while (i <= maxInt):
+            x = i
+            y = iSources[i]
+            xValues.append(x)
+            yValues.append(y)
+            ticks.append(i)
+            i *= 2
+        plot(xValues, yValues, linestyle, label=dirtype)
+        # change line style
+        linestyleIndex += 1
+        if (linestyleIndex >= len(LINESTYLES)):
+            linestyleIndex = 0
+        linestyle = LINESTYLES[linestyleIndex]
+    legend(loc='best')
+    xlabel(myXlabel)
+    ylabel(myYlabel)
+    xticks(ticks)
+    axis([0, maxInt*1.1, 0, 110])
+
+def plotL1(benchmarks, dirtypes, minimum, maximum, component, key):
+    myXlabel='L1 Cache Size in Kilobytes'
+    myYlabel='% Runtime'
+    results = getL1Results(benchmarks, dirtypes, DEFAULT_CPU, minimum, maximum, DEFAULT_L2, component, key)
+    graphResults = getGraphResults(benchmarks, dirtypes, results, minimum, maximum)
+    plotGraph(dirtypes, graphResults, minimum, maximum, myXlabel, myYlabel)
+'''
+def plotMessages(benchmarks, dirtypes, mincpu, maxcpu, component, key):
+    myXlabel='Number of Messages'
+    myYlabel='% Runtime'
+    cpuResults = getCpuResults(benchmarks, dirtypes, mincpu, maxcpu, DEFAULT_L1, DEFAULT_L2, component, key)
+    graphResults = getGraphResults(benchmarks, dirtypes, cpuResults, mincpu, maxcpu)
+    plotGraph(dirtypes, graphResults, mincpu, maxcpu, myXlabel, myYlabel)
+    '''
 
 if __name__ == "__main__":
     main()
