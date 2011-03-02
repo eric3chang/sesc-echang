@@ -182,9 +182,9 @@ namespace Memory
 
 	void RandomLoadNetwork::DumpStats(std::ostream& out)
 	{
-		out << "TotalMessagesReceived:" << totalMessagesReceived << endl;
+		out << DeviceName() << ":TotalMessagesReceived:" << totalMessagesReceived << endl;
 		double averageLatency = ((double)totalLatency)/((double)totalMessagesReceived);
-		out << "AverageLatency:" << averageLatency << endl;
+		out << DeviceName() << ":AverageLatency:" << averageLatency << endl;
 	}
 
 	void RandomLoadNetwork::RecvMsg(const BaseMsg* msg, int connectionID)

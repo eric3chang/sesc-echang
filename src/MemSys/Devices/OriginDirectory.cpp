@@ -539,29 +539,29 @@ namespace Memory
 	 */
 	void OriginDirectory::DumpStats(std::ostream& out)
 	{
-		out << "localSendTime:" << localSendTime << std::endl;
-		out << "remoteSendTime:" << remoteSendTime << std::endl;
-		out << "lookupRetryTime:" << lookupRetryTime << std::endl;
-		out << "lookupTime:" << lookupTime << std::endl;
-		out << "satisfyTime:" << satisfyTime << std::endl;
-		out << "nodeID:" << nodeID << std::endl;
-	   out << "TotalMessagesReceived:" << messagesReceived << std::endl;
-		out << "cacheNaksReceived:" << cacheNaksReceived << std::endl;
-		out << "cacheEvictionsReceived:" << cacheEvictionsReceived << std::endl;
-		out << "cacheInterventionsReceived:" << cacheInterventionsReceived << std::endl;
-		out << "cacheInvalidatesReceived:" << cacheInvalidatesReceived << std::endl;
-		out << "cacheInvalidateAcksReceived:" << cacheInvalidateAcksReceived << std::endl;
-		out << "cacheInvalidateResponsesReceived:" << cacheInvalidateResponsesReceived << std::endl;
-		out << "cacheSpeculativeRepliesReceived:" << cacheSpeculativeRepliesReceived << std::endl;
-		out << "cacheReadResponsesReceived:" << cacheReadResponsesReceived << std::endl;
-		out << "cacheReadRepliesReceived:" << cacheReadRepliesReceived << std::endl;
-		out << "directoryNaksReceived:" << directoryNaksReceived << std::endl;
-		out << "directoryReadsReceived:" << directoryReadsReceived << std::endl;
-		out << "directoryReadResponsesReceived:" << directoryReadResponsesReceived << std::endl;
-		out << "directoryTransfersReceived:" << directoryTransfersReceived << std::endl;
-		out << "directoryWritebacksReceived:" << directoryWritebacksReceived << std::endl;
-		out << "directoryWritebackRequestsReceived:" << directoryWritebackRequestsReceived << std::endl;
-		out << "directoryWriteResponsesReceived:" << directoryWriteResponsesReceived << std::endl;
+		out << DeviceName() << ":localSendTime:" << localSendTime << std::endl;
+		out << DeviceName() << ":remoteSendTime:" << remoteSendTime << std::endl;
+		out << DeviceName() << ":lookupRetryTime:" << lookupRetryTime << std::endl;
+		out << DeviceName() << ":lookupTime:" << lookupTime << std::endl;
+		out << DeviceName() << ":satisfyTime:" << satisfyTime << std::endl;
+		out << DeviceName() << ":nodeID:" << nodeID << std::endl;
+	   out << DeviceName() << ":TotalMessagesReceived:" << messagesReceived << std::endl;
+		out << DeviceName() << ":cacheNaksReceived:" << cacheNaksReceived << std::endl;
+		out << DeviceName() << ":cacheEvictionsReceived:" << cacheEvictionsReceived << std::endl;
+		out << DeviceName() << ":cacheInterventionsReceived:" << cacheInterventionsReceived << std::endl;
+		out << DeviceName() << ":cacheInvalidatesReceived:" << cacheInvalidatesReceived << std::endl;
+		out << DeviceName() << ":cacheInvalidateAcksReceived:" << cacheInvalidateAcksReceived << std::endl;
+		out << DeviceName() << ":cacheInvalidateResponsesReceived:" << cacheInvalidateResponsesReceived << std::endl;
+		out << DeviceName() << ":cacheSpeculativeRepliesReceived:" << cacheSpeculativeRepliesReceived << std::endl;
+		out << DeviceName() << ":cacheReadResponsesReceived:" << cacheReadResponsesReceived << std::endl;
+		out << DeviceName() << ":cacheReadRepliesReceived:" << cacheReadRepliesReceived << std::endl;
+		out << DeviceName() << ":directoryNaksReceived:" << directoryNaksReceived << std::endl;
+		out << DeviceName() << ":directoryReadsReceived:" << directoryReadsReceived << std::endl;
+		out << DeviceName() << ":directoryReadResponsesReceived:" << directoryReadResponsesReceived << std::endl;
+		out << DeviceName() << ":directoryTransfersReceived:" << directoryTransfersReceived << std::endl;
+		out << DeviceName() << ":directoryWritebacksReceived:" << directoryWritebacksReceived << std::endl;
+		out << DeviceName() << ":directoryWritebackRequestsReceived:" << directoryWritebackRequestsReceived << std::endl;
+		out << DeviceName() << ":directoryWriteResponsesReceived:" << directoryWriteResponsesReceived << std::endl;
 	}
 
 	void OriginDirectory::OnCacheCacheNak(const CacheNakMsg* m, NodeID src)

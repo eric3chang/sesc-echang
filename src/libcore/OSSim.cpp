@@ -1016,7 +1016,7 @@ void OSSim::simFinish()
 
      out << endl << endl;
      out << "DateTime" << endl;
-     out << "DateTime:" << timeBuffer.str() << endl;
+     out << "DateTime:DateTime:" << timeBuffer.str() << endl;
      /*
       * //don't really care about processorSkews right now
      for(unsigned int i = 0; i < cpus.size(); i++)
@@ -1034,9 +1034,8 @@ void OSSim::simFinish()
      //out << " #" << std::endl;
      //out << "int TotalRunTime " << globalClock << " #" << std::endl;
      out << endl;
-     out << "Overall" << endl;
-     out << "TotalRunTime:" << globalClock << std::endl;
-     out << endl;
+     out << "TotalRunTime" << endl;
+     out << "TotalRunTime:TotalRunTime:" << globalClock << endl << endl;
      std::cout << "Dumping stats" << std::endl;
 
      using Memory::BaseMemDevice;
@@ -1183,26 +1182,27 @@ void OSSim::simFinish()
 			}
 		} // end memdevice for loops
 
-		out << "totalL1CacheExclusiveReadHits:" << totalL1CacheExclusiveReadHits << std::endl;
-		out << "totalL1CacheExclusiveReadMisses:" << totalL1CacheExclusiveReadMisses << std::endl;
-		out << "totalL1CacheSharedReadHits:" << totalL1CacheSharedReadHits << std::endl;
-		out << "totalL1CacheSharedReadMisses:" << totalL1CacheSharedReadMisses << std::endl;
-		out << "totalL1CacheWriteHits:" << totalL1CacheWriteHits << std::endl;
-		out << "totalL1CacheWriteMisses:" << totalL1CacheWriteMisses << std::endl;
-		out << std::endl;
-		out << "totalL2CacheExclusiveReadHits:" << totalL2CacheExclusiveReadHits << std::endl;
-		out << "totalL2CacheExclusiveReadMisses:" << totalL2CacheExclusiveReadMisses << std::endl;
-		out << "totalL2CacheSharedReadHits:" << totalL2CacheSharedReadHits << std::endl;
-		out << "totalL2CacheSharedReadMisses:" << totalL2CacheSharedReadMisses << std::endl;
-		out << "totalL2CacheWriteHits:" << totalL2CacheWriteHits << std::endl;
-		out << "totalL2CacheWriteMisses:" << totalL2CacheWriteMisses << std::endl;
-		out << std::endl;
-		out << "totalCacheExclusiveReadHits:" << totalCacheExclusiveReadHits << std::endl;
-		out << "totalCacheExclusiveReadMisses:" << totalCacheExclusiveReadMisses << std::endl;
-		out << "totalCacheSharedReadHits:" << totalCacheSharedReadHits << std::endl;
-		out << "totalCacheSharedReadMisses:" << totalCacheSharedReadMisses << std::endl;
-		out << "totalCacheWriteHits:" << totalCacheWriteHits << std::endl;
-		out << "totalCacheWriteMisses:" << totalCacheWriteMisses << std::endl;
+		out << "TotalCache" << endl;
+		out << "TotalCache:" << "totalL1CacheExclusiveReadHits:" << totalL1CacheExclusiveReadHits << std::endl;
+		out << "TotalCache:" << "totalL1CacheExclusiveReadMisses:" << totalL1CacheExclusiveReadMisses << std::endl;
+		out << "TotalCache:" << "totalL1CacheSharedReadHits:" << totalL1CacheSharedReadHits << std::endl;
+		out << "TotalCache:" << "totalL1CacheSharedReadMisses:" << totalL1CacheSharedReadMisses << std::endl;
+		out << "TotalCache:" << "totalL1CacheWriteHits:" << totalL1CacheWriteHits << std::endl;
+		out << "TotalCache:" << "totalL1CacheWriteMisses:" << totalL1CacheWriteMisses << std::endl;
+		//out << "TotalCache:" << std::endl;
+		out << "TotalCache:" << "totalL2CacheExclusiveReadHits:" << totalL2CacheExclusiveReadHits << std::endl;
+		out << "TotalCache:" << "totalL2CacheExclusiveReadMisses:" << totalL2CacheExclusiveReadMisses << std::endl;
+		out << "TotalCache:" << "totalL2CacheSharedReadHits:" << totalL2CacheSharedReadHits << std::endl;
+		out << "TotalCache:" << "totalL2CacheSharedReadMisses:" << totalL2CacheSharedReadMisses << std::endl;
+		out << "TotalCache:" << "totalL2CacheWriteHits:" << totalL2CacheWriteHits << std::endl;
+		out << "TotalCache:" << "totalL2CacheWriteMisses:" << totalL2CacheWriteMisses << std::endl;
+		//out << "TotalCache:" << std::endl;
+		out << "TotalCache:" << "totalCacheExclusiveReadHits:" << totalCacheExclusiveReadHits << std::endl;
+		out << "TotalCache:" << "totalCacheExclusiveReadMisses:" << totalCacheExclusiveReadMisses << std::endl;
+		out << "TotalCache:" << "totalCacheSharedReadHits:" << totalCacheSharedReadHits << std::endl;
+		out << "TotalCache:" << "totalCacheSharedReadMisses:" << totalCacheSharedReadMisses << std::endl;
+		out << "TotalCache:" << "totalCacheWriteHits:" << totalCacheWriteHits << std::endl;
+		out << "TotalCache:" << "totalCacheWriteMisses:" << totalCacheWriteMisses << std::endl;
 
 		out << endl;
 

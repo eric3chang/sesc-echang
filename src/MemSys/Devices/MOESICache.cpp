@@ -957,13 +957,13 @@ namespace Memory
 	void MOESICache::DumpRunningState(RootConfigNode& node){}
 	void MOESICache::DumpStats(std::ostream& out)
 	{
-	   out << "messagesReceived:" << messagesReceived << std::endl;
-	   out << "exclusiveReadHits:" << exclusiveReadHits << std::endl;
-	   out << "sharedReadHits:" << sharedReadHits << std::endl;
-	   out << "exclusiveReadMisses:" << exclusiveReadMisses << std::endl;
-	   out << "sharedReadMisses:" << sharedReadMisses << std::endl;
-	   out << "writeHits:" << writeHits << std::endl;
-	   out << "writeMisses:" << writeMisses << std::endl;
+	   out << DeviceName() << ":messagesReceived:" << messagesReceived << std::endl;
+	   out << DeviceName() << ":exclusiveReadHits:" << exclusiveReadHits << std::endl;
+	   out << DeviceName() << ":sharedReadHits:" << sharedReadHits << std::endl;
+	   out << DeviceName() << ":exclusiveReadMisses:" << exclusiveReadMisses << std::endl;
+	   out << DeviceName() << ":sharedReadMisses:" << sharedReadMisses << std::endl;
+	   out << DeviceName() << ":writeHits:" << writeHits << std::endl;
+	   out << DeviceName() << ":writeMisses:" << writeMisses << std::endl;
 	}
 	void MOESICache::RecvMsg(const BaseMsg* msg, int connectionID)
 	{

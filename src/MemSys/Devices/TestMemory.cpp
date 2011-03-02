@@ -26,9 +26,9 @@ namespace Memory
 
 	void TestMemory::DumpStats(std::ostream& out)
 	{
-		out << "EvictionsReceived:" << evictionsReceived << endl;
-		out << "ReadsReceived:" << readsReceived << endl;
-		out << "WritessReceived:" << writesReceived << endl;
+		out << DeviceName() << ":EvictionsReceived:" << evictionsReceived << endl;
+		out << DeviceName() << ":ReadsReceived:" << readsReceived << endl;
+		out << DeviceName() << ":WritessReceived:" << writesReceived << endl;
 	}
 
 	void TestMemory::RecvMsg(const BaseMsg* msg, int connectionID)
