@@ -82,9 +82,10 @@ def generateAllBenchmarks(benchmarkNames, directoryType, processorCountLow, proc
         generateMultipleConfigs(benchmark, directoryType, processorCountLow, processorCountHi, L1Low, L1Hi)
 
 def main():
-    benchmarkNames = ['barnes', 'cholesky', 'fft', 'fmm', 'radix', 'raytrace', 'ocean']
-    directoryTypes = ['bip', 'directory', 'origin']
-    #directoryTypes = ['directory']
+    #benchmarkNames = ['barnes', 'cholesky', 'fft', 'fmm', 'lu', 'radix', 'raytrace', 'ocean']
+    benchmarkNames = ['lu']
+    #directoryTypes = ['bip', 'directory', 'origin']
+    directoryTypes = ['bip','origin']
     #cacheType = 'mesi'
     #cacheType = ''
     processorCountLow = '2'
