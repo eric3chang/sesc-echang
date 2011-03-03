@@ -8,5 +8,5 @@ HOSTNAME=$(hostname)
 #./runfile-radix-bip-all.sh
 #./runfile-radix-origin-all.sh
 #./runfile-cholesky-bip-all.sh
-./runfile-cholesky-directory-all.sh
+#./runfile-cholesky-directory-all.sh
 #./runfile-cholesky-origin-all.sh
