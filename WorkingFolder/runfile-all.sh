@@ -2,5 +2,5 @@
 DATE=$(date "+%m%d%H%M")
 HOSTNAME=$(hostname)
 
-./runfile-lu-bip-all.sh
-./runfile-lu-origin-all.sh
+./runfile-barnes-bip-all.sh
+./runfile-barnes-origin-all.sh

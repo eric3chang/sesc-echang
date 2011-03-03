@@ -22,7 +22,7 @@ STRING5='.$DATE.$HOSTNAME'
 
 # parameters for benchmarks
 BARNES_PARAMS_PRE='< benchmarks-splash2-sesc/barnes-inputs/cpu'
-BARNES_PARAMS_POST=''
+BARNES_PARAMS_POST='-special'
 CHOLESKY_PARAMS_PRE='-p'
 CHOLESKY_PARAMS_POST=' -B32 -C16384 -t < benchmarks-splash2-sesc/cholesky-inputs/wr10.O'
 FFT_PARAMS_PRE='-m10 -p'
@@ -31,7 +31,8 @@ FMM_PARAMS_PRE='-o < benchmarks-splash2-sesc/fmm-inputs/cpu'
 FMM_PARAMS_POST=''
 LU_PARAMS_PRE='-n512 -p'
 LU_PARAMS_POST=' -b16 -t'
-OCEAN_PARAMS_PRE='-n130 -p'
+#OCEAN_PARAMS_PRE='-n130 -p'
+OCEAN_PARAMS_PRE='-n6 -p'
 OCEAN_PARAMS_POST=' -e1e-7 -r20000.0 -t28800.0'
 RADIX_PARAMS_PRE='-p'
 RADIX_PARAMS_POST=' -n262144 -r1024 -m524288'
@@ -123,7 +124,7 @@ processorCountHi, L1Low, L1Hi, L2Low):
 
 def main():
     #benchmarkNames = ['barnes', 'cholesky', 'fft', 'fmm', 'lu', 'radix', 'raytrace', 'ocean']
-    benchmarkNames = ['lu']
+    benchmarkNames = ['barnes']
     directoryTypes = ['bip', 'origin']
     processorCountLow = '2'
     processorCountHi = '32'
