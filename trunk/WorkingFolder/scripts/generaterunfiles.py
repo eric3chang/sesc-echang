@@ -84,13 +84,14 @@ def generateOneRunfile(benchmarkName, directoryType, processorCount, L1Size, L2S
     return returnString
 
 def generateMultipleRunfiles(combinedOutfile, benchmarkName, directoryType, processorCountLow,\
-processorCountHi, L1Low, L1Hi, L2Low):
+processorCountHi, L1Low, L1Hi, L2Low, L2Hi):
     # check if these variables are numbers before using them
     processorCountLowInt = convertToInt(processorCountLow)
     processorCountHiInt = convertToInt(processorCountHi)
     L1LowInt = convertToInt(L1Low)
     L1HiInt = convertToInt(L1Hi)
     L2LowInt = convertToInt(L2Low)
+    L2HiInt = convertToInt(L2Hi)
 
     outFilename = OUT_PRE + benchmarkName + '-' + directoryType + '-all'
     outFilenameFull = outFilename + OUT_EXT
@@ -111,7 +112,7 @@ processorCountHi, L1Low, L1Hi, L2Low):
             L2Index = L1Index * 2
             if (L2Index < L2LowInt):
                 L2Index = L2LowInt
-            while (L2Index <= L1HiInt*8):
+            while (L2Index <= L2HiInt):
                 outputString += generateOneRunfile(benchmarkName, directoryType, str(processorIndex), str(L1Index), str(L2Index))
                 outputString += '\n'
                 #print(str(processorIndex) + ' ' + str(L1Index) + ' ' + str(L2Index))
@@ -123,14 +124,16 @@ processorCountHi, L1Low, L1Hi, L2Low):
     outFile.close()
 
 def main():
-    #benchmarkNames = ['barnes', 'cholesky', 'fft', 'fmm', 'lu', 'radix', 'raytrace', 'ocean']
-    benchmarkNames = ['barnes']
+    benchmarkNames = ['barnes', 'cholesky', 'fft', 'fmm', 'lu', 'radix', 'raytrace', 'ocean']
+    #benchmarkNames = ['barnes']
     directoryTypes = ['bip', 'origin']
     processorCountLow = '2'
     processorCountHi = '32'
-    L1Low = '16'
+    L1Low = '128'
     L1Hi = '128'
-    L2Low = '1024'
+    #L2Low = '1024'
+    L2Low = '512'
+    L2Hi = '8192'
 
     combinedOutfilename = OUT_DIR+COMBINED_OUT+OUT_EXT
     combinedOutfile = open(combinedOutfilename, 'wb')
@@ -142,7 +145,7 @@ def main():
     for name in benchmarkNames:
         for directory in directoryTypes:
             generateMultipleRunfiles(combinedOutfile, name, directory, processorCountLow,\
-                processorCountHi, L1Low, L1Hi, L2Low)
+                processorCountHi, L1Low, L1Hi, L2Low, L2Hi)
     combinedOutfile.close()
 
 if __name__ == "__main__":
