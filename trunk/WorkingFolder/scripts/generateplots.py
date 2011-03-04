@@ -3,6 +3,7 @@ import os
 import sys
 
 from matplotlib.pyplot import *
+#from mpl_toolkits.axes_grid1 import ImageGrid
 
 # need to change this when moving this script
 IN_DIR='../results/'
@@ -22,6 +23,7 @@ IN_EXT='.memDevResults'
 LINESTYLES=['ko','k^']
 #LINESTYLES=['k*','kD']
 #LINESTYLES=['kp','kd']
+LINESTYLE_SOLID='k-'
 OUT_EXT='.png'
 
 thisFileName = sys.argv[0]
@@ -178,11 +180,14 @@ def plotCpuMultiple(benchmarks, dirtypes, minimum, maximum, component, key, myYl
     remainder = benchmarkLength % GRAPH_WIDTH
     if (remainder > 0):
         row += 1
-    figureIndex = 1
     figureIndexPrefix = str(row) + str(GRAPH_WIDTH)
+
+    #myFigure = figure(1)
+    #myGrid = ImageGrid(myFigure, 111, nrows_ncols = (row, GRAPH_WIDTH), axes_pad=0.1)
     subplots_adjust(hspace=0.4)
     subplots_adjust(wspace=0.4)
 
+    figureIndex = 1
     for benchmark in benchmarks:
         myTitle = benchmark
         tempBenchmarks = [benchmark]
@@ -224,24 +229,51 @@ def plotGraph(dirtypes, graphResults, minimum, maximum, myXlabel, myYlabel, myTi
     linestyleIndex = 0
     linestyle = LINESTYLES[linestyleIndex]
     ticks = []
-    for dirtype in dirtypes:
-        iSources = graphResults[dirtype]
-        i = minInt
-        xValues = []
-        yValues = []
-        while (i <= maxInt):
-            x = i
-            y = iSources[i]
-            xValues.append(x)
-            yValues.append(y)
-            ticks.append(i)
-            i *= 2
-        plot(xValues, yValues, linestyle, label=dirtype)
-        # change line style
-        linestyleIndex += 1
-        if (linestyleIndex >= len(LINESTYLES)):
-            linestyleIndex = 0
-        linestyle = LINESTYLES[linestyleIndex]
+    if (myTitle!='radix'):
+        for dirtype in dirtypes:
+            iSources = graphResults[dirtype]
+            i = minInt
+            xValues = []
+            yValues = []
+            while (i <= maxInt):
+                x = i
+                y = iSources[i]
+                xValues.append(x)
+                yValues.append(y)
+                ticks.append(i)
+                i *= 2
+            plot(xValues, yValues, linestyle, label=dirtype)
+            plot(xValues, yValues, LINESTYLE_SOLID)
+            # change line style
+            linestyleIndex += 1
+            if (linestyleIndex >= len(LINESTYLES)):
+                linestyleIndex = 0
+            linestyle = LINESTYLES[linestyleIndex]
+    else:
+        directoryIndex = len(dirtypes)-1
+        while (directoryIndex >= 0):
+            dirtype = dirtypes[directoryIndex]
+            iSources = graphResults[dirtype]
+            i = minInt
+            xValues = []
+            yValues = []
+            while (i <= maxInt):
+                x = i
+                y = iSources[i]
+                xValues.append(x)
+                yValues.append(y)
+                ticks.append(i)
+                i *= 2
+            specialDirtypeIndex = ~directoryIndex
+            plot(xValues, yValues, linestyle, label=dirtypes[specialDirtypeIndex])
+            plot(xValues, yValues, LINESTYLE_SOLID)
+            # change line style
+            linestyleIndex += 1
+            if (linestyleIndex >= len(LINESTYLES)):
+                linestyleIndex = 0
+            linestyle = LINESTYLES[linestyleIndex]
+            directoryIndex -= 1
+
     legend(loc='best')
     xlabel(myXlabel)
     ylabel(myYlabel)
@@ -249,7 +281,6 @@ def plotGraph(dirtypes, graphResults, minimum, maximum, myXlabel, myYlabel, myTi
     grid(True)
     title(myTitle)
     axis([0, maxInt*1.1, 0, 110])
-    #show()
 
 def plotL1(benchmarks, dirtypes, minimum, maximum, component, key):
     myXlabel='L1 Cache Size in Kilobytes'
