@@ -141,7 +141,8 @@ namespace Memory
 		void OnDirectoryBlockRequest(const ReadMsg* m, NodeID src);
 		void OnDirectoryBlockResponse(const ReadResponseMsg* m, NodeID src);
 
-      void SendRequestToMemory(const BaseMsg *msg);
+      void SendReadRequestToMemory(const ReadMsg *msg);
+		void SendWriteRequestToMemory(const WriteMsg *msg);
 
 		void PrintDebugInfo(const char* fromMethod, const BaseMsg &myMessage, const char* operation);
 		void PrintDebugInfo(const char* fromMethod, const BaseMsg &myMessage, const char* operation,NodeID src);
