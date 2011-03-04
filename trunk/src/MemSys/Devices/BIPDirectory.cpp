@@ -89,18 +89,19 @@ namespace Memory
 		}
 		else
 		{
-			SendRequestToMemory(m);
+			SendReadRequestToMemory(m);
 			return;
 		}
 		if(target == nodeID)
 		{// if target == nodeID, it could mean that the block was evicted or invalidated
 		   // and a response has already been sent, but we still need
 			// to do this to get a proper read response, otherwise the program
-			// will stall
+			// will stall. It could also mean that we want to evict this block
 #ifdef MEMORY_BIP_DIRECTORY_DEBUG_VERBOSE_OLD
          PrintDebugInfo("RemoteRead",*m,"PerformDirectoryFetch:Error",nodeID);
 #endif
 			OnRemoteReadCache(m, nodeID);//ERROR
+			//SendReadRequestToMemory(m);
 		}
 		else
 		{
@@ -160,43 +161,26 @@ namespace Memory
 	}
 
    /**
-   send a memory access complete message
+   send a memory access message
    */
-   void BIPDirectory::SendRequestToMemory(const BaseMsg *msg)
+   void BIPDirectory::SendReadRequestToMemory(const ReadMsg *msg)
    {
-   	if (msg->Type()==mt_Read)
-   	{
-   		DebugAssertWithMessageID(pendingMemoryReadAccesses.find(msg->MsgID())==pendingMemoryReadAccesses.end(),msg->MsgID());
-   		const ReadMsg* m = (const ReadMsg*) msg;
-   		pendingMemoryReadAccesses[msg->MsgID()] = m;
-   		BaseMsg *forward = EM().ReplicateMsg(msg);
-   		// using 0 for send time because the time is taken care of in TestMemory
-   		SendMsg(localMemoryConnectionID,forward,localSendTime);
-   	}
-   	else if (msg->Type()==mt_Write)
-   	{
-   		DebugAssertWithMessageID(pendingMemoryWriteAccesses.find(msg->MsgID())==pendingMemoryWriteAccesses.end(),msg->MsgID());
-   		const WriteMsg* m = (const WriteMsg*) msg;
-   		pendingMemoryWriteAccesses[msg->MsgID()] = m;
-   		BaseMsg *forward = EM().ReplicateMsg(msg);
-   		// using 0 for send time because the time is taken care of in TestMemory
-   		SendMsg(localMemoryConnectionID,forward,localSendTime);
-   	}
-		/*
-		else if (msg->Type()==mt_Eviction)
-   	{
-   		DebugAssertWithMessageID(pendingMemoryEvictionAccesses.find(msg->MsgID())==pendingMemoryEvictionAccesses.end(),msg->MsgID());
-   		const EvictionMsg* m = (const EvictionMsg*) msg;
-   		pendingMemoryEvictionAccesses[msg->MsgID()] = m;
-   		BaseMsg *forward = EM().ReplicateMsg(msg);
-   		// using 0 for send time because the time is taken care of in TestMemory
-   		SendMsg(localMemoryConnectionID,forward,localSendTime);
-   	}
-		*/
-   	else
-   	{
-   		PrintError("SendMemoryRequest", msg, "can't send current message type to memory");
-   	}
+   	DebugAssertWithMessageID(pendingMemoryReadAccesses.find(msg->MsgID())==pendingMemoryReadAccesses.end(),msg->MsgID());
+   	const ReadMsg* m = (const ReadMsg*) msg;
+   	pendingMemoryReadAccesses[msg->MsgID()] = m;
+   	BaseMsg *forward = EM().ReplicateMsg(msg);
+   	// using 0 for send time because the time is taken care of in TestMemory
+   	SendMsg(localMemoryConnectionID,forward,localSendTime);
+   }
+
+	void BIPDirectory::SendWriteRequestToMemory(const WriteMsg *msg)
+   {
+   	DebugAssertWithMessageID(pendingMemoryWriteAccesses.find(msg->MsgID())==pendingMemoryWriteAccesses.end(),msg->MsgID());
+   	const WriteMsg* m = (const WriteMsg*) msg;
+   	pendingMemoryWriteAccesses[msg->MsgID()] = m;
+   	BaseMsg *forward = EM().ReplicateMsg(msg);
+   	// using 0 for send time because the time is taken care of in TestMemory
+   	SendMsg(localMemoryConnectionID,forward,localSendTime);
    }
 
 	/**
@@ -429,19 +413,28 @@ namespace Memory
 			// if there is some pending shared read on this address
 			if(pendingDirectorySharedReads.find(m->addr) != pendingDirectorySharedReads.end())
 			{
-			   // for all the elements in pendingDirectorySharedReads where key is in the range of m->addr
-				for(HashMultiMap<Address,LookupData<ReadMsg> >::iterator i = pendingDirectorySharedReads.equal_range(m->addr).first; i != pendingDirectorySharedReads.equal_range(m->addr).second; i++)
+				int numberOfReaders = 0;
+				HashMultiMap<Address,LookupData<ReadMsg> >::iterator tempIterator;
+				std::pair<HashMultiMap<Address,LookupData<ReadMsg> >::iterator,HashMultiMap<Address,LookupData<ReadMsg> >::iterator> ret;
+				ret = pendingDirectorySharedReads.equal_range(m->addr);
+				for (tempIterator=ret.first; tempIterator!=ret.second; tempIterator++)
 				{
-					ReadResponseMsg* r = EM().CreateReadResponseMsg(GetDeviceID(),i->second.msg->GeneratingPC());
+					numberOfReaders++;
+				}
+				bool isOneReader = (numberOfReaders==1);
+			   // for all the elements in pendingDirectorySharedReads where key is in the range of m->addr
+				for(tempIterator = ret.first; tempIterator != ret.second; tempIterator++)
+				{
+					ReadResponseMsg* r = EM().CreateReadResponseMsg(GetDeviceID(),tempIterator->second.msg->GeneratingPC());
 					r->blockAttached = true;
 					r->addr = m->addr;
 					r->size = m->size;
 					r->directoryLookup = true;
-					r->exclusiveOwnership = (pendingDirectorySharedReads.equal_range(m->addr).first++) == pendingDirectorySharedReads.equal_range(m->addr).second;// only one reader
+					r->exclusiveOwnership = isOneReader;
 					r->satisfied = true;
-					r->solicitingMessage = i->second.msg->MsgID();
-					AddDirectoryShare(m->addr,i->second.sourceNode,false);
-					if(i->second.sourceNode == nodeID)
+					r->solicitingMessage = tempIterator->second.msg->MsgID();
+					AddDirectoryShare(m->addr,tempIterator->second.sourceNode,false);
+					if(tempIterator->second.sourceNode == nodeID)
 					{
 #ifdef MEMORY_BIP_DIRECTORY_DEBUG_VERBOSE_OLD
                PrintDebugInfo("DirBlkRes",*r,"RemReadRes",nodeID);
@@ -450,21 +443,23 @@ namespace Memory
 					}
 					else
 					{
-						NetworkMsg* nm = EM().CreateNetworkMsg(GetDeviceID(),i->second.msg->GeneratingPC());
-						nm->destinationNode = i->second.sourceNode;
+						NetworkMsg* nm = EM().CreateNetworkMsg(GetDeviceID(),tempIterator->second.msg->GeneratingPC());
+						nm->destinationNode = tempIterator->second.sourceNode;
 						nm->sourceNode = nodeID;
 						nm->payloadMsg = r;
 						SendMsg(remoteConnectionID, nm, remoteSendTime + satisfyTime);
 					}
-					EM().DisposeMsg(i->second.msg);
+					EM().DisposeMsg(tempIterator->second.msg);
 				}
 				pendingDirectorySharedReads.erase(pendingDirectorySharedReads.equal_range(m->addr).first,pendingDirectorySharedReads.equal_range(m->addr).second);
 			}  //if(pendingDirectorySharedReads.find(m->addr) != pendingDirectorySharedReads.end())
 			else // pendingDirectorySharedReads.find(m->addr) == pendingDirectorySharedReads.end())
 			{  // there is no pending shared read on this address, then we have an exclusive pending read
-				DebugAssertWithMessageID(m->exclusiveOwnership,m->MsgID())
-				DebugAssertWithMessageID(m->blockAttached,m->MsgID())
-				DebugAssertWithMessageID(directoryData[m->addr].owner == InvalidNodeID || directoryData[m->addr].owner == src,m->MsgID())
+				DebugAssertWithMessageID(m->exclusiveOwnership,m->solicitingMessage)
+				DebugAssertWithMessageID(m->blockAttached,m->solicitingMessage)
+				BlockData& myBlockData = directoryData[m->addr];
+				// src==InvalidNodeID means that this response came from the memory
+				DebugAssertWithMessageID(myBlockData.owner==InvalidNodeID || myBlockData.owner==src || src==InvalidNodeID,m->solicitingMessage)
 				if(directoryData[m->addr].sharers.size() == 0)
 				{//send block on now
 					ReadResponseMsg* response = (ReadResponseMsg*)EM().ReplicateMsg(m);
@@ -487,7 +482,11 @@ namespace Memory
 				} // if(directoryData[m->addr].sharers.size() == 0)
 				else
 				{//hold the block, send on once all invalidations are complete
-					for(HashSet<NodeID>::iterator i = directoryData[m->addr].sharers.begin(); i != directoryData[m->addr].sharers.end(); i++)
+					BlockData &myBlockData = directoryData[m->addr];
+					HashSet<NodeID>& sharers = myBlockData.sharers;
+					// the following check was done before the if above near line 454
+					//DebugAssertWithMessageID(myBlockData.owner==InvalidNodeID, m->solicitingMessage);
+					for(HashSet<NodeID>::iterator i = sharers.begin(); i != sharers.end(); i++)
 					{
 						InvalidateMsg* inv = EM().CreateInvalidateMsg(GetDeviceID(),m->GeneratingPC());
 						inv->addr = m->addr;
@@ -541,7 +540,7 @@ namespace Memory
 		DebugAssertWithMessageID(m,m->MsgID())
 		DebugAssertWithMessageID(nodeID == directoryNodeCalc->CalcNodeID(m->addr),m->MsgID())
 
-		SendRequestToMemory(m);
+		SendWriteRequestToMemory(m);
 
 		/*
 		NodeID memoryNode = memoryNodeCalc->CalcNodeID(m->addr);
@@ -630,7 +629,7 @@ namespace Memory
 			wm->size = m->size;
 			wm->onCompletedCallback = NULL;
 
-			SendRequestToMemory(wm);
+			SendWriteRequestToMemory(wm);
 
 			/*
 			NetworkMsg* nm = EM().CreateNetworkMsg(GetDeviceID(), m->GeneratingPC());
@@ -717,7 +716,7 @@ namespace Memory
 			wm->size = m->size;
 			wm->onCompletedCallback = NULL;
 
-			SendRequestToMemory(wm);
+			SendWriteRequestToMemory(wm);
 			/*
 			NetworkMsg* nm = EM().CreateNetworkMsg(GetDeviceID(), m->GeneratingPC());
 			nm->sourceNode = nodeID;
