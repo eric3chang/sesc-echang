@@ -22,7 +22,7 @@
  * Calling TM_SIMOP(SIM_START_RABBIT) will start rabbit mode.
  * */
 
-int myInt = 1;
+volatile int myInt = 1;
 
 void *writeInt(void *numberOfLoops)
 {
