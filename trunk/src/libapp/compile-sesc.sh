@@ -4,6 +4,7 @@
 FILE=$1  # uses the first passed-in parameter for filename
 #SESC_THREAD_O=~/csl/sesc-echang/src/libapp/sesc_thread.o
 OBJECT_FILES="sesc_chud.o sesc_events.o sesc_locks.o sesc_thread.o sesc_tls.o sesc_ts.o"
+OUT_DIR='../../WorkingFolder/benchmarks-splash2-sesc/'
 #SESC_THREAD_O=sesc_chud.o\ sesc_locks.o\ sesc_thread.o\ sesc_tls.o\ sesc_ts.o
 MINT_X=/opt/csl/sescutils/mipseb-linux/lib/ldscripts/mint.x
 EXTENSION=sesc
@@ -16,5 +17,5 @@ fi
 
 shift
 
-mipseb-linux-g++ -o "${FILE%.*}.$EXTENSION" "${FILE}" -g -mips2 -mabi=32 -static -Wa,-non_shared -mno-abicalls $OBJECT_FILES -Wl,--script="$MINT_X" $@
+mipseb-linux-g++ -o "${OUT_DIR}${FILE%.*}.$EXTENSION" "${FILE}" -g -mips2 -mabi=32 -static -Wa,-non_shared -mno-abicalls $OBJECT_FILES -Wl,--script="$MINT_X" $@
 

@@ -3,17 +3,18 @@
 #ifdef USE_SESC
    #include "sescapi.h"
 #else
+   #define MAX_NUM_THREADS 32
    #include <pthread.h>
 #endif
 
 #include <stdio.h>
 #include <stdlib.h>
 
-#define SIM_CHECKPOINT 2
-#define SIM_START_RABBIT 0
-#define SIM_STOP_RABBIT 1
+//#define SIM_CHECKPOINT 2
+//#define SIM_START_RABBIT 0
+//#define SIM_STOP_RABBIT 1
 
-#define TM_SIMOP(x) asm __volatile__ ("andi $0, $0, %0\n\t"::"i"(x): "memory")
+//#define TM_SIMOP(x) asm __volatile__ ("andi $0, $0, %0\n\t"::"i"(x): "memory")
 
 /*
  * Calling TM_SIMOP(SIM_CHECKPOINT) will take a chekcpoint.
@@ -21,25 +22,16 @@
  * Calling TM_SIMOP(SIM_START_RABBIT) will start rabbit mode.
  * */
 
-//int finalOutput[65535];
-//int *finalOutputPtr = finalOutput;
-int myChar = 1;
+int myInt = 1;
 
-void *writeChar(int *threadid)
+void *writeInt(void *numberOfLoops)
 {
    int i=0;
-   int threadidCopy = *threadid;
-	printf("threadid=%d\n", threadidCopy);
    
-   for (i=0; i<10000; i++)
+   for (i=0; i<*((int*)numberOfLoops); i++)
    {
-      myChar = myChar + 1;
-      //printf("%d", threadidCopy);
-      //*finalOutputPtr = threadidCopy;
-      //finalOutputPtr++;
+      myInt = myInt + 1;
    }
-
-   printf("\n");
 #ifdef USE_SESC
    sesc_exit(0);
 #else
@@ -52,12 +44,13 @@ int main(int argc, char** argv)
 #ifdef USE_SESC
 	sesc_init();
 #else
-    pthread_t threads[NUM_THREADS];
+   pthread_t threads[MAX_NUM_THREADS];
 #endif
-   int* index = 0;
-	int t = 0;
-   int processorCount = 0;
    char *tempString = NULL;
+   int t = 0;
+   int threadIndexMax = 0;
+   int numberOfLoops = 0;
+   int processorCount = 0;
 
    // process arguments
    for (t=0; t<argc; t++)
@@ -69,42 +62,42 @@ int main(int argc, char** argv)
          {
             processorCount = atoi(tempString+2);
          }
+         else if (tempString[1]=='n')
+         {
+            numberOfLoops = atoi(tempString+2);
+         }
       }
    }
 
-   if (!processorCount)
+   if (!processorCount || !numberOfLoops)
    {
-      printf("Usage: writetest -p[number of processors]\n");
+      printf("Usage: writetest -p[number of processors] -n[number of loops]\n");
 #ifdef USE_SESC
       sesc_exit(1);
+#else
+      pthread_exit(NULL);
 #endif
    }
 
-   for(t=0;t<processorCount;t++)
+   for(t=0;t<processorCount-1;t++)
    {
        printf("Creating thread %d\n", t);
 #ifdef USE_SESC
-	    sesc_spawn((void (*)(void*)) *writeChar, &t, 0);
+	    sesc_spawn((void (*)(void*)) *writeInt, &numberOfLoops, 0);
 #else
-       pthread_create(&threads[t], NULL, writeChar, &t);
+       pthread_create(&threads[t], NULL, writeInt, &numberOfLoops);
 #endif
     }
+
 #ifdef USE_SESC
    sesc_wait(); // wait for thread to finish
-#endif
-
-   /*
-   for (index=finalOutput; index<finalOutputPtr; index++)
-   {
-      printf("%d", *index);
-   }
-   */
-   printf("\n");
-
-#ifdef USE_SESC
-	sesc_exit(0);
+   sesc_exit(0);
 #else
-   pthread_exit(NULL);
+   for (t=0; t<processorCount-1; t++)
+   {
+      pthread_join(threads[t], NULL);
+      pthread_exit(NULL);
+   }
 #endif
 }
 
