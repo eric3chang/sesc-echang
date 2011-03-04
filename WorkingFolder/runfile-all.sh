@@ -2,5 +2,5 @@
 DATE=$(date "+%m%d%H%M")
 HOSTNAME=$(hostname)
 
-./runfile-fft-bip-all.sh
-./runfile-fft-origin-all.sh
+./runfile-cholesky-bip-all.sh
+./runfile-cholesky-origin-all.sh
