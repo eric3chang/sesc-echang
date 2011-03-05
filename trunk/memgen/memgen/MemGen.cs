@@ -143,7 +143,7 @@
         // use the following one to simulate against Origin
         output.WriteLine("Int LocalSendTime " + 60);
 		output.WriteLine("Int RemoteSendTime " + 4);
-		output.WriteLine("Int LookupRetryTime " + 4);
+		output.WriteLine("Int LookupRetryTime " + 60);
 		output.WriteLine("Int LookupTime " + 4);
 		output.WriteLine("Int SatisfyTime " + 4);
 		output.WriteLine("Int NodeID " + myNode);
@@ -173,7 +173,7 @@
         output.WriteLine("String DeviceName " + name);
         output.WriteLine("Int LocalSendTime " + 60);
         output.WriteLine("Int RemoteSendTime " + 4);
-        output.WriteLine("Int LookupRetryTime " + 4);
+        output.WriteLine("Int LookupRetryTime " + 60);
         output.WriteLine("Int LookupTime " + 4);
         output.WriteLine("Int SatisfyTime " + 4);
         output.WriteLine("Int NodeID " + myNode);
@@ -198,7 +198,7 @@
         output.WriteLine("String DeviceName " + name);
         output.WriteLine("Int LocalSendTime " + 60);
         output.WriteLine("Int RemoteSendTime " + 4);
-        output.WriteLine("Int LookupRetryTime " + 4);
+        output.WriteLine("Int LookupRetryTime " + 60);
         output.WriteLine("Int LookupTime " + 4);
         output.WriteLine("Int SatisfyTime " + 4);
         output.WriteLine("Int NodeID " + myNode);

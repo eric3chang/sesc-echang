@@ -175,7 +175,7 @@ String DeviceType BIPDirectory
 String DeviceName BIPDirectory_0
 Int LocalSendTime 60
 Int RemoteSendTime 4
-Int LookupRetryTime 4
+Int LookupRetryTime 60
 Int LookupTime 4
 Int SatisfyTime 4
 Int NodeID 0
@@ -262,7 +262,7 @@ String DeviceType BIPDirectory
 String DeviceName BIPDirectory_1
 Int LocalSendTime 60
 Int RemoteSendTime 4
-Int LookupRetryTime 4
+Int LookupRetryTime 60
 Int LookupTime 4
 Int SatisfyTime 4
 Int NodeID 1
@@ -349,7 +349,7 @@ String DeviceType BIPDirectory
 String DeviceName BIPDirectory_2
 Int LocalSendTime 60
 Int RemoteSendTime 4
-Int LookupRetryTime 4
+Int LookupRetryTime 60
 Int LookupTime 4
 Int SatisfyTime 4
 Int NodeID 2
@@ -436,7 +436,7 @@ String DeviceType BIPDirectory
 String DeviceName BIPDirectory_3
 Int LocalSendTime 60
 Int RemoteSendTime 4
-Int LookupRetryTime 4
+Int LookupRetryTime 60
 Int LookupTime 4
 Int SatisfyTime 4
 Int NodeID 3
@@ -523,7 +523,7 @@ String DeviceType BIPDirectory
 String DeviceName BIPDirectory_4
 Int LocalSendTime 60
 Int RemoteSendTime 4
-Int LookupRetryTime 4
+Int LookupRetryTime 60
 Int LookupTime 4
 Int SatisfyTime 4
 Int NodeID 4
@@ -610,7 +610,7 @@ String DeviceType BIPDirectory
 String DeviceName BIPDirectory_5
 Int LocalSendTime 60
 Int RemoteSendTime 4
-Int LookupRetryTime 4
+Int LookupRetryTime 60
 Int LookupTime 4
 Int SatisfyTime 4
 Int NodeID 5
@@ -697,7 +697,7 @@ String DeviceType BIPDirectory
 String DeviceName BIPDirectory_6
 Int LocalSendTime 60
 Int RemoteSendTime 4
-Int LookupRetryTime 4
+Int LookupRetryTime 60
 Int LookupTime 4
 Int SatisfyTime 4
 Int NodeID 6
@@ -784,7 +784,7 @@ String DeviceType BIPDirectory
 String DeviceName BIPDirectory_7
 Int LocalSendTime 60
 Int RemoteSendTime 4
-Int LookupRetryTime 4
+Int LookupRetryTime 60
 Int LookupTime 4
 Int SatisfyTime 4
 Int NodeID 7
@@ -871,7 +871,7 @@ String DeviceType BIPDirectory
 String DeviceName BIPDirectory_8
 Int LocalSendTime 60
 Int RemoteSendTime 4
-Int LookupRetryTime 4
+Int LookupRetryTime 60
 Int LookupTime 4
 Int SatisfyTime 4
 Int NodeID 8
@@ -958,7 +958,7 @@ String DeviceType BIPDirectory
 String DeviceName BIPDirectory_9
 Int LocalSendTime 60
 Int RemoteSendTime 4
-Int LookupRetryTime 4
+Int LookupRetryTime 60
 Int LookupTime 4
 Int SatisfyTime 4
 Int NodeID 9
@@ -1045,7 +1045,7 @@ String DeviceType BIPDirectory
 String DeviceName BIPDirectory_10
 Int LocalSendTime 60
 Int RemoteSendTime 4
-Int LookupRetryTime 4
+Int LookupRetryTime 60
 Int LookupTime 4
 Int SatisfyTime 4
 Int NodeID 10
@@ -1132,7 +1132,7 @@ String DeviceType BIPDirectory
 String DeviceName BIPDirectory_11
 Int LocalSendTime 60
 Int RemoteSendTime 4
-Int LookupRetryTime 4
+Int LookupRetryTime 60
 Int LookupTime 4
 Int SatisfyTime 4
 Int NodeID 11
@@ -1219,7 +1219,7 @@ String DeviceType BIPDirectory
 String DeviceName BIPDirectory_12
 Int LocalSendTime 60
 Int RemoteSendTime 4
-Int LookupRetryTime 4
+Int LookupRetryTime 60
 Int LookupTime 4
 Int SatisfyTime 4
 Int NodeID 12
@@ -1306,7 +1306,7 @@ String DeviceType BIPDirectory
 String DeviceName BIPDirectory_13
 Int LocalSendTime 60
 Int RemoteSendTime 4
-Int LookupRetryTime 4
+Int LookupRetryTime 60
 Int LookupTime 4
 Int SatisfyTime 4
 Int NodeID 13
@@ -1393,7 +1393,7 @@ String DeviceType BIPDirectory
 String DeviceName BIPDirectory_14
 Int LocalSendTime 60
 Int RemoteSendTime 4
-Int LookupRetryTime 4
+Int LookupRetryTime 60
 Int LookupTime 4
 Int SatisfyTime 4
 Int NodeID 14
@@ -1480,7 +1480,7 @@ String DeviceType BIPDirectory
 String DeviceName BIPDirectory_15
 Int LocalSendTime 60
 Int RemoteSendTime 4
-Int LookupRetryTime 4
+Int LookupRetryTime 60
 Int LookupTime 4
 Int SatisfyTime 4
 Int NodeID 15
@@ -1567,7 +1567,7 @@ String DeviceType BIPDirectory
 String DeviceName BIPDirectory_16
 Int LocalSendTime 60
 Int RemoteSendTime 4
-Int LookupRetryTime 4
+Int LookupRetryTime 60
 Int LookupTime 4
 Int SatisfyTime 4
 Int NodeID 16
@@ -1654,7 +1654,7 @@ String DeviceType BIPDirectory
 String DeviceName BIPDirectory_17
 Int LocalSendTime 60
 Int RemoteSendTime 4
-Int LookupRetryTime 4
+Int LookupRetryTime 60
 Int LookupTime 4
 Int SatisfyTime 4
 Int NodeID 17
@@ -1741,7 +1741,7 @@ String DeviceType BIPDirectory
 String DeviceName BIPDirectory_18
 Int LocalSendTime 60
 Int RemoteSendTime 4
-Int LookupRetryTime 4
+Int LookupRetryTime 60
 Int LookupTime 4
 Int SatisfyTime 4
 Int NodeID 18
@@ -1828,7 +1828,7 @@ String DeviceType BIPDirectory
 String DeviceName BIPDirectory_19
 Int LocalSendTime 60
 Int RemoteSendTime 4
-Int LookupRetryTime 4
+Int LookupRetryTime 60
 Int LookupTime 4
 Int SatisfyTime 4
 Int NodeID 19
@@ -1915,7 +1915,7 @@ String DeviceType BIPDirectory
 String DeviceName BIPDirectory_20
 Int LocalSendTime 60
 Int RemoteSendTime 4
-Int LookupRetryTime 4
+Int LookupRetryTime 60
 Int LookupTime 4
 Int SatisfyTime 4
 Int NodeID 20
@@ -2002,7 +2002,7 @@ String DeviceType BIPDirectory
 String DeviceName BIPDirectory_21
 Int LocalSendTime 60
 Int RemoteSendTime 4
-Int LookupRetryTime 4
+Int LookupRetryTime 60
 Int LookupTime 4
 Int SatisfyTime 4
 Int NodeID 21
@@ -2089,7 +2089,7 @@ String DeviceType BIPDirectory
 String DeviceName BIPDirectory_22
 Int LocalSendTime 60
 Int RemoteSendTime 4
-Int LookupRetryTime 4
+Int LookupRetryTime 60
 Int LookupTime 4
 Int SatisfyTime 4
 Int NodeID 22
@@ -2176,7 +2176,7 @@ String DeviceType BIPDirectory
 String DeviceName BIPDirectory_23
 Int LocalSendTime 60
 Int RemoteSendTime 4
-Int LookupRetryTime 4
+Int LookupRetryTime 60
 Int LookupTime 4
 Int SatisfyTime 4
 Int NodeID 23
@@ -2263,7 +2263,7 @@ String DeviceType BIPDirectory
 String DeviceName BIPDirectory_24
 Int LocalSendTime 60
 Int RemoteSendTime 4
-Int LookupRetryTime 4
+Int LookupRetryTime 60
 Int LookupTime 4
 Int SatisfyTime 4
 Int NodeID 24
@@ -2350,7 +2350,7 @@ String DeviceType BIPDirectory
 String DeviceName BIPDirectory_25
 Int LocalSendTime 60
 Int RemoteSendTime 4
-Int LookupRetryTime 4
+Int LookupRetryTime 60
 Int LookupTime 4
 Int SatisfyTime 4
 Int NodeID 25
@@ -2437,7 +2437,7 @@ String DeviceType BIPDirectory
 String DeviceName BIPDirectory_26
 Int LocalSendTime 60
 Int RemoteSendTime 4
-Int LookupRetryTime 4
+Int LookupRetryTime 60
 Int LookupTime 4
 Int SatisfyTime 4
 Int NodeID 26
@@ -2524,7 +2524,7 @@ String DeviceType BIPDirectory
 String DeviceName BIPDirectory_27
 Int LocalSendTime 60
 Int RemoteSendTime 4
-Int LookupRetryTime 4
+Int LookupRetryTime 60
 Int LookupTime 4
 Int SatisfyTime 4
 Int NodeID 27
@@ -2611,7 +2611,7 @@ String DeviceType BIPDirectory
 String DeviceName BIPDirectory_28
 Int LocalSendTime 60
 Int RemoteSendTime 4
-Int LookupRetryTime 4
+Int LookupRetryTime 60
 Int LookupTime 4
 Int SatisfyTime 4
 Int NodeID 28
@@ -2698,7 +2698,7 @@ String DeviceType BIPDirectory
 String DeviceName BIPDirectory_29
 Int LocalSendTime 60
 Int RemoteSendTime 4
-Int LookupRetryTime 4
+Int LookupRetryTime 60
 Int LookupTime 4
 Int SatisfyTime 4
 Int NodeID 29
@@ -2785,7 +2785,7 @@ String DeviceType BIPDirectory
 String DeviceName BIPDirectory_30
 Int LocalSendTime 60
 Int RemoteSendTime 4
-Int LookupRetryTime 4
+Int LookupRetryTime 60
 Int LookupTime 4
 Int SatisfyTime 4
 Int NodeID 30
@@ -2872,7 +2872,7 @@ String DeviceType BIPDirectory
 String DeviceName BIPDirectory_31
 Int LocalSendTime 60
 Int RemoteSendTime 4
-Int LookupRetryTime 4
+Int LookupRetryTime 60
 Int LookupTime 4
 Int SatisfyTime 4
 Int NodeID 31

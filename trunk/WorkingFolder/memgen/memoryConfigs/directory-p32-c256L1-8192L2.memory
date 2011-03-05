@@ -192,7 +192,7 @@ String DeviceType Directory
 String DeviceName Directory_0
 Int LocalSendTime 60
 Int RemoteSendTime 4
-Int LookupRetryTime 4
+Int LookupRetryTime 60
 Int LookupTime 4
 Int SatisfyTime 4
 Int NodeID 0
@@ -270,7 +270,7 @@ String DeviceType Directory
 String DeviceName Directory_1
 Int LocalSendTime 60
 Int RemoteSendTime 4
-Int LookupRetryTime 4
+Int LookupRetryTime 60
 Int LookupTime 4
 Int SatisfyTime 4
 Int NodeID 1
@@ -348,7 +348,7 @@ String DeviceType Directory
 String DeviceName Directory_2
 Int LocalSendTime 60
 Int RemoteSendTime 4
-Int LookupRetryTime 4
+Int LookupRetryTime 60
 Int LookupTime 4
 Int SatisfyTime 4
 Int NodeID 2
@@ -426,7 +426,7 @@ String DeviceType Directory
 String DeviceName Directory_3
 Int LocalSendTime 60
 Int RemoteSendTime 4
-Int LookupRetryTime 4
+Int LookupRetryTime 60
 Int LookupTime 4
 Int SatisfyTime 4
 Int NodeID 3
@@ -504,7 +504,7 @@ String DeviceType Directory
 String DeviceName Directory_4
 Int LocalSendTime 60
 Int RemoteSendTime 4
-Int LookupRetryTime 4
+Int LookupRetryTime 60
 Int LookupTime 4
 Int SatisfyTime 4
 Int NodeID 4
@@ -582,7 +582,7 @@ String DeviceType Directory
 String DeviceName Directory_5
 Int LocalSendTime 60
 Int RemoteSendTime 4
-Int LookupRetryTime 4
+Int LookupRetryTime 60
 Int LookupTime 4
 Int SatisfyTime 4
 Int NodeID 5
@@ -660,7 +660,7 @@ String DeviceType Directory
 String DeviceName Directory_6
 Int LocalSendTime 60
 Int RemoteSendTime 4
-Int LookupRetryTime 4
+Int LookupRetryTime 60
 Int LookupTime 4
 Int SatisfyTime 4
 Int NodeID 6
@@ -738,7 +738,7 @@ String DeviceType Directory
 String DeviceName Directory_7
 Int LocalSendTime 60
 Int RemoteSendTime 4
-Int LookupRetryTime 4
+Int LookupRetryTime 60
 Int LookupTime 4
 Int SatisfyTime 4
 Int NodeID 7
@@ -816,7 +816,7 @@ String DeviceType Directory
 String DeviceName Directory_8
 Int LocalSendTime 60
 Int RemoteSendTime 4
-Int LookupRetryTime 4
+Int LookupRetryTime 60
 Int LookupTime 4
 Int SatisfyTime 4
 Int NodeID 8
@@ -894,7 +894,7 @@ String DeviceType Directory
 String DeviceName Directory_9
 Int LocalSendTime 60
 Int RemoteSendTime 4
-Int LookupRetryTime 4
+Int LookupRetryTime 60
 Int LookupTime 4
 Int SatisfyTime 4
 Int NodeID 9
@@ -972,7 +972,7 @@ String DeviceType Directory
 String DeviceName Directory_10
 Int LocalSendTime 60
 Int RemoteSendTime 4
-Int LookupRetryTime 4
+Int LookupRetryTime 60
 Int LookupTime 4
 Int SatisfyTime 4
 Int NodeID 10
@@ -1050,7 +1050,7 @@ String DeviceType Directory
 String DeviceName Directory_11
 Int LocalSendTime 60
 Int RemoteSendTime 4
-Int LookupRetryTime 4
+Int LookupRetryTime 60
 Int LookupTime 4
 Int SatisfyTime 4
 Int NodeID 11
@@ -1128,7 +1128,7 @@ String DeviceType Directory
 String DeviceName Directory_12
 Int LocalSendTime 60
 Int RemoteSendTime 4
-Int LookupRetryTime 4
+Int LookupRetryTime 60
 Int LookupTime 4
 Int SatisfyTime 4
 Int NodeID 12
@@ -1206,7 +1206,7 @@ String DeviceType Directory
 String DeviceName Directory_13
 Int LocalSendTime 60
 Int RemoteSendTime 4
-Int LookupRetryTime 4
+Int LookupRetryTime 60
 Int LookupTime 4
 Int SatisfyTime 4
 Int NodeID 13
@@ -1284,7 +1284,7 @@ String DeviceType Directory
 String DeviceName Directory_14
 Int LocalSendTime 60
 Int RemoteSendTime 4
-Int LookupRetryTime 4
+Int LookupRetryTime 60
 Int LookupTime 4
 Int SatisfyTime 4
 Int NodeID 14
@@ -1362,7 +1362,7 @@ String DeviceType Directory
 String DeviceName Directory_15
 Int LocalSendTime 60
 Int RemoteSendTime 4
-Int LookupRetryTime 4
+Int LookupRetryTime 60
 Int LookupTime 4
 Int SatisfyTime 4
 Int NodeID 15
@@ -1440,7 +1440,7 @@ String DeviceType Directory
 String DeviceName Directory_16
 Int LocalSendTime 60
 Int RemoteSendTime 4
-Int LookupRetryTime 4
+Int LookupRetryTime 60
 Int LookupTime 4
 Int SatisfyTime 4
 Int NodeID 16
@@ -1518,7 +1518,7 @@ String DeviceType Directory
 String DeviceName Directory_17
 Int LocalSendTime 60
 Int RemoteSendTime 4
-Int LookupRetryTime 4
+Int LookupRetryTime 60
 Int LookupTime 4
 Int SatisfyTime 4
 Int NodeID 17
@@ -1596,7 +1596,7 @@ String DeviceType Directory
 String DeviceName Directory_18
 Int LocalSendTime 60
 Int RemoteSendTime 4
-Int LookupRetryTime 4
+Int LookupRetryTime 60
 Int LookupTime 4
 Int SatisfyTime 4
 Int NodeID 18
@@ -1674,7 +1674,7 @@ String DeviceType Directory
 String DeviceName Directory_19
 Int LocalSendTime 60
 Int RemoteSendTime 4
-Int LookupRetryTime 4
+Int LookupRetryTime 60
 Int LookupTime 4
 Int SatisfyTime 4
 Int NodeID 19
@@ -1752,7 +1752,7 @@ String DeviceType Directory
 String DeviceName Directory_20
 Int LocalSendTime 60
 Int RemoteSendTime 4
-Int LookupRetryTime 4
+Int LookupRetryTime 60
 Int LookupTime 4
 Int SatisfyTime 4
 Int NodeID 20
@@ -1830,7 +1830,7 @@ String DeviceType Directory
 String DeviceName Directory_21
 Int LocalSendTime 60
 Int RemoteSendTime 4
-Int LookupRetryTime 4
+Int LookupRetryTime 60
 Int LookupTime 4
 Int SatisfyTime 4
 Int NodeID 21
@@ -1908,7 +1908,7 @@ String DeviceType Directory
 String DeviceName Directory_22
 Int LocalSendTime 60
 Int RemoteSendTime 4
-Int LookupRetryTime 4
+Int LookupRetryTime 60
 Int LookupTime 4
 Int SatisfyTime 4
 Int NodeID 22
@@ -1986,7 +1986,7 @@ String DeviceType Directory
 String DeviceName Directory_23
 Int LocalSendTime 60
 Int RemoteSendTime 4
-Int LookupRetryTime 4
+Int LookupRetryTime 60
 Int LookupTime 4
 Int SatisfyTime 4
 Int NodeID 23
@@ -2064,7 +2064,7 @@ String DeviceType Directory
 String DeviceName Directory_24
 Int LocalSendTime 60
 Int RemoteSendTime 4
-Int LookupRetryTime 4
+Int LookupRetryTime 60
 Int LookupTime 4
 Int SatisfyTime 4
 Int NodeID 24
@@ -2142,7 +2142,7 @@ String DeviceType Directory
 String DeviceName Directory_25
 Int LocalSendTime 60
 Int RemoteSendTime 4
-Int LookupRetryTime 4
+Int LookupRetryTime 60
 Int LookupTime 4
 Int SatisfyTime 4
 Int NodeID 25
@@ -2220,7 +2220,7 @@ String DeviceType Directory
 String DeviceName Directory_26
 Int LocalSendTime 60
 Int RemoteSendTime 4
-Int LookupRetryTime 4
+Int LookupRetryTime 60
 Int LookupTime 4
 Int SatisfyTime 4
 Int NodeID 26
@@ -2298,7 +2298,7 @@ String DeviceType Directory
 String DeviceName Directory_27
 Int LocalSendTime 60
 Int RemoteSendTime 4
-Int LookupRetryTime 4
+Int LookupRetryTime 60
 Int LookupTime 4
 Int SatisfyTime 4
 Int NodeID 27
@@ -2376,7 +2376,7 @@ String DeviceType Directory
 String DeviceName Directory_28
 Int LocalSendTime 60
 Int RemoteSendTime 4
-Int LookupRetryTime 4
+Int LookupRetryTime 60
 Int LookupTime 4
 Int SatisfyTime 4
 Int NodeID 28
@@ -2454,7 +2454,7 @@ String DeviceType Directory
 String DeviceName Directory_29
 Int LocalSendTime 60
 Int RemoteSendTime 4
-Int LookupRetryTime 4
+Int LookupRetryTime 60
 Int LookupTime 4
 Int SatisfyTime 4
 Int NodeID 29
@@ -2532,7 +2532,7 @@ String DeviceType Directory
 String DeviceName Directory_30
 Int LocalSendTime 60
 Int RemoteSendTime 4
-Int LookupRetryTime 4
+Int LookupRetryTime 60
 Int LookupTime 4
 Int SatisfyTime 4
 Int NodeID 30
@@ -2610,7 +2610,7 @@ String DeviceType Directory
 String DeviceName Directory_31
 Int LocalSendTime 60
 Int RemoteSendTime 4
-Int LookupRetryTime 4
+Int LookupRetryTime 60
 Int LookupTime 4
 Int SatisfyTime 4
 Int NodeID 31

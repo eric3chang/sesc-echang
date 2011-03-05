@@ -72,7 +72,7 @@ String DeviceType Directory
 String DeviceName Directory_0
 Int LocalSendTime 60
 Int RemoteSendTime 4
-Int LookupRetryTime 4
+Int LookupRetryTime 60
 Int LookupTime 4
 Int SatisfyTime 4
 Int NodeID 0
@@ -150,7 +150,7 @@ String DeviceType Directory
 String DeviceName Directory_1
 Int LocalSendTime 60
 Int RemoteSendTime 4
-Int LookupRetryTime 4
+Int LookupRetryTime 60
 Int LookupTime 4
 Int SatisfyTime 4
 Int NodeID 1
