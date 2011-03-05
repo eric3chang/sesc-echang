@@ -16,6 +16,8 @@ Global
 		fft-origin-mesi-4-1-2|Win32 = fft-origin-mesi-4-1-2|Win32
 		fft-origin-mesi-64-1-2|Win32 = fft-origin-mesi-64-1-2|Win32
 		fft-origin-mesi-8-1-2|Win32 = fft-origin-mesi-8-1-2|Win32
+		newtest-bip-4-256-4096|Win32 = newtest-bip-4-256-4096|Win32
+		newtest-origin-4-256-4096|Win32 = newtest-origin-4-256-4096|Win32
 		Release|Win32 = Release|Win32
 		smalltest-bip|Win32 = smalltest-bip|Win32
 		smalltest-origin-4-256-4096|Win32 = smalltest-origin-4-256-4096|Win32
@@ -45,6 +47,10 @@ Global
 		{A54864F1-6C99-4165-A176-888B5427ADC2}.fft-origin-mesi-64-1-2|Win32.Build.0 = fft-origin-mesi-64-1-2|Win32
 		{A54864F1-6C99-4165-A176-888B5427ADC2}.fft-origin-mesi-8-1-2|Win32.ActiveCfg = fft-origin-mesi-8-1-2|Win32
 		{A54864F1-6C99-4165-A176-888B5427ADC2}.fft-origin-mesi-8-1-2|Win32.Build.0 = fft-origin-mesi-8-1-2|Win32
+		{A54864F1-6C99-4165-A176-888B5427ADC2}.newtest-bip-4-256-4096|Win32.ActiveCfg = newtest-bip-4-256-4096|Win32
+		{A54864F1-6C99-4165-A176-888B5427ADC2}.newtest-bip-4-256-4096|Win32.Build.0 = newtest-bip-4-256-4096|Win32
+		{A54864F1-6C99-4165-A176-888B5427ADC2}.newtest-origin-4-256-4096|Win32.ActiveCfg = newtest-origin-4-256-4096|Win32
+		{A54864F1-6C99-4165-A176-888B5427ADC2}.newtest-origin-4-256-4096|Win32.Build.0 = newtest-origin-4-256-4096|Win32
 		{A54864F1-6C99-4165-A176-888B5427ADC2}.Release|Win32.ActiveCfg = Release|Win32
 		{A54864F1-6C99-4165-A176-888B5427ADC2}.Release|Win32.Build.0 = Release|Win32
 		{A54864F1-6C99-4165-A176-888B5427ADC2}.smalltest-bip|Win32.ActiveCfg = smalltest-bip|Win32

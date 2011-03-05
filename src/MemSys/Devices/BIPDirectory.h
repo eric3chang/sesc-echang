@@ -6,6 +6,7 @@
 #include <vector>
 
 using std::stringstream;
+using std::pair;
 
 namespace Memory
 {
@@ -99,6 +100,14 @@ namespace Memory
 		int remoteConnectionID;
 		NodeID nodeID;
 
+		typedef HashMultiMap<Address, const ReadMsg*> AddrReadMultimap;
+		typedef pair<Address,const ReadMsg*> AddrReadPair;
+		typedef pair<AddrReadMultimap::iterator,AddrReadMultimap::iterator> AddrReadMultimapPairii;
+		typedef HashMultiMap<Address,LookupData<ReadMsg> > AddrLDReadMultimap;
+		typedef pair<Address,LookupData<ReadMsg> > AddrLDReadPair;
+		typedef pair<AddrLDReadMultimap::iterator,AddrLDReadMultimap::iterator> AddrLDReadMultimapPairii;
+		typedef HashMap<Address,LookupData<ReadMsg> > AddrLDReadMap;
+
 		HashMap<MessageID, const ReadMsg*> pendingLocalReads;
 		HashMap<MessageID, LookupData<ReadMsg> > pendingRemoteReads;
 		HashMap<MessageID, LookupData<InvalidateMsg> > pendingRemoteInvalidates;
@@ -108,6 +117,7 @@ namespace Memory
 		HashMap<MessageID, const ReadMsg*> pendingMemoryReadAccesses;
       HashMap<MessageID, const EvictionMsg*> pendingMemoryEvictionAccesses;
       HashMap<MessageID, const WriteMsg*> pendingMemoryWriteAccesses;
+		AddrReadMultimap reversePendingLocalReads;
 		HashMap<Address, BlockData> directoryData;
 
       void dump(HashMap<Memory::MessageID, const Memory::BaseMsg*> &m);
@@ -128,6 +138,7 @@ namespace Memory
 		void OnLocalMemoryWriteResponse(const WriteResponseMsg* m);
 		//void OnLocalMemoryEvictionResponse(const EvictionResponseMsg* m);
 
+		void OnRemoteDirectoryNak(const DirectoryNakMsg* m, NodeID src);
 		void OnRemoteReadCache(const ReadMsg* m, NodeID src);
 		//void OnRemoteReadMemory(const ReadMsg* m, NodeID src);
 		void OnRemoteReadResponse(const ReadResponseMsg* m, NodeID src);
@@ -141,6 +152,8 @@ namespace Memory
 		void OnDirectoryBlockRequest(const ReadMsg* m, NodeID src);
 		void OnDirectoryBlockResponse(const ReadResponseMsg* m, NodeID src);
 
+		void SendDirectoryNak(const ReadMsg *m);
+      void SendMessageToNetwork(const BaseMsg *msg, NodeID dest);
       void SendReadRequestToMemory(const ReadMsg *msg);
 		void SendWriteRequestToMemory(const WriteMsg *msg);
 
@@ -158,6 +171,8 @@ namespace Memory
 
 		typedef PooledFunctionGenerator<StoredClassFunction2<BIPDirectory,const ReadMsg*, NodeID, &BIPDirectory::OnDirectoryBlockRequest> > CBOnDirectoryBlockRequest;
 		CBOnDirectoryBlockRequest cbOnDirectoryBlockRequest;
+		typedef PooledFunctionGenerator<StoredClassFunction2<BIPDirectory,const DirectoryNakMsg*, NodeID, &BIPDirectory::OnRemoteDirectoryNak> > CBOnRemoteDirectoryNak;
+		CBOnRemoteDirectoryNak cbOnRemoteDirectoryNak;
 		// 2010/08/05 Eric: seems to be unused
 		/*
 		typedef PooledFunctionGenerator<StoredClassFunction2<BIPDirectory,const ReadResponseMsg*, NodeID, &BIPDirectory::OnDirectoryBlockResponse> > CBOnDirectoryBlockResponse;

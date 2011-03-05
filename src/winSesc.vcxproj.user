@@ -12,6 +12,8 @@
     <LocalDebuggerWorkingDirectory Condition="'$(Configuration)|$(Platform)'=='combinedtest-origin-4-256-4096|Win32'">..\WorkingFolder</LocalDebuggerWorkingDirectory>
     <LocalDebuggerWorkingDirectory Condition="'$(Configuration)|$(Platform)'=='combinedtest-bip-4-256-4096|Win32'">..\WorkingFolder</LocalDebuggerWorkingDirectory>
     <LocalDebuggerWorkingDirectory Condition="'$(Configuration)|$(Platform)'=='writetest-bip-4-256-4096|Win32'">..\WorkingFolder</LocalDebuggerWorkingDirectory>
+    <LocalDebuggerWorkingDirectory Condition="'$(Configuration)|$(Platform)'=='newtest-bip-4-256-4096|Win32'">..\WorkingFolder</LocalDebuggerWorkingDirectory>
+    <LocalDebuggerWorkingDirectory Condition="'$(Configuration)|$(Platform)'=='newtest-origin-4-256-4096|Win32'">..\WorkingFolder</LocalDebuggerWorkingDirectory>
     <LocalDebuggerWorkingDirectory Condition="'$(Configuration)|$(Platform)'=='writetest-origin-4-256-4096|Win32'">..\WorkingFolder</LocalDebuggerWorkingDirectory>
     <LocalDebuggerWorkingDirectory Condition="'$(Configuration)|$(Platform)'=='fft-origin-mesi-64-1-2|Win32'">..\WorkingFolder</LocalDebuggerWorkingDirectory>
     <LocalDebuggerWorkingDirectory Condition="'$(Configuration)|$(Platform)'=='fft-origin-mesi-4-1-2|Win32'">..\WorkingFolder</LocalDebuggerWorkingDirectory>
@@ -29,6 +31,8 @@
     <DebuggerFlavor Condition="'$(Configuration)|$(Platform)'=='combinedtest-origin-4-256-4096|Win32'">WindowsLocalDebugger</DebuggerFlavor>
     <DebuggerFlavor Condition="'$(Configuration)|$(Platform)'=='combinedtest-bip-4-256-4096|Win32'">WindowsLocalDebugger</DebuggerFlavor>
     <DebuggerFlavor Condition="'$(Configuration)|$(Platform)'=='writetest-bip-4-256-4096|Win32'">WindowsLocalDebugger</DebuggerFlavor>
+    <DebuggerFlavor Condition="'$(Configuration)|$(Platform)'=='newtest-bip-4-256-4096|Win32'">WindowsLocalDebugger</DebuggerFlavor>
+    <DebuggerFlavor Condition="'$(Configuration)|$(Platform)'=='newtest-origin-4-256-4096|Win32'">WindowsLocalDebugger</DebuggerFlavor>
     <DebuggerFlavor Condition="'$(Configuration)|$(Platform)'=='writetest-origin-4-256-4096|Win32'">WindowsLocalDebugger</DebuggerFlavor>
     <DebuggerFlavor Condition="'$(Configuration)|$(Platform)'=='fft-origin-mesi-64-1-2|Win32'">WindowsLocalDebugger</DebuggerFlavor>
     <DebuggerFlavor Condition="'$(Configuration)|$(Platform)'=='fft-origin-mesi-4-1-2|Win32'">WindowsLocalDebugger</DebuggerFlavor>
@@ -46,6 +50,8 @@
     <LocalDebuggerCommandArguments Condition="'$(Configuration)|$(Platform)'=='combinedtest-origin-4-256-4096|Win32'">-cconfigs\workFile\combinedtest-origin-4-256-4096.conf -dconfigs\workFile\combinedtest-origin-4-256-4096.report ..\src\libapp\combinedtest.sesc &gt; console-outputs\combinedtest-origin-4-256-4096.out</LocalDebuggerCommandArguments>
     <LocalDebuggerCommandArguments Condition="'$(Configuration)|$(Platform)'=='combinedtest-bip-4-256-4096|Win32'">-cconfigs\workFile\combinedtest-bip-4-256-4096.conf -dconfigs\workFile\combinedtest-bip-4-256-4096.report ..\src\libapp\combinedtest.sesc &gt; console-outputs\combinedtest-bip-4-256-4096.out</LocalDebuggerCommandArguments>
     <LocalDebuggerCommandArguments Condition="'$(Configuration)|$(Platform)'=='writetest-bip-4-256-4096|Win32'">-cconfigs\workFile\writetest-bip-4-256-4096.conf -dconfigs\workFile\writetest-bip-4-256-4096.report benchmarks-splash2-sesc\writetest.sesc -p3 -n1000 &gt; console-outputs\writetest-bip-4-256-4096.out</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments Condition="'$(Configuration)|$(Platform)'=='newtest-bip-4-256-4096|Win32'">-cconfigs\workFile\newtest-bip-4-256-4096.conf -dconfigs\workFile\newtest-bip-4-256-4096.report benchmarks-splash2-sesc\newtest.sesc -p4 -n1000 &gt; console-outputs\newtest-bip-4-256-4096.out</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments Condition="'$(Configuration)|$(Platform)'=='newtest-origin-4-256-4096|Win32'">-cconfigs\workFile\newtest-origin-4-256-4096.conf -dconfigs\workFile\newtest-origin-4-256-4096.report benchmarks-splash2-sesc\newtest.sesc -p4 -n1000 &gt; console-outputs\newtest-origin-4-256-4096.out</LocalDebuggerCommandArguments>
     <LocalDebuggerCommandArguments Condition="'$(Configuration)|$(Platform)'=='writetest-origin-4-256-4096|Win32'">-cconfigs\workFile\writetest-origin-4-256-4096.conf -dconfigs\workFile\writetest-origin-4-256-4096.report benchmarks-splash2-sesc\writetest.sesc -p3 -n1000 &gt; console-outputs\writetest-origin-4-256-4096.out</LocalDebuggerCommandArguments>
     <LocalDebuggerCommandArguments Condition="'$(Configuration)|$(Platform)'=='fft-origin-mesi-64-1-2|Win32'">-cconfigs\workFile\fft-origin-mesi-64-1-2.conf -dconfigs\workFile\fft-origin-mesi-64-1-2.report benchmarks-splash2-sesc\fft.mips  -m12 -p64 -n65536 -l4 -t &gt; console-outputs\fft-origin-mesi-64-1-2.out</LocalDebuggerCommandArguments>
     <LocalDebuggerCommandArguments Condition="'$(Configuration)|$(Platform)'=='fft-origin-mesi-4-1-2|Win32'">-cconfigs\workFile\fft-origin-mesi-4-1-2.conf -dconfigs\workFile\fft-origin-mesi-4-1-2.report benchmarks-splash2-sesc\fft.mips  -m10 -p4 -n65536 -l4 -t &gt; console-outputs\fft-origin-mesi-4-1-2.out</LocalDebuggerCommandArguments>
