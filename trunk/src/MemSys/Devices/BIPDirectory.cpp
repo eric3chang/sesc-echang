@@ -160,6 +160,41 @@ namespace Memory
 		}
 	}
 
+	void BIPDirectory::SendDirectoryNak(const ReadMsg *m)
+	{
+   	DirectoryNakMsg* dnk = EM().CreateDirectoryNakMsg(GetDeviceID(), m->GeneratingPC());
+   	EM().InitializeBaseNakMsg(dnk, m);
+
+		NodeID dirNode = directoryNodeCalc->CalcNodeID(m->addr);
+		DebugAssertWithMessageID(dirNode!=InvalidNodeID, m->MsgID());
+
+		if(dirNode == nodeID)
+		{
+			// schedule this to be called later
+			CBOnRemoteDirectoryNak::FunctionType* f = cbOnRemoteDirectoryNak.Create();
+			f->Initialize(this, dnk, nodeID);
+			EM().ScheduleEvent(f, localSendTime);
+		}
+		else
+		{
+			SendMessageToNetwork(dnk, dirNode);
+		}
+	}
+
+	void BIPDirectory::SendMessageToNetwork(const BaseMsg *msg, NodeID dest)
+   {
+   	// only send a network message if we actually need to, otherwise, we should
+   		// just schedule the event
+   	DebugAssertWithMessageID(dest!=nodeID, msg->MsgID());
+
+   	NetworkMsg* nm = EM().CreateNetworkMsg(GetDeviceID(), msg->GeneratingPC());
+   	DebugAssertWithMessageID(nm,msg->MsgID());
+   	nm->sourceNode = nodeID;
+   	nm->destinationNode = dest;
+   	nm->payloadMsg = msg;
+   	SendMsg(remoteConnectionID, nm, remoteSendTime);
+   }
+
    /**
    send a memory access message
    */
@@ -201,6 +236,8 @@ namespace Memory
 		
 		DebugAssertWithMessageID(pendingLocalReads.find(m->MsgID()) == pendingLocalReads.end(),m->MsgID())
 		pendingLocalReads[m->MsgID()] = m;
+		AddrReadPair myPair(m->addr, m);
+		reversePendingLocalReads.insert(myPair);
 		ReadMsg* forward = (ReadMsg*)EM().ReplicateMsg(m);
 		forward->onCompletedCallback = NULL;
 		forward->directoryLookup = true;
@@ -376,14 +413,27 @@ namespace Memory
 #endif
 		DebugAssertWithMessageID(m,m->MsgID())
 		DebugAssertWithMessageID(!m->directoryLookup,m->MsgID())
-#ifdef MEMORY_BIP_DIRECTORY_DEBUG_PENDING_REMOTE_READS
-		PrintDebugInfo("RemoteRead", *m,
-		      ("pendingRemoteReads.insert("+to_string<MessageID>(m->MsgID())+")").c_str());
-#endif
-		DebugAssertWithMessageID(pendingRemoteReads.find(m->MsgID()) == pendingRemoteReads.end(),m->MsgID())
-		pendingRemoteReads[m->MsgID()].msg = m;
-		pendingRemoteReads[m->MsgID()].sourceNode = src;
-		SendMsg(localCacheConnectionID, EM().ReplicateMsg(m), localSendTime);
+		
+		pair<AddrReadMultimap::iterator,AddrReadMultimap::iterator> tempPair;
+		tempPair = reversePendingLocalReads.equal_range(m->addr);
+		bool hasAddress = (tempPair.first!=tempPair.second);
+
+		if (hasAddress)
+		{
+			SendDirectoryNak(m);
+		}
+		else
+		{
+	#ifdef MEMORY_BIP_DIRECTORY_DEBUG_PENDING_REMOTE_READS
+			PrintDebugInfo("RemoteRead", *m,
+					("pendingRemoteReads.insert("+to_string<MessageID>(m->MsgID())+")").c_str());
+	#endif
+			DebugAssertWithMessageID(pendingRemoteReads.find(m->MsgID()) == pendingRemoteReads.end(),m->MsgID())
+			pendingRemoteReads[m->MsgID()].msg = m;
+			pendingRemoteReads[m->MsgID()].sourceNode = src;
+
+			SendMsg(localCacheConnectionID, EM().ReplicateMsg(m), localSendTime);
+		}
 	}
 
 	/*
@@ -573,6 +623,26 @@ namespace Memory
 #endif
 		DebugAssertWithMessageID(m,m->MsgID())
 		EM().DisposeMsg(m);
+	}
+
+	void BIPDirectory::OnRemoteDirectoryNak(const DirectoryNakMsg* m, NodeID src)
+	{
+#ifdef MEMORY_BIP_DIRECTORY_DEBUG_VERBOSE
+		PrintDebugInfo("RemDirNak",*m,"",src);
+#endif
+		AddrLDReadMultimapPairii ret = pendingDirectorySharedReads.equal_range(m->addr);
+		AddrLDReadMap::iterator exclusiveReadIterator;
+		exclusiveReadIterator = pendingDirectoryExclusiveReads.find(m->addr);
+		bool isInDirectorySharedReads = (ret.first!=ret.second);
+		bool isInDirectoryExclusiveReads = (exclusiveReadIterator!=pendingDirectoryExclusiveReads.end());
+
+		DebugAssertWithMessageID(isInDirectorySharedReads||isInDirectoryExclusiveReads, m->solicitingMessage);
+		DebugAssertWithMessageID(!isInDirectorySharedReads||!isInDirectoryExclusiveReads, m->solicitingMessage);
+
+		EraseDirectoryShare(m->addr, src);
+		PerformDirectoryFetch(m->addr);
+
+		return;
 	}
 
 	void BIPDirectory::OnRemoteEviction(const EvictionMsg* m, NodeID src)
@@ -837,6 +907,7 @@ namespace Memory
       PrintDirectoryData(m->addr,m->MsgID());
 #endif
 	}
+
 	void BIPDirectory::OnDirectoryBlockResponse(const ReadResponseMsg* m, NodeID src)
 	{
 #ifdef MEMORY_BIP_DIRECTORY_DEBUG_VERBOSE
@@ -854,7 +925,24 @@ namespace Memory
 		// check that m->solicitingMessage is in pendingLocalReads before accessing it
 		// error here means that we expect there to be a message in pendingLocalReads,
 		// but the message is not there
-      DebugAssertWithMessageID(pendingLocalReads.find(m->solicitingMessage) != pendingLocalReads.end(),m->MsgID())
+      DebugAssertWithMessageID(pendingLocalReads.find(m->solicitingMessage) != pendingLocalReads.end(),m->MsgID());
+		AddrReadMultimap::iterator tempIterator;
+		pair<AddrReadMultimap::iterator,AddrReadMultimap::iterator> ret;
+		ret = reversePendingLocalReads.equal_range(m->addr);
+		const ReadMsg* reverseReadMsg = NULL;
+		for (tempIterator=ret.first; tempIterator!=ret.second; tempIterator++)
+		{
+			AddrReadPair tempPair = *tempIterator;
+			const ReadMsg* tempReadMsg = tempPair.second;
+			if (tempReadMsg->MsgID()==m->solicitingMessage)
+			{
+				reverseReadMsg = tempReadMsg;
+				break;
+			}
+		}
+		// have to find this read message in reversePendingLocalReads
+		DebugAssertWithMessageID(reverseReadMsg!=NULL, m->solicitingMessage);
+
 		const ReadMsg* ref = pendingLocalReads[m->solicitingMessage];
 
 		if(!m->satisfied)
@@ -864,6 +952,7 @@ namespace Memory
 		         ("pendingLocalReads.erase("+to_string<MessageID>(m->solicitingMessage)+")").c_str());
 #endif
 			pendingLocalReads.erase(m->solicitingMessage);
+			reversePendingLocalReads.erase(tempIterator);
 #ifdef MEMORY_BIP_DIRECTORY_DEBUG_VERBOSE_OLD
                PrintDebugInfo("LocalRead",*m,"DirBlkRes");
 #endif
@@ -884,6 +973,7 @@ namespace Memory
 		   ("pendingLocalReads.erase("+m->solicitingMessage+")").c_str());
 #endif
 		pendingLocalReads.erase(m->solicitingMessage);
+		reversePendingLocalReads.erase(tempIterator);
 
 		EM().DisposeMsg(m);
 		SendMsg(localCacheConnectionID, r, satisfyTime + localSendTime);
@@ -1091,6 +1181,12 @@ namespace Memory
 			EM().DisposeMsg(m);
 			switch(payload->Type())
 			{
+			case(mt_DirectoryNak):
+				{
+					DirectoryNakMsg* m = (DirectoryNakMsg*)payload;
+					OnRemoteDirectoryNak(m,src);
+					break;
+				}
 			case(mt_Read):
 				{
 					ReadMsg* m = (ReadMsg*)payload;
@@ -1270,7 +1366,7 @@ namespace Memory
    void BIPDirectory::PrintDebugInfo(const char* fromMethod,Address addr,NodeID id,const char* operation)
    {
       cout << setw(17) << " " // account for spacing from src and msgSrc
-            << " dst=" << setw(3) << GetDeviceID()
+			<< " dst=" << setw(3) << GetDeviceID()
             << setw(11) << " "   // account for spacing from msgID
             << " addr=" << addr
             << " " << fromMethod

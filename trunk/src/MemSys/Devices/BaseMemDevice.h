@@ -77,7 +77,9 @@ namespace Memory
          else
          {
             // convert from nodeID to deviceID
-            cout << " src=" << setw(3) << (4*src)+7;
+				cout << " src=" << setw(3) << BaseMsg::convertNodeIDToDeviceID(src);
+            //cout << " src=" << setw(3) << (4*src)+7;
+				//cout << " src=" << setw(3) << src;
          }
          myBaseMsg.print(deviceID);
          cout

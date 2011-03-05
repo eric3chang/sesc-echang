@@ -152,27 +152,27 @@ def getGraphAverageResults(benchmarks, dirtypes, benchmarkResults, minimum, maxi
             i *= 2
     return dirtypeResults
 
-def plotCpuLatencyMultiple(benchmarks, dirtypes, minimum, maximum):
-    plotCpuMultiple(benchmarks, dirtypes, minimum, maximum, 'Network', 'AverageLatency', 'Average Latency (%)', 'cpu-latency')
+def plotCpuLatencyMultiple(benchmarks, dirtypes, minimum, maximum, l1, l2):
+    plotCpuMultiple(benchmarks, dirtypes, minimum, maximum,l1,l2,'Network', 'AverageLatency', 'Average Latency (%)', 'cpu-latency')
 
-def plotCpuLatencySingle(benchmarks, dirtypes, minimum, maximum):
-    plotCpuSingle(benchmarks, dirtypes, minimum, maximum, 'Network', 'AverageLatency', 'Average Latency (%)', 'cpu-latency')
+def plotCpuLatencySingle(benchmarks, dirtypes, minimum, maximum, l1, l2):
+    plotCpuSingle(benchmarks, dirtypes, minimum, maximum,'Network', 'AverageLatency', 'Average Latency (%)', 'cpu-latency')
 
 def plotCpuMessagesMultiple(benchmarks, dirtypes, minimum, maximum):
-    plotCpuMultiple(benchmarks, dirtypes, minimum, maximum, 'Network', 'TotalMessagesReceived', 'Messages Received (%)', 'cpu-messages')
+    plotCpuMultiple(benchmarks, dirtypes, minimum, maximum,l1,l2,'Network', 'TotalMessagesReceived', 'Messages Received (%)', 'cpu-messages')
 
 def plotCpuMessagesSingle(benchmarks, dirtypes, minimum, maximum):
     plotCpuSingle(benchmarks, dirtypes, minimum, maximum, 'Network', 'TotalMessagesReceived', 'Messages Received (%)', 'cpu-messages')
 
-def plotCpuTimeMultiple(benchmarks, dirtypes, minimum, maximum):
-    plotCpuMultiple(benchmarks, dirtypes, minimum, maximum, 'TotalRunTime', 'TotalRunTime', 'Runtime (%)', 'cpu-time')
+def plotCpuTimeMultiple(benchmarks, dirtypes, minimum, maximum, l1, l2):
+    plotCpuMultiple(benchmarks, dirtypes, minimum, maximum, l1, l2, 'TotalRunTime', 'TotalRunTime', 'Runtime (%)', 'cpu-time')
 
 def plotCpuTimeSingle(benchmarks, dirtypes, minimum, maximum):
     plotCpuSingle(benchmarks, dirtypes, minimum, maximum, 'TotalRunTime', 'TotalRunTime', 'Runtime (%)', 'cpu-time')
 
-def plotCpuMultiple(benchmarks, dirtypes, minimum, maximum, component, key, myYlabel, filenameSuffix):
+def plotCpuMultiple(benchmarks, dirtypes, minimum, maximum, l1, l2, component, key, myYlabel, filenameSuffix):
     myXlabel='Number of Processors'
-    iResults = getCpuResults(benchmarks, dirtypes, minimum, maximum, DEFAULT_L1, DEFAULT_L2, component, key)
+    iResults = getCpuResults(benchmarks, dirtypes, minimum, maximum, l1, l2, component, key)
 
     benchmarkLength = len(benchmarks)
     row = benchmarkLength / GRAPH_WIDTH
@@ -198,8 +198,8 @@ def plotCpuMultiple(benchmarks, dirtypes, minimum, maximum, component, key, myYl
         figureIndex += 1
 
     outfullpath = OUT_DIR+filenameSuffix
-    savefig(outfullpath)
-    #show()
+    #savefig(outfullpath)
+    show()
     close()
 
 def plotCpuSingle(benchmarks, dirtypes, minimum, maximum, component, key, myYlabel, filenameSuffix):
@@ -291,36 +291,22 @@ def plotL1(benchmarks, dirtypes, minimum, maximum, component, key):
 
 def main():
     #benchmarks = ['barnes', 'cholesky', 'fft', 'fmm', 'radix', 'raytrace', 'ocean']
-    #benchmarks = ['radix']
+    #benchmarks = ['fft', 'cholesky']
     benchmarks = ['fft', 'cholesky', 'ocean', 'radix']
     #dirtypes = ['bip', 'directory', 'origin']
     dirtypes = ['bip', 'origin']
     #cacheType = 'mesi'
     #cacheType = ''
-    mincpu = '2'
+    mincpu = '4'
     maxcpu = '32'
     minl1 = '16'
     maxl1 = '128'
     l1 = '128'
     l2 = '1024'
-    componentKey = ['TotalRunTime', 'TotalRunTime']
-    #componentKey = ['Network', 'AverageLatency']
 
-    myXlabel='Number of Processors'
-    myYlabel='% Runtime'
-
-    #dictionary = getDictionary('combinedtest', 'bip', '4', '256', '4096')
-    #dictionary = getDictionary('fft', 'bip', '2', '8', '16')
-    #print (dictionary)
-    '''
-    cpuResults = getCpuResults(benchmarks, dirtypes, mincpu, maxcpu, l1, l2, component, key)
-    graphResults = getGraphAverageResults(benchmarks, dirtypes, cpuResults, mincpu, maxcpu)
-    plotGraph(dirtypes, graphResults, mincpu, maxcpu, myXlabel, myYlabel)
-    print (graphResults)
-    '''
-    plotCpuTimeMultiple(benchmarks, dirtypes, mincpu, maxcpu)
-    plotCpuMessagesMultiple(benchmarks, dirtypes, mincpu, maxcpu)
-    plotCpuLatencyMultiple(benchmarks, dirtypes, mincpu, maxcpu)
+    plotCpuTimeMultiple(benchmarks, dirtypes, mincpu, maxcpu,l1,l2)
+    #plotCpuMessagesMultiple(benchmarks, dirtypes, mincpu, maxcpu)
+    #plotCpuLatencyMultiple(benchmarks, dirtypes, mincpu, maxcpu)
     #plotCpuMessages(benchmarks, dirtypes, mincpu, maxcpu)
     #plotCpuLatency(benchmarks, dirtypes, mincpu, maxcpu)
     #plotL1(benchmarks, dirtypes, minl1, maxl1, componentKey[0], componentKey[1])
