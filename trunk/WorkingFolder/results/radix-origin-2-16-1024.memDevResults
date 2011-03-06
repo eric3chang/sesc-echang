@@ -1,7 +1,7 @@
 Group string ReportFileName results/radix-origin-2-16-1024.memDevResults string BenchName radix
 
 DateTime
-DateTime:DateTime:03020546
+DateTime:DateTime:03051740
 
 TotalRunTime
 TotalRunTime:TotalRunTime:83283501
@@ -36,7 +36,7 @@ L2_0:writeMisses:0
 OriginDirectory_0
 OriginDirectory_0:localSendTime:60
 OriginDirectory_0:remoteSendTime:4
-OriginDirectory_0:lookupRetryTime:4
+OriginDirectory_0:lookupRetryTime:60
 OriginDirectory_0:lookupTime:4
 OriginDirectory_0:satisfyTime:4
 OriginDirectory_0:nodeID:0
@@ -89,7 +89,7 @@ L2_1:writeMisses:0
 OriginDirectory_1
 OriginDirectory_1:localSendTime:60
 OriginDirectory_1:remoteSendTime:4
-OriginDirectory_1:lookupRetryTime:4
+OriginDirectory_1:lookupRetryTime:60
 OriginDirectory_1:lookupTime:4
 OriginDirectory_1:satisfyTime:4
 OriginDirectory_1:nodeID:1

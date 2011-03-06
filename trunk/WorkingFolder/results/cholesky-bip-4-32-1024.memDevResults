@@ -1,7 +1,7 @@
 Group string ReportFileName results/cholesky-bip-4-32-1024.memDevResults string BenchName cholesky
 
 DateTime
-DateTime:DateTime:03041342
+DateTime:DateTime:03051427
 
 TotalRunTime
 TotalRunTime:TotalRunTime:15972
@@ -36,7 +36,7 @@ L2_0:writeMisses:0
 BIPDirectory_0
 BIPDirectory_0:localSendTime:60
 BIPDirectory_0:remoteSendTime:4
-BIPDirectory_0:lookupRetryTime:4
+BIPDirectory_0:lookupRetryTime:60
 BIPDirectory_0:lookupTime:4
 BIPDirectory_0:satisfyTime:4
 BIPDirectory_0:nodeID:0
@@ -88,7 +88,7 @@ L2_1:writeMisses:0
 BIPDirectory_1
 BIPDirectory_1:localSendTime:60
 BIPDirectory_1:remoteSendTime:4
-BIPDirectory_1:lookupRetryTime:4
+BIPDirectory_1:lookupRetryTime:60
 BIPDirectory_1:lookupTime:4
 BIPDirectory_1:satisfyTime:4
 BIPDirectory_1:nodeID:1
@@ -140,7 +140,7 @@ L2_2:writeMisses:0
 BIPDirectory_2
 BIPDirectory_2:localSendTime:60
 BIPDirectory_2:remoteSendTime:4
-BIPDirectory_2:lookupRetryTime:4
+BIPDirectory_2:lookupRetryTime:60
 BIPDirectory_2:lookupTime:4
 BIPDirectory_2:satisfyTime:4
 BIPDirectory_2:nodeID:2
@@ -192,7 +192,7 @@ L2_3:writeMisses:0
 BIPDirectory_3
 BIPDirectory_3:localSendTime:60
 BIPDirectory_3:remoteSendTime:4
-BIPDirectory_3:lookupRetryTime:4
+BIPDirectory_3:lookupRetryTime:60
 BIPDirectory_3:lookupTime:4
 BIPDirectory_3:satisfyTime:4
 BIPDirectory_3:nodeID:3

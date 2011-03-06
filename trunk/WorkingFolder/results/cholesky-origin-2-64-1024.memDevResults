@@ -1,10 +1,10 @@
 Group string ReportFileName results/cholesky-origin-2-64-1024.memDevResults string BenchName cholesky
 
 DateTime
-DateTime:DateTime:03041355
+DateTime:DateTime:03051440
 
 TotalRunTime
-TotalRunTime:TotalRunTime:3528653
+TotalRunTime:TotalRunTime:3528661
 
 Network
 Network:TotalMessagesReceived:14203
@@ -36,12 +36,12 @@ L2_0:writeMisses:0
 OriginDirectory_0
 OriginDirectory_0:localSendTime:60
 OriginDirectory_0:remoteSendTime:4
-OriginDirectory_0:lookupRetryTime:4
+OriginDirectory_0:lookupRetryTime:60
 OriginDirectory_0:lookupTime:4
 OriginDirectory_0:satisfyTime:4
 OriginDirectory_0:nodeID:0
 OriginDirectory_0:TotalMessagesReceived:18603
-OriginDirectory_0:cacheNaksReceived:3
+OriginDirectory_0:cacheNaksReceived:2
 OriginDirectory_0:cacheEvictionsReceived:0
 OriginDirectory_0:cacheInterventionsReceived:270
 OriginDirectory_0:cacheInvalidatesReceived:71
@@ -51,7 +51,7 @@ OriginDirectory_0:cacheSpeculativeRepliesReceived:1113
 OriginDirectory_0:cacheReadResponsesReceived:1370
 OriginDirectory_0:cacheReadRepliesReceived:3950
 OriginDirectory_0:directoryNaksReceived:1
-OriginDirectory_0:directoryReadsReceived:5676
+OriginDirectory_0:directoryReadsReceived:5675
 OriginDirectory_0:directoryReadResponsesReceived:0
 OriginDirectory_0:directoryTransfersReceived:0
 OriginDirectory_0:directoryWritebacksReceived:76
@@ -89,7 +89,7 @@ L2_1:writeMisses:0
 OriginDirectory_1
 OriginDirectory_1:localSendTime:60
 OriginDirectory_1:remoteSendTime:4
-OriginDirectory_1:lookupRetryTime:4
+OriginDirectory_1:lookupRetryTime:60
 OriginDirectory_1:lookupTime:4
 OriginDirectory_1:satisfyTime:4
 OriginDirectory_1:nodeID:1

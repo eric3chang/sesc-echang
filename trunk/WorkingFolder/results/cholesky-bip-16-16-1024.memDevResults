@@ -1,7 +1,7 @@
 Group string ReportFileName results/cholesky-bip-16-16-1024.memDevResults string BenchName cholesky
 
 DateTime
-DateTime:DateTime:03041345
+DateTime:DateTime:03051430
 
 TotalRunTime
 TotalRunTime:TotalRunTime:18704
@@ -36,7 +36,7 @@ L2_0:writeMisses:0
 BIPDirectory_0
 BIPDirectory_0:localSendTime:60
 BIPDirectory_0:remoteSendTime:4
-BIPDirectory_0:lookupRetryTime:4
+BIPDirectory_0:lookupRetryTime:60
 BIPDirectory_0:lookupTime:4
 BIPDirectory_0:satisfyTime:4
 BIPDirectory_0:nodeID:0
@@ -88,7 +88,7 @@ L2_1:writeMisses:0
 BIPDirectory_1
 BIPDirectory_1:localSendTime:60
 BIPDirectory_1:remoteSendTime:4
-BIPDirectory_1:lookupRetryTime:4
+BIPDirectory_1:lookupRetryTime:60
 BIPDirectory_1:lookupTime:4
 BIPDirectory_1:satisfyTime:4
 BIPDirectory_1:nodeID:1
@@ -140,7 +140,7 @@ L2_2:writeMisses:0
 BIPDirectory_2
 BIPDirectory_2:localSendTime:60
 BIPDirectory_2:remoteSendTime:4
-BIPDirectory_2:lookupRetryTime:4
+BIPDirectory_2:lookupRetryTime:60
 BIPDirectory_2:lookupTime:4
 BIPDirectory_2:satisfyTime:4
 BIPDirectory_2:nodeID:2
@@ -192,7 +192,7 @@ L2_3:writeMisses:0
 BIPDirectory_3
 BIPDirectory_3:localSendTime:60
 BIPDirectory_3:remoteSendTime:4
-BIPDirectory_3:lookupRetryTime:4
+BIPDirectory_3:lookupRetryTime:60
 BIPDirectory_3:lookupTime:4
 BIPDirectory_3:satisfyTime:4
 BIPDirectory_3:nodeID:3
@@ -244,7 +244,7 @@ L2_4:writeMisses:0
 BIPDirectory_4
 BIPDirectory_4:localSendTime:60
 BIPDirectory_4:remoteSendTime:4
-BIPDirectory_4:lookupRetryTime:4
+BIPDirectory_4:lookupRetryTime:60
 BIPDirectory_4:lookupTime:4
 BIPDirectory_4:satisfyTime:4
 BIPDirectory_4:nodeID:4
@@ -296,7 +296,7 @@ L2_5:writeMisses:0
 BIPDirectory_5
 BIPDirectory_5:localSendTime:60
 BIPDirectory_5:remoteSendTime:4
-BIPDirectory_5:lookupRetryTime:4
+BIPDirectory_5:lookupRetryTime:60
 BIPDirectory_5:lookupTime:4
 BIPDirectory_5:satisfyTime:4
 BIPDirectory_5:nodeID:5
@@ -348,7 +348,7 @@ L2_6:writeMisses:0
 BIPDirectory_6
 BIPDirectory_6:localSendTime:60
 BIPDirectory_6:remoteSendTime:4
-BIPDirectory_6:lookupRetryTime:4
+BIPDirectory_6:lookupRetryTime:60
 BIPDirectory_6:lookupTime:4
 BIPDirectory_6:satisfyTime:4
 BIPDirectory_6:nodeID:6
@@ -400,7 +400,7 @@ L2_7:writeMisses:0
 BIPDirectory_7
 BIPDirectory_7:localSendTime:60
 BIPDirectory_7:remoteSendTime:4
-BIPDirectory_7:lookupRetryTime:4
+BIPDirectory_7:lookupRetryTime:60
 BIPDirectory_7:lookupTime:4
 BIPDirectory_7:satisfyTime:4
 BIPDirectory_7:nodeID:7
@@ -452,7 +452,7 @@ L2_8:writeMisses:0
 BIPDirectory_8
 BIPDirectory_8:localSendTime:60
 BIPDirectory_8:remoteSendTime:4
-BIPDirectory_8:lookupRetryTime:4
+BIPDirectory_8:lookupRetryTime:60
 BIPDirectory_8:lookupTime:4
 BIPDirectory_8:satisfyTime:4
 BIPDirectory_8:nodeID:8
@@ -504,7 +504,7 @@ L2_9:writeMisses:0
 BIPDirectory_9
 BIPDirectory_9:localSendTime:60
 BIPDirectory_9:remoteSendTime:4
-BIPDirectory_9:lookupRetryTime:4
+BIPDirectory_9:lookupRetryTime:60
 BIPDirectory_9:lookupTime:4
 BIPDirectory_9:satisfyTime:4
 BIPDirectory_9:nodeID:9
@@ -556,7 +556,7 @@ L2_10:writeMisses:0
 BIPDirectory_10
 BIPDirectory_10:localSendTime:60
 BIPDirectory_10:remoteSendTime:4
-BIPDirectory_10:lookupRetryTime:4
+BIPDirectory_10:lookupRetryTime:60
 BIPDirectory_10:lookupTime:4
 BIPDirectory_10:satisfyTime:4
 BIPDirectory_10:nodeID:10
@@ -608,7 +608,7 @@ L2_11:writeMisses:0
 BIPDirectory_11
 BIPDirectory_11:localSendTime:60
 BIPDirectory_11:remoteSendTime:4
-BIPDirectory_11:lookupRetryTime:4
+BIPDirectory_11:lookupRetryTime:60
 BIPDirectory_11:lookupTime:4
 BIPDirectory_11:satisfyTime:4
 BIPDirectory_11:nodeID:11
@@ -660,7 +660,7 @@ L2_12:writeMisses:0
 BIPDirectory_12
 BIPDirectory_12:localSendTime:60
 BIPDirectory_12:remoteSendTime:4
-BIPDirectory_12:lookupRetryTime:4
+BIPDirectory_12:lookupRetryTime:60
 BIPDirectory_12:lookupTime:4
 BIPDirectory_12:satisfyTime:4
 BIPDirectory_12:nodeID:12
@@ -712,7 +712,7 @@ L2_13:writeMisses:0
 BIPDirectory_13
 BIPDirectory_13:localSendTime:60
 BIPDirectory_13:remoteSendTime:4
-BIPDirectory_13:lookupRetryTime:4
+BIPDirectory_13:lookupRetryTime:60
 BIPDirectory_13:lookupTime:4
 BIPDirectory_13:satisfyTime:4
 BIPDirectory_13:nodeID:13
@@ -764,7 +764,7 @@ L2_14:writeMisses:0
 BIPDirectory_14
 BIPDirectory_14:localSendTime:60
 BIPDirectory_14:remoteSendTime:4
-BIPDirectory_14:lookupRetryTime:4
+BIPDirectory_14:lookupRetryTime:60
 BIPDirectory_14:lookupTime:4
 BIPDirectory_14:satisfyTime:4
 BIPDirectory_14:nodeID:14
@@ -816,7 +816,7 @@ L2_15:writeMisses:0
 BIPDirectory_15
 BIPDirectory_15:localSendTime:60
 BIPDirectory_15:remoteSendTime:4
-BIPDirectory_15:lookupRetryTime:4
+BIPDirectory_15:lookupRetryTime:60
 BIPDirectory_15:lookupTime:4
 BIPDirectory_15:satisfyTime:4
 BIPDirectory_15:nodeID:15
