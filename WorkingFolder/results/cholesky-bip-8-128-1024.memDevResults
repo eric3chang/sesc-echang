@@ -1,7 +1,7 @@
 Group string ReportFileName results/cholesky-bip-8-128-1024.memDevResults string BenchName cholesky
 
 DateTime
-DateTime:DateTime:03041344
+DateTime:DateTime:03051429
 
 TotalRunTime
 TotalRunTime:TotalRunTime:18408
@@ -36,7 +36,7 @@ L2_0:writeMisses:0
 BIPDirectory_0
 BIPDirectory_0:localSendTime:60
 BIPDirectory_0:remoteSendTime:4
-BIPDirectory_0:lookupRetryTime:4
+BIPDirectory_0:lookupRetryTime:60
 BIPDirectory_0:lookupTime:4
 BIPDirectory_0:satisfyTime:4
 BIPDirectory_0:nodeID:0
@@ -88,7 +88,7 @@ L2_1:writeMisses:0
 BIPDirectory_1
 BIPDirectory_1:localSendTime:60
 BIPDirectory_1:remoteSendTime:4
-BIPDirectory_1:lookupRetryTime:4
+BIPDirectory_1:lookupRetryTime:60
 BIPDirectory_1:lookupTime:4
 BIPDirectory_1:satisfyTime:4
 BIPDirectory_1:nodeID:1
@@ -140,7 +140,7 @@ L2_2:writeMisses:0
 BIPDirectory_2
 BIPDirectory_2:localSendTime:60
 BIPDirectory_2:remoteSendTime:4
-BIPDirectory_2:lookupRetryTime:4
+BIPDirectory_2:lookupRetryTime:60
 BIPDirectory_2:lookupTime:4
 BIPDirectory_2:satisfyTime:4
 BIPDirectory_2:nodeID:2
@@ -192,7 +192,7 @@ L2_3:writeMisses:0
 BIPDirectory_3
 BIPDirectory_3:localSendTime:60
 BIPDirectory_3:remoteSendTime:4
-BIPDirectory_3:lookupRetryTime:4
+BIPDirectory_3:lookupRetryTime:60
 BIPDirectory_3:lookupTime:4
 BIPDirectory_3:satisfyTime:4
 BIPDirectory_3:nodeID:3
@@ -244,7 +244,7 @@ L2_4:writeMisses:0
 BIPDirectory_4
 BIPDirectory_4:localSendTime:60
 BIPDirectory_4:remoteSendTime:4
-BIPDirectory_4:lookupRetryTime:4
+BIPDirectory_4:lookupRetryTime:60
 BIPDirectory_4:lookupTime:4
 BIPDirectory_4:satisfyTime:4
 BIPDirectory_4:nodeID:4
@@ -296,7 +296,7 @@ L2_5:writeMisses:0
 BIPDirectory_5
 BIPDirectory_5:localSendTime:60
 BIPDirectory_5:remoteSendTime:4
-BIPDirectory_5:lookupRetryTime:4
+BIPDirectory_5:lookupRetryTime:60
 BIPDirectory_5:lookupTime:4
 BIPDirectory_5:satisfyTime:4
 BIPDirectory_5:nodeID:5
@@ -348,7 +348,7 @@ L2_6:writeMisses:0
 BIPDirectory_6
 BIPDirectory_6:localSendTime:60
 BIPDirectory_6:remoteSendTime:4
-BIPDirectory_6:lookupRetryTime:4
+BIPDirectory_6:lookupRetryTime:60
 BIPDirectory_6:lookupTime:4
 BIPDirectory_6:satisfyTime:4
 BIPDirectory_6:nodeID:6
@@ -400,7 +400,7 @@ L2_7:writeMisses:0
 BIPDirectory_7
 BIPDirectory_7:localSendTime:60
 BIPDirectory_7:remoteSendTime:4
-BIPDirectory_7:lookupRetryTime:4
+BIPDirectory_7:lookupRetryTime:60
 BIPDirectory_7:lookupTime:4
 BIPDirectory_7:satisfyTime:4
 BIPDirectory_7:nodeID:7
