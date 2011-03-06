@@ -24,7 +24,7 @@ LINESTYLES=['ko','k^']
 #LINESTYLES=['k*','kD']
 #LINESTYLES=['kp','kd']
 LINESTYLE_SOLID='k-'
-OUT_EXT='.png'
+OUT_EXT='.pdf'
 
 thisFileName = sys.argv[0]
 thisFileName = os.path.basename(thisFileName)
@@ -173,7 +173,7 @@ def plotCpuTimeMultiple(benchmarks, dirtypes, minimum, maximum, l1, l2, isSaveFi
 def plotCpuTimeSingle(benchmarks, dirtypes, minimum, maximum):
     plotCpuSingle(benchmarks, dirtypes, minimum, maximum, 'TotalRunTime', 'TotalRunTime', 'Runtime (%)', 'cpu-time')
 
-def plotCpuMultiple(benchmarks, dirtypes, minimum, maximum, l1, l2, component, key, myYlabel, filenameSuffix, isSaveFigure):
+def plotCpuMultiple(benchmarks, dirtypes, minimum, maximum, l1, l2, component, key, myYlabel, filename, isSaveFigure):
     myXlabel='Number of Processors'
     iResults = getCpuResults(benchmarks, dirtypes, minimum, maximum, l1, l2, component, key)
 
@@ -193,7 +193,7 @@ def plotCpuMultiple(benchmarks, dirtypes, minimum, maximum, l1, l2, component, k
     figureIndexPrefix = str(row) + str(column)
 
     #myFigure = figure(1)
-    #myGrid = ImageGrid(myFigure, 111, nrows_ncols = (row, GRAPH_WIDTH), axes_pad=0.1)
+    #myGrid = ImageGrid(myFigure, 111, nrows_ncols = (row, column), axes_pad=0.1)
     subplots_adjust(hspace=0.4)
     subplots_adjust(wspace=0.4)
 
@@ -205,9 +205,10 @@ def plotCpuMultiple(benchmarks, dirtypes, minimum, maximum, l1, l2, component, k
         subplotIn = figureIndexPrefix + str(figureIndex)
         subplot(subplotIn)
         plotGraph(dirtypes, graphResults, minimum, maximum, myXlabel, myYlabel, myTitle)
+        #plotGraph(dirtypes, graphResults, minimum, maximum, myXlabel, myYlabel, myTitle, myGrid[figureIndex-1])
         figureIndex += 1
 
-    outfullpath = OUT_DIR+filenameSuffix
+    outfullpath = OUT_DIR+filename+OUT_EXT
     if (isSaveFigure):
         savefig(outfullpath)
     else:
@@ -241,7 +242,8 @@ def plotGraph(dirtypes, graphResults, minimum, maximum, myXlabel, myYlabel, myTi
     linestyleIndex = 0
     linestyle = LINESTYLES[linestyleIndex]
     ticks = []
-    if (myTitle!='radix'):
+    #if (myTitle!='radix'):
+    if (True):
         for dirtype in dirtypes:
             iSources = graphResults[dirtype]
             i = minInt
@@ -262,6 +264,7 @@ def plotGraph(dirtypes, graphResults, minimum, maximum, myXlabel, myYlabel, myTi
                 linestyleIndex = 0
             linestyle = LINESTYLES[linestyleIndex]
     else:
+        # for radix only
         directoryIndex = len(dirtypes)-1
         while (directoryIndex >= 0):
             dirtype = dirtypes[directoryIndex]
@@ -293,6 +296,67 @@ def plotGraph(dirtypes, graphResults, minimum, maximum, myXlabel, myYlabel, myTi
     grid(True)
     title(myTitle)
     axis([0, maxInt*1.1, 0, 110])
+'''
+def plotGraph(dirtypes, graphResults, minimum, maximum, myXlabel, myYlabel, myTitle, myLocatableAxis):
+    minInt = convertToInt(minimum)
+    maxInt = convertToInt(maximum)
+    print("hello")
+    linestyleIndex = 0
+    linestyle = LINESTYLES[linestyleIndex]
+    ticks = []
+    if (myTitle!='radix'):
+        for dirtype in dirtypes:
+            iSources = graphResults[dirtype]
+            i = minInt
+            xValues = []
+            yValues = []
+            while (i <= maxInt):
+                x = i
+                y = iSources[i]
+                xValues.append(x)
+                yValues.append(y)
+                ticks.append(i)
+                i *= 2
+            myLocatableAxis.plot(xValues, yValues, linestyle, label=dirtype)
+            myLocatableAxis.plot(xValues, yValues, LINESTYLE_SOLID)
+            # change line style
+            linestyleIndex += 1
+            if (linestyleIndex >= len(LINESTYLES)):
+                linestyleIndex = 0
+            linestyle = LINESTYLES[linestyleIndex]
+    else:
+        directoryIndex = len(dirtypes)-1
+        while (directoryIndex >= 0):
+            dirtype = dirtypes[directoryIndex]
+            iSources = graphResults[dirtype]
+            i = minInt
+            xValues = []
+            yValues = []
+            while (i <= maxInt):
+                x = i
+                y = iSources[i]
+                xValues.append(x)
+                yValues.append(y)
+                ticks.append(i)
+                i *= 2
+            specialDirtypeIndex = ~directoryIndex
+            myLocatableAxis.plot(xValues, yValues, linestyle, label=dirtypes[specialDirtypeIndex])
+            myLocatableAxis.plot(xValues, yValues, LINESTYLE_SOLID)
+            # change line style
+            linestyleIndex += 1
+            if (linestyleIndex >= len(LINESTYLES)):
+                linestyleIndex = 0
+            linestyle = LINESTYLES[linestyleIndex]
+            directoryIndex -= 1
+
+    legend(loc='best')
+    xlabel(myXlabel)
+    ylabel(myYlabel)
+    xticks(ticks)
+    grid(True)
+    title(myTitle)
+    axis([0, maxInt*1.1, 0, 110])
+    '''
 
 def plotL1(benchmarks, dirtypes, minimum, maximum, component, key):
     myXlabel='L1 Cache Size in Kilobytes'
@@ -320,7 +384,7 @@ def main():
     l1 = '128'
     l2 = '1024'
 
-    plotCpuTimeMultiple(benchmarks, dirtypes, mincpu, maxcpu,l1,l2,False)
+    plotCpuTimeMultiple(benchmarks, dirtypes, mincpu, maxcpu,l1,l2,True)
     #plotCpuMessagesMultiple(benchmarks, dirtypes, mincpu, maxcpu)
     #plotCpuLatencyMultiple(benchmarks, dirtypes, mincpu, maxcpu)
     #plotCpuMessages(benchmarks, dirtypes, mincpu, maxcpu)
