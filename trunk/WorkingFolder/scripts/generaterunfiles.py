@@ -7,14 +7,15 @@ import sys
 OUT_DIR='../'
 
 # don't need to change these when moving this script
-BUILD_TYPE='Debug'
+AUGSESC='augSesc-Debug'
+#AUGSESC='augSesc-Release'
 
 COMBINED_OUT='runfile-all'
 EXE_EXT='.mips'
 OUT_EXT='.sh'
 OUT_PRE='runfile-'
-HEADER='#!/bin/bash\nDATE=$(date "+%m%d%H%M")\nHOSTNAME=$(hostname)\n\n'
-STRING1='nice -10 ./augSesc-' + BUILD_TYPE + ' -cconfigs/workFile/'
+HEADER='#!/bin/bash\nDATE=$(date "+%m%d%H%M")\nHOSTNAME=$(hostname)\nAUGSESC='+AUGSESC+'\n\n'
+STRING1='nice -10 ./$AUGSESC -cconfigs/workFile/'
 STRING2='.conf -dconfigs/workFile/'
 STRING3='.conf.report benchmarks-splash2-sesc/'
 STRING4=' &> console-outputs/'
@@ -22,22 +23,25 @@ STRING5='.$DATE.$HOSTNAME'
 
 # parameters for benchmarks
 BARNES_PARAMS_PRE='< benchmarks-splash2-sesc/barnes-inputs/cpu'
+#BARNES_PARAMS_POST=''
 BARNES_PARAMS_POST='-special'
 CHOLESKY_PARAMS_PRE='-p'
-CHOLESKY_PARAMS_POST=' -B32 -C16384 -t < benchmarks-splash2-sesc/cholesky-inputs/wr10.O'
+#CHOLESKY_PARAMS_POST=' -B32 -C16384 -t < benchmarks-splash2-sesc/cholesky-inputs/wr10.O'
+CHOLESKY_PARAMS_POST=' -B32 -C16384 -t < benchmarks-splash2-sesc/cholesky-inputs/lshp.O'
 COMBINEDTEST_PARAMS_PRE='-p'
 COMBINEDTEST_PARAMS_POST=' -B32 -C16384 -t < benchmarks-splash2-sesc/cholesky-inputs/wr10.O'
-FFT_PARAMS_PRE='-m10 -p'
+FFT_PARAMS_PRE='-m12 -p'
 FFT_PARAMS_POST=' -n65536 -l4 -t'
 FMM_PARAMS_PRE='-o < benchmarks-splash2-sesc/fmm-inputs/cpu'
 FMM_PARAMS_POST=''
 LU_PARAMS_PRE='-n512 -p'
 LU_PARAMS_POST=' -b16 -t'
-#OCEAN_PARAMS_PRE='-n130 -p'
-OCEAN_PARAMS_PRE='-n6 -p'
+OCEAN_PARAMS_PRE='-n130 -p'
+#OCEAN_PARAMS_PRE='-n6 -p'
 OCEAN_PARAMS_POST=' -e1e-7 -r20000.0 -t28800.0'
 RADIX_PARAMS_PRE='-p'
-RADIX_PARAMS_POST=' -n262144 -r1024 -m524288'
+#RADIX_PARAMS_POST=' -n262144 -r1024 -m524288'
+RADIX_PARAMS_POST=' -n524288 -r1024 -m524288'
 RAYTRACE_PARAMS_PRE='-p'
 RAYTRACE_PARAMS_POST=' benchmarks-splash2-sesc/raytrace-inputs/balls4.env'
 
@@ -127,11 +131,13 @@ processorCountHi, L1Low, L1Hi, L2Low, L2Hi):
 
 def main():
     #benchmarkNames = ['barnes', 'cholesky', 'fft', 'fmm', 'lu', 'radix', 'raytrace', 'ocean']
-    benchmarkNames = ['cholesky', 'fft', 'radix', 'ocean']
+    benchmarkNames = ['barnes', 'cholesky', 'fft', 'lu', 'radix', 'raytrace', 'ocean']
+    #benchmarkNames = ['cholesky', 'fft', 'radix', 'ocean']
+    #benchmarkNames = ['radix']
     directoryTypes = ['bip', 'origin']
     processorCountLow = '2'
     processorCountHi = '32'
-    L1Low = '16'
+    L1Low = '1'
     L1Hi = '128'
     L2Low = '1024'
     #L2Low = '512'

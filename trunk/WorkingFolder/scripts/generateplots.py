@@ -386,26 +386,27 @@ def plotL1TimeMultiple(benchmarks, dirtypes, cpu, minimum, maximum, l2, isSaveFi
 
 def main():
     #benchmarks = ['barnes', 'cholesky', 'fft', 'fmm', 'radix', 'raytrace', 'ocean']
-    benchmarks = ['fft']
+    benchmarks = ['lu']
     #benchmarks = ['fft', 'cholesky', 'ocean', 'radix']
     #dirtypes = ['bip', 'directory', 'origin']
     dirtypes = ['bip', 'origin']
+    #dirtypes = ['bip']
     #cacheType = 'mesi'
     #cacheType = ''
-    cpu = '4'
+    cpu = '32'
     mincpu = '4'
     maxcpu = '32'
-    minl1 = '16'
+    minl1 = '4'
     maxl1 = '128'
     l1 = '128'
     l2 = '1024'
     isSaveFigure = False
 
-    #plotCpuTimeMultiple(benchmarks, dirtypes, mincpu, maxcpu,l1,l2,isSaveFigure)
+    plotCpuTimeMultiple(benchmarks, dirtypes, mincpu, maxcpu,l1,l2,isSaveFigure)
     #plotCpuMessagesMultiple(benchmarks, dirtypes, mincpu, maxcpu,l1,l2,isSaveFigure)
     #plotCpuLatencyMultiple(benchmarks, dirtypes, mincpu, maxcpu,l1,l2,isSaveFigure)
 
-    plotL1TimeMultiple(benchmarks, dirtypes, cpu, minl1, maxl1, l2, isSaveFigure)
+    #plotL1TimeMultiple(benchmarks, dirtypes, cpu, minl1, maxl1, l2, isSaveFigure)
     #plotL1MessagesMultiple(benchmarks, dirtypes, mincpu, minl1, maxl1, l2, isSaveFigure)
     #plotL1LatencyMultiple(benchmarks, dirtypes, mincpu, minl1, maxl1, l2, isSaveFigure)
 
