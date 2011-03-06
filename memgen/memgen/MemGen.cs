@@ -407,7 +407,7 @@
 		output.Close();
 	}
 
-    public static void OutOriginDirectoryMOESIMemory(int nodeCount, int l1, int l2)
+    public static void OutOriginDirectoryMemory(int nodeCount, int l1, int l2)
     {
         output = new System.IO.StreamWriter("memoryConfigs\\origin-p" + nodeCount + "-c" + l1 + "L1-" + l2 + "L2.memory");
         index = 1;
@@ -482,16 +482,16 @@
         // nodeCount also determines the total number of processors
 		for (int nodeCount = 2; nodeCount <= 32; nodeCount *= 2)
 		{
-			//for (int l1 = 1; l1 <= 1024; l1 *= 2)
-            for (int l1 = 8; l1 <= 1024; l1 *= 2)
+			for (int l1 = 1; l1 <= 1024; l1 *= 2)
+            //for (int l1 = 8; l1 <= 1024; l1 *= 2)
 			{
 //				OutSimpleMemory1(i, l1);
 				for (int l2 = l1 * 2; l2 <= 8 * 1024; l2 *= 2)
                 //for (int l2 = l1 * 2; l2 <= 2; l2 *= 2)
 				{
-                    OutBIPDirectoryMemory(nodeCount, l1, l2);
-                    OutDirectoryMemory(nodeCount, l1, l2);
-					OutOriginDirectoryMOESIMemory(nodeCount, l1, l2);
+                    //OutBIPDirectoryMemory(nodeCount, l1, l2);
+                    //OutDirectoryMemory(nodeCount, l1, l2);
+					OutOriginDirectoryMemory(nodeCount, l1, l2);
 					//OutSimpleMemory2(i, l1, l2);
 					for (int l3 = l2 * 2; l3 <= 64 * 1024; l3 *= 2)
 					{
