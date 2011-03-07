@@ -104,7 +104,7 @@ namespace Memory
 		HashSet<Address> pendingEviction;
 		HashMap<Address, BlockData> directoryData;
 
-      void dump(HashMap<Memory::MessageID, const Memory::BaseMsg*> &m);
+      void dump(HashMap<MessageID, const BaseMsg*> &m);
 
 		void PerformDirectoryFetch(Address a);
 		void EraseDirectoryShare(Address a, NodeID id);

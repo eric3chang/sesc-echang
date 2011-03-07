@@ -87,12 +87,21 @@ namespace Memory
 	void EventManager::InitializeBaseNakMsg(BaseNakMsg* copy, const InterventionMsg* original)
 	{
 		copy->addr = original->addr;
+		copy->size = original->size;
 		copy->solicitingMessage = original->solicitingMessage;
+	}
+
+	void EventManager::InitializeBaseNakMsg(BaseNakMsg* copy, const InvalidateMsg* original)
+	{
+		copy->addr = original->addr;
+		copy->size = original->size;
+		copy->solicitingMessage = original->MsgID();
 	}
 
 	void EventManager::InitializeBaseNakMsg(BaseNakMsg* bnm, const ReadMsg* rm)
 	{
 		bnm->addr = rm->addr;
+		bnm->size = rm->size;
 		bnm->solicitingMessage = rm->MsgID();
 	}
 
@@ -278,12 +287,17 @@ namespace Memory
 		m->interventionMessage = 0;
 		return m;
 	}
+
    DirectoryNakMsg* EventManager::CreateDirectoryNakMsg(DeviceID devID, Address generatingPC)
 	{
 		DirectoryNakMsg* m = directoryNakPool.Take();
 		FillBaseNakMsg(m,devID,generatingPC);
+		m->isInvalidateResponse = false;
+		m->isReadResponse = false;
+		m->size = 0;
 		return m;
 	}
+
    InterventionMsg* EventManager::CreateInterventionMsg(DeviceID devID, Address generatingPC)
 	{
 		InterventionMsg* m = interventionPool.Take();
@@ -292,6 +306,7 @@ namespace Memory
 		m->solicitingMessage = 0;
 		return m;
 	}
+
    InvalidateAckMsg* EventManager::CreateInvalidateAckMsg(DeviceID devID, Address generatingPC)
 	{
 		InvalidateAckMsg* m = invalidateAckPool.Take();

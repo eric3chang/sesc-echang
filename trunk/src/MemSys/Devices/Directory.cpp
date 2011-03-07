@@ -49,9 +49,9 @@ namespace Memory
 	}
 
 	// debug function
-   void Directory::dump(HashMap<Memory::MessageID, const Memory::BaseMsg*> &m)
+   void Directory::dump(HashMap<MessageID, const BaseMsg*> &m)
    {
-      DumpMsgTemplate<Memory::MessageID>(m);
+      DumpMsgTemplate<MessageID>(m);
    }
 
    // performs a directory fetch from main memory of address a

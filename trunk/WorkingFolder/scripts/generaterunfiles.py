@@ -139,10 +139,12 @@ def main():
     #benchmarkNames = ['cholesky', 'fft', 'radix', 'ocean']
     benchmarkNames = ['newtest']
     directoryTypes = ['bip', 'origin']
-    processorCountLow = '2'
+    #processorCountLow = '2'
+    processorCountLow = '4'
     processorCountHi = '32'
     L1Low = '1'
-    L1Hi = '128'
+    #L1Hi = '128'
+    L1Hi = '1'
     L2Low = '1024'
     #L2Low = '512'
     L2Hi = '1024'

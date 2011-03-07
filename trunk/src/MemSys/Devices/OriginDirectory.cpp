@@ -78,15 +78,16 @@ namespace Memory
 		cacheState = newCacheState;
 	}
 
-	void OriginDirectory::dump(HashMap<Memory::MessageID, const Memory::BaseMsg*> &m)
+	void OriginDirectory::dump(HashMap<MessageID, const BaseMsg*> &m)
 	{
-		DumpMsgTemplate<Memory::MessageID>(m);
+		DumpMsgTemplate<MessageID>(m);
 	}
+/*
 	void OriginDirectory::dump(HashMap<Address,LookupData<BaseMsg> > &m)
 	{
 		DumpLookupDataTemplate<Address>(m);
 	}
-
+*/
 	void OriginDirectory::ClearTempCacheData(CacheData& cacheData)
    {
    	//EM().DisposeMsg(cacheData.firstReply);
