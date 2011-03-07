@@ -7,7 +7,7 @@ OBJECT_FILES="sesc_chud.o sesc_events.o sesc_locks.o sesc_thread.o sesc_tls.o se
 OUT_DIR='../../WorkingFolder/benchmarks-splash2-sesc/'
 #SESC_THREAD_O=sesc_chud.o\ sesc_locks.o\ sesc_thread.o\ sesc_tls.o\ sesc_ts.o
 MINT_X=/opt/csl/sescutils/mipseb-linux/lib/ldscripts/mint.x
-EXTENSION=sesc
+EXTENSION=mips
 
 if [[ $# < 1 ]]; then
    echo "usage: compile-sesc.sh [YOUR FILE] [OTHER GCC PARAMETERS]"

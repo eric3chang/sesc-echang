@@ -69,6 +69,7 @@ int main(int argc, char** argv)
    int t = 0;
    int threadIndexMax = 0;
    int numberOfLoops = 0;
+   int numberOfReads = 0;
    int processorCount = 0;
 
    // process arguments
@@ -83,14 +84,14 @@ int main(int argc, char** argv)
          }
          else if (tempString[1]=='n')
          {
-            numberOfLoops = atoi(tempString+2);
+            numberOfReads = atoi(tempString+2);
          }
       }
    }
 
-   if (!processorCount || !numberOfLoops)
+   if (!processorCount || !numberOfReads)
    {
-      printf("Usage: readtest -p[number of processors] -n[number of loops]\n");
+      printf("Usage: readtest -p[number of processors] -n[number of reads]\n");
 #ifdef USE_SESC
       sesc_exit(1);
 #else
@@ -100,6 +101,10 @@ int main(int argc, char** argv)
 
    threadIndexMax = processorCount - 2;
    threadIndexMax = threadIndexMax / 2;
+
+   // calculate the number of Loops
+   numberOfLoops = numberOfReads / (processorCount-2);
+   printf("numberOfLoops=%d\n", numberOfLoops);
 
    for (t=0; t<threadIndexMax; t++)
    {

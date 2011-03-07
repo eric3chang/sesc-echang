@@ -107,6 +107,8 @@ namespace Memory
 		typedef pair<Address,LookupData<ReadMsg> > AddrLDReadPair;
 		typedef pair<AddrLDReadMultimap::iterator,AddrLDReadMultimap::iterator> AddrLDReadMultimapPairii;
 		typedef HashMap<Address,LookupData<ReadMsg> > AddrLDReadMap;
+		typedef HashMap<MessageID,const ReadMsg*> MessageReadMap;
+		typedef pair<MessageID,const ReadMsg*> MessageReadPair;
 
 		HashMap<MessageID, const ReadMsg*> pendingLocalReads;
 		HashMap<MessageID, LookupData<ReadMsg> > pendingRemoteReads;

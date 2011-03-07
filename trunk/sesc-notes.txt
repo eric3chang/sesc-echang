@@ -12,4 +12,5 @@
 - - Matt got Barnes, Radix, Raytrace, Ocean, FFT, Cholesky and FMM to work
 - use -yINT to run only INT number of instructions
 - start at 4 processors, 8k L1 cache, 16k L2 cache
+- converted from svn to mercurial at revision 568
 
