@@ -227,8 +227,9 @@ namespace Memory
 		HashMap<Address, DirectoryData> directoryDataMap;
 		HashMap<Address, CacheData> cacheDataMap;
 
-		void dump(HashMap<Memory::MessageID, const Memory::BaseMsg*> &m);
-		void dump(HashMap<Address,LookupData<BaseMsg> > &m);
+		//void dump(HashMap<MessageID, const ReadMsg*> &m);
+		void dump(HashMap<MessageID, const BaseMsg*> &m);
+		//void dump(HashMap<Address,LookupData<BaseMsg> > &m);
 		// debugging functions
 		template <class Key>
 		static void DumpLookupDataTemplate(HashMap<Key,LookupData<Memory::BaseMsg> > &m)

@@ -14,7 +14,7 @@ namespace Memory
 		{
 			BaseMsg::print(destinationDeviceID);
          cout
-				<< " addr=" << addr
+				<< " adr=" << addr
 		   ;
 		}
 	};

@@ -9,6 +9,7 @@ namespace Memory
 	{
 	public:
 		MessageID solicitingMessage;
+		size_t size;
 
 		virtual void print(DeviceID destinationDeviceID) const
 		{

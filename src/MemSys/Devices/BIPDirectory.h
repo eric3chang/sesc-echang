@@ -67,6 +67,12 @@ namespace Memory
 		public:
 			const T* msg;
 			NodeID sourceNode;
+			int invalidateResponsesExpected;
+			int invalidateResponsesReceived;
+			LookupData() :
+				invalidateResponsesExpected(0),
+				invalidateResponsesReceived(0)
+			{}
 		};
 
 		unsigned long long messagesReceived;
@@ -122,7 +128,7 @@ namespace Memory
 		AddrReadMultimap reversePendingLocalReads;
 		HashMap<Address, BlockData> directoryData;
 
-      void dump(HashMap<Memory::MessageID, const Memory::BaseMsg*> &m);
+      void dump(HashMap<MessageID, const BaseMsg*> &m);
 
 		void PerformDirectoryFetch(Address a);
 		void EraseDirectoryShare(Address a, NodeID id);
@@ -154,6 +160,8 @@ namespace Memory
 		void OnDirectoryBlockRequest(const ReadMsg* m, NodeID src);
 		void OnDirectoryBlockResponse(const ReadResponseMsg* m, NodeID src);
 
+		void SendDirectoryNak(const DirectoryNakMsg *m);
+		void SendDirectoryNak(const InvalidateMsg *m);
 		void SendDirectoryNak(const ReadMsg *m);
       void SendMessageToNetwork(const BaseMsg *msg, NodeID dest);
       void SendReadRequestToMemory(const ReadMsg *msg);

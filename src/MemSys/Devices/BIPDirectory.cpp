@@ -52,9 +52,9 @@ namespace Memory
 	}
 
 	// debug function
-   void BIPDirectory::dump(HashMap<Memory::MessageID, const Memory::BaseMsg*> &m)
+   void BIPDirectory::dump(HashMap<MessageID, const BaseMsg*> &m)
    {
-      DumpMsgTemplate<Memory::MessageID>(m);
+      DumpMsgTemplate<MessageID>(m);
    }
 
    // performs a directory fetch from main memory of address a
@@ -165,11 +165,26 @@ namespace Memory
 		}
 	}
 
+	void BIPDirectory::SendDirectoryNak(const InvalidateMsg *m)
+	{
+   	DirectoryNakMsg* dnk = EM().CreateDirectoryNakMsg(GetDeviceID(), m->GeneratingPC());
+   	EM().InitializeBaseNakMsg(dnk, m);
+   	dnk->isInvalidateResponse = true;
+
+   	SendDirectoryNak(dnk);
+	}
+
 	void BIPDirectory::SendDirectoryNak(const ReadMsg *m)
 	{
    	DirectoryNakMsg* dnk = EM().CreateDirectoryNakMsg(GetDeviceID(), m->GeneratingPC());
    	EM().InitializeBaseNakMsg(dnk, m);
+   	dnk->isReadResponse = true;
 
+   	SendDirectoryNak(dnk);
+	}
+
+	void BIPDirectory::SendDirectoryNak(const DirectoryNakMsg *m)
+	{
 		NodeID dirNode = directoryNodeCalc->CalcNodeID(m->addr);
 		DebugAssertWithMessageID(dirNode!=InvalidNodeID, m->MsgID());
 
@@ -177,12 +192,12 @@ namespace Memory
 		{
 			// schedule this to be called later
 			CBOnRemoteDirectoryNak::FunctionType* f = cbOnRemoteDirectoryNak.Create();
-			f->Initialize(this, dnk, nodeID);
+			f->Initialize(this, m, nodeID);
 			EM().ScheduleEvent(f, localSendTime);
 		}
 		else
 		{
-			SendMessageToNetwork(dnk, dirNode);
+			SendMessageToNetwork(m, dirNode);
 		}
 	}
 
@@ -375,7 +390,7 @@ namespace Memory
 		else
 		{
 #ifdef MEMORY_BIP_DIRECTORY_DEBUG_VERBOSE_OLD
-               PrintDebugInfo("RemoteInvalidateResponse",*m,"LocalInvalidateResponse",nodeID);
+               PrintDebugInfo("RemInvRes",*m,"LocalInvalidateResponse",nodeID);
 #endif
 			OnRemoteInvalidateResponse(m,nodeID);
 		}
@@ -455,22 +470,23 @@ namespace Memory
       PrintDebugInfo("RemReadRes",*m,"",src);
 #endif
 		DebugAssertWithMessageID(m,m->MsgID())
-		DebugAssertWithMessageID(!m->directoryLookup,m->MsgID())
-		DebugAssertWithMessageID(pendingDirectorySharedReads.find(m->addr) != pendingDirectorySharedReads.end() || pendingDirectoryExclusiveReads.find(m->addr) != pendingDirectoryExclusiveReads.end(),m->MsgID())
-		DebugAssertWithMessageID(pendingDirectorySharedReads.find(m->addr) == pendingDirectorySharedReads.end() || pendingDirectoryExclusiveReads.find(m->addr) == pendingDirectoryExclusiveReads.end(),m->MsgID())
-		DebugAssertWithMessageID(directoryData.find(m->addr) != directoryData.end(),m->MsgID())
+		DebugAssertWithMessageID(!m->directoryLookup,m->solicitingMessage)
+		DebugAssertWithMessageID(pendingDirectorySharedReads.find(m->addr) != pendingDirectorySharedReads.end() || pendingDirectoryExclusiveReads.find(m->addr) != pendingDirectoryExclusiveReads.end(),m->solicitingMessage)
+		DebugAssertWithMessageID(pendingDirectorySharedReads.find(m->addr) == pendingDirectorySharedReads.end() || pendingDirectoryExclusiveReads.find(m->addr) == pendingDirectoryExclusiveReads.end(),m->solicitingMessage)
+		DebugAssertWithMessageID(directoryData.find(m->addr) != directoryData.end(),m->solicitingMessage)
 		if(m->satisfied)
 		{
 			if(m->exclusiveOwnership)
 			{
+				// make sure to note that we erase src from directory already
 				EraseDirectoryShare(m->addr,src);
 			}
 			// if there is some pending shared read on this address
 			if(pendingDirectorySharedReads.find(m->addr) != pendingDirectorySharedReads.end())
 			{
 				int numberOfReaders = 0;
-				HashMultiMap<Address,LookupData<ReadMsg> >::iterator tempIterator;
-				std::pair<HashMultiMap<Address,LookupData<ReadMsg> >::iterator,HashMultiMap<Address,LookupData<ReadMsg> >::iterator> ret;
+				AddrLDReadMultimap::iterator tempIterator;
+				AddrLDReadMultimapPairii ret;
 				ret = pendingDirectorySharedReads.equal_range(m->addr);
 				for (tempIterator=ret.first; tempIterator!=ret.second; tempIterator++)
 				{
@@ -516,7 +532,11 @@ namespace Memory
 				// src==InvalidNodeID means that this response came from the memory
 				DebugAssertWithMessageID(myBlockData.owner==InvalidNodeID || myBlockData.owner==src || src==InvalidNodeID,m->solicitingMessage)
 				if(directoryData[m->addr].sharers.size() == 0)
-				{//send block on now
+				{
+					//send block on now. We don't have to worry about src since it had to have sent
+						// back a block with exclusive ownership, which means that the nodeID was
+						// deleted at the beginning of this function. This means that myBlockData
+						// will only have the new owner, since the old owner was erased
 					ReadResponseMsg* response = (ReadResponseMsg*)EM().ReplicateMsg(m);
 					response->directoryLookup = true;
 					if(pendingDirectoryExclusiveReads[m->addr].sourceNode != nodeID)
@@ -536,11 +556,20 @@ namespace Memory
 					pendingDirectoryExclusiveReads.erase(m->addr);
 				} // if(directoryData[m->addr].sharers.size() == 0)
 				else
-				{//hold the block, send on once all invalidations are complete
+				{
+					//hold the block, send on once all invalidations are complete. The old owner was
+						// erased. It also must have had to send back a block with exclusive ownership
+						// since we had a pendingDirectoryExclusiveRead request
 					BlockData &myBlockData = directoryData[m->addr];
 					HashSet<NodeID>& sharers = myBlockData.sharers;
-					// the following check was done before the if above near line 454
 					//DebugAssertWithMessageID(myBlockData.owner==InvalidNodeID, m->solicitingMessage);
+
+					AddrLDReadMap::iterator tempIterator = pendingDirectoryExclusiveReads.find(m->addr);
+					DebugAssertWithMessageID(tempIterator!=pendingDirectoryExclusiveReads.end(),m->solicitingMessage);
+					LookupData<ReadMsg>& ld = (*tempIterator).second;
+					ld.invalidateResponsesReceived = 0;
+					ld.invalidateResponsesExpected = sharers.size();
+
 					for(HashSet<NodeID>::iterator i = sharers.begin(); i != sharers.end(); i++)
 					{
 						InvalidateMsg* inv = EM().CreateInvalidateMsg(GetDeviceID(),m->GeneratingPC());
@@ -635,19 +664,48 @@ namespace Memory
 #ifdef MEMORY_BIP_DIRECTORY_DEBUG_VERBOSE
 		PrintDebugInfo("RemDirNak",*m,"",src);
 #endif
-		AddrLDReadMultimapPairii ret = pendingDirectorySharedReads.equal_range(m->addr);
-		AddrLDReadMap::iterator exclusiveReadIterator;
-		exclusiveReadIterator = pendingDirectoryExclusiveReads.find(m->addr);
-		bool isInDirectorySharedReads = (ret.first!=ret.second);
-		bool isInDirectoryExclusiveReads = (exclusiveReadIterator!=pendingDirectoryExclusiveReads.end());
-
-		// only perform directory fetch if the request still exists
-		if (isInDirectorySharedReads || isInDirectoryExclusiveReads)
+		if (m->isReadResponse)
 		{
-			DebugAssertWithMessageID(!isInDirectorySharedReads||!isInDirectoryExclusiveReads, m->solicitingMessage);
+			AddrLDReadMultimapPairii ret = pendingDirectorySharedReads.equal_range(m->addr);
+			AddrLDReadMap::iterator exclusiveReadIterator;
+			exclusiveReadIterator = pendingDirectoryExclusiveReads.find(m->addr);
+			bool isInDirectorySharedReads = (ret.first!=ret.second);
+			bool isInDirectoryExclusiveReads = (exclusiveReadIterator!=pendingDirectoryExclusiveReads.end());
 
-			EraseDirectoryShare(m->addr, src);
-			PerformDirectoryFetch(m->addr);
+			// only perform directory fetch if the request still exists
+			if (isInDirectorySharedReads || isInDirectoryExclusiveReads)
+			{
+				DebugAssertWithMessageID(!isInDirectorySharedReads||!isInDirectoryExclusiveReads, m->solicitingMessage);
+
+				EraseDirectoryShare(m->addr, src);
+				PerformDirectoryFetch(m->addr);
+			}
+		}
+		else if (m->isInvalidateResponse)
+		{
+			// resend invalidate request
+			InvalidateMsg* inv = EM().CreateInvalidateMsg(GetDeviceID(),m->GeneratingPC());
+			inv->addr = m->addr;
+			inv->size = m->size;
+			if(src != nodeID)
+			{
+				NetworkMsg* net = EM().CreateNetworkMsg(GetDeviceID(),m->GeneratingPC());
+				net->destinationNode = src;
+				net->sourceNode = nodeID;
+				net->payloadMsg = inv;
+				SendMsg(remoteConnectionID, net, lookupTime + remoteSendTime);
+			}
+			else
+			{
+#ifdef MEMORY_BIP_DIRECTORY_DEBUG_VERBOSE_OLD
+				PrintDebugInfo("RemoteInvalidate",*inv,"RemReadRes",nodeID);
+#endif
+				OnRemoteInvalidate(inv, nodeID);
+			}
+		}
+		else
+		{
+			PrintError("RemDirNak",m,"isInvalidateResponse and isReadResponse not set");
 		}
 
 		return;
@@ -740,19 +798,32 @@ namespace Memory
 
 	void BIPDirectory::OnRemoteInvalidate(const InvalidateMsg* m, NodeID src)
 	{
-		remoteInvalidatesReceived++;
 #ifdef MEMORY_BIP_DIRECTORY_DEBUG_VERBOSE
       PrintDebugInfo("RemInv",*m,"",src);
 #endif
 		DebugAssertWithMessageID(m,m->MsgID())
+		remoteInvalidatesReceived++;
+
+		pair<AddrReadMultimap::iterator,AddrReadMultimap::iterator> tempPair;
+		tempPair = reversePendingLocalReads.equal_range(m->addr);
+		bool hasAddress = (tempPair.first!=tempPair.second);
+
+		//if (hasAddress)
+		if(false)
+		{
+			SendDirectoryNak(m);
+		}
+		else
+		{
 #ifdef MEMORY_BIP_DIRECTORY_DEBUG_PENDING_REMOTE_INVALIDATES
-      PrintDebugInfo("RemoteInvalidate", *m,
+			PrintDebugInfo("RemoteInvalidate", *m,
             ("pendingRemoteInvalidates.insert("+to_string<Address>(m->addr)+")").c_str());
 #endif
-		DebugAssertWithMessageID(pendingRemoteInvalidates.find(m->addr) == pendingRemoteInvalidates.end(),m->MsgID())
-		pendingRemoteInvalidates[m->addr].sourceNode = src;
-		pendingRemoteInvalidates[m->addr].msg = m;
-		SendMsg(localCacheConnectionID, EM().ReplicateMsg(m), localSendTime);
+			DebugAssertWithMessageID(pendingRemoteInvalidates.find(m->addr) == pendingRemoteInvalidates.end(),m->MsgID())
+			pendingRemoteInvalidates[m->addr].sourceNode = src;
+			pendingRemoteInvalidates[m->addr].msg = m;
+			SendMsg(localCacheConnectionID, EM().ReplicateMsg(m), localSendTime);
+		}
 	}
 
 	void BIPDirectory::OnRemoteInvalidateResponse(const InvalidateResponseMsg* m, NodeID src)
@@ -769,14 +840,14 @@ namespace Memory
 		if(b.owner == src)
 		{
 #ifdef MEMORY_BIP_DIRECTORY_DEBUG_DIRECTORY_DATA
-         PrintDebugInfo("RemoteInvalidateResponse",*m,"b.owner=InvalidNodeID",src);
+         PrintDebugInfo("RemInvRes",*m,"b.owner=InvalidNodeID",src);
 #endif
 			b.owner = InvalidNodeID;
 		}
       else if (b.sharers.find(src) != b.sharers.end())
 		{
 #ifdef MEMORY_BIP_DIRECTORY_DEBUG_DIRECTORY_DATA
-			PrintDebugInfo("RemoteInvalidateResponse",*m,
+			PrintDebugInfo("RemInvRes",*m,
 			   ("b.sharers.erase("+to_string<NodeID>(src)+")").c_str(),src);
 #endif
 			b.sharers.erase(src);
@@ -803,15 +874,24 @@ namespace Memory
 			SendMsg(remoteConnectionID, nm, remoteSendTime);
 			*/
 		}
-		if(pendingDirectoryExclusiveReads.find(m->addr) != pendingDirectoryExclusiveReads.end())
+
+		AddrLDReadMap::iterator tempIterator = pendingDirectoryExclusiveReads.find(m->addr);
+		DebugAssertWithMessageID(tempIterator!=pendingDirectoryExclusiveReads.end(), m->solicitingMessage);
+		LookupData<ReadMsg>& ld = (*tempIterator).second;
+		int& invalidateResponsesExpected = ld.invalidateResponsesExpected;
+		int& invalidateResponsesReceived = ld.invalidateResponsesReceived;
+		invalidateResponsesReceived++;
+
+		//if(pendingDirectoryExclusiveReads.find(m->addr) != pendingDirectoryExclusiveReads.end())
+		if (invalidateResponsesExpected==invalidateResponsesReceived)
 		{
 			if( (b.owner == InvalidNodeID && b.sharers.size() == 0) ||
 				(b.owner == pendingDirectoryExclusiveReads[m->addr].sourceNode && b.sharers.size() == 0) ||
 				(b.owner == InvalidNodeID && b.sharers.size() == 1 && b.sharers.find(pendingDirectoryExclusiveReads[m->addr].sourceNode) != b.sharers.end()))
 			{
 #ifdef MEMORY_BIP_DIRECTORY_DEBUG_DIRECTORY_DATA
-			   PrintDebugInfo("RemoteInvalidateResponse",*m,"b.sharers.clear()",src);
-            PrintDebugInfo("RemoteInvalidateResponse",*m,
+			   PrintDebugInfo("RemInvRes",*m,"b.sharers.clear()",src);
+            PrintDebugInfo("RemInvRes",*m,
                ("b.owner="+to_string<NodeID>(pendingDirectoryExclusiveReads[m->addr].sourceNode)).c_str(),
                src);
 #endif
@@ -1280,7 +1360,7 @@ namespace Memory
 				{
 			      InvalidateResponseMsg* m = (InvalidateResponseMsg*)payload;
 #ifdef MEMORY_BIP_DIRECTORY_DEBUG_VERBOSE_OLD
-               PrintDebugInfo("RemoteInvalidateResponse",*m,"RecvMsg",src);
+               PrintDebugInfo("RemInvRes",*m,"RecvMsg",src);
 #endif
 					OnRemoteInvalidateResponse(m,src);
 					break;
@@ -1376,7 +1456,7 @@ namespace Memory
       cout << setw(17) << " " // account for spacing from src and msgSrc
 			<< " dst=" << setw(3) << GetDeviceID()
             << setw(11) << " "   // account for spacing from msgID
-            << " addr=" << addr
+            << " adr=" << addr
             << " " << fromMethod
             << " " << operation << "(" << id << ")"
             << endl;
@@ -1396,8 +1476,8 @@ namespace Memory
    {
       cout << setw(17) << " " // account for spacing from src and msgSrc
             << " dst=" << setw(3) << GetDeviceID()
-            << setw(10) << " "   // account for spacing from msgID
-            << " addr=" << addr
+            << setw(11) << " "   // account for spacing from msgID
+            << " adr=" << addr
             << " " << fromMethod
             << " nodeID=" << id
             << " " << operation

@@ -35,16 +35,16 @@ namespace Memory
 	public:
 		// debugging functions
 		template <class Key>
-		static void DumpMsgTemplate(HashMap<Key,const Memory::BaseMsg*> &m)
+		static void DumpMsgTemplate(HashMap<Key,const BaseMsg*> &m)
 		{
-			typename HashMap<Key,const Memory::BaseMsg*>::const_iterator i,j;
+			typename HashMap<Key,const BaseMsg*>::const_iterator i,j;
 			i = m.begin();
 			j = m.end();
 
 			std::cout << "[" << "dump" << "]" << std::endl;
 			for(; i != j; ++i)
 			{
-				std::cout << '[' << i->first << "]";
+				std::cout << '[' << setw(2) << i->first << "]";
 				i->second->print(0);
 				std::cout << std::endl;
 			}
