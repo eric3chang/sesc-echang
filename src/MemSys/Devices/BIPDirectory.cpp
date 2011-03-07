@@ -89,7 +89,12 @@ namespace Memory
 		}
 		else
 		{
-			SendReadRequestToMemory(m);
+			// only send message to memory if there's no already a memory request
+			MessageReadMap::iterator tempIterator = pendingMemoryReadAccesses.find(m->MsgID());
+			if (tempIterator==pendingMemoryReadAccesses.end())
+			{
+				SendReadRequestToMemory(m);
+			}
 			return;
 		}
 		if(target == nodeID)
@@ -636,11 +641,14 @@ namespace Memory
 		bool isInDirectorySharedReads = (ret.first!=ret.second);
 		bool isInDirectoryExclusiveReads = (exclusiveReadIterator!=pendingDirectoryExclusiveReads.end());
 
-		DebugAssertWithMessageID(isInDirectorySharedReads||isInDirectoryExclusiveReads, m->solicitingMessage);
-		DebugAssertWithMessageID(!isInDirectorySharedReads||!isInDirectoryExclusiveReads, m->solicitingMessage);
+		// only perform directory fetch if the request still exists
+		if (isInDirectorySharedReads || isInDirectoryExclusiveReads)
+		{
+			DebugAssertWithMessageID(!isInDirectorySharedReads||!isInDirectoryExclusiveReads, m->solicitingMessage);
 
-		EraseDirectoryShare(m->addr, src);
-		PerformDirectoryFetch(m->addr);
+			EraseDirectoryShare(m->addr, src);
+			PerformDirectoryFetch(m->addr);
+		}
 
 		return;
 	}

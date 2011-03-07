@@ -36,6 +36,8 @@ FMM_PARAMS_PRE='-o < benchmarks-splash2-sesc/fmm-inputs/cpu'
 FMM_PARAMS_POST=''
 LU_PARAMS_PRE='-n512 -p'
 LU_PARAMS_POST=' -b16 -t'
+NEWTEST_PARAMS_PRE='-p'
+NEWTEST_PARAMS_POST=' -n100000'
 OCEAN_PARAMS_PRE='-n130 -p'
 #OCEAN_PARAMS_PRE='-n6 -p'
 OCEAN_PARAMS_POST=' -e1e-7 -r20000.0 -t28800.0'
@@ -73,6 +75,8 @@ def generateOneRunfile(benchmarkName, directoryType, processorCount, L1Size, L2S
         parameters = FMM_PARAMS_PRE + processorCount + FMM_PARAMS_POST
     elif (benchmarkName=='lu'):
         parameters = LU_PARAMS_PRE + processorCount + LU_PARAMS_POST
+    elif (benchmarkName=='newtest'):
+        parameters = NEWTEST_PARAMS_PRE + processorCount + NEWTEST_PARAMS_POST
     elif (benchmarkName=='ocean'):
         parameters = OCEAN_PARAMS_PRE + processorCount + OCEAN_PARAMS_POST
     elif (benchmarkName=='radix'):
@@ -131,9 +135,9 @@ processorCountHi, L1Low, L1Hi, L2Low, L2Hi):
 
 def main():
     #benchmarkNames = ['barnes', 'cholesky', 'fft', 'fmm', 'lu', 'radix', 'raytrace', 'ocean']
-    benchmarkNames = ['barnes', 'cholesky', 'fft', 'lu', 'radix', 'raytrace', 'ocean']
+    #benchmarkNames = ['barnes', 'cholesky', 'fft', 'lu', 'radix', 'raytrace', 'ocean']
     #benchmarkNames = ['cholesky', 'fft', 'radix', 'ocean']
-    #benchmarkNames = ['radix']
+    benchmarkNames = ['newtest']
     directoryTypes = ['bip', 'origin']
     processorCountLow = '2'
     processorCountHi = '32'
