@@ -1,14 +1,14 @@
 Group string ReportFileName results/lu-bip-2-64-1024.memDevResults string BenchName lu
 
 DateTime
-DateTime:DateTime:03022046
+DateTime:DateTime:03071313
 
 TotalRunTime
-TotalRunTime:TotalRunTime:195284330
+TotalRunTime:TotalRunTime:193984567
 
 Network
-Network:TotalMessagesReceived:345648
-Network:AverageLatency:101.708
+Network:TotalMessagesReceived:236242
+Network:AverageLatency:97.9331
 
 ProcessorInterface_0
 ProcessorInterface_0:readCount:56357781
@@ -16,19 +16,19 @@ ProcessorInterface_0:writeCount:27381715
 ProcessorInterface_0:totalOperations:83739496
 
 L1_0
-L1_0:messagesReceived:84566891
+L1_0:messagesReceived:84522176
 L1_0:exclusiveReadHits:0
 L1_0:sharedReadHits:56357781
 L1_0:exclusiveReadMisses:0
-L1_0:sharedReadMisses:320134
+L1_0:sharedReadMisses:318896
 L1_0:writeHits:27381715
-L1_0:writeMisses:52009
+L1_0:writeMisses:32855
 
 L2_0
-L2_0:messagesReceived:1080586
-L2_0:exclusiveReadHits:52009
-L2_0:sharedReadHits:320135
-L2_0:exclusiveReadMisses:52009
+L2_0:messagesReceived:993595
+L2_0:exclusiveReadHits:32855
+L2_0:sharedReadHits:318896
+L2_0:exclusiveReadMisses:32855
 L2_0:sharedReadMisses:59668
 L2_0:writeHits:0
 L2_0:writeMisses:0
@@ -36,31 +36,31 @@ L2_0:writeMisses:0
 BIPDirectory_0
 BIPDirectory_0:localSendTime:60
 BIPDirectory_0:remoteSendTime:4
-BIPDirectory_0:lookupRetryTime:4
+BIPDirectory_0:lookupRetryTime:60
 BIPDirectory_0:lookupTime:4
 BIPDirectory_0:satisfyTime:4
 BIPDirectory_0:nodeID:0
-BIPDirectory_0:TotalMessagesReceived:466746
-BIPDirectory_0:directoryRequestsReceived:82912
-BIPDirectory_0:directoryResponsesReceived:85676
-BIPDirectory_0:localEvictionsReceived:76140
-BIPDirectory_0:localInvalidateResponsesReceived:1
-BIPDirectory_0:localReadsReceived:111679
-BIPDirectory_0:localReadResponsesReceived:27239
+BIPDirectory_0:TotalMessagesReceived:372740
+BIPDirectory_0:directoryRequestsReceived:61848
+BIPDirectory_0:directoryResponsesReceived:76097
+BIPDirectory_0:localEvictionsReceived:76139
+BIPDirectory_0:localInvalidateResponsesReceived:0
+BIPDirectory_0:localReadsReceived:92523
+BIPDirectory_0:localReadResponsesReceived:4120
 BIPDirectory_0:localWritesReceived:0
-BIPDirectory_0:remoteEvictionsReceived:45474
+BIPDirectory_0:remoteEvictionsReceived:45464
 BIPDirectory_0:remoteEvictionResponsesReceived:38133
-BIPDirectory_0:remoteInvalidatesReceived:1
+BIPDirectory_0:remoteInvalidatesReceived:0
 BIPDirectory_0:remoteInvalidateResponsesReceived:0
-BIPDirectory_0:remoteReadsReceived:27239
-BIPDirectory_0:remoteReadResponsesReceived:82920
+BIPDirectory_0:remoteReadsReceived:8086
+BIPDirectory_0:remoteReadResponsesReceived:61845
 BIPDirectory_0:remoteWritesReceived:0
-BIPDirectory_0:remoteWriteResponsesReceived:26452
+BIPDirectory_0:remoteWriteResponsesReceived:26442
 
 MainMemory_0
 MainMemory_0:EvictionsReceived:0
-MainMemory_0:ReadsReceived:53613
-MainMemory_0:WritessReceived:26452
+MainMemory_0:ReadsReceived:57567
+MainMemory_0:WritessReceived:26442
 
 ProcessorInterface_1
 ProcessorInterface_1:readCount:47274171
@@ -68,70 +68,70 @@ ProcessorInterface_1:writeCount:23373182
 ProcessorInterface_1:totalOperations:70647353
 
 L1_1
-L1_1:messagesReceived:71269306
+L1_1:messagesReceived:71220026
 L1_1:exclusiveReadHits:0
 L1_1:sharedReadHits:47274171
 L1_1:exclusiveReadMisses:0
-L1_1:sharedReadMisses:276631
-L1_1:writeHits:23373174
-L1_1:writeMisses:23088
+L1_1:sharedReadMisses:275021
+L1_1:writeHits:23373177
+L1_1:writeMisses:11
 
 L2_1
-L2_1:messagesReceived:730807
-L2_1:exclusiveReadHits:23082
-L2_1:sharedReadHits:276631
-L2_1:exclusiveReadMisses:23088
-L2_1:sharedReadMisses:31483
+L2_1:messagesReceived:635336
+L2_1:exclusiveReadHits:6
+L2_1:sharedReadHits:275021
+L2_1:exclusiveReadMisses:11
+L2_1:sharedReadMisses:31474
 L2_1:writeHits:0
 L2_1:writeMisses:0
 
 BIPDirectory_1
 BIPDirectory_1:localSendTime:60
 BIPDirectory_1:remoteSendTime:4
-BIPDirectory_1:lookupRetryTime:4
+BIPDirectory_1:lookupRetryTime:60
 BIPDirectory_1:lookupTime:4
 BIPDirectory_1:satisfyTime:4
 BIPDirectory_1:nodeID:1
-BIPDirectory_1:TotalMessagesReceived:355810
-BIPDirectory_1:directoryRequestsReceived:83337
-BIPDirectory_1:directoryResponsesReceived:42963
-BIPDirectory_1:localEvictionsReceived:15109
+BIPDirectory_1:TotalMessagesReceived:255896
+BIPDirectory_1:directoryRequestsReceived:62160
+BIPDirectory_1:directoryResponsesReceived:31476
+BIPDirectory_1:localEvictionsReceived:15101
 BIPDirectory_1:localInvalidateResponsesReceived:0
-BIPDirectory_1:localReadsReceived:54570
-BIPDirectory_1:localReadResponsesReceived:31710
+BIPDirectory_1:localReadsReceived:31485
+BIPDirectory_1:localReadResponsesReceived:8622
 BIPDirectory_1:localWritesReceived:0
-BIPDirectory_1:remoteEvictionsReceived:45775
-BIPDirectory_1:remoteEvictionResponsesReceived:7467
+BIPDirectory_1:remoteEvictionsReceived:45776
+BIPDirectory_1:remoteEvictionResponsesReceived:7458
 BIPDirectory_1:remoteInvalidatesReceived:0
-BIPDirectory_1:remoteInvalidateResponsesReceived:1
-BIPDirectory_1:remoteReadsReceived:31710
-BIPDirectory_1:remoteReadResponsesReceived:83338
+BIPDirectory_1:remoteInvalidateResponsesReceived:0
+BIPDirectory_1:remoteReadsReceived:8631
+BIPDirectory_1:remoteReadResponsesReceived:62158
 BIPDirectory_1:remoteWritesReceived:0
-BIPDirectory_1:remoteWriteResponsesReceived:26700
+BIPDirectory_1:remoteWriteResponsesReceived:26701
 
 MainMemory_1
 MainMemory_1:EvictionsReceived:0
-MainMemory_1:ReadsReceived:53698
-MainMemory_1:WritessReceived:26700
+MainMemory_1:ReadsReceived:53699
+MainMemory_1:WritessReceived:26701
 
 TotalCache
 TotalCache:totalL1CacheExclusiveReadHits:0
 TotalCache:totalL1CacheExclusiveReadMisses:0
 TotalCache:totalL1CacheSharedReadHits:103631952
-TotalCache:totalL1CacheSharedReadMisses:596765
-TotalCache:totalL1CacheWriteHits:50754889
-TotalCache:totalL1CacheWriteMisses:75097
-TotalCache:totalL2CacheExclusiveReadHits:75091
-TotalCache:totalL2CacheExclusiveReadMisses:75097
-TotalCache:totalL2CacheSharedReadHits:596766
-TotalCache:totalL2CacheSharedReadMisses:91151
+TotalCache:totalL1CacheSharedReadMisses:593917
+TotalCache:totalL1CacheWriteHits:50754892
+TotalCache:totalL1CacheWriteMisses:32866
+TotalCache:totalL2CacheExclusiveReadHits:32861
+TotalCache:totalL2CacheExclusiveReadMisses:32866
+TotalCache:totalL2CacheSharedReadHits:593917
+TotalCache:totalL2CacheSharedReadMisses:91142
 TotalCache:totalL2CacheWriteHits:0
 TotalCache:totalL2CacheWriteMisses:0
-TotalCache:totalCacheExclusiveReadHits:75091
-TotalCache:totalCacheExclusiveReadMisses:75097
-TotalCache:totalCacheSharedReadHits:104228718
-TotalCache:totalCacheSharedReadMisses:687916
-TotalCache:totalCacheWriteHits:50754889
-TotalCache:totalCacheWriteMisses:75097
+TotalCache:totalCacheExclusiveReadHits:32861
+TotalCache:totalCacheExclusiveReadMisses:32866
+TotalCache:totalCacheSharedReadHits:104225869
+TotalCache:totalCacheSharedReadMisses:685059
+TotalCache:totalCacheWriteHits:50754892
+TotalCache:totalCacheWriteMisses:32866
 
 EndGroup #
