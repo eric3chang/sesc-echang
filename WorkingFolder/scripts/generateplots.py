@@ -397,15 +397,15 @@ def main():
     benchmarks = ['newtest']
     #benchmarks = ['fft', 'cholesky', 'ocean', 'radix']
     #dirtypes = ['bip', 'directory', 'origin']
-    dirtypes = ['bip', 'origin']
-    #dirtypes = ['bip']
+    #dirtypes = ['bip', 'origin']
+    dirtypes = ['origin']
     #cacheType = 'mesi'
     #cacheType = ''
     cpu = '32'
     mincpu = '4'
     maxcpu = '32'
     minl1 = '1'
-    maxl1 = '128'
+    maxl1 = '2'
     l1 = '1'
     l2 = '1024'
     isNormalize = False
@@ -413,13 +413,13 @@ def main():
 
     l1Index = int(minl1)
     while (l1Index <= int(maxl1)):
-        #plotCpuTimeMultiple(benchmarks, dirtypes, mincpu, maxcpu,str(l1Index),l2,isSaveFigure,isNormalize)
+        plotCpuTimeMultiple(benchmarks, dirtypes, mincpu, maxcpu,str(l1Index),l2,isSaveFigure,isNormalize)
         #plotCpuMessagesMultiple(benchmarks, dirtypes, mincpu, maxcpu,l1,l2,isSaveFigure,isNormalize)
         #plotCpuLatencyMultiple(benchmarks, dirtypes, mincpu, maxcpu,l1,l2,isSaveFigure,isNormalize)
         l1Index *= 2
     cpuIndex = int(mincpu)
     while (cpuIndex <= int(maxcpu)):
-        plotL1TimeMultiple(benchmarks, dirtypes, cpu, minl1, maxl1, l2, isSaveFigure,isNormalize)
+        #plotL1TimeMultiple(benchmarks, dirtypes, cpu, minl1, maxl1, l2, isSaveFigure,isNormalize)
         #plotL1MessagesMultiple(benchmarks, dirtypes, mincpu, minl1, maxl1, l2, isSaveFigure,isNormalize)
         #plotL1LatencyMultiple(benchmarks, dirtypes, mincpu, minl1, maxl1, l2, isSaveFigure,isNormalize)
         cpuIndex *= 2
