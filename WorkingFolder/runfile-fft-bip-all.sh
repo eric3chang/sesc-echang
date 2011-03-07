@@ -1,7 +1,7 @@
 #!/bin/bash
 DATE=$(date "+%m%d%H%M")
 HOSTNAME=$(hostname)
-AUGSESC=augSesc-Debug
+AUGSESC=augSesc-Release
 
 nice -10 ./$AUGSESC -cconfigs/workFile/fft-bip-2-1-1024.conf -dconfigs/workFile/fft-bip-2-1-1024.conf.report benchmarks-splash2-sesc/fft.mips -m12 -p2 -n65536 -l4 -t &> console-outputs/fft-bip-2-1-1024.$DATE.$HOSTNAME
 nice -10 ./$AUGSESC -cconfigs/workFile/fft-bip-2-2-1024.conf -dconfigs/workFile/fft-bip-2-2-1024.conf.report benchmarks-splash2-sesc/fft.mips -m12 -p2 -n65536 -l4 -t &> console-outputs/fft-bip-2-2-1024.$DATE.$HOSTNAME
