@@ -1,7 +1,7 @@
 #!/bin/bash
 DATE=$(date "+%m%d%H%M")
 HOSTNAME=$(hostname)
-AUGSESC=augSesc-Debug
+AUGSESC=augSesc-Release
 
 nice -10 ./$AUGSESC -cconfigs/workFile/lu-origin-2-1-1024.conf -dconfigs/workFile/lu-origin-2-1-1024.conf.report benchmarks-splash2-sesc/lu.mips -n512 -p2 -b16 -t &> console-outputs/lu-origin-2-1-1024.$DATE.$HOSTNAME
 nice -10 ./$AUGSESC -cconfigs/workFile/lu-origin-2-2-1024.conf -dconfigs/workFile/lu-origin-2-2-1024.conf.report benchmarks-splash2-sesc/lu.mips -n512 -p2 -b16 -t &> console-outputs/lu-origin-2-2-1024.$DATE.$HOSTNAME
