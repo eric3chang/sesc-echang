@@ -14,7 +14,8 @@ COMBINED_OUT='runfile-all'
 EXE_EXT='.mips'
 OUT_EXT='.sh'
 OUT_PRE='runfile-'
-HEADER='#!/bin/bash\nDATE=$(date "+%m%d%H%M")\nHOSTNAME=$(hostname)\nAUGSESC='+AUGSESC+'\n\n'
+HEADER1='#!/bin/bash\n\n'
+HEADER2='#!/bin/bash\nDATE=$(date "+%m%d%H%M")\nHOSTNAME=$(hostname)\nAUGSESC='+AUGSESC+'\n\n'
 STRING1='nice -10 ./$AUGSESC -cconfigs/workFile/'
 STRING2='.conf -dconfigs/workFile/'
 STRING3='.conf.report benchmarks-splash2-sesc/'
@@ -42,8 +43,8 @@ OCEAN_PARAMS_PRE='-n130 -p'
 #OCEAN_PARAMS_PRE='-n6 -p'
 OCEAN_PARAMS_POST=' -e1e-7 -r20000.0 -t28800.0'
 RADIX_PARAMS_PRE='-p'
-#RADIX_PARAMS_POST=' -n262144 -r1024 -m524288'
-RADIX_PARAMS_POST=' -n524288 -r1024 -m524288'
+RADIX_PARAMS_POST=' -n262144 -r1024 -m524288'
+#RADIX_PARAMS_POST=' -n524288 -r1024 -m524288'
 RAYTRACE_PARAMS_PRE='-p'
 RAYTRACE_PARAMS_POST=' benchmarks-splash2-sesc/raytrace-inputs/balls4.env'
 
@@ -113,7 +114,7 @@ processorCountHi, L1Low, L1Hi, L2Low, L2Hi):
     # start inputting data
     outputString = ''
     #outputString = generateOneRunfile(benchmarkName, directoryType, processorCountLow, L1Low, '4096')
-    outFile.write(HEADER)
+    outFile.write(HEADER2)
 
     processorIndex = processorCountLowInt
     while (processorIndex <= processorCountHiInt):
@@ -135,9 +136,9 @@ processorCountHi, L1Low, L1Hi, L2Low, L2Hi):
 
 def main():
     #benchmarkNames = ['barnes', 'cholesky', 'fft', 'fmm', 'lu','newtest', 'radix', 'raytrace', 'ocean']
-    #benchmarkNames = ['barnes', 'cholesky', 'fft', 'lu','newtest', 'radix', 'raytrace', 'ocean']
+    benchmarkNames = ['cholesky', 'fft', 'lu','newtest', 'radix', 'raytrace', 'ocean']
     #benchmarkNames = ['cholesky', 'fft', 'radix', 'ocean']
-    benchmarkNames = ['newtest']
+    #benchmarkNames = ['newtest']
     directoryTypes = ['bip', 'origin']
     processorCountLow = '2'
     #processorCountLow = '4'
@@ -152,7 +153,7 @@ def main():
 
     combinedOutfilename = OUT_DIR+COMBINED_OUT+OUT_EXT
     combinedOutfile = open(combinedOutfilename, 'wb')
-    combinedOutfile.write(HEADER)
+    combinedOutfile.write(HEADER1)
 
     #generateMultipleRunfiles(benchmarkName, directoryType, processorCountLow,\
         #processorCountHi, L1Low, L1Hi, L2Low)
