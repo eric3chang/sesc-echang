@@ -6,6 +6,7 @@ add_library (Devices
    MSICache.cpp
    MESICache.cpp
    MOESICache.cpp
+   BIPMOESICache.cpp
    NetworkMemoryInterface.cpp
    RandomLoadNetwork.cpp
    SESCProcessorInterface.cpp

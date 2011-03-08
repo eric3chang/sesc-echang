@@ -68,7 +68,7 @@ namespace Memory
 		m->isDirectory = false;
 		m->directoryLookup = false;
 		//m->isMemory = false;
-		//m->originalRequestingNode = InvalidNodeID;
+		m->originalRequestingNode = InvalidNodeID;
 		m->onCompletedCallback = NULL;
 	}
 
@@ -103,6 +103,13 @@ namespace Memory
 		bnm->addr = rm->addr;
 		bnm->size = rm->size;
 		bnm->solicitingMessage = rm->MsgID();
+	}
+
+	void EventManager::InitializeBaseNakMsg(BaseNakMsg* copy, const ReadResponseMsg* original)
+	{
+		copy->addr = original->addr;
+		copy->size = original->size;
+		copy->solicitingMessage = original->MsgID();
 	}
 
 	void EventManager::InitializeEvictionMsg(EvictionMsg* copy, const EvictionMsg* original)

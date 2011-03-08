@@ -33,7 +33,7 @@ namespace Memory
 	   */
 	   static int convertNodeIDToDeviceID(NodeID myNodeID)
 	   {
-	      return(myNodeID*4 + 7);
+	      return(myNodeID*5 + 5);
 	   }
 
 		Address GeneratingPC() const

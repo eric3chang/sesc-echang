@@ -18,7 +18,7 @@ namespace Memory
 		bool alreadyHasBlock;
 		bool directoryLookup;
 		//bool isMemory;
-		//NodeID originalRequestingNode;
+		NodeID originalRequestingNode;
 
 		StoredFunctionBase* onCompletedCallback;
 
@@ -41,7 +41,7 @@ namespace Memory
 		         << " hasBlk=" << alreadyHasBlock
 		         << " dirLook=" << directoryLookup
 		         //<< " mem=" << isMemory
-               //<< " ogReqNode=" << BaseMsg::convertNodeIDToDeviceID(originalRequestingNode)
+               << " ogReqNode=" << BaseMsg::convertNodeIDToDeviceID(originalRequestingNode)
 		   ;
 		}
 	};

@@ -1,24 +1,24 @@
 Group string ReportFileName results/newtest-bip-16-8-1024.memDevResults string BenchName newtest
 
 DateTime
-DateTime:DateTime:03061917
+DateTime:DateTime:03080157
 
 TotalRunTime
-TotalRunTime:TotalRunTime:315346
+TotalRunTime:TotalRunTime:103452
 
 Network
-Network:TotalMessagesReceived:5422
-Network:AverageLatency:161.649
+Network:TotalMessagesReceived:3716
+Network:AverageLatency:158.055
 
 ProcessorInterface_0
-ProcessorInterface_0:readCount:377
+ProcessorInterface_0:readCount:375
 ProcessorInterface_0:writeCount:236
-ProcessorInterface_0:totalOperations:613
+ProcessorInterface_0:totalOperations:611
 
 L1_0
-L1_0:messagesReceived:647
+L1_0:messagesReceived:645
 L1_0:exclusiveReadHits:0
-L1_0:sharedReadHits:377
+L1_0:sharedReadHits:375
 L1_0:exclusiveReadMisses:0
 L1_0:sharedReadMisses:20
 L1_0:writeHits:236
@@ -40,8 +40,8 @@ BIPDirectory_0:lookupRetryTime:60
 BIPDirectory_0:lookupTime:4
 BIPDirectory_0:satisfyTime:4
 BIPDirectory_0:nodeID:0
-BIPDirectory_0:TotalMessagesReceived:2773
-BIPDirectory_0:directoryRequestsReceived:2068
+BIPDirectory_0:TotalMessagesReceived:1920
+BIPDirectory_0:directoryRequestsReceived:1576
 BIPDirectory_0:directoryResponsesReceived:33
 BIPDirectory_0:localEvictionsReceived:0
 BIPDirectory_0:localInvalidateResponsesReceived:0
@@ -53,7 +53,7 @@ BIPDirectory_0:remoteEvictionResponsesReceived:0
 BIPDirectory_0:remoteInvalidatesReceived:0
 BIPDirectory_0:remoteInvalidateResponsesReceived:76
 BIPDirectory_0:remoteReadsReceived:1
-BIPDirectory_0:remoteReadResponsesReceived:360
+BIPDirectory_0:remoteReadResponsesReceived:114
 BIPDirectory_0:remoteWritesReceived:0
 BIPDirectory_0:remoteWriteResponsesReceived:15
 
@@ -63,17 +63,17 @@ MainMemory_0:ReadsReceived:40
 MainMemory_0:WritessReceived:15
 
 ProcessorInterface_1
-ProcessorInterface_1:readCount:35713
-ProcessorInterface_1:writeCount:14290
-ProcessorInterface_1:totalOperations:50003
+ProcessorInterface_1:readCount:11428
+ProcessorInterface_1:writeCount:4576
+ProcessorInterface_1:totalOperations:16004
 
 L1_1
-L1_1:messagesReceived:50016
+L1_1:messagesReceived:16017
 L1_1:exclusiveReadHits:0
-L1_1:sharedReadHits:35713
+L1_1:sharedReadHits:11428
 L1_1:exclusiveReadMisses:0
 L1_1:sharedReadMisses:7
-L1_1:writeHits:14290
+L1_1:writeHits:4576
 L1_1:writeMisses:1
 
 L2_1
@@ -115,17 +115,17 @@ MainMemory_1:ReadsReceived:2
 MainMemory_1:WritessReceived:0
 
 ProcessorInterface_2
-ProcessorInterface_2:readCount:35713
-ProcessorInterface_2:writeCount:14289
-ProcessorInterface_2:totalOperations:50002
+ProcessorInterface_2:readCount:11428
+ProcessorInterface_2:writeCount:4575
+ProcessorInterface_2:totalOperations:16003
 
 L1_2
-L1_2:messagesReceived:50019
+L1_2:messagesReceived:16020
 L1_2:exclusiveReadHits:0
-L1_2:sharedReadHits:35713
+L1_2:sharedReadHits:11428
 L1_2:exclusiveReadMisses:0
 L1_2:sharedReadMisses:3
-L1_2:writeHits:14289
+L1_2:writeHits:4575
 L1_2:writeMisses:5
 
 L2_2
@@ -167,17 +167,17 @@ MainMemory_2:ReadsReceived:2
 MainMemory_2:WritessReceived:0
 
 ProcessorInterface_3
-ProcessorInterface_3:readCount:35713
-ProcessorInterface_3:writeCount:14290
-ProcessorInterface_3:totalOperations:50003
+ProcessorInterface_3:readCount:11428
+ProcessorInterface_3:writeCount:4576
+ProcessorInterface_3:totalOperations:16004
 
 L1_3
-L1_3:messagesReceived:50022
+L1_3:messagesReceived:16023
 L1_3:exclusiveReadHits:0
-L1_3:sharedReadHits:35713
+L1_3:sharedReadHits:11428
 L1_3:exclusiveReadMisses:0
 L1_3:sharedReadMisses:10
-L1_3:writeHits:14290
+L1_3:writeHits:4576
 L1_3:writeMisses:1
 
 L2_3
@@ -219,17 +219,17 @@ MainMemory_3:ReadsReceived:2
 MainMemory_3:WritessReceived:0
 
 ProcessorInterface_4
-ProcessorInterface_4:readCount:35713
-ProcessorInterface_4:writeCount:14289
-ProcessorInterface_4:totalOperations:50002
+ProcessorInterface_4:readCount:11428
+ProcessorInterface_4:writeCount:4575
+ProcessorInterface_4:totalOperations:16003
 
 L1_4
-L1_4:messagesReceived:50007
+L1_4:messagesReceived:16008
 L1_4:exclusiveReadHits:0
-L1_4:sharedReadHits:35713
+L1_4:sharedReadHits:11428
 L1_4:exclusiveReadMisses:0
 L1_4:sharedReadMisses:2
-L1_4:writeHits:14289
+L1_4:writeHits:4575
 L1_4:writeMisses:2
 
 L2_4
@@ -271,17 +271,17 @@ MainMemory_4:ReadsReceived:2
 MainMemory_4:WritessReceived:0
 
 ProcessorInterface_5
-ProcessorInterface_5:readCount:35713
-ProcessorInterface_5:writeCount:14290
-ProcessorInterface_5:totalOperations:50003
+ProcessorInterface_5:readCount:11428
+ProcessorInterface_5:writeCount:4576
+ProcessorInterface_5:totalOperations:16004
 
 L1_5
-L1_5:messagesReceived:50020
+L1_5:messagesReceived:16021
 L1_5:exclusiveReadHits:0
-L1_5:sharedReadHits:35713
+L1_5:sharedReadHits:11428
 L1_5:exclusiveReadMisses:0
 L1_5:sharedReadMisses:9
-L1_5:writeHits:14290
+L1_5:writeHits:4576
 L1_5:writeMisses:1
 
 L2_5
@@ -323,25 +323,25 @@ MainMemory_5:ReadsReceived:3
 MainMemory_5:WritessReceived:0
 
 ProcessorInterface_6
-ProcessorInterface_6:readCount:35713
-ProcessorInterface_6:writeCount:14289
-ProcessorInterface_6:totalOperations:50002
+ProcessorInterface_6:readCount:11428
+ProcessorInterface_6:writeCount:4575
+ProcessorInterface_6:totalOperations:16003
 
 L1_6
-L1_6:messagesReceived:50332
+L1_6:messagesReceived:16087
 L1_6:exclusiveReadHits:0
-L1_6:sharedReadHits:35713
+L1_6:sharedReadHits:11428
 L1_6:exclusiveReadMisses:0
-L1_6:sharedReadMisses:89
-L1_6:writeHits:14289
-L1_6:writeMisses:76
+L1_6:sharedReadMisses:34
+L1_6:writeHits:4575
+L1_6:writeMisses:8
 
 L2_6
-L2_6:messagesReceived:660
-L2_6:exclusiveReadHits:76
-L2_6:sharedReadHits:94
-L2_6:exclusiveReadMisses:76
-L2_6:sharedReadMisses:89
+L2_6:messagesReceived:168
+L2_6:exclusiveReadHits:8
+L2_6:sharedReadHits:39
+L2_6:exclusiveReadMisses:8
+L2_6:sharedReadMisses:34
 L2_6:writeHits:0
 L2_6:writeMisses:0
 
@@ -352,19 +352,19 @@ BIPDirectory_6:lookupRetryTime:60
 BIPDirectory_6:lookupTime:4
 BIPDirectory_6:satisfyTime:4
 BIPDirectory_6:nodeID:6
-BIPDirectory_6:TotalMessagesReceived:1097
+BIPDirectory_6:TotalMessagesReceived:423
 BIPDirectory_6:directoryRequestsReceived:5
-BIPDirectory_6:directoryResponsesReceived:531
+BIPDirectory_6:directoryResponsesReceived:285
 BIPDirectory_6:localEvictionsReceived:0
 BIPDirectory_6:localInvalidateResponsesReceived:7
-BIPDirectory_6:localReadsReceived:531
-BIPDirectory_6:localReadResponsesReceived:153
+BIPDirectory_6:localReadsReceived:285
+BIPDirectory_6:localReadResponsesReceived:30
 BIPDirectory_6:localWritesReceived:0
 BIPDirectory_6:remoteEvictionsReceived:0
 BIPDirectory_6:remoteEvictionResponsesReceived:0
 BIPDirectory_6:remoteInvalidatesReceived:7
 BIPDirectory_6:remoteInvalidateResponsesReceived:0
-BIPDirectory_6:remoteReadsReceived:219
+BIPDirectory_6:remoteReadsReceived:37
 BIPDirectory_6:remoteReadResponsesReceived:5
 BIPDirectory_6:remoteWritesReceived:0
 BIPDirectory_6:remoteWriteResponsesReceived:0
@@ -375,17 +375,17 @@ MainMemory_6:ReadsReceived:5
 MainMemory_6:WritessReceived:0
 
 ProcessorInterface_7
-ProcessorInterface_7:readCount:35713
-ProcessorInterface_7:writeCount:14290
-ProcessorInterface_7:totalOperations:50003
+ProcessorInterface_7:readCount:11428
+ProcessorInterface_7:writeCount:4576
+ProcessorInterface_7:totalOperations:16004
 
 L1_7
-L1_7:messagesReceived:50010
+L1_7:messagesReceived:16011
 L1_7:exclusiveReadHits:0
-L1_7:sharedReadHits:35713
+L1_7:sharedReadHits:11428
 L1_7:exclusiveReadMisses:0
 L1_7:sharedReadMisses:4
-L1_7:writeHits:14290
+L1_7:writeHits:4576
 L1_7:writeMisses:1
 
 L2_7
@@ -427,25 +427,25 @@ MainMemory_7:ReadsReceived:2
 MainMemory_7:WritessReceived:0
 
 ProcessorInterface_8
-ProcessorInterface_8:readCount:35713
-ProcessorInterface_8:writeCount:14289
-ProcessorInterface_8:totalOperations:50002
+ProcessorInterface_8:readCount:11428
+ProcessorInterface_8:writeCount:4575
+ProcessorInterface_8:totalOperations:16003
 
 L1_8
-L1_8:messagesReceived:50336
+L1_8:messagesReceived:16091
 L1_8:exclusiveReadHits:0
-L1_8:sharedReadHits:35713
+L1_8:sharedReadHits:11428
 L1_8:exclusiveReadMisses:0
-L1_8:sharedReadMisses:65
-L1_8:writeHits:14289
-L1_8:writeMisses:101
+L1_8:sharedReadMisses:6
+L1_8:writeHits:4575
+L1_8:writeMisses:37
 
 L2_8
-L2_8:messagesReceived:668
-L2_8:exclusiveReadHits:101
-L2_8:sharedReadHits:71
-L2_8:exclusiveReadMisses:101
-L2_8:sharedReadMisses:65
+L2_8:messagesReceived:176
+L2_8:exclusiveReadHits:37
+L2_8:sharedReadHits:12
+L2_8:exclusiveReadMisses:37
+L2_8:sharedReadMisses:6
 L2_8:writeHits:0
 L2_8:writeMisses:0
 
@@ -456,19 +456,19 @@ BIPDirectory_8:lookupRetryTime:60
 BIPDirectory_8:lookupTime:4
 BIPDirectory_8:satisfyTime:4
 BIPDirectory_8:nodeID:8
-BIPDirectory_8:TotalMessagesReceived:1110
+BIPDirectory_8:TotalMessagesReceived:439
 BIPDirectory_8:directoryRequestsReceived:2
-BIPDirectory_8:directoryResponsesReceived:518
+BIPDirectory_8:directoryResponsesReceived:272
 BIPDirectory_8:localEvictionsReceived:0
 BIPDirectory_8:localInvalidateResponsesReceived:9
-BIPDirectory_8:localReadsReceived:518
-BIPDirectory_8:localReadResponsesReceived:153
+BIPDirectory_8:localReadsReceived:272
+BIPDirectory_8:localReadResponsesReceived:30
 BIPDirectory_8:localWritesReceived:0
 BIPDirectory_8:remoteEvictionsReceived:0
 BIPDirectory_8:remoteEvictionResponsesReceived:0
 BIPDirectory_8:remoteInvalidatesReceived:9
 BIPDirectory_8:remoteInvalidateResponsesReceived:0
-BIPDirectory_8:remoteReadsReceived:245
+BIPDirectory_8:remoteReadsReceived:66
 BIPDirectory_8:remoteReadResponsesReceived:2
 BIPDirectory_8:remoteWritesReceived:0
 BIPDirectory_8:remoteWriteResponsesReceived:0
@@ -479,17 +479,17 @@ MainMemory_8:ReadsReceived:2
 MainMemory_8:WritessReceived:0
 
 ProcessorInterface_9
-ProcessorInterface_9:readCount:35713
-ProcessorInterface_9:writeCount:14290
-ProcessorInterface_9:totalOperations:50003
+ProcessorInterface_9:readCount:11428
+ProcessorInterface_9:writeCount:4576
+ProcessorInterface_9:totalOperations:16004
 
 L1_9
-L1_9:messagesReceived:50014
+L1_9:messagesReceived:16015
 L1_9:exclusiveReadHits:0
-L1_9:sharedReadHits:35713
+L1_9:sharedReadHits:11428
 L1_9:exclusiveReadMisses:0
 L1_9:sharedReadMisses:6
-L1_9:writeHits:14290
+L1_9:writeHits:4576
 L1_9:writeMisses:1
 
 L2_9
@@ -531,17 +531,17 @@ MainMemory_9:ReadsReceived:1
 MainMemory_9:WritessReceived:0
 
 ProcessorInterface_10
-ProcessorInterface_10:readCount:35713
-ProcessorInterface_10:writeCount:14289
-ProcessorInterface_10:totalOperations:50002
+ProcessorInterface_10:readCount:11428
+ProcessorInterface_10:writeCount:4575
+ProcessorInterface_10:totalOperations:16003
 
 L1_10
-L1_10:messagesReceived:50027
+L1_10:messagesReceived:16028
 L1_10:exclusiveReadHits:0
-L1_10:sharedReadHits:35713
+L1_10:sharedReadHits:11428
 L1_10:exclusiveReadMisses:0
 L1_10:sharedReadMisses:4
-L1_10:writeHits:14289
+L1_10:writeHits:4575
 L1_10:writeMisses:7
 
 L2_10
@@ -583,17 +583,17 @@ MainMemory_10:ReadsReceived:1
 MainMemory_10:WritessReceived:0
 
 ProcessorInterface_11
-ProcessorInterface_11:readCount:35713
-ProcessorInterface_11:writeCount:14290
-ProcessorInterface_11:totalOperations:50003
+ProcessorInterface_11:readCount:11428
+ProcessorInterface_11:writeCount:4576
+ProcessorInterface_11:totalOperations:16004
 
 L1_11
-L1_11:messagesReceived:50030
+L1_11:messagesReceived:16031
 L1_11:exclusiveReadHits:0
-L1_11:sharedReadHits:35713
+L1_11:sharedReadHits:11428
 L1_11:exclusiveReadMisses:0
 L1_11:sharedReadMisses:14
-L1_11:writeHits:14290
+L1_11:writeHits:4576
 L1_11:writeMisses:1
 
 L2_11
@@ -635,17 +635,17 @@ MainMemory_11:ReadsReceived:1
 MainMemory_11:WritessReceived:0
 
 ProcessorInterface_12
-ProcessorInterface_12:readCount:35713
-ProcessorInterface_12:writeCount:14289
-ProcessorInterface_12:totalOperations:50002
+ProcessorInterface_12:readCount:11428
+ProcessorInterface_12:writeCount:4575
+ProcessorInterface_12:totalOperations:16003
 
 L1_12
-L1_12:messagesReceived:50028
+L1_12:messagesReceived:16029
 L1_12:exclusiveReadHits:0
-L1_12:sharedReadHits:35713
+L1_12:sharedReadHits:11428
 L1_12:exclusiveReadMisses:0
 L1_12:sharedReadMisses:5
-L1_12:writeHits:14289
+L1_12:writeHits:4575
 L1_12:writeMisses:7
 
 L2_12
@@ -687,17 +687,17 @@ MainMemory_12:ReadsReceived:2
 MainMemory_12:WritessReceived:0
 
 ProcessorInterface_13
-ProcessorInterface_13:readCount:35713
-ProcessorInterface_13:writeCount:14290
-ProcessorInterface_13:totalOperations:50003
+ProcessorInterface_13:readCount:11428
+ProcessorInterface_13:writeCount:4576
+ProcessorInterface_13:totalOperations:16004
 
 L1_13
-L1_13:messagesReceived:50012
+L1_13:messagesReceived:16013
 L1_13:exclusiveReadHits:0
-L1_13:sharedReadHits:35713
+L1_13:sharedReadHits:11428
 L1_13:exclusiveReadMisses:0
 L1_13:sharedReadMisses:5
-L1_13:writeHits:14290
+L1_13:writeHits:4576
 L1_13:writeMisses:1
 
 L2_13
@@ -739,17 +739,17 @@ MainMemory_13:ReadsReceived:1
 MainMemory_13:WritessReceived:0
 
 ProcessorInterface_14
-ProcessorInterface_14:readCount:35713
-ProcessorInterface_14:writeCount:14289
-ProcessorInterface_14:totalOperations:50002
+ProcessorInterface_14:readCount:11428
+ProcessorInterface_14:writeCount:4575
+ProcessorInterface_14:totalOperations:16003
 
 L1_14
-L1_14:messagesReceived:50030
+L1_14:messagesReceived:16031
 L1_14:exclusiveReadHits:0
-L1_14:sharedReadHits:35713
+L1_14:sharedReadHits:11428
 L1_14:exclusiveReadMisses:0
 L1_14:sharedReadMisses:5
-L1_14:writeHits:14289
+L1_14:writeHits:4575
 L1_14:writeMisses:8
 
 L2_14
@@ -845,21 +845,21 @@ MainMemory_15:WritessReceived:0
 TotalCache
 TotalCache:totalL1CacheExclusiveReadHits:0
 TotalCache:totalL1CacheExclusiveReadMisses:0
-TotalCache:totalL1CacheSharedReadHits:500359
-TotalCache:totalL1CacheSharedReadMisses:248
-TotalCache:totalL1CacheWriteHits:200289
-TotalCache:totalL1CacheWriteMisses:226
-TotalCache:totalL2CacheExclusiveReadHits:226
-TotalCache:totalL2CacheExclusiveReadMisses:226
-TotalCache:totalL2CacheSharedReadHits:280
-TotalCache:totalL2CacheSharedReadMisses:248
+TotalCache:totalL1CacheSharedReadHits:160367
+TotalCache:totalL1CacheSharedReadMisses:134
+TotalCache:totalL1CacheWriteHits:64293
+TotalCache:totalL1CacheWriteMisses:94
+TotalCache:totalL2CacheExclusiveReadHits:94
+TotalCache:totalL2CacheExclusiveReadMisses:94
+TotalCache:totalL2CacheSharedReadHits:166
+TotalCache:totalL2CacheSharedReadMisses:134
 TotalCache:totalL2CacheWriteHits:0
 TotalCache:totalL2CacheWriteMisses:0
-TotalCache:totalCacheExclusiveReadHits:226
-TotalCache:totalCacheExclusiveReadMisses:226
-TotalCache:totalCacheSharedReadHits:500639
-TotalCache:totalCacheSharedReadMisses:496
-TotalCache:totalCacheWriteHits:200289
-TotalCache:totalCacheWriteMisses:226
+TotalCache:totalCacheExclusiveReadHits:94
+TotalCache:totalCacheExclusiveReadMisses:94
+TotalCache:totalCacheSharedReadHits:160533
+TotalCache:totalCacheSharedReadMisses:268
+TotalCache:totalCacheWriteHits:64293
+TotalCache:totalCacheWriteMisses:94
 
 EndGroup #

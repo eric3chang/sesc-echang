@@ -1,9 +1,9 @@
 // toggles debug output
-//#define MEMORY_MOESI_CACHE_DEBUG_VERBOSE
-//#define MEMORY_MOESI_CACHE_DEBUG_PENDING_EVICTION
-//#define MEMORY_MOESI_CACHE_DEBUG_PENDING_INVALIDATE
+//#define MEMORY_BIPMOESI_CACHE_DEBUG_VERBOSE
+//#define MEMORY_BIPMOESI_CACHE_DEBUG_PENDING_EVICTION
+//#define MEMORY_BIPMOESI_CACHE_DEBUG_PENDING_INVALIDATE
 
-#include "MOESICache.h"
+#include "BIPMOESICache.h"
 #include "../Messages/AllMessageTypes.h"
 #include "../EventManager.h"
 #include "../Connection.h"
@@ -15,7 +15,7 @@
 
 namespace Memory
 {
-	int MOESICache::RandomEvictionPolicy::Evict(Memory::MOESICache::BlockState *set, int setSize)
+	int BIPMOESICache::RandomEvictionPolicy::Evict(Memory::BIPMOESICache::BlockState *set, int setSize)
 	{
 		DebugAssert(setSize > 0);
 		int validCount = 0;
@@ -42,10 +42,10 @@ namespace Memory
 				index--;
 			}
 		}
-		DebugFail("Strange indexing problem in Random Eviction [MOESI]");
+		DebugFail("Strange indexing problem in Random Eviction [BIPMOESI]");
 		return InvalidBlock;
 	}
-	int MOESICache::LRUEvictionPolicy::Evict(Memory::MOESICache::BlockState *set, int setSize)
+	int BIPMOESICache::LRUEvictionPolicy::Evict(Memory::BIPMOESICache::BlockState *set, int setSize)
 	{
 		DebugAssert(setSize > 0);
 		DebugAssert(set);
@@ -54,7 +54,7 @@ namespace Memory
 		int validCount = 0;
 		for(int i = 0; i < setSize; i++)
 		{
-			Memory::MOESICache::BlockState& tempSet = set[i];
+			Memory::BIPMOESICache::BlockState& tempSet = set[i];
 			if(set[i].valid && set[i].state != bs_Invalid && !set[i].locked)
 			{
 				TickTime t = std::max(set[i].lastWrite,set[i].lastRead);
@@ -73,37 +73,37 @@ namespace Memory
 		DebugAssert(index != InvalidBlock);
 		return index;
 	}
-	MOESICache::BlockState* MOESICache::GetSet(int i)
+	BIPMOESICache::BlockState* BIPMOESICache::GetSet(int i)
 	{
 		DebugAssert(i >= 0 && i < setCount);
       BlockState *myBlockState = &(cacheContents[i * associativity]);
       return myBlockState;
 	}
-	unsigned int MOESICache::getExclusiveReadHits()
+	unsigned int BIPMOESICache::getExclusiveReadHits()
 	{
 		return exclusiveReadHits;
 	}
-	unsigned int MOESICache::getExclusiveReadMisses()
+	unsigned int BIPMOESICache::getExclusiveReadMisses()
 	{
 		return exclusiveReadMisses;
 	}
-	unsigned int MOESICache::getSharedReadHits()
+	unsigned int BIPMOESICache::getSharedReadHits()
 	{
 		return sharedReadHits;
 	}
-	unsigned int MOESICache::getSharedReadMisses()
+	unsigned int BIPMOESICache::getSharedReadMisses()
 	{
 		return sharedReadMisses;
 	}
-	unsigned int MOESICache::getWriteHits()
+	unsigned int BIPMOESICache::getWriteHits()
 	{
 		return writeHits;
 	}
-	unsigned int MOESICache::getWriteMisses()
+	unsigned int BIPMOESICache::getWriteMisses()
 	{
 		return writeMisses;
 	}
-	void MOESICache::InvalidateBlock(MOESICache::BlockState& block)
+	void BIPMOESICache::InvalidateBlock(BIPMOESICache::BlockState& block)
 	{
 		DebugAssert(waitingOnBlockUnlock.find(block.tag) == waitingOnBlockUnlock.end());
 		block.tag = 0;
@@ -113,23 +113,23 @@ namespace Memory
 		block.valid = false;
 		block.locked = false;
 	}
-	MOESICache::AddrTag MOESICache::CalcTag(Address addr)
+	BIPMOESICache::AddrTag BIPMOESICache::CalcTag(Address addr)
 	{
 		return (AddrTag)(addr / lineSize);
 	}
-	Address MOESICache::CalcAddr(MOESICache::AddrTag tag)
+	Address BIPMOESICache::CalcAddr(BIPMOESICache::AddrTag tag)
 	{
 		return (Address)(tag * lineSize);
 	}
-	int MOESICache::CalcSetFromAddr(Address addr)
+	int BIPMOESICache::CalcSetFromAddr(Address addr)
 	{
 		return CalcSetFromTag(CalcTag(addr));
 	}
-	int MOESICache::CalcSetFromTag(MOESICache::AddrTag tag)
+	int BIPMOESICache::CalcSetFromTag(BIPMOESICache::AddrTag tag)
 	{
 		return (int)(tag % setCount);
 	}
-	MOESICache::BlockState* MOESICache::Lookup(MOESICache::AddrTag tag)
+	BIPMOESICache::BlockState* BIPMOESICache::Lookup(BIPMOESICache::AddrTag tag)
 	{
       int setIndex = CalcSetFromTag(tag);
 		BlockState* set = GetSet(setIndex);
@@ -151,7 +151,7 @@ namespace Memory
 	 * can be called as the result of a block not being found in cache
 	 * during a read from the CPU side (OnLocalRead)
 	 */
-	bool MOESICache::AllocateBlock(MOESICache::AddrTag tag)
+	bool BIPMOESICache::AllocateBlock(BIPMOESICache::AddrTag tag)
 	{
 		BlockState* set = GetSet(CalcSetFromTag(tag));
 		DebugAssert(set);
@@ -177,7 +177,7 @@ namespace Memory
          }
          else
          {
-			#ifdef MEMORY_MOESI_CACHE_DEBUG_PENDING_EVICTION
+			#ifdef MEMORY_BIPMOESI_CACHE_DEBUG_PENDING_EVICTION
 				PrintDebugInfo("AllocateBlock",set[eviction].tag,"pendingEviction.insert");
 			#endif
             DebugAssert(pendingEviction.find(set[eviction].tag) == pendingEviction.end());
@@ -198,7 +198,7 @@ namespace Memory
          return true;
 		}
 	}
-	void MOESICache::EvictBlock(MOESICache::AddrTag tag)
+	void BIPMOESICache::EvictBlock(BIPMOESICache::AddrTag tag)
 	{
 		BlockState* b = Lookup(tag);
 		DebugAssert(b != NULL);
@@ -214,7 +214,7 @@ namespace Memory
 		DebugAssert(remoteConnection);
 		remoteConnection->SendMsg(m,evictionTime);
 	}
-	void MOESICache::LockBlock(MOESICache::AddrTag tag)
+	void BIPMOESICache::LockBlock(BIPMOESICache::AddrTag tag)
 	{
 		BlockState* b = Lookup(tag);
 		DebugAssert(b);
@@ -223,7 +223,7 @@ namespace Memory
 		DebugAssert(waitingOnBlockUnlock.find(tag) == waitingOnBlockUnlock.end());
 		b->locked = true;
 	}
-	void MOESICache::UnlockBlock(MOESICache::AddrTag tag)
+	void BIPMOESICache::UnlockBlock(BIPMOESICache::AddrTag tag)
 	{
 		BlockState* b = Lookup(tag);
 		DebugAssert(b);
@@ -246,7 +246,7 @@ namespace Memory
 			}
 		}
 	}
-	void MOESICache::PrepareFreshBlock(int setNumber, int index, AddrTag tag)
+	void BIPMOESICache::PrepareFreshBlock(int setNumber, int index, AddrTag tag)
 	{
 		BlockState* mySet = GetSet(setNumber);
 		DebugAssert(mySet[index].locked == false);
@@ -265,7 +265,7 @@ namespace Memory
 		   canceledBlockEviction.insert(tag);
 
 			mySet[index] = pendingEviction[tag];
-		#ifdef MEMORY_MOESI_CACHE_DEBUG_PENDING_EVICTION
+		#ifdef MEMORY_BIPMOESI_CACHE_DEBUG_PENDING_EVICTION
 			PrintDebugInfo("PrepareFreshBlock",tag,"pendingEviction.erase");
 		#endif
 			pendingEviction.erase(tag);
@@ -273,7 +273,7 @@ namespace Memory
 		}
 		DebugAssert(mySet[index].locked == false);
 	}
-	void MOESICache::RespondInvalidate(MOESICache::AddrTag tag)
+	void BIPMOESICache::RespondInvalidate(BIPMOESICache::AddrTag tag)
 	{
 		DebugAssert(pendingInvalidate.find(tag) != pendingInvalidate.end())
 		BlockState* b = Lookup(tag);
@@ -292,7 +292,7 @@ namespace Memory
 		else if(b == NULL && pendingEviction.find(tag) != pendingEviction.end())
 		{
 			res->blockAttached = (pendingEviction[tag].state == bs_Modified) || (pendingEviction[tag].state == bs_Owned);
-		#ifdef MEMORY_MOESI_CACHE_DEBUG_PENDING_EVICTION
+		#ifdef MEMORY_BIPMOESI_CACHE_DEBUG_PENDING_EVICTION
 			PrintDebugInfo("RespondInvalidate",tag,"pendingEviction.erase");
 		#endif
 			pendingEviction.erase(tag);
@@ -320,12 +320,12 @@ namespace Memory
 			InvalidateBlock(*b);
 		}
 		EM().DisposeMsg(pendingInvalidate[tag]);
-	#ifdef MEMORY_MOESI_CACHE_DEBUG_PENDING_INVALIDATE
+	#ifdef MEMORY_BIPMOESI_CACHE_DEBUG_PENDING_INVALIDATE
 		PrintDebugInfo("RespondInvalidate",tag,"pendingInvalidate.erase");
 	#endif
 		pendingInvalidate.erase(tag);
 	}
-	void MOESICache::WaitOnBlockUnlock(MOESICache::AddrTag tag, StoredFunctionBase* f)
+	void BIPMOESICache::WaitOnBlockUnlock(BIPMOESICache::AddrTag tag, StoredFunctionBase* f)
 	{
 		DebugAssert(f);
 		if(waitingOnBlockUnlock.find(tag) != waitingOnBlockUnlock.end())
@@ -336,7 +336,7 @@ namespace Memory
 		}
 		waitingOnBlockUnlock[tag] = f;
 	}
-	void MOESICache::WaitOnRemoteReadResponse(MOESICache::AddrTag tag, StoredFunctionBase* f)
+	void BIPMOESICache::WaitOnRemoteReadResponse(BIPMOESICache::AddrTag tag, StoredFunctionBase* f)
 	{
 		DebugAssert(f);
 		if(waitingOnRemoteReads.find(tag) != waitingOnRemoteReads.end())
@@ -347,7 +347,7 @@ namespace Memory
 		}
 		waitingOnRemoteReads[tag] = f;
 	}
-	void MOESICache::WaitOnSetUnlock(int s, StoredFunctionBase* f)
+	void BIPMOESICache::WaitOnSetUnlock(int s, StoredFunctionBase* f)
 	{
 		DebugAssert(f);
 		if(waitingOnSetUnlock[s])
@@ -358,7 +358,7 @@ namespace Memory
 		}
 		waitingOnSetUnlock[s] = f;
 	}
-	void MOESICache::PerformRead(const ReadMsg* m)
+	void BIPMOESICache::PerformRead(const ReadMsg* m)
 	{		
 		DebugAssertWithMessageID(m,m->MsgID());
 		AddrTag tag = CalcTag(m->addr);
@@ -412,7 +412,7 @@ namespace Memory
 		}
 		b->lastRead = EM().CurrentTick();
 	}
-	void MOESICache::PerformRemoteRead(const ReadMsg* m)
+	void BIPMOESICache::PerformRemoteRead(const ReadMsg* m)
 	{
 		DebugAssertWithMessageID(m,m->MsgID());
 		AddrTag tag = CalcTag(m->addr);
@@ -463,7 +463,7 @@ namespace Memory
 		remoteConnection->SendMsg(res,hitTime);
 		EM().DisposeMsg(m);
 	}
-	void MOESICache::PerformWrite(const WriteMsg* m)
+	void BIPMOESICache::PerformWrite(const WriteMsg* m)
 	{
 		DebugAssertWithMessageID(m,m->MsgID());
 		AddrTag tag = CalcTag(m->addr);
@@ -501,11 +501,11 @@ namespace Memory
 		}
 		b->lastWrite = EM().CurrentTick();
 	}
-	void MOESICache::RetryMsg(const BaseMsg* m, int connectionID)
+	void BIPMOESICache::RetryMsg(const BaseMsg* m, int connectionID)
 	{
 		RecvMsg(m,connectionID);
 	}
-	void MOESICache::OnLocalRead(const ReadMsg* m)
+	void BIPMOESICache::OnLocalRead(const ReadMsg* m)
 	{
 		DebugAssertWithMessageID(m,m->MsgID());
 		AddrTag tag = CalcTag(m->addr);
@@ -529,7 +529,7 @@ namespace Memory
 			}
 		}
 	}
-	void MOESICache::OnRemoteRead(const ReadMsg* m)
+	void BIPMOESICache::OnRemoteRead(const ReadMsg* m)
 	{
 		DebugAssertWithMessageID(m,m->MsgID());
 		AddrTag tag = CalcTag(m->addr);
@@ -559,7 +559,7 @@ namespace Memory
 			PerformRemoteRead(m);
 		}
 	}
-	void MOESICache::OnLocalWrite(const WriteMsg* m)
+	void BIPMOESICache::OnLocalWrite(const WriteMsg* m)
 	{
 		DebugAssertWithMessageID(m,m->MsgID());
 		AddrTag tag = CalcTag(m->addr);
@@ -582,7 +582,7 @@ namespace Memory
 			}
 		}
 	}
-	void MOESICache::OnRemoteWrite(const WriteMsg* m)
+	void BIPMOESICache::OnRemoteWrite(const WriteMsg* m)
 	{
 		WriteResponseMsg* res = EM().CreateWriteResponseMsg(GetDeviceID(),m->GeneratingPC());
 		res->addr = m->addr;
@@ -592,12 +592,12 @@ namespace Memory
 		remoteConnection->SendMsg(res,satisfyRequestTime);
 		EM().DisposeMsg(m);
 	}
-	void MOESICache::OnLocalInvalidate(const InvalidateMsg* m)
+	void BIPMOESICache::OnLocalInvalidate(const InvalidateMsg* m)
 	{
 		EM().DisposeMsg(m);
 		DebugFail("Local Invalidates illegal in this cache");
 	}
-	void MOESICache::OnRemoteInvalidate(const InvalidateMsg* m)
+	void BIPMOESICache::OnRemoteInvalidate(const InvalidateMsg* m)
 	{
 		DebugAssertWithMessageID(m,m->MsgID());
 		AddrTag tag = CalcTag(m->addr);
@@ -608,7 +608,7 @@ namespace Memory
 		}
 		else
 		{
-#ifdef MEMORY_MOESI_CACHE_DEBUG_PENDING_INVALIDATE
+#ifdef MEMORY_BIPMOESI_CACHE_DEBUG_PENDING_INVALIDATE
 		   PrintDebugInfo("OnRemoteInvalidate",*m,
 		         ("pendingInvalidate.insert(" + to_string<AddrTag>(tag)+")").c_str());
 #endif
@@ -629,7 +629,7 @@ namespace Memory
 			RespondInvalidate(tag);
 		}
 	}
-	void MOESICache::OnLocalEviction(const EvictionMsg* m)
+	void BIPMOESICache::OnLocalEviction(const EvictionMsg* m)
 	{
 		DebugAssertWithMessageID(m,m->MsgID());
 		AddrTag tag = CalcTag(m->addr);
@@ -652,7 +652,7 @@ namespace Memory
 		localConnection->SendMsg(res,hitTime);
 		EM().DisposeMsg(m);
 	}
-	void MOESICache::OnRemoteEviction(const EvictionMsg* m)
+	void BIPMOESICache::OnRemoteEviction(const EvictionMsg* m)
 	{
 		DebugAssertWithMessageID(m,m->MsgID());
 		EvictionResponseMsg* res = EM().CreateEvictionResponseMsg(GetDeviceID(),m->GeneratingPC());
@@ -662,7 +662,7 @@ namespace Memory
 		remoteConnection->SendMsg(res,hitTime);
 		EM().DisposeMsg(m);
 	}
-	void MOESICache::OnLocalReadResponse(const ReadResponseMsg* m)
+	void BIPMOESICache::OnLocalReadResponse(const ReadResponseMsg* m)
 	{
 		DebugAssertWithMessageID(m,m->MsgID());
 		AddrTag tag = CalcTag(m->addr);
@@ -674,7 +674,7 @@ namespace Memory
 		}
 		EM().DisposeMsg(m);
 	}
-	void MOESICache::OnRemoteReadResponse(const ReadResponseMsg* m)
+	void BIPMOESICache::OnRemoteReadResponse(const ReadResponseMsg* m)
 	{
 		DebugAssertWithMessageID(m,m->MsgID());
 		AddrTag tag = CalcTag(m->addr);
@@ -698,6 +698,17 @@ namespace Memory
    */
 		if(b == NULL || !b->locked)
 		{
+         //BlockState &bs = pendingEviction[m->addr];
+         // send eviction message because this block is not found in the cache
+         EvictionMsg *forward = EM().CreateEvictionMsg(GetDeviceID());
+         forward->addr = m->addr;
+         //DebugAssertWithMessageID(m->blockAttached,m->MsgID());
+         forward->blockAttached = m->blockAttached;
+         forward->size = m->size;
+         //forward->isBlockNotFound = true;
+         //DebugAssertWithMessageID(pendingEviction.find(tag)==pendingEviction.end(),m->MsgID());
+         remoteConnection->SendMsg(forward,evictionTime);
+
 			EM().DisposeMsg(m);
 			return;
 		}
@@ -712,21 +723,18 @@ namespace Memory
 		UnlockBlock(tag);
 		EM().DisposeMsg(m);
 	}
-
-	void MOESICache::OnLocalWriteResponse(const WriteResponseMsg* m)
+	void BIPMOESICache::OnLocalWriteResponse(const WriteResponseMsg* m)
 	{
 		EM().DisposeMsg(m);
 		DebugFail("A Write should never have been emitted");
 	}
-
-	void MOESICache::OnRemoteWriteResponse(const WriteResponseMsg* m)
+	void BIPMOESICache::OnRemoteWriteResponse(const WriteResponseMsg* m)
 	{
 		EM().DisposeMsg(m);
 	}
-
-	void MOESICache::OnLocalInvalidateResponse(const InvalidateResponseMsg* m)
+	void BIPMOESICache::OnLocalInvalidateResponse(const InvalidateResponseMsg* m)
 	{
-#ifdef MEMORY_MOESI_CACHE_DEBUG_COMMON
+#ifdef MEMORY_BIPMOESI_CACHE_DEBUG_COMMON
    #ifdef _WIN32
          waitingOnBlockUnlock;
          waitingOnSetUnlock;
@@ -734,18 +742,18 @@ namespace Memory
          pendingEviction;
          pendingInvalidate;
    #else
-         #define MEMORY_MOESI_CACHE_ARRAY_SIZE 200
-         StoredFunctionBase* waitingOnBlockUnlockArray[MEMORY_MOESI_CACHE_ARRAY_SIZE];
-         StoredFunctionBase* waitingOnSetUnlockArray[MEMORY_MOESI_CACHE_ARRAY_SIZE];
-         StoredFunctionBase* waitingOnRemoteReadsArray[MEMORY_MOESI_CACHE_ARRAY_SIZE];
-         BlockState pendingEvictionArray[MEMORY_MOESI_CACHE_ARRAY_SIZE];
-         const InvalidateMsg* pendingInvalidateArray[MEMORY_MOESI_CACHE_ARRAY_SIZE];
+         #define MEMORY_BIPMOESI_CACHE_ARRAY_SIZE 200
+         StoredFunctionBase* waitingOnBlockUnlockArray[MEMORY_BIPMOESI_CACHE_ARRAY_SIZE];
+         StoredFunctionBase* waitingOnSetUnlockArray[MEMORY_BIPMOESI_CACHE_ARRAY_SIZE];
+         StoredFunctionBase* waitingOnRemoteReadsArray[MEMORY_BIPMOESI_CACHE_ARRAY_SIZE];
+         BlockState pendingEvictionArray[MEMORY_BIPMOESI_CACHE_ARRAY_SIZE];
+         const InvalidateMsg* pendingInvalidateArray[MEMORY_BIPMOESI_CACHE_ARRAY_SIZE];
 
-         waitingOnBlockUnlock.convertToArray(waitingOnBlockUnlockArray,MEMORY_MOESI_CACHE_ARRAY_SIZE);
-         convertVectorToArray<StoredFunctionBase*>(waitingOnSetUnlock,waitingOnSetUnlockArray,MEMORY_MOESI_CACHE_ARRAY_SIZE);
-         waitingOnRemoteReads.convertToArray(waitingOnRemoteReadsArray,MEMORY_MOESI_CACHE_ARRAY_SIZE);
-         pendingEviction.convertToArray(pendingEvictionArray,MEMORY_MOESI_CACHE_ARRAY_SIZE);
-         pendingInvalidate.convertToArray(pendingInvalidateArray,MEMORY_MOESI_CACHE_ARRAY_SIZE);
+         waitingOnBlockUnlock.convertToArray(waitingOnBlockUnlockArray,MEMORY_BIPMOESI_CACHE_ARRAY_SIZE);
+         convertVectorToArray<StoredFunctionBase*>(waitingOnSetUnlock,waitingOnSetUnlockArray,MEMORY_BIPMOESI_CACHE_ARRAY_SIZE);
+         waitingOnRemoteReads.convertToArray(waitingOnRemoteReadsArray,MEMORY_BIPMOESI_CACHE_ARRAY_SIZE);
+         pendingEviction.convertToArray(pendingEvictionArray,MEMORY_BIPMOESI_CACHE_ARRAY_SIZE);
+         pendingInvalidate.convertToArray(pendingInvalidateArray,MEMORY_BIPMOESI_CACHE_ARRAY_SIZE);
    #endif
 #endif
 		DebugAssertWithMessageID(m,m->MsgID());
@@ -813,7 +821,7 @@ namespace Memory
             forward->addr = CalcAddr(CalcTag(m->addr));
             forward->size = lineSize;
             forward->blockAttached = pendingEviction[tag].state == bs_Modified || pendingEviction[tag].state == bs_Owned;
-   #ifdef MEMORY_MOESI_CACHE_DEBUG_PENDING_EVICTION
+   #ifdef MEMORY_BIPMOESI_CACHE_DEBUG_PENDING_EVICTION
             PrintDebugInfo("OnLocalInvalidateResponse",tag,"pendingEviction.erase");
    #endif
             pendingEviction.erase(tag);
@@ -822,27 +830,27 @@ namespace Memory
          EM().DisposeMsg(m);
 		} // else (canceledBlockEviction.find(tag) == canceledBlockEviction.end())
 	}
-	void MOESICache::OnRemoteInvalidateResponse(const InvalidateResponseMsg* m)
+	void BIPMOESICache::OnRemoteInvalidateResponse(const InvalidateResponseMsg* m)
 	{
 		EM().DisposeMsg(m);
 	}
-	void MOESICache::OnLocalEvictionResponse(const EvictionResponseMsg* m)
+	void BIPMOESICache::OnLocalEvictionResponse(const EvictionResponseMsg* m)
 	{
 		EM().DisposeMsg(m);
 		DebugFail("An Eviction should never have been emitted");
 	}
-	void MOESICache::OnRemoteEvictionResponse(const EvictionResponseMsg* m)
+	void BIPMOESICache::OnRemoteEvictionResponse(const EvictionResponseMsg* m)
 	{
 		EM().DisposeMsg(m);
 	}
-	MOESICache::~MOESICache()
+	BIPMOESICache::~BIPMOESICache()
 	{
 		if(evictionPolicy)
 		{
 			delete evictionPolicy;
 		}
 	}
-	void MOESICache::Initialize(EventManager* em, const RootConfigNode& config, const std::vector<Connection*>& connectionSet)
+	void BIPMOESICache::Initialize(EventManager* em, const RootConfigNode& config, const std::vector<Connection*>& connectionSet)
 	{
 		BaseMemDevice::Initialize(em,config,connectionSet);
 		localConnection = NULL;
@@ -957,8 +965,8 @@ namespace Memory
       writeHits = 0;
       writeMisses = 0;
 	}
-	void MOESICache::DumpRunningState(RootConfigNode& node){}
-	void MOESICache::DumpStats(std::ostream& out)
+	void BIPMOESICache::DumpRunningState(RootConfigNode& node){}
+	void BIPMOESICache::DumpStats(std::ostream& out)
 	{
 	   out << DeviceName() << ":messagesReceived:" << messagesReceived << std::endl;
 	   out << DeviceName() << ":exclusiveReadHits:" << exclusiveReadHits << std::endl;
@@ -968,7 +976,7 @@ namespace Memory
 	   out << DeviceName() << ":writeHits:" << writeHits << std::endl;
 	   out << DeviceName() << ":writeMisses:" << writeMisses << std::endl;
 	}
-	void MOESICache::RecvMsg(const BaseMsg* msg, int connectionID)
+	void BIPMOESICache::RecvMsg(const BaseMsg* msg, int connectionID)
 	{
 	   messagesReceived++;
 
@@ -977,55 +985,55 @@ namespace Memory
 			switch(msg->Type())
 			{
 			case(mt_Read):
-         #ifdef MEMORY_MOESI_CACHE_DEBUG_VERBOSE
+         #ifdef MEMORY_BIPMOESI_CACHE_DEBUG_VERBOSE
             PrintDebugInfo("OnLocalRead", *msg, "RecvMsg");
          #endif
 				OnLocalRead((const ReadMsg*)msg);
 				break;
 			case(mt_Write):
-         #ifdef MEMORY_MOESI_CACHE_DEBUG_VERBOSE
+         #ifdef MEMORY_BIPMOESI_CACHE_DEBUG_VERBOSE
             PrintDebugInfo("OnLocalWrite", *msg, "RecvMsg");
          #endif
 				OnLocalWrite((const WriteMsg*)msg);
 				break;
 			case(mt_Invalidate):
-         #ifdef MEMORY_MOESI_CACHE_DEBUG_VERBOSE
+         #ifdef MEMORY_BIPMOESI_CACHE_DEBUG_VERBOSE
             PrintDebugInfo("OnLocalInvalidate", *msg, "RecvMsg");
          #endif
 				OnLocalInvalidate((const InvalidateMsg*)msg);
 				break;
 			case(mt_Eviction):
-         #ifdef MEMORY_MOESI_CACHE_DEBUG_VERBOSE
+         #ifdef MEMORY_BIPMOESI_CACHE_DEBUG_VERBOSE
             PrintDebugInfo("OnLocalEviction", *msg, "RecvMsg");
          #endif
 				OnLocalEviction((const EvictionMsg*)msg);
 				break;
 			case(mt_ReadResponse):
-         #ifdef MEMORY_MOESI_CACHE_DEBUG_VERBOSE
+         #ifdef MEMORY_BIPMOESI_CACHE_DEBUG_VERBOSE
             PrintDebugInfo("OnLocalReadResponse", *msg, "RecvMsg");
          #endif
 				OnLocalReadResponse((const ReadResponseMsg*)msg);
 				break;
 			case(mt_WriteResponse):
-         #ifdef MEMORY_MOESI_CACHE_DEBUG_VERBOSE
+         #ifdef MEMORY_BIPMOESI_CACHE_DEBUG_VERBOSE
             PrintDebugInfo("OnLocalWriteResponse", *msg, "RecvMsg");
          #endif
 				OnLocalWriteResponse((const WriteResponseMsg*)msg);
 				break;
 			case(mt_InvalidateResponse):
-         #ifdef MEMORY_MOESI_CACHE_DEBUG_VERBOSE
+         #ifdef MEMORY_BIPMOESI_CACHE_DEBUG_VERBOSE
             PrintDebugInfo("OnLocalInvalidateResponse", *msg, "RecvMsg");
          #endif
 				OnLocalInvalidateResponse((const InvalidateResponseMsg*)msg);
 				break;
 			case(mt_EvictionResponse):
-         #ifdef MEMORY_MOESI_CACHE_DEBUG_VERBOSE
+         #ifdef MEMORY_BIPMOESI_CACHE_DEBUG_VERBOSE
             PrintDebugInfo("OnLocalEvictionResponse", *msg, "RecvMsg");
          #endif
 				OnLocalEvictionResponse((const EvictionResponseMsg*)msg);
 				break;
 			default:
-				DebugFail("MOESICache::Bad msg Type");
+				DebugFail("BIPMOESICache::Bad msg Type");
 			}
 		}
 		else if(connectionID == remoteConnectionID)
@@ -1033,49 +1041,49 @@ namespace Memory
 			switch(msg->Type())
 			{
 			case(mt_Read):
-         #ifdef MEMORY_MOESI_CACHE_DEBUG_VERBOSE
+         #ifdef MEMORY_BIPMOESI_CACHE_DEBUG_VERBOSE
             PrintDebugInfo("OnRemoteRead", *msg, "RecvMsg");
          #endif
 				OnRemoteRead((const ReadMsg*)msg);
 				break;
 			case(mt_Write):
-         #ifdef MEMORY_MOESI_CACHE_DEBUG_VERBOSE
+         #ifdef MEMORY_BIPMOESI_CACHE_DEBUG_VERBOSE
             PrintDebugInfo("OnRemoteWrite", *msg, "RecvMsg");
          #endif
 				OnRemoteWrite((const WriteMsg*)msg);
 				break;
 			case(mt_Invalidate):
-         #ifdef MEMORY_MOESI_CACHE_DEBUG_VERBOSE
+         #ifdef MEMORY_BIPMOESI_CACHE_DEBUG_VERBOSE
             PrintDebugInfo("OnRemoteInvalidate", *msg, "RecvMsg");
          #endif
 				OnRemoteInvalidate((const InvalidateMsg*)msg);
 				break;
 			case(mt_Eviction):
-         #ifdef MEMORY_MOESI_CACHE_DEBUG_VERBOSE
+         #ifdef MEMORY_BIPMOESI_CACHE_DEBUG_VERBOSE
             PrintDebugInfo("OnRemoteEviction", *msg, "RecvMsg");
          #endif
 				OnRemoteEviction((const EvictionMsg*)msg);
 				break;
 			case(mt_ReadResponse):
-         #ifdef MEMORY_MOESI_CACHE_DEBUG_VERBOSE
+         #ifdef MEMORY_BIPMOESI_CACHE_DEBUG_VERBOSE
             PrintDebugInfo("OnRemoteReadResponse", *msg, "RecvMsg");
          #endif
 				OnRemoteReadResponse((const ReadResponseMsg*)msg);
 				break;
 			case(mt_WriteResponse):
-         #ifdef MEMORY_MOESI_CACHE_DEBUG_VERBOSE
+         #ifdef MEMORY_BIPMOESI_CACHE_DEBUG_VERBOSE
             PrintDebugInfo("OnRemoteWriteResponse", *msg, "RecvMsg");
          #endif
 				OnRemoteWriteResponse((const WriteResponseMsg*)msg);
 				break;
 			case(mt_InvalidateResponse):
-         #ifdef MEMORY_MOESI_CACHE_DEBUG_VERBOSE
+         #ifdef MEMORY_BIPMOESI_CACHE_DEBUG_VERBOSE
             PrintDebugInfo("OnRemoteInvalidateResponse", *msg, "RecvMsg");
          #endif
 				OnRemoteInvalidateResponse((const InvalidateResponseMsg*)msg);
 				break;
 			case(mt_EvictionResponse):
-         #ifdef MEMORY_MOESI_CACHE_DEBUG_VERBOSE
+         #ifdef MEMORY_BIPMOESI_CACHE_DEBUG_VERBOSE
             PrintDebugInfo("OnRemoteEvictionResponse", *msg, "RecvMsg");
          #endif
 				OnRemoteEvictionResponse((const EvictionResponseMsg*)msg);
@@ -1088,18 +1096,18 @@ namespace Memory
 		{
 			DebugFail("Connection not a valid ID");
 		}
-	} // MOESICache::RecvMsg
+	} // BIPMOESICache::RecvMsg
 
-   void MOESICache::printDebugInfo(const char* fromMethod, const BaseMsg &myMessage, const char* operation)
+   void BIPMOESICache::printDebugInfo(const char* fromMethod, const BaseMsg &myMessage, const char* operation)
    {
-      printBaseMemDeviceDebugInfo("MOESICache", fromMethod, myMessage, operation);
+      printBaseMemDeviceDebugInfo("BIPMOESICache", fromMethod, myMessage, operation);
    }
 
-   void MOESICache::printDebugInfo(const char* fromMethod,const AddrTag tag,const char* operation)
+   void BIPMOESICache::printDebugInfo(const char* fromMethod,const AddrTag tag,const char* operation)
    {
       cout << setw(17) << " "
             << " dst=" << setw(2) << GetDeviceID()
-            << " MOESICache::" << fromMethod
+            << " BIPMOESICache::" << fromMethod
             << " " << operation << "(" << tag << ")"
             << endl;
    }
