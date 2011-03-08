@@ -3970,7 +3970,7 @@ SPLASH2 benchmarks
 \begin_inset Float figure
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -4052,7 +4052,7 @@ We also see that for both Origin and BIP, as the CPU count increases, the
 \begin_inset Float figure
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -4213,7 +4213,10 @@ reference "fig:SPLASH-2-benchmarks-cpu-latency"
 
 \end_inset
 
-, the network latency
+, the network latency of various benchmarks are affected by both the benchmark
+ and the number of processors.
+ It is closely correlated with how many messages are in the network.
+ The more messages there are in the network, the 
 \end_layout
 
 \begin_layout Section

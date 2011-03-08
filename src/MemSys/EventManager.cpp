@@ -48,9 +48,9 @@ namespace Memory
 
 	void EventManager::FillInvalidateMsg(InvalidateMsg* m, DeviceID devID, Address generatingPC)
 	{
+		m->SetIDInfo(currentMsgStamp++,devID,generatingPC);
 		m->isCache = false;
 		m->isDirectory = false;
-		m->SetIDInfo(currentMsgStamp++,devID,generatingPC);
       m->newOwner = InvalidNodeID;
 	}
 

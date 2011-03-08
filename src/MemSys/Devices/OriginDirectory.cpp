@@ -2888,14 +2888,7 @@ namespace Memory
 			{// if requester is owner or is in sharers
 				state = ds_Exclusive;
 
-				// send exclusive reply (no data) with invalidates pending to requester
-				ReadReplyMsg* rrm = EM().CreateReadReplyMsg(GetDeviceID(),m->GeneratingPC());
-				EM().InitializeReadResponseMsg(rrm, m);
-				rrm->blockAttached = false;
-				rrm->exclusiveOwnership = true;
-				rrm->pendingInvalidates = sharers.size();
-				rrm->satisfied = true;
-				SendMessageToRemoteCache(rrm, src);
+				int pendingInvalidates = 0;
 
 				DebugAssertWithMessageID(owner!=InvalidNodeID, m->MsgID());
 				// send invalidates to owner if it is not the requester
@@ -2907,13 +2900,16 @@ namespace Memory
 					im->size = m->size;
 					//im->solicitingMessage = m->MsgID();
 					SendMessageToRemoteCache(im, owner);
+					pendingInvalidates++;
 				}
 
 				// send invalidates to sharers that are not the requester
 				for(HashSet<NodeID>::iterator i = sharers.begin(); i != sharers.end(); i++)
 				{
 					DebugAssertWithMessageID(*i!=InvalidNodeID, m->MsgID());
-					if (*i!=src)
+					// do not send the invalidate to requester
+					// do not send invalidate to owner, since we did that already
+					if (*i!=src && *i!=owner)
 					{
 						InvalidateMsg* im = EM().CreateInvalidateMsg(GetDeviceID(),m->GeneratingPC());
 						im->addr = m->addr;
@@ -2921,8 +2917,19 @@ namespace Memory
 						im->size = m->size;
 						//im->solicitingMessage = m->MsgID();
 						SendMessageToRemoteCache(im, *i);
+						pendingInvalidates++;
 					}
 				}
+
+				// send exclusive reply (no data) with invalidates pending to requester
+				ReadReplyMsg* rrm = EM().CreateReadReplyMsg(GetDeviceID(),m->GeneratingPC());
+				EM().InitializeReadResponseMsg(rrm, m);
+				rrm->blockAttached = false;
+				rrm->exclusiveOwnership = true;
+				rrm->satisfied = true;
+				rrm->pendingInvalidates = pendingInvalidates;
+				SendMessageToRemoteCache(rrm, src);
+
 				owner = src;
 				sharers.clear();
 			}//else if (m->requestingExclusive && (owner==src || sharers.find(src)!=sharers.end()))
@@ -2955,22 +2962,31 @@ namespace Memory
 			DebugAssertWithMessageID(msg->Type()==mt_ReadResponse, msg->MsgID());
 			const ReadResponseMsg* m = (const ReadResponseMsg*)msg;
 			PerformMemoryReadResponseCheck(m, src);
+			int pendingInvalidates = 0;
 
 			state = ds_Exclusive;
 
 			// send invalidations to sharers and owner since we know that
 				// the requester is not the owner or in sharers
-			SendInvalidateMsg(firstRequest, owner, firstRequestSrc);
+			if (owner!=firstRequestSrc)
+			{
+				SendInvalidateMsg(firstRequest, owner, firstRequestSrc);
+				pendingInvalidates++;
+			}
 			for (HashSet<NodeID>::iterator i = sharers.begin(); i!=sharers.end(); i++)
 			{
-				SendInvalidateMsg(firstRequest, *i, firstRequestSrc);
+				if (*i!=firstRequestSrc)
+				{
+					SendInvalidateMsg(firstRequest, *i, firstRequestSrc);
+					pendingInvalidates++;
+				}
 			}
 
 			// send exclusive reply with invalidates pending to requester
 			ReadReplyMsg* rrm = EM().CreateReadReplyMsg(GetDeviceID(), m->GeneratingPC());
 			EM().InitializeReadResponseMsg(rrm, firstRequest);
 			rrm->exclusiveOwnership = true;
-			rrm->pendingInvalidates = sharers.size() + 1;
+			rrm->pendingInvalidates = pendingInvalidates;
 			rrm->satisfied = true;
 			SendMessageToRemoteCache(rrm, firstRequestSrc);
 
