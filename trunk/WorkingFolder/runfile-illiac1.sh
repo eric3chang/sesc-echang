@@ -5,8 +5,8 @@ AUGSESC=augSesc-Debug
 
 #./runfile-barnes-bip-all.sh
 #./runfile-barnes-origin-all.sh
-./runfile-cholesky-bip-all.sh
-./runfile-cholesky-origin-all.sh
+#./runfile-cholesky-bip-all.sh
+./runfile-cholesky-origin-special.sh
 #./runfile-fft-bip-all.sh
 #./runfile-fft-origin-all.sh
 #./runfile-lu-bip-all.sh

@@ -5,8 +5,9 @@
 #include "NetworkMsg.h"
 #include <vector>
 
-using std::stringstream;
 using std::pair;
+using std::stringstream;
+using std::vector;
 
 namespace Memory
 {
@@ -107,6 +108,7 @@ namespace Memory
 		NodeID nodeID;
 
 		typedef HashMultiMap<Address, const ReadMsg*> AddrReadMultimap;
+		typedef HashMap<Address, const ReadMsg*> AddrReadMap;
 		typedef pair<Address,const ReadMsg*> AddrReadPair;
 		typedef pair<AddrReadMultimap::iterator,AddrReadMultimap::iterator> AddrReadMultimapPairii;
 		typedef HashMultiMap<Address,LookupData<ReadMsg> > AddrLDReadMultimap;
@@ -128,7 +130,16 @@ namespace Memory
 		AddrReadMultimap reversePendingLocalReads;
 		HashMap<Address, BlockData> directoryData;
 
+		// debug functions
       void dump(HashMap<MessageID, const BaseMsg*> &m);
+      void dump(MessageReadMap &m);
+      void dump(AddrLDReadMultimap &m);
+      void dump(AddrLDReadMap &m);
+      void dump(AddrReadMultimap &m);
+      void dumpPendingLocalReads();
+      void dumpPendingDirectorySharedReads();
+      void dumpPendingDirectoryExclusiveReads();
+      void dumpReversePendingLocalReads();
 
 		void PerformDirectoryFetch(Address a);
 		void EraseDirectoryShare(Address a, NodeID id);
@@ -163,6 +174,7 @@ namespace Memory
 		void SendDirectoryNak(const DirectoryNakMsg *m);
 		void SendDirectoryNak(const InvalidateMsg *m);
 		void SendDirectoryNak(const ReadMsg *m);
+		void SendDirectoryNak(const ReadResponseMsg *m);
       void SendMessageToNetwork(const BaseMsg *msg, NodeID dest);
       void SendReadRequestToMemory(const ReadMsg *msg);
 		void SendWriteRequestToMemory(const WriteMsg *msg);

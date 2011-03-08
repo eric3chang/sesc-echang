@@ -3,7 +3,7 @@
 #ifdef USE_SESC
    #include "sescapi.h"
 #else
-   #define MAX_NUM_THREADS 64
+   #define MAX_NUM_THREADS 32
    #include <pthread.h>
 #endif
 
@@ -69,7 +69,7 @@ int main(int argc, char** argv)
    int t = 0;
    int threadIndexMax = 0;
    int numberOfLoops = 0;
-   int numberOfOperations = 0;
+   int numberOfReads = 0;
    int processorCount = 0;
 
    // process arguments
@@ -84,14 +84,14 @@ int main(int argc, char** argv)
          }
          else if (tempString[1]=='n')
          {
-            numberOfOperations = atoi(tempString+2);
+            numberOfReads = atoi(tempString+2);
          }
       }
    }
 
-   if (!processorCount || !numberOfOperations)
+   if (!processorCount || !numberOfReads)
    {
-      printf("Usage: readtest -p[number of processors] -n[number of operations]\n");
+      printf("Usage: readtest -p[number of processors] -n[number of reads]\n");
 #ifdef USE_SESC
       sesc_exit(1);
 #else
@@ -99,39 +99,29 @@ int main(int argc, char** argv)
 #endif
    }
 
-   threadIndexMax = processorCount - 1;
+   threadIndexMax = processorCount - 2;
+   threadIndexMax = threadIndexMax / 2;
 
    // calculate the number of Loops
-   numberOfLoops = numberOfOperations / processorCount;
+   numberOfLoops = numberOfReads / (processorCount-2);
    printf("numberOfLoops=%d\n", numberOfLoops);
 
-   t = 0;
-   while (1)
+   for (t=0; t<threadIndexMax; t++)
    {
-      t++;
-      printf("Creating read thread %d\n", t);
+      printf("Creating read thread %d\n", t*2);
 #ifdef USE_SESC
       sesc_spawn((void (*)(void*)) *readInt, &numberOfLoops, 0);
 #else
-      pthread_create(&threads[t], NULL, readInt, &numberOfLoops);
+      pthread_create(&threads[t*2], NULL, readInt, &numberOfLoops);
 #endif
-
-      if (t >= threadIndexMax)
-      {
-         break;
-      }
-      t++;
-      printf("Creating write thread %d\n", t);
+      printf("Creating write thread %d\n", t*2+1);
 #ifdef USE_SESC
       sesc_spawn((void (*)(void*)) *writeInt, &numberOfLoops, 0);
 #else
-      pthread_create(&threads[t], NULL, writeInt, &numberOfLoops);
+      pthread_create(&threads[t*2+1], NULL, writeInt, &numberOfLoops);
 #endif
    }
-
-   printf("Creating write thread %d\n", t+1);
-   writeInt(&numberOfLoops);
-
+ 
 #ifdef USE_SESC
    sesc_wait(); // wait for threads to finish
 	sesc_exit(0);

@@ -99,6 +99,7 @@ namespace Memory
 		void InitializeBaseNakMsg(BaseNakMsg* bnm, const InterventionMsg* original);
 		void InitializeBaseNakMsg(BaseNakMsg* copy, const InvalidateMsg* original);
       void InitializeBaseNakMsg(BaseNakMsg* baseNak, const ReadMsg* read);
+      void InitializeBaseNakMsg(BaseNakMsg* copy, const ReadResponseMsg* original);
       void InitializeEvictionMsg(EvictionMsg* eviction, const ReadMsg* read);
       void InitializeEvictionMsg(EvictionMsg* copy, const EvictionMsg* original);
       void InitializeEvictionResponseMsg(EvictionResponseMsg* evictionResponse, const EvictionMsg* eviction);
