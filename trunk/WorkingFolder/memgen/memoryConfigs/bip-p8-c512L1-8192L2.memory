@@ -50,7 +50,7 @@ String DeviceName ProcessorInterface_0
 Int DeviceID 2
 End
 Root MemoryDevice Begin
-String DeviceType MOESICache
+String DeviceType BIPMOESICache
 String DeviceName L1_0
 Int DeviceID 3
 Int LineSize 64
@@ -62,7 +62,7 @@ Int TopCache 1
 String EvictionPolicy LRU
 End
 Root MemoryDevice Begin
-String DeviceType MOESICache
+String DeviceType BIPMOESICache
 String DeviceName L2_0
 Int DeviceID 4
 Int LineSize 64
@@ -137,7 +137,7 @@ String DeviceName ProcessorInterface_1
 Int DeviceID 7
 End
 Root MemoryDevice Begin
-String DeviceType MOESICache
+String DeviceType BIPMOESICache
 String DeviceName L1_1
 Int DeviceID 8
 Int LineSize 64
@@ -149,7 +149,7 @@ Int TopCache 1
 String EvictionPolicy LRU
 End
 Root MemoryDevice Begin
-String DeviceType MOESICache
+String DeviceType BIPMOESICache
 String DeviceName L2_1
 Int DeviceID 9
 Int LineSize 64
@@ -224,7 +224,7 @@ String DeviceName ProcessorInterface_2
 Int DeviceID 12
 End
 Root MemoryDevice Begin
-String DeviceType MOESICache
+String DeviceType BIPMOESICache
 String DeviceName L1_2
 Int DeviceID 13
 Int LineSize 64
@@ -236,7 +236,7 @@ Int TopCache 1
 String EvictionPolicy LRU
 End
 Root MemoryDevice Begin
-String DeviceType MOESICache
+String DeviceType BIPMOESICache
 String DeviceName L2_2
 Int DeviceID 14
 Int LineSize 64
@@ -311,7 +311,7 @@ String DeviceName ProcessorInterface_3
 Int DeviceID 17
 End
 Root MemoryDevice Begin
-String DeviceType MOESICache
+String DeviceType BIPMOESICache
 String DeviceName L1_3
 Int DeviceID 18
 Int LineSize 64
@@ -323,7 +323,7 @@ Int TopCache 1
 String EvictionPolicy LRU
 End
 Root MemoryDevice Begin
-String DeviceType MOESICache
+String DeviceType BIPMOESICache
 String DeviceName L2_3
 Int DeviceID 19
 Int LineSize 64
@@ -398,7 +398,7 @@ String DeviceName ProcessorInterface_4
 Int DeviceID 22
 End
 Root MemoryDevice Begin
-String DeviceType MOESICache
+String DeviceType BIPMOESICache
 String DeviceName L1_4
 Int DeviceID 23
 Int LineSize 64
@@ -410,7 +410,7 @@ Int TopCache 1
 String EvictionPolicy LRU
 End
 Root MemoryDevice Begin
-String DeviceType MOESICache
+String DeviceType BIPMOESICache
 String DeviceName L2_4
 Int DeviceID 24
 Int LineSize 64
@@ -485,7 +485,7 @@ String DeviceName ProcessorInterface_5
 Int DeviceID 27
 End
 Root MemoryDevice Begin
-String DeviceType MOESICache
+String DeviceType BIPMOESICache
 String DeviceName L1_5
 Int DeviceID 28
 Int LineSize 64
@@ -497,7 +497,7 @@ Int TopCache 1
 String EvictionPolicy LRU
 End
 Root MemoryDevice Begin
-String DeviceType MOESICache
+String DeviceType BIPMOESICache
 String DeviceName L2_5
 Int DeviceID 29
 Int LineSize 64
@@ -572,7 +572,7 @@ String DeviceName ProcessorInterface_6
 Int DeviceID 32
 End
 Root MemoryDevice Begin
-String DeviceType MOESICache
+String DeviceType BIPMOESICache
 String DeviceName L1_6
 Int DeviceID 33
 Int LineSize 64
@@ -584,7 +584,7 @@ Int TopCache 1
 String EvictionPolicy LRU
 End
 Root MemoryDevice Begin
-String DeviceType MOESICache
+String DeviceType BIPMOESICache
 String DeviceName L2_6
 Int DeviceID 34
 Int LineSize 64
@@ -659,7 +659,7 @@ String DeviceName ProcessorInterface_7
 Int DeviceID 37
 End
 Root MemoryDevice Begin
-String DeviceType MOESICache
+String DeviceType BIPMOESICache
 String DeviceName L1_7
 Int DeviceID 38
 Int LineSize 64
@@ -671,7 +671,7 @@ Int TopCache 1
 String EvictionPolicy LRU
 End
 Root MemoryDevice Begin
-String DeviceType MOESICache
+String DeviceType BIPMOESICache
 String DeviceName L2_7
 Int DeviceID 39
 Int LineSize 64

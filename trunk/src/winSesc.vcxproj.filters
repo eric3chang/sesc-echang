@@ -534,6 +534,9 @@
     <ClInclude Include="MemSys\Devices\BIPDirectory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="memsys\devices\bipmoesicache.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="libmem\AddressPrefetcher.cpp">
@@ -846,6 +849,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MemSys\Devices\BIPDirectory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MemSys\Devices\BIPMOESICache.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
