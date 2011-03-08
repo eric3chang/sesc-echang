@@ -766,6 +766,7 @@
     <ClInclude Include="include\hash_fun_extra.h" />
     <ClInclude Include="include\to_string.h" />
     <ClInclude Include="MemSys\Devices\BIPDirectory.h" />
+    <ClInclude Include="memsys\devices\bipmoesicache.h" />
     <ClInclude Include="MemSys\Devices\MESICache.h" />
     <ClInclude Include="MemSys\Devices\OriginDirectory.h" />
     <ClInclude Include="libmint\Addressing.h" />
@@ -961,6 +962,7 @@
     <ClCompile Include="libmint\elf.cpp" />
     <ClCompile Include="libmint\error_ops.cpp" />
     <ClCompile Include="MemSys\Devices\BIPDirectory.cpp" />
+    <ClCompile Include="MemSys\Devices\BIPMOESICache.cpp" />
     <ClCompile Include="MemSys\Devices\Directory.cpp" />
     <ClCompile Include="MemSys\Devices\MESICache.cpp" />
     <ClCompile Include="MemSys\Devices\MSICache.cpp" />

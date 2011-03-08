@@ -57,6 +57,36 @@
         return _ret;
     }
 
+    public static void AddBIPCache(string deviceName, int associativity, int setCount, int lineSize, int missTime, int hitTime, EvictionPolicy ev)
+    {
+        output.WriteLine("Root MemoryDevice Begin");
+        output.WriteLine("String DeviceType BIPMOESICache");
+        output.WriteLine("String DeviceName " + deviceName);
+        output.WriteLine("Int DeviceID " + (index++));
+        output.WriteLine("Int LineSize " + lineSize);
+        output.WriteLine("Int Associativity " + associativity);
+        output.WriteLine("Int SetCount " + setCount);
+        output.WriteLine("Int HitTime " + hitTime);
+        output.WriteLine("Int MissTime " + missTime);
+        if (deviceName.Contains("L1"))
+        {
+            output.WriteLine("Int TopCache 1");
+        }
+        else
+        {
+            output.WriteLine("Int TopCache 0");
+        }
+        if (ev == EvictionPolicy.LRU)
+        {
+            output.WriteLine("String EvictionPolicy LRU");
+        }
+        else
+        {
+            output.WriteLine("String EvictionPolicy Random");
+        }
+        output.WriteLine("End");
+    }
+
 	public static void AddCache(string deviceName, int associativity, int setCount, int lineSize, int missTime, int hitTime, EvictionPolicy ev)
 	{
 		output.WriteLine("Root MemoryDevice Begin");
@@ -457,9 +487,9 @@
         for (int i = 0; i < nodeCount; i++)
         {
             AddSESCInterface("ProcessorInterface_" + i);
-            AddCache("L1_" + i, 4, l1 / (4 * 64), 64, 2, 1, EvictionPolicy.LRU);
+            AddBIPCache("L1_" + i, 4, l1 / (4 * 64), 64, 2, 1, EvictionPolicy.LRU);
             // AddCache("L2_" + i, 4, l2 / (4 * 64), 64, 7, 4, EvictionPolicy.LRU);
-            AddCache("L2_" + i, 4, l2 / (4 * 64), 64, 13, 10, EvictionPolicy.LRU);
+            AddBIPCache("L2_" + i, 4, l2 / (4 * 64), 64, 13, 10, EvictionPolicy.LRU);
             //AddOriginDirectory("OriginDirectory_" + i, nodeCount, i, nodeCount + 10);
             AddBIPDirectory("BIPDirectory_" + i, nodeCount, i);
             AddMainMemory("MainMemory_" + i, 57, 66);
@@ -489,9 +519,9 @@
 				for (int l2 = l1 * 2; l2 <= 8 * 1024; l2 *= 2)
                 //for (int l2 = l1 * 2; l2 <= 2; l2 *= 2)
 				{
-                    //OutBIPDirectoryMemory(nodeCount, l1, l2);
+                    OutBIPDirectoryMemory(nodeCount, l1, l2);
                     //OutDirectoryMemory(nodeCount, l1, l2);
-					OutOriginDirectoryMemory(nodeCount, l1, l2);
+					//OutOriginDirectoryMemory(nodeCount, l1, l2);
 					//OutSimpleMemory2(i, l1, l2);
 					for (int l3 = l2 * 2; l3 <= 64 * 1024; l3 *= 2)
 					{
