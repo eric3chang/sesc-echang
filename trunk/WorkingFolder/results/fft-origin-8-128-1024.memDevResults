@@ -1,10 +1,10 @@
 Group string ReportFileName results/fft-origin-8-128-1024.memDevResults string BenchName fft
 
 DateTime
-DateTime:DateTime:03070538
+DateTime:DateTime:03080812
 
 TotalRunTime
-TotalRunTime:TotalRunTime:507952
+TotalRunTime:TotalRunTime:507850
 
 Network
 Network:TotalMessagesReceived:50088
@@ -93,12 +93,12 @@ OriginDirectory_1:lookupRetryTime:60
 OriginDirectory_1:lookupTime:4
 OriginDirectory_1:satisfyTime:4
 OriginDirectory_1:nodeID:1
-OriginDirectory_1:TotalMessagesReceived:9849
+OriginDirectory_1:TotalMessagesReceived:9850
 OriginDirectory_1:cacheNaksReceived:27
 OriginDirectory_1:cacheEvictionsReceived:0
 OriginDirectory_1:cacheInterventionsReceived:672
 OriginDirectory_1:cacheInvalidatesReceived:673
-OriginDirectory_1:cacheInvalidateAcksReceived:670
+OriginDirectory_1:cacheInvalidateAcksReceived:671
 OriginDirectory_1:cacheInvalidateResponsesReceived:673
 OriginDirectory_1:cacheSpeculativeRepliesReceived:678
 OriginDirectory_1:cacheReadResponsesReceived:1348
@@ -334,17 +334,17 @@ ProcessorInterface_6:writeCount:40168
 ProcessorInterface_6:totalOperations:98084
 
 L1_6
-L1_6:messagesReceived:101198
+L1_6:messagesReceived:101199
 L1_6:exclusiveReadHits:0
 L1_6:sharedReadHits:57916
 L1_6:exclusiveReadMisses:0
 L1_6:sharedReadMisses:1077
-L1_6:writeHits:40144
+L1_6:writeHits:40152
 L1_6:writeMisses:695
 
 L2_6
-L2_6:messagesReceived:6231
-L2_6:exclusiveReadHits:692
+L2_6:messagesReceived:6232
+L2_6:exclusiveReadHits:693
 L2_6:sharedReadHits:1077
 L2_6:exclusiveReadMisses:695
 L2_6:sharedReadMisses:1077
@@ -358,12 +358,12 @@ OriginDirectory_6:lookupRetryTime:60
 OriginDirectory_6:lookupTime:4
 OriginDirectory_6:satisfyTime:4
 OriginDirectory_6:nodeID:6
-OriginDirectory_6:TotalMessagesReceived:9852
+OriginDirectory_6:TotalMessagesReceived:9851
 OriginDirectory_6:cacheNaksReceived:12
 OriginDirectory_6:cacheEvictionsReceived:0
 OriginDirectory_6:cacheInterventionsReceived:674
 OriginDirectory_6:cacheInvalidatesReceived:672
-OriginDirectory_6:cacheInvalidateAcksReceived:674
+OriginDirectory_6:cacheInvalidateAcksReceived:673
 OriginDirectory_6:cacheInvalidateResponsesReceived:673
 OriginDirectory_6:cacheSpeculativeRepliesReceived:689
 OriginDirectory_6:cacheReadResponsesReceived:1361
@@ -439,19 +439,19 @@ TotalCache:totalL1CacheExclusiveReadHits:0
 TotalCache:totalL1CacheExclusiveReadMisses:0
 TotalCache:totalL1CacheSharedReadHits:464061
 TotalCache:totalL1CacheSharedReadMisses:8647
-TotalCache:totalL1CacheWriteHits:321715
+TotalCache:totalL1CacheWriteHits:321723
 TotalCache:totalL1CacheWriteMisses:5565
-TotalCache:totalL2CacheExclusiveReadHits:5560
+TotalCache:totalL2CacheExclusiveReadHits:5561
 TotalCache:totalL2CacheExclusiveReadMisses:5565
 TotalCache:totalL2CacheSharedReadHits:8649
 TotalCache:totalL2CacheSharedReadMisses:8647
 TotalCache:totalL2CacheWriteHits:0
 TotalCache:totalL2CacheWriteMisses:0
-TotalCache:totalCacheExclusiveReadHits:5560
+TotalCache:totalCacheExclusiveReadHits:5561
 TotalCache:totalCacheExclusiveReadMisses:5565
 TotalCache:totalCacheSharedReadHits:472710
 TotalCache:totalCacheSharedReadMisses:17294
-TotalCache:totalCacheWriteHits:321715
+TotalCache:totalCacheWriteHits:321723
 TotalCache:totalCacheWriteMisses:5565
 
 EndGroup #

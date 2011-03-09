@@ -1,14 +1,14 @@
 Group string ReportFileName results/fft-origin-4-128-1024.memDevResults string BenchName fft
 
 DateTime
-DateTime:DateTime:03070535
+DateTime:DateTime:03080809
 
 TotalRunTime
-TotalRunTime:TotalRunTime:828928
+TotalRunTime:TotalRunTime:829031
 
 Network
 Network:TotalMessagesReceived:38465
-Network:AverageLatency:124.998
+Network:AverageLatency:125.015
 
 ProcessorInterface_0
 ProcessorInterface_0:readCount:115979
@@ -16,7 +16,7 @@ ProcessorInterface_0:writeCount:80452
 ProcessorInterface_0:totalOperations:196431
 
 L1_0
-L1_0:messagesReceived:201933
+L1_0:messagesReceived:201934
 L1_0:exclusiveReadHits:0
 L1_0:sharedReadHits:115979
 L1_0:exclusiveReadMisses:0
@@ -25,7 +25,7 @@ L1_0:writeHits:80452
 L1_0:writeMisses:1182
 
 L2_0
-L2_0:messagesReceived:10976
+L2_0:messagesReceived:10977
 L2_0:exclusiveReadHits:1182
 L2_0:sharedReadHits:1971
 L2_0:exclusiveReadMisses:1182

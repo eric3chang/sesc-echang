@@ -80,8 +80,8 @@ Int NodeName 26
 End
 Root CalculatorConfig Begin
 String Type RandomLoaded
-Int MinTime 135
-Int MaxTime 149
+Int MinTime 100
+Int MaxTime 110
 Int TimePerByte 1
 Real TimePerPacket 0.1
 Int EnforceOrder 1
