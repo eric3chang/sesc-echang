@@ -1078,6 +1078,7 @@ void OSSim::simFinish()
 			bool isMSICache = (typeid(*ptr)==typeid(Memory::MSICache));
 			bool isMESICache = (typeid(*ptr)==typeid(Memory::MESICache));
 			bool isMOESICache = (typeid(*ptr)==typeid(Memory::MOESICache));
+			bool isBIPMOESICache = (typeid(*ptr)==typeid(Memory::BIPMOESICache));
 
 			if (isMSICache)
 			{
@@ -1148,12 +1149,35 @@ void OSSim::simFinish()
 				cacheWriteHits = tempCache->getWriteHits();
 				cacheWriteMisses = tempCache->getWriteMisses();
 			}
+			else if (isBIPMOESICache)
+			{
+				Memory::BIPMOESICache *tempCache = (Memory::BIPMOESICache*)ptr;
+				string deviceName = tempCache->DeviceName();
+				size_t findL1 = deviceName.find("L1");
+				size_t findL2 = deviceName.find("L2");
+
+				if (findL1!=string::npos)
+				{
+					isL1Cache = true;
+				}
+				if (findL2!=string::npos)
+				{
+					isL2Cache = true;
+				}
+
+				cacheExclusiveReadHits = tempCache->getExclusiveReadHits();
+				cacheExclusiveReadMisses = tempCache->getExclusiveReadMisses();
+				cacheSharedReadHits = tempCache->getSharedReadHits();
+				cacheSharedReadMisses = tempCache->getSharedReadMisses();
+				cacheWriteHits = tempCache->getWriteHits();
+				cacheWriteMisses = tempCache->getWriteMisses();
+			}
 
 			out << ptr->DeviceName() << std::endl;
 			ptr->DumpStats(out);
 			out << std::endl;
 
-			if (isMSICache || isMESICache || isMOESICache)
+			if (isMSICache || isMESICache || isMOESICache || isBIPMOESICache)
 			{
 				if (isL1Cache)
 				{

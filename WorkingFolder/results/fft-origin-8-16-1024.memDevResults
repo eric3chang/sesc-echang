@@ -1,14 +1,14 @@
 Group string ReportFileName results/fft-origin-8-16-1024.memDevResults string BenchName fft
 
 DateTime
-DateTime:DateTime:03070537
+DateTime:DateTime:03080811
 
 TotalRunTime
-TotalRunTime:TotalRunTime:512297
+TotalRunTime:TotalRunTime:512027
 
 Network
 Network:TotalMessagesReceived:50088
-Network:AverageLatency:162.328
+Network:AverageLatency:162.306
 
 ProcessorInterface_0
 ProcessorInterface_0:readCount:58589
@@ -40,7 +40,7 @@ OriginDirectory_0:lookupRetryTime:60
 OriginDirectory_0:lookupTime:4
 OriginDirectory_0:satisfyTime:4
 OriginDirectory_0:nodeID:0
-OriginDirectory_0:TotalMessagesReceived:10843
+OriginDirectory_0:TotalMessagesReceived:10845
 OriginDirectory_0:cacheNaksReceived:0
 OriginDirectory_0:cacheEvictionsReceived:0
 OriginDirectory_0:cacheInterventionsReceived:693
@@ -54,14 +54,14 @@ OriginDirectory_0:directoryNaksReceived:0
 OriginDirectory_0:directoryReadsReceived:1779
 OriginDirectory_0:directoryReadResponsesReceived:0
 OriginDirectory_0:directoryTransfersReceived:0
-OriginDirectory_0:directoryWritebacksReceived:121
+OriginDirectory_0:directoryWritebacksReceived:123
 OriginDirectory_0:directoryWritebackRequestsReceived:0
 OriginDirectory_0:directoryWriteResponsesReceived:0
 
 MainMemory_0
 MainMemory_0:EvictionsReceived:0
 MainMemory_0:ReadsReceived:1088
-MainMemory_0:WritessReceived:121
+MainMemory_0:WritessReceived:123
 
 ProcessorInterface_1
 ProcessorInterface_1:readCount:57980
@@ -93,12 +93,12 @@ OriginDirectory_1:lookupRetryTime:60
 OriginDirectory_1:lookupTime:4
 OriginDirectory_1:satisfyTime:4
 OriginDirectory_1:nodeID:1
-OriginDirectory_1:TotalMessagesReceived:9973
+OriginDirectory_1:TotalMessagesReceived:9972
 OriginDirectory_1:cacheNaksReceived:27
 OriginDirectory_1:cacheEvictionsReceived:0
 OriginDirectory_1:cacheInterventionsReceived:672
 OriginDirectory_1:cacheInvalidatesReceived:673
-OriginDirectory_1:cacheInvalidateAcksReceived:671
+OriginDirectory_1:cacheInvalidateAcksReceived:670
 OriginDirectory_1:cacheInvalidateResponsesReceived:673
 OriginDirectory_1:cacheSpeculativeRepliesReceived:678
 OriginDirectory_1:cacheReadResponsesReceived:1348
@@ -146,7 +146,7 @@ OriginDirectory_2:lookupRetryTime:60
 OriginDirectory_2:lookupTime:4
 OriginDirectory_2:satisfyTime:4
 OriginDirectory_2:nodeID:2
-OriginDirectory_2:TotalMessagesReceived:10793
+OriginDirectory_2:TotalMessagesReceived:10792
 OriginDirectory_2:cacheNaksReceived:20
 OriginDirectory_2:cacheEvictionsReceived:0
 OriginDirectory_2:cacheInterventionsReceived:673
@@ -160,14 +160,14 @@ OriginDirectory_2:directoryNaksReceived:0
 OriginDirectory_2:directoryReadsReceived:1782
 OriginDirectory_2:directoryReadResponsesReceived:0
 OriginDirectory_2:directoryTransfersReceived:0
-OriginDirectory_2:directoryWritebacksReceived:137
+OriginDirectory_2:directoryWritebacksReceived:136
 OriginDirectory_2:directoryWritebackRequestsReceived:0
 OriginDirectory_2:directoryWriteResponsesReceived:0
 
 MainMemory_2
 MainMemory_2:EvictionsReceived:0
 MainMemory_2:ReadsReceived:1095
-MainMemory_2:WritessReceived:137
+MainMemory_2:WritessReceived:136
 
 ProcessorInterface_3
 ProcessorInterface_3:readCount:57915
@@ -252,7 +252,7 @@ OriginDirectory_4:lookupRetryTime:60
 OriginDirectory_4:lookupTime:4
 OriginDirectory_4:satisfyTime:4
 OriginDirectory_4:nodeID:4
-OriginDirectory_4:TotalMessagesReceived:10868
+OriginDirectory_4:TotalMessagesReceived:10866
 OriginDirectory_4:cacheNaksReceived:19
 OriginDirectory_4:cacheEvictionsReceived:0
 OriginDirectory_4:cacheInterventionsReceived:674
@@ -266,14 +266,14 @@ OriginDirectory_4:directoryNaksReceived:0
 OriginDirectory_4:directoryReadsReceived:1816
 OriginDirectory_4:directoryReadResponsesReceived:0
 OriginDirectory_4:directoryTransfersReceived:0
-OriginDirectory_4:directoryWritebacksReceived:168
+OriginDirectory_4:directoryWritebacksReceived:166
 OriginDirectory_4:directoryWritebackRequestsReceived:0
 OriginDirectory_4:directoryWriteResponsesReceived:0
 
 MainMemory_4
 MainMemory_4:EvictionsReceived:0
 MainMemory_4:ReadsReceived:1104
-MainMemory_4:WritessReceived:168
+MainMemory_4:WritessReceived:166
 
 ProcessorInterface_5
 ProcessorInterface_5:readCount:57915
@@ -305,7 +305,7 @@ OriginDirectory_5:lookupRetryTime:60
 OriginDirectory_5:lookupTime:4
 OriginDirectory_5:satisfyTime:4
 OriginDirectory_5:nodeID:5
-OriginDirectory_5:TotalMessagesReceived:10777
+OriginDirectory_5:TotalMessagesReceived:10778
 OriginDirectory_5:cacheNaksReceived:30
 OriginDirectory_5:cacheEvictionsReceived:0
 OriginDirectory_5:cacheInterventionsReceived:673
@@ -319,14 +319,14 @@ OriginDirectory_5:directoryNaksReceived:0
 OriginDirectory_5:directoryReadsReceived:1787
 OriginDirectory_5:directoryReadResponsesReceived:0
 OriginDirectory_5:directoryTransfersReceived:0
-OriginDirectory_5:directoryWritebacksReceived:116
+OriginDirectory_5:directoryWritebacksReceived:117
 OriginDirectory_5:directoryWritebackRequestsReceived:0
 OriginDirectory_5:directoryWriteResponsesReceived:0
 
 MainMemory_5
 MainMemory_5:EvictionsReceived:0
 MainMemory_5:ReadsReceived:1091
-MainMemory_5:WritessReceived:116
+MainMemory_5:WritessReceived:117
 
 ProcessorInterface_6
 ProcessorInterface_6:readCount:57916
@@ -343,8 +343,8 @@ L1_6:writeHits:40144
 L1_6:writeMisses:867
 
 L2_6
-L2_6:messagesReceived:8827
-L2_6:exclusiveReadHits:865
+L2_6:messagesReceived:8826
+L2_6:exclusiveReadHits:864
 L2_6:sharedReadHits:1583
 L2_6:exclusiveReadMisses:695
 L2_6:sharedReadMisses:1077
@@ -441,13 +441,13 @@ TotalCache:totalL1CacheSharedReadHits:464061
 TotalCache:totalL1CacheSharedReadMisses:12660
 TotalCache:totalL1CacheWriteHits:321715
 TotalCache:totalL1CacheWriteMisses:6997
-TotalCache:totalL2CacheExclusiveReadHits:6993
+TotalCache:totalL2CacheExclusiveReadHits:6992
 TotalCache:totalL2CacheExclusiveReadMisses:5565
 TotalCache:totalL2CacheSharedReadHits:12662
 TotalCache:totalL2CacheSharedReadMisses:8647
 TotalCache:totalL2CacheWriteHits:0
 TotalCache:totalL2CacheWriteMisses:0
-TotalCache:totalCacheExclusiveReadHits:6993
+TotalCache:totalCacheExclusiveReadHits:6992
 TotalCache:totalCacheExclusiveReadMisses:5565
 TotalCache:totalCacheSharedReadHits:476723
 TotalCache:totalCacheSharedReadMisses:21307

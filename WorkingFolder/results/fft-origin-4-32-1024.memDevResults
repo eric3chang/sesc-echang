@@ -1,14 +1,14 @@
 Group string ReportFileName results/fft-origin-4-32-1024.memDevResults string BenchName fft
 
 DateTime
-DateTime:DateTime:03070534
+DateTime:DateTime:03080808
 
 TotalRunTime
-TotalRunTime:TotalRunTime:842220
+TotalRunTime:TotalRunTime:841275
 
 Network
 Network:TotalMessagesReceived:38465
-Network:AverageLatency:129.484
+Network:AverageLatency:129.479
 
 ProcessorInterface_0
 ProcessorInterface_0:readCount:115979
@@ -16,7 +16,7 @@ ProcessorInterface_0:writeCount:80452
 ProcessorInterface_0:totalOperations:196431
 
 L1_0
-L1_0:messagesReceived:207652
+L1_0:messagesReceived:207658
 L1_0:exclusiveReadHits:0
 L1_0:sharedReadHits:115979
 L1_0:exclusiveReadMisses:0
@@ -25,7 +25,7 @@ L1_0:writeHits:80452
 L1_0:writeMisses:1684
 
 L2_0
-L2_0:messagesReceived:16695
+L2_0:messagesReceived:16701
 L2_0:exclusiveReadHits:1684
 L2_0:sharedReadHits:3200
 L2_0:exclusiveReadMisses:1182
@@ -69,7 +69,7 @@ ProcessorInterface_1:writeCount:80073
 ProcessorInterface_1:totalOperations:195453
 
 L1_1
-L1_1:messagesReceived:206511
+L1_1:messagesReceived:206517
 L1_1:exclusiveReadHits:0
 L1_1:sharedReadHits:115380
 L1_1:exclusiveReadMisses:0
@@ -78,7 +78,7 @@ L1_1:writeHits:80071
 L1_1:writeMisses:1647
 
 L2_1
-L2_1:messagesReceived:16482
+L2_1:messagesReceived:16488
 L2_1:exclusiveReadHits:1645
 L2_1:sharedReadHits:3170
 L2_1:exclusiveReadMisses:1175
@@ -175,7 +175,7 @@ ProcessorInterface_3:writeCount:80056
 ProcessorInterface_3:totalOperations:195371
 
 L1_3
-L1_3:messagesReceived:206533
+L1_3:messagesReceived:206534
 L1_3:exclusiveReadHits:0
 L1_3:sharedReadHits:115315
 L1_3:exclusiveReadMisses:0
@@ -184,7 +184,7 @@ L1_3:writeHits:80056
 L1_3:writeMisses:1725
 
 L2_3
-L2_3:messagesReceived:16584
+L2_3:messagesReceived:16585
 L2_3:exclusiveReadHits:1725
 L2_3:sharedReadHits:3140
 L2_3:exclusiveReadMisses:1175
@@ -199,7 +199,7 @@ OriginDirectory_3:lookupRetryTime:60
 OriginDirectory_3:lookupTime:4
 OriginDirectory_3:satisfyTime:4
 OriginDirectory_3:nodeID:3
-OriginDirectory_3:TotalMessagesReceived:17384
+OriginDirectory_3:TotalMessagesReceived:17385
 OriginDirectory_3:cacheNaksReceived:11
 OriginDirectory_3:cacheEvictionsReceived:0
 OriginDirectory_3:cacheInterventionsReceived:1153
@@ -213,14 +213,14 @@ OriginDirectory_3:directoryNaksReceived:0
 OriginDirectory_3:directoryReadsReceived:3145
 OriginDirectory_3:directoryReadResponsesReceived:0
 OriginDirectory_3:directoryTransfersReceived:0
-OriginDirectory_3:directoryWritebacksReceived:368
+OriginDirectory_3:directoryWritebacksReceived:369
 OriginDirectory_3:directoryWritebackRequestsReceived:0
 OriginDirectory_3:directoryWriteResponsesReceived:0
 
 MainMemory_3
 MainMemory_3:EvictionsReceived:0
 MainMemory_3:ReadsReceived:1970
-MainMemory_3:WritessReceived:368
+MainMemory_3:WritessReceived:369
 
 TotalCache
 TotalCache:totalL1CacheExclusiveReadHits:0

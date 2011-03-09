@@ -38,7 +38,7 @@ FMM_PARAMS_POST=''
 LU_PARAMS_PRE='-n512 -p'
 LU_PARAMS_POST=' -b16 -t'
 NEWTEST_PARAMS_PRE='-p'
-NEWTEST_PARAMS_POST=' -n3200000'
+NEWTEST_PARAMS_POST=' -n10000'
 OCEAN_PARAMS_PRE='-n130 -p'
 #OCEAN_PARAMS_PRE='-n6 -p'
 OCEAN_PARAMS_POST=' -e1e-7 -r20000.0 -t28800.0'
@@ -136,12 +136,11 @@ processorCountHi, L1Low, L1Hi, L2Low, L2Hi):
 
 def main():
     #benchmarkNames = ['barnes', 'cholesky', 'fft', 'fmm', 'lu','newtest', 'radix', 'raytrace', 'ocean']
-    benchmarkNames = ['cholesky', 'fft', 'lu','newtest', 'radix', 'raytrace', 'ocean']
+    #benchmarkNames = ['cholesky', 'fft', 'lu','newtest', 'radix', 'raytrace', 'ocean']
     #benchmarkNames = ['cholesky', 'fft', 'radix', 'ocean']
-    #benchmarkNames = ['newtest']
+    benchmarkNames = ['newtest']
     directoryTypes = ['bip', 'origin']
-    processorCountLow = '2'
-    #processorCountLow = '4'
+    processorCountLow = '4'
     processorCountHi = '32'
     L1Low = '1'
     L1Hi = '128'

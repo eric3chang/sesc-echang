@@ -12,7 +12,7 @@
         public int randomMax = 0;
     }
 
-    public static NetworkTimingData GetNetworkTimingData(int nodeCount)
+    public static NetworkTimingData GetNetworkTimingData(int nodeCount, float multiplyFactor)
     {
         NetworkTimingData _ret = new NetworkTimingData();
 
@@ -53,6 +53,18 @@
                 _ret.randomMax = 66;
                 break;
         }
+
+        _ret.randomMin = 100;
+        _ret.randomMax = 110;
+
+        float tempMin = _ret.randomMin;
+        float tempMax = _ret.randomMax;
+
+        tempMin *= multiplyFactor;
+        tempMax *= multiplyFactor;
+
+        _ret.randomMin = (int)tempMin;
+        _ret.randomMax = (int)tempMax;
 
         return _ret;
     }
@@ -404,14 +416,15 @@
 		output.Close();
 	}
 
-	public static void OutDirectoryMemory(int nodeCount, int l1, int l2)
+	public static void OutDirectoryMemory(int nodeCount, int l1, int l2, float multiplyFactor, string filesysSeperator)
 	{
-        output = new System.IO.StreamWriter("memoryConfigs\\directory-p" + nodeCount + "-c" + l1 + "L1-" + l2 + "L2.memory");
+        string outputString = "memoryConfigs"+filesysSeperator+"directory-p" + nodeCount + "-c" + l1 + "L1-" + l2 + "L2.memory";
+        output = new System.IO.StreamWriter(outputString);
 		index = 1;
 		output.WriteLine("Begin");
         MainMemory(57, 66);
 		
-        NetworkTimingData myNetworkTimingData = GetNetworkTimingData(nodeCount);
+        NetworkTimingData myNetworkTimingData = GetNetworkTimingData(nodeCount, multiplyFactor);
         int randomMin = myNetworkTimingData.randomMin;
         int randomMax = myNetworkTimingData.randomMax;
         //AddNetwork("Network", nodeCount, 4, 20, 0.1f);
@@ -437,13 +450,14 @@
 		output.Close();
 	}
 
-    public static void OutOriginDirectoryMemory(int nodeCount, int l1, int l2)
+    public static void OutOriginDirectoryMemory(int nodeCount, int l1, int l2, float multiplyFactor, string filesysSeperator)
     {
-        output = new System.IO.StreamWriter("memoryConfigs\\origin-p" + nodeCount + "-c" + l1 + "L1-" + l2 + "L2.memory");
+        string outputString = "memoryConfigs"+filesysSeperator+"origin-p" + nodeCount + "-c" + l1 + "L1-" + l2 + "L2.memory";
+        output = new System.IO.StreamWriter(outputString);
         index = 1;
         output.WriteLine("Begin");
         //MainMemory(400, 300);
-        NetworkTimingData myNetworkTimingData = GetNetworkTimingData(nodeCount);
+        NetworkTimingData myNetworkTimingData = GetNetworkTimingData(nodeCount, multiplyFactor);
         int randomMin = myNetworkTimingData.randomMin;
         int randomMax = myNetworkTimingData.randomMax;
         AddOriginNetwork("Network", nodeCount, randomMin, randomMax, 0.1f);
@@ -471,13 +485,14 @@
         output.Close();
     }
 
-    public static void OutBIPDirectoryMemory(int nodeCount, int l1, int l2)
+    public static void OutBIPDirectoryMemory(int nodeCount, int l1, int l2, float multiplyFactor, string filesysSeperator)
     {
-        output = new System.IO.StreamWriter("memoryConfigs\\bip-p" + nodeCount + "-c" + l1 + "L1-" + l2 + "L2.memory");
+        string outputString = "memoryConfigs"+filesysSeperator+"bip-p" + nodeCount + "-c" + l1 + "L1-" + l2 + "L2.memory";
+        output = new System.IO.StreamWriter(outputString);
         index = 1;
         output.WriteLine("Begin");
         //MainMemory(400, 300);
-        NetworkTimingData myNetworkTimingData = GetNetworkTimingData(nodeCount);
+        NetworkTimingData myNetworkTimingData = GetNetworkTimingData(nodeCount, multiplyFactor);
         int randomMin = myNetworkTimingData.randomMin;
         int randomMax = myNetworkTimingData.randomMax;
         AddOriginNetwork("Network", nodeCount, randomMin, randomMax, 0.1f);
@@ -509,6 +524,9 @@
 	{
 		System.IO.Directory.CreateDirectory("memoryConfigs");
 
+      float networkMultiplyFactor = 1.00f;
+      string filesysSeperator = "/";
+      //string filesysSeperator = "\\";
         // nodeCount also determines the total number of processors
 		for (int nodeCount = 2; nodeCount <= 32; nodeCount *= 2)
 		{
@@ -519,9 +537,9 @@
 				for (int l2 = l1 * 2; l2 <= 8 * 1024; l2 *= 2)
                 //for (int l2 = l1 * 2; l2 <= 2; l2 *= 2)
 				{
-                    OutBIPDirectoryMemory(nodeCount, l1, l2);
-                    //OutDirectoryMemory(nodeCount, l1, l2);
-					//OutOriginDirectoryMemory(nodeCount, l1, l2);
+                    OutBIPDirectoryMemory(nodeCount, l1, l2, networkMultiplyFactor, filesysSeperator);
+                    OutDirectoryMemory(nodeCount, l1, l2, networkMultiplyFactor, filesysSeperator);
+					OutOriginDirectoryMemory(nodeCount, l1, l2, networkMultiplyFactor, filesysSeperator);
 					//OutSimpleMemory2(i, l1, l2);
 					for (int l3 = l2 * 2; l3 <= 64 * 1024; l3 *= 2)
 					{

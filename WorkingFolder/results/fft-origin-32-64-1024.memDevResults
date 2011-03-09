@@ -1,14 +1,14 @@
 Group string ReportFileName results/fft-origin-32-64-1024.memDevResults string BenchName fft
 
 DateTime
-DateTime:DateTime:03070546
+DateTime:DateTime:03080820
 
 TotalRunTime
-TotalRunTime:TotalRunTime:241293
+TotalRunTime:TotalRunTime:241612
 
 Network
-Network:TotalMessagesReceived:95004
-Network:AverageLatency:183.586
+Network:TotalMessagesReceived:95109
+Network:AverageLatency:183.562
 
 ProcessorInterface_0
 ProcessorInterface_0:readCount:15588
@@ -16,7 +16,7 @@ ProcessorInterface_0:writeCount:10649
 ProcessorInterface_0:totalOperations:26237
 
 L1_0
-L1_0:messagesReceived:27864
+L1_0:messagesReceived:27865
 L1_0:exclusiveReadHits:0
 L1_0:sharedReadHits:15588
 L1_0:exclusiveReadMisses:0
@@ -25,7 +25,7 @@ L1_0:writeHits:10649
 L1_0:writeMisses:229
 
 L2_0
-L2_0:messagesReceived:2950
+L2_0:messagesReceived:2951
 L2_0:exclusiveReadHits:229
 L2_0:sharedReadHits:532
 L2_0:exclusiveReadMisses:225
@@ -40,7 +40,7 @@ OriginDirectory_0:lookupRetryTime:60
 OriginDirectory_0:lookupTime:4
 OriginDirectory_0:satisfyTime:4
 OriginDirectory_0:nodeID:0
-OriginDirectory_0:TotalMessagesReceived:6200
+OriginDirectory_0:TotalMessagesReceived:6215
 OriginDirectory_0:cacheNaksReceived:0
 OriginDirectory_0:cacheEvictionsReceived:0
 OriginDirectory_0:cacheInterventionsReceived:213
@@ -51,7 +51,7 @@ OriginDirectory_0:cacheSpeculativeRepliesReceived:372
 OriginDirectory_0:cacheReadResponsesReceived:585
 OriginDirectory_0:cacheReadRepliesReceived:365
 OriginDirectory_0:directoryNaksReceived:0
-OriginDirectory_0:directoryReadsReceived:1525
+OriginDirectory_0:directoryReadsReceived:1540
 OriginDirectory_0:directoryReadResponsesReceived:0
 OriginDirectory_0:directoryTransfersReceived:0
 OriginDirectory_0:directoryWritebacksReceived:12
@@ -94,17 +94,17 @@ OriginDirectory_1:lookupTime:4
 OriginDirectory_1:satisfyTime:4
 OriginDirectory_1:nodeID:1
 OriginDirectory_1:TotalMessagesReceived:5968
-OriginDirectory_1:cacheNaksReceived:186
+OriginDirectory_1:cacheNaksReceived:216
 OriginDirectory_1:cacheEvictionsReceived:0
 OriginDirectory_1:cacheInterventionsReceived:193
 OriginDirectory_1:cacheInvalidatesReceived:373
 OriginDirectory_1:cacheInvalidateAcksReceived:372
 OriginDirectory_1:cacheInvalidateResponsesReceived:374
-OriginDirectory_1:cacheSpeculativeRepliesReceived:75
-OriginDirectory_1:cacheReadResponsesReceived:267
-OriginDirectory_1:cacheReadRepliesReceived:631
+OriginDirectory_1:cacheSpeculativeRepliesReceived:37
+OriginDirectory_1:cacheReadResponsesReceived:229
+OriginDirectory_1:cacheReadRepliesReceived:669
 OriginDirectory_1:directoryNaksReceived:0
-OriginDirectory_1:directoryReadsReceived:1501
+OriginDirectory_1:directoryReadsReceived:1509
 OriginDirectory_1:directoryReadResponsesReceived:0
 OriginDirectory_1:directoryTransfersReceived:0
 OriginDirectory_1:directoryWritebacksReceived:12
@@ -146,18 +146,18 @@ OriginDirectory_2:lookupRetryTime:60
 OriginDirectory_2:lookupTime:4
 OriginDirectory_2:satisfyTime:4
 OriginDirectory_2:nodeID:2
-OriginDirectory_2:TotalMessagesReceived:5968
-OriginDirectory_2:cacheNaksReceived:217
+OriginDirectory_2:TotalMessagesReceived:5982
+OriginDirectory_2:cacheNaksReceived:229
 OriginDirectory_2:cacheEvictionsReceived:0
 OriginDirectory_2:cacheInterventionsReceived:193
 OriginDirectory_2:cacheInvalidatesReceived:372
 OriginDirectory_2:cacheInvalidateAcksReceived:372
 OriginDirectory_2:cacheInvalidateResponsesReceived:373
-OriginDirectory_2:cacheSpeculativeRepliesReceived:13
-OriginDirectory_2:cacheReadResponsesReceived:205
-OriginDirectory_2:cacheReadRepliesReceived:691
+OriginDirectory_2:cacheSpeculativeRepliesReceived:33
+OriginDirectory_2:cacheReadResponsesReceived:225
+OriginDirectory_2:cacheReadRepliesReceived:671
 OriginDirectory_2:directoryNaksReceived:0
-OriginDirectory_2:directoryReadsReceived:1542
+OriginDirectory_2:directoryReadsReceived:1524
 OriginDirectory_2:directoryReadResponsesReceived:0
 OriginDirectory_2:directoryTransfersReceived:0
 OriginDirectory_2:directoryWritebacksReceived:12
@@ -199,18 +199,18 @@ OriginDirectory_3:lookupRetryTime:60
 OriginDirectory_3:lookupTime:4
 OriginDirectory_3:satisfyTime:4
 OriginDirectory_3:nodeID:3
-OriginDirectory_3:TotalMessagesReceived:6124
-OriginDirectory_3:cacheNaksReceived:35
+OriginDirectory_3:TotalMessagesReceived:6104
+OriginDirectory_3:cacheNaksReceived:70
 OriginDirectory_3:cacheEvictionsReceived:0
 OriginDirectory_3:cacheInterventionsReceived:193
 OriginDirectory_3:cacheInvalidatesReceived:372
 OriginDirectory_3:cacheInvalidateAcksReceived:372
 OriginDirectory_3:cacheInvalidateResponsesReceived:373
-OriginDirectory_3:cacheSpeculativeRepliesReceived:374
-OriginDirectory_3:cacheReadResponsesReceived:565
-OriginDirectory_3:cacheReadRepliesReceived:331
+OriginDirectory_3:cacheSpeculativeRepliesReceived:316
+OriginDirectory_3:cacheReadResponsesReceived:507
+OriginDirectory_3:cacheReadRepliesReceived:389
 OriginDirectory_3:directoryNaksReceived:0
-OriginDirectory_3:directoryReadsReceived:1519
+OriginDirectory_3:directoryReadsReceived:1522
 OriginDirectory_3:directoryReadResponsesReceived:0
 OriginDirectory_3:directoryTransfersReceived:0
 OriginDirectory_3:directoryWritebacksReceived:12
@@ -228,19 +228,19 @@ ProcessorInterface_4:writeCount:10252
 ProcessorInterface_4:totalOperations:25117
 
 L1_4
-L1_4:messagesReceived:26697
+L1_4:messagesReceived:26696
 L1_4:exclusiveReadHits:0
 L1_4:sharedReadHits:14865
 L1_4:exclusiveReadMisses:0
 L1_4:sharedReadMisses:509
 L1_4:writeHits:10252
-L1_4:writeMisses:227
+L1_4:writeMisses:226
 
 L2_4
-L2_4:messagesReceived:2849
-L2_4:exclusiveReadHits:227
+L2_4:messagesReceived:2847
+L2_4:exclusiveReadHits:226
 L2_4:sharedReadHits:509
-L2_4:exclusiveReadMisses:215
+L2_4:exclusiveReadMisses:214
 L2_4:sharedReadMisses:489
 L2_4:writeHits:0
 L2_4:writeMisses:0
@@ -252,28 +252,28 @@ OriginDirectory_4:lookupRetryTime:60
 OriginDirectory_4:lookupTime:4
 OriginDirectory_4:satisfyTime:4
 OriginDirectory_4:nodeID:4
-OriginDirectory_4:TotalMessagesReceived:5927
-OriginDirectory_4:cacheNaksReceived:209
+OriginDirectory_4:TotalMessagesReceived:5954
+OriginDirectory_4:cacheNaksReceived:213
 OriginDirectory_4:cacheEvictionsReceived:0
 OriginDirectory_4:cacheInterventionsReceived:193
 OriginDirectory_4:cacheInvalidatesReceived:372
-OriginDirectory_4:cacheInvalidateAcksReceived:372
+OriginDirectory_4:cacheInvalidateAcksReceived:371
 OriginDirectory_4:cacheInvalidateResponsesReceived:373
 OriginDirectory_4:cacheSpeculativeRepliesReceived:13
 OriginDirectory_4:cacheReadResponsesReceived:205
-OriginDirectory_4:cacheReadRepliesReceived:691
+OriginDirectory_4:cacheReadRepliesReceived:690
 OriginDirectory_4:directoryNaksReceived:0
-OriginDirectory_4:directoryReadsReceived:1509
+OriginDirectory_4:directoryReadsReceived:1538
 OriginDirectory_4:directoryReadResponsesReceived:0
 OriginDirectory_4:directoryTransfersReceived:0
-OriginDirectory_4:directoryWritebacksReceived:12
+OriginDirectory_4:directoryWritebacksReceived:11
 OriginDirectory_4:directoryWritebackRequestsReceived:0
 OriginDirectory_4:directoryWriteResponsesReceived:0
 
 MainMemory_4
 MainMemory_4:EvictionsReceived:0
-MainMemory_4:ReadsReceived:952
-MainMemory_4:WritessReceived:12
+MainMemory_4:ReadsReceived:951
+MainMemory_4:WritessReceived:11
 
 ProcessorInterface_5
 ProcessorInterface_5:readCount:14865
@@ -281,7 +281,7 @@ ProcessorInterface_5:writeCount:10252
 ProcessorInterface_5:totalOperations:25117
 
 L1_5
-L1_5:messagesReceived:26676
+L1_5:messagesReceived:26675
 L1_5:exclusiveReadHits:0
 L1_5:sharedReadHits:14865
 L1_5:exclusiveReadMisses:0
@@ -290,7 +290,7 @@ L1_5:writeHits:10252
 L1_5:writeMisses:219
 
 L2_5
-L2_5:messagesReceived:2828
+L2_5:messagesReceived:2826
 L2_5:exclusiveReadHits:219
 L2_5:sharedReadHits:505
 L2_5:exclusiveReadMisses:215
@@ -305,18 +305,18 @@ OriginDirectory_5:lookupRetryTime:60
 OriginDirectory_5:lookupTime:4
 OriginDirectory_5:satisfyTime:4
 OriginDirectory_5:nodeID:5
-OriginDirectory_5:TotalMessagesReceived:6147
+OriginDirectory_5:TotalMessagesReceived:6143
 OriginDirectory_5:cacheNaksReceived:57
 OriginDirectory_5:cacheEvictionsReceived:0
 OriginDirectory_5:cacheInterventionsReceived:193
-OriginDirectory_5:cacheInvalidatesReceived:372
+OriginDirectory_5:cacheInvalidatesReceived:371
 OriginDirectory_5:cacheInvalidateAcksReceived:372
-OriginDirectory_5:cacheInvalidateResponsesReceived:373
+OriginDirectory_5:cacheInvalidateResponsesReceived:372
 OriginDirectory_5:cacheSpeculativeRepliesReceived:373
 OriginDirectory_5:cacheReadResponsesReceived:565
 OriginDirectory_5:cacheReadRepliesReceived:331
 OriginDirectory_5:directoryNaksReceived:0
-OriginDirectory_5:directoryReadsReceived:1519
+OriginDirectory_5:directoryReadsReceived:1517
 OriginDirectory_5:directoryReadResponsesReceived:0
 OriginDirectory_5:directoryTransfersReceived:0
 OriginDirectory_5:directoryWritebacksReceived:12
@@ -358,18 +358,18 @@ OriginDirectory_6:lookupRetryTime:60
 OriginDirectory_6:lookupTime:4
 OriginDirectory_6:satisfyTime:4
 OriginDirectory_6:nodeID:6
-OriginDirectory_6:TotalMessagesReceived:6108
-OriginDirectory_6:cacheNaksReceived:49
+OriginDirectory_6:TotalMessagesReceived:6110
+OriginDirectory_6:cacheNaksReceived:30
 OriginDirectory_6:cacheEvictionsReceived:0
 OriginDirectory_6:cacheInterventionsReceived:193
 OriginDirectory_6:cacheInvalidatesReceived:372
 OriginDirectory_6:cacheInvalidateAcksReceived:372
 OriginDirectory_6:cacheInvalidateResponsesReceived:373
-OriginDirectory_6:cacheSpeculativeRepliesReceived:354
-OriginDirectory_6:cacheReadResponsesReceived:545
-OriginDirectory_6:cacheReadRepliesReceived:351
+OriginDirectory_6:cacheSpeculativeRepliesReceived:374
+OriginDirectory_6:cacheReadResponsesReceived:565
+OriginDirectory_6:cacheReadRepliesReceived:331
 OriginDirectory_6:directoryNaksReceived:0
-OriginDirectory_6:directoryReadsReceived:1507
+OriginDirectory_6:directoryReadsReceived:1508
 OriginDirectory_6:directoryReadResponsesReceived:0
 OriginDirectory_6:directoryTransfersReceived:0
 OriginDirectory_6:directoryWritebacksReceived:12
@@ -411,28 +411,28 @@ OriginDirectory_7:lookupRetryTime:60
 OriginDirectory_7:lookupTime:4
 OriginDirectory_7:satisfyTime:4
 OriginDirectory_7:nodeID:7
-OriginDirectory_7:TotalMessagesReceived:6156
-OriginDirectory_7:cacheNaksReceived:89
+OriginDirectory_7:TotalMessagesReceived:6152
+OriginDirectory_7:cacheNaksReceived:74
 OriginDirectory_7:cacheEvictionsReceived:0
 OriginDirectory_7:cacheInterventionsReceived:193
 OriginDirectory_7:cacheInvalidatesReceived:373
 OriginDirectory_7:cacheInvalidateAcksReceived:372
 OriginDirectory_7:cacheInvalidateResponsesReceived:374
-OriginDirectory_7:cacheSpeculativeRepliesReceived:317
-OriginDirectory_7:cacheReadResponsesReceived:508
-OriginDirectory_7:cacheReadRepliesReceived:389
+OriginDirectory_7:cacheSpeculativeRepliesReceived:355
+OriginDirectory_7:cacheReadResponsesReceived:546
+OriginDirectory_7:cacheReadRepliesReceived:351
 OriginDirectory_7:directoryNaksReceived:0
-OriginDirectory_7:directoryReadsReceived:1549
+OriginDirectory_7:directoryReadsReceived:1519
 OriginDirectory_7:directoryReadResponsesReceived:0
 OriginDirectory_7:directoryTransfersReceived:0
-OriginDirectory_7:directoryWritebacksReceived:11
+OriginDirectory_7:directoryWritebacksReceived:12
 OriginDirectory_7:directoryWritebackRequestsReceived:0
 OriginDirectory_7:directoryWriteResponsesReceived:0
 
 MainMemory_7
 MainMemory_7:EvictionsReceived:0
-MainMemory_7:ReadsReceived:952
-MainMemory_7:WritessReceived:11
+MainMemory_7:ReadsReceived:953
+MainMemory_7:WritessReceived:12
 
 ProcessorInterface_8
 ProcessorInterface_8:readCount:14866
@@ -440,20 +440,20 @@ ProcessorInterface_8:writeCount:10252
 ProcessorInterface_8:totalOperations:25118
 
 L1_8
-L1_8:messagesReceived:26687
+L1_8:messagesReceived:26686
 L1_8:exclusiveReadHits:0
 L1_8:sharedReadHits:14866
 L1_8:exclusiveReadMisses:0
 L1_8:sharedReadMisses:506
 L1_8:writeHits:10252
-L1_8:writeMisses:225
+L1_8:writeMisses:226
 
 L2_8
-L2_8:messagesReceived:2836
-L2_8:exclusiveReadHits:225
+L2_8:messagesReceived:2833
+L2_8:exclusiveReadHits:226
 L2_8:sharedReadHits:506
 L2_8:exclusiveReadMisses:214
-L2_8:sharedReadMisses:489
+L2_8:sharedReadMisses:488
 L2_8:writeHits:0
 L2_8:writeMisses:0
 
@@ -464,18 +464,18 @@ OriginDirectory_8:lookupRetryTime:60
 OriginDirectory_8:lookupTime:4
 OriginDirectory_8:satisfyTime:4
 OriginDirectory_8:nodeID:8
-OriginDirectory_8:TotalMessagesReceived:5996
+OriginDirectory_8:TotalMessagesReceived:5995
 OriginDirectory_8:cacheNaksReceived:248
 OriginDirectory_8:cacheEvictionsReceived:0
 OriginDirectory_8:cacheInterventionsReceived:192
-OriginDirectory_8:cacheInvalidatesReceived:372
+OriginDirectory_8:cacheInvalidatesReceived:371
 OriginDirectory_8:cacheInvalidateAcksReceived:371
-OriginDirectory_8:cacheInvalidateResponsesReceived:373
-OriginDirectory_8:cacheSpeculativeRepliesReceived:33
-OriginDirectory_8:cacheReadResponsesReceived:224
+OriginDirectory_8:cacheInvalidateResponsesReceived:372
+OriginDirectory_8:cacheSpeculativeRepliesReceived:32
+OriginDirectory_8:cacheReadResponsesReceived:223
 OriginDirectory_8:cacheReadRepliesReceived:670
 OriginDirectory_8:directoryNaksReceived:0
-OriginDirectory_8:directoryReadsReceived:1520
+OriginDirectory_8:directoryReadsReceived:1524
 OriginDirectory_8:directoryReadResponsesReceived:0
 OriginDirectory_8:directoryTransfersReceived:0
 OriginDirectory_8:directoryWritebacksReceived:12
@@ -517,8 +517,8 @@ OriginDirectory_9:lookupRetryTime:60
 OriginDirectory_9:lookupTime:4
 OriginDirectory_9:satisfyTime:4
 OriginDirectory_9:nodeID:9
-OriginDirectory_9:TotalMessagesReceived:5962
-OriginDirectory_9:cacheNaksReceived:234
+OriginDirectory_9:TotalMessagesReceived:5963
+OriginDirectory_9:cacheNaksReceived:232
 OriginDirectory_9:cacheEvictionsReceived:0
 OriginDirectory_9:cacheInterventionsReceived:194
 OriginDirectory_9:cacheInvalidatesReceived:372
@@ -528,7 +528,7 @@ OriginDirectory_9:cacheSpeculativeRepliesReceived:12
 OriginDirectory_9:cacheReadResponsesReceived:204
 OriginDirectory_9:cacheReadRepliesReceived:692
 OriginDirectory_9:directoryNaksReceived:0
-OriginDirectory_9:directoryReadsReceived:1516
+OriginDirectory_9:directoryReadsReceived:1519
 OriginDirectory_9:directoryReadResponsesReceived:0
 OriginDirectory_9:directoryTransfersReceived:0
 OriginDirectory_9:directoryWritebacksReceived:12
@@ -555,11 +555,11 @@ L1_10:writeHits:10252
 L1_10:writeMisses:219
 
 L2_10
-L2_10:messagesReceived:2836
+L2_10:messagesReceived:2837
 L2_10:exclusiveReadHits:219
 L2_10:sharedReadHits:509
 L2_10:exclusiveReadMisses:215
-L2_10:sharedReadMisses:488
+L2_10:sharedReadMisses:489
 L2_10:writeHits:0
 L2_10:writeMisses:0
 
@@ -570,18 +570,18 @@ OriginDirectory_10:lookupRetryTime:60
 OriginDirectory_10:lookupTime:4
 OriginDirectory_10:satisfyTime:4
 OriginDirectory_10:nodeID:10
-OriginDirectory_10:TotalMessagesReceived:6101
-OriginDirectory_10:cacheNaksReceived:40
+OriginDirectory_10:TotalMessagesReceived:6112
+OriginDirectory_10:cacheNaksReceived:17
 OriginDirectory_10:cacheEvictionsReceived:0
 OriginDirectory_10:cacheInterventionsReceived:193
 OriginDirectory_10:cacheInvalidatesReceived:371
 OriginDirectory_10:cacheInvalidateAcksReceived:372
 OriginDirectory_10:cacheInvalidateResponsesReceived:372
-OriginDirectory_10:cacheSpeculativeRepliesReceived:349
-OriginDirectory_10:cacheReadResponsesReceived:541
-OriginDirectory_10:cacheReadRepliesReceived:354
+OriginDirectory_10:cacheSpeculativeRepliesReceived:373
+OriginDirectory_10:cacheReadResponsesReceived:565
+OriginDirectory_10:cacheReadRepliesReceived:331
 OriginDirectory_10:directoryNaksReceived:0
-OriginDirectory_10:directoryReadsReceived:1519
+OriginDirectory_10:directoryReadsReceived:1527
 OriginDirectory_10:directoryReadResponsesReceived:0
 OriginDirectory_10:directoryTransfersReceived:0
 OriginDirectory_10:directoryWritebacksReceived:12
@@ -623,8 +623,8 @@ OriginDirectory_11:lookupRetryTime:60
 OriginDirectory_11:lookupTime:4
 OriginDirectory_11:satisfyTime:4
 OriginDirectory_11:nodeID:11
-OriginDirectory_11:TotalMessagesReceived:6881
-OriginDirectory_11:cacheNaksReceived:208
+OriginDirectory_11:TotalMessagesReceived:6917
+OriginDirectory_11:cacheNaksReceived:212
 OriginDirectory_11:cacheEvictionsReceived:0
 OriginDirectory_11:cacheInterventionsReceived:193
 OriginDirectory_11:cacheInvalidatesReceived:373
@@ -634,7 +634,7 @@ OriginDirectory_11:cacheSpeculativeRepliesReceived:13
 OriginDirectory_11:cacheReadResponsesReceived:206
 OriginDirectory_11:cacheReadRepliesReceived:691
 OriginDirectory_11:directoryNaksReceived:3
-OriginDirectory_11:directoryReadsReceived:2415
+OriginDirectory_11:directoryReadsReceived:2447
 OriginDirectory_11:directoryReadResponsesReceived:0
 OriginDirectory_11:directoryTransfersReceived:0
 OriginDirectory_11:directoryWritebacksReceived:12
@@ -652,7 +652,7 @@ ProcessorInterface_12:writeCount:10252
 ProcessorInterface_12:totalOperations:25118
 
 L1_12
-L1_12:messagesReceived:26691
+L1_12:messagesReceived:26690
 L1_12:exclusiveReadHits:0
 L1_12:sharedReadHits:14866
 L1_12:exclusiveReadMisses:0
@@ -661,7 +661,7 @@ L1_12:writeHits:10252
 L1_12:writeMisses:219
 
 L2_12
-L2_12:messagesReceived:2842
+L2_12:messagesReceived:2841
 L2_12:exclusiveReadHits:219
 L2_12:sharedReadHits:509
 L2_12:exclusiveReadMisses:215
@@ -676,7 +676,7 @@ OriginDirectory_12:lookupRetryTime:60
 OriginDirectory_12:lookupTime:4
 OriginDirectory_12:satisfyTime:4
 OriginDirectory_12:nodeID:12
-OriginDirectory_12:TotalMessagesReceived:6180
+OriginDirectory_12:TotalMessagesReceived:6178
 OriginDirectory_12:cacheNaksReceived:49
 OriginDirectory_12:cacheEvictionsReceived:0
 OriginDirectory_12:cacheInterventionsReceived:193
@@ -687,7 +687,7 @@ OriginDirectory_12:cacheSpeculativeRepliesReceived:373
 OriginDirectory_12:cacheReadResponsesReceived:565
 OriginDirectory_12:cacheReadRepliesReceived:331
 OriginDirectory_12:directoryNaksReceived:0
-OriginDirectory_12:directoryReadsReceived:1558
+OriginDirectory_12:directoryReadsReceived:1556
 OriginDirectory_12:directoryReadResponsesReceived:0
 OriginDirectory_12:directoryTransfersReceived:0
 OriginDirectory_12:directoryWritebacksReceived:12
@@ -705,7 +705,7 @@ ProcessorInterface_13:writeCount:10252
 ProcessorInterface_13:totalOperations:25118
 
 L1_13
-L1_13:messagesReceived:26677
+L1_13:messagesReceived:26676
 L1_13:exclusiveReadHits:0
 L1_13:sharedReadHits:14866
 L1_13:exclusiveReadMisses:0
@@ -714,7 +714,7 @@ L1_13:writeHits:10252
 L1_13:writeMisses:219
 
 L2_13
-L2_13:messagesReceived:2828
+L2_13:messagesReceived:2827
 L2_13:exclusiveReadHits:219
 L2_13:sharedReadHits:505
 L2_13:exclusiveReadMisses:215
@@ -729,7 +729,7 @@ OriginDirectory_13:lookupRetryTime:60
 OriginDirectory_13:lookupTime:4
 OriginDirectory_13:satisfyTime:4
 OriginDirectory_13:nodeID:13
-OriginDirectory_13:TotalMessagesReceived:6157
+OriginDirectory_13:TotalMessagesReceived:6155
 OriginDirectory_13:cacheNaksReceived:24
 OriginDirectory_13:cacheEvictionsReceived:0
 OriginDirectory_13:cacheInterventionsReceived:193
@@ -740,7 +740,7 @@ OriginDirectory_13:cacheSpeculativeRepliesReceived:373
 OriginDirectory_13:cacheReadResponsesReceived:565
 OriginDirectory_13:cacheReadRepliesReceived:331
 OriginDirectory_13:directoryNaksReceived:0
-OriginDirectory_13:directoryReadsReceived:1559
+OriginDirectory_13:directoryReadsReceived:1557
 OriginDirectory_13:directoryReadResponsesReceived:0
 OriginDirectory_13:directoryTransfersReceived:0
 OriginDirectory_13:directoryWritebacksReceived:12
@@ -782,8 +782,8 @@ OriginDirectory_14:lookupRetryTime:60
 OriginDirectory_14:lookupTime:4
 OriginDirectory_14:satisfyTime:4
 OriginDirectory_14:nodeID:14
-OriginDirectory_14:TotalMessagesReceived:6049
-OriginDirectory_14:cacheNaksReceived:255
+OriginDirectory_14:TotalMessagesReceived:6054
+OriginDirectory_14:cacheNaksReceived:253
 OriginDirectory_14:cacheEvictionsReceived:0
 OriginDirectory_14:cacheInterventionsReceived:193
 OriginDirectory_14:cacheInvalidatesReceived:372
@@ -793,7 +793,7 @@ OriginDirectory_14:cacheSpeculativeRepliesReceived:13
 OriginDirectory_14:cacheReadResponsesReceived:205
 OriginDirectory_14:cacheReadRepliesReceived:691
 OriginDirectory_14:directoryNaksReceived:0
-OriginDirectory_14:directoryReadsReceived:1584
+OriginDirectory_14:directoryReadsReceived:1591
 OriginDirectory_14:directoryReadResponsesReceived:0
 OriginDirectory_14:directoryTransfersReceived:0
 OriginDirectory_14:directoryWritebacksReceived:12
@@ -835,28 +835,28 @@ OriginDirectory_15:lookupRetryTime:60
 OriginDirectory_15:lookupTime:4
 OriginDirectory_15:satisfyTime:4
 OriginDirectory_15:nodeID:15
-OriginDirectory_15:TotalMessagesReceived:6107
-OriginDirectory_15:cacheNaksReceived:206
+OriginDirectory_15:TotalMessagesReceived:6087
+OriginDirectory_15:cacheNaksReceived:207
 OriginDirectory_15:cacheEvictionsReceived:0
 OriginDirectory_15:cacheInterventionsReceived:194
 OriginDirectory_15:cacheInvalidatesReceived:372
 OriginDirectory_15:cacheInvalidateAcksReceived:374
 OriginDirectory_15:cacheInvalidateResponsesReceived:373
-OriginDirectory_15:cacheSpeculativeRepliesReceived:32
-OriginDirectory_15:cacheReadResponsesReceived:224
-OriginDirectory_15:cacheReadRepliesReceived:672
+OriginDirectory_15:cacheSpeculativeRepliesReceived:12
+OriginDirectory_15:cacheReadResponsesReceived:204
+OriginDirectory_15:cacheReadRepliesReceived:692
 OriginDirectory_15:directoryNaksReceived:0
 OriginDirectory_15:directoryReadsReceived:1673
 OriginDirectory_15:directoryReadResponsesReceived:0
 OriginDirectory_15:directoryTransfersReceived:0
-OriginDirectory_15:directoryWritebacksReceived:11
+OriginDirectory_15:directoryWritebacksReceived:12
 OriginDirectory_15:directoryWritebackRequestsReceived:0
 OriginDirectory_15:directoryWriteResponsesReceived:0
 
 MainMemory_15
 MainMemory_15:EvictionsReceived:0
-MainMemory_15:ReadsReceived:961
-MainMemory_15:WritessReceived:11
+MainMemory_15:ReadsReceived:960
+MainMemory_15:WritessReceived:12
 
 ProcessorInterface_16
 ProcessorInterface_16:readCount:14866
@@ -888,16 +888,16 @@ OriginDirectory_16:lookupRetryTime:60
 OriginDirectory_16:lookupTime:4
 OriginDirectory_16:satisfyTime:4
 OriginDirectory_16:nodeID:16
-OriginDirectory_16:TotalMessagesReceived:3313
-OriginDirectory_16:cacheNaksReceived:201
+OriginDirectory_16:TotalMessagesReceived:3344
+OriginDirectory_16:cacheNaksReceived:174
 OriginDirectory_16:cacheEvictionsReceived:0
 OriginDirectory_16:cacheInterventionsReceived:193
 OriginDirectory_16:cacheInvalidatesReceived:372
 OriginDirectory_16:cacheInvalidateAcksReceived:372
 OriginDirectory_16:cacheInvalidateResponsesReceived:373
-OriginDirectory_16:cacheSpeculativeRepliesReceived:30
-OriginDirectory_16:cacheReadResponsesReceived:222
-OriginDirectory_16:cacheReadRepliesReceived:674
+OriginDirectory_16:cacheSpeculativeRepliesReceived:88
+OriginDirectory_16:cacheReadResponsesReceived:280
+OriginDirectory_16:cacheReadRepliesReceived:616
 OriginDirectory_16:directoryNaksReceived:0
 OriginDirectory_16:directoryReadsReceived:148
 OriginDirectory_16:directoryReadResponsesReceived:0
@@ -917,19 +917,19 @@ ProcessorInterface_17:writeCount:10252
 ProcessorInterface_17:totalOperations:25117
 
 L1_17
-L1_17:messagesReceived:26684
+L1_17:messagesReceived:26682
 L1_17:exclusiveReadHits:0
 L1_17:sharedReadHits:14865
 L1_17:exclusiveReadMisses:0
 L1_17:sharedReadMisses:505
 L1_17:writeHits:10252
-L1_17:writeMisses:227
+L1_17:writeMisses:226
 
 L2_17
-L2_17:messagesReceived:2836
-L2_17:exclusiveReadHits:227
+L2_17:messagesReceived:2832
+L2_17:exclusiveReadHits:226
 L2_17:sharedReadHits:505
-L2_17:exclusiveReadMisses:215
+L2_17:exclusiveReadMisses:214
 L2_17:sharedReadMisses:489
 L2_17:writeHits:0
 L2_17:writeMisses:0
@@ -941,16 +941,16 @@ OriginDirectory_17:lookupRetryTime:60
 OriginDirectory_17:lookupTime:4
 OriginDirectory_17:satisfyTime:4
 OriginDirectory_17:nodeID:17
-OriginDirectory_17:TotalMessagesReceived:3253
-OriginDirectory_17:cacheNaksReceived:235
+OriginDirectory_17:TotalMessagesReceived:3281
+OriginDirectory_17:cacheNaksReceived:248
 OriginDirectory_17:cacheEvictionsReceived:0
-OriginDirectory_17:cacheInterventionsReceived:193
+OriginDirectory_17:cacheInterventionsReceived:192
 OriginDirectory_17:cacheInvalidatesReceived:372
-OriginDirectory_17:cacheInvalidateAcksReceived:372
+OriginDirectory_17:cacheInvalidateAcksReceived:371
 OriginDirectory_17:cacheInvalidateResponsesReceived:373
-OriginDirectory_17:cacheSpeculativeRepliesReceived:13
-OriginDirectory_17:cacheReadResponsesReceived:205
-OriginDirectory_17:cacheReadRepliesReceived:691
+OriginDirectory_17:cacheSpeculativeRepliesReceived:33
+OriginDirectory_17:cacheReadResponsesReceived:224
+OriginDirectory_17:cacheReadRepliesReceived:670
 OriginDirectory_17:directoryNaksReceived:0
 OriginDirectory_17:directoryReadsReceived:80
 OriginDirectory_17:directoryReadResponsesReceived:0
@@ -979,11 +979,11 @@ L1_18:writeHits:10252
 L1_18:writeMisses:219
 
 L2_18
-L2_18:messagesReceived:2826
+L2_18:messagesReceived:2824
 L2_18:exclusiveReadHits:219
 L2_18:sharedReadHits:505
 L2_18:exclusiveReadMisses:215
-L2_18:sharedReadMisses:489
+L2_18:sharedReadMisses:488
 L2_18:writeHits:0
 L2_18:writeMisses:0
 
@@ -994,16 +994,16 @@ OriginDirectory_18:lookupRetryTime:60
 OriginDirectory_18:lookupTime:4
 OriginDirectory_18:satisfyTime:4
 OriginDirectory_18:nodeID:18
-OriginDirectory_18:TotalMessagesReceived:3413
-OriginDirectory_18:cacheNaksReceived:40
+OriginDirectory_18:TotalMessagesReceived:3406
+OriginDirectory_18:cacheNaksReceived:58
 OriginDirectory_18:cacheEvictionsReceived:0
 OriginDirectory_18:cacheInterventionsReceived:193
-OriginDirectory_18:cacheInvalidatesReceived:372
+OriginDirectory_18:cacheInvalidatesReceived:371
 OriginDirectory_18:cacheInvalidateAcksReceived:372
-OriginDirectory_18:cacheInvalidateResponsesReceived:373
-OriginDirectory_18:cacheSpeculativeRepliesReceived:373
-OriginDirectory_18:cacheReadResponsesReceived:565
-OriginDirectory_18:cacheReadRepliesReceived:331
+OriginDirectory_18:cacheInvalidateResponsesReceived:372
+OriginDirectory_18:cacheSpeculativeRepliesReceived:352
+OriginDirectory_18:cacheReadResponsesReceived:544
+OriginDirectory_18:cacheReadRepliesReceived:351
 OriginDirectory_18:directoryNaksReceived:0
 OriginDirectory_18:directoryReadsReceived:77
 OriginDirectory_18:directoryReadResponsesReceived:0
@@ -1129,19 +1129,19 @@ ProcessorInterface_21:writeCount:10252
 ProcessorInterface_21:totalOperations:25118
 
 L1_21
-L1_21:messagesReceived:26685
+L1_21:messagesReceived:26686
 L1_21:exclusiveReadHits:0
 L1_21:sharedReadHits:14866
 L1_21:exclusiveReadMisses:0
 L1_21:sharedReadMisses:505
 L1_21:writeHits:10252
-L1_21:writeMisses:226
+L1_21:writeMisses:227
 
 L2_21
-L2_21:messagesReceived:2835
-L2_21:exclusiveReadHits:226
+L2_21:messagesReceived:2837
+L2_21:exclusiveReadHits:227
 L2_21:sharedReadHits:505
-L2_21:exclusiveReadMisses:214
+L2_21:exclusiveReadMisses:215
 L2_21:sharedReadMisses:489
 L2_21:writeHits:0
 L2_21:writeMisses:0
@@ -1154,15 +1154,15 @@ OriginDirectory_21:lookupTime:4
 OriginDirectory_21:satisfyTime:4
 OriginDirectory_21:nodeID:21
 OriginDirectory_21:TotalMessagesReceived:3219
-OriginDirectory_21:cacheNaksReceived:228
+OriginDirectory_21:cacheNaksReceived:225
 OriginDirectory_21:cacheEvictionsReceived:0
 OriginDirectory_21:cacheInterventionsReceived:193
 OriginDirectory_21:cacheInvalidatesReceived:372
-OriginDirectory_21:cacheInvalidateAcksReceived:371
+OriginDirectory_21:cacheInvalidateAcksReceived:372
 OriginDirectory_21:cacheInvalidateResponsesReceived:373
 OriginDirectory_21:cacheSpeculativeRepliesReceived:13
 OriginDirectory_21:cacheReadResponsesReceived:205
-OriginDirectory_21:cacheReadRepliesReceived:690
+OriginDirectory_21:cacheReadRepliesReceived:691
 OriginDirectory_21:directoryNaksReceived:0
 OriginDirectory_21:directoryReadsReceived:56
 OriginDirectory_21:directoryReadResponsesReceived:0
@@ -1182,7 +1182,7 @@ ProcessorInterface_22:writeCount:10253
 ProcessorInterface_22:totalOperations:25119
 
 L1_22
-L1_22:messagesReceived:26692
+L1_22:messagesReceived:26691
 L1_22:exclusiveReadHits:0
 L1_22:sharedReadHits:14866
 L1_22:exclusiveReadMisses:0
@@ -1191,7 +1191,7 @@ L1_22:writeHits:10253
 L1_22:writeMisses:219
 
 L2_22
-L2_22:messagesReceived:2842
+L2_22:messagesReceived:2841
 L2_22:exclusiveReadHits:219
 L2_22:sharedReadHits:509
 L2_22:exclusiveReadMisses:215
@@ -1235,7 +1235,7 @@ ProcessorInterface_23:writeCount:10253
 ProcessorInterface_23:totalOperations:25119
 
 L1_23
-L1_23:messagesReceived:26697
+L1_23:messagesReceived:26698
 L1_23:exclusiveReadHits:0
 L1_23:sharedReadHits:14866
 L1_23:exclusiveReadMisses:0
@@ -1244,7 +1244,7 @@ L1_23:writeHits:10253
 L1_23:writeMisses:226
 
 L2_23
-L2_23:messagesReceived:2845
+L2_23:messagesReceived:2847
 L2_23:exclusiveReadHits:226
 L2_23:sharedReadHits:509
 L2_23:exclusiveReadMisses:214
@@ -1259,16 +1259,16 @@ OriginDirectory_23:lookupRetryTime:60
 OriginDirectory_23:lookupTime:4
 OriginDirectory_23:satisfyTime:4
 OriginDirectory_23:nodeID:23
-OriginDirectory_23:TotalMessagesReceived:3295
-OriginDirectory_23:cacheNaksReceived:258
+OriginDirectory_23:TotalMessagesReceived:3266
+OriginDirectory_23:cacheNaksReceived:250
 OriginDirectory_23:cacheEvictionsReceived:0
-OriginDirectory_23:cacheInterventionsReceived:192
+OriginDirectory_23:cacheInterventionsReceived:193
 OriginDirectory_23:cacheInvalidatesReceived:372
 OriginDirectory_23:cacheInvalidateAcksReceived:371
 OriginDirectory_23:cacheInvalidateResponsesReceived:373
-OriginDirectory_23:cacheSpeculativeRepliesReceived:36
-OriginDirectory_23:cacheReadResponsesReceived:227
-OriginDirectory_23:cacheReadRepliesReceived:667
+OriginDirectory_23:cacheSpeculativeRepliesReceived:13
+OriginDirectory_23:cacheReadResponsesReceived:205
+OriginDirectory_23:cacheReadRepliesReceived:690
 OriginDirectory_23:directoryNaksReceived:0
 OriginDirectory_23:directoryReadsReceived:80
 OriginDirectory_23:directoryReadResponsesReceived:0
@@ -1312,8 +1312,8 @@ OriginDirectory_24:lookupRetryTime:60
 OriginDirectory_24:lookupTime:4
 OriginDirectory_24:satisfyTime:4
 OriginDirectory_24:nodeID:24
-OriginDirectory_24:TotalMessagesReceived:3231
-OriginDirectory_24:cacheNaksReceived:234
+OriginDirectory_24:TotalMessagesReceived:3238
+OriginDirectory_24:cacheNaksReceived:241
 OriginDirectory_24:cacheEvictionsReceived:0
 OriginDirectory_24:cacheInterventionsReceived:193
 OriginDirectory_24:cacheInvalidatesReceived:372
@@ -1366,15 +1366,15 @@ OriginDirectory_25:lookupTime:4
 OriginDirectory_25:satisfyTime:4
 OriginDirectory_25:nodeID:25
 OriginDirectory_25:TotalMessagesReceived:3450
-OriginDirectory_25:cacheNaksReceived:40
+OriginDirectory_25:cacheNaksReceived:60
 OriginDirectory_25:cacheEvictionsReceived:0
 OriginDirectory_25:cacheInterventionsReceived:193
 OriginDirectory_25:cacheInvalidatesReceived:372
 OriginDirectory_25:cacheInvalidateAcksReceived:372
 OriginDirectory_25:cacheInvalidateResponsesReceived:373
-OriginDirectory_25:cacheSpeculativeRepliesReceived:373
-OriginDirectory_25:cacheReadResponsesReceived:565
-OriginDirectory_25:cacheReadRepliesReceived:331
+OriginDirectory_25:cacheSpeculativeRepliesReceived:353
+OriginDirectory_25:cacheReadResponsesReceived:545
+OriginDirectory_25:cacheReadRepliesReceived:351
 OriginDirectory_25:directoryNaksReceived:0
 OriginDirectory_25:directoryReadsReceived:81
 OriginDirectory_25:directoryReadResponsesReceived:0
@@ -1394,7 +1394,7 @@ ProcessorInterface_26:writeCount:10252
 ProcessorInterface_26:totalOperations:25118
 
 L1_26
-L1_26:messagesReceived:26677
+L1_26:messagesReceived:26678
 L1_26:exclusiveReadHits:0
 L1_26:sharedReadHits:14866
 L1_26:exclusiveReadMisses:0
@@ -1403,7 +1403,7 @@ L1_26:writeHits:10252
 L1_26:writeMisses:219
 
 L2_26
-L2_26:messagesReceived:2828
+L2_26:messagesReceived:2830
 L2_26:exclusiveReadHits:219
 L2_26:sharedReadHits:505
 L2_26:exclusiveReadMisses:215
@@ -1418,13 +1418,13 @@ OriginDirectory_26:lookupRetryTime:60
 OriginDirectory_26:lookupTime:4
 OriginDirectory_26:satisfyTime:4
 OriginDirectory_26:nodeID:26
-OriginDirectory_26:TotalMessagesReceived:3484
+OriginDirectory_26:TotalMessagesReceived:3486
 OriginDirectory_26:cacheNaksReceived:44
 OriginDirectory_26:cacheEvictionsReceived:0
 OriginDirectory_26:cacheInterventionsReceived:193
-OriginDirectory_26:cacheInvalidatesReceived:372
+OriginDirectory_26:cacheInvalidatesReceived:373
 OriginDirectory_26:cacheInvalidateAcksReceived:372
-OriginDirectory_26:cacheInvalidateResponsesReceived:372
+OriginDirectory_26:cacheInvalidateResponsesReceived:373
 OriginDirectory_26:cacheSpeculativeRepliesReceived:373
 OriginDirectory_26:cacheReadResponsesReceived:566
 OriginDirectory_26:cacheReadRepliesReceived:331
@@ -1471,8 +1471,8 @@ OriginDirectory_27:lookupRetryTime:60
 OriginDirectory_27:lookupTime:4
 OriginDirectory_27:satisfyTime:4
 OriginDirectory_27:nodeID:27
-OriginDirectory_27:TotalMessagesReceived:3273
-OriginDirectory_27:cacheNaksReceived:194
+OriginDirectory_27:TotalMessagesReceived:3274
+OriginDirectory_27:cacheNaksReceived:195
 OriginDirectory_27:cacheEvictionsReceived:0
 OriginDirectory_27:cacheInterventionsReceived:194
 OriginDirectory_27:cacheInvalidatesReceived:372
@@ -1500,7 +1500,7 @@ ProcessorInterface_28:writeCount:10252
 ProcessorInterface_28:totalOperations:25118
 
 L1_28
-L1_28:messagesReceived:26687
+L1_28:messagesReceived:26686
 L1_28:exclusiveReadHits:0
 L1_28:sharedReadHits:14866
 L1_28:exclusiveReadMisses:0
@@ -1509,7 +1509,7 @@ L1_28:writeHits:10252
 L1_28:writeMisses:227
 
 L2_28
-L2_28:messagesReceived:2838
+L2_28:messagesReceived:2837
 L2_28:exclusiveReadHits:227
 L2_28:sharedReadHits:505
 L2_28:exclusiveReadMisses:215
@@ -1524,8 +1524,8 @@ OriginDirectory_28:lookupRetryTime:60
 OriginDirectory_28:lookupTime:4
 OriginDirectory_28:satisfyTime:4
 OriginDirectory_28:nodeID:28
-OriginDirectory_28:TotalMessagesReceived:3279
-OriginDirectory_28:cacheNaksReceived:205
+OriginDirectory_28:TotalMessagesReceived:3282
+OriginDirectory_28:cacheNaksReceived:208
 OriginDirectory_28:cacheEvictionsReceived:0
 OriginDirectory_28:cacheInterventionsReceived:193
 OriginDirectory_28:cacheInvalidatesReceived:372
@@ -1553,7 +1553,7 @@ ProcessorInterface_29:writeCount:10252
 ProcessorInterface_29:totalOperations:25117
 
 L1_29
-L1_29:messagesReceived:26689
+L1_29:messagesReceived:26688
 L1_29:exclusiveReadHits:0
 L1_29:sharedReadHits:14865
 L1_29:exclusiveReadMisses:0
@@ -1562,7 +1562,7 @@ L1_29:writeHits:10252
 L1_29:writeMisses:219
 
 L2_29
-L2_29:messagesReceived:2841
+L2_29:messagesReceived:2840
 L2_29:exclusiveReadHits:219
 L2_29:sharedReadHits:509
 L2_29:exclusiveReadMisses:215
@@ -1630,8 +1630,8 @@ OriginDirectory_30:lookupRetryTime:60
 OriginDirectory_30:lookupTime:4
 OriginDirectory_30:satisfyTime:4
 OriginDirectory_30:nodeID:30
-OriginDirectory_30:TotalMessagesReceived:3236
-OriginDirectory_30:cacheNaksReceived:213
+OriginDirectory_30:TotalMessagesReceived:3244
+OriginDirectory_30:cacheNaksReceived:221
 OriginDirectory_30:cacheEvictionsReceived:0
 OriginDirectory_30:cacheInterventionsReceived:193
 OriginDirectory_30:cacheInvalidatesReceived:373
@@ -1659,7 +1659,7 @@ ProcessorInterface_31:writeCount:10252
 ProcessorInterface_31:totalOperations:25118
 
 L1_31
-L1_31:messagesReceived:26683
+L1_31:messagesReceived:26680
 L1_31:exclusiveReadHits:0
 L1_31:sharedReadHits:14866
 L1_31:exclusiveReadMisses:0
@@ -1668,10 +1668,10 @@ L1_31:writeHits:10252
 L1_31:writeMisses:219
 
 L2_31
-L2_31:messagesReceived:2832
+L2_31:messagesReceived:2827
 L2_31:exclusiveReadHits:219
 L2_31:sharedReadHits:506
-L2_31:exclusiveReadMisses:215
+L2_31:exclusiveReadMisses:214
 L2_31:sharedReadMisses:488
 L2_31:writeHits:0
 L2_31:writeMisses:0
@@ -1683,16 +1683,16 @@ OriginDirectory_31:lookupRetryTime:60
 OriginDirectory_31:lookupTime:4
 OriginDirectory_31:satisfyTime:4
 OriginDirectory_31:nodeID:31
-OriginDirectory_31:TotalMessagesReceived:3441
-OriginDirectory_31:cacheNaksReceived:91
+OriginDirectory_31:TotalMessagesReceived:3438
+OriginDirectory_31:cacheNaksReceived:93
 OriginDirectory_31:cacheEvictionsReceived:0
-OriginDirectory_31:cacheInterventionsReceived:193
+OriginDirectory_31:cacheInterventionsReceived:192
 OriginDirectory_31:cacheInvalidatesReceived:371
-OriginDirectory_31:cacheInvalidateAcksReceived:372
+OriginDirectory_31:cacheInvalidateAcksReceived:371
 OriginDirectory_31:cacheInvalidateResponsesReceived:371
 OriginDirectory_31:cacheSpeculativeRepliesReceived:352
-OriginDirectory_31:cacheReadResponsesReceived:545
-OriginDirectory_31:cacheReadRepliesReceived:351
+OriginDirectory_31:cacheReadResponsesReceived:544
+OriginDirectory_31:cacheReadRepliesReceived:350
 OriginDirectory_31:directoryNaksReceived:0
 OriginDirectory_31:directoryReadsReceived:48
 OriginDirectory_31:directoryReadResponsesReceived:0
@@ -1714,15 +1714,15 @@ TotalCache:totalL1CacheSharedReadMisses:16259
 TotalCache:totalL1CacheWriteHits:328475
 TotalCache:totalL1CacheWriteMisses:7135
 TotalCache:totalL2CacheExclusiveReadHits:7134
-TotalCache:totalL2CacheExclusiveReadMisses:6882
+TotalCache:totalL2CacheExclusiveReadMisses:6880
 TotalCache:totalL2CacheSharedReadHits:16262
-TotalCache:totalL2CacheSharedReadMisses:15679
+TotalCache:totalL2CacheSharedReadMisses:15678
 TotalCache:totalL2CacheWriteHits:0
 TotalCache:totalL2CacheWriteMisses:0
 TotalCache:totalCacheExclusiveReadHits:7134
-TotalCache:totalCacheExclusiveReadMisses:6882
+TotalCache:totalCacheExclusiveReadMisses:6880
 TotalCache:totalCacheSharedReadHits:492748
-TotalCache:totalCacheSharedReadMisses:31938
+TotalCache:totalCacheSharedReadMisses:31937
 TotalCache:totalCacheWriteHits:328475
 TotalCache:totalCacheWriteMisses:7135
 
