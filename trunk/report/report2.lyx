@@ -3611,21 +3611,7 @@ Results
 \begin_layout Standard
 In this section, I will discuss the results of running the simulation on
  the SESC simulator.
- First, I will discuss how to ensure that the simulator is working correctly.
- Next, I will go over a small synthetic benchmark that exploits the differences
- in protocol.
- Finally, I will present the results of running the simulator on the SPLASH2
- benchmarks.
-\end_layout
-
-\begin_layout Subsection
-
-\family roman
-Verifying Correctness
-\end_layout
-
-\begin_layout Standard
-To verify whether or not the simulator is correct, we run the benchmark
+ To verify whether or not the simulator is correct, we run the benchmark
  on a normal machine to find out what the output is, then run the program
  on SESC.
  The output produced from SESC should be identical to that produced by running
@@ -3635,6 +3621,10 @@ To verify whether or not the simulator is correct, we run the benchmark
  In addition, the SPLASH2 benchmarks' kernel programs provide self-test
  that we can invoke to ensure that our protocols were implemented directly.
  It achieves this self-test using inherent tests to the data structure.
+ First, I will go over a small synthetic benchmark that exploits the differences
+ in protocol.
+ Then, I will present the results of running the simulator on the SPLASH2
+ benchmarks.
 \end_layout
 
 \begin_layout Subsection
@@ -3645,7 +3635,7 @@ Synthetic Benchmark
 \begin_inset Float figure
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 int myInt = 1
@@ -3659,14 +3649,14 @@ int myInt = 1
 \end_layout
 
 \begin_layout Plain Layout
-readInt():
+readInt(numberOfIndividualLoops):
 \end_layout
 
 \begin_layout Plain Layout
 \begin_inset space \qquad{}
 \end_inset
 
-loop 10000 times:
+loop numberOfIndividualLoops times:
 \end_layout
 
 \begin_layout Plain Layout
@@ -3688,14 +3678,14 @@ read myInt
 \end_layout
 
 \begin_layout Plain Layout
-writeInt():
+writeInt(numberOfIndividualLoops):
 \end_layout
 
 \begin_layout Plain Layout
 \begin_inset space \qquad{}
 \end_inset
 
-loop 10000 times:
+loop numberOfIndividualLoops times:
 \end_layout
 
 \begin_layout Plain Layout
@@ -3714,21 +3704,43 @@ increment myInt
 \end_layout
 
 \begin_layout Plain Layout
-main():
+main(numberOfProcessors , numberOfLoops):
 \end_layout
 
 \begin_layout Plain Layout
 \begin_inset space \qquad{}
 \end_inset
 
-spawn thread readInt()
+numberOfIndividualLoops = numberOfLoops / numberOfProcessors
 \end_layout
 
 \begin_layout Plain Layout
 \begin_inset space \qquad{}
 \end_inset
 
-spawn thread writeInt()
+loop numberOfProcessors / 2 times:
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset space \qquad{}
+\end_inset
+
+
+\begin_inset space \qquad{}
+\end_inset
+
+spawn thread readInt(numberOfIndividualLoops)
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset space \qquad{}
+\end_inset
+
+
+\begin_inset space \qquad{}
+\end_inset
+
+spawn thread writeInt(numberOfIndividualLoops)
 \end_layout
 
 \begin_layout Plain Layout
@@ -3785,30 +3797,67 @@ reference "fig:Synthetic-Benchmark"
 \end_inset
 
 .
- This program spawns two threads.
+ The global int, myInt, is the variable that will be read and written in
+ this synthetic benchmark.
+ The readInt and the writeInt functions both take in a parameter, numberOfIndivi
+dualLoops, that tells the function how many times to read the myInt variable.
+ The difference is that the readInt function only reads from myInt and the
+ writeInt function reads myInt and also increments it.
+ The main function requires two arguments.
+ NumberOfPorcessors specify how many processors are in the system and affects
+ how many threads get created, and this variable should be a power of 2
+ that is at least 1.
+ NumberOfLoops specify how many times the threads would read the variable
+ myInt.
+ We divide the numberOfLoops by the numberOfProcessors to get numberOfIndividual
+Loops, which we pass into readInt and writeInt.
+ This is to ensure that the number of times myInt is being read is the same
+ regardless of the number of processors being used.
+ Then readInt and writeInt are each spawned numberOfProcessors / 2 times
+ to put a thread on all the available processors in the simulator.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Plain Layout
+This program spawns a number of read threads and write threads specified
+ by a command-line parameter.
  The first one reads myInt continuously 10000 times.
  The second thread increments this same variable continuously 10000 times.
- Since both threads are using the same memory location, this program generates
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Since both threads are using the same memory location, this program generates
  an extremely large number of exclusive reads.
  This forces the block that contains myInt to get continuously evicted,
  which will highlight the major benefit of the Origin protocol versus BIP.
  BIP has a delay of four hops for each invalidation, whereas Origin protocol
  only faces a delay of three hops.
  This will also test the effectiveness of the Origin protocol in reducing
- latency by allowing the data node to reply directly to the requesting node,
- without having to send the message first to the directory.
+ overall runtime by allowing the data node to reply directly to the requesting
+ node, without having to send the message first to the directory.
 \end_layout
 
 \begin_layout Standard
-\begin_inset Float table
-wide false
-sideways false
+\align center
+\begin_inset Note Comment
 status collapsed
+
+\begin_layout Plain Layout
+Synthetic benchmark results - Origin protocol versus BIP 2 processors
+\end_layout
 
 \begin_layout Plain Layout
 \align center
 \begin_inset Tabular
-<lyxtabular version="3" rows="3" columns="2">
+<lyxtabular version="3" rows="2" columns="2">
 <features>
 <column alignment="center" valignment="top" width="0">
 <column alignment="center" valignment="top" width="0">
@@ -3826,27 +3875,7 @@ Runtime
 \begin_inset Text
 
 \begin_layout Plain Layout
-70.8%
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Total Messages Sent
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-67.7%
+72.9%
 \end_layout
 
 \end_inset
@@ -3857,7 +3886,7 @@ Total Messages Sent
 \begin_inset Text
 
 \begin_layout Plain Layout
-Average Latency
+Total Messages Sent
 \end_layout
 
 \end_inset
@@ -3866,7 +3895,7 @@ Average Latency
 \begin_inset Text
 
 \begin_layout Plain Layout
-87.3%
+35.8%
 \end_layout
 
 \end_inset
@@ -3877,8 +3906,27 @@ Average Latency
 \end_inset
 
 
-\begin_inset Note Comment
-status collapsed
+\end_layout
+
+\begin_layout Plain Layout
+These are the new results
+\end_layout
+
+\begin_layout Plain Layout
+141513/194151
+\end_layout
+
+\begin_layout Plain Layout
+1075/3005
+\end_layout
+
+\begin_layout Plain Layout
+122.616/124.462
+\end_layout
+
+\begin_layout Plain Layout
+The following is the original
+\end_layout
 
 \begin_layout Plain Layout
 258556/365040
@@ -3897,32 +3945,8 @@ status collapsed
 
 \end_layout
 
-\begin_layout Plain Layout
-\begin_inset Caption
-
-\begin_layout Plain Layout
-Synthetic benchmark results - Origin protocol versus BIP
-\begin_inset CommandInset label
-LatexCommand label
-name "tab:Synthetic-benchmark-results"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
 \begin_layout Standard
-The results of running this benchmark is presented in 
+The results of running this benchmark are presented in 
 \begin_inset ERT
 status open
 
@@ -3930,7 +3954,7 @@ status open
 
 
 \backslash
-tablename
+figurename
 \end_layout
 
 \end_inset
@@ -3942,22 +3966,62 @@ tablename
 
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "tab:Synthetic-benchmark-results"
+reference "fig:Synthetic-benchmark-results-runtime"
 
 \end_inset
 
 .
- This benchmark was run on a four processor system with 256KB L1 cache and
- 4MB L2 cache.
- We can see that the Origin protocol completes this synthetic benchmark
- in 70.8% of the time it takes for BIP to finish this benchmark.
- We can also see that the total number of messages sent into the network
- from the Origin protocol was only 67.7% of the number of messages sent into
- the network of BIP.
- This is one of the causes of the faster runtime of the Origin protocol.
- In addition, the average latency of the Origin protocol is only 87.3% of
- the BIP, which could be caused by the congestion in the network that results
- from the larger number of messages sent into the network.
+ The benchmark was simulated with 1KB L1 cache and 1MB L2 cache using 4-32
+ processors.
+ We can see from the graph that the Origin protocol is faster than BIP in
+ each of the cases.
+ However, the benefits of having multiple processors start to diminish in
+ each protocol when approaching 32 processors.
+ This is possibly due to the benchmark having only one block that is constantly
+ being requested.
+ This means that many of the processors are being stalled, and cannot proceed
+ with their progress while the block is held exclusively in the cache of
+ some other processor.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename diagrams/newtest-cpu-time-c1-.png
+	width 100text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Synthetic benchmark results - runtime
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Synthetic-benchmark-results-runtime"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection
@@ -4010,6 +4074,13 @@ name "fig:SPLASH-2-benchmarks-cpu-time"
 \begin_layout Standard
 We are using an architecture with a 128KB L1 cache and a 1MB L2 cache unless
  otherwise specified.
+\end_layout
+
+\begin_layout Standard
+As we can see, the biggest speedup is going from 4 processor to 8 processors.
+ This is apparent in both procotols.
+ This could be due to inherently non-parallizable code in the benchmark,
+ leading diminishing returns when we move to higher processor counts.
 \end_layout
 
 \begin_layout Standard

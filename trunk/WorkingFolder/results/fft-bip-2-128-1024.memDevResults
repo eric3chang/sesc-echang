@@ -1,14 +1,14 @@
 Group string ReportFileName results/fft-bip-2-128-1024.memDevResults string BenchName fft
 
 DateTime
-DateTime:DateTime:03080746
+DateTime:DateTime:03082303
 
 TotalRunTime
-TotalRunTime:TotalRunTime:1379121
+TotalRunTime:TotalRunTime:1481626
 
 Network
 Network:TotalMessagesReceived:21649
-Network:AverageLatency:102.791
+Network:AverageLatency:146.374
 
 ProcessorInterface_0
 ProcessorInterface_0:readCount:230777
@@ -16,18 +16,18 @@ ProcessorInterface_0:writeCount:160229
 ProcessorInterface_0:totalOperations:391006
 
 L1_0
-L1_0:messagesReceived:401293
+L1_0:messagesReceived:401290
 L1_0:exclusiveReadHits:0
 L1_0:sharedReadHits:230777
 L1_0:exclusiveReadMisses:0
-L1_0:sharedReadMisses:3278
+L1_0:sharedReadMisses:3276
 L1_0:writeHits:160229
 L1_0:writeMisses:1666
 
 L2_0
-L2_0:messagesReceived:19601
+L2_0:messagesReceived:19598
 L2_0:exclusiveReadHits:1666
-L2_0:sharedReadHits:3278
+L2_0:sharedReadHits:3276
 L2_0:exclusiveReadMisses:1567
 L2_0:sharedReadMisses:3118
 L2_0:writeHits:0
@@ -92,9 +92,9 @@ BIPDirectory_1:lookupRetryTime:60
 BIPDirectory_1:lookupTime:4
 BIPDirectory_1:satisfyTime:4
 BIPDirectory_1:nodeID:1
-BIPDirectory_1:TotalMessagesReceived:21662
+BIPDirectory_1:TotalMessagesReceived:21661
 BIPDirectory_1:directoryRequestsReceived:4665
-BIPDirectory_1:directoryResponsesReceived:3874
+BIPDirectory_1:directoryResponsesReceived:3873
 BIPDirectory_1:localEvictionsReceived:0
 BIPDirectory_1:localInvalidateResponsesReceived:1536
 BIPDirectory_1:localReadsReceived:4652
@@ -117,21 +117,21 @@ MainMemory_1:WritessReceived:0
 TotalCache
 TotalCache:totalL1CacheExclusiveReadHits:0
 TotalCache:totalL1CacheExclusiveReadMisses:0
-TotalCache:totalL1CacheSharedReadHits:0
-TotalCache:totalL1CacheSharedReadMisses:0
-TotalCache:totalL1CacheWriteHits:0
-TotalCache:totalL1CacheWriteMisses:0
-TotalCache:totalL2CacheExclusiveReadHits:0
-TotalCache:totalL2CacheExclusiveReadMisses:0
-TotalCache:totalL2CacheSharedReadHits:0
-TotalCache:totalL2CacheSharedReadMisses:0
+TotalCache:totalL1CacheSharedReadHits:460957
+TotalCache:totalL1CacheSharedReadMisses:6532
+TotalCache:totalL1CacheWriteHits:320068
+TotalCache:totalL1CacheWriteMisses:3287
+TotalCache:totalL2CacheExclusiveReadHits:3286
+TotalCache:totalL2CacheExclusiveReadMisses:3123
+TotalCache:totalL2CacheSharedReadHits:6532
+TotalCache:totalL2CacheSharedReadMisses:6214
 TotalCache:totalL2CacheWriteHits:0
 TotalCache:totalL2CacheWriteMisses:0
-TotalCache:totalCacheExclusiveReadHits:0
-TotalCache:totalCacheExclusiveReadMisses:0
-TotalCache:totalCacheSharedReadHits:0
-TotalCache:totalCacheSharedReadMisses:0
-TotalCache:totalCacheWriteHits:0
-TotalCache:totalCacheWriteMisses:0
+TotalCache:totalCacheExclusiveReadHits:3286
+TotalCache:totalCacheExclusiveReadMisses:3123
+TotalCache:totalCacheSharedReadHits:467489
+TotalCache:totalCacheSharedReadMisses:12746
+TotalCache:totalCacheWriteHits:320068
+TotalCache:totalCacheWriteMisses:3287
 
 EndGroup #
