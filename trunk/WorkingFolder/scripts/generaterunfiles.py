@@ -29,8 +29,6 @@ BARNES_PARAMS_POST='-special'
 CHOLESKY_PARAMS_PRE='-p'
 #CHOLESKY_PARAMS_POST=' -B32 -C16384 -t < benchmarks-splash2-sesc/cholesky-inputs/wr10.O'
 CHOLESKY_PARAMS_POST=' -B32 -C16384 -t < benchmarks-splash2-sesc/cholesky-inputs/lshp.O'
-COMBINEDTEST_PARAMS_PRE='-p'
-COMBINEDTEST_PARAMS_POST=' -B32 -C16384 -t < benchmarks-splash2-sesc/cholesky-inputs/wr10.O'
 FFT_PARAMS_PRE='-m12 -p'
 FFT_PARAMS_POST=' -n65536 -l4 -t'
 FMM_PARAMS_PRE='-o < benchmarks-splash2-sesc/fmm-inputs/cpu'
@@ -39,8 +37,8 @@ LU_PARAMS_PRE='-n512 -p'
 LU_PARAMS_POST=' -b16 -t'
 NEWTEST_PARAMS_PRE='-p'
 NEWTEST_PARAMS_POST=' -n10000'
-OCEAN_PARAMS_PRE='-n130 -p'
-#OCEAN_PARAMS_PRE='-n6 -p'
+#OCEAN_PARAMS_PRE='-n130 -p'
+OCEAN_PARAMS_PRE='-n258 -p'
 OCEAN_PARAMS_POST=' -e1e-7 -r20000.0 -t28800.0'
 RADIX_PARAMS_PRE='-p'
 RADIX_PARAMS_POST=' -n262144 -r1024 -m524288'
@@ -116,6 +114,7 @@ processorCountHi, L1Low, L1Hi, L2Low, L2Hi):
     #outputString = generateOneRunfile(benchmarkName, directoryType, processorCountLow, L1Low, '4096')
     outFile.write(HEADER2)
 
+    '''
     processorIndex = processorCountLowInt
     while (processorIndex <= processorCountHiInt):
         L1Index = L1LowInt
@@ -130,17 +129,32 @@ processorCountHi, L1Low, L1Hi, L2Low, L2Hi):
                 L2Index *= 2
             L1Index *= 2
         processorIndex *=2
+    '''
 
+    L1Index = L1LowInt
+    while (L1Index <= L1HiInt):
+        processorIndex = processorCountLowInt
+        while (processorIndex <= processorCountHiInt):
+            L2Index = L1Index * 2
+            if (L2Index < L2LowInt):
+                L2Index = L2LowInt
+            while (L2Index <= L2HiInt):
+                outputString += generateOneRunfile(benchmarkName, directoryType, str(processorIndex), str(L1Index), str(L2Index))
+                outputString += '\n'
+                #print(str(processorIndex) + ' ' + str(L1Index) + ' ' + str(L2Index))
+                L2Index *= 2
+            processorIndex *=2
+        L1Index *= 2
+ 
     outFile.write(outputString)
     outFile.close()
 
 def main():
     #benchmarkNames = ['barnes', 'cholesky', 'fft', 'fmm', 'lu','newtest', 'radix', 'raytrace', 'ocean']
-    #benchmarkNames = ['cholesky', 'fft', 'lu','newtest', 'radix', 'raytrace', 'ocean']
-    #benchmarkNames = ['cholesky', 'fft', 'radix', 'ocean']
-    benchmarkNames = ['newtest']
+    benchmarkNames = ['cholesky', 'fft', 'lu','newtest', 'radix', 'raytrace', 'ocean']
+    #benchmarkNames = ['newtest']
     directoryTypes = ['bip', 'origin']
-    processorCountLow = '4'
+    processorCountLow = '2'
     processorCountHi = '32'
     L1Low = '1'
     L1Hi = '128'

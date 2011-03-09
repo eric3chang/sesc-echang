@@ -142,7 +142,8 @@ namespace Memory
       void dumpReversePendingLocalReads();
 
 		void PerformDirectoryFetch(Address a);
-		void EraseDirectoryShare(Address a, NodeID id);
+		//void EraseDirectoryShare(Address a, NodeID id);
+		void EraseDirectoryShare(const ReadResponseMsg* m, NodeID id);
 		void AddDirectoryShare(Address a, NodeID id, bool exclusive);
 
 		// local cache methods

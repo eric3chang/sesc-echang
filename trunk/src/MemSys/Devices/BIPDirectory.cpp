@@ -229,9 +229,10 @@ namespace Memory
 	 * erase Node id as a share for Address a. If a is owned by id, check that there
 	 * are no other shares
 	 */
-	void BIPDirectory::EraseDirectoryShare(Address a, NodeID id)
+	void BIPDirectory::EraseDirectoryShare(const ReadResponseMsg* m, NodeID id)
 	{
-		DebugAssert(directoryData.find(a) != directoryData.end());
+		Address a = m->addr;
+		DebugAssertWithMessageID(directoryData.find(a) != directoryData.end(), m->solicitingMessage);
 		BlockData& b = directoryData[a];
 		if(b.owner == id)
 		{
@@ -239,7 +240,7 @@ namespace Memory
          PrintEraseOwner("EraseDirectoryShare",a, id,"b.owner=InvalidNodeID");
 #endif
 			b.owner = InvalidNodeID;
-			DebugAssert(b.sharers.find(id) == b.sharers.end());
+			//DebugAssert(b.sharers.find(id) == b.sharers.end());
 		}
 		else if(b.sharers.find(id) != b.sharers.end())
 		{
@@ -629,7 +630,7 @@ namespace Memory
 			if(m->exclusiveOwnership)
 			{
 				// make sure to note that we erase src from directory already
-				EraseDirectoryShare(m->addr,src);
+				EraseDirectoryShare(m,src);
 			}
 			// if there is some pending shared read on this address
 			if(pendingDirectorySharedReads.find(m->addr) != pendingDirectorySharedReads.end())
@@ -747,11 +748,13 @@ namespace Memory
 		}// if(m->satisfied)
 		else  // !m->satisfied
 		{
-			EraseDirectoryShare(m->addr,src);
-			// 2011/02/23 Commented out the following line and replaced it with the one below
+			EraseDirectoryShare(m,src);
+
 			DebugAssertWithMessageID(directoryData[m->addr].owner == InvalidNodeID,m->MsgID());
 			PerformDirectoryFetch(m->addr);
 			/*
+			 * the following method leads to processor stalls, so it's better to use
+			 * the assertion above
 			if (directoryData[m->addr].owner==InvalidNodeID)
 			{
 				PerformDirectoryFetch(m->addr);
