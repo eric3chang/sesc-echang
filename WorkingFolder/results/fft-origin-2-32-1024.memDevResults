@@ -1,14 +1,14 @@
 Group string ReportFileName results/fft-origin-2-32-1024.memDevResults string BenchName fft
 
 DateTime
-DateTime:DateTime:03080805
+DateTime:DateTime:03082317
 
 TotalRunTime
-TotalRunTime:TotalRunTime:1369235
+TotalRunTime:TotalRunTime:1453022
 
 Network
 Network:TotalMessagesReceived:20125
-Network:AverageLatency:92.5674
+Network:AverageLatency:136.17
 
 ProcessorInterface_0
 ProcessorInterface_0:readCount:230777
@@ -20,16 +20,16 @@ L1_0:messagesReceived:418170
 L1_0:exclusiveReadHits:0
 L1_0:sharedReadHits:230777
 L1_0:exclusiveReadMisses:0
-L1_0:sharedReadMisses:8371
+L1_0:sharedReadMisses:8373
 L1_0:writeHits:160228
-L1_0:writeMisses:3921
+L1_0:writeMisses:3919
 
 L2_0
 L2_0:messagesReceived:34944
-L2_0:exclusiveReadHits:3921
-L2_0:sharedReadHits:8371
-L2_0:exclusiveReadMisses:1568
-L2_0:sharedReadMisses:3117
+L2_0:exclusiveReadHits:3919
+L2_0:sharedReadHits:8373
+L2_0:exclusiveReadMisses:1566
+L2_0:sharedReadMisses:3119
 L2_0:writeHits:0
 L2_0:writeMisses:0
 
@@ -120,20 +120,20 @@ TotalCache
 TotalCache:totalL1CacheExclusiveReadHits:0
 TotalCache:totalL1CacheExclusiveReadMisses:0
 TotalCache:totalL1CacheSharedReadHits:460957
-TotalCache:totalL1CacheSharedReadMisses:16623
+TotalCache:totalL1CacheSharedReadMisses:16625
 TotalCache:totalL1CacheWriteHits:320075
-TotalCache:totalL1CacheWriteMisses:7870
-TotalCache:totalL2CacheExclusiveReadHits:7870
-TotalCache:totalL2CacheExclusiveReadMisses:3125
-TotalCache:totalL2CacheSharedReadHits:16623
-TotalCache:totalL2CacheSharedReadMisses:6213
+TotalCache:totalL1CacheWriteMisses:7868
+TotalCache:totalL2CacheExclusiveReadHits:7868
+TotalCache:totalL2CacheExclusiveReadMisses:3123
+TotalCache:totalL2CacheSharedReadHits:16625
+TotalCache:totalL2CacheSharedReadMisses:6215
 TotalCache:totalL2CacheWriteHits:0
 TotalCache:totalL2CacheWriteMisses:0
-TotalCache:totalCacheExclusiveReadHits:7870
-TotalCache:totalCacheExclusiveReadMisses:3125
-TotalCache:totalCacheSharedReadHits:477580
-TotalCache:totalCacheSharedReadMisses:22836
+TotalCache:totalCacheExclusiveReadHits:7868
+TotalCache:totalCacheExclusiveReadMisses:3123
+TotalCache:totalCacheSharedReadHits:477582
+TotalCache:totalCacheSharedReadMisses:22840
 TotalCache:totalCacheWriteHits:320075
-TotalCache:totalCacheWriteMisses:7870
+TotalCache:totalCacheWriteMisses:7868
 
 EndGroup #

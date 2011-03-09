@@ -1,7 +1,7 @@
 Group string ReportFileName results/newtest-bip-8-32-1024.memDevResults string BenchName newtest
 
 DateTime
-DateTime:DateTime:03081521
+DateTime:DateTime:03082248
 
 TotalRunTime
 TotalRunTime:TotalRunTime:185135
@@ -429,21 +429,21 @@ MainMemory_7:WritessReceived:0
 TotalCache
 TotalCache:totalL1CacheExclusiveReadHits:0
 TotalCache:totalL1CacheExclusiveReadMisses:0
-TotalCache:totalL1CacheSharedReadHits:0
-TotalCache:totalL1CacheSharedReadMisses:0
-TotalCache:totalL1CacheWriteHits:0
-TotalCache:totalL1CacheWriteMisses:0
-TotalCache:totalL2CacheExclusiveReadHits:0
-TotalCache:totalL2CacheExclusiveReadMisses:0
-TotalCache:totalL2CacheSharedReadHits:0
-TotalCache:totalL2CacheSharedReadMisses:0
+TotalCache:totalL1CacheSharedReadHits:50351
+TotalCache:totalL1CacheSharedReadMisses:222
+TotalCache:totalL1CacheWriteHits:20234
+TotalCache:totalL1CacheWriteMisses:181
+TotalCache:totalL2CacheExclusiveReadHits:180
+TotalCache:totalL2CacheExclusiveReadMisses:221
+TotalCache:totalL2CacheSharedReadHits:240
+TotalCache:totalL2CacheSharedReadMisses:222
 TotalCache:totalL2CacheWriteHits:0
 TotalCache:totalL2CacheWriteMisses:0
-TotalCache:totalCacheExclusiveReadHits:0
-TotalCache:totalCacheExclusiveReadMisses:0
-TotalCache:totalCacheSharedReadHits:0
-TotalCache:totalCacheSharedReadMisses:0
-TotalCache:totalCacheWriteHits:0
-TotalCache:totalCacheWriteMisses:0
+TotalCache:totalCacheExclusiveReadHits:180
+TotalCache:totalCacheExclusiveReadMisses:221
+TotalCache:totalCacheSharedReadHits:50591
+TotalCache:totalCacheSharedReadMisses:444
+TotalCache:totalCacheWriteHits:20234
+TotalCache:totalCacheWriteMisses:181
 
 EndGroup #

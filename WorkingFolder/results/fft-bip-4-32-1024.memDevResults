@@ -1,7 +1,7 @@
 Group string ReportFileName results/fft-bip-4-32-1024.memDevResults string BenchName fft
 
 DateTime
-DateTime:DateTime:03080748
+DateTime:DateTime:03082259
 
 TotalRunTime
 TotalRunTime:TotalRunTime:920812
@@ -221,21 +221,21 @@ MainMemory_3:WritessReceived:1
 TotalCache
 TotalCache:totalL1CacheExclusiveReadHits:0
 TotalCache:totalL1CacheExclusiveReadMisses:0
-TotalCache:totalL1CacheSharedReadHits:0
-TotalCache:totalL1CacheSharedReadMisses:0
-TotalCache:totalL1CacheWriteHits:0
-TotalCache:totalL1CacheWriteMisses:0
-TotalCache:totalL2CacheExclusiveReadHits:0
-TotalCache:totalL2CacheExclusiveReadMisses:0
-TotalCache:totalL2CacheSharedReadHits:0
-TotalCache:totalL2CacheSharedReadMisses:0
+TotalCache:totalL1CacheSharedReadHits:461990
+TotalCache:totalL1CacheSharedReadMisses:12417
+TotalCache:totalL1CacheWriteHits:320636
+TotalCache:totalL1CacheWriteMisses:6735
+TotalCache:totalL2CacheExclusiveReadHits:6735
+TotalCache:totalL2CacheExclusiveReadMisses:4705
+TotalCache:totalL2CacheSharedReadHits:12417
+TotalCache:totalL2CacheSharedReadMisses:7793
 TotalCache:totalL2CacheWriteHits:0
 TotalCache:totalL2CacheWriteMisses:0
-TotalCache:totalCacheExclusiveReadHits:0
-TotalCache:totalCacheExclusiveReadMisses:0
-TotalCache:totalCacheSharedReadHits:0
-TotalCache:totalCacheSharedReadMisses:0
-TotalCache:totalCacheWriteHits:0
-TotalCache:totalCacheWriteMisses:0
+TotalCache:totalCacheExclusiveReadHits:6735
+TotalCache:totalCacheExclusiveReadMisses:4705
+TotalCache:totalCacheSharedReadHits:474407
+TotalCache:totalCacheSharedReadMisses:20210
+TotalCache:totalCacheWriteHits:320636
+TotalCache:totalCacheWriteMisses:6735
 
 EndGroup #

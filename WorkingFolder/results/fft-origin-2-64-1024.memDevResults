@@ -1,14 +1,14 @@
 Group string ReportFileName results/fft-origin-2-64-1024.memDevResults string BenchName fft
 
 DateTime
-DateTime:DateTime:03080805
+DateTime:DateTime:03082320
 
 TotalRunTime
-TotalRunTime:TotalRunTime:1352552
+TotalRunTime:TotalRunTime:1435759
 
 Network
 Network:TotalMessagesReceived:20125
-Network:AverageLatency:85.1915
+Network:AverageLatency:128.793
 
 ProcessorInterface_0
 ProcessorInterface_0:readCount:230777
@@ -20,16 +20,16 @@ L1_0:messagesReceived:410109
 L1_0:exclusiveReadHits:0
 L1_0:sharedReadHits:230777
 L1_0:exclusiveReadMisses:0
-L1_0:sharedReadMisses:5664
+L1_0:sharedReadMisses:5666
 L1_0:writeHits:160228
-L1_0:writeMisses:3082
+L1_0:writeMisses:3080
 
 L2_0
 L2_0:messagesReceived:26883
-L2_0:exclusiveReadHits:3082
-L2_0:sharedReadHits:5664
-L2_0:exclusiveReadMisses:1568
-L2_0:sharedReadMisses:3117
+L2_0:exclusiveReadHits:3080
+L2_0:sharedReadHits:5666
+L2_0:exclusiveReadMisses:1566
+L2_0:sharedReadMisses:3119
 L2_0:writeHits:0
 L2_0:writeMisses:0
 
@@ -40,7 +40,7 @@ OriginDirectory_0:lookupRetryTime:60
 OriginDirectory_0:lookupTime:4
 OriginDirectory_0:satisfyTime:4
 OriginDirectory_0:nodeID:0
-OriginDirectory_0:TotalMessagesReceived:21464
+OriginDirectory_0:TotalMessagesReceived:21463
 OriginDirectory_0:cacheNaksReceived:0
 OriginDirectory_0:cacheEvictionsReceived:0
 OriginDirectory_0:cacheInterventionsReceived:1557
@@ -54,14 +54,14 @@ OriginDirectory_0:directoryNaksReceived:0
 OriginDirectory_0:directoryReadsReceived:4672
 OriginDirectory_0:directoryReadResponsesReceived:0
 OriginDirectory_0:directoryTransfersReceived:0
-OriginDirectory_0:directoryWritebacksReceived:497
+OriginDirectory_0:directoryWritebacksReceived:496
 OriginDirectory_0:directoryWritebackRequestsReceived:0
 OriginDirectory_0:directoryWriteResponsesReceived:0
 
 MainMemory_0
 MainMemory_0:EvictionsReceived:0
 MainMemory_0:ReadsReceived:3136
-MainMemory_0:WritessReceived:497
+MainMemory_0:WritessReceived:496
 
 ProcessorInterface_1
 ProcessorInterface_1:readCount:230180
@@ -69,18 +69,18 @@ ProcessorInterface_1:writeCount:159847
 ProcessorInterface_1:totalOperations:390027
 
 L1_1
-L1_1:messagesReceived:408747
+L1_1:messagesReceived:408745
 L1_1:exclusiveReadHits:0
 L1_1:sharedReadHits:230180
 L1_1:exclusiveReadMisses:0
-L1_1:sharedReadMisses:5605
+L1_1:sharedReadMisses:5604
 L1_1:writeHits:159847
 L1_1:writeMisses:3001
 
 L2_1
-L2_1:messagesReceived:26445
+L2_1:messagesReceived:26443
 L2_1:exclusiveReadHits:3001
-L2_1:sharedReadHits:5605
+L2_1:sharedReadHits:5604
 L2_1:exclusiveReadMisses:1557
 L2_1:sharedReadMisses:3096
 L2_1:writeHits:0
@@ -120,20 +120,20 @@ TotalCache
 TotalCache:totalL1CacheExclusiveReadHits:0
 TotalCache:totalL1CacheExclusiveReadMisses:0
 TotalCache:totalL1CacheSharedReadHits:460957
-TotalCache:totalL1CacheSharedReadMisses:11269
+TotalCache:totalL1CacheSharedReadMisses:11270
 TotalCache:totalL1CacheWriteHits:320075
-TotalCache:totalL1CacheWriteMisses:6083
-TotalCache:totalL2CacheExclusiveReadHits:6083
-TotalCache:totalL2CacheExclusiveReadMisses:3125
-TotalCache:totalL2CacheSharedReadHits:11269
-TotalCache:totalL2CacheSharedReadMisses:6213
+TotalCache:totalL1CacheWriteMisses:6081
+TotalCache:totalL2CacheExclusiveReadHits:6081
+TotalCache:totalL2CacheExclusiveReadMisses:3123
+TotalCache:totalL2CacheSharedReadHits:11270
+TotalCache:totalL2CacheSharedReadMisses:6215
 TotalCache:totalL2CacheWriteHits:0
 TotalCache:totalL2CacheWriteMisses:0
-TotalCache:totalCacheExclusiveReadHits:6083
-TotalCache:totalCacheExclusiveReadMisses:3125
-TotalCache:totalCacheSharedReadHits:472226
-TotalCache:totalCacheSharedReadMisses:17482
+TotalCache:totalCacheExclusiveReadHits:6081
+TotalCache:totalCacheExclusiveReadMisses:3123
+TotalCache:totalCacheSharedReadHits:472227
+TotalCache:totalCacheSharedReadMisses:17485
 TotalCache:totalCacheWriteHits:320075
-TotalCache:totalCacheWriteMisses:6083
+TotalCache:totalCacheWriteMisses:6081
 
 EndGroup #
