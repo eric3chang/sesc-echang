@@ -102,6 +102,17 @@ int main(int argc, char** argv)
    threadIndexMax = processorCount - 2;
    threadIndexMax = threadIndexMax / 2;
 
+   /* 
+   if (!threadIndexMax)
+   {
+#ifdef USE_SESC
+      sesc_exit(0);
+#else
+      pthread_exit(NULL);
+#endif
+   }
+ */
+
    // calculate the number of Loops
    numberOfLoops = numberOfReads / (processorCount-2);
    printf("numberOfLoops=%d\n", numberOfLoops);
