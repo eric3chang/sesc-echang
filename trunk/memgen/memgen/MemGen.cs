@@ -416,9 +416,11 @@
 		output.Close();
 	}
 
-	public static void OutDirectoryMemory(int nodeCount, int l1, int l2, float multiplyFactor, string filesysSeperator)
+	public static void OutDirectoryMemory(int nodeCount, int l1, int l2, float multiplyFactor, string filesysSeperator,
+       string filenameAddition)
 	{
-        string outputString = "memoryConfigs"+filesysSeperator+"directory-p" + nodeCount + "-c" + l1 + "L1-" + l2 + "L2.memory";
+        string outputString = "memoryConfigs" + filesysSeperator + filenameAddition + "directory-p" 
+            + nodeCount + "-c" + l1 + "L1-" + l2 + "L2.memory";
         output = new System.IO.StreamWriter(outputString);
 		index = 1;
 		output.WriteLine("Begin");
@@ -450,9 +452,11 @@
 		output.Close();
 	}
 
-    public static void OutOriginDirectoryMemory(int nodeCount, int l1, int l2, float multiplyFactor, string filesysSeperator)
+    public static void OutOriginDirectoryMemory(int nodeCount, int l1, int l2, float multiplyFactor, string filesysSeperator,
+        string filenameAddition)
     {
-        string outputString = "memoryConfigs"+filesysSeperator+"origin-p" + nodeCount + "-c" + l1 + "L1-" + l2 + "L2.memory";
+        string outputString = "memoryConfigs" + filesysSeperator + filenameAddition + "radix-origin-p" +
+            nodeCount + "-c" + l1 + "L1-" + l2 + "L2.memory";
         output = new System.IO.StreamWriter(outputString);
         index = 1;
         output.WriteLine("Begin");
@@ -485,9 +489,11 @@
         output.Close();
     }
 
-    public static void OutBIPDirectoryMemory(int nodeCount, int l1, int l2, float multiplyFactor, string filesysSeperator)
+    public static void OutBIPDirectoryMemory(int nodeCount, int l1, int l2, float multiplyFactor, string filesysSeperator,
+        string filenameAddition)
     {
-        string outputString = "memoryConfigs"+filesysSeperator+"bip-p" + nodeCount + "-c" + l1 + "L1-" + l2 + "L2.memory";
+        string outputString = "memoryConfigs" + filesysSeperator + filenameAddition + "bip-p" + nodeCount 
+            + "-c" + l1 + "L1-" + l2 + "L2.memory";
         output = new System.IO.StreamWriter(outputString);
         index = 1;
         output.WriteLine("Begin");
@@ -524,9 +530,11 @@
 	{
 		System.IO.Directory.CreateDirectory("memoryConfigs");
 
-      float networkMultiplyFactor = 1.00f;
-      string filesysSeperator = "/";
-      //string filesysSeperator = "\\";
+      float networkMultiplyFactor = 10.00f;
+      string filesysSeperator = "/";   // unix
+      //string filesysSeperator = "\\";   // windows
+      string filenameAddition = "fft-";
+      //string filenameAddition = "";
         // nodeCount also determines the total number of processors
 		for (int nodeCount = 2; nodeCount <= 32; nodeCount *= 2)
 		{
@@ -537,9 +545,9 @@
 				for (int l2 = l1 * 2; l2 <= 8 * 1024; l2 *= 2)
                 //for (int l2 = l1 * 2; l2 <= 2; l2 *= 2)
 				{
-                    OutBIPDirectoryMemory(nodeCount, l1, l2, networkMultiplyFactor, filesysSeperator);
-                    OutDirectoryMemory(nodeCount, l1, l2, networkMultiplyFactor, filesysSeperator);
-					OutOriginDirectoryMemory(nodeCount, l1, l2, networkMultiplyFactor, filesysSeperator);
+                    OutBIPDirectoryMemory(nodeCount, l1, l2, networkMultiplyFactor, filesysSeperator,filenameAddition);
+                    //OutDirectoryMemory(nodeCount, l1, l2, networkMultiplyFactor, filesysSeperator,filenameAddition);
+					OutOriginDirectoryMemory(nodeCount, l1, l2, networkMultiplyFactor, filesysSeperator,filenameAddition);
 					//OutSimpleMemory2(i, l1, l2);
 					for (int l3 = l2 * 2; l3 <= 64 * 1024; l3 *= 2)
 					{
