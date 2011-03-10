@@ -1,0 +1,10 @@
+finished:
+newtest
+fft
+radix - rerun with higher network latencies
+
+unfinished:
+cholesky
+lu
+raytrace
+ocean

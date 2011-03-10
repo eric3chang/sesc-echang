@@ -19,6 +19,7 @@ DEFAULT_L1='128'
 DEFAULT_L2='1024'
 GRAPH_WIDTH=2
 IN_EXT='.memDevResults'
+#IN_EXT='.memDevResults.bak'
 #IN_EXT='.memDevResults.3200000'
 #IN_EXT='-special.memDevResults'
 #LINESTYLES=['k--','k:']
