@@ -1,7 +1,7 @@
 Group string ReportFileName results/cholesky-bip-4-32-1024.memDevResults string BenchName cholesky
 
 DateTime
-DateTime:DateTime:03080859
+DateTime:DateTime:03090741
 
 TotalRunTime
 TotalRunTime:TotalRunTime:5849112
@@ -221,21 +221,21 @@ MainMemory_3:WritessReceived:122
 TotalCache
 TotalCache:totalL1CacheExclusiveReadHits:0
 TotalCache:totalL1CacheExclusiveReadMisses:0
-TotalCache:totalL1CacheSharedReadHits:0
-TotalCache:totalL1CacheSharedReadMisses:0
-TotalCache:totalL1CacheWriteHits:0
-TotalCache:totalL1CacheWriteMisses:0
-TotalCache:totalL2CacheExclusiveReadHits:0
-TotalCache:totalL2CacheExclusiveReadMisses:0
-TotalCache:totalL2CacheSharedReadHits:0
-TotalCache:totalL2CacheSharedReadMisses:0
+TotalCache:totalL1CacheSharedReadHits:8606699
+TotalCache:totalL1CacheSharedReadMisses:50381
+TotalCache:totalL1CacheWriteHits:1509032
+TotalCache:totalL1CacheWriteMisses:14012
+TotalCache:totalL2CacheExclusiveReadHits:14010
+TotalCache:totalL2CacheExclusiveReadMisses:10598
+TotalCache:totalL2CacheSharedReadHits:50410
+TotalCache:totalL2CacheSharedReadMisses:22601
 TotalCache:totalL2CacheWriteHits:0
 TotalCache:totalL2CacheWriteMisses:0
-TotalCache:totalCacheExclusiveReadHits:0
-TotalCache:totalCacheExclusiveReadMisses:0
-TotalCache:totalCacheSharedReadHits:0
-TotalCache:totalCacheSharedReadMisses:0
-TotalCache:totalCacheWriteHits:0
-TotalCache:totalCacheWriteMisses:0
+TotalCache:totalCacheExclusiveReadHits:14010
+TotalCache:totalCacheExclusiveReadMisses:10598
+TotalCache:totalCacheSharedReadHits:8657109
+TotalCache:totalCacheSharedReadMisses:72982
+TotalCache:totalCacheWriteHits:1509032
+TotalCache:totalCacheWriteMisses:14012
 
 EndGroup #
