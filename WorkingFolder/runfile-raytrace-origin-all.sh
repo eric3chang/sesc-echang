@@ -1,7 +1,7 @@
 #!/bin/bash
 DATE=$(date "+%m%d%H%M")
 HOSTNAME=$(hostname)
-AUGSESC=augSesc-Debug
+AUGSESC=augSesc-Release
 
 nice -10 ./$AUGSESC -cconfigs/workFile/raytrace-origin-2-1-1024.conf -dconfigs/workFile/raytrace-origin-2-1-1024.conf.report benchmarks-splash2-sesc/raytrace.mips -p2 benchmarks-splash2-sesc/raytrace-inputs/balls4.env &> console-outputs/raytrace-origin-2-1-1024.$DATE.$HOSTNAME
 nice -10 ./$AUGSESC -cconfigs/workFile/raytrace-origin-4-1-1024.conf -dconfigs/workFile/raytrace-origin-4-1-1024.conf.report benchmarks-splash2-sesc/raytrace.mips -p4 benchmarks-splash2-sesc/raytrace-inputs/balls4.env &> console-outputs/raytrace-origin-4-1-1024.$DATE.$HOSTNAME
