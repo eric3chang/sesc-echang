@@ -4310,7 +4310,7 @@ reference "fig:FFT-results"
 \begin_inset Float figure
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \align center
@@ -4382,47 +4382,6 @@ We also see that for both Origin and BIP, as the CPU count increases, the
 \end_layout
 
 \begin_layout Standard
-\begin_inset Float figure
-wide false
-sideways false
-status collapsed
-
-\begin_layout Plain Layout
-\align center
-\begin_inset Graphics
-	filename diagrams/cpu-messages.png
-	width 100text%
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset Caption
-
-\begin_layout Plain Layout
-SPLASH 2 benchmarks number of processors versus messages received
-\begin_inset CommandInset label
-LatexCommand label
-name "fig:SPLASH-2-benchmarks-cpu-messages"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
 The speedup is caused by increases in cache size.
  The increase in cache size resulted in a reduction of misses.
  As we can see, the misses in the system can directly affect the runtime
@@ -4474,51 +4433,6 @@ key "HEN00"
 \end_inset
 
 .
-\end_layout
-
-\begin_layout Standard
-\begin_inset Float figure
-wide false
-sideways false
-status collapsed
-
-\begin_layout Plain Layout
-\align center
-\begin_inset Graphics
-	filename diagrams/cpu-latency.png
-	width 100text%
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset Caption
-
-\begin_layout Plain Layout
-SPLASH 2 benchmarks number of processors versus average network latency
-\begin_inset CommandInset label
-LatexCommand label
-name "fig:SPLASH-2-benchmarks-cpu-latency"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-
-
 \end_layout
 
 \begin_layout Standard
@@ -4581,6 +4495,171 @@ Unless otherwise specified, the resultant runs from simulations are done
 The more cores we have, the higher our network latency is, since there should
  be more messages in the network because more of the blocks is distributed
  and being used in different nodes.
+\end_layout
+
+\begin_layout Subsubsection
+Radix
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename diagrams/radix-cpu-time-c1-.png
+	width 50text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename diagrams/radix-cpu-messages-c1-.png
+	width 50text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Radix results
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Radix-results"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The results from running the Radix benchmark is shown in 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+figurename
+\end_layout
+
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Radix-results"
+
+\end_inset
+
+.
+ These results are similar to 
+\end_layout
+
+\begin_layout Subsubsection
+Cholesky
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename diagrams/cholesky-cpu-time-c1-.png
+	width 50text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename diagrams/cholesky-cpu-messages-c64-.png
+	width 50text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Cholesky results
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Cholesky-results"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The results for Cholesky is shown in 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+figurename
+\end_layout
+
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Cholesky-results"
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Section

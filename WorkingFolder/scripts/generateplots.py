@@ -349,20 +349,19 @@ def plotL1TimeSingle(benchmarks, dirtypes, cpu, minimum, maximum, l2, isSaveFigu
 def main():
     #benchmark = ['barnes', 'cholesky', 'fft', 'fmm', 'lu','newtest', 'radix', 'raytrace', 'ocean']
     #benchmark = ['cholesky', 'fft', 'lu','newtest', 'radix', 'raytrace', 'ocean']
-    benchmarks = ['lu']
+    benchmarks = ['ocean']
     #dirtypes = ['bip', 'directory', 'origin']
-    #dirtypes = ['bip', 'origin']
-    dirtypes = ['bip']
+    dirtypes = ['bip','origin']
     #filenameAddition = '100-110'
     filenameAddition = ''
     mincpu = '4'
     maxcpu = '32'
     minl1 = '1'
     #maxl1 = '128'
-    maxl1 = '1'
+    maxl1 = '128'
     l2 = '1024'
-    isNormalize = False
-    isSaveFigure = False
+    isNormalize = True
+    isSaveFigure = True
 
     l1Index = int(minl1)
     while (l1Index <= int(maxl1)):
