@@ -7,8 +7,9 @@ import sys
 OUT_DIR='../'
 
 # don't need to change these when moving this script
-AUGSESC='augSesc-Debug'
+#AUGSESC='augSesc-Debug'
 #AUGSESC='augSesc-Release'
+AUGSESC='augSesc-O1'
 
 COMBINED_OUT='runfile-all'
 EXE_EXT='.mips'
@@ -27,8 +28,8 @@ BARNES_PARAMS_PRE='< benchmarks-splash2-sesc/barnes-inputs/cpu'
 #BARNES_PARAMS_POST=''
 BARNES_PARAMS_POST='-special'
 CHOLESKY_PARAMS_PRE='-p'
-#CHOLESKY_PARAMS_POST=' -B32 -C16384 -t < benchmarks-splash2-sesc/cholesky-inputs/wr10.O'
-CHOLESKY_PARAMS_POST=' -B32 -C16384 -t < benchmarks-splash2-sesc/cholesky-inputs/lshp.O'
+CHOLESKY_PARAMS_POST=' -B32 -C16384 -t < benchmarks-splash2-sesc/cholesky-inputs/wr10.O'
+#CHOLESKY_PARAMS_POST=' -B32 -C16384 -t < benchmarks-splash2-sesc/cholesky-inputs/lshp.O'
 FFT_PARAMS_PRE='-m12 -p'
 FFT_PARAMS_POST=' -n65536 -l4 -t'
 FMM_PARAMS_PRE='-o < benchmarks-splash2-sesc/fmm-inputs/cpu'
@@ -37,8 +38,8 @@ LU_PARAMS_PRE='-n512 -p'
 LU_PARAMS_POST=' -b16 -t'
 NEWTEST_PARAMS_PRE='-p'
 NEWTEST_PARAMS_POST=' -n10000'
-#OCEAN_PARAMS_PRE='-n130 -p'
-OCEAN_PARAMS_PRE='-n258 -p'
+OCEAN_PARAMS_PRE='-n130 -p'
+#OCEAN_PARAMS_PRE='-n258 -p'
 OCEAN_PARAMS_POST=' -e1e-7 -r20000.0 -t28800.0'
 RADIX_PARAMS_PRE='-p'
 RADIX_PARAMS_POST=' -n262144 -r1024 -m524288'
@@ -151,10 +152,10 @@ processorCountHi, L1Low, L1Hi, L2Low, L2Hi):
 
 def main():
     #benchmarkNames = ['barnes', 'cholesky', 'fft', 'fmm', 'lu','newtest', 'radix', 'raytrace', 'ocean']
-    benchmarkNames = ['cholesky', 'fft', 'lu','newtest', 'radix', 'raytrace', 'ocean']
-    #benchmarkNames = ['newtest']
+    #benchmarkNames = ['cholesky', 'fft', 'lu','newtest', 'radix', 'raytrace', 'ocean']
+    benchmarkNames = ['cholesky']
     directoryTypes = ['bip', 'origin']
-    processorCountLow = '2'
+    processorCountLow = '4'
     processorCountHi = '32'
     L1Low = '1'
     L1Hi = '128'

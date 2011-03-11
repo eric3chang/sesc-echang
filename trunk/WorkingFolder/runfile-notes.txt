@@ -1,10 +1,15 @@
 finished:
-newtest
-fft
-radix - rerun with higher network latencies
+newtest  - not in svn repository
+fft      - not in svn repository
+ocean    - ran with network 10, removed from repository
+radix    - ran with network 10
+cholesky - ran with network 10 and wr10, removed from repository
+lu       - ran with network 10, removed from repository
+
+possible rerun:
+
+rerun with higher network latencies:
 
 unfinished:
-cholesky
-lu
 raytrace
-ocean
+

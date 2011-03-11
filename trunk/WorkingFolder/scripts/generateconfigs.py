@@ -27,7 +27,7 @@ def convertToInt(incoming):
         quit()
     return outgoing
 
-def generateConfig(benchmarkName, directoryType, processorCount, L1Size, L2Size, isBenchmarkInMemory):
+def generateConfig(benchmarkName, directoryType, processorCount, L1Size, L2Size, memoryfilePrefix):
     # check if these variables are numbers before using them
     processorCountInt = convertToInt(processorCount)
     L1SizeInt = convertToInt(L1Size)
@@ -50,19 +50,15 @@ def generateConfig(benchmarkName, directoryType, processorCount, L1Size, L2Size,
     outFile.write("MemDeviceReportFile = 'results/" + outFilename + ".memDevResults'\n")
     outFile.write("CompositionResultFile = 'results/" + outFilename + ".dat'\n")
     outFile.write("BenchName = '" + benchmarkName + "'\n")
-    if (isBenchmarkInMemory):
-        outFile.write('MemorySystemConfig = "' + MEMORY_SYSTEM_CONFIG_DIRECTORY + benchmarkName + '-' + directoryType \
-            + '-p' + processorCount + '-c' + L1Size + 'L1-' + L2Size + 'L2.memory"\n')
-    else:
-        outFile.write('MemorySystemConfig = "' + MEMORY_SYSTEM_CONFIG_DIRECTORY + directoryType \
-            + '-p' + processorCount + '-c' + L1Size + 'L1-' + L2Size + 'L2.memory"\n')
+    outFile.write('MemorySystemConfig = "' + MEMORY_SYSTEM_CONFIG_DIRECTORY + memoryfilePrefix + '-' + directoryType \
+        + '-p' + processorCount + '-c' + L1Size + 'L1-' + L2Size + 'L2.memory"\n')
     outFile.write('<base_' + processorCount + 'cpu.conf>\n')
     outFile.write('\n')
 
     outFile.close()
 
 def generateMultipleConfigs(benchmarkName, directoryType, processorCountLow, processorCountHi, L1Low, L1Hi,
-    isBenchmarkInMemory):
+    memoryfilePrefix):
     # check if these variables are numbers before using them
     processorCountLowInt = convertToInt(processorCountLow)
     processorCountHiInt = convertToInt(processorCountHi)
@@ -76,33 +72,33 @@ def generateMultipleConfigs(benchmarkName, directoryType, processorCountLow, pro
             L2Index = L1Index * 2
             while (L2Index <= L1HiInt*8):
                 generateConfig(benchmarkName, directoryType, str(processorIndex), str(L1Index), \
-                    str(L2Index),isBenchmarkInMemory)
+                    str(L2Index),memoryfilePrefix)
                 #print(str(processorIndex) + ' ' + str(L1Index) + ' ' + str(L2Index))
                 L2Index *= 2
             L1Index *= 2
         processorIndex *=2
 
 def generateAllBenchmarks(benchmarkNames, directoryType, processorCountLow, processorCountHi, L1Low, L1Hi,
-    isBenchmarkInMemory):
+    memoryfilePrefix):
     for benchmark in benchmarkNames:
         generateMultipleConfigs(benchmark, directoryType, processorCountLow, processorCountHi, L1Low, L1Hi,
-            isBenchmarkInMemory)
+            memoryfilePrefix)
 
 def main():
     #benchmarkNames = ['barnes', 'cholesky', 'fft', 'fmm', 'lu', 'radix', 'raytrace', 'ocean']
-    benchmarkNames = ['fft']
+    benchmarkNames = ['cholesky']
     #directoryTypes = ['bip', 'directory', 'origin']
     directoryTypes = ['bip','origin']
     #cacheType = 'mesi'
     #cacheType = ''
-    processorCountLow = '2'
+    processorCountLow = '4'
     processorCountHi = '32'
     L1Low = '1'
     L1Hi = '1024'
-    isBenchmarkInMemory = False
+    memoryfilePrefix = 'network10'
 
     for directory in directoryTypes:
-       generateAllBenchmarks(benchmarkNames, directory, processorCountLow, processorCountHi, L1Low, L1Hi,isBenchmarkInMemory)
+       generateAllBenchmarks(benchmarkNames, directory, processorCountLow, processorCountHi, L1Low, L1Hi,memoryfilePrefix)
 
 if __name__ == "__main__":
     main()
