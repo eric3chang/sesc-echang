@@ -3,7 +3,8 @@ newtest  - not in svn repository
 fft      - not in svn repository
 ocean    - ran with network 10, removed from repository
 radix    - ran with network 10
-cholesky - ran with network 10 and wr10, removed from repository
+cholesky - ran with network 10 and lshp, removed from repository. do not run
+with wr10
 lu       - ran with network 10, removed from repository
 
 possible rerun:
