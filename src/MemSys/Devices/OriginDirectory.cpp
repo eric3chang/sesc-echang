@@ -100,7 +100,7 @@ namespace Memory
 
    void OriginDirectory::ClearTempDirectoryData(DirectoryData& directoryData)
    {
-   	EM().DisposeMsg(directoryData.firstRequest);
+   	//EM().DisposeMsg(directoryData.firstRequest);
    	directoryData.firstRequest = NULL;
    	directoryData.firstRequestSrc = InvalidNodeID;
    	directoryData.previousOwner = InvalidNodeID;
@@ -366,7 +366,7 @@ namespace Memory
 		// set send time to 0 because we are saying that this
 			// code in the OriginDirectory is already part of the cache
 		SendMsg(localCacheConnectionID, m, localSendTime);
-		EM().DisposeMsg(msg);
+		//EM().DisposeMsg(msg);
 	}
 
 	void OriginDirectory::SendMessageToDirectory(BaseMsg *msg)
@@ -946,7 +946,8 @@ namespace Memory
    			SendMessageToDirectory(tm, false);
 
    			ClearTempCacheData(cacheData);
-   			EM().DisposeMsg(m);
+   			// do not dispose, this is the same message as firstReply
+   			//EM().DisposeMsg(m);
 			
    			cacheData.SetCacheState(cs_Shared);
    		} // if (!m->requestingExclusive)
@@ -969,7 +970,8 @@ namespace Memory
    			SendMessageToDirectory(tm, false);
 
    			ClearTempCacheData(cacheData);
-   			EM().DisposeMsg(m);
+   			// do not dispose, this is the same message as firstReply
+   			//EM().DisposeMsg(m);
 				
    			cacheData.SetCacheState(cs_Invalid);
    		} // else m is requesting exclusive
@@ -1037,7 +1039,8 @@ namespace Memory
    			SendMessageToDirectory(tm, false);
 
    			ClearTempCacheData(cacheData);
-   			EM().DisposeMsg(m);
+   			// do not dispose, this is the same message as firstReply
+   			//EM().DisposeMsg(m);
    		} // if (firstReply->requestingExclusive)
    		else
    		{
@@ -1059,9 +1062,9 @@ namespace Memory
    			wm->isShared = true;
    			SendMessageToDirectory(wm, false);
 
-
    			ClearTempCacheData(cacheData);
-   			EM().DisposeMsg(m);
+   			// do not dispose, this is the same message as firstReply
+   			//EM().DisposeMsg(m);
    		} // else !(if (m->requestingExclusive)
    	} // else if (msg->Type()==mt_Intervention)
 		else
@@ -1186,7 +1189,7 @@ namespace Memory
 			DebugAssertWithMessageID(firstReplySrc==dirNode, m->solicitingMessage);
 			DebugAssertWithMessageID(pendingRemoteReads.find(m->solicitingMessage)!=pendingRemoteReads.end(), m->MsgID());
 			const ReadMsg*& rm = pendingRemoteReads[m->solicitingMessage];
-			EM().DisposeMsg(rm);
+			//EM().DisposeMsg(rm);
 			pendingRemoteReads.erase(m->solicitingMessage);
 
 			if (m->isDirty)
@@ -1263,7 +1266,7 @@ namespace Memory
 
 			EM().DisposeMsg(secondReply);
    		ClearTempCacheData(cacheData);
-   		EM().DisposeMsg(m);
+   		//EM().DisposeMsg(m);
 			
 			// should be set to invalid always regardless of the interventionMessage because
 				// we received an eviction from the local cache
@@ -1274,7 +1277,7 @@ namespace Memory
 			const ReadResponseMsg* m = (const ReadResponseMsg*)msg;
 			DebugAssertWithMessageID(pendingRemoteReads.find(m->solicitingMessage)!=pendingRemoteReads.end(), m->MsgID());
 			const ReadMsg*& rm = pendingRemoteReads[m->solicitingMessage];
-			EM().DisposeMsg(rm);
+			//EM().DisposeMsg(rm);
 			pendingRemoteReads.erase(m->solicitingMessage);
 
 			// send response to cache
@@ -1322,7 +1325,7 @@ namespace Memory
 
 			EM().DisposeMsg(secondReply);
    		ClearTempCacheData(cacheData);
-   		EM().DisposeMsg(m);
+   		//EM().DisposeMsg(m);
 
 			// should be set to invalid always regardless of the interventionMessage because
 				// we received an eviction from the local cache			
@@ -1667,7 +1670,7 @@ namespace Memory
 			DebugAssertWithMessageID(firstReply->newOwner!=InvalidNodeID, m->solicitingMessage);
 			SendMessageToRemoteCache(iam, firstReply->newOwner);
 
-			//EM().DisposeMsg(m);
+			EM().DisposeMsg(m);
 			ClearTempCacheData(cacheData);
 
 			// if a read request has been canceled because we were processing an invalidate
@@ -1718,7 +1721,7 @@ namespace Memory
 			invalidAcksReceived++;
 			cacheData.SetCacheState(cs_WaitingForKInvalidatesJInvalidatesReceived);
 
-			//EM().DisposeMsg(msg);
+			EM().DisposeMsg(m);
 		}
 		else if (msg->Type()==mt_SpeculativeReply)
 		{
@@ -3347,7 +3350,7 @@ namespace Memory
 		DebugAssertWithMessageID(cacheDataPendingLocalReads.size()>0, m->solicitingMessage);
 		const ReadMsg* ref = cacheDataPendingLocalReads.front();
 		DebugAssertWithMessageID(ref->MsgID()==m->solicitingMessage, m->solicitingMessage);
-		EM().DisposeMsg(ref);
+		//EM().DisposeMsg(ref);
 		// erase the first entry
 		cacheDataPendingLocalReads.erase(cacheDataPendingLocalReads.begin());
 
