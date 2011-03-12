@@ -455,7 +455,7 @@
     public static void OutOriginDirectoryMemory(int nodeCount, int l1, int l2, float multiplyFactor, string filesysSeperator,
         string filenameAddition)
     {
-        string outputString = "memoryConfigs" + filesysSeperator + filenameAddition + "radix-origin-p" +
+        string outputString = "memoryConfigs" + filesysSeperator + filenameAddition + "origin-p" +
             nodeCount + "-c" + l1 + "L1-" + l2 + "L2.memory";
         output = new System.IO.StreamWriter(outputString);
         index = 1;
@@ -530,10 +530,10 @@
 	{
 		System.IO.Directory.CreateDirectory("memoryConfigs");
 
-      float networkMultiplyFactor = 0.5f;
+      float networkMultiplyFactor = 10.0f;
       string filesysSeperator = "/";   // unix
       //string filesysSeperator = "\\";   // windows
-      string filenameAddition = "network0.5-";
+      string filenameAddition = "network10-";
       //string filenameAddition = "";
         // nodeCount also determines the total number of processors
 		for (int nodeCount = 4; nodeCount <= 32; nodeCount *= 2)
