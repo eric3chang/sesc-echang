@@ -946,6 +946,7 @@ namespace Memory
    			SendMessageToDirectory(tm, false);
 
    			ClearTempCacheData(cacheData);
+   			EM().DisposeMsg(m);
 			
    			cacheData.SetCacheState(cs_Shared);
    		} // if (!m->requestingExclusive)
@@ -968,6 +969,7 @@ namespace Memory
    			SendMessageToDirectory(tm, false);
 
    			ClearTempCacheData(cacheData);
+   			EM().DisposeMsg(m);
 				
    			cacheData.SetCacheState(cs_Invalid);
    		} // else m is requesting exclusive
@@ -1034,8 +1036,8 @@ namespace Memory
    			tm->isDirty = true;
    			SendMessageToDirectory(tm, false);
 
-   			//EM().DisposeMsg(msg);
    			ClearTempCacheData(cacheData);
+   			EM().DisposeMsg(m);
    		} // if (firstReply->requestingExclusive)
    		else
    		{
@@ -1057,8 +1059,9 @@ namespace Memory
    			wm->isShared = true;
    			SendMessageToDirectory(wm, false);
 
-   			//EM().DisposeMsg(msg);
+
    			ClearTempCacheData(cacheData);
+   			EM().DisposeMsg(m);
    		} // else !(if (m->requestingExclusive)
    	} // else if (msg->Type()==mt_Intervention)
 		else
@@ -1142,8 +1145,6 @@ namespace Memory
 				}
 				else
 				{
-					//TODO!!!!!
-					//OnCacheDirtyExclusive(m, src, cacheData);
 					OnCacheCleanExclusive(m, src, cacheData);
 				}
 			}
@@ -1262,6 +1263,7 @@ namespace Memory
 
 			EM().DisposeMsg(secondReply);
    		ClearTempCacheData(cacheData);
+   		EM().DisposeMsg(m);
 			
 			// should be set to invalid always regardless of the interventionMessage because
 				// we received an eviction from the local cache
@@ -1318,9 +1320,9 @@ namespace Memory
 				SendMessageToDirectory(tm, false);
 			}
 
-   		//EM().DisposeMsg(msg);
 			EM().DisposeMsg(secondReply);
    		ClearTempCacheData(cacheData);
+   		EM().DisposeMsg(m);
 
 			// should be set to invalid always regardless of the interventionMessage because
 				// we received an eviction from the local cache			
@@ -1494,7 +1496,7 @@ namespace Memory
 			DebugAssertWithMessageID(firstReply->newOwner!=InvalidNodeID, m->solicitingMessage);
 			SendMessageToRemoteCache(iam, firstReply->newOwner);
 
-	   	EM().DisposeMsg(m);
+	   	//EM().DisposeMsg(m);
 	   	ClearTempCacheData(cacheData);
 		}
 		else if (msg->Type()==mt_Read)
@@ -1665,7 +1667,7 @@ namespace Memory
 			DebugAssertWithMessageID(firstReply->newOwner!=InvalidNodeID, m->solicitingMessage);
 			SendMessageToRemoteCache(iam, firstReply->newOwner);
 
-			EM().DisposeMsg(m);
+			//EM().DisposeMsg(m);
 			ClearTempCacheData(cacheData);
 
 			// if a read request has been canceled because we were processing an invalidate
@@ -1716,7 +1718,7 @@ namespace Memory
 			invalidAcksReceived++;
 			cacheData.SetCacheState(cs_WaitingForKInvalidatesJInvalidatesReceived);
 
-			EM().DisposeMsg(m);
+			//EM().DisposeMsg(msg);
 		}
 		else if (msg->Type()==mt_SpeculativeReply)
 		{
@@ -1804,7 +1806,7 @@ namespace Memory
 			// use 0 for localSendTime to simulate this device as part of the cache
 			SendMsg(localCacheConnectionID, rrm, localSendTime);
 
-			EM().DisposeMsg(m);
+			//EM().DisposeMsg(m);
 			ClearTempCacheData(cacheData);
 			ProcessReadResponse(m, cacheData);
 		}
@@ -1918,7 +1920,7 @@ namespace Memory
 			{
 				// haven't received exclusive reply with pending invalidates
 				invalidateAcksReceived++;
-				EM().DisposeMsg(msg);
+				//EM().DisposeMsg(msg);
 			} // else cacheData.firstReply==NULL
 		}
 		else if (msg->Type()==mt_ReadReply)
@@ -2097,7 +2099,7 @@ namespace Memory
 			EM().InitializeEvictionResponseMsg(erm, m);
 			SendMsg(localCacheConnectionID, erm, localSendTime);
 
-   		EM().DisposeMsg(m);
+   		//EM().DisposeMsg(m);
    		ClearTempCacheData(cacheData);
 				
 			ProcessRemainingPendingLocalReads(cacheData);
@@ -2137,7 +2139,7 @@ namespace Memory
 				EM().InitializeEvictionResponseMsg(erm, m);
 				SendMsg(localCacheConnectionID, erm, localSendTime);
 
-				EM().DisposeMsg(m);
+				//EM().DisposeMsg(m);
 				EM().DisposeMsg(pendingEviction[m->addr]);
 				pendingEviction.erase(m->addr);
 
@@ -3058,7 +3060,7 @@ namespace Memory
 				rrm->satisfied = true;
 				SendMessageToRemoteCache(rrm, sourceNode);
 
-				EM().DisposeMsg(read);
+				//EM().DisposeMsg(read);
 			}
 
 			pendingSharedReads.clear();

@@ -150,22 +150,23 @@ processorCountHi, L1Low, L1Hi, L2Low, L2Hi):
  
     outFile.write(outputString)
     outFile.close()
+    os.chmod(outPath,0700)
 
 def main():
     #benchmarkNames = ['barnes', 'cholesky', 'fft', 'fmm', 'lu','newtest', 'radix', 'raytrace', 'ocean']
     #benchmarkNames = ['cholesky', 'fft', 'lu','newtest', 'radix', 'raytrace', 'ocean']
-    benchmarkNames = ['barnes']
+    benchmarkNames = ['lu']
     directoryTypes = ['bip', 'origin']
-    processorCountLow = '32'
+    processorCountLow = '4'
     processorCountHi = '32'
     #L1Low = '8'
     #L1Hi = '64'
-    L1Low = '1'
-    L1Hi = '1'
+    L1Low = '64'
+    L1Hi = '64'
     #L2Low = '512'
     #L2Hi = '8192'
-    L2Low = '1024'
-    L2Hi = '1024'
+    L2Low = '128'
+    L2Hi = '4096'
 
     combinedOutfilename = OUT_DIR+COMBINED_OUT+OUT_EXT
     combinedOutfile = open(combinedOutfilename, 'wb')
@@ -179,6 +180,8 @@ def main():
             generateMultipleRunfiles(combinedOutfile, name, directory, processorCountLow,\
                 processorCountHi, L1Low, L1Hi, L2Low, L2Hi)
     combinedOutfile.close()
+    # leading 0 implies octal
+    os.chmod(combinedOutfilename,0700)
 
 if __name__ == "__main__":
     main()
