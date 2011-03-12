@@ -90,7 +90,7 @@ namespace Memory
 */
 	void OriginDirectory::ClearTempCacheData(CacheData& cacheData)
    {
-   	//EM().DisposeMsg(cacheData.firstReply);
+   	EM().DisposeMsg(cacheData.firstReply);
    	cacheData.firstReply = NULL;
    	cacheData.firstReplySrc = InvalidNodeID;
    	cacheData.invalidAcksReceived = InvalidInvalidAcksReceived;
@@ -100,7 +100,7 @@ namespace Memory
 
    void OriginDirectory::ClearTempDirectoryData(DirectoryData& directoryData)
    {
-   	//EM().DisposeMsg(directoryData.firstRequest);
+   	EM().DisposeMsg(directoryData.firstRequest);
    	directoryData.firstRequest = NULL;
    	directoryData.firstRequestSrc = InvalidNodeID;
    	directoryData.previousOwner = InvalidNodeID;
@@ -137,7 +137,7 @@ namespace Memory
 		DebugAssertWithMessageID(src==InvalidNodeID, m->MsgID());
 		DebugAssertWithMessageID(pendingMemoryReadAccesses.find(m->solicitingMessage)!=pendingMemoryReadAccesses.end(), m->MsgID());
 		const ReadMsg* rm = pendingMemoryReadAccesses[m->solicitingMessage];
-		//EM().DisposeMsg(rm);
+		EM().DisposeMsg(rm);
 		pendingMemoryReadAccesses.erase(m->solicitingMessage);
 	}
 
@@ -146,7 +146,7 @@ namespace Memory
 		DebugAssertWithMessageID(src==InvalidNodeID, m->MsgID());
 		DebugAssertWithMessageID(pendingMemoryWriteAccesses.find(m->solicitingMessage)!=pendingMemoryWriteAccesses.end(), m->MsgID());
 		const WriteMsg* wm = pendingMemoryWriteAccesses[m->solicitingMessage];
-		//EM().DisposeMsg(wm);
+		EM().DisposeMsg(wm);
 		pendingMemoryWriteAccesses.erase(m->solicitingMessage);
 	}
 
@@ -1165,7 +1165,7 @@ namespace Memory
 			DebugAssertWithMessageID(firstReplySrc==dirNode, m->solicitingMessage);
 			DebugAssertWithMessageID(pendingRemoteInvalidates.find(m->solicitingMessage)!=pendingRemoteInvalidates.end(), m->MsgID());
 			const InvalidateMsg*& im = pendingRemoteInvalidates[m->solicitingMessage];
-			//EM().DisposeMsg(im);
+			EM().DisposeMsg(im);
 			pendingRemoteInvalidates.erase(m->solicitingMessage);
 
 			if (m->blockAttached)
@@ -1185,7 +1185,7 @@ namespace Memory
 			DebugAssertWithMessageID(firstReplySrc==dirNode, m->solicitingMessage);
 			DebugAssertWithMessageID(pendingRemoteReads.find(m->solicitingMessage)!=pendingRemoteReads.end(), m->MsgID());
 			const ReadMsg*& rm = pendingRemoteReads[m->solicitingMessage];
-			//EM().DisposeMsg(rm);
+			EM().DisposeMsg(rm);
 			pendingRemoteReads.erase(m->solicitingMessage);
 
 			if (m->isDirty)
@@ -1227,7 +1227,7 @@ namespace Memory
 			const InvalidateResponseMsg* m = (const InvalidateResponseMsg*)msg;
 			DebugAssertWithMessageID(pendingRemoteInvalidates.find(m->solicitingMessage)!=pendingRemoteInvalidates.end(), m->MsgID());
 			const InvalidateMsg*& im = pendingRemoteInvalidates[m->solicitingMessage];
-			//EM().DisposeMsg(im);
+			EM().DisposeMsg(im);
 			pendingRemoteInvalidates.erase(m->solicitingMessage);
 
 			// send response to cache
@@ -1272,7 +1272,7 @@ namespace Memory
 			const ReadResponseMsg* m = (const ReadResponseMsg*)msg;
 			DebugAssertWithMessageID(pendingRemoteReads.find(m->solicitingMessage)!=pendingRemoteReads.end(), m->MsgID());
 			const ReadMsg*& rm = pendingRemoteReads[m->solicitingMessage];
-			//EM().DisposeMsg(rm);
+			EM().DisposeMsg(rm);
 			pendingRemoteReads.erase(m->solicitingMessage);
 
 			// send response to cache
@@ -1494,7 +1494,7 @@ namespace Memory
 			DebugAssertWithMessageID(firstReply->newOwner!=InvalidNodeID, m->solicitingMessage);
 			SendMessageToRemoteCache(iam, firstReply->newOwner);
 
-	   	//EM().DisposeMsg(m);
+	   	EM().DisposeMsg(m);
 	   	ClearTempCacheData(cacheData);
 		}
 		else if (msg->Type()==mt_Read)
@@ -1665,7 +1665,7 @@ namespace Memory
 			DebugAssertWithMessageID(firstReply->newOwner!=InvalidNodeID, m->solicitingMessage);
 			SendMessageToRemoteCache(iam, firstReply->newOwner);
 
-			//EM().DisposeMsg(m);
+			EM().DisposeMsg(m);
 			ClearTempCacheData(cacheData);
 
 			// if a read request has been canceled because we were processing an invalidate
@@ -1716,7 +1716,7 @@ namespace Memory
 			invalidAcksReceived++;
 			cacheData.SetCacheState(cs_WaitingForKInvalidatesJInvalidatesReceived);
 
-			//EM().DisposeMsg(msg);
+			EM().DisposeMsg(m);
 		}
 		else if (msg->Type()==mt_SpeculativeReply)
 		{
@@ -1804,7 +1804,7 @@ namespace Memory
 			// use 0 for localSendTime to simulate this device as part of the cache
 			SendMsg(localCacheConnectionID, rrm, localSendTime);
 
-			//EM().DisposeMsg(m);
+			EM().DisposeMsg(m);
 			ClearTempCacheData(cacheData);
 			ProcessReadResponse(m, cacheData);
 		}
@@ -1858,7 +1858,7 @@ namespace Memory
 			DebugAssertWithMessageID(m->newOwner!=InvalidNodeID, m->solicitingMessage);
 
 			DebugAssertWithMessageID(pendingEviction.find(firstReply->addr)!=pendingEviction.end(), firstReply->solicitingMessage);
-			//EM().DisposeMsg(pendingEviction[firstReply->addr]);
+			EM().DisposeMsg(pendingEviction[firstReply->addr]);
 			pendingEviction.erase(firstReply->addr);
 
 			cacheData.SetCacheState(cs_Invalid);
@@ -1918,7 +1918,7 @@ namespace Memory
 			{
 				// haven't received exclusive reply with pending invalidates
 				invalidateAcksReceived++;
-				//EM().DisposeMsg(msg);
+				EM().DisposeMsg(msg);
 			} // else cacheData.firstReply==NULL
 		}
 		else if (msg->Type()==mt_ReadReply)
@@ -2087,7 +2087,7 @@ namespace Memory
 			DebugAssertWithMessageID(m->isBusy && !m->isExclusive, m->solicitingMessage);
 			
 			DebugAssertWithMessageID(pendingEviction.find(m->addr)!=pendingEviction.end(), m->solicitingMessage);
-			//EM().DisposeMsg(pendingEviction[m->addr]);
+			EM().DisposeMsg(pendingEviction[m->addr]);
 			pendingEviction.erase(m->addr);
 
    		cacheData.SetCacheState(cs_Invalid);
@@ -2097,7 +2097,7 @@ namespace Memory
 			EM().InitializeEvictionResponseMsg(erm, m);
 			SendMsg(localCacheConnectionID, erm, localSendTime);
 
-   		//EM().DisposeMsg(m);
+   		EM().DisposeMsg(m);
    		ClearTempCacheData(cacheData);
 				
 			ProcessRemainingPendingLocalReads(cacheData);
@@ -2137,8 +2137,8 @@ namespace Memory
 				EM().InitializeEvictionResponseMsg(erm, m);
 				SendMsg(localCacheConnectionID, erm, localSendTime);
 
-				//EM().DisposeMsg(m);
-				//EM().DisposeMsg(pendingEviction[m->addr]);
+				EM().DisposeMsg(m);
+				EM().DisposeMsg(pendingEviction[m->addr]);
 				pendingEviction.erase(m->addr);
 
 				ProcessRemainingPendingLocalReads(cacheData);		
@@ -3058,7 +3058,7 @@ namespace Memory
 				rrm->satisfied = true;
 				SendMessageToRemoteCache(rrm, sourceNode);
 
-				//EM().DisposeMsg(read);
+				EM().DisposeMsg(read);
 			}
 
 			pendingSharedReads.clear();

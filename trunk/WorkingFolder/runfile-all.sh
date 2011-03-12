@@ -1,4 +1,4 @@
 #!/bin/bash
 
-./runfile-cholesky-bip-all.sh
-./runfile-cholesky-origin-all.sh
+./runfile-barnes-bip-all.sh
+./runfile-barnes-origin-all.sh
