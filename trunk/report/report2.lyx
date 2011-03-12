@@ -192,7 +192,8 @@ In the following section of the paper, an overview of how each components
  Section 4 talks about the basic message types that are present in the system.
  Implementation and comparison of protocols is presented in Section 5.
  Performance of the two types of protocols is presented in Section 6.
- Section 7 describes some of the problems faced in simulating the protocols.
+ Section 7 describes some of the problems faced in simulating the protocols
+ and some possible future works.
  Finally, section 8 concludes the report.
 \end_layout
 
@@ -4752,7 +4753,7 @@ Lu
 \begin_inset Float figure
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \begin_inset Graphics
@@ -4831,7 +4832,7 @@ reference "fig:Lu-results"
 
 \begin_layout Standard
 \begin_inset Note Note
-status open
+status collapsed
 
 \begin_layout Subsubsection
 Cholesky
@@ -4920,7 +4921,7 @@ reference "fig:Cholesky-results"
 \begin_layout Section
 
 \family roman
-Problems
+Problems and Future Works
 \end_layout
 
 \begin_layout Standard
@@ -4938,15 +4939,6 @@ y since the bugs often surface after tens of thousands of messages are sent.
  hold true if the system is working.
  They can easily be turned off to increase speed of the simulator by not
  defining DEBUG when compiling.
-\end_layout
-
-\begin_layout Standard
-In addition, the memory system in the current system is implemented in a
- way such that it is in one location.
- In the future, we could modify the the simulator such that the memory system
- is distributed just like the directory system.
- With a distributed memory system, there would be much more issue with coherence
-, scaling, performance, and correctness.
 \end_layout
 
 \begin_layout Standard
@@ -4979,8 +4971,9 @@ Conclusion
 
 \begin_layout Standard
 We have arrived at the conclusion that the Origin-based directory protocol
- is superior, since a few of its transactions can be done using a three-way
- interaction instead of two bilateral interactions.
+ is superior in many situations compared to BIP.
+ Origin-based systems achieve lower runtime based primarily on their ability
+ to inject fewer messages into the network.
  
 \begin_inset CommandInset bibtex
 LatexCommand bibtex
