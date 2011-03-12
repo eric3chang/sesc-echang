@@ -17,7 +17,9 @@ OUT_EXT='.sh'
 OUT_PRE='runfile-'
 HEADER1='#!/bin/bash\n\n'
 HEADER2='#!/bin/bash\nDATE=$(date "+%m%d%H%M")\nHOSTNAME=$(hostname)\nAUGSESC='+AUGSESC+'\n\n'
-STRING1='nice -10 ./$AUGSESC -cconfigs/workFile/'
+LARGE_STACK='-k65536 '
+STRING11='nice -10 ./$AUGSESC '
+STRING12='-cconfigs/workFile/'
 STRING2='.conf -dconfigs/workFile/'
 STRING3='.conf.report benchmarks-splash2-sesc/'
 STRING4=' &> console-outputs/'
@@ -65,11 +67,13 @@ def generateOneRunfile(benchmarkName, directoryType, processorCount, L1Size, L2S
     processorCountInt = convertToInt(processorCount)
     L1SizeInt = convertToInt(L1Size)
     L2SizeInt = convertToInt(L2Size)
+    isUseLargeStack = False
 
     if (benchmarkName=='barnes'):
         parameters = BARNES_PARAMS_PRE + processorCount + BARNES_PARAMS_POST
     elif (benchmarkName=='cholesky'):
         parameters = CHOLESKY_PARAMS_PRE + processorCount + CHOLESKY_PARAMS_POST
+        isUseLargeStack = True
     elif (benchmarkName=='fft'):
         parameters = FFT_PARAMS_PRE + processorCount + FFT_PARAMS_POST
     elif (benchmarkName=='fmm'):
@@ -90,7 +94,12 @@ def generateOneRunfile(benchmarkName, directoryType, processorCount, L1Size, L2S
 
     confFilename = benchmarkName + '-' + directoryType + '-' + processorCount + '-' + L1Size + '-' + L2Size
 
-    returnString = STRING1 + confFilename + STRING2 + confFilename + STRING3 + benchmarkName + EXE_EXT\
+    returnString = ''
+    if (isUseLargeStack):
+        returnString += STRING11 + LARGE_STACK
+    else:
+        returnString += STRING11
+    returnString += STRING12 + confFilename + STRING2 + confFilename + STRING3 + benchmarkName + EXE_EXT\
         + ' ' + parameters + STRING4 + confFilename + STRING5
     return returnString
 
@@ -155,7 +164,7 @@ processorCountHi, L1Low, L1Hi, L2Low, L2Hi):
 def main():
     #benchmarkNames = ['barnes', 'cholesky', 'fft', 'fmm', 'lu','newtest', 'radix', 'raytrace', 'ocean']
     #benchmarkNames = ['cholesky', 'fft', 'lu','newtest', 'radix', 'raytrace', 'ocean']
-    benchmarkNames = ['lu']
+    benchmarkNames = ['cholesky']
     directoryTypes = ['bip', 'origin']
     processorCountLow = '4'
     processorCountHi = '32'
