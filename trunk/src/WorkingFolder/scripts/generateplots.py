@@ -8,7 +8,7 @@ from matplotlib.pyplot import *
 # need to change this when moving this script
 IN_DIR='../results/'
 #OUT_DIR='./graphs/'
-OUT_DIR='../../report/diagrams/'
+OUT_DIR='../../../report/diagrams/'
 #OUT_DIR='../configs/workFile/'
 
 # don't need to change these when moving this script
@@ -18,11 +18,12 @@ DEFAULT_L1='128'
 #DEFAULT_L2='4096'
 DEFAULT_L2='1024'
 GRAPH_WIDTH=2
-IN_EXT='.memDevResults'
+#IN_EXT='.memDevResults'
 #IN_EXT='.memDevResults.bak'
 #IN_EXT='.memDevResults.3200000'
 #IN_EXT='-special.memDevResults'
-#IN_EXT='.memDevResults'
+#IN_EXT='.memDevResults.wr10'
+IN_EXT='.memDevResults.lshp.network10'
 #LINESTYLES=['k--','k:']
 LINESTYLES=['ko','k^']
 #LINESTYLES=['k*','kD']
@@ -82,6 +83,31 @@ def getL1Results(benchmarks, dirtypes, cpu, minimum, maximum, l2, component, key
             i = minInt
             while (i <= maxInt):
                 dictionary = getDictionary(benchmark, dirtype, cpu, str(i), l2)
+                if component not in dictionary:
+                    printError(component + ' should be in the file')
+                else:
+                    subDictionary = dictionary[component]
+                if key not in subDictionary:
+                    printError(key + ' should be in the file')
+                else:
+                    value = subDictionary[key]
+                    iResults[i] = value
+                i *= 2
+            dirtypeResults[dirtype] = iResults
+        benchmarkResults[benchmark] = dirtypeResults
+    return benchmarkResults
+
+def getL2Results(benchmarks, dirtypes, cpu, l1, minimum, maximum, component, key):
+    benchmarkResults = {}
+    minInt = convertToInt(minimum)
+    maxInt = convertToInt(maximum)
+    for benchmark in benchmarks:
+        dirtypeResults = {}
+        for dirtype in dirtypes:
+            iResults = {}
+            i = minInt
+            while (i <= maxInt):
+                dictionary = getDictionary(benchmark, dirtype, cpu, l1, str(i))
                 if component not in dictionary:
                     printError(component + ' should be in the file')
                 else:
@@ -159,27 +185,27 @@ def getGraphAverageResults(benchmarks, dirtypes, benchmarkResults, minimum, maxi
 
 def plotCpuLatencyMultiple(benchmarks, dirtypes, minimum, maximum, l1, l2,isSaveFigure,isNormalize,filenameAddition,isSwitchDirtype):
     plotCpuMultiple(benchmarks, dirtypes, minimum, maximum,l1,l2,'Network', 'AverageLatency',
-        'Average Latency (%)','cpu-latency-c'+l1+'-'+filenameAddition,isSaveFigure,isNormalize,isSwitchDirtype)
+        'Average Latency (%)','cpu-latency-c'+l1+filenameAddition,isSaveFigure,isNormalize,isSwitchDirtype)
 
 def plotCpuLatencySingle(benchmarks, dirtypes, minimum, maximum, l1, l2,isSaveFigure,isNormalize,filenameAddition,isSwitchDirtype):
     plotCpuSingle(benchmarks, dirtypes, minimum, maximum,l1,l2,'Network', 'AverageLatency', 'Average Latency (%)',
-        'cpu-latency-c'+l1+'-'+filenameAddition,isSaveFigure,isNormalize,isSwitchDirtype)
+        'cpu-latency-c'+l1+filenameAddition,isSaveFigure,isNormalize,isSwitchDirtype)
 
 def plotCpuMessagesMultiple(benchmarks, dirtypes, minimum, maximum,l1,l2,isSaveFigure,isNormalize,filenameAddition,isSwitchDirtype):
     plotCpuMultiple(benchmarks, dirtypes, minimum, maximum,l1,l2,'Network', 'TotalMessagesReceived',
-        'Messages Received (%)','cpu-messages-c'+l1+'-'+filenameAddition,isSaveFigure,isNormalize,isSwitchDirtype)
+        'Messages Received (%)','cpu-messages-c'+l1+filenameAddition,isSaveFigure,isNormalize,isSwitchDirtype)
 
 def plotCpuMessagesSingle(benchmarks, dirtypes, minimum, maximum,l1,l2,isSaveFigure,isNormalize,filenameAddition,isSwitchDirtype):
     plotCpuSingle(benchmarks, dirtypes, minimum, maximum,l1,l2,'Network', 'TotalMessagesReceived',
-        'Messages Received (%)','cpu-messages-c'+l1+'-'+filenameAddition,isSaveFigure,isNormalize,isSwitchDirtype)
+        'Messages Received (%)','cpu-messages-c'+l1+filenameAddition,isSaveFigure,isNormalize,isSwitchDirtype)
 
 def plotCpuTimeMultiple(benchmarks, dirtypes, minimum, maximum, l1, l2, isSaveFigure,isNormalize,filenameAddition,isSwitchDirtype):
     plotCpuMultiple(benchmarks, dirtypes, minimum, maximum, l1, l2, 'TotalRunTime', 'TotalRunTime',
-         'Runtime (%)','cpu-time-c'+l1+'-'+filenameAddition, isSaveFigure,isNormalize,isSwitchDirtype)
+         'Runtime (%)','cpu-time-c'+l1+filenameAddition, isSaveFigure,isNormalize,isSwitchDirtype)
 
 def plotCpuTimeSingle(benchmarks, dirtypes, minimum, maximum,l1,l2,isSaveFigure,isNormalize,filenameAddition,isSwitchDirtype):
     plotCpuSingle(benchmarks, dirtypes, minimum, maximum,l1,l2,'TotalRunTime', 'TotalRunTime', 'Runtime (%)',
-        'cpu-time-c'+l1+'-'+filenameAddition,isSaveFigure,isNormalize,isSwitchDirtype)
+        'cpu-time-c'+l1+filenameAddition,isSaveFigure,isNormalize,isSwitchDirtype)
 
 def plotCpuMultiple(benchmarks, dirtypes, minimum, maximum, l1, l2, component, key, myYlabel, filename, isSaveFigure,isNormalize,isSwitchDirtype):
     myXlabel='Number of Processors'
@@ -313,19 +339,19 @@ def plotGraphSingle(dirtypes, graphResults, minimum, maximum, myXlabel, myYlabel
 
 def plotL1LatencyMultiple(benchmarks, dirtypes,cpu,minimum,maximum, l2,isSaveFigure,isNormalize,filenameAddition,isSwitchDirtype):
     plotL1Multiple(benchmarks, dirtypes,cpu,minimum, maximum,l2,'Network', 'AverageLatency', 'Average Latency (%)',
-    'l1-latency-p'+cpu+'-'+filenameAddition,isSaveFigure,isNormalize,isSwitchDirtype)
+    'l1-latency-p'+cpu+filenameAddition,isSaveFigure,isNormalize,isSwitchDirtype)
 
-def plotL1LatencySingle(benchmarks, dirtypes,cpu,minimum,maximum, l2,isSaveFigure,isNormalize,filenameAddition):
+def plotL1LatencySingle(benchmarks, dirtypes,cpu,minimum,maximum, l2,isSaveFigure,isNormalize,filenameAddition, isSwitchDirtype):
     plotL1Single(benchmarks, dirtypes,cpu,minimum, maximum,l2,'Network', 'AverageLatency', 'Average Latency (%)',
-    'l1-latency-p'+cpu+'-'+filenameAddition,isSaveFigure,isNormalize)
+    'l1-latency-p'+cpu+filenameAddition,isSaveFigure,isNormalize, isSwitchDirtype)
 
 def plotL1MessagesMultiple(benchmarks, dirtypes,cpu,minimum, maximum,l2,isSaveFigure,isNormalize,filenameAddition,isSwitchDirtype):
     plotL1Multiple(benchmarks, dirtypes,cpu,minimum, maximum,l2,'Network', 'TotalMessagesReceived',
-    'Messages Received (%)','l1-messages-p'+cpu+'-'+filenameAddition,isSaveFigure,isNormalize,isSwitchDirtype)
+    'Messages Received (%)','l1-messages-p'+cpu+filenameAddition,isSaveFigure,isNormalize,isSwitchDirtype)
 
 def plotL1MessagesSingle(benchmarks, dirtypes,cpu,minimum, maximum,l2,isSaveFigure,isNormalize,filenameAddition,isSwitchDirtype):
     plotL1Single(benchmarks, dirtypes,cpu,minimum, maximum,l2,'Network', 'TotalMessagesReceived',
-    'Messages Received (%)','l1-messages-p'+cpu+'-'+filenameAddition,isSaveFigure,isNormalize,isSwitchDirtype)
+    'Messages Received (%)','l1-messages-p'+cpu+filenameAddition,isSaveFigure,isNormalize,isSwitchDirtype)
 
 def plotL1Multiple(benchmarks, dirtypes, cpu, minimum, maximum, l2, component, key, myYlabel, filename, isSaveFigure,isNormalize,
         isSwitchDirtype):
@@ -346,49 +372,99 @@ def plotL1Single(benchmarks, dirtypes, cpu, minimum, maximum, l2, component, key
 
 def plotL1TimeMultiple(benchmarks, dirtypes, cpu, minimum, maximum, l2, isSaveFigure,isNormalize,filenameAddition,isSwitchDirtype):
     plotL1Multiple(benchmarks, dirtypes, cpu, minimum, maximum, l2,'TotalRunTime', 'TotalRunTime', 'Runtime (%)',
-        'l1-time-p'+cpu+'-'+filenameAddition,isSaveFigure,isNormalize,isSwitchDirtype,isSwitchDirtype)
+        'l1-time-p'+cpu+filenameAddition,isSaveFigure,isNormalize,isSwitchDirtype)
 
 def plotL1TimeSingle(benchmarks, dirtypes, cpu, minimum, maximum, l2, isSaveFigure,isNormalize,filenameAddition,isSwitchDirtype):
     plotL1Single(benchmarks, dirtypes, cpu, minimum, maximum, l2,'TotalRunTime', 'TotalRunTime', 'Runtime (%)',
-        'l1-time-p'+cpu+'-'+filenameAddition,isSaveFigure,isNormalize,isSwitchDirtype)
+        'l1-time-p'+cpu+filenameAddition,isSaveFigure,isNormalize,isSwitchDirtype)
 
+def plotL2LatencySingle(benchmarks, dirtypes,cpu, l1, minimum,maximum, isSaveFigure,isNormalize,filenameAddition, isSwitchDirtype):
+    plotL2Single(benchmarks, dirtypes,cpu, l1, minimum, maximum, 'Network', 'AverageLatency', 'Average Latency (%)',
+    'l2-latency-p'+cpu+filenameAddition,isSaveFigure,isNormalize, isSwitchDirtype)
+
+def plotL2MessagesSingle(benchmarks, dirtypes,cpu, l1, minimum, maximum, isSaveFigure,isNormalize,filenameAddition,isSwitchDirtype):
+    plotL2Single(benchmarks, dirtypes,cpu, l1, minimum, maximum, 'Network', 'TotalMessagesReceived',
+    'Messages Received (%)','l2-messages-p'+cpu+filenameAddition,isSaveFigure,isNormalize,isSwitchDirtype)
+
+def plotL2Single(benchmarks, dirtypes, cpu, l1, minimum, maximum, component, key, myYlabel, filename, isSaveFigure,isNormalize,
+        isSwitchDirtype):
+    myXlabel='L2 Cache Size in Kilobytes'
+    iResults = getL2Results(benchmarks, dirtypes, cpu, l1, minimum, maximum, component, key)
+
+    for benchmark in benchmarks:
+        myTitle = benchmark
+        tempBenchmarks = [benchmark]
+        plotGraphMultiple(tempBenchmarks,dirtypes,iResults, minimum, maximum, myXlabel, myYlabel,filename,isSaveFigure,isNormalize,
+            isSwitchDirtype)
+
+def plotL2TimeSingle(benchmarks, dirtypes, cpu, l1, minimum, maximum, isSaveFigure,isNormalize,filenameAddition,isSwitchDirtype):
+    plotL2Single(benchmarks, dirtypes, cpu, l1, minimum, maximum, 'TotalRunTime', 'TotalRunTime', 'Runtime (%)',
+        'l2-time-p'+cpu+filenameAddition,isSaveFigure,isNormalize,isSwitchDirtype)
 
 def main():
     #benchmark = ['barnes', 'cholesky', 'fft', 'fmm', 'lu','newtest', 'radix', 'raytrace', 'ocean']
     #benchmark = ['cholesky', 'fft', 'lu','newtest', 'radix', 'raytrace', 'ocean']
-    benchmarks = ['raytrace']
+    benchmarks = ['cholesky']
     #dirtypes = ['bip', 'directory', 'origin']
     dirtypes = ['bip','origin']
-    #filenameAddition = '100-110'
+    #filenameAddition = '-100-110'
     filenameAddition = ''
-    mincpu = '16'
+    mincpu = '4'
     maxcpu = '32'
     minl1 = '4'
     #maxl1 = '128'
     maxl1 = '4'
+    #l1 = '64'
+    l1 = '32'
     l2 = '1024'
+    #minl2 = '128'
+    #maxl2 = '4096'
+    minl2 = '1024'
+    maxl2 = '1024'
     isNormalize = False
     isSaveFigure = False
     isSwitchDirtype = False
 
-    l1Index = int(minl1)
-    while (l1Index <= int(maxl1)):
-        plotCpuTimeMultiple(benchmarks, dirtypes, mincpu, maxcpu,str(l1Index),l2,isSaveFigure,isNormalize,filenameAddition,isSwitchDirtype)
-        #plotCpuTimeSingle(benchmarks, dirtypes, mincpu, maxcpu,str(l1Index),l2,isSaveFigure,isNormalize,filenameAddition,isSwitchDirtype)
-        plotCpuMessagesMultiple(benchmarks, dirtypes, mincpu, maxcpu,str(l1Index),l2,isSaveFigure,isNormalize,filenameAddition,isSwitchDirtype)
-        #plotCpuMessagesSingle(benchmarks, dirtypes, mincpu, maxcpu,str(l1Index),l2,isSaveFigure,isNormalize,filenameAddition,isSwitchDirtype)
-        #plotCpuLatencyMultiple(benchmarks, dirtypes, mincpu, maxcpu,str(l1Index),l2,isSaveFigure,isNormalize,filenameAddition,isSwitchDirtype)
-        #plotCpuLatencySingle(benchmarks, dirtypes, mincpu, maxcpu,str(l1Index),l2,isSaveFigure,isNormalize,filenameAddition,isSwitchDirtype)
-        l1Index *= 2
+    l2Index = int(minl2)
+    while (l2Index <= int(maxl2)):
+        #plotCpuTimeMultiple(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index) ,isSaveFigure,isNormalize,filenameAddition,isSwitchDirtype)
+        plotCpuTimeSingle(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index),isSaveFigure,isNormalize,filenameAddition,isSwitchDirtype)
+        #plotCpuMessagesMultiple(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index), isSaveFigure,isNormalize,filenameAddition,isSwitchDirtype)
+        plotCpuMessagesSingle(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index), isSaveFigure,isNormalize,filenameAddition,isSwitchDirtype)
+        #plotCpuLatencyMultiple(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index), isSaveFigure,isNormalize,filenameAddition,isSwitchDirtype)
+        plotCpuLatencySingle(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index), isSaveFigure,isNormalize,filenameAddition,isSwitchDirtype)
+        l2Index *= 2
+
     cpuIndex = int(mincpu)
     while (cpuIndex <= int(maxcpu)):
-        #plotL1TimeMultiple(benchmarks, dirtypes, str(cpuIndex), minl1, maxl1, l2, isSaveFigure,isNormalize,filenameAddition)
-        #plotL1TimeSingle(benchmarks, dirtypes, str(cpuIndex), minl1, maxl1, l2, isSaveFigure,isNormalize,filenameAddition)
-        #plotL1MessagesMultiple(benchmarks, dirtypes, str(cpuIndex), minl1, maxl1, l2, isSaveFigure,isNormalize,filenameAddition)
-        #plotL1MessagesSingle(benchmarks, dirtypes, str(cpuIndex), minl1, maxl1, l2, isSaveFigure,isNormalize,filenameAddition)
-        #plotL1LatencyMultiple(benchmarks, dirtypes, str(cpuIndex), minl1, maxl1, l2, isSaveFigure,isNormalize,filenameAddition)
-        #plotL1LatencySingle(benchmarks, dirtypes, str(cpuIndex), minl1, maxl1, l2, isSaveFigure,isNormalize,filenameAddition)
+        #plotL2TimeSingle(benchmarks, dirtypes, str(cpuIndex), l1, minl2, maxl2, isSaveFigure,isNormalize,filenameAddition,isSwitchDirtype)
+        #plotL2MessagesSingle(benchmarks, dirtypes, str(cpuIndex), l1, minl2, maxl2, isSaveFigure,isNormalize,filenameAddition,isSwitchDirtype)
+        #plotL2LatencySingle(benchmarks, dirtypes, str(cpuIndex), l1, minl2, maxl2, isSaveFigure,isNormalize,filenameAddition, isSwitchDirtype)
         cpuIndex *= 2
+
+    '''
+    cpuIndex = int(mincpu)
+    while (cpuIndex <= int(maxcpu)):
+        #plotL1TimeMultiple(benchmarks, dirtypes, str(cpuIndex), minl1, maxl1, l2, isSaveFigure,isNormalize,filenameAddition,isSwitchDirtype)
+        plotL1TimeSingle(benchmarks, dirtypes, str(cpuIndex), minl1, maxl1, l2, isSaveFigure,isNormalize,filenameAddition,isSwitchDirtype)
+        #plotL1MessagesMultiple(benchmarks, dirtypes, str(cpuIndex), minl1, maxl1, l2, isSaveFigure,isNormalize,filenameAddition,isSwitchDirtype)
+        plotL1MessagesSingle(benchmarks, dirtypes, str(cpuIndex), minl1, maxl1, l2, isSaveFigure,isNormalize,filenameAddition,isSwitchDirtype)
+        #plotL1LatencyMultiple(benchmarks, dirtypes, str(cpuIndex), minl1, maxl1, l2, isSaveFigure,isNormalize,filenameAddition, isSwitchDirtype)
+        plotL1LatencySingle(benchmarks, dirtypes, str(cpuIndex), minl1, maxl1, l2, isSaveFigure,isNormalize,filenameAddition, isSwitchDirtype)
+        cpuIndex *= 2
+    '''
+
+    '''
+    l1Index = int(minl1)
+    while (l1Index <= int(maxl1)):
+        #plotCpuTimeMultiple(benchmarks, dirtypes, mincpu, maxcpu, str(l1Index), l2, isSaveFigure,isNormalize,filenameAddition,isSwitchDirtype)
+        plotCpuTimeSingle(benchmarks, dirtypes, mincpu, maxcpu, str(l1Index), l2, isSaveFigure,isNormalize,filenameAddition,isSwitchDirtype)
+        #plotCpuMessagesMultiple(benchmarks, dirtypes, mincpu, maxcpu,str(l1Index),l2,isSaveFigure,isNormalize,filenameAddition,isSwitchDirtype)
+        plotCpuMessagesSingle(benchmarks, dirtypes, mincpu, maxcpu,str(l1Index),l2,isSaveFigure,isNormalize,filenameAddition,isSwitchDirtype)
+        #plotCpuLatencyMultiple(benchmarks, dirtypes, mincpu, maxcpu,str(l1Index),l2,isSaveFigure,isNormalize,filenameAddition,isSwitchDirtype)
+        plotCpuLatencySingle(benchmarks, dirtypes, mincpu, maxcpu,str(l1Index),l2,isSaveFigure,isNormalize,filenameAddition,isSwitchDirtype)
+        l1Index *= 2
+    '''
 
     #plotCpuMessages(benchmarks, dirtypes, mincpu, maxcpu)
     #plotCpuLatency(benchmarks, dirtypes, mincpu, maxcpu)

@@ -106,7 +106,8 @@ add_subdirectory (MemSys)
 #add_subdirectory (WorkingFolder)
 
 # set executable path
-set (EXECUTABLE_OUTPUT_PATH "${PROJECT_SOURCE_DIR}/../WorkingFolder"
+#set (EXECUTABLE_OUTPUT_PATH "${PROJECT_SOURCE_DIR}/../WorkingFolder"
+set (EXECUTABLE_OUTPUT_PATH "${PROJECT_SOURCE_DIR}/WorkingFolder"
    CACHE INTERNAL "Non-configurable executable directory.")
 
 # add all the libraries so that the linker can find them
