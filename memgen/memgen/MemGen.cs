@@ -530,11 +530,11 @@
 	{
 		System.IO.Directory.CreateDirectory("memoryConfigs");
 
-      float networkMultiplyFactor = 1.0f;
+      float networkMultiplyFactor = 0.5f;
       string filesysSeperator = "/";   // unix
       //string filesysSeperator = "\\";   // windows
-      //string filenameAddition = "network10-";
-      string filenameAddition = "";
+      string filenameAddition = "network0.5-";
+      //string filenameAddition = "";
         // nodeCount also determines the total number of processors
 		for (int nodeCount = 4; nodeCount <= 32; nodeCount *= 2)
 		{
@@ -542,9 +542,9 @@
             //for (int l1 = 8; l1 <= 1024; l1 *= 2)
 			{
 //				OutSimpleMemory1(i, l1);
-				//for (int l2 = l1 * 2; l2 <= 8 * 1024; l2 *= 2)
+				for (int l2 = l1 * 2; l2 <= 4 * 1024; l2 *= 2)
                 //for (int l2 = l1 * 2; l2 <= 2; l2 *= 2)
-				for (int l2 = 1024; l2 <= 1024; l2 *= 2)
+				//for (int l2 = 1024; l2 <= 1024; l2 *= 2)
 				{
                     OutBIPDirectoryMemory(nodeCount, l1, l2, networkMultiplyFactor, filesysSeperator,filenameAddition);
                     //OutDirectoryMemory(nodeCount, l1, l2, networkMultiplyFactor, filesysSeperator,filenameAddition);
