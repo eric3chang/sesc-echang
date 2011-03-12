@@ -1,0 +1,17 @@
+finished:
+newtest  - not in svn repository
+fft      - not in svn repository
+ocean    - ran with network 10, removed from repository
+radix    - ran with network 10
+cholesky - ran with network 10 and lshp, removed from repository
+lu       - ran with network 10, removed from repository
+
+possible rerun:
+
+rerun with higher network latencies:
+
+unfinished:
+raytrace
+
+doesn't work:
+fmm, barnes - causes GProcessor::retire CPU[1] ROB empty for long time @62409146368
