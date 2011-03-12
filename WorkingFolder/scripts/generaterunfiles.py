@@ -154,17 +154,18 @@ processorCountHi, L1Low, L1Hi, L2Low, L2Hi):
 def main():
     #benchmarkNames = ['barnes', 'cholesky', 'fft', 'fmm', 'lu','newtest', 'radix', 'raytrace', 'ocean']
     #benchmarkNames = ['cholesky', 'fft', 'lu','newtest', 'radix', 'raytrace', 'ocean']
-    benchmarkNames = ['cholesky']
+    benchmarkNames = ['barnes']
     directoryTypes = ['bip', 'origin']
-    processorCountLow = '4'
+    processorCountLow = '32'
     processorCountHi = '32'
-    L1Low = '8'
-    L1Hi = '64'
-    #L1Hi = '1'
-    L2Low = '1024'
+    #L1Low = '8'
+    #L1Hi = '64'
+    L1Low = '1'
+    L1Hi = '1'
     #L2Low = '512'
-    L2Hi = '1024'
     #L2Hi = '8192'
+    L2Low = '1024'
+    L2Hi = '1024'
 
     combinedOutfilename = OUT_DIR+COMBINED_OUT+OUT_EXT
     combinedOutfile = open(combinedOutfilename, 'wb')
