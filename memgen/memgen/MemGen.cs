@@ -530,15 +530,15 @@
 	{
 		System.IO.Directory.CreateDirectory("memoryConfigs");
 
-      float networkMultiplyFactor = 10.0f;
+      float networkMultiplyFactor = 1.0f;
       string filesysSeperator = "/";   // unix
       //string filesysSeperator = "\\";   // windows
-      string filenameAddition = "network10-";
-      //string filenameAddition = "";
+      //string filenameAddition = "network10-";
+      string filenameAddition = "";
         // nodeCount also determines the total number of processors
 		for (int nodeCount = 4; nodeCount <= 32; nodeCount *= 2)
 		{
-			for (int l1 = 8; l1 <= 64; l1 *= 2)
+			for (int l1 = 64; l1 <= 64; l1 *= 2)
             //for (int l1 = 8; l1 <= 1024; l1 *= 2)
 			{
 //				OutSimpleMemory1(i, l1);

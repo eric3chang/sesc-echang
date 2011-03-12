@@ -24,7 +24,7 @@ memgen.exe: memgen/MemGen.cs
 		-lib:$(MONODIR)/lib/mono/2.0 \
 		-reference:$(MONOLIB)
 	mono memgen.exe
-	mv memoryConfigs/* ../WorkingFolder/memgen/memoryConfigs/
+	mv memoryConfigs/* ../src/WorkingFolder/memgen/memoryConfigs/
 
 Output/Campaign.exe: Programs/Campaign.cs $(LIBSRCFILES)
 	mkdir -p Output
