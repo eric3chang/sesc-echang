@@ -95,8 +95,8 @@ def main():
     processorCountHi = '32'
     L1Low = '1'
     L1Hi = '1024'
-    #memoryfilePrefix = 'network10'
-    memoryfilePrefix = 'network0.3'
+    memoryfilePrefix = 'network10'
+    #memoryfilePrefix = 'network0.3'
 
     for directory in directoryTypes:
        generateAllBenchmarks(benchmarkNames, directory, processorCountLow, processorCountHi, L1Low, L1Hi,memoryfilePrefix)
