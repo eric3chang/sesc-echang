@@ -3805,7 +3805,7 @@ dualLoops, that tells the function how many times to read the myInt variable.
  The difference is that the readInt function only reads from myInt and the
  writeInt function reads myInt and also increments it.
  The main function requires two arguments.
- NumberOfPorcessors specify how many processors are in the system and affects
+ NumberOfProcessors specify how many processors are in the system and affects
  how many threads get created, and this variable should be a power of 2
  that is at least 1.
  NumberOfLoops specify how many times the threads would read the variable
@@ -4257,29 +4257,114 @@ reference "tab:SPLASH-2-latencies"
  The latencies for the memory are significantly larger than the caches,
  but is still relatively small to simulate the behavior of main memory in
  a DSM.
+ Each of these results are normalized to the highest value on the graph.
+ For example, in each graph featuring the runtime, the highest value on
+ the graph will be 100%.
  The benchmarks that will be presented from the SPLASH-2 Benchmark Suite
- are FFT, Radix, Cholesky, Ocean, and LU.
-\end_layout
-
-\begin_layout Subsubsection
-FFT
+ are FFT, Radix, and Ocean.
 \end_layout
 
 \begin_layout Standard
-The FFT benchmark is a complex 1-D version of the radix-
-\begin_inset Formula ${\surd}$
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Plain Layout
+Using these results, we can see that the BIP takes longer to complete.
+ Although there are more read misses for the Origin protocol, it is offset
+ by the amount of read hits for L2 cache.
+ It could also be possible that the additional read misses do not incur
+ as much penalty in a Origin because in a Origin protocol, there is a greater
+ opportunity for the cache to fetch the data from another node in that directory
+ instead of from the memory.
+\end_layout
+
 \end_inset
 
-n six-step FFT algorithm, which is optimized to minimize inter-processor
- communication
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Plain Layout
+The speedup is caused by increases in cache size.
+ The increase in cache size resulted in a reduction of misses.
+ As we can see, the misses in the system can directly affect the runtime
+ of the system.
+ The higher the number of misses there are, the longer the system takes
+ to finish.
+ The results from averaging the benchmarks show that the Origin protocol
+ is superior in virtually all cases.
+ Unless otherwise specified, the resultant runs from simulations are done
+ with 32 processors, with 
+\end_layout
+
+\begin_layout Plain Layout
+The cache size can be determined by associativity * number of sets * width.
+ Therefore, in the configuration file, it is only necessary to give these
+ three parameters and not the total size of the cache.
+ For example, in my system, this could be 4 * 4 * 64, in the case of the
+ L1 cache.
+ This gives it 16 blocks of 64-bit data to have a 1kB L1 cache.
+ In the case of the L2 cache, I used an associativity of 4 with 8 sets to
+ get 32 blocks.
+ this equates to a 2kB cache.
+\end_layout
+
+\begin_layout Plain Layout
+Increasing cache size increases coherence misses because more invalidates
+ occur because fewer blocks are bumped due to capacity misses.
+ Of course, capacity misses decrease because the cache has more spaces to
+ put blocks
 \begin_inset CommandInset citation
 LatexCommand cite
-key "WOO00"
+key "HEN00"
 
 \end_inset
 
 .
- The results of running the FFT benchmarks are shown in figure 
+ Increasing block size means capacity miss decreases and compulsory miss
+ decreases for certain applications.
+ When this happens, it most likely means that there is a lot of spatial
+ locality in the code, such as when running kernel code.
+ Because increasing block size grabs more of the code in the same area together,
+ which directly reduces compulsory misses.
+ The capacity miss is reduced because we're storing more of the necessary
+ code in the cache
+\begin_inset CommandInset citation
+LatexCommand cite
+key "HEN00"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Plain Layout
+The speedup is caused by increases in cache size.
+ The increase in cache size resulted in a reduction of misses.
+ As we can see, the misses in the system can directly affect the runtime
+ of the system.
+ The higher the number of misses there are, the longer the system takes
+ to finish.
+ The results from averaging the benchmarks show that the Origin protocol
+ is superior in most cases.
+ Except for the case of 2 processors, the Origin protocol is shown to be
+ superior in virtually all other cases.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Plain Layout
+As we can see from 
 \begin_inset ERT
 status open
 
@@ -4299,18 +4384,41 @@ figurename
 
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "fig:FFT-results"
+reference "fig:SPLASH-2-benchmarks-cpu-latency"
 
 \end_inset
 
-.
+, the network latency of various benchmarks are affected by both the benchmark
+ and the number of processors.
+ It is closely correlated with how many messages are in the network.
+ The more messages there are in the network, the 
+\end_layout
+
+\begin_layout Plain Layout
+The more cores we have, the higher our network latency is, since there should
+ be more messages in the network because more of the blocks is distributed
+ and being used in different nodes.
+\end_layout
+
+\begin_layout Plain Layout
+The more messages there are in the system, the higher the average network
+ latency should be, which is what we see in the previous graph.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+FFT
 \end_layout
 
 \begin_layout Standard
 \begin_inset Float figure
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -4355,88 +4463,32 @@ name "fig:FFT-results"
 \end_layout
 
 \begin_layout Standard
-As we can see, the biggest speedup is going from 4 processor to 8 processors.
- This is apparent in both procotols.
- This could be due to inherently non-parallizable code in the benchmark,
- leading diminishing returns when we move to higher processor counts.
- However, in either case, the Origin protocol is faster than BIP.
-\end_layout
+\begin_inset Note Note
+status collapsed
 
-\begin_layout Standard
-Using these results, we can see that the BIP takes longer to complete.
- Although there are more read misses for the Origin protocol, it is offset
- by the amount of read hits for L2 cache.
- It could also be possible that the additional read misses do not incur
- as much penalty in a Origin because in a Origin protocol, there is a greater
- opportunity for the cache to fetch the data from another node in that directory
- instead of from the memory.
-\end_layout
-
-\begin_layout Standard
-
-\family roman
-We also see that for both Origin and BIP, as the CPU count increases, the
- run-time decreases, this is to be expected as more work can be done in
- the same amount of time when one has more processors that can be used at
- the same time.
-\end_layout
-
-\begin_layout Standard
-The speedup is caused by increases in cache size.
- The increase in cache size resulted in a reduction of misses.
- As we can see, the misses in the system can directly affect the runtime
- of the system.
- The higher the number of misses there are, the longer the system takes
- to finish.
- The results from averaging the benchmarks show that the Origin protocol
- is superior in virtually all cases.
- Unless otherwise specified, the resultant runs from simulations are done
- with 32 processors, with 
-\end_layout
-
-\begin_layout Standard
-The cache size can be determined by associativity * number of sets * width.
- Therefore, in the configuration file, it is only necessary to give these
- three parameters and not the total size of the cache.
- For example, in my system, this could be 4 * 4 * 64, in the case of the
- L1 cache.
- This gives it 16 blocks of 64-bit data to have a 1kB L1 cache.
- In the case of the L2 cache, I used an associativity of 4 with 8 sets to
- get 32 blocks.
- this equates to a 2kB cache.
-\end_layout
-
-\begin_layout Standard
-Increasing cache size increases coherence misses because more invalidates
- occur because fewer blocks are bumped due to capacity misses.
- Of course, capacity misses decrease because the cache has more spaces to
- put blocks
-\begin_inset CommandInset citation
-LatexCommand cite
-key "HEN00"
-
+\begin_layout Plain Layout
+The FFT benchmark is a complex 1-D version of the radix-
+\begin_inset Formula ${\surd}$
 \end_inset
 
-.
- Increasing block size means capacity miss decreases and compulsory miss
- decreases for certain applications.
- When this happens, it most likely means that there is a lot of spatial
- locality in the code, such as when running kernel code.
- Because increasing block size grabs more of the code in the same area together,
- which directly reduces compulsory misses.
- The capacity miss is reduced because we're storing more of the necessary
- code in the cache
+n six-step FFT algorithm, which is optimized to minimize inter-processor
+ communication
 \begin_inset CommandInset citation
 LatexCommand cite
-key "HEN00"
+key "WOO00"
 
 \end_inset
 
 .
 \end_layout
 
+\end_inset
+
+
+\end_layout
+
 \begin_layout Standard
-As we can see from 
+The results of running the FFT benchmarks are shown in figure 
 \begin_inset ERT
 status open
 
@@ -4456,45 +4508,26 @@ figurename
 
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "fig:SPLASH-2-benchmarks-cpu-latency"
+reference "fig:FFT-results"
 
 \end_inset
 
-, the network latency of various benchmarks are affected by both the benchmark
- and the number of processors.
- It is closely correlated with how many messages are in the network.
- The more messages there are in the network, the 
-\end_layout
+.
+ 
+\family roman
+We also see that for both Origin and BIP, as the CPU count increases, the
+ run-time decreases, this is to be expected as more work can be done in
+ the same amount of time when one has more processors that can be used at
+ the same time.
 
-\begin_layout Standard
-We we can see, the higher the number of cores we use, the more messages
- we have in the system.
- The more messages there are in the system, the higher the average network
- latency should be, which is what we see in the previous graph.
-\end_layout
-
-\begin_layout Standard
-The speedup is caused by increases in cache size.
- Teh increase in cache size resulted in a reduction of misses.
- As we can see, the misses in the ssytem can directly affect the runtime
- of the system.
- The higher the numbre of misses there are, the longer the system takes
- to finish.
- The results from averaging the benchmarks show that the Origin protocol
- is superior in most cases.
- Except for the case of 2 processors, the Origin protocol is shown to be
- superior in virtuallyt all other cases.
-\end_layout
-
-\begin_layout Standard
-Unless otherwise specified, the resultant runs from simulations are done
- with 32 processors, with L1 cache = 16KB and L2 cache = 1MB.
-\end_layout
-
-\begin_layout Standard
-The more cores we have, the higher our network latency is, since there should
- be more messages in the network because more of the blocks is distributed
- and being used in different nodes.
+\family default
+ As we can see, the biggest speedup is going from 4 processor to 8 processors.
+ This is apparent in both protocols.
+ This could be due to inherently non-parallelizable code in the benchmark,
+ leading diminishing returns when we move to higher processor counts.
+ To demonstrate this, the higher the number of cores we use, the more messages
+ we have in the system, which means that more messages are contributing
+ to the network congestion, slowing the whole system down.
 \end_layout
 
 \begin_layout Subsubsection
@@ -4505,7 +4538,7 @@ Radix
 \begin_inset Float figure
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \begin_inset Graphics
@@ -4552,6 +4585,22 @@ name "fig:Radix-results"
 \end_layout
 
 \begin_layout Standard
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Plain Layout
+The Radix benchmark is an iterative algorithm.
+ Local histograms, generated by each processor, are accumulated into a global
+ histogram, which is used for permutation for the next iteration.
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
 The results from running the Radix benchmark is shown in 
 \begin_inset ERT
 status open
@@ -4577,79 +4626,24 @@ reference "fig:Radix-results"
 \end_inset
 
 .
- These results are similar to 
-\end_layout
-
-\begin_layout Subsubsection
-Cholesky
-\end_layout
-
-\begin_layout Standard
-\begin_inset Float figure
-wide false
-sideways false
+ These results are similar to the FFT benchmark for the total runtime.
+ Again, the biggest speedup is going from 4 processor to 8 processors even
+ though there is noticeable speedup throughout the system.
+ 
+\begin_inset Note Note
 status collapsed
 
 \begin_layout Plain Layout
-\begin_inset Graphics
-	filename diagrams/cholesky-cpu-messages-c64-.png
-	width 50text%
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset Caption
-
-\begin_layout Plain Layout
-Cholesky results
-\begin_inset CommandInset label
-LatexCommand label
-name "fig:Cholesky-results"
-
-\end_inset
-
-
+ It is possible that the global accumulation and permutation steps are limiting
+ the speedup.
+ 
 \end_layout
 
 \end_inset
 
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-The results for Cholesky is shown in 
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-figurename
-\end_layout
-
-\end_inset
-
-
-\begin_inset space \space{}
-\end_inset
-
-
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "fig:Cholesky-results"
-
-\end_inset
-
-.
+However, in either case, the Origin protocol is faster than BIP.
+ It is apparent from the graph that the increase in the number of messages
+ sent in the network are responsible for the Origin protocol being faster.
 \end_layout
 
 \begin_layout Subsubsection
@@ -4660,7 +4654,7 @@ Ocean
 \begin_inset Float figure
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \begin_inset Graphics
@@ -4736,17 +4730,29 @@ reference "fig:Ocean-results"
 \end_inset
 
 .
+ For both benchmarks, the greatest speedup occur when going from 4 to 8
+ processors.
+ However, the interesting part is that the results for 32 processors is
+ noticeably faster than BIP, when compared to the speedup experienced in
+ 4, 8, or 16 processors.
+ This is because the Origin protocol sends proportionally fewer messages
+ than BIP at 32 processors compared to the results received at other processor
+ counts.
 \end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status collapsed
 
 \begin_layout Subsubsection
 Lu
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 \begin_inset Float figure
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \begin_inset Graphics
@@ -4784,16 +4790,12 @@ name "fig:Lu-results"
 
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
 \end_inset
 
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 The results from the Lu benchmark is shown in 
 \begin_inset ERT
 status open
@@ -4819,6 +4821,100 @@ reference "fig:Lu-results"
 \end_inset
 
 .
+ For this benchmark, we are seeing 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Subsubsection
+Cholesky
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename diagrams/cholesky-cpu-time-c16-.png
+	width 50text%
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename diagrams/cholesky-cpu-messages-c64-.png
+	width 50text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Cholesky results
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Cholesky-results"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+The results for Cholesky is shown in 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+figurename
+\end_layout
+
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Cholesky-results"
+
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section
