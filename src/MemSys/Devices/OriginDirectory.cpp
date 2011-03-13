@@ -132,6 +132,16 @@ namespace Memory
 		return directoryDataMap[currentAddress];
 	}
 
+   Time_t OriginDirectory::GetTotalLatency()
+   {
+   	return totalLatency;
+   }
+
+   unsigned long long OriginDirectory::GetTotalReadResponses()
+   {
+   	return totalReadResponses;
+   }
+
 	void OriginDirectory::PerformMemoryReadResponseCheck(const ReadResponseMsg *m, NodeID src)
 	{
 		DebugAssertWithMessageID(src==InvalidNodeID, m->MsgID());
@@ -527,6 +537,8 @@ namespace Memory
 		directoryWritebacksReceived = 0;
 		directoryWritebackRequestsReceived = 0;
 		directoryWriteResponsesReceived = 0;
+		totalLatency = 0;
+		totalReadResponses = 0;
 	}
 
 	/**
@@ -563,6 +575,8 @@ namespace Memory
 		out << DeviceName() << ":directoryWritebacksReceived:" << directoryWritebacksReceived << std::endl;
 		out << DeviceName() << ":directoryWritebackRequestsReceived:" << directoryWritebackRequestsReceived << std::endl;
 		out << DeviceName() << ":directoryWriteResponsesReceived:" << directoryWriteResponsesReceived << std::endl;
+		out << DeviceName() << ":totalLatency:" << totalLatency << std::endl;
+		out << DeviceName() << ":totalReadResponses:" << totalReadResponses << std::endl;
 	}
 
 	void OriginDirectory::OnCacheCacheNak(const CacheNakMsg* m, NodeID src)
@@ -662,7 +676,10 @@ namespace Memory
 #endif
 		cacheReadsReceived++;
 		DebugAssertWithMessageID(pendingLocalReads.find(m->MsgID())==pendingLocalReads.end(), m->MsgID());
-		pendingLocalReads[m->MsgID()] = m;
+		TimeData<ReadMsg> td;
+		td.msg = m;
+		td.requestTime = globalClock;
+		pendingLocalReads[m->MsgID()] = td;
 		CacheData& cacheData = GetCacheData(m->addr);
 		vector<const ReadMsg*>& cacheDataPendingLocalReads = cacheData.cacheDataPendingLocalReads;
 		CacheState cacheState = cacheData.GetCacheState();
@@ -3345,6 +3362,10 @@ namespace Memory
 		vector<const ReadMsg*>& cacheDataPendingLocalReads = cacheData.cacheDataPendingLocalReads;
 
 		DebugAssertWithMessageID(pendingLocalReads.find(m->solicitingMessage)!=pendingLocalReads.end(), m->solicitingMessage);
+		TimeData<ReadMsg>& td = pendingLocalReads[m->solicitingMessage];
+		Time_t latency = globalClock - td.requestTime;
+		totalLatency += latency;
+		totalReadResponses++;
 		pendingLocalReads.erase(m->solicitingMessage);
 		// there must be a message in cacheDataPendingLocalReads, so there shouldn't be an error using front()
 		DebugAssertWithMessageID(cacheDataPendingLocalReads.size()>0, m->solicitingMessage);

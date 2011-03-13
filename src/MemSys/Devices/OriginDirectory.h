@@ -109,6 +109,7 @@ namespace Memory
 			CacheState GetCacheState();
 			void SetCacheState(CacheState newCacheState);
 		};
+
 		template <class T>
 		class LookupData
 		{
@@ -123,6 +124,19 @@ namespace Memory
          			<< " prevOwn=" << previousOwner;
          }
 		};
+
+		template <class T>
+		class TimeData
+		{
+		public:
+			const T* msg;
+			Time_t requestTime;
+			TimeData() :
+				msg(NULL),
+				requestTime(0)
+			{}
+		};
+
 		class DirectoryData
 		{
 		public:
@@ -205,6 +219,8 @@ namespace Memory
 		unsigned long long directoryWritebacksReceived;
 		unsigned long long directoryWritebackRequestsReceived;
 		unsigned long long directoryWriteResponsesReceived;
+		Time_t totalLatency;
+		unsigned long long totalReadResponses;
 
 		TimeDelta localSendTime;
 		TimeDelta remoteSendTime;
@@ -219,7 +235,7 @@ namespace Memory
 		int remoteConnectionID;
 		NodeID nodeID;
 
-		HashMap<MessageID, const ReadMsg*> pendingLocalReads;
+		HashMap<MessageID, TimeData<ReadMsg> > pendingLocalReads;
 		HashMap<MessageID, const ReadMsg* > pendingRemoteReads;
 		HashMap<MessageID, const InvalidateMsg* > pendingRemoteInvalidates;
       HashMap<MessageID, const ReadMsg*> pendingMemoryReadAccesses;
@@ -353,6 +369,9 @@ namespace Memory
 		typedef PooledFunctionGenerator<StoredClassFunction2<OriginDirectory,const BaseMsg*,NodeID,&OriginDirectory::RecvMsgCache> > CBRecvMsgCache;
 		CBRecvMsgCache cbRecvMsgCache;
 	public:
+		Time_t GetTotalLatency();
+		unsigned long long GetTotalReadResponses();
+
 		virtual void Initialize(EventManager* em, const RootConfigNode& config, const std::vector<Connection*>& connectionSet);
 		virtual void DumpRunningState(RootConfigNode& node);
 		virtual void DumpStats(std::ostream& out);
