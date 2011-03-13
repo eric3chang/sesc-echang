@@ -393,7 +393,7 @@ def plotL2TimeSingle(benchmarks, dirtypes, cpu, l1, minimum, maximum, isSaveFigu
 
 def main():
     #benchmark = ['cholesky', 'fft', 'lu','newtest', 'radix', 'raytrace', 'ocean']
-    benchmarks = ['cholesky']
+    benchmarks = ['radix']
     dirtypes = ['bip','origin']
     #filenameAddition = '-100-110'
     filenameAddition = ''
@@ -406,7 +406,8 @@ def main():
     isSavFig = False
     isSwitchDir = False
     global IN_EXT
-    IN_EXT = '.memDevResults.tk23.network10'
+    #IN_EXT = '.memDevResults.tk23.network10'
+    IN_EXT = '.memDevResults.network10'
 
     l2Index = int(minl2)
     while (l2Index <= int(maxl2)):
