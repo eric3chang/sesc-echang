@@ -3848,8 +3848,7 @@ Since both threads are using the same memory location, this program generates
 \end_layout
 
 \begin_layout Standard
-\align center
-\begin_inset Note Comment
+\begin_inset Note Note
 status collapsed
 
 \begin_layout Plain Layout
@@ -3944,10 +3943,6 @@ The following is the original
 
 \end_inset
 
-
-\end_layout
-
-\begin_layout Standard
 The results of running this benchmark are presented in 
 \begin_inset ERT
 status open
@@ -3990,12 +3985,13 @@ reference "fig:Synthetic-benchmark-results-runtime"
 \begin_inset Float figure
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
+\align center
 \begin_inset Graphics
 	filename diagrams/newtest-cpu-time-c1-.png
-	width 100text%
+	width 75text%
 
 \end_inset
 
@@ -4196,10 +4192,10 @@ memory write
 \begin_inset Caption
 
 \begin_layout Plain Layout
-SPLASH-2 latencies
+Latencies
 \begin_inset CommandInset label
 LatexCommand label
-name "tab:SPLASH-2-latencies"
+name "tab:latencies"
 
 \end_inset
 
@@ -4250,7 +4246,7 @@ tablename
 
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "tab:SPLASH-2-latencies"
+reference "tab:latencies"
 
 \end_inset
 
@@ -4419,20 +4415,20 @@ FFT
 \begin_inset Float figure
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \align center
 \begin_inset Graphics
 	filename diagrams/fft-cpu-time-c1-.png
-	width 50text%
+	width 41text%
 
 \end_inset
 
 
 \begin_inset Graphics
 	filename diagrams/fft-cpu-messages-c1-.png
-	width 50text%
+	width 41text%
 
 \end_inset
 
@@ -4539,22 +4535,20 @@ Radix
 \begin_inset Float figure
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
+\align center
 \begin_inset Graphics
 	filename diagrams/radix-cpu-time-c1-.png
-	width 50text%
+	width 41text%
 
 \end_inset
 
 
-\end_layout
-
-\begin_layout Plain Layout
 \begin_inset Graphics
 	filename diagrams/radix-cpu-messages-c1-.png
-	width 50text%
+	width 41text%
 
 \end_inset
 
@@ -4655,22 +4649,20 @@ Ocean
 \begin_inset Float figure
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
+\align center
 \begin_inset Graphics
 	filename diagrams/ocean-cpu-time-c1-.png
-	width 50text%
+	width 41text%
 
 \end_inset
 
 
-\end_layout
-
-\begin_layout Plain Layout
 \begin_inset Graphics
 	filename diagrams/ocean-cpu-messages-c1-.png
-	width 50text%
+	width 41text%
 
 \end_inset
 
