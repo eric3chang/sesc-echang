@@ -7,9 +7,9 @@ import sys
 OUT_DIR='../'
 
 # don't need to change these when moving this script
-AUGSESC='augSesc-Debug'
+#AUGSESC='augSesc-Debug'
 #AUGSESC='augSesc-Release'
-#AUGSESC='augSesc-O1'
+AUGSESC='augSesc-O1'
 
 COMBINED_OUT='runfile-all'
 EXE_EXT='.mips'
@@ -163,8 +163,8 @@ processorCountHi, L1Low, L1Hi, L2Low, L2Hi):
 
 def main():
     #benchmarkNames = ['barnes', 'cholesky', 'fft', 'fmm', 'lu','newtest', 'radix', 'raytrace', 'ocean']
-    #benchmarkNames = ['cholesky', 'fft', 'lu','newtest', 'radix', 'raytrace', 'ocean']
-    benchmarkNames = ['fft']
+    benchmarkNames = ['cholesky', 'fft', 'lu','newtest', 'radix', 'raytrace', 'ocean']
+    #benchmarkNames = ['fft']
     directoryTypes = ['bip']
     processorCountLow = '4'
     processorCountHi = '32'

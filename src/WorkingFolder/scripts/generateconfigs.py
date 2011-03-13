@@ -46,7 +46,8 @@ def generateConfig(benchmarkName, directoryType, processorCount, L1Size, L2Size,
     outFile.write('DieAfterCheckpointTaken = 0\n')
     outFile.write('HeapMemorySize = 334217728\n')
     outFile.write('FilterSize = 64\n')
-    outFile.write("ReportFile = 'results/" + outFilename + ".report'\n")
+    # don't need to write ReportFile, since it has no useful information
+    #outFile.write("ReportFile = 'results/" + outFilename + ".report'\n")
     outFile.write("MemDeviceReportFile = 'results/" + outFilename + ".memDevResults'\n")
     outFile.write("CompositionResultFile = 'results/" + outFilename + ".dat'\n")
     outFile.write("BenchName = '" + benchmarkName + "'\n")
@@ -88,11 +89,8 @@ def generateAllBenchmarks(benchmarkNames, directoryType, processorCountLow, proc
 
 def main():
     #benchmarkNames = ['barnes', 'cholesky', 'fft', 'fmm', 'lu', 'radix', 'raytrace', 'ocean']
-    benchmarkNames = ['fft']
-    #directoryTypes = ['bip', 'directory', 'origin']
+    benchmarkNames = ['cholesky', 'fft', 'lu', 'radix', 'ocean']
     directoryTypes = ['bip','origin']
-    #cacheType = 'mesi'
-    #cacheType = ''
     processorCountLow = '4'
     processorCountHi = '32'
     L1Low = '64'
