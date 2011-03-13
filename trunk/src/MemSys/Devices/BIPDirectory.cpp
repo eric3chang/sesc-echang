@@ -1252,17 +1252,21 @@ namespace Memory
 		// calculate the minimum request time of all messages
 		ret = reversePendingLocalReads.equal_range(m->addr);
 		tempIterator = ret.first;
-		AddrTDReadPair tempPair = *tempIterator;
-		Time_t minimumRequestTime = tempPair.second.requestTime;
-		tempIterator++;
-		for (;tempIterator!=ret.second; tempIterator++)
+		Time_t minimumRequestTime = 0;
+		if (tempIterator!=ret.second)
 		{
 			AddrTDReadPair tempPair = *tempIterator;
-			TimeData<ReadMsg>& td = tempPair.second;
-			DebugAssertWithMessageID(td.requestTime>0, m->solicitingMessage);
-			if (td.requestTime < minimumRequestTime)
+			minimumRequestTime = tempPair.second.requestTime;
+			tempIterator++;
+			for (;tempIterator!=ret.second; tempIterator++)
 			{
-				minimumRequestTime = td.requestTime;
+				tempPair = *tempIterator;
+				TimeData<ReadMsg>& td = tempPair.second;
+				DebugAssertWithMessageID(td.requestTime>0, m->solicitingMessage);
+				if (td.requestTime < minimumRequestTime)
+				{
+					minimumRequestTime = td.requestTime;
+				}
 			}
 		}
 
@@ -1289,6 +1293,7 @@ namespace Memory
 			Time_t latency;
 			if (isEraseAll)
 			{
+				DebugAssertWithMessageID(minimumRequestTime!=0, m->solicitingMessage);
 				latency = globalClock - minimumRequestTime;
 			}
 			else
