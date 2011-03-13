@@ -147,6 +147,7 @@ namespace Memory
       HashMap<MessageID, const EvictionMsg*> pendingMemoryEvictionAccesses;
       HashMap<MessageID, const WriteMsg*> pendingMemoryWriteAccesses;
 		AddrTDReadMultimap reversePendingLocalReads;
+      //AddrReadMultimap reversePendingLocalReads;
 		HashMap<Address, BlockData> directoryData;
 
 		// debug functions
@@ -224,6 +225,9 @@ namespace Memory
 		CBOnRemoteReadResponse cbOnRemoteReadResponse;
 		*/
 	public:
+		Time_t GetTotalLatency();
+		unsigned long long GetTotalReadResponses();
+
 		virtual void Initialize(EventManager* em, const RootConfigNode& config, const std::vector<Connection*>& connectionSet);
 		virtual void DumpRunningState(RootConfigNode& node);
 		virtual void DumpStats(std::ostream& out);

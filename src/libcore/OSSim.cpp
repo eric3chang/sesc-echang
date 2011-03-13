@@ -1062,6 +1062,10 @@ void OSSim::simFinish()
 		long long unsigned int totalL2CacheWriteHits = 0;
 		long long unsigned int totalL2CacheWriteMisses = 0;
 
+		// for use by directories
+		long long unsigned int totalLatency = 0;
+		long long unsigned int totalReadResponses = 0;
+
 		for (std::vector<BaseMemDevice*>::iterator i=deviceSet.begin(); i!=deviceSet.end(); i++)
 		{
 			BaseMemDevice* ptr = *i;
@@ -1079,6 +1083,8 @@ void OSSim::simFinish()
 			bool isMESICache = (typeid(*ptr)==typeid(Memory::MESICache));
 			bool isMOESICache = (typeid(*ptr)==typeid(Memory::MOESICache));
 			bool isBIPMOESICache = (typeid(*ptr)==typeid(Memory::BIPMOESICache));
+			bool isBIPDirectory = (typeid(*ptr)==typeid(Memory::BIPDirectory));
+			bool isOriginDirectory = (typeid(*ptr)==typeid(Memory::OriginDirectory));
 
 			if (isMSICache)
 			{
@@ -1172,6 +1178,13 @@ void OSSim::simFinish()
 				cacheWriteHits = tempCache->getWriteHits();
 				cacheWriteMisses = tempCache->getWriteMisses();
 			}
+			else if (isBIPDirectory)
+			{
+				Memory::BIPDirectory *tempDevice = (Memory::BIPDirectory*)ptr;
+
+				totalLatency += tempDevice->GetTotalLatency();
+				totalReadResponses += tempDevice->GetTotalReadResponses();
+			}
 
 			out << ptr->DeviceName() << std::endl;
 			ptr->DumpStats(out);
@@ -1227,6 +1240,13 @@ void OSSim::simFinish()
 		out << "TotalCache:" << "totalCacheSharedReadMisses:" << totalCacheSharedReadMisses << std::endl;
 		out << "TotalCache:" << "totalCacheWriteHits:" << totalCacheWriteHits << std::endl;
 		out << "TotalCache:" << "totalCacheWriteMisses:" << totalCacheWriteMisses << std::endl;
+		out << endl;
+
+		out << "TotalDirectory" << endl;
+		out << "TotalDirectory:" << "totalLatency:" << totalLatency << endl;
+		out << "TotalDirectory:" << "totalReadResponses:" << totalReadResponses << endl;
+		unsigned long long averageWaitTime = totalLatency/totalReadResponses;
+		out << "TotalDirectory:" << "averageWaitTime:" << averageWaitTime << endl;
 
 		out << endl;
 
