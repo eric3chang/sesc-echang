@@ -393,34 +393,36 @@ def plotL2TimeSingle(benchmarks, dirtypes, cpu, l1, minimum, maximum, isSaveFigu
 
 def main():
     #benchmark = ['cholesky', 'fft', 'lu','newtest', 'radix', 'raytrace', 'ocean']
-    benchmarks = ['radix']
+    benchmarks = ['cholesky']
     dirtypes = ['bip','origin']
     #filenameAddition = '-100-110'
     filenameAddition = ''
     mincpu = '4'
     maxcpu = '32'
     l1 = '64'
+    #minl2 = '128'
+    #maxl2 = '4096'
     minl2 = '128'
-    maxl2 = '4096'
+    maxl2 = '512'
     isNorm = False
     isSavFig = False
     isSwitchDir = False
     global IN_EXT
-    #IN_EXT = '.memDevResults.tk23.network10'
-    IN_EXT = '.memDevResults.network10'
+    IN_EXT = '.memDevResults.tk23.network10'
+    #IN_EXT = '.memDevResults.network10'
 
     l2Index = int(minl2)
     while (l2Index <= int(maxl2)):
-        plotCpuTimeSingle(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index),isSavFig,isNorm,filenameAddition,isSwitchDir)
-        plotCpuMessagesSingle(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index), isSavFig,isNorm,filenameAddition,isSwitchDir)
-        plotCpuLatencySingle(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index), isSavFig,isNorm,filenameAddition,isSwitchDir)
+        #plotCpuTimeSingle(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index),isSavFig,isNorm,filenameAddition,isSwitchDir)
+        #plotCpuMessagesSingle(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index), isSavFig,isNorm,filenameAddition,isSwitchDir)
+        #plotCpuLatencySingle(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index), isSavFig,isNorm,filenameAddition,isSwitchDir)
         l2Index *= 2
 
     cpuIndex = int(mincpu)
     while (cpuIndex <= int(maxcpu)):
-        #plotL2TimeSingle(benchmarks, dirtypes, str(cpuIndex), l1, minl2, maxl2, isSavFig,isNorm,filenameAddition,isSwitchDir)
-        #plotL2MessagesSingle(benchmarks, dirtypes, str(cpuIndex), l1, minl2, maxl2, isSavFig,isNorm,filenameAddition,isSwitchDir)
-        #plotL2LatencySingle(benchmarks, dirtypes, str(cpuIndex), l1, minl2, maxl2, isSavFig,isNorm,filenameAddition, isSwitchDir)
+        plotL2TimeSingle(benchmarks, dirtypes, str(cpuIndex), l1, minl2, maxl2, isSavFig,isNorm,filenameAddition,isSwitchDir)
+        plotL2MessagesSingle(benchmarks, dirtypes, str(cpuIndex), l1, minl2, maxl2, isSavFig,isNorm,filenameAddition,isSwitchDir)
+        plotL2LatencySingle(benchmarks, dirtypes, str(cpuIndex), l1, minl2, maxl2, isSavFig,isNorm,filenameAddition, isSwitchDir)
         cpuIndex *= 2
 
     '''
