@@ -5,6 +5,8 @@
 #include "NetworkMsg.h"
 #include <vector>
 
+#include "MemObj.h"	// for access to globalClock
+
 using std::string;
 using std::stringstream;
 using std::vector;
