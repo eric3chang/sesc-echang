@@ -1,7 +1,7 @@
 Group string ReportFileName results/fft-bip-4-64-1024.memDevResults string BenchName fft
 
 DateTime
-DateTime:DateTime:03082301
+DateTime:DateTime:03130854
 
 TotalRunTime
 TotalRunTime:TotalRunTime:919497
@@ -56,6 +56,8 @@ BIPDirectory_0:remoteReadsReceived:2336
 BIPDirectory_0:remoteReadResponsesReceived:3120
 BIPDirectory_0:remoteWritesReceived:0
 BIPDirectory_0:remoteWriteResponsesReceived:0
+BIPDirectory_0:totalLatency:1787033
+BIPDirectory_0:totalReadResponses:2851
 
 MainMemory_0
 MainMemory_0:EvictionsReceived:0
@@ -108,6 +110,8 @@ BIPDirectory_1:remoteReadsReceived:2304
 BIPDirectory_1:remoteReadResponsesReceived:3115
 BIPDirectory_1:remoteWritesReceived:0
 BIPDirectory_1:remoteWriteResponsesReceived:0
+BIPDirectory_1:totalLatency:1783098
+BIPDirectory_1:totalReadResponses:2824
 
 MainMemory_1
 MainMemory_1:EvictionsReceived:0
@@ -160,6 +164,8 @@ BIPDirectory_2:remoteReadsReceived:2305
 BIPDirectory_2:remoteReadResponsesReceived:3113
 BIPDirectory_2:remoteWritesReceived:0
 BIPDirectory_2:remoteWriteResponsesReceived:0
+BIPDirectory_2:totalLatency:1781664
+BIPDirectory_2:totalReadResponses:2822
 
 MainMemory_2
 MainMemory_2:EvictionsReceived:0
@@ -212,6 +218,8 @@ BIPDirectory_3:remoteReadsReceived:2306
 BIPDirectory_3:remoteReadResponsesReceived:3121
 BIPDirectory_3:remoteWritesReceived:0
 BIPDirectory_3:remoteWriteResponsesReceived:1
+BIPDirectory_3:totalLatency:1780819
+BIPDirectory_3:totalReadResponses:2822
 
 MainMemory_3
 MainMemory_3:EvictionsReceived:0
@@ -237,5 +245,10 @@ TotalCache:totalCacheSharedReadHits:470369
 TotalCache:totalCacheSharedReadMisses:16172
 TotalCache:totalCacheWriteHits:320636
 TotalCache:totalCacheWriteMisses:4846
+
+TotalDirectory
+TotalDirectory:totalLatency:7132614
+TotalDirectory:totalReadResponses:11319
+TotalDirectory:averageWaitTime:630
 
 EndGroup #
