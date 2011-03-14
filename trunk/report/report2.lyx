@@ -4224,8 +4224,8 @@ key "WOO00"
 .
  The results from running these benchmarks will be used to show the performance
  of BIP versus Origin protocol.
- All benchmarks are run with 16KB L1 cache and 1MB L2 cache, with the processor
- count between 4 and 32.
+ All benchmarks are run on the default settings with 64KB L1 cache and 1MB
+ L2 cache, with the processor count between 4 and 32.
  The latencies for running each of the benchmarks are shown in 
 \begin_inset ERT
 status open
@@ -4255,10 +4255,11 @@ reference "tab:latencies"
  but is still relatively small to simulate the behavior of main memory in
  a DSM.
  Each of these results are normalized to the highest value on the graph.
- For example, in each graph featuring the runtime, the highest value on
- the graph will be 100%.
+ For example, in each graph featuring the runtime, the results will not
+ be shown in raw runtime numbers; the numbers represent the current y value
+ versus the highest value on the graph.
  The benchmarks that will be presented from the SPLASH-2 Benchmark Suite
- are FFT, Radix, and Ocean.
+ are FFT, Radix, Ocean, and Cholesky.
 \end_layout
 
 \begin_layout Standard
@@ -4421,14 +4422,14 @@ status open
 \align center
 \begin_inset Graphics
 	filename diagrams/fft-cpu-time-c1-.png
-	width 41text%
+	width 45text%
 
 \end_inset
 
 
 \begin_inset Graphics
 	filename diagrams/fft-cpu-messages-c1-.png
-	width 41text%
+	width 45text%
 
 \end_inset
 
@@ -4637,8 +4638,9 @@ status collapsed
 \end_inset
 
 However, in either case, the Origin protocol is faster than BIP.
- It is apparent from the graph that the increase in the number of messages
- sent in the network are responsible for the Origin protocol being faster.
+ The higher number of messages in the system when processor count increases
+ contributes to the slowdown in the system, as evidenced by the non-ideal
+ increase in speedup across both protocols.
 \end_layout
 
 \begin_layout Subsubsection
@@ -4649,7 +4651,7 @@ Ocean
 \begin_inset Float figure
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -4688,10 +4690,6 @@ name "fig:Ocean-results"
 
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
 \end_inset
 
 
@@ -4725,92 +4723,14 @@ reference "fig:Ocean-results"
 .
  For both benchmarks, the greatest speedup occur when going from 4 to 8
  processors.
- However, the interesting part is that the results for 32 processors is
- noticeably faster than BIP, when compared to the speedup experienced in
- 4, 8, or 16 processors.
+ However, the interesting part is that in the results for 32 processors,
+ the Ocean protocol is noticeably faster than BIP, when compared to the
+ speedup experienced in 4, 8, or 16 processors.
  This is because the Origin protocol sends proportionally fewer messages
  than BIP at 32 processors compared to the results received at other processor
  counts.
-\end_layout
-
-\begin_layout Subsubsection
-Lu
-\end_layout
-
-\begin_layout Standard
-\begin_inset Float figure
-wide false
-sideways false
-status open
-
-\begin_layout Plain Layout
-\begin_inset Graphics
-	filename diagrams/lu-cpu-time-c32.png
-	width 50text%
-
-\end_inset
-
-
-\begin_inset Graphics
-	filename diagrams/lu-cpu-messages-c32.png
-	width 50text%
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset Caption
-
-\begin_layout Plain Layout
-Lu results
-\begin_inset CommandInset label
-LatexCommand label
-name "fig:Lu-results"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-The results from the Lu benchmark is shown in 
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-figurename
-\end_layout
-
-\end_inset
-
-
-\begin_inset space \space{}
-\end_inset
-
-
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "fig:Lu-results"
-
-\end_inset
-
-.
- For this benchmark, we are seeing 
+ This allows the Origin protocol to experience fewer slowdowns related to
+ traffic congestion in the system.
 \end_layout
 
 \begin_layout Subsubsection
@@ -4890,6 +4810,99 @@ reference "fig:Cholesky-results"
 \end_inset
 
 .
+ According to the results, BIP is slower than the Origin protocol.
+ Again, we see that the number of messages BIP send into the system is larger
+ than the Origin protocol, causing the difference between the runtime of
+ the two systems.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Subsubsection
+Lu
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename diagrams/lu-cpu-time-c32.png
+	width 50text%
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename diagrams/lu-cpu-messages-c32.png
+	width 50text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Lu results
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Lu-results"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+The results from the Lu benchmark is shown in 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+figurename
+\end_layout
+
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Lu-results"
+
+\end_inset
+
+.
+ For this benchmark, we are seeing 
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section
@@ -4899,8 +4912,8 @@ Problems and Future Works
 \end_layout
 
 \begin_layout Standard
-In implementing the directory-based cache coherence protocol, there were
- some problems.
+There were some problems in implementing the directory-based cache coherence
+ protocol in the SESC simulator.
  One was simply that debugging such a large system is inherently hard, especiall
 y since the bugs often surface after tens of thousands of messages are sent.
  It is useful to print out each message that pass around the system.
@@ -4911,12 +4924,16 @@ y since the bugs often surface after tens of thousands of messages are sent.
  problem.
  The debugging system works by various lines of assertions that should always
  hold true if the system is working.
- They can easily be turned off to increase speed of the simulator by not
- defining DEBUG when compiling.
+ In addition, there are edge cases in the protocol, not specified by the
+ Origin paper, where it is necessary to guess what the specific implementation
+ would be.
+ The other problem is that, like any simulator, this is a model of the real
+ system, so the results might not exactly match what can happen on the real
+ system.
 \end_layout
 
 \begin_layout Standard
-We can compare the protocol we have to a snarfing protocol.
+As for future work, we can compare the protocol we have to a snarfing protocol.
  In this protocol, the cache controller watches both address and data in
  an attempt to update its own copy of a memory location when a second master
  modifies a location in main memory.
@@ -4946,8 +4963,8 @@ Conclusion
 \begin_layout Standard
 We have arrived at the conclusion that the Origin-based directory protocol
  is superior in many situations compared to BIP.
- Origin-based systems achieve lower runtime based primarily on their ability
- to inject fewer messages into the network.
+ Origin-based systems achieve lower runtime based on their ability to inject
+ fewer messages into the network.
  
 \begin_inset CommandInset bibtex
 LatexCommand bibtex
