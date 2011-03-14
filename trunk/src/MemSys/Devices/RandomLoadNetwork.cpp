@@ -65,6 +65,17 @@ namespace Memory
 		}
 		perByte = (TimeDelta)Config::GetInt(config, "TimePerByte");
 	}
+
+	TimeDelta RandomLoadNetwork::RandomLoadedCalculator::GetInitialTime()
+	{
+		return initialTime;
+	}
+
+	TimeDelta RandomLoadNetwork::RandomLoadedCalculator::GetRandomRange()
+	{
+		return randomRange;
+	}
+
 	TimeDelta RandomLoadNetwork::RandomLoadedCalculator::CalcTime(const NetworkMsg* msg, int fromNode, int toNode, TickTime time)
 	{
 		TimeDelta dtBase = initialTime + (rand() % randomRange) + (TimeDelta)((float)packetsInTransit * timePerPacket);
@@ -184,8 +195,9 @@ namespace Memory
 
 	void RandomLoadNetwork::DumpStats(std::ostream& out)
 	{
-		out << DeviceName() << ":initialTime" << initialTime << endl;
-		out << DeviceName() << ":randomRange" << randomRange << endl;
+		RandomLoadedCalculator* myRLC = (RandomLoadedCalculator*)delayCalc;
+		out << DeviceName() << ":initialTime" << myRLC->GetInitialTime() << endl;
+		out << DeviceName() << ":randomRange" << myRLC->GetRandomRange() << endl;
 		out << DeviceName() << ":TotalMessagesReceived:" << totalMessagesReceived << endl;
 		double averageLatency = ((double)totalLatency)/((double)totalMessagesReceived);
 		out << DeviceName() << ":AverageLatency:" << averageLatency << endl;

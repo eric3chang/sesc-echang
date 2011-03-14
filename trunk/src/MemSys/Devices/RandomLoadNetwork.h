@@ -56,6 +56,8 @@ namespace Memory
 			bool enforceInOrder;
 			std::vector<std::vector<TickTime> > mostRecentMsg;//arrival time, not send time
 		public:
+			virtual TimeDelta GetInitialTime();
+			virtual TimeDelta GetRandomRange();
 			virtual TimeDelta CalcTime(const NetworkMsg* msg, int fromNode, int toNode, TickTime time);
 			virtual void OnMsgSend(const NetworkMsg* msg, int fromNode, int toNode, TickTime time);
 			virtual void OnMsgDelivered(const NetworkMsg* msg, int fromNode, int toNode, TickTime time);

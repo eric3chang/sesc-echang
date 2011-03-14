@@ -1,4 +1,4 @@
-#!/users/erichang/csl/opt/bin/python
+#!/usr/bin/python
 import os
 import sys
 
@@ -164,7 +164,7 @@ processorCountHi, L1Low, L1Hi, L2Low, L2Hi):
 def main():
     #benchmarkNames = ['barnes', 'cholesky', 'fft', 'fmm', 'lu','newtest', 'radix', 'raytrace', 'ocean']
     benchmarkNames = ['cholesky', 'fft', 'lu','newtest', 'radix', 'ocean']
-    #benchmarkNames = ['fft']
+    benchmarkNames = ['lu', 'ocean']
     directoryTypes = ['bip','origin']
     processorCountLow = '4'
     processorCountHi = '32'
