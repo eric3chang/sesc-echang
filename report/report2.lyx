@@ -3597,13 +3597,6 @@ Waiting for Writeback Response,
  and the cache has to resend its writeback request if that happens.
 \end_layout
 
-\begin_layout Standard
-\begin_inset Newpage newpage
-\end_inset
-
-
-\end_layout
-
 \begin_layout Section
 
 \family roman
