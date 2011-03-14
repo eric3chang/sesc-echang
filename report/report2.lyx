@@ -4427,6 +4427,10 @@ status open
 \end_inset
 
 
+\end_layout
+
+\begin_layout Plain Layout
+\align center
 \begin_inset Graphics
 	filename diagrams/fft-cpu-l2miss-c128.network1.0.png
 	width 50text%
@@ -4556,6 +4560,10 @@ status open
 \end_inset
 
 
+\end_layout
+
+\begin_layout Plain Layout
+\align center
 \begin_inset Graphics
 	filename diagrams/radix-cpu-l2miss-c1024.network1.0.png
 	width 50text%
@@ -4680,6 +4688,10 @@ status open
 \end_inset
 
 
+\end_layout
+
+\begin_layout Plain Layout
+\align center
 \begin_inset Graphics
 	filename diagrams/ocean-cpu-l2miss-c2048.network1.0.png
 	width 50text%
@@ -4780,6 +4792,10 @@ status open
 \end_inset
 
 
+\end_layout
+
+\begin_layout Plain Layout
+\align center
 \begin_inset Graphics
 	filename diagrams/cholesky-cpu-l2miss-c1024.network1.0.png
 	width 50text%
@@ -4839,6 +4855,8 @@ reference "fig:Cholesky-results"
 \end_inset
 
 .
+ Like the other benchmarks, the runtime decreases for both protocols as
+ the processor count increases.
  The Origin protocol caused more misses in the L2 cache.
  Despite this, BIP still sent more messages into the network than Origin
  protocol.
