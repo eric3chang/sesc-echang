@@ -177,6 +177,10 @@ def plotCpuCacheLatencySingle(benchmarks, dirtypes, minimum, maximum,l1,l2,isSav
     plotCpuSingle(benchmarks, dirtypes, minimum, maximum,l1,l2,'TotalDirectory', 'averageWaitTime', 'Latency (%)',
         'cpu-cachelatency-c'+l2+filenameAddition,isSaveFigure,isNormalize,isSwitchDirtype)
 
+def plotCpuCacheTotalLatencySingle(benchmarks, dirtypes, minimum, maximum,l1,l2,isSaveFigure,isNormalize,fileAdd,isSwitchDirtype):
+    plotCpuSingle(benchmarks, dirtypes, minimum, maximum,l1,l2,'TotalDirectory', 'totalLatency', 'Latency (%)',
+        'cpu-cachelatency-c'+l2+fileAdd,isSaveFigure,isNormalize,isSwitchDirtype)
+
 def plotCpuNetworkLatencyMultiple(benchmarks, dirtypes, minimum, maximum, l1, l2,isSaveFigure,isNormalize,filenameAddition,isSwitchDirtype):
     plotCpuMultiple(benchmarks, dirtypes, minimum, maximum,l1,l2,'Network', 'AverageLatency',
         'Average Latency (%)','cpu-networklatency-c'+l2+filenameAddition,isSaveFigure,isNormalize,isSwitchDirtype)
@@ -401,7 +405,7 @@ def plotL2TimeSingle(benchmarks, dirtypes, cpu, l1, minimum, maximum, isSaveFigu
 
 def main():
     #benchmark = ['cholesky', 'fft', 'lu','newtest', 'radix', 'raytrace', 'ocean']
-    benchmarks = ['fft']
+    benchmarks = ['radix']
     dirtypes = ['bip']
     #fileAdd = '-100-110'
     fileAdd = ''
@@ -422,10 +426,11 @@ def main():
 
     l2Index = int(minl2)
     while (l2Index <= int(maxl2)):
-        plotCpuTimeSingle(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index),isSavFig,isNorm,fileAdd,isSwitchDir)
+        #plotCpuTimeSingle(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index),isSavFig,isNorm,fileAdd,isSwitchDir)
         #plotCpuMessagesSingle(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index), isSavFig,isNorm,fileAdd,isSwitchDir)
         #plotCpuNetworkLatencySingle(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index), isSavFig,isNorm,fileAdd,isSwitchDir)
-        plotCpuCacheLatencySingle(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index), isSavFig,isNorm,fileAdd,isSwitchDir)
+        #plotCpuCacheLatencySingle(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index), isSavFig,isNorm,fileAdd,isSwitchDir)
+        plotCpuCacheTotalLatencySingle(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index), isSavFig,isNorm,fileAdd,isSwitchDir)  
         l2Index *= 2
 
     cpuIndex = int(mincpu)

@@ -94,7 +94,6 @@ namespace Memory
 		}
    }
 
-
    void BIPDirectory::dump(AddrTDReadMultimap &m)
    {
    	AddrTDReadMultimap::const_iterator i,j;
@@ -144,6 +143,22 @@ namespace Memory
 		{
 			std::cout << '[' << setw(2) << i->first << "]";
 			i->second->print(0);
+			std::cout << std::endl;
+		}
+   }
+
+   void BIPDirectory::dump(MessageTDReadMap &m)
+   {
+   	MessageTDReadMap::const_iterator i,j;
+		i = m.begin();
+		j = m.end();
+
+		std::cout << "[" << "dump" << "]" << std::endl;
+		for(; i != j; ++i)
+		{
+			std::cout << '[' << setw(2) << i->first << "]";
+			const TimeData<ReadMsg>& ld = i->second;
+			ld.msg->print(0);
 			std::cout << std::endl;
 		}
    }
@@ -273,9 +288,19 @@ namespace Memory
 		return totalLatency;
 	}
 
+	Time_t BIPDirectory::GetTotalLatencySimple()
+	{
+		return totalLatencySimple;
+	}
+
 	unsigned long long BIPDirectory::GetTotalReadResponses()
 	{
 		return totalReadResponses;
+	}
+
+	unsigned long long BIPDirectory::GetTotalReadResponsesSimple()
+	{
+		return totalReadResponsesSimple;
 	}
 
 	void BIPDirectory::AddDirectoryShare(Address a, NodeID id, bool exclusive)
@@ -399,10 +424,10 @@ namespace Memory
 		localReadsReceived++;
 		
 		DebugAssertWithMessageID(pendingLocalReads.find(m->MsgID()) == pendingLocalReads.end(),m->MsgID())
-		pendingLocalReads[m->MsgID()] = m;
 		TimeData<ReadMsg> td;
 		td.msg = m;
 		td.requestTime = globalClock;
+		pendingLocalReads[m->MsgID()] = td;
 		AddrTDReadPair myPair(m->addr, td);
 		reversePendingLocalReads.insert(myPair);
 		ReadMsg* forward = (ReadMsg*)EM().ReplicateMsg(m);
@@ -1219,7 +1244,8 @@ namespace Memory
 			// if we had received an exclusive read response before
 		//DebugAssertWithMessageID(reverseReadMsg!=NULL, m->solicitingMessage);
 
-		const ReadMsg* ref = pendingLocalReads[m->solicitingMessage];
+		TimeData<ReadMsg>& pendLRTD = pendingLocalReads[m->solicitingMessage];
+		const ReadMsg* ref = pendLRTD.msg;
 
 		if(!m->satisfied)
 		{
@@ -1227,7 +1253,12 @@ namespace Memory
 		   PrintDebugInfo("DirBlkRes",*m,
 		         ("pendingLocalReads.erase("+to_string<MessageID>(m->solicitingMessage)+")").c_str());
 #endif
+			DebugAssertWithMessageID(pendLRTD.requestTime>0, m->solicitingMessage);
+			Time_t latency = globalClock - pendLRTD.requestTime;
+			totalLatencySimple += latency;
+			totalReadResponsesSimple++;
 			pendingLocalReads.erase(m->solicitingMessage);
+
 			if (reverseReadMsg != NULL)
 			{
 				reversePendingLocalReads.erase(firstIterator);
@@ -1275,7 +1306,12 @@ namespace Memory
 			}
 		}
 
+		DebugAssertWithMessageID(pendLRTD.requestTime>0, m->solicitingMessage);
+		Time_t latency = globalClock - pendLRTD.requestTime;
+		totalLatencySimple += latency;
+		totalReadResponsesSimple++;
 		pendingLocalReads.erase(m->solicitingMessage);
+
 		Time_t singleRequestTime = 0;
 		if (reverseReadMsg != NULL)
 		{
@@ -1390,7 +1426,9 @@ namespace Memory
 		remoteWriteResponsesReceived = 0;
 
 		totalLatency = 0;
+		totalLatencySimple = 0;
 		totalReadResponses = 0;
+		totalReadResponsesSimple = 0;
 	}  // BIPDirectory::Initialize()
 	/**
 	 * this is used for checkpoint purposes
@@ -1426,6 +1464,8 @@ namespace Memory
 		out << DeviceName() << ":remoteWriteResponsesReceived:" << remoteWriteResponsesReceived << std::endl;
 		out << DeviceName() << ":totalLatency:" << totalLatency << std::endl;
 		out << DeviceName() << ":totalReadResponses:" << totalReadResponses << std::endl;
+		out << DeviceName() << ":totalLatencySimple:" << totalLatencySimple << std::endl;
+		out << DeviceName() << ":totalReadResponsesSimple:" << totalReadResponsesSimple << std::endl;
 	}
 	/**
 	 * Handles all the incoming messages from outside of the directory.
@@ -1653,39 +1693,6 @@ namespace Memory
 	      readMsgArray[i] = myIterator->second.msg;
 	      i++;
 	   }
-      delete [] readMsgArray;
-      readMsgArray = NULL;
-	}
-
-   /**
-    * readMsgArray in this method could be coupled with Eclipse's debugger to
-    * see what elements are in pendingLocalReads. The reason for using
-    * a regular array instead of a vector is because Eclipse can view
-    * Array elements directly, but not elements in STL containers.
-    */
-	void BIPDirectory::PrintPendingLocalReads()
-	{
-      HashMap<MessageID, const ReadMsg*>::const_iterator myIterator;
-
-      myIterator = pendingLocalReads.begin();
-
-      cout << "BIPDirectory::printPendingLocalReads: ";
-
-      int size = pendingLocalReads.size();
-      cout << "size=" << size;
-
-      ReadMsg const ** readMsgArray = new ReadMsg const *[size];
-
-      int i = 0;
-      for (myIterator = pendingLocalReads.begin();
-            myIterator != pendingLocalReads.end(); ++myIterator)
-      {
-         cout << "myIterator->first=" << myIterator->first << " ";
-         //const ReadMsg *myReadMsg = myIterator->second.msg;
-         readMsgArray[i] = myIterator->second;
-         i++;
-      }
-      
       delete [] readMsgArray;
       readMsgArray = NULL;
 	}
