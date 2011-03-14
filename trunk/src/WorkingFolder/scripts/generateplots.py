@@ -13,6 +13,7 @@ OUT_DIR='../../../report/generated-figures/'
 
 # don't need to change these when moving this script
 CHOLESKY_INPUT='tk23'
+LU_INPUT='b8'
 GRAPH_WIDTH=2
 #IN_EXT='IN_EXT'
 #LINESTYLES=['k--','k:']
@@ -123,6 +124,14 @@ def getDictionary(benchmark, dirtype, cpu, l1, l2):
             fullpath += myWord + '.'
             if (myWord == 'memDevResults'):
                 fullpath += CHOLESKY_INPUT + '.'
+        fullpath = fullpath.rstrip('.')
+    elif (benchmark=='lu'):
+        splitfullpath = fullpath.split('.')
+        fullpath = ''
+        for myWord in splitfullpath:
+            fullpath += myWord + '.'
+            if (myWord == 'memDevResults'):
+                fullpath += LU_INPUT + '.'
         fullpath = fullpath.rstrip('.')
 
     filein = open(fullpath, 'r')
@@ -457,8 +466,8 @@ def plotL2TimeSingle(benchmarks, dirtypes, cpu, l1, minimum, maximum, isSaveFigu
 
 def main():
     #benchmarks = ['cholesky', 'fft', 'lu','newtest', 'radix', 'ocean']
-    benchmarks = ['cholesky', 'radix', 'ocean']
-    #benchmarks = ['lu']
+    #benchmarks = ['cholesky', 'radix', 'ocean']
+    benchmarks = ['lu']
     dirtypes = ['bip','origin']
     #bipdirtypes = ['bip']
     #origindirtypes = ['origin']
@@ -471,7 +480,7 @@ def main():
     minl2 = '128'
     maxl2 = '4096'
     isNorm = True
-    isSavFig = True
+    isSavFig = False
     isSwitchDir = False
     global IN_EXT
     #IN_EXT = '.memDevResults.network10'
@@ -481,7 +490,7 @@ def main():
 
     l2Index = int(minl2)
     while (l2Index <= int(maxl2)):
-        #plotCpuTimeSingle(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index),isSavFig,isNorm,fileAdd,isSwitchDir)
+        plotCpuTimeSingle(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index),isSavFig,isNorm,fileAdd,isSwitchDir)
         #plotCpuTimeMultiple(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index),isSavFig,isNorm,fileAdd,isSwitchDir)
         #plotCpuMessagesSingle(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index), isSavFig,isNorm,fileAdd,isSwitchDir)
         #plotCpuNetworkLatencySingle(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index), isSavFig,isNorm,fileAdd,isSwitchDir)
