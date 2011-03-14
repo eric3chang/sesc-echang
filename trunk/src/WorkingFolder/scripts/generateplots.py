@@ -238,7 +238,7 @@ def plotCpuTimeSingle(benchmarks, dirtypes, minimum, maximum,l1,l2,isSaveFigure,
 
 def plotCpuL2Misses(benchmarks, dirtypes, minimum, maximum, l1, l2, isSaveFigure, isNorm, filenameAdd, isSwitchDirtype):
     myXlabel='Number of Processors'
-    myYlabel='L2 Misses'
+    myYlabel='L2 Misses (%)'
     filename='cpu-l2miss-c'+l2+filenameAdd
     exclusiveReadMisses = getCpuResults(benchmarks, dirtypes, minimum,maximum, l1, l2, 'TotalCache', 'totalL2CacheExclusiveReadMisses')
     sharedReadMisses = getCpuResults(benchmarks, dirtypes, minimum, maximum, l1, l2, 'TotalCache', 'totalL2CacheSharedReadMisses')
@@ -466,8 +466,9 @@ def plotL2TimeSingle(benchmarks, dirtypes, cpu, l1, minimum, maximum, isSaveFigu
 
 def main():
     #benchmarks = ['cholesky', 'fft', 'lu','newtest', 'radix', 'ocean']
+    benchmarks = ['cholesky', 'fft', 'newtest', 'radix', 'ocean']
     #benchmarks = ['cholesky', 'radix', 'ocean']
-    benchmarks = ['lu']
+    #benchmarks = ['lu']
     dirtypes = ['bip','origin']
     #bipdirtypes = ['bip']
     #origindirtypes = ['origin']
@@ -480,12 +481,12 @@ def main():
     minl2 = '128'
     maxl2 = '4096'
     isNorm = True
-    isSavFig = False
+    isSavFig = True
     isSwitchDir = False
     global IN_EXT
     #IN_EXT = '.memDevResults.network10'
-    #fileAdd = '.network1.0'
-    fileAdd = '.network10'
+    fileAdd = '.network1.0'
+    #fileAdd = '.network10'
     IN_EXT = '.memDevResults' + fileAdd
 
     l2Index = int(minl2)

@@ -4415,14 +4415,21 @@ status open
 \align center
 \begin_inset Graphics
 	filename diagrams/fft-cpu-time-c1-.png
-	width 41text%
+	width 50text%
 
 \end_inset
 
 
 \begin_inset Graphics
 	filename diagrams/fft-cpu-messages-c1-.png
-	width 41text%
+	width 50text%
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename diagrams/fft-cpu-l2miss-c128.network1.0.png
+	width 50text%
 
 \end_inset
 
@@ -4519,6 +4526,8 @@ We also see that for both Origin and BIP, as the CPU count increases, the
  To demonstrate this, the higher the number of cores we use, the more messages
  we have in the system, which means that more messages are contributing
  to the network congestion, slowing the whole system down.
+ We know this because the misses from the L2 cache is the same for both
+ Origin protocl and BIP across all processor counts.
 \end_layout
 
 \begin_layout Subsubsection
@@ -4535,14 +4544,21 @@ status open
 \align center
 \begin_inset Graphics
 	filename diagrams/radix-cpu-time-c1-.png
-	width 41text%
+	width 50text%
 
 \end_inset
 
 
 \begin_inset Graphics
 	filename diagrams/radix-cpu-messages-c1-.png
-	width 41text%
+	width 50text%
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename diagrams/radix-cpu-l2miss-c1024.network1.0.png
+	width 50text%
 
 \end_inset
 
@@ -4631,6 +4647,8 @@ status collapsed
 \end_inset
 
 However, in either case, the Origin protocol is faster than BIP.
+ This is because BIP generated more messages, as the L2 cache for Origin
+ protocol and BIP have the same number of misses.
  The higher number of messages in the system when processor count increases
  contributes to the slowdown in the system, as evidenced by the non-ideal
  increase in speedup across both protocols.
@@ -4650,14 +4668,21 @@ status open
 \align center
 \begin_inset Graphics
 	filename diagrams/ocean-cpu-time-c1-.png
-	width 41text%
+	width 50text%
 
 \end_inset
 
 
 \begin_inset Graphics
 	filename diagrams/ocean-cpu-messages-c1-.png
-	width 41text%
+	width 50text%
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename diagrams/ocean-cpu-l2miss-c2048.network1.0.png
+	width 50text%
 
 \end_inset
 
@@ -4724,6 +4749,9 @@ reference "fig:Ocean-results"
  counts.
  This allows the Origin protocol to experience fewer slowdowns related to
  traffic congestion in the system.
+ Again, we see that the number of misses are equal, which means that the
+ speedup of the Origin protocol over BIP can be attributed to the higher
+ number of messages sent in BIP.
 \end_layout
 
 \begin_layout Subsubsection
@@ -4740,14 +4768,21 @@ status open
 \align center
 \begin_inset Graphics
 	filename diagrams/cholesky-cpu-time-c512.network10.png
-	width 41text%
+	width 50text%
 
 \end_inset
 
 
 \begin_inset Graphics
 	filename diagrams/cholesky-cpu-messages-c512.network10.png
-	width 41text%
+	width 50text%
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename diagrams/cholesky-cpu-l2miss-c1024.network1.0.png
+	width 50text%
 
 \end_inset
 
@@ -4804,10 +4839,11 @@ reference "fig:Cholesky-results"
 \end_inset
 
 .
- According to the results, BIP is slower than the Origin protocol.
- Again, we see that the number of messages BIP send into the system is larger
- than the Origin protocol, causing the difference between the runtime of
- the two systems.
+ The Origin protocol caused more misses in the L2 cache.
+ Despite this, BIP still sent more messages into the network than Origin
+ protocol.
+ The difference in their total runtime can be attributed to Origin's reduction
+ in messages sent as compared to BIP.
 \end_layout
 
 \begin_layout Standard
