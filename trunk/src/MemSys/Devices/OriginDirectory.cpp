@@ -1,6 +1,6 @@
 // toggles debug messages
-//#define MEMORY_ORIGIN_DIRECTORY_DEBUG_VERBOSE
-//#define MEMORY_ORIGIN_DIRECTORY_DEBUG_DIRECTORY_DATA
+#define MEMORY_ORIGIN_DIRECTORY_DEBUG_VERBOSE
+#define MEMORY_ORIGIN_DIRECTORY_DEBUG_DIRECTORY_DATA
 //#define MEMORY_ORIGIN_DIRECTORY_DEBUG_COUNTERS
 //#define MEMORY_ORIGIN_DIRECTORY_DEBUG_MSG_COUNT
 //#define MEMORY_ORIGIN_DIRECTORY_DEBUG_PENDING_DIRECTORY_EXCLUSIVE_READS
@@ -1460,7 +1460,8 @@ namespace Memory
 			ProcessInvalidateWhileInvalid(m, src);
 		}
 		/*
-		 * this fix doesn't work
+		//this fix doesn't work, it only leads to requests being dropped
+		 //and a hanging system
 		else if (msg->Type()==mt_InvalidateResponse)
 		{
 			// ignore this message
