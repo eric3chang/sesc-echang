@@ -471,7 +471,7 @@ TotalCache:totalCacheWriteHits:321740
 TotalCache:totalCacheWriteMisses:5596
 
 TotalDirectory
-TotalDirectorydirectoryCount:8
+TotalDirectory:directoryCount:8
 TotalDirectory:totalLatency:6475356
 TotalDirectory:totalReadResponses:14218
 TotalDirectory:averageWaitTime:455

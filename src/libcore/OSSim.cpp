@@ -1065,6 +1065,8 @@ void OSSim::simFinish()
 		// for use by directories
 		long long unsigned int totalLatency = 0;
 		long long unsigned int totalReadResponses = 0;
+		long long unsigned int totalLatencySimple = 0;
+		long long unsigned int totalReadResponsesSimple = 0;
 		int directoryCount = 0;
 
 		for (std::vector<BaseMemDevice*>::iterator i=deviceSet.begin(); i!=deviceSet.end(); i++)
@@ -1185,6 +1187,8 @@ void OSSim::simFinish()
 
 				totalLatency += tempDevice->GetTotalLatency();
 				totalReadResponses += tempDevice->GetTotalReadResponses();
+				totalLatencySimple += tempDevice->GetTotalLatencySimple();
+				totalReadResponsesSimple += tempDevice->GetTotalReadResponsesSimple();
 				directoryCount++;
 			}
 			else if (isOriginDirectory)
@@ -1253,11 +1257,19 @@ void OSSim::simFinish()
 		out << endl;
 
 		out << "TotalDirectory" << endl;
-		out << "TotalDirectory" << "directoryCount:" << directoryCount << endl;
+		out << "TotalDirectory:" << "directoryCount:" << directoryCount << endl;
 		out << "TotalDirectory:" << "totalLatency:" << totalLatency << endl;
 		out << "TotalDirectory:" << "totalReadResponses:" << totalReadResponses << endl;
+		out << "TotalDirectory:" << "totalLatencySimple:" << totalLatencySimple << endl;
+		out << "TotalDirectory:" << "totalReadResponsesSimple:" << totalReadResponsesSimple << endl;
 		unsigned long long averageWaitTime = totalLatency/totalReadResponses;
+		unsigned long long averageWaitTimeSimple = 0;
+		if (totalReadResponsesSimple != 0)
+		{
+			averageWaitTimeSimple = totalLatencySimple/totalReadResponsesSimple;
+		}
 		out << "TotalDirectory:" << "averageWaitTime:" << averageWaitTime << endl;
+		out << "TotalDirectory:" << "averageWaitTimeSimple:" << averageWaitTimeSimple << endl;
 
 		out << endl;
 

@@ -133,7 +133,8 @@ def getDictionary(benchmark, dirtype, cpu, l1, l2):
         if (line.count(':')):
             splitlines = line.split(':')
             if (len(splitlines)!=3):
-                printError('input file format should have dictionary of 3')
+                print(fullpath)
+                printError('input file format should have dictionary of 3, filein was ' + fullpath)
             component = splitlines[0]
             key = splitlines[1]
             value = splitlines[2]
@@ -338,7 +339,7 @@ def plotGraphSingle(dirtypes, graphResults, minimum, maximum, myXlabel, myYlabel
             linestyle = LINESTYLES[linestyleIndex]
             directoryIndex -= 1
 
-    legend(loc='best')
+    #legend(loc='best')
     xlabel(myXlabel)
     ylabel(myYlabel)
     xticks(ticks)
@@ -419,7 +420,6 @@ def main():
     #benchmarks = ['radix']
     dirtypes = ['bip','origin']
     #fileAdd = '-100-110'
-    fileAdd = ''
     mincpu = '4'
     maxcpu = '32'
     l1 = '64'
@@ -431,13 +431,13 @@ def main():
     isSavFig = False
     isSwitchDir = False
     global IN_EXT
-    #IN_EXT = '.memDevResults.tk23.network10'
     #IN_EXT = '.memDevResults.network10'
-    IN_EXT = '.memDevResults.network1.0'
+    fileAdd = '.network1.0'
+    IN_EXT = '.memDevResults' + fileAdd
 
     l2Index = int(minl2)
     while (l2Index <= int(maxl2)):
-        plotCpuTimeSingle(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index),isSavFig,isNorm,fileAdd,isSwitchDir)
+        #plotCpuTimeSingle(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index),isSavFig,isNorm,fileAdd,isSwitchDir)
         plotCpuTimeMultiple(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index),isSavFig,isNorm,fileAdd,isSwitchDir)
         #plotCpuMessagesSingle(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index), isSavFig,isNorm,fileAdd,isSwitchDir)
         #plotCpuNetworkLatencySingle(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index), isSavFig,isNorm,fileAdd,isSwitchDir)
