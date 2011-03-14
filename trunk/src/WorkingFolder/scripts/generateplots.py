@@ -339,7 +339,7 @@ def plotGraphSingle(dirtypes, graphResults, minimum, maximum, myXlabel, myYlabel
             linestyle = LINESTYLES[linestyleIndex]
             directoryIndex -= 1
 
-    #legend(loc='best')
+    legend(loc='best')
     xlabel(myXlabel)
     ylabel(myYlabel)
     xticks(ticks)
@@ -416,8 +416,8 @@ def plotL2TimeSingle(benchmarks, dirtypes, cpu, l1, minimum, maximum, isSaveFigu
         'l2-time-p'+cpu+filenameAddition,isSaveFigure,isNormalize,isSwitchDirtype)
 
 def main():
-    benchmarks = ['cholesky', 'fft', 'lu','newtest', 'radix', 'ocean']
-    #benchmarks = ['radix']
+    #benchmarks = ['cholesky', 'fft', 'lu','newtest', 'radix', 'ocean']
+    benchmarks = ['lu']
     dirtypes = ['bip','origin']
     #fileAdd = '-100-110'
     mincpu = '4'
