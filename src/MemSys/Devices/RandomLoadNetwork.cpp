@@ -89,6 +89,7 @@ namespace Memory
 		DebugAssert(packetsInTransit > 0);
 		packetsInTransit--;
 	}
+
 	void RandomLoadNetwork::RandomLoadedCalculator::Initialize(const RootConfigNode& config, int nodeCount)
 	{
 		TimeDelta minTime = (TimeDelta)Config::GetInt(config, "MinTime");
@@ -112,6 +113,7 @@ namespace Memory
 		timePerPacket = (float)Config::GetReal(config, "TimePerPacket");
 		packetsInTransit = 0;
 	}
+
 	void RandomLoadNetwork::DeliverMsg(const NetworkMsg* m)
 	{
 		DebugAssert(m);
@@ -182,6 +184,8 @@ namespace Memory
 
 	void RandomLoadNetwork::DumpStats(std::ostream& out)
 	{
+		out << DeviceName() << ":initialTime" << initialTime << endl;
+		out << DeviceName() << ":randomRange" << randomRange << endl;
 		out << DeviceName() << ":TotalMessagesReceived:" << totalMessagesReceived << endl;
 		double averageLatency = ((double)totalLatency)/((double)totalMessagesReceived);
 		out << DeviceName() << ":AverageLatency:" << averageLatency << endl;

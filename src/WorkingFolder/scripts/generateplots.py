@@ -12,6 +12,7 @@ OUT_DIR='../../../report/diagrams/'
 #OUT_DIR='../configs/workFile/'
 
 # don't need to change these when moving this script
+CHOLESKY_INPUT='tk23'
 GRAPH_WIDTH=2
 #IN_EXT='IN_EXT'
 #LINESTYLES=['k--','k:']
@@ -114,6 +115,16 @@ def getL2Results(benchmarks, dirtypes, cpu, l1, minimum, maximum, component, key
 
 def getDictionary(benchmark, dirtype, cpu, l1, l2):
     fullpath = getFilename(benchmark, dirtype, cpu, l1, l2)
+    # replace cholesky's filename with correct one
+    if (benchmark=='cholesky'):
+        splitfullpath = fullpath.split('.')
+        fullpath = ''
+        for myWord in splitfullpath:
+            fullpath += myWord + '.'
+            if (myWord == 'memDevResults'):
+                fullpath += CHOLESKY_INPUT + '.'
+        fullpath = fullpath.rstrip('.')
+
     filein = open(fullpath, 'r')
     dictionary = {}
     line = ''
@@ -404,9 +415,9 @@ def plotL2TimeSingle(benchmarks, dirtypes, cpu, l1, minimum, maximum, isSaveFigu
         'l2-time-p'+cpu+filenameAddition,isSaveFigure,isNormalize,isSwitchDirtype)
 
 def main():
-    #benchmark = ['cholesky', 'fft', 'lu','newtest', 'radix', 'raytrace', 'ocean']
-    benchmarks = ['radix']
-    dirtypes = ['bip']
+    benchmarks = ['cholesky', 'fft', 'lu','newtest', 'radix', 'ocean']
+    #benchmarks = ['radix']
+    dirtypes = ['bip','origin']
     #fileAdd = '-100-110'
     fileAdd = ''
     mincpu = '4'
@@ -426,11 +437,12 @@ def main():
 
     l2Index = int(minl2)
     while (l2Index <= int(maxl2)):
-        #plotCpuTimeSingle(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index),isSavFig,isNorm,fileAdd,isSwitchDir)
+        plotCpuTimeSingle(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index),isSavFig,isNorm,fileAdd,isSwitchDir)
+        plotCpuTimeMultiple(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index),isSavFig,isNorm,fileAdd,isSwitchDir)
         #plotCpuMessagesSingle(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index), isSavFig,isNorm,fileAdd,isSwitchDir)
         #plotCpuNetworkLatencySingle(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index), isSavFig,isNorm,fileAdd,isSwitchDir)
         #plotCpuCacheLatencySingle(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index), isSavFig,isNorm,fileAdd,isSwitchDir)
-        plotCpuCacheTotalLatencySingle(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index), isSavFig,isNorm,fileAdd,isSwitchDir)  
+        #plotCpuCacheTotalLatencySingle(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index), isSavFig,isNorm,fileAdd,isSwitchDir)  
         l2Index *= 2
 
     cpuIndex = int(mincpu)

@@ -45,6 +45,7 @@ namespace Memory
 			virtual void OnMsgDelivered(const NetworkMsg* msg, int fromNode, int toNode, TickTime time);
 			virtual void Initialize(const RootConfigNode& config, int nodeCount);
 		};
+
 		class RandomLoadedCalculator : public MsgDelayCalculator
 		{
 			TimeDelta initialTime;
@@ -60,6 +61,7 @@ namespace Memory
 			virtual void OnMsgDelivered(const NetworkMsg* msg, int fromNode, int toNode, TickTime time);
 			virtual void Initialize(const RootConfigNode& config, int nodeCount);
 		};
+
 		MsgDelayCalculator* delayCalc;
 		HashMap<NodeID, int> nodeToConnection;
 
