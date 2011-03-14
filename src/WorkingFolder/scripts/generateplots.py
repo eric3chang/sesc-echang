@@ -14,6 +14,7 @@ OUT_DIR='../../../report/generated-figures/'
 # don't need to change these when moving this script
 CHOLESKY_INPUT='tk23'
 LU_INPUT='b8'
+#LU_INPUT='b32'
 GRAPH_WIDTH=2
 #IN_EXT='IN_EXT'
 #LINESTYLES=['k--','k:']
@@ -325,7 +326,11 @@ def plotGraphMultiple(benchmarks,dirtypes,iResults,minimum,maximum,myXlabel,myYl
         figureIndex += 1
 
     if (isSaveFigure):
-        outfullpath = OUT_DIR+benchmarkString+filename+OUT_EXT
+        outfullpath = ''
+        if (benchmarkString=='lu-'):
+            outfullpath = OUT_DIR+benchmarkString+filename+'.'+LU_INPUT+OUT_EXT
+        else:
+            outfullpath = OUT_DIR+benchmarkString+filename+OUT_EXT
         savefig(outfullpath)
     else:
         show()
@@ -466,9 +471,9 @@ def plotL2TimeSingle(benchmarks, dirtypes, cpu, l1, minimum, maximum, isSaveFigu
 
 def main():
     #benchmarks = ['cholesky', 'fft', 'lu','newtest', 'radix', 'ocean']
-    benchmarks = ['cholesky', 'fft', 'newtest', 'radix', 'ocean']
+    #benchmarks = ['cholesky', 'fft', 'newtest', 'radix', 'ocean']
     #benchmarks = ['cholesky', 'radix', 'ocean']
-    #benchmarks = ['lu']
+    benchmarks = ['lu']
     dirtypes = ['bip','origin']
     #bipdirtypes = ['bip']
     #origindirtypes = ['origin']
@@ -485,15 +490,16 @@ def main():
     isSwitchDir = False
     global IN_EXT
     #IN_EXT = '.memDevResults.network10'
-    fileAdd = '.network1.0'
-    #fileAdd = '.network10'
+    #fileAdd = '.network1.0'
+    fileAdd = '.network10'
+    #IN_EXT = '.memDevResults' + fileAdd
     IN_EXT = '.memDevResults' + fileAdd
 
     l2Index = int(minl2)
     while (l2Index <= int(maxl2)):
         plotCpuTimeSingle(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index),isSavFig,isNorm,fileAdd,isSwitchDir)
         #plotCpuTimeMultiple(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index),isSavFig,isNorm,fileAdd,isSwitchDir)
-        #plotCpuMessagesSingle(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index), isSavFig,isNorm,fileAdd,isSwitchDir)
+        plotCpuMessagesSingle(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index), isSavFig,isNorm,fileAdd,isSwitchDir)
         #plotCpuNetworkLatencySingle(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index), isSavFig,isNorm,fileAdd,isSwitchDir)
         #plotCpuCacheLatencySingle(benchmarks, origindirtypes, mincpu, maxcpu, l1, str(l2Index), isSavFig,isNorm,fileAdd,isSwitchDir)
         #plotCpuCacheLatencySimpleSingle(benchmarks, bipdirtypes, mincpu, maxcpu, l1, str(l2Index), isSavFig,isNorm,fileAdd,isSwitchDir)
