@@ -107,7 +107,9 @@ namespace Memory
 		unsigned long long remoteWritesReceived;
 		unsigned long long remoteWriteResponsesReceived;
 		Time_t totalLatency;
+		Time_t totalLatencySimple;
 		unsigned long long totalReadResponses;
+		unsigned long long totalReadResponsesSimple;
 
 		TimeDelta localSendTime;
 		TimeDelta remoteSendTime;
@@ -136,8 +138,12 @@ namespace Memory
 		typedef HashMultiMap<Address,TimeData<ReadMsg> > AddrTDReadMultimap;
 		typedef pair<Address,TimeData<ReadMsg> > AddrTDReadPair;
 		typedef pair<AddrTDReadMultimap::iterator,AddrTDReadMultimap::iterator> AddrTDReadMultimapPairii;
+		typedef HashMap<MessageID,TimeData<ReadMsg> > MessageTDReadMap;
+		typedef pair<MessageID,TimeData<ReadMsg> > MessageTDReadPair;
+		typedef pair<MessageTDReadMap::iterator,MessageTDReadMap::iterator> MessageTDReadMapPairii;
 
-		HashMap<MessageID, const ReadMsg*> pendingLocalReads;
+		//HashMap<MessageID, const ReadMsg*> pendingLocalReads;
+		MessageTDReadMap pendingLocalReads;
 		HashMap<MessageID, LookupData<ReadMsg> > pendingRemoteReads;
 		HashMap<MessageID, LookupData<InvalidateMsg> > pendingRemoteInvalidates;
 		HashMultiMap<Address, LookupData<ReadMsg> > pendingDirectorySharedReads;
@@ -153,6 +159,7 @@ namespace Memory
 		// debug functions
       void dump(HashMap<MessageID, const BaseMsg*> &m);
       void dump(MessageReadMap &m);
+      void dump(MessageTDReadMap &m);
       void dump(AddrLDReadMultimap &m);
       void dump(AddrTDReadMultimap &m);
       void dump(AddrLDReadMap &m);
@@ -226,7 +233,9 @@ namespace Memory
 		*/
 	public:
 		Time_t GetTotalLatency();
+		Time_t GetTotalLatencySimple();
 		unsigned long long GetTotalReadResponses();
+		unsigned long long GetTotalReadResponsesSimple();
 
 		virtual void Initialize(EventManager* em, const RootConfigNode& config, const std::vector<Connection*>& connectionSet);
 		virtual void DumpRunningState(RootConfigNode& node);

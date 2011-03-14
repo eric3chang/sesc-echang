@@ -1,6 +1,6 @@
 // toggles debug messages
-#define MEMORY_ORIGIN_DIRECTORY_DEBUG_VERBOSE
-#define MEMORY_ORIGIN_DIRECTORY_DEBUG_DIRECTORY_DATA
+//#define MEMORY_ORIGIN_DIRECTORY_DEBUG_VERBOSE
+//#define MEMORY_ORIGIN_DIRECTORY_DEBUG_DIRECTORY_DATA
 //#define MEMORY_ORIGIN_DIRECTORY_DEBUG_COUNTERS
 //#define MEMORY_ORIGIN_DIRECTORY_DEBUG_MSG_COUNT
 //#define MEMORY_ORIGIN_DIRECTORY_DEBUG_PENDING_DIRECTORY_EXCLUSIVE_READS
@@ -1535,7 +1535,16 @@ namespace Memory
 		{
 			const EvictionMsg* m = (const EvictionMsg*)msg;
 
-			cacheData.SetCacheState(cs_Invalid);
+			// only set cache state to invalid if we haven't received
+				// an invalidate
+			if (cacheData.firstReply!=NULL)
+			{
+				DebugAssertWithMessageID(cacheData.firstReply->Type()==mt_Invalidate,m->MsgID());
+			}
+			else
+			{
+				cacheData.SetCacheState(cs_Invalid);
+			}
 
 			// send Eviction Response Msg to cache
 			EvictionResponseMsg* erm = EM().CreateEvictionResponseMsg(GetDeviceID(), m->GeneratingDeviceID());
