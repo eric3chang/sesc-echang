@@ -457,8 +457,8 @@ def plotL2TimeSingle(benchmarks, dirtypes, cpu, l1, minimum, maximum, isSaveFigu
 
 def main():
     #benchmarks = ['cholesky', 'fft', 'lu','newtest', 'radix', 'ocean']
-    #benchmarks = ['cholesky', 'fft', 'newtest', 'radix', 'ocean']
-    benchmarks = ['lu']
+    benchmarks = ['cholesky', 'radix', 'ocean']
+    #benchmarks = ['lu']
     dirtypes = ['bip','origin']
     #bipdirtypes = ['bip']
     #origindirtypes = ['origin']
@@ -481,9 +481,9 @@ def main():
 
     l2Index = int(minl2)
     while (l2Index <= int(maxl2)):
-        plotCpuTimeSingle(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index),isSavFig,isNorm,fileAdd,isSwitchDir)
+        #plotCpuTimeSingle(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index),isSavFig,isNorm,fileAdd,isSwitchDir)
         #plotCpuTimeMultiple(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index),isSavFig,isNorm,fileAdd,isSwitchDir)
-        plotCpuMessagesSingle(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index), isSavFig,isNorm,fileAdd,isSwitchDir)
+        #plotCpuMessagesSingle(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index), isSavFig,isNorm,fileAdd,isSwitchDir)
         #plotCpuNetworkLatencySingle(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index), isSavFig,isNorm,fileAdd,isSwitchDir)
         #plotCpuCacheLatencySingle(benchmarks, origindirtypes, mincpu, maxcpu, l1, str(l2Index), isSavFig,isNorm,fileAdd,isSwitchDir)
         #plotCpuCacheLatencySimpleSingle(benchmarks, bipdirtypes, mincpu, maxcpu, l1, str(l2Index), isSavFig,isNorm,fileAdd,isSwitchDir)
