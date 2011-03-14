@@ -97,7 +97,7 @@ def main():
     L1Hi = '64'
     L2Low = '128'
     L2Hi = '4096'
-    memoryfilePrefix = ''
+    #memoryfilePrefix = ''
     memoryfilePrefix = 'network10-'
     #memoryfilePrefix = 'network0.5-'
 
