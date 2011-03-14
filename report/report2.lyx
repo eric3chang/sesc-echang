@@ -3978,7 +3978,7 @@ reference "fig:Synthetic-benchmark-results-runtime"
 \begin_inset Float figure
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \align center
@@ -4415,14 +4415,14 @@ status open
 \align center
 \begin_inset Graphics
 	filename diagrams/fft-cpu-time-c1-.png
-	width 45text%
+	width 41text%
 
 \end_inset
 
 
 \begin_inset Graphics
 	filename diagrams/fft-cpu-messages-c1-.png
-	width 45text%
+	width 41text%
 
 \end_inset
 
@@ -4644,7 +4644,7 @@ Ocean
 \begin_inset Float figure
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \align center
@@ -4737,16 +4737,17 @@ sideways false
 status open
 
 \begin_layout Plain Layout
+\align center
 \begin_inset Graphics
 	filename diagrams/cholesky-cpu-time-c512.network10.png
-	width 50text%
+	width 41text%
 
 \end_inset
 
 
 \begin_inset Graphics
 	filename diagrams/cholesky-cpu-messages-c512.network10.png
-	width 50text%
+	width 41text%
 
 \end_inset
 
