@@ -196,8 +196,8 @@ namespace Memory
 	void RandomLoadNetwork::DumpStats(std::ostream& out)
 	{
 		RandomLoadedCalculator* myRLC = (RandomLoadedCalculator*)delayCalc;
-		out << DeviceName() << ":initialTime" << myRLC->GetInitialTime() << endl;
-		out << DeviceName() << ":randomRange" << myRLC->GetRandomRange() << endl;
+		out << DeviceName() << ":initialTime:" << myRLC->GetInitialTime() << endl;
+		out << DeviceName() << ":randomRange:" << myRLC->GetRandomRange() << endl;
 		out << DeviceName() << ":TotalMessagesReceived:" << totalMessagesReceived << endl;
 		double averageLatency = ((double)totalLatency)/((double)totalMessagesReceived);
 		out << DeviceName() << ":AverageLatency:" << averageLatency << endl;
