@@ -8,7 +8,7 @@ from matplotlib.pyplot import *
 # need to change this when moving this script
 IN_DIR='../results/'
 #OUT_DIR='./graphs/'
-OUT_DIR='../../../report/diagrams/'
+OUT_DIR='../../../report/generated-figures/'
 #OUT_DIR='../configs/workFile/'
 
 # don't need to change these when moving this script
@@ -133,7 +133,8 @@ def getDictionary(benchmark, dirtype, cpu, l1, l2):
         if (line.count(':')):
             splitlines = line.split(':')
             if (len(splitlines)!=3):
-                print(fullpath)
+                print('splitlines=')
+                print(splitlines)
                 printError('input file format should have dictionary of 3, filein was ' + fullpath)
             component = splitlines[0]
             key = splitlines[1]
@@ -191,7 +192,7 @@ def plotCpuCacheLatencySingle(benchmarks, dirtypes, minimum, maximum,l1,l2,isSav
 
 def plotCpuCacheTotalLatencySingle(benchmarks, dirtypes, minimum, maximum,l1,l2,isSaveFigure,isNormalize,fileAdd,isSwitchDirtype):
     plotCpuSingle(benchmarks, dirtypes, minimum, maximum,l1,l2,'TotalDirectory', 'totalLatency', 'Latency (%)',
-        'cpu-cachelatency-c'+l2+fileAdd,isSaveFigure,isNormalize,isSwitchDirtype)
+        'cpu-cachetotallatency-c'+l2+fileAdd,isSaveFigure,isNormalize,isSwitchDirtype)
 
 def plotCpuNetworkLatencyMultiple(benchmarks, dirtypes, minimum, maximum, l1, l2,isSaveFigure,isNormalize,filenameAddition,isSwitchDirtype):
     plotCpuMultiple(benchmarks, dirtypes, minimum, maximum,l1,l2,'Network', 'AverageLatency',
@@ -427,8 +428,8 @@ def main():
     #maxl2 = '4096'
     minl2 = '128'
     maxl2 = '4096'
-    isNorm = False
-    isSavFig = False
+    isNorm = True
+    isSavFig = True
     isSwitchDir = False
     global IN_EXT
     #IN_EXT = '.memDevResults.network10'

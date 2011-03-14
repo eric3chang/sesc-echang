@@ -4733,15 +4733,11 @@ reference "fig:Ocean-results"
  counts.
 \end_layout
 
-\begin_layout Standard
-\begin_inset Note Note
-status collapsed
-
 \begin_layout Subsubsection
 Lu
 \end_layout
 
-\begin_layout Plain Layout
+\begin_layout Standard
 \begin_inset Float figure
 wide false
 sideways false
@@ -4749,14 +4745,14 @@ status open
 
 \begin_layout Plain Layout
 \begin_inset Graphics
-	filename diagrams/lu-cpu-time-c32-.png
+	filename diagrams/lu-cpu-time-c32.png
 	width 50text%
 
 \end_inset
 
 
 \begin_inset Graphics
-	filename diagrams/lu-cpu-messages-c32-.png
+	filename diagrams/lu-cpu-messages-c32.png
 	width 50text%
 
 \end_inset
@@ -4788,7 +4784,7 @@ name "fig:Lu-results"
 
 \end_layout
 
-\begin_layout Plain Layout
+\begin_layout Standard
 The results from the Lu benchmark is shown in 
 \begin_inset ERT
 status open
@@ -4817,20 +4813,11 @@ reference "fig:Lu-results"
  For this benchmark, we are seeing 
 \end_layout
 
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset Note Note
-status collapsed
-
 \begin_layout Subsubsection
 Cholesky
 \end_layout
 
-\begin_layout Plain Layout
+\begin_layout Standard
 \begin_inset Float figure
 wide false
 sideways false
@@ -4838,14 +4825,14 @@ status open
 
 \begin_layout Plain Layout
 \begin_inset Graphics
-	filename diagrams/cholesky-cpu-time-c16-.png
+	filename diagrams/cholesky-cpu-time-c512.network10.png
 	width 50text%
 
 \end_inset
 
 
 \begin_inset Graphics
-	filename diagrams/cholesky-cpu-messages-c64-.png
+	filename diagrams/cholesky-cpu-messages-c512.network10.png
 	width 50text%
 
 \end_inset
@@ -4877,7 +4864,7 @@ name "fig:Cholesky-results"
 
 \end_layout
 
-\begin_layout Plain Layout
+\begin_layout Standard
 The results for Cholesky is shown in 
 \begin_inset ERT
 status open
@@ -4903,11 +4890,6 @@ reference "fig:Cholesky-results"
 \end_inset
 
 .
-\end_layout
-
-\end_inset
-
-
 \end_layout
 
 \begin_layout Section

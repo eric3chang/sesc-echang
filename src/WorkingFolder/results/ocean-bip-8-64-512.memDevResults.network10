@@ -7,8 +7,8 @@ TotalRunTime
 TotalRunTime:TotalRunTime:8682300
 
 Network
-Network:initialTime1000
-Network:randomRange101
+Network:initialTime:1000
+Network:randomRange:101
 Network:TotalMessagesReceived:201705
 Network:AverageLatency:1092.4
 
