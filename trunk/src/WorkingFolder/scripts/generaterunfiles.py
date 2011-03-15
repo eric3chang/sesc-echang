@@ -176,8 +176,8 @@ def main():
     L1Hi = '64'
     #L2Low = '512'
     #L2Hi = '8192'
-    L2Low = '128'
-    L2Hi = '4096'
+    L2Low = '512'
+    L2Hi = '512'
 
     combinedOutfilename = OUT_DIR+COMBINED_OUT+OUT_EXT
     combinedOutfile = open(combinedOutfilename, 'wb')
