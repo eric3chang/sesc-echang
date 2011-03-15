@@ -38,8 +38,8 @@ FFT_PARAMS_POST=' -n65536 -l4 -t'
 FMM_PARAMS_PRE='-o < benchmarks-splash2-sesc/fmm-inputs/cpu'
 FMM_PARAMS_POST=''
 LU_PARAMS_PRE='-n256 -p'
-#LU_PARAMS_POST=' -b8 -t'
-LU_PARAMS_POST=' -b16 -t'
+LU_PARAMS_POST=' -b8 -t'
+#LU_PARAMS_POST=' -b16 -t'
 #LU_PARAMS_POST=' -b32 -t'
 NEWTEST_PARAMS_PRE='-p'
 NEWTEST_PARAMS_POST=' -n10000'
@@ -166,7 +166,7 @@ processorCountHi, L1Low, L1Hi, L2Low, L2Hi):
 def main():
     #benchmarkNames = ['barnes', 'cholesky', 'fft', 'fmm', 'lu','newtest', 'radix', 'raytrace', 'ocean']
     benchmarkNames = ['cholesky', 'fft', 'lu','newtest', 'radix', 'ocean']
-    benchmarkNames = ['lu']
+    #benchmarkNames = ['lu']
     directoryTypes = ['bip','origin']
     processorCountLow = '4'
     processorCountHi = '32'
@@ -174,10 +174,10 @@ def main():
     #L1Hi = '64'
     L1Low = '64'
     L1Hi = '64'
-    #L2Low = '512'
-    #L2Hi = '8192'
-    L2Low = '512'
-    L2Hi = '512'
+    #L2Low = '128'
+    #L2Hi = '4096'
+    L2Low = '128'
+    L2Hi = '4096'
 
     combinedOutfilename = OUT_DIR+COMBINED_OUT+OUT_EXT
     combinedOutfile = open(combinedOutfilename, 'wb')
