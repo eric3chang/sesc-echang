@@ -13,8 +13,9 @@ OUT_DIR='../../../report/generated-figures/'
 
 # don't need to change these when moving this script
 CHOLESKY_INPUT='tk23'
-LU_INPUT='b8'
-#LU_INPUT='b32'
+#LU_INPUT='b8'
+#LU_INPUT='b16'
+LU_INPUT='b32'
 GRAPH_WIDTH=2
 #IN_EXT='IN_EXT'
 #LINESTYLES=['k--','k:']
@@ -484,10 +485,10 @@ def main():
     #minl2 = '128'
     #maxl2 = '4096'
     minl2 = '128'
-    maxl2 = '4096'
+    maxl2 = '128'
     isNorm = True
     isSavFig = True
-    isSwitchDir = False
+    isSwitchDir = True
     global IN_EXT
     #IN_EXT = '.memDevResults.network10'
     #fileAdd = '.network1.0'
@@ -497,7 +498,7 @@ def main():
 
     l2Index = int(minl2)
     while (l2Index <= int(maxl2)):
-        plotCpuTimeSingle(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index),isSavFig,isNorm,fileAdd,isSwitchDir)
+        #plotCpuTimeSingle(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index),isSavFig,isNorm,fileAdd,isSwitchDir)
         #plotCpuTimeMultiple(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index),isSavFig,isNorm,fileAdd,isSwitchDir)
         plotCpuMessagesSingle(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index), isSavFig,isNorm,fileAdd,isSwitchDir)
         #plotCpuNetworkLatencySingle(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index), isSavFig,isNorm,fileAdd,isSwitchDir)
@@ -505,7 +506,7 @@ def main():
         #plotCpuCacheLatencySimpleSingle(benchmarks, bipdirtypes, mincpu, maxcpu, l1, str(l2Index), isSavFig,isNorm,fileAdd,isSwitchDir)
         #plotCpuCacheTotalLatencySingle(benchmarks, origindirtypes, mincpu, maxcpu, l1, str(l2Index), isSavFig,isNorm,fileAdd,isSwitchDir)  
         #plotCpuCacheTotalLatencySimpleSingle(benchmarks, bipdirtypes, mincpu, maxcpu, l1, str(l2Index), isSavFig,isNorm,fileAdd,isSwitchDir)  
-        plotCpuL2Misses(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index), isSavFig, isNorm, fileAdd, isSwitchDir)
+        #plotCpuL2Misses(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index), isSavFig, isNorm, fileAdd, isSwitchDir)
         l2Index *= 2
 
     cpuIndex = int(mincpu)

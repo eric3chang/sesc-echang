@@ -450,9 +450,9 @@ TotalCache:totalL1CacheSharedReadMisses:222
 TotalCache:totalL1CacheWriteHits:20234
 TotalCache:totalL1CacheWriteMisses:181
 TotalCache:totalL2CacheExclusiveReadHits:180
-TotalCache:totalL2CacheExclusiveReadMisses:221
+TotalCache:totalL2CacheExclusiveReadMisses:216
 TotalCache:totalL2CacheSharedReadHits:240
-TotalCache:totalL2CacheSharedReadMisses:222
+TotalCache:totalL2CacheSharedReadMisses:217
 TotalCache:totalL2CacheWriteHits:0
 TotalCache:totalL2CacheWriteMisses:0
 TotalCache:totalCacheExclusiveReadHits:180
