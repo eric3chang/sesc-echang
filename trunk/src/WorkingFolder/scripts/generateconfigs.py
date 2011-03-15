@@ -99,7 +99,7 @@ def main():
     L2Hi = '4096'
     #memoryfilePrefix = ''
     #memoryfilePrefix = 'network10-'
-    memoryfilePrefix = 'network0.5-'
+    #memoryfilePrefix = 'network0.5-'
 
     for directory in directoryTypes:
        generateAllBenchmarks(benchmarkNames, directory, processorCountLow, processorCountHi, L1Low, L1Hi,memoryfilePrefix,L2Low,L2Hi)
