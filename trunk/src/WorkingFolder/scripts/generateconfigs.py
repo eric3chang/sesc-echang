@@ -88,9 +88,9 @@ def generateAllBenchmarks(benchmarkNames, directoryType, processorCountLow, proc
             memoryfilePrefix,L2Low,L2Hi)
 
 def main():
-    benchmarkNames = ['cholesky', 'fft', 'lu', 'newtest', 'radix', 'ocean']
-    #benchmarkNames = ['lu']
-    directoryTypes = ['bip','origin']
+    #benchmarkNames = ['cholesky', 'fft', 'lu', 'newtest', 'radix', 'ocean']
+    benchmarkNames = ['lu']
+    directoryTypes = ['origin']
     processorCountLow = '4'
     processorCountHi = '32'
     L1Low = '64'
@@ -100,6 +100,7 @@ def main():
     #memoryfilePrefix = ''
     #memoryfilePrefix = 'network10-'
     #memoryfilePrefix = 'network0.5-'
+    memoryfilePrefix = 'network2.0-'
 
     for directory in directoryTypes:
        generateAllBenchmarks(benchmarkNames, directory, processorCountLow, processorCountHi, L1Low, L1Hi,memoryfilePrefix,L2Low,L2Hi)
