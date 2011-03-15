@@ -234,9 +234,9 @@ TotalCache:totalL1CacheSharedReadMisses:138
 TotalCache:totalL1CacheWriteHits:20241
 TotalCache:totalL1CacheWriteMisses:128
 TotalCache:totalL2CacheExclusiveReadHits:128
-TotalCache:totalL2CacheExclusiveReadMisses:129
+TotalCache:totalL2CacheExclusiveReadMisses:211
 TotalCache:totalL2CacheSharedReadHits:139
-TotalCache:totalL2CacheSharedReadMisses:138
+TotalCache:totalL2CacheSharedReadMisses:211
 TotalCache:totalL2CacheWriteHits:0
 TotalCache:totalL2CacheWriteMisses:0
 TotalCache:totalCacheExclusiveReadHits:128
