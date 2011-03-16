@@ -166,9 +166,10 @@ processorCountHi, L1Low, L1Hi, L2Low, L2Hi):
 def main():
     #benchmarkNames = ['barnes', 'cholesky', 'fft', 'fmm', 'lu','newtest', 'radix', 'raytrace', 'ocean']
     #benchmarkNames = ['cholesky', 'fft', 'lu','newtest', 'radix', 'ocean']
-    benchmarkNames = ['lu']
-    directoryTypes = ['bip']
-    processorCountLow = '32'
+    benchmarkNames = ['fft', 'lu','newtest', 'radix', 'ocean']
+    #benchmarkNames = ['lu']
+    directoryTypes = ['bip', 'origin']
+    processorCountLow = '4'
     processorCountHi = '32'
     #L1Low = '8'
     #L1Hi = '64'
