@@ -167,7 +167,7 @@ def main():
     #benchmarkNames = ['barnes', 'cholesky', 'fft', 'fmm', 'lu','newtest', 'radix', 'raytrace', 'ocean']
     #benchmarkNames = ['cholesky', 'fft', 'lu','newtest', 'radix', 'ocean']
     benchmarkNames = ['lu']
-    directoryTypes = ['origin']
+    directoryTypes = ['bip']
     processorCountLow = '32'
     processorCountHi = '32'
     #L1Low = '8'
@@ -177,7 +177,7 @@ def main():
     #L2Low = '128'
     #L2Hi = '4096'
     L2Low = '128'
-    L2Hi = '128'
+    L2Hi = '4096'
 
     combinedOutfilename = OUT_DIR+COMBINED_OUT+OUT_EXT
     combinedOutfile = open(combinedOutfilename, 'wb')
