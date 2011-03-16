@@ -132,16 +132,6 @@ namespace Memory
 		return directoryDataMap[currentAddress];
 	}
 
-   Time_t OriginDirectory::GetTotalLatency()
-   {
-   	return totalLatency;
-   }
-
-   unsigned long long OriginDirectory::GetTotalReadResponses()
-   {
-   	return totalReadResponses;
-   }
-
 	void OriginDirectory::PerformMemoryReadResponseCheck(const ReadResponseMsg *m, NodeID src)
 	{
 		DebugAssertWithMessageID(src==InvalidNodeID, m->MsgID());
@@ -537,8 +527,6 @@ namespace Memory
 		directoryWritebacksReceived = 0;
 		directoryWritebackRequestsReceived = 0;
 		directoryWriteResponsesReceived = 0;
-		totalLatency = 0;
-		totalReadResponses = 0;
 	}
 
 	/**
@@ -575,8 +563,6 @@ namespace Memory
 		out << DeviceName() << ":directoryWritebacksReceived:" << directoryWritebacksReceived << std::endl;
 		out << DeviceName() << ":directoryWritebackRequestsReceived:" << directoryWritebackRequestsReceived << std::endl;
 		out << DeviceName() << ":directoryWriteResponsesReceived:" << directoryWriteResponsesReceived << std::endl;
-		out << DeviceName() << ":totalLatency:" << totalLatency << std::endl;
-		out << DeviceName() << ":totalReadResponses:" << totalReadResponses << std::endl;
 	}
 
 	void OriginDirectory::OnCacheCacheNak(const CacheNakMsg* m, NodeID src)
@@ -676,10 +662,7 @@ namespace Memory
 #endif
 		cacheReadsReceived++;
 		DebugAssertWithMessageID(pendingLocalReads.find(m->MsgID())==pendingLocalReads.end(), m->MsgID());
-		TimeData<ReadMsg> td;
-		td.msg = m;
-		td.requestTime = globalClock;
-		pendingLocalReads[m->MsgID()] = td;
+		pendingLocalReads[m->MsgID()] = m;
 		CacheData& cacheData = GetCacheData(m->addr);
 		vector<const ReadMsg*>& cacheDataPendingLocalReads = cacheData.cacheDataPendingLocalReads;
 		CacheState cacheState = cacheData.GetCacheState();
@@ -963,8 +946,6 @@ namespace Memory
    			SendMessageToDirectory(tm, false);
 
    			ClearTempCacheData(cacheData);
-   			// do not dispose, this is the same message as firstReply
-   			//EM().DisposeMsg(m);
 			
    			cacheData.SetCacheState(cs_Shared);
    		} // if (!m->requestingExclusive)
@@ -987,8 +968,6 @@ namespace Memory
    			SendMessageToDirectory(tm, false);
 
    			ClearTempCacheData(cacheData);
-   			// do not dispose, this is the same message as firstReply
-   			//EM().DisposeMsg(m);
 				
    			cacheData.SetCacheState(cs_Invalid);
    		} // else m is requesting exclusive
@@ -1055,9 +1034,8 @@ namespace Memory
    			tm->isDirty = true;
    			SendMessageToDirectory(tm, false);
 
+   			//EM().DisposeMsg(msg);
    			ClearTempCacheData(cacheData);
-   			// do not dispose, this is the same message as firstReply
-   			//EM().DisposeMsg(m);
    		} // if (firstReply->requestingExclusive)
    		else
    		{
@@ -1079,9 +1057,8 @@ namespace Memory
    			wm->isShared = true;
    			SendMessageToDirectory(wm, false);
 
+   			//EM().DisposeMsg(msg);
    			ClearTempCacheData(cacheData);
-   			// do not dispose, this is the same message as firstReply
-   			//EM().DisposeMsg(m);
    		} // else !(if (m->requestingExclusive)
    	} // else if (msg->Type()==mt_Intervention)
 		else
@@ -1165,6 +1142,8 @@ namespace Memory
 				}
 				else
 				{
+					//TODO!!!!!
+					//OnCacheDirtyExclusive(m, src, cacheData);
 					OnCacheCleanExclusive(m, src, cacheData);
 				}
 			}
@@ -1283,7 +1262,6 @@ namespace Memory
 
 			EM().DisposeMsg(secondReply);
    		ClearTempCacheData(cacheData);
-   		//EM().DisposeMsg(m);
 			
 			// should be set to invalid always regardless of the interventionMessage because
 				// we received an eviction from the local cache
@@ -1340,9 +1318,9 @@ namespace Memory
 				SendMessageToDirectory(tm, false);
 			}
 
+   		//EM().DisposeMsg(msg);
 			EM().DisposeMsg(secondReply);
    		ClearTempCacheData(cacheData);
-   		//EM().DisposeMsg(m);
 
 			// should be set to invalid always regardless of the interventionMessage because
 				// we received an eviction from the local cache			
@@ -1460,8 +1438,7 @@ namespace Memory
 			ProcessInvalidateWhileInvalid(m, src);
 		}
 		/*
-		//this fix doesn't work, it only leads to requests being dropped
-		 //and a hanging system
+		 * this fix doesn't work
 		else if (msg->Type()==mt_InvalidateResponse)
 		{
 			// ignore this message
@@ -1535,16 +1512,7 @@ namespace Memory
 		{
 			const EvictionMsg* m = (const EvictionMsg*)msg;
 
-			// only set cache state to invalid if we haven't received
-				// an invalidate
-			if (cacheData.firstReply!=NULL)
-			{
-				DebugAssertWithMessageID(cacheData.firstReply->Type()==mt_Invalidate,m->MsgID());
-			}
-			else
-			{
-				cacheData.SetCacheState(cs_Invalid);
-			}
+			cacheData.SetCacheState(cs_Invalid);
 
 			// send Eviction Response Msg to cache
 			EvictionResponseMsg* erm = EM().CreateEvictionResponseMsg(GetDeviceID(), m->GeneratingDeviceID());
@@ -1748,7 +1716,7 @@ namespace Memory
 			invalidAcksReceived++;
 			cacheData.SetCacheState(cs_WaitingForKInvalidatesJInvalidatesReceived);
 
-			//EM().DisposeMsg(m);
+			//EM().DisposeMsg(msg);
 		}
 		else if (msg->Type()==mt_SpeculativeReply)
 		{
@@ -3372,10 +3340,6 @@ namespace Memory
 		vector<const ReadMsg*>& cacheDataPendingLocalReads = cacheData.cacheDataPendingLocalReads;
 
 		DebugAssertWithMessageID(pendingLocalReads.find(m->solicitingMessage)!=pendingLocalReads.end(), m->solicitingMessage);
-		TimeData<ReadMsg>& td = pendingLocalReads[m->solicitingMessage];
-		Time_t latency = globalClock - td.requestTime;
-		totalLatency += latency;
-		totalReadResponses++;
 		pendingLocalReads.erase(m->solicitingMessage);
 		// there must be a message in cacheDataPendingLocalReads, so there shouldn't be an error using front()
 		DebugAssertWithMessageID(cacheDataPendingLocalReads.size()>0, m->solicitingMessage);

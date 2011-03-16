@@ -1195,8 +1195,8 @@ void OSSim::simFinish()
 			{
 				Memory::OriginDirectory *tempDevice = (Memory::OriginDirectory*)ptr;
 
-				totalLatency += tempDevice->GetTotalLatency();
-				totalReadResponses += tempDevice->GetTotalReadResponses();
+				//totalLatency += tempDevice->GetTotalLatency();
+				//totalReadResponses += tempDevice->GetTotalReadResponses();
 				directoryCount++;
 			}
 
@@ -1262,7 +1262,12 @@ void OSSim::simFinish()
 		out << "TotalDirectory:" << "totalReadResponses:" << totalReadResponses << endl;
 		out << "TotalDirectory:" << "totalLatencySimple:" << totalLatencySimple << endl;
 		out << "TotalDirectory:" << "totalReadResponsesSimple:" << totalReadResponsesSimple << endl;
-		unsigned long long averageWaitTime = totalLatency/totalReadResponses;
+		unsigned long long averageWaitTime = 0;
+		if (totalReadResponses != 0)
+		{
+			averageWaitTime = totalLatency/totalReadResponses;
+		}
+
 		unsigned long long averageWaitTimeSimple = 0;
 		if (totalReadResponsesSimple != 0)
 		{
