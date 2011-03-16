@@ -1,0 +1,73 @@
+#LyX 1.6.9 created this file. For more info see http://www.lyx.org/
+\lyxformat 345
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\language english
+\inputencoding auto
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\paperfontsize default
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_amsmath 1
+\use_esint 1
+\cite_engine basic
+\use_bibtopic false
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\author "" 
+\author "" 
+\end_header
+
+\begin_body
+
+\begin_layout Itemize
+The protocols you are looking at are not really directly applicable to CMPs
+ (chip multiprocessors) but were designed for older systems.
+ In particular, note that with the Origin 2000 there is part of main memory
+ with every node.
+ This is not the case on a CMP.
+ The way you can 
+\begin_inset Quotes eld
+\end_inset
+
+adapt
+\begin_inset Quotes erd
+\end_inset
+
+ the Origin 2000 protocol to CMPs is to consider a CMP where the last-level
+ cache is distributed across the nodes (cores) and you are ignoring misses
+ from the last-level cache.
+ So, if you want to talk about CMPs, you will need to explain the "mapping"
+ of the Origin 2000 protocol to CMPs along the lines of the text above.
+\end_layout
+
+\begin_layout Itemize
+A coherence protocol involves maintaining states for the blocks in the caches
+ as well as request and reply message types exchanged among the nodes of
+ the system.
+ Exaplin the basic states as well as the basic message types.
+\end_layout
+
+\end_body
+\end_document

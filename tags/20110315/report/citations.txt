@@ -1,0 +1,7 @@
+SPLASH2
+
+   J. Laudon and D. Lenoski, "The SGI Origin: A ccNUMA
+   Highly Scalable Server," 24th Annual International
+   Symposium on Computer Architecture, Denver, CO, pp.
+   241-251 (May 1997).
+

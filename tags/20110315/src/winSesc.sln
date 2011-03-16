@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual C++ Express 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "winSesc", "winSesc.vcxproj", "{A54864F1-6C99-4165-A176-888B5427ADC2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		fft-bip-2-8-16|Win32 = fft-bip-2-8-16|Win32
+		newtest-bip-4-256-4096|Win32 = newtest-bip-4-256-4096|Win32
+		newtest-bip-4-64-1024|Win32 = newtest-bip-4-64-1024|Win32
+		newtest-origin-4-256-4096|Win32 = newtest-origin-4-256-4096|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A54864F1-6C99-4165-A176-888B5427ADC2}.fft-bip-2-8-16|Win32.ActiveCfg = fft-bip-2-8-16|Win32
+		{A54864F1-6C99-4165-A176-888B5427ADC2}.fft-bip-2-8-16|Win32.Build.0 = fft-bip-2-8-16|Win32
+		{A54864F1-6C99-4165-A176-888B5427ADC2}.newtest-bip-4-256-4096|Win32.ActiveCfg = newtest-bip-4-256-4096|Win32
+		{A54864F1-6C99-4165-A176-888B5427ADC2}.newtest-bip-4-256-4096|Win32.Build.0 = newtest-bip-4-256-4096|Win32
+		{A54864F1-6C99-4165-A176-888B5427ADC2}.newtest-bip-4-64-1024|Win32.ActiveCfg = newtest-bip-4-64-1024|Win32
+		{A54864F1-6C99-4165-A176-888B5427ADC2}.newtest-bip-4-64-1024|Win32.Build.0 = newtest-bip-4-64-1024|Win32
+		{A54864F1-6C99-4165-A176-888B5427ADC2}.newtest-origin-4-256-4096|Win32.ActiveCfg = newtest-origin-4-256-4096|Win32
+		{A54864F1-6C99-4165-A176-888B5427ADC2}.newtest-origin-4-256-4096|Win32.Build.0 = newtest-origin-4-256-4096|Win32
+		{A54864F1-6C99-4165-A176-888B5427ADC2}.Release|Win32.ActiveCfg = Release|Win32
+		{A54864F1-6C99-4165-A176-888B5427ADC2}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

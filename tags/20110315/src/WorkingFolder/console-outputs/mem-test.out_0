@@ -1,0 +1,35 @@
+static[0x45bfc0-0x10000c8c] heap[0x10002000-0x18002000] stack[0x18002000-0x187fa000] -> [0x97b4f008-0xafeed048]
+Device : P(0)_DL1  Description : ProcessorInterface_0
+Device : P(0)_IL1  Description : InstSource
+Device : P(1)_DL1  Description : ProcessorInterface_1
+Device : P(1)_IL1  Description : InstSource
+Rabbit Mode Start 
+Start rabbit mode forever...
+Creating thread 0
+sesc_spawn( 0x400290, 0x0, 0x0 ) pid = 0, child pid = 1, child context = a032608
+Creating thread 1
+b
+mint_exit 1
+sesc_spawn( 0x400290, 0x0, 0x0 ) pid = 0, child pid = 1, child context = a032608
+Creating thread 2
+c
+mint_exit 1
+sesc_spawn( 0x400290, 0x0, 0x0 ) pid = 0, child pid = 1, child context = a032608
+Creating thread 3
+d
+mint_exit 1
+sesc_spawn( 0x400290, 0x0, 0x0 ) pid = 0, child pid = 1, child context = a032608
+Creating thread 4
+e
+mint_exit 1
+sesc_spawn( 0x400290, 0x0, 0x0 ) pid = 0, child pid = 1, child context = a032608
+mint_exit 0
+f
+mint_exit 1
+Leaving rabbit mode...
+Get out of 'has-work' loop
+Finished running 
+Dumping stats
+beginning collision detection dump
+dumping result set
+ending collision detection dump

@@ -1,0 +1,210 @@
+Begin
+Root MemoryDevice Begin
+String DeviceType TestMemory
+String DeviceName MainMemory
+Int DeviceID 1
+Int ReadLatency 57
+Int WriteLatency 66
+End
+Root MemoryDevice Begin
+Int DeviceID 2
+String DeviceType RandomLoadNetwork
+String DeviceName Network
+Root Connection Begin
+String LinkName Connection_0
+Int NodeName 0
+End
+Root Connection Begin
+String LinkName Connection_1
+Int NodeName 1
+End
+Root Connection Begin
+String LinkName MemoryConnection
+Int NodeName 12
+End
+Root CalculatorConfig Begin
+String Type RandomLoaded
+Int MinTime 100
+Int MaxTime 110
+Int TimePerByte 1
+Real TimePerPacket 0.1
+Int EnforceOrder 1
+End
+End
+Root MemoryDevice Begin
+String DeviceType NetworkMemoryInterface
+String DeviceName NMInt
+Int DeviceID 3
+Int NodeID 12
+End
+Root MemoryDevice Begin
+String DeviceType SESCInterface
+String DeviceName ProcessorInterface_0
+Int DeviceID 4
+End
+Root MemoryDevice Begin
+String DeviceType MOESICache
+String DeviceName L1_0
+Int DeviceID 5
+Int LineSize 64
+Int Associativity 4
+Int SetCount 256
+Int HitTime 1
+Int MissTime 3
+Int TopCache 1
+String EvictionPolicy LRU
+End
+Root MemoryDevice Begin
+String DeviceType MOESICache
+String DeviceName L2_0
+Int DeviceID 6
+Int LineSize 64
+Int Associativity 4
+Int SetCount 4096
+Int HitTime 4
+Int MissTime 7
+Int TopCache 0
+String EvictionPolicy LRU
+End
+Root MemoryDevice Begin
+Int DeviceID 7
+String DeviceType Directory
+String DeviceName Directory_0
+Int LocalSendTime 60
+Int RemoteSendTime 4
+Int LookupRetryTime 60
+Int LookupTime 4
+Int SatisfyTime 4
+Int NodeID 0
+Root MemoryNodeCalculator Begin
+String Type HashedPageCalculator
+Int PageSize 64
+IntSet NodeIDSet 1 { 12 }
+End
+Root DirectoryNodeCalculator Begin
+String Type HashedPageCalculator
+Int PageSize 64
+IntSet NodeIDSet 2 { 0 1 }
+End
+End
+Root Connection Begin
+String FromDevice ProcessorInterface_0
+String ToDevice L1_0
+String FromName Connection
+String ToName LocalConnection
+Int Latency 0
+End
+Root Connection Begin
+String FromDevice L1_0
+String ToDevice L2_0
+String FromName RemoteConnection
+String ToName LocalConnection
+Int Latency 0
+End
+Root Connection Begin
+String FromDevice L2_0
+String ToDevice Directory_0
+String FromName RemoteConnection
+String ToName LocalConnection
+Int Latency 0
+End
+Root Connection Begin
+String FromDevice Directory_0
+String ToDevice Network
+String FromName RemoteConnection
+String ToName Connection_0
+Int Latency 0
+End
+Root MemoryDevice Begin
+String DeviceType SESCInterface
+String DeviceName ProcessorInterface_1
+Int DeviceID 8
+End
+Root MemoryDevice Begin
+String DeviceType MOESICache
+String DeviceName L1_1
+Int DeviceID 9
+Int LineSize 64
+Int Associativity 4
+Int SetCount 256
+Int HitTime 1
+Int MissTime 3
+Int TopCache 1
+String EvictionPolicy LRU
+End
+Root MemoryDevice Begin
+String DeviceType MOESICache
+String DeviceName L2_1
+Int DeviceID 10
+Int LineSize 64
+Int Associativity 4
+Int SetCount 4096
+Int HitTime 4
+Int MissTime 7
+Int TopCache 0
+String EvictionPolicy LRU
+End
+Root MemoryDevice Begin
+Int DeviceID 11
+String DeviceType Directory
+String DeviceName Directory_1
+Int LocalSendTime 60
+Int RemoteSendTime 4
+Int LookupRetryTime 60
+Int LookupTime 4
+Int SatisfyTime 4
+Int NodeID 1
+Root MemoryNodeCalculator Begin
+String Type HashedPageCalculator
+Int PageSize 64
+IntSet NodeIDSet 1 { 12 }
+End
+Root DirectoryNodeCalculator Begin
+String Type HashedPageCalculator
+Int PageSize 64
+IntSet NodeIDSet 2 { 0 1 }
+End
+End
+Root Connection Begin
+String FromDevice ProcessorInterface_1
+String ToDevice L1_1
+String FromName Connection
+String ToName LocalConnection
+Int Latency 0
+End
+Root Connection Begin
+String FromDevice L1_1
+String ToDevice L2_1
+String FromName RemoteConnection
+String ToName LocalConnection
+Int Latency 0
+End
+Root Connection Begin
+String FromDevice L2_1
+String ToDevice Directory_1
+String FromName RemoteConnection
+String ToName LocalConnection
+Int Latency 0
+End
+Root Connection Begin
+String FromDevice Directory_1
+String ToDevice Network
+String FromName RemoteConnection
+String ToName Connection_1
+Int Latency 0
+End
+Root Connection Begin
+String FromDevice Network
+String ToDevice NMInt
+String FromName MemoryConnection
+String ToName NetworkConnection
+Int Latency 0
+End
+Root Connection Begin
+String FromDevice NMInt
+String ToDevice MainMemory
+String FromName MemoryConnection
+String ToName Remoteconnection
+Int Latency 0
+End
+End

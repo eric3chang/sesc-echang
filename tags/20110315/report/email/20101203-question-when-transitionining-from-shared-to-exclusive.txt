@@ -1,0 +1,14 @@
+Re:
+   The scenario you describe is possible.
+   The description in the paper does not really cover this situation.
+   It seems to me that this problem can be solved by having
+   the requestor transition to a "busy" state after sending the
+   original request and having this state persist until
+   it transitions to exclusive state in step 6c.
+   Any intervention requests arriving while the block is
+   in this "busy" state should be NACKed.
+
+I have attached two files indicating the changes I made to handle this last case. Fsm-directory.pdf indicates the directory's actions and fsm-other.pdf indicates the requester's actions. The relevant changes are colored in red. Is this what you meant in your comments?
+
+Eric
+

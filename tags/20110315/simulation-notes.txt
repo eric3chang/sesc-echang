@@ -1,0 +1,282 @@
+#cray - do not use cray. It only has 1GB of memory
+dorado
+illiac
+lion
+mpi
+
+apps: barnes, fmm, ocean, radiosity, raytrace, volrend, water-nsquared, water-spatial
+kernels: cholesky, fft, lu, radix
+
+all: barnes, cholesky, fft, fmm, lu, ocean, radiosity, radix, raytrace,
+volrend, water-nsquared, water-spatial
+
+dorado: fmm, lu, ocean
+illiac: barnes, cholesky, fft
+lion: radix, raytrace
+mpi: volrend
+
+illiac and lion can handle more than 1 run simultaneously
+
+NOT USED
+radiosity   # doesn't seem to drop out of rabbit mode
+water-nsquared, water-spatial     # seg-faults on ThreadContext.h line 336
+
+order for benchmarks on number of total instructions (size)
+fft, fmm (256 particles), radix, ocean, cholesky (wr10.O), lu, volrend(head), raytrace(car), barnes (16K particles)
+
+BARNES
+ < benchmarks-splash2-sesc/barnes-inputs/cpu2
+         infile
+16384    nbody   
+123      seed
+         outfile
+0.025    dtime
+0.05     eps
+1.0      tol
+2.0      fcells
+5.0      fleaves
+0.075    tstop
+0.25     dtout
+1        NPROC
+
+    1) infile (char*) : The name of an input file that contains particle
+       data.
+
+       The format of the file is:
+         a) An int representing the number of particles in the distribution
+         b) An int representing the dimensionality of the problem (3-D)
+         c) A double representing the current time of the simulation
+         d) Doubles representing the masses of all the particles
+         e) A vector (length equal to the dimensionality) of doubles
+            representing the positions of all the particles
+         f) A vector (length equal to the dimensionality) of doubles
+            representing the velocities of all the particles
+
+       Each of these numbers can be separated by any amount of whitespace.
+    2) nbody (int) : If no input file is specified (the first line is
+       blank), this number specifies the number of particles to generate
+       under a plummer model.  Default is 16384.
+    3) seed (int) : The seed used by the random number generator.
+       Default is 123.
+    4) outfile (char*) : The name of the file that snapshots will be
+       printed to. This feature has been disabled in the SPLASH release.
+       Default is NULL.
+    5) dtime (double) : The integration time-step.
+       Default is 0.025.
+    6) eps (double) : The usual potential softening
+       Default is 0.05.
+    7) tol (double) : The cell subdivision tolerance.
+       Default is 1.0.
+    8) fcells (double) : Number of cells created = fcells * number of 
+       leaves.
+       Default is 2.0.
+    9) fleaves (double) : Number of leaves created = fleaves * nbody.
+       Default is 0.5.
+    10) tstop (double) : The time to stop integration.
+       Default is 0.075.
+    11) dtout (double) : The data-output interval.
+       Default is 0.25.
+    12) NPROC (int) : The number of processors.
+       Default is 1.
+
+CHOLESKY
+-p2 -B32 -C16384 -t < benchmarks-splash2-sesc/cholesky-inputs/lshp.O
+/*  Sparse Cholesky Factorization (Fan-Out with no block copy-across)    */
+/*  -pP : P = number of processors.                                      */
+/*  -Bb : Use a postpass partition size of b.                            */
+/*  -Cc : Cache size in bytes.                                           */
+/*  -s  : Print individual processor timing statistics.                  */
+/*  -t  : Test output.                                                   */
+/*  -h  : Print out command line options.  
+default is tk15.O
+
+FFT
+-m10 -p2 -n65536 -l4 -t
+/*  Perform 1D fast Fourier transform using six-step FFT method          */
+/*                                                                       */
+/*  1) Performs staggered, blocked transposes for cache-line reuse       */
+/*  2) Roots of unity rearranged and distributed for only local          */
+/*     accesses during application of roots of unity                     */
+/*  3) Small set of roots of unity elements replicated locally for       */
+/*     1D FFTs (less than root N elements replicated at each node)       */
+/*  4) Matrix data structures are padded to reduce cache mapping         */
+/*     conflicts                                                         */
+/*                                                                       */
+/*  Command line options:                                                */
+/*                                                                       */
+/*  -mM : M = even integer; 2**M total complex data points transformed.  */
+/*  -pP : P = number of processors; Must be a power of 2.                */
+/*  -nN : N = number of cache lines.                                     */
+/*  -lL : L = Log base 2 of cache line length in bytes.                  */
+/*  -s  : Print individual processor timing statistics.                  */
+/*  -t  : Perform FFT and inverse FFT.  Test output by comparing the     */
+/*        integral of the original data to the integral of the data      */
+/*        that results from performing the FFT and inverse FFT.          */
+/*  -o  : Print out complex data points.                                 */
+/*  -h  : Print out command line options.                                */
+/*                                                                       */
+/*  Note: This version works under both the FORK and SPROC models        */
+
+FMM
+two cluster    Cluster Type
+plummer        Distribution Type
+256            Number of Particles (default is 16384, but I'm using 256)
+1e-6           Precision
+1              Number of Processors
+5              Number of Time Steps
+.025           Duration of a Time Step
+0.0            Softening Parameter
+cost zones     Partitioning Scheme
+
+   Usage: FMM <options> < inputfile
+
+    Command line options:
+
+      -o : Print out final particle positions.
+      -s : Print out individual processor timing statistics.
+      -h : Print out command line options
+
+    Input file parameter description:
+      There are a total of nine parameters, with parameters
+      three through seven having no default values.
+
+      1) Cluster Type : Particles are distributed either in one cluster, 
+         or two interacting clusters of size (# of particles)/ 2. 
+         These two options are selected by the strings "one cluster" or
+         "two cluster". The default is for two clusters.
+      2) Distribution Type : Particles are distributed in a cluster 
+         either in a spherical uniform distribution, or according to 
+         the Plummer model which typically has a large percentage of the 
+         particles close to the center of the sphere and fewer particles 
+         farther from the center.  There two options are selected by 
+         the strings "uniform" or "plummer". The default is for a 
+         plummer distribution.
+      3) Number Of Particles : Should be an integer greater than 0.
+      4) Precision : A measure of how accurate the calculation should be.
+         A precision of 1e-3 means that the results will be accurate to 
+         within three decimal places regardless of the relative magnitude 
+         of the positions.  The precision should be a real number greater 
+         than 0.
+      5) Number of Processors : Should be an integer greater than 0.
+      6) Number of Time Steps : Should be an integer greater than 0.
+      7) Duration of a Time Step : How long each time step lasts.
+         Should be a double greater than 0.
+      8) Softening Parameter : This value sets the minimum distance in 
+         each direction that two particles can be separated by.  If two 
+         particles are closer than this, the distance used for the 
+         calculation is changed to the softening parameter. The particle 
+         positions themselves are NOT changed. This number should be a 
+         real number greater than 0 and defaults to DBL_MIN or FLT_MIN, 
+         depending on what type of data is being used.
+      9) Partitioning Scheme : Sets which type of partitioning scheme
+         is used. There are currently two : "cost zones" and "orb".
+         The default is cost zones.
+
+LU
+-n512 -p2 -b16 -t
+/*  -nN : Decompose NxN matrix.                                          */
+/*  -pP : P = number of processors.                                      */
+/*  -bB : Use a block size of B. BxB elements should fit in cache for    */
+/*        good performance. Small block sizes (B=8, B=16) work well.     */
+/*  -s  : Print individual processor timing statistics.                  */
+/*  -t  : Test output.                                                   */
+/*  -o  : Print out matrix values.                                       */
+/*  -h  : Print out command line options.   
+
+OCEAN
+-n130 -p1 -e1e-7 -r20000.0 -t28800.0
+default is -n258
+/*     -nN : Simulate NxN ocean.  N must be (power of 2)+2.              */
+/*     -pP : P = number of processors.  P must be power of 2.            */
+/*     -eE : E = error tolerance for iterative relaxation.               */
+/*     -rR : R = distance between grid points in meters.                 */
+/*     -tT : T = timestep in seconds.                                    */
+/*     -s  : Print timing statistics.                                    */
+/*     -o  : Print out relaxation residual values.                       */
+/*     -h  : Print out command line options.                             */
+
+RADIOSITY
+The base problem size we recommend is to use the program as follows: 
+
+RADIOSITY -p ? -batch -room
+
+where ? is the number of processors.  This sets the ae, bf etc flags
+(see comment at top of rad_main.C or run "RADIOSITY -h" to see what
+these are) to their default values.  The default values can be found
+by looking at the comment at the top of rad_main.C or running
+"RADIOSITY -h".
+   -p    (d)  # of processes
+   -tq   (d)  # of tasks per queue: default (200) in code for SPLASH
+   -ae   (f)  Area epsilon: default (2000.0) in code for SPLASH
+   -pr   (d)  # of inter for parallel refinement: default (5) in code for SPLASH
+   -pv   (d)  # of visibility comp in a task: default (4) in code for SPLASH
+   -bf   (f)  BFepsilon (BF refinement): default (0.015) in code for SPLASH
+   -en   (f)  Energy epsilon (convergence): default (0.005) in code for SPLASH
+   -room      Use room model (default=test)
+   -largeroom Use large room model
+   -batch     Batch mode (use for SPLASH)
+   -verbose   Verbose mode (don't use for SPLASH)
+
+RADIX
+/*  Integer radix sort of non-negative integers.                         */
+/*  Default: RADIX -p1 -n262144 -r1024 -m524288                          */
+/*  Command line options:                                                */
+/*                                                                       */
+/*  -pP : P = number of processors.                                      */
+/*  -rR : R = radix for sorting.  Must be power of 2.                    */
+/*  -nN : N = number of keys to sort.                                    */
+/*  -mM : M = maximum key value.  Integer keys k will be generated such  */
+/*        that 0 <= k <= M.                                              */
+/*  -s  : Print individual processor timing statistics.                  */
+/*  -t  : Check to make sure all keys are sorted correctly.              */
+/*  -o  : Print out sorted keys.                                         */
+/*  -h  : Print out command line options.                                */
+/*                                                                       */
+
+RAYTRACE
+-p2 benchmarks-splash2-sesc/raytrace-inputs/balls4.env
+default is car.env
+ *	prt [options] envfile
+ *
+ *		-h	Print this usage message.
+ *		-a<n>	Enable antialiasing with n subpixels (default = 1).
+ *		-m<n>	Request n megabytes of global memory (default = 32).
+ *		-p<n>	Run on n processors (default = 1)
+
+VOLREND
+VOLREND num_processes head-scaleddown4
+      where input_file is head for the head data set. i.e. the filename
+          without a suffix
+
+WATER-SP & WATER-NSQ 
+water < benchmarks-splash2-sesc/water-inputs/cpu2
+  1.5e-16   512  3   6
+ -1      3000     3  0
+1 6.21275
+
+1.5e-16   TSTEP:   the physical time interval (in sec) between timesteps.  
+            Good default is 1e-15.
+512       NMOL:    the number of molecules to be simulated.
+3         NSTEP:   the number of timesteps to be simulated.
+6         NORDER:  the order of the predictor-corrector method to be used.
+            set this to 6.
+-1        NSAVE:   the frequency with which to save data in data collection.
+             Set to 0 always.
+3000      NRST:    the frequency with which to write RST file: set to 0 always (not used). 
+3         NPRINT:  the frequency with which to compute potential energy. 
+             i.e. the routine POTENG is called every NPRINT timesteps.
+             It also computes intermolecular as well as intramolecular
+             interactions, and hence is very expensive.
+0         NFMC:    Not used (historical artifact).  Set to anything, say 0.
+1         NumProcs: the number of processors to be used.
+6.21275   CUTOFF:  the cutoff radius to be used (in Angstrom, 
+             floating-point).  In a real simulation, this
+             will be set to 0 here in which case the program will 
+             compute it itself (and set it to about 11 Angstrom.   
+             It can be set by the user if they want
+             to use an artificially small cutoff radius, for example
+             to control the number of boxes created for small problems 
+             (and not have fewer boxes than processors). 
+
+
+
