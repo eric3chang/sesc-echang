@@ -1,7 +1,7 @@
 Group string ReportFileName results/cholesky-origin-8-64-256.memDevResults string BenchName cholesky
 
 DateTime
-DateTime:DateTime:03151124
+DateTime:DateTime:03162356
 
 TotalRunTime
 TotalRunTime:TotalRunTime:52185723
@@ -59,8 +59,6 @@ OriginDirectory_0:directoryTransfersReceived:0
 OriginDirectory_0:directoryWritebacksReceived:4757
 OriginDirectory_0:directoryWritebackRequestsReceived:37126
 OriginDirectory_0:directoryWriteResponsesReceived:0
-OriginDirectory_0:totalLatency:52494174
-OriginDirectory_0:totalReadResponses:86537
 
 MainMemory_0
 MainMemory_0:EvictionsReceived:0
@@ -114,8 +112,6 @@ OriginDirectory_1:directoryTransfersReceived:0
 OriginDirectory_1:directoryWritebacksReceived:4788
 OriginDirectory_1:directoryWritebackRequestsReceived:37020
 OriginDirectory_1:directoryWriteResponsesReceived:0
-OriginDirectory_1:totalLatency:44615837
-OriginDirectory_1:totalReadResponses:71149
 
 MainMemory_1
 MainMemory_1:EvictionsReceived:0
@@ -169,8 +165,6 @@ OriginDirectory_2:directoryTransfersReceived:0
 OriginDirectory_2:directoryWritebacksReceived:4722
 OriginDirectory_2:directoryWritebackRequestsReceived:36869
 OriginDirectory_2:directoryWriteResponsesReceived:0
-OriginDirectory_2:totalLatency:50960188
-OriginDirectory_2:totalReadResponses:83665
 
 MainMemory_2
 MainMemory_2:EvictionsReceived:0
@@ -224,8 +218,6 @@ OriginDirectory_3:directoryTransfersReceived:0
 OriginDirectory_3:directoryWritebacksReceived:4784
 OriginDirectory_3:directoryWritebackRequestsReceived:36377
 OriginDirectory_3:directoryWriteResponsesReceived:0
-OriginDirectory_3:totalLatency:41625517
-OriginDirectory_3:totalReadResponses:63819
 
 MainMemory_3
 MainMemory_3:EvictionsReceived:0
@@ -279,8 +271,6 @@ OriginDirectory_4:directoryTransfersReceived:0
 OriginDirectory_4:directoryWritebacksReceived:4777
 OriginDirectory_4:directoryWritebackRequestsReceived:37032
 OriginDirectory_4:directoryWriteResponsesReceived:0
-OriginDirectory_4:totalLatency:45922972
-OriginDirectory_4:totalReadResponses:74979
 
 MainMemory_4
 MainMemory_4:EvictionsReceived:0
@@ -334,8 +324,6 @@ OriginDirectory_5:directoryTransfersReceived:0
 OriginDirectory_5:directoryWritebacksReceived:4785
 OriginDirectory_5:directoryWritebackRequestsReceived:36715
 OriginDirectory_5:directoryWriteResponsesReceived:0
-OriginDirectory_5:totalLatency:56077762
-OriginDirectory_5:totalReadResponses:92980
 
 MainMemory_5
 MainMemory_5:EvictionsReceived:0
@@ -389,8 +377,6 @@ OriginDirectory_6:directoryTransfersReceived:0
 OriginDirectory_6:directoryWritebacksReceived:4774
 OriginDirectory_6:directoryWritebackRequestsReceived:36876
 OriginDirectory_6:directoryWriteResponsesReceived:0
-OriginDirectory_6:totalLatency:44896131
-OriginDirectory_6:totalReadResponses:69144
 
 MainMemory_6
 MainMemory_6:EvictionsReceived:0
@@ -444,8 +430,6 @@ OriginDirectory_7:directoryTransfersReceived:0
 OriginDirectory_7:directoryWritebacksReceived:4782
 OriginDirectory_7:directoryWritebackRequestsReceived:36583
 OriginDirectory_7:directoryWriteResponsesReceived:0
-OriginDirectory_7:totalLatency:46665014
-OriginDirectory_7:totalReadResponses:75175
 
 MainMemory_7
 MainMemory_7:EvictionsReceived:0
@@ -474,11 +458,11 @@ TotalCache:totalCacheWriteMisses:196685
 
 TotalDirectory
 TotalDirectory:directoryCount:8
-TotalDirectory:totalLatency:383257595
-TotalDirectory:totalReadResponses:617448
+TotalDirectory:totalLatency:0
+TotalDirectory:totalReadResponses:0
 TotalDirectory:totalLatencySimple:0
 TotalDirectory:totalReadResponsesSimple:0
-TotalDirectory:averageWaitTime:620
+TotalDirectory:averageWaitTime:0
 TotalDirectory:averageWaitTimeSimple:0
 
 EndGroup #

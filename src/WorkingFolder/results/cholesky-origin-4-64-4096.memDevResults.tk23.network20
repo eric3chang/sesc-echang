@@ -1,7 +1,7 @@
 Group string ReportFileName results/cholesky-origin-4-64-4096.memDevResults string BenchName cholesky
 
 DateTime
-DateTime:DateTime:03151054
+DateTime:DateTime:03162326
 
 TotalRunTime
 TotalRunTime:TotalRunTime:66366943
@@ -59,8 +59,6 @@ OriginDirectory_0:directoryTransfersReceived:0
 OriginDirectory_0:directoryWritebacksReceived:17923
 OriginDirectory_0:directoryWritebackRequestsReceived:5462
 OriginDirectory_0:directoryWriteResponsesReceived:0
-OriginDirectory_0:totalLatency:46023358
-OriginDirectory_0:totalReadResponses:78242
 
 MainMemory_0
 MainMemory_0:EvictionsReceived:0
@@ -114,8 +112,6 @@ OriginDirectory_1:directoryTransfersReceived:0
 OriginDirectory_1:directoryWritebacksReceived:18069
 OriginDirectory_1:directoryWritebackRequestsReceived:5498
 OriginDirectory_1:directoryWriteResponsesReceived:0
-OriginDirectory_1:totalLatency:33459537
-OriginDirectory_1:totalReadResponses:49567
 
 MainMemory_1
 MainMemory_1:EvictionsReceived:0
@@ -169,8 +165,6 @@ OriginDirectory_2:directoryTransfersReceived:0
 OriginDirectory_2:directoryWritebacksReceived:17953
 OriginDirectory_2:directoryWritebackRequestsReceived:5410
 OriginDirectory_2:directoryWriteResponsesReceived:0
-OriginDirectory_2:totalLatency:48199337
-OriginDirectory_2:totalReadResponses:75352
 
 MainMemory_2
 MainMemory_2:EvictionsReceived:0
@@ -224,8 +218,6 @@ OriginDirectory_3:directoryTransfersReceived:0
 OriginDirectory_3:directoryWritebacksReceived:17817
 OriginDirectory_3:directoryWritebackRequestsReceived:5444
 OriginDirectory_3:directoryWriteResponsesReceived:0
-OriginDirectory_3:totalLatency:36960874
-OriginDirectory_3:totalReadResponses:57697
 
 MainMemory_3
 MainMemory_3:EvictionsReceived:0
@@ -254,11 +246,11 @@ TotalCache:totalCacheWriteMisses:151920
 
 TotalDirectory
 TotalDirectory:directoryCount:4
-TotalDirectory:totalLatency:164643106
-TotalDirectory:totalReadResponses:260858
+TotalDirectory:totalLatency:0
+TotalDirectory:totalReadResponses:0
 TotalDirectory:totalLatencySimple:0
 TotalDirectory:totalReadResponsesSimple:0
-TotalDirectory:averageWaitTime:631
+TotalDirectory:averageWaitTime:0
 TotalDirectory:averageWaitTimeSimple:0
 
 EndGroup #
