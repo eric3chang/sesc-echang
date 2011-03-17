@@ -1,11 +1,6 @@
 #!/bin/bash
+DATE=$(date "+%m%d%H%M")
+HOSTNAME=$(hostname)
+AUGSESC=augSesc-Debug
 
-./runfile-fft-bip-all.sh
-./runfile-fft-origin-all.sh
-./runfile-lu-origin-all.sh
-#./runfile-newtest-bip-all.sh
-#./runfile-newtest-origin-all.sh
-#./runfile-radix-bip-all.sh
-#./runfile-radix-origin-all.sh
-#./runfile-ocean-bip-all.sh
-#./runfile-ocean-origin-all.sh
+nice -10 ./$AUGSESC -cconfigs/workFile/fft-origin-32-64-128.conf -dconfigs/workFile/fft-origin-32-64-128.conf.report benchmarks-splash2-sesc/fft.mips -m12 -p32 -n65536 -l4 -t
