@@ -946,7 +946,9 @@ namespace Memory
    			SendMessageToDirectory(tm, false);
 
    			ClearTempCacheData(cacheData);
-			
+   			// do not dispose, this is the same message as firstReply
+   			//EM().DisposeMsg(m);
+				
    			cacheData.SetCacheState(cs_Shared);
    		} // if (!m->requestingExclusive)
    		else
@@ -968,7 +970,9 @@ namespace Memory
    			SendMessageToDirectory(tm, false);
 
    			ClearTempCacheData(cacheData);
-				
+   			// do not dispose, this is the same message as firstReply
+   			//EM().DisposeMsg(m);
+					
    			cacheData.SetCacheState(cs_Invalid);
    		} // else m is requesting exclusive
 		} // if (msg->Type()==mt_Intervention)
@@ -1036,7 +1040,10 @@ namespace Memory
 
    			//EM().DisposeMsg(msg);
    			ClearTempCacheData(cacheData);
-   		} // if (firstReply->requestingExclusive)
+   			// do not dispose, this is the same message as firstReply
+   			//EM().DisposeMsg(m);
+
+	  		} // if (firstReply->requestingExclusive)
    		else
    		{
    			cacheData.SetCacheState(cs_Shared);
@@ -1059,7 +1066,9 @@ namespace Memory
 
    			//EM().DisposeMsg(msg);
    			ClearTempCacheData(cacheData);
-   		} // else !(if (m->requestingExclusive)
+   			// do not dispose, this is the same message as firstReply
+   			//EM().DisposeMsg(m);
+    		} // else !(if (m->requestingExclusive)
    	} // else if (msg->Type()==mt_Intervention)
 		else
 		{
@@ -1142,8 +1151,6 @@ namespace Memory
 				}
 				else
 				{
-					//TODO!!!!!
-					//OnCacheDirtyExclusive(m, src, cacheData);
 					OnCacheCleanExclusive(m, src, cacheData);
 				}
 			}
@@ -1318,9 +1325,9 @@ namespace Memory
 				SendMessageToDirectory(tm, false);
 			}
 
-   		//EM().DisposeMsg(msg);
 			EM().DisposeMsg(secondReply);
    		ClearTempCacheData(cacheData);
+   		//EM().DisposeMsg(m);
 
 			// should be set to invalid always regardless of the interventionMessage because
 				// we received an eviction from the local cache			
@@ -1438,7 +1445,8 @@ namespace Memory
 			ProcessInvalidateWhileInvalid(m, src);
 		}
 		/*
-		 * this fix doesn't work
+		//this fix doesn't work, it only leads to requests being dropped
+		 //and a hanging system
 		else if (msg->Type()==mt_InvalidateResponse)
 		{
 			// ignore this message
@@ -1512,7 +1520,16 @@ namespace Memory
 		{
 			const EvictionMsg* m = (const EvictionMsg*)msg;
 
-			cacheData.SetCacheState(cs_Invalid);
+			// only set cache state to invalid if we haven't received
+				// an invalidate
+			if (cacheData.firstReply!=NULL)
+			{
+				DebugAssertWithMessageID(cacheData.firstReply->Type()==mt_Invalidate,m->MsgID());
+			}
+			else
+			{
+				cacheData.SetCacheState(cs_Invalid);
+			}
 
 			// send Eviction Response Msg to cache
 			EvictionResponseMsg* erm = EM().CreateEvictionResponseMsg(GetDeviceID(), m->GeneratingDeviceID());
@@ -1716,7 +1733,7 @@ namespace Memory
 			invalidAcksReceived++;
 			cacheData.SetCacheState(cs_WaitingForKInvalidatesJInvalidatesReceived);
 
-			//EM().DisposeMsg(msg);
+			//EM().DisposeMsg(m);
 		}
 		else if (msg->Type()==mt_SpeculativeReply)
 		{
