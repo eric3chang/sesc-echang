@@ -1,7 +1,7 @@
 Group string ReportFileName results/cholesky-bip-16-64-1024.memDevResults string BenchName cholesky
 
 DateTime
-DateTime:DateTime:03140523
+DateTime:DateTime:03131310
 
 TotalRunTime
 TotalRunTime:TotalRunTime:27682735
@@ -895,7 +895,6 @@ TotalCache:totalCacheWriteHits:22863530
 TotalCache:totalCacheWriteMisses:165619
 
 TotalDirectory
-TotalDirectory:directoryCount:16
 TotalDirectory:totalLatency:1281625506
 TotalDirectory:totalReadResponses:511504
 TotalDirectory:averageWaitTime:2505
