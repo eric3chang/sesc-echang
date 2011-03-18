@@ -186,15 +186,21 @@ key "LAU00"
 \end_layout
 
 \begin_layout Standard
+For 
+\end_layout
+
+\begin_layout Standard
 In the following section of the paper, an overview of how each components
  are connected together to form the complete system is presented.
  Section 3 shows the details of each individual component in the system.
  Section 4 talks about the basic message types that are present in the system.
  Implementation and comparison of protocols is presented in Section 5.
- Performance of the two types of protocols is presented in Section 6.
- Section 7 describes some of the problems faced in simulating the protocols
+ Section 6 discusses the experimental setup used in the simulation.
+ Performance and results of the two types of protocols is presented in Section
+ 7.
+ Section 8 describes some of the problems faced in simulating the protocols
  and some possible future works.
- Finally, section 8 concludes the report.
+ Finally, section 9 concludes the report.
 \end_layout
 
 \begin_layout Section
@@ -390,10 +396,11 @@ The most important job of any cache coherence protocols is to maintain data
  for the blocks in the caches.
  Each individual cache needs to know the state of its own block, but the
  caches also need to communicate to each other about block states by sending
- messages to each other.
+ messages to each other over a network.
  In a directory-based cache coherence protocol, the directory is responsible
  for storing some of these states.
- I will introduce the cache and the directory in the following sections.
+ I will introduce the network, the cache, and the directory in the following
+ sections.
 \end_layout
 
 \begin_layout Subsection
@@ -402,7 +409,8 @@ Network
 
 \begin_layout Standard
 The network connects the different nodes of the system together.
- There are 
+ It is responsible for making sure that the different nodes receive the
+ packets, as desired.
 \end_layout
 
 \begin_layout Subsection
@@ -3835,7 +3843,29 @@ reference "tab:latencies"
  The latencies for the memory are significantly larger than the caches,
  but is still relatively small to simulate the behavior of main memory in
  a DSM.
- 
+\end_layout
+
+\begin_layout Standard
+The underlying network in use for this simulator is a simple black box model.
+ It does not model a real network with routing.
+ Instead it models messages going in and out of the network using a random
+ delay with a lower-bound of 4 and an upper-bound of 20.
+ When more messages arrive, the delay coming from the random delay generator
+ will be shifted higher as to model the higher traffic conditions.
+\end_layout
+
+\begin_layout Standard
+In the simulator, we make sure that whenever a message is being sent to
+ a remote node that has the same node ID as the current node, we send the
+ message to itself.
+ For example, if processor 1 requests a block A, where processor 1 is block
+ A's home node, sending a network message from a node to itself it pointless
+ and just results in needless network traffic.
+ We perform a check to see if the destination for a message is the same
+ as the source of the message, previous to sending the network message.
+ If this is the case, it just forwards it straight on to the function that
+ would handle it on the local directory node rather than emitting something
+ on the network.
 \end_layout
 
 \begin_layout Section
@@ -4440,7 +4470,7 @@ FFT
 \begin_inset Float figure
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -4573,7 +4603,7 @@ Radix
 \begin_inset Float figure
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -5033,6 +5063,17 @@ key "LAU00"
 \end_inset
 
 .
+\end_layout
+
+\begin_layout Standard
+We could have used a more complicated network, one that simulates router-router
+ connection and uses routing protocols, but such a network was not available
+ at the time in the simulator, and the black box network serves its purpose
+ for delivering messages to and from all the directories, as well as the
+ main memory.
+ Although the SESC simulator has the capability to model a more complicated
+ network, a simple network, such as the one used here, can illustrate our
+ point.
 \end_layout
 
 \begin_layout Section
