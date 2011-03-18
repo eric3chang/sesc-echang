@@ -48,7 +48,8 @@ def generateConfig(benchmarkName, directoryType, processorCount, L1Size, L2Size,
     outFile.write('FilterSize = 64\n')
     # don't need to write ReportFile, since it has no useful information
     #outFile.write("ReportFile = 'results/" + outFilename + ".report'\n")
-    outFile.write("MemDeviceReportFile = 'results/" + outFilename + ".memDevResults." + memoryfilePrefix + "'\n")
+    #outFile.write("MemDeviceReportFile = 'results/" + outFilename + ".memDevResults." + memoryfilePrefix + "'\n")
+    outFile.write("MemDeviceReportFile = 'results/" + outFilename + ".memDevResults'\n")
     outFile.write("CompositionResultFile = 'results/" + outFilename + ".dat'\n")
     outFile.write("BenchName = '" + benchmarkName + "'\n")
     outFile.write('MemorySystemConfig = "' + MEMORY_SYSTEM_CONFIG_DIRECTORY + memoryfilePrefix + "-" + directoryType \
@@ -89,7 +90,7 @@ def generateAllBenchmarks(benchmarkNames, directoryType, processorCountLow, proc
 
 def main():
     #benchmarkNames = ['cholesky', 'fft', 'lu', 'newtest', 'radix', 'ocean']
-    benchmarkNames = ['lu']
+    benchmarkNames = ['newtest2']
     directoryTypes = ['bip','origin']
     processorCountLow = '4'
     processorCountHi = '32'
@@ -99,8 +100,8 @@ def main():
     #L2Hi = '4096'
     L2Low = '128'
     L2Hi = '4096'
-    memoryfilePrefix = 'network05'
-    #memoryfilePrefix = 'network10'
+    #memoryfilePrefix = 'network05'
+    memoryfilePrefix = 'network10'
     #memoryfilePrefix = 'network20'
     #memoryfilePrefix = 'network90'
 

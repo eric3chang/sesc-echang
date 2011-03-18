@@ -1,5 +1,3 @@
-#define USE_SESC
-
 #ifdef USE_SESC
    #include "sescapi.h"
 #else
@@ -25,6 +23,11 @@
  * */
 
 volatile int myInt = 1;
+#ifdef USE_SESC
+slock_t myLock;
+#else
+pthread_mutex_t myLock;
+#endif
 
 void *readInt(void *numberOfLoops)
 {
@@ -34,7 +37,17 @@ void *readInt(void *numberOfLoops)
    
    for (i=0; i<*((int*)numberOfLoops); i++)
    {
+#ifdef USE_SESC
+      sesc_lock(&myLock);
+#else
+      pthread_mutex_lock(&myLock);
+#endif
       localInt = myInt;
+#ifdef USE_SESC
+      sesc_unlock(&myLock);
+#else
+      pthread_mutex_unlock(&myLock);
+#endif
    }
 #ifdef USE_SESC
    sesc_exit(0);
@@ -43,12 +56,22 @@ void *readInt(void *numberOfLoops)
 #endif
 }
 
-void *writeInt(void *numberOfLoops)
+void *incInt(void *numberOfLoops)
 {
    int i=0;
    for (i=0; i<*((int*)numberOfLoops); i++)
    {
+#ifdef USE_SESC
+      sesc_lock(&myLock);
+#else
+      pthread_mutex_lock(&myLock);
+#endif
       myInt = myInt + 1;
+#ifdef USE_SESC
+      sesc_unlock(&myLock);
+#else
+      pthread_mutex_unlock(&myLock);
+#endif
    }
 #ifdef USE_SESC
    sesc_exit(0);
@@ -62,8 +85,15 @@ int main(int argc, char** argv)
 {
 #ifdef USE_SESC
 	sesc_init();
+   sesc_lock_init(&myLock);
 #else
    pthread_t threads[MAX_NUM_THREADS];
+   int error = pthread_mutex_init(&myLock,0);
+   if (error)
+   {
+      printf("Error initializing lock\n");
+      return(1);
+   }
 #endif
    char *tempString = NULL;
    int t = 0;
@@ -114,25 +144,52 @@ int main(int argc, char** argv)
  */
 
    // calculate the number of Loops
-   numberOfLoops = numberOfReads / (processorCount-2);
+   //numberOfLoops = numberOfReads / (processorCount-2);
+   numberOfLoops = numberOfReads / processorCount;
    printf("numberOfLoops=%d\n", numberOfLoops);
 
-   for (t=0; t<threadIndexMax; t++)
+   t = 0;
+   while (1)
    {
-      printf("Creating read thread %d\n", t*2);
+      printf("Creating read thread %d\n", t);
 #ifdef USE_SESC
-      sesc_spawn((void (*)(void*)) *readInt, &numberOfLoops, 0);
+      sesc_spawn((void (*)(void*)) *readInt, &numberOfLoops, SESC_FLAG_NOMIGRATE|SESC_FLAG_MAP|t+1);
 #else
-      pthread_create(&threads[t*2], NULL, readInt, &numberOfLoops);
+      pthread_create(&threads[t], NULL, readInt, &numberOfLoops);
 #endif
-      printf("Creating write thread %d\n", t*2+1);
+      t++;
+      if (t >= processorCount-1)
+      {
+         break;
+      }
+      printf("Creating write thread %d\n", t);
 #ifdef USE_SESC
-      sesc_spawn((void (*)(void*)) *writeInt, &numberOfLoops, 0);
+      sesc_spawn((void (*)(void*)) *incInt, &numberOfLoops, SESC_FLAG_NOMIGRATE|SESC_FLAG_MAP|t+1);
 #else
-      pthread_create(&threads[t*2+1], NULL, writeInt, &numberOfLoops);
+      pthread_create(&threads[t], NULL, incInt, &numberOfLoops);
+#endif
+      t++;
+   }
+
+   printf("Creating write thread %d\n", t);
+
+   // begin incInt section
+   for (t=0; t<numberOfLoops; t++)
+   {
+#ifdef USE_SESC
+      sesc_lock(&myLock);
+#else
+      pthread_mutex_lock(&myLock);
+#endif
+      myInt = myInt + 1;
+#ifdef USE_SESC
+      sesc_unlock(&myLock);
+#else
+      pthread_mutex_unlock(&myLock);
 #endif
    }
- 
+   // end incInt section
+
 #ifdef USE_SESC
    sesc_wait(); // wait for threads to finish
 	sesc_exit(0);
