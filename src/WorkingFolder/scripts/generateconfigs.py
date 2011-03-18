@@ -48,10 +48,10 @@ def generateConfig(benchmarkName, directoryType, processorCount, L1Size, L2Size,
     outFile.write('FilterSize = 64\n')
     # don't need to write ReportFile, since it has no useful information
     #outFile.write("ReportFile = 'results/" + outFilename + ".report'\n")
-    outFile.write("MemDeviceReportFile = 'results/" + outFilename + ".memDevResults'\n")
+    outFile.write("MemDeviceReportFile = 'results/" + outFilename + ".memDevResults." + memoryfilePrefix + "'\n")
     outFile.write("CompositionResultFile = 'results/" + outFilename + ".dat'\n")
     outFile.write("BenchName = '" + benchmarkName + "'\n")
-    outFile.write('MemorySystemConfig = "' + MEMORY_SYSTEM_CONFIG_DIRECTORY + memoryfilePrefix + directoryType \
+    outFile.write('MemorySystemConfig = "' + MEMORY_SYSTEM_CONFIG_DIRECTORY + memoryfilePrefix + "-" + directoryType \
         + '-p' + processorCount + '-c' + L1Size + 'L1-' + L2Size + 'L2.memory"\n')
     outFile.write('<base_' + processorCount + 'cpu.conf>\n')
     outFile.write('\n')
@@ -88,7 +88,8 @@ def generateAllBenchmarks(benchmarkNames, directoryType, processorCountLow, proc
             memoryfilePrefix,L2Low,L2Hi)
 
 def main():
-    benchmarkNames = ['cholesky', 'fft', 'lu', 'newtest', 'radix', 'ocean']
+    #benchmarkNames = ['cholesky', 'fft', 'lu', 'newtest', 'radix', 'ocean']
+    benchmarkNames = ['lu']
     directoryTypes = ['bip','origin']
     processorCountLow = '4'
     processorCountHi = '32'
@@ -98,10 +99,10 @@ def main():
     #L2Hi = '4096'
     L2Low = '128'
     L2Hi = '4096'
-    #memoryfilePrefix = ''
-    #memoryfilePrefix = 'network10-'
-    #memoryfilePrefix = 'network0.5-'
-    memoryfilePrefix = 'network2.0-'
+    memoryfilePrefix = 'network05'
+    #memoryfilePrefix = 'network10'
+    #memoryfilePrefix = 'network20'
+    #memoryfilePrefix = 'network90'
 
     for directory in directoryTypes:
        generateAllBenchmarks(benchmarkNames, directory, processorCountLow, processorCountHi, L1Low, L1Hi,memoryfilePrefix,L2Low,L2Hi)
