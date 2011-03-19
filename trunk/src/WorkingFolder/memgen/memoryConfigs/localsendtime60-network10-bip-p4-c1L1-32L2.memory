@@ -1,0 +1,379 @@
+Begin
+Root MemoryDevice Begin
+Int DeviceID 1
+String DeviceType RandomLoadNetwork
+String DeviceName Network
+Root Connection Begin
+String LinkName Connection_0
+Int NodeName 0
+End
+Root Connection Begin
+String LinkName Connection_1
+Int NodeName 1
+End
+Root Connection Begin
+String LinkName Connection_2
+Int NodeName 2
+End
+Root Connection Begin
+String LinkName Connection_3
+Int NodeName 3
+End
+Root CalculatorConfig Begin
+String Type RandomLoaded
+Int MinTime 100
+Int MaxTime 110
+Int TimePerByte 1
+Real TimePerPacket 0.1
+Int EnforceOrder 0
+End
+End
+Root MemoryDevice Begin
+String DeviceType SESCInterface
+String DeviceName ProcessorInterface_0
+Int DeviceID 2
+End
+Root MemoryDevice Begin
+String DeviceType BIPMOESICache
+String DeviceName L1_0
+Int DeviceID 3
+Int LineSize 64
+Int Associativity 4
+Int SetCount 4
+Int HitTime 1
+Int MissTime 2
+Int TopCache 1
+String EvictionPolicy LRU
+End
+Root MemoryDevice Begin
+String DeviceType BIPMOESICache
+String DeviceName L2_0
+Int DeviceID 4
+Int LineSize 64
+Int Associativity 4
+Int SetCount 128
+Int HitTime 10
+Int MissTime 13
+Int TopCache 0
+String EvictionPolicy LRU
+End
+Root MemoryDevice Begin
+Int DeviceID 5
+String DeviceType BIPDirectory
+String DeviceName BIPDirectory_0
+Int LocalSendTime 60
+Int RemoteSendTime 4
+Int LookupRetryTime 60
+Int LookupTime 4
+Int SatisfyTime 4
+Int NodeID 0
+Root DirectoryNodeCalculator Begin
+String Type HashedPageCalculator
+Int PageSize 64
+IntSet NodeIDSet 4 { 0 1 2 3 }
+End
+End
+Root MemoryDevice Begin
+String DeviceType TestMemory
+String DeviceName MainMemory_0
+Int DeviceID 6
+Int ReadLatency 57
+Int WriteLatency 66
+End
+Root Connection Begin
+String FromDevice ProcessorInterface_0
+String ToDevice L1_0
+String FromName Connection
+String ToName LocalConnection
+Int Latency 0
+End
+Root Connection Begin
+String FromDevice L1_0
+String ToDevice L2_0
+String FromName RemoteConnection
+String ToName LocalConnection
+Int Latency 0
+End
+Root Connection Begin
+String FromDevice L2_0
+String ToDevice BIPDirectory_0
+String FromName RemoteConnection
+String ToName LocalCacheConnection
+Int Latency 0
+End
+Root Connection Begin
+String FromDevice MainMemory_0
+String ToDevice BIPDirectory_0
+String FromName RemoteConnection
+String ToName LocalMemoryConnection
+Int Latency 0
+End
+Root Connection Begin
+String FromDevice BIPDirectory_0
+String ToDevice Network
+String FromName RemoteConnection
+String ToName Connection_0
+Int Latency 0
+End
+Root MemoryDevice Begin
+String DeviceType SESCInterface
+String DeviceName ProcessorInterface_1
+Int DeviceID 7
+End
+Root MemoryDevice Begin
+String DeviceType BIPMOESICache
+String DeviceName L1_1
+Int DeviceID 8
+Int LineSize 64
+Int Associativity 4
+Int SetCount 4
+Int HitTime 1
+Int MissTime 2
+Int TopCache 1
+String EvictionPolicy LRU
+End
+Root MemoryDevice Begin
+String DeviceType BIPMOESICache
+String DeviceName L2_1
+Int DeviceID 9
+Int LineSize 64
+Int Associativity 4
+Int SetCount 128
+Int HitTime 10
+Int MissTime 13
+Int TopCache 0
+String EvictionPolicy LRU
+End
+Root MemoryDevice Begin
+Int DeviceID 10
+String DeviceType BIPDirectory
+String DeviceName BIPDirectory_1
+Int LocalSendTime 60
+Int RemoteSendTime 4
+Int LookupRetryTime 60
+Int LookupTime 4
+Int SatisfyTime 4
+Int NodeID 1
+Root DirectoryNodeCalculator Begin
+String Type HashedPageCalculator
+Int PageSize 64
+IntSet NodeIDSet 4 { 0 1 2 3 }
+End
+End
+Root MemoryDevice Begin
+String DeviceType TestMemory
+String DeviceName MainMemory_1
+Int DeviceID 11
+Int ReadLatency 57
+Int WriteLatency 66
+End
+Root Connection Begin
+String FromDevice ProcessorInterface_1
+String ToDevice L1_1
+String FromName Connection
+String ToName LocalConnection
+Int Latency 0
+End
+Root Connection Begin
+String FromDevice L1_1
+String ToDevice L2_1
+String FromName RemoteConnection
+String ToName LocalConnection
+Int Latency 0
+End
+Root Connection Begin
+String FromDevice L2_1
+String ToDevice BIPDirectory_1
+String FromName RemoteConnection
+String ToName LocalCacheConnection
+Int Latency 0
+End
+Root Connection Begin
+String FromDevice MainMemory_1
+String ToDevice BIPDirectory_1
+String FromName RemoteConnection
+String ToName LocalMemoryConnection
+Int Latency 0
+End
+Root Connection Begin
+String FromDevice BIPDirectory_1
+String ToDevice Network
+String FromName RemoteConnection
+String ToName Connection_1
+Int Latency 0
+End
+Root MemoryDevice Begin
+String DeviceType SESCInterface
+String DeviceName ProcessorInterface_2
+Int DeviceID 12
+End
+Root MemoryDevice Begin
+String DeviceType BIPMOESICache
+String DeviceName L1_2
+Int DeviceID 13
+Int LineSize 64
+Int Associativity 4
+Int SetCount 4
+Int HitTime 1
+Int MissTime 2
+Int TopCache 1
+String EvictionPolicy LRU
+End
+Root MemoryDevice Begin
+String DeviceType BIPMOESICache
+String DeviceName L2_2
+Int DeviceID 14
+Int LineSize 64
+Int Associativity 4
+Int SetCount 128
+Int HitTime 10
+Int MissTime 13
+Int TopCache 0
+String EvictionPolicy LRU
+End
+Root MemoryDevice Begin
+Int DeviceID 15
+String DeviceType BIPDirectory
+String DeviceName BIPDirectory_2
+Int LocalSendTime 60
+Int RemoteSendTime 4
+Int LookupRetryTime 60
+Int LookupTime 4
+Int SatisfyTime 4
+Int NodeID 2
+Root DirectoryNodeCalculator Begin
+String Type HashedPageCalculator
+Int PageSize 64
+IntSet NodeIDSet 4 { 0 1 2 3 }
+End
+End
+Root MemoryDevice Begin
+String DeviceType TestMemory
+String DeviceName MainMemory_2
+Int DeviceID 16
+Int ReadLatency 57
+Int WriteLatency 66
+End
+Root Connection Begin
+String FromDevice ProcessorInterface_2
+String ToDevice L1_2
+String FromName Connection
+String ToName LocalConnection
+Int Latency 0
+End
+Root Connection Begin
+String FromDevice L1_2
+String ToDevice L2_2
+String FromName RemoteConnection
+String ToName LocalConnection
+Int Latency 0
+End
+Root Connection Begin
+String FromDevice L2_2
+String ToDevice BIPDirectory_2
+String FromName RemoteConnection
+String ToName LocalCacheConnection
+Int Latency 0
+End
+Root Connection Begin
+String FromDevice MainMemory_2
+String ToDevice BIPDirectory_2
+String FromName RemoteConnection
+String ToName LocalMemoryConnection
+Int Latency 0
+End
+Root Connection Begin
+String FromDevice BIPDirectory_2
+String ToDevice Network
+String FromName RemoteConnection
+String ToName Connection_2
+Int Latency 0
+End
+Root MemoryDevice Begin
+String DeviceType SESCInterface
+String DeviceName ProcessorInterface_3
+Int DeviceID 17
+End
+Root MemoryDevice Begin
+String DeviceType BIPMOESICache
+String DeviceName L1_3
+Int DeviceID 18
+Int LineSize 64
+Int Associativity 4
+Int SetCount 4
+Int HitTime 1
+Int MissTime 2
+Int TopCache 1
+String EvictionPolicy LRU
+End
+Root MemoryDevice Begin
+String DeviceType BIPMOESICache
+String DeviceName L2_3
+Int DeviceID 19
+Int LineSize 64
+Int Associativity 4
+Int SetCount 128
+Int HitTime 10
+Int MissTime 13
+Int TopCache 0
+String EvictionPolicy LRU
+End
+Root MemoryDevice Begin
+Int DeviceID 20
+String DeviceType BIPDirectory
+String DeviceName BIPDirectory_3
+Int LocalSendTime 60
+Int RemoteSendTime 4
+Int LookupRetryTime 60
+Int LookupTime 4
+Int SatisfyTime 4
+Int NodeID 3
+Root DirectoryNodeCalculator Begin
+String Type HashedPageCalculator
+Int PageSize 64
+IntSet NodeIDSet 4 { 0 1 2 3 }
+End
+End
+Root MemoryDevice Begin
+String DeviceType TestMemory
+String DeviceName MainMemory_3
+Int DeviceID 21
+Int ReadLatency 57
+Int WriteLatency 66
+End
+Root Connection Begin
+String FromDevice ProcessorInterface_3
+String ToDevice L1_3
+String FromName Connection
+String ToName LocalConnection
+Int Latency 0
+End
+Root Connection Begin
+String FromDevice L1_3
+String ToDevice L2_3
+String FromName RemoteConnection
+String ToName LocalConnection
+Int Latency 0
+End
+Root Connection Begin
+String FromDevice L2_3
+String ToDevice BIPDirectory_3
+String FromName RemoteConnection
+String ToName LocalCacheConnection
+Int Latency 0
+End
+Root Connection Begin
+String FromDevice MainMemory_3
+String ToDevice BIPDirectory_3
+String FromName RemoteConnection
+String ToName LocalMemoryConnection
+Int Latency 0
+End
+Root Connection Begin
+String FromDevice BIPDirectory_3
+String ToDevice Network
+String FromName RemoteConnection
+String ToName Connection_3
+Int Latency 0
+End
+End
