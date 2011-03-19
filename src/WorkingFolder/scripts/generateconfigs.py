@@ -91,18 +91,23 @@ def generateAllBenchmarks(benchmarkNames, directoryType, processorCountLow, proc
 def main():
     benchmarkNames = ['cholesky', 'fft', 'newtest', 'radix', 'ocean']
     directoryTypes = ['bip','origin']
-    processorCountLow = '128'
-    processorCountHi = '128'
+    processorCountLow = '2'
+    processorCountHi = '32'
     L1Low = '64'
     L1Hi = '64'
     #L2Low = '128'
+    #L2Low = '512'
     #L2Hi = '4096'
-    L2Low = '128'
+    L2Low = '512'
     L2Hi = '4096'
-    memoryfilePrefix = 'network05'
-    #memoryfilePrefix = 'network10'
-    #memoryfilePrefix = 'network20'
-    #memoryfilePrefix = 'network90'
+    memoryfilePrefix = 'localsendtime4-network05'
+    #memoryfilePrefix = 'localsendtime4-network10'
+    #memoryfilePrefix = 'localsendtime4-network20'
+    #memoryfilePrefix = 'localsendtime4-network90'
+    #memoryfilePrefix = 'localsendtime60-network05'
+    #memoryfilePrefix = 'localsendtime60-network10'
+    #memoryfilePrefix = 'localsendtime60-network20'
+    #memoryfilePrefix = 'localsendtime60-network90'
 
     for directory in directoryTypes:
        generateAllBenchmarks(benchmarkNames, directory, processorCountLow, processorCountHi, L1Low, L1Hi,memoryfilePrefix,L2Low,L2Hi)

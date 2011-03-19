@@ -94,22 +94,6 @@ namespace Memory
 		}
    }
 
-   void BIPDirectory::dump(AddrTDReadMultimap &m)
-   {
-   	AddrTDReadMultimap::const_iterator i,j;
-		i = m.begin();
-		j = m.end();
-
-		std::cout << "[" << "dump" << "]" << std::endl;
-		for(; i != j; ++i)
-		{
-			std::cout << '[' << setw(2) << i->first << "]";
-			const TimeData<ReadMsg>& ld = i->second;
-			ld.msg->print(0);
-			std::cout << std::endl;
-		}
-   }
-
    void BIPDirectory::dump(AddrLDReadMap &m)
    {
    	AddrLDReadMap::const_iterator i,j;
@@ -143,22 +127,6 @@ namespace Memory
 		{
 			std::cout << '[' << setw(2) << i->first << "]";
 			i->second->print(0);
-			std::cout << std::endl;
-		}
-   }
-
-   void BIPDirectory::dump(MessageTDReadMap &m)
-   {
-   	MessageTDReadMap::const_iterator i,j;
-		i = m.begin();
-		j = m.end();
-
-		std::cout << "[" << "dump" << "]" << std::endl;
-		for(; i != j; ++i)
-		{
-			std::cout << '[' << setw(2) << i->first << "]";
-			const TimeData<ReadMsg>& ld = i->second;
-			ld.msg->print(0);
 			std::cout << std::endl;
 		}
    }
@@ -283,26 +251,6 @@ namespace Memory
 		}
 	}
 
-	Time_t BIPDirectory::GetTotalLatency()
-	{
-		return totalLatency;
-	}
-
-	Time_t BIPDirectory::GetTotalLatencySimple()
-	{
-		return totalLatencySimple;
-	}
-
-	unsigned long long BIPDirectory::GetTotalReadResponses()
-	{
-		return totalReadResponses;
-	}
-
-	unsigned long long BIPDirectory::GetTotalReadResponsesSimple()
-	{
-		return totalReadResponsesSimple;
-	}
-
 	void BIPDirectory::AddDirectoryShare(Address a, NodeID id, bool exclusive)
 	{
       DebugAssert(directoryData.find(a) != directoryData.end());
@@ -424,11 +372,8 @@ namespace Memory
 		localReadsReceived++;
 		
 		DebugAssertWithMessageID(pendingLocalReads.find(m->MsgID()) == pendingLocalReads.end(),m->MsgID())
-		TimeData<ReadMsg> td;
-		td.msg = m;
-		td.requestTime = globalClock;
-		pendingLocalReads[m->MsgID()] = td;
-		AddrTDReadPair myPair(m->addr, td);
+		pendingLocalReads[m->MsgID()] = m;
+		AddrReadPair myPair(m->addr, m);
 		reversePendingLocalReads.insert(myPair);
 		ReadMsg* forward = (ReadMsg*)EM().ReplicateMsg(m);
 		forward->onCompletedCallback = NULL;
@@ -624,15 +569,14 @@ namespace Memory
 		DebugAssertWithMessageID(m,m->MsgID())
 		DebugAssertWithMessageID(!m->directoryLookup,m->MsgID())
 		
-		AddrTDReadMultimapPairii tempPair;
+		pair<AddrReadMultimap::iterator,AddrReadMultimap::iterator> tempPair;
 		tempPair = reversePendingLocalReads.equal_range(m->addr);
-		AddrTDReadMultimap::iterator firstIterator;
+		AddrReadMultimap::iterator tempIterator;
 		bool hasAddress = false;
 		bool hasBlock = false;
-		for (firstIterator=tempPair.first; firstIterator!=tempPair.second; firstIterator++)
+		for (tempIterator=tempPair.first; tempIterator!=tempPair.second; tempIterator++)
 		{
-			TimeData<ReadMsg>& td = firstIterator->second;
-			const ReadMsg* tempMessage = td.msg;
+			const ReadMsg* tempMessage = tempIterator->second;
 			if (tempMessage->alreadyHasBlock)
 			{
 				hasBlock = true;
@@ -1013,7 +957,7 @@ namespace Memory
 		DebugAssertWithMessageID(m,m->MsgID())
 		remoteInvalidatesReceived++;
 
-		AddrTDReadMultimapPairii tempPair;
+		pair<AddrReadMultimap::iterator,AddrReadMultimap::iterator> tempPair;
 		tempPair = reversePendingLocalReads.equal_range(m->addr);
 		bool hasAddress = (tempPair.first!=tempPair.second);
 
@@ -1223,20 +1167,17 @@ namespace Memory
 		// error here means that we expect there to be a message in pendingLocalReads,
 		// but the message is not there
       DebugAssertWithMessageID(pendingLocalReads.find(m->solicitingMessage) != pendingLocalReads.end(),m->MsgID());
-      AddrTDReadMultimap::iterator firstIterator;
-		AddrTDReadMultimapPairii ret;
+		AddrReadMultimap::iterator tempIterator;
+		pair<AddrReadMultimap::iterator,AddrReadMultimap::iterator> ret;
 		ret = reversePendingLocalReads.equal_range(m->addr);
 		const ReadMsg* reverseReadMsg = NULL;
-		Time_t requestTime;
-		for (firstIterator=ret.first; firstIterator!=ret.second; firstIterator++)
+		for (tempIterator=ret.first; tempIterator!=ret.second; tempIterator++)
 		{
-			AddrTDReadPair tempPair = *firstIterator;
-			TimeData<ReadMsg>& td = tempPair.second;
-			const ReadMsg* tempReadMsg = td.msg;
+			AddrReadPair tempPair = *tempIterator;
+			const ReadMsg* tempReadMsg = tempPair.second;
 			if (tempReadMsg->MsgID()==m->solicitingMessage)
 			{
 				reverseReadMsg = tempReadMsg;
-				requestTime = td.requestTime;
 				break;
 			}
 		}
@@ -1244,8 +1185,7 @@ namespace Memory
 			// if we had received an exclusive read response before
 		//DebugAssertWithMessageID(reverseReadMsg!=NULL, m->solicitingMessage);
 
-		TimeData<ReadMsg>& pendLRTD = pendingLocalReads[m->solicitingMessage];
-		const ReadMsg* ref = pendLRTD.msg;
+		const ReadMsg* ref = pendingLocalReads[m->solicitingMessage];
 
 		if(!m->satisfied)
 		{
@@ -1253,15 +1193,10 @@ namespace Memory
 		   PrintDebugInfo("DirBlkRes",*m,
 		         ("pendingLocalReads.erase("+to_string<MessageID>(m->solicitingMessage)+")").c_str());
 #endif
-			DebugAssertWithMessageID(pendLRTD.requestTime>0, m->solicitingMessage);
-			Time_t latency = globalClock - pendLRTD.requestTime;
-			totalLatencySimple += latency;
-			totalReadResponsesSimple++;
 			pendingLocalReads.erase(m->solicitingMessage);
-
 			if (reverseReadMsg != NULL)
 			{
-				reversePendingLocalReads.erase(firstIterator);
+				reversePendingLocalReads.erase(tempIterator);
 			}
 #ifdef MEMORY_BIP_DIRECTORY_DEBUG_VERBOSE_OLD
                PrintDebugInfo("LocalRead",*m,"DirBlkRes");
@@ -1269,8 +1204,6 @@ namespace Memory
 			OnLocalRead(ref);
 			return;
 		}
-
-		// request is satisfied
 		ReadResponseMsg* r = EM().CreateReadResponseMsg(GetDeviceID(),ref->GeneratingPC());
 		r->addr = ref->addr;
 		r->blockAttached = m->blockAttached;
@@ -1284,65 +1217,17 @@ namespace Memory
 		PrintDebugInfo("DirBlkRes", *m,
 		   ("pendingLocalReads.erase("+m->solicitingMessage+")").c_str());
 #endif
-
-		// calculate the minimum request time of all messages
-		AddrTDReadMultimapPairii secondRet = reversePendingLocalReads.equal_range(m->addr);
-		AddrTDReadMultimap::iterator secondIterator = secondRet.first;
-		Time_t minimumRequestTime = 0;
-		if (secondIterator!=secondRet.second)
-		{
-			AddrTDReadPair tempPair = *secondIterator;
-			minimumRequestTime = tempPair.second.requestTime;
-			secondIterator++;
-			for (;secondIterator!=secondRet.second; secondIterator++)
-			{
-				tempPair = *secondIterator;
-				TimeData<ReadMsg>& td = tempPair.second;
-				DebugAssertWithMessageID(td.requestTime>0, m->solicitingMessage);
-				if (td.requestTime < minimumRequestTime)
-				{
-					minimumRequestTime = td.requestTime;
-				}
-			}
-		}
-
-		DebugAssertWithMessageID(pendLRTD.requestTime>0, m->solicitingMessage);
-		Time_t latency = globalClock - pendLRTD.requestTime;
-		totalLatencySimple += latency;
-		totalReadResponsesSimple++;
 		pendingLocalReads.erase(m->solicitingMessage);
-
-		Time_t singleRequestTime = 0;
 		if (reverseReadMsg != NULL)
 		{
-			singleRequestTime = globalClock - requestTime;
-			reversePendingLocalReads.erase(firstIterator);
+			reversePendingLocalReads.erase(tempIterator);
 		}
 
 		// if it was exclusive, erase all of this address,
 			// , but only from reversePendingLocalReads
-		bool isEraseAll = false;
 		if (m->exclusiveOwnership)
 		{
-			isEraseAll = true;
 			reversePendingLocalReads.erase(m->addr);
-		}
-
-		// only add latency if we actually satisfied a request
-		if (reverseReadMsg != NULL)
-		{
-			Time_t latency;
-			if (isEraseAll)
-			{
-				DebugAssertWithMessageID(minimumRequestTime!=0, m->solicitingMessage);
-				latency = globalClock - minimumRequestTime;
-			}
-			else
-			{
-				latency = singleRequestTime;
-			}
-			totalLatency += latency;
-			totalReadResponses++;
 		}
 
 		EM().DisposeMsg(m);
@@ -1424,11 +1309,6 @@ namespace Memory
 		remoteReadResponsesReceived = 0;
 		remoteWritesReceived = 0;
 		remoteWriteResponsesReceived = 0;
-
-		totalLatency = 0;
-		totalLatencySimple = 0;
-		totalReadResponses = 0;
-		totalReadResponsesSimple = 0;
 	}  // BIPDirectory::Initialize()
 	/**
 	 * this is used for checkpoint purposes
@@ -1462,10 +1342,6 @@ namespace Memory
 		out << DeviceName() << ":remoteReadResponsesReceived:" << remoteReadResponsesReceived << std::endl;
 		out << DeviceName() << ":remoteWritesReceived:" << remoteWritesReceived << std::endl;
 		out << DeviceName() << ":remoteWriteResponsesReceived:" << remoteWriteResponsesReceived << std::endl;
-		out << DeviceName() << ":totalLatency:" << totalLatency << std::endl;
-		out << DeviceName() << ":totalReadResponses:" << totalReadResponses << std::endl;
-		out << DeviceName() << ":totalLatencySimple:" << totalLatencySimple << std::endl;
-		out << DeviceName() << ":totalReadResponsesSimple:" << totalReadResponsesSimple << std::endl;
 	}
 	/**
 	 * Handles all the incoming messages from outside of the directory.
@@ -1693,6 +1569,39 @@ namespace Memory
 	      readMsgArray[i] = myIterator->second.msg;
 	      i++;
 	   }
+      delete [] readMsgArray;
+      readMsgArray = NULL;
+	}
+
+   /**
+    * readMsgArray in this method could be coupled with Eclipse's debugger to
+    * see what elements are in pendingLocalReads. The reason for using
+    * a regular array instead of a vector is because Eclipse can view
+    * Array elements directly, but not elements in STL containers.
+    */
+	void BIPDirectory::PrintPendingLocalReads()
+	{
+      HashMap<MessageID, const ReadMsg*>::const_iterator myIterator;
+
+      myIterator = pendingLocalReads.begin();
+
+      cout << "BIPDirectory::printPendingLocalReads: ";
+
+      int size = pendingLocalReads.size();
+      cout << "size=" << size;
+
+      ReadMsg const ** readMsgArray = new ReadMsg const *[size];
+
+      int i = 0;
+      for (myIterator = pendingLocalReads.begin();
+            myIterator != pendingLocalReads.end(); ++myIterator)
+      {
+         cout << "myIterator->first=" << myIterator->first << " ";
+         //const ReadMsg *myReadMsg = myIterator->second.msg;
+         readMsgArray[i] = myIterator->second;
+         i++;
+      }
+      
       delete [] readMsgArray;
       readMsgArray = NULL;
 	}

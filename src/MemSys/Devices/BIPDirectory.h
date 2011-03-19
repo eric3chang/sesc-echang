@@ -5,8 +5,6 @@
 #include "NetworkMsg.h"
 #include <vector>
 
-#include "MemObj.h"	// for access to globalClock
-
 using std::pair;
 using std::stringstream;
 using std::vector;
@@ -78,18 +76,6 @@ namespace Memory
 			{}
 		};
 
-		template <class T>
-		class TimeData
-		{
-		public:
-			const T* msg;
-			Time_t requestTime;
-			TimeData() :
-				msg(NULL),
-				requestTime(0)
-			{}
-		};
-
 		unsigned long long messagesReceived;
 		unsigned long long directoryRequestsReceived;
 		unsigned long long directoryResponsesReceived;
@@ -106,10 +92,6 @@ namespace Memory
 		unsigned long long remoteReadResponsesReceived;
 		unsigned long long remoteWritesReceived;
 		unsigned long long remoteWriteResponsesReceived;
-		Time_t totalLatency;
-		Time_t totalLatencySimple;
-		unsigned long long totalReadResponses;
-		unsigned long long totalReadResponsesSimple;
 
 		TimeDelta localSendTime;
 		TimeDelta remoteSendTime;
@@ -135,15 +117,8 @@ namespace Memory
 		typedef HashMap<Address,LookupData<ReadMsg> > AddrLDReadMap;
 		typedef HashMap<MessageID,const ReadMsg*> MessageReadMap;
 		typedef pair<MessageID,const ReadMsg*> MessageReadPair;
-		typedef HashMultiMap<Address,TimeData<ReadMsg> > AddrTDReadMultimap;
-		typedef pair<Address,TimeData<ReadMsg> > AddrTDReadPair;
-		typedef pair<AddrTDReadMultimap::iterator,AddrTDReadMultimap::iterator> AddrTDReadMultimapPairii;
-		typedef HashMap<MessageID,TimeData<ReadMsg> > MessageTDReadMap;
-		typedef pair<MessageID,TimeData<ReadMsg> > MessageTDReadPair;
-		typedef pair<MessageTDReadMap::iterator,MessageTDReadMap::iterator> MessageTDReadMapPairii;
 
-		//HashMap<MessageID, const ReadMsg*> pendingLocalReads;
-		MessageTDReadMap pendingLocalReads;
+		HashMap<MessageID, const ReadMsg*> pendingLocalReads;
 		HashMap<MessageID, LookupData<ReadMsg> > pendingRemoteReads;
 		HashMap<MessageID, LookupData<InvalidateMsg> > pendingRemoteInvalidates;
 		HashMultiMap<Address, LookupData<ReadMsg> > pendingDirectorySharedReads;
@@ -152,16 +127,13 @@ namespace Memory
 		HashMap<MessageID, const ReadMsg*> pendingMemoryReadAccesses;
       HashMap<MessageID, const EvictionMsg*> pendingMemoryEvictionAccesses;
       HashMap<MessageID, const WriteMsg*> pendingMemoryWriteAccesses;
-		AddrTDReadMultimap reversePendingLocalReads;
-      //AddrReadMultimap reversePendingLocalReads;
+		AddrReadMultimap reversePendingLocalReads;
 		HashMap<Address, BlockData> directoryData;
 
 		// debug functions
       void dump(HashMap<MessageID, const BaseMsg*> &m);
       void dump(MessageReadMap &m);
-      void dump(MessageTDReadMap &m);
       void dump(AddrLDReadMultimap &m);
-      void dump(AddrTDReadMultimap &m);
       void dump(AddrLDReadMap &m);
       void dump(AddrReadMultimap &m);
       void dumpPendingLocalReads();
@@ -232,11 +204,6 @@ namespace Memory
 		CBOnRemoteReadResponse cbOnRemoteReadResponse;
 		*/
 	public:
-		Time_t GetTotalLatency();
-		Time_t GetTotalLatencySimple();
-		unsigned long long GetTotalReadResponses();
-		unsigned long long GetTotalReadResponsesSimple();
-
 		virtual void Initialize(EventManager* em, const RootConfigNode& config, const std::vector<Connection*>& connectionSet);
 		virtual void DumpRunningState(RootConfigNode& node);
 		virtual void DumpStats(std::ostream& out);
