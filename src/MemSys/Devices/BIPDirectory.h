@@ -45,22 +45,8 @@ namespace Memory
 			HashSet<NodeID> sharers;
 			NodeID owner;
 
-         BlockData() : owner(InvalidNodeID) {}
-         void print(Address myAddress, MessageID myMessageID,bool isSharedBusy, bool isExclusiveBusy)
-         {
-            cout << setw(10) << " ";
-            cout << " addr=" << myAddress;
-            cout << " msgID=" << myMessageID;
-            cout << " own=" << BaseMsg::convertNodeIDToDeviceID(owner);
-            cout << " sh=";
-            for (HashSet<NodeID>::iterator i = sharers.begin(); i != sharers.end(); i++)
-            {
-               cout << BaseMsg::convertNodeIDToDeviceID(*i) << " ";
-            }
-            cout << " isShBusy=" << isSharedBusy
-               << " isExBusy=" << isExclusiveBusy
-               << endl;
-         }
+         BlockData();
+         void print(Address myAddress, MessageID myMessageID,bool isSharedBusy, bool isExclusiveBusy);
 		};
 		template <class T>
 		class LookupData

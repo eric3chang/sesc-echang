@@ -4031,6 +4031,10 @@ In the simulator, we make sure that whenever a message is being sent to
 Since the simulator could only simulate 
 \end_layout
 
+\begin_layout Standard
+We are only interested in the comparison between the protocols.
+\end_layout
+
 \begin_layout Section
 
 \family roman
@@ -4453,10 +4457,6 @@ name "fig:Synthetic-benchmark-results-runtime"
 
 \family roman
 SPLASH-2 benchmarks
-\end_layout
-
-\begin_layout Standard
-
 \end_layout
 
 \begin_layout Standard
