@@ -1,5 +1,7 @@
 ﻿public static class MemGen
 {
+   static int LOCAL_SEND_TIME = 0;
+
 	public enum EvictionPolicy
 	{
 		LRU,
@@ -181,9 +183,7 @@
 		output.WriteLine("Int DeviceID " + (index++));
 		output.WriteLine("String DeviceType Directory");
 		output.WriteLine("String DeviceName " + name);
-		//output.WriteLine("Int LocalSendTime " + 4);
-        // use the following one to simulate against Origin
-        output.WriteLine("Int LocalSendTime " + 60);
+		output.WriteLine("Int LocalSendTime " + LOCAL_SEND_TIME);
 		output.WriteLine("Int RemoteSendTime " + 4);
 		output.WriteLine("Int LookupRetryTime " + 60);
 		output.WriteLine("Int LookupTime " + 4);
@@ -213,7 +213,7 @@
         output.WriteLine("Int DeviceID " + (index++));
         output.WriteLine("String DeviceType OriginDirectory");
         output.WriteLine("String DeviceName " + name);
-        output.WriteLine("Int LocalSendTime " + 60);
+        output.WriteLine("Int LocalSendTime " + LOCAL_SEND_TIME);
         output.WriteLine("Int RemoteSendTime " + 4);
         output.WriteLine("Int LookupRetryTime " + 60);
         output.WriteLine("Int LookupTime " + 4);
@@ -238,7 +238,7 @@
         output.WriteLine("Int DeviceID " + (index++));
         output.WriteLine("String DeviceType BIPDirectory");
         output.WriteLine("String DeviceName " + name);
-        output.WriteLine("Int LocalSendTime " + 60);
+        output.WriteLine("Int LocalSendTime " + LOCAL_SEND_TIME);
         output.WriteLine("Int RemoteSendTime " + 4);
         output.WriteLine("Int LookupRetryTime " + 60);
         output.WriteLine("Int LookupTime " + 4);
@@ -530,25 +530,26 @@
 	{
 		System.IO.Directory.CreateDirectory("memoryConfigs");
 
-      float networkMultiplyFactor = 1.0f;
+      float networkMultiplyFactor = 0.5f;
       string filesysSeperator = "/";   // unix
       //string filesysSeperator = "\\";   // windows
-      string filenameAddition = "network10-";
       //string filenameAddition = "";
-        // nodeCount also determines the total number of processors
-		//for (int nodeCount = 4; nodeCount <= 32; nodeCount *= 2)
-		for (int nodeCount = 2; nodeCount <= 2; nodeCount *= 2)
+      string filenameAddition = "localsendtime4-network05-";
+      LOCAL_SEND_TIME = 4;
+      
+      // nodeCount also determines the total number of processors
+		for (int nodeCount = 2; nodeCount <= 32; nodeCount *= 2)
+		//for (int nodeCount = 128; nodeCount <= 128; nodeCount *= 2)
 		{
 			for (int l1 = 64; l1 <= 64; l1 *= 2)
             //for (int l1 = 8; l1 <= 1024; l1 *= 2)
 			{
 //				OutSimpleMemory1(i, l1);
-				//for (int l2 = l1 * 2; l2 <= 4 * 1024; l2 *= 2)
-            for (int l2 = l1 * 2; l2 <= 128; l2 *= 2)
-				//for (int l2 = 1024; l2 <= 1024; l2 *= 2)
+				for (int l2 = l1 * 2; l2 <= 4 * 1024; l2 *= 2)
+            //for (int l2 = l1 * 2; l2 <= 128; l2 *= 2)
 				{
-                    OutBIPDirectoryMemory(nodeCount, l1, l2, networkMultiplyFactor, filesysSeperator,filenameAddition);
-                    //OutDirectoryMemory(nodeCount, l1, l2, networkMultiplyFactor, filesysSeperator,filenameAddition);
+               OutBIPDirectoryMemory(nodeCount, l1, l2, networkMultiplyFactor, filesysSeperator,filenameAddition);
+               //OutDirectoryMemory(nodeCount, l1, l2, networkMultiplyFactor, filesysSeperator,filenameAddition);
 					OutOriginDirectoryMemory(nodeCount, l1, l2, networkMultiplyFactor, filesysSeperator,filenameAddition);
 					//OutSimpleMemory2(i, l1, l2);
 					for (int l3 = l2 * 2; l3 <= 64 * 1024; l3 *= 2)

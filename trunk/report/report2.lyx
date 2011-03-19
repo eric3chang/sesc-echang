@@ -186,7 +186,7 @@ key "LAU00"
 \end_layout
 
 \begin_layout Standard
-For 
+The simulation I developed for testing my hypothesis uses the SESC simulator.
 \end_layout
 
 \begin_layout Standard
@@ -411,6 +411,55 @@ Network
 The network connects the different nodes of the system together.
  It is responsible for making sure that the different nodes receive the
  packets, as desired.
+\end_layout
+
+\begin_layout Standard
+[[
+\end_layout
+
+\begin_layout Standard
+A computer network, often simply referred to as a network, is a collection
+ of computers and devices interconnected by communications channels that
+ facilitate communications among users and allows users to share resources.
+ Networks may be classified according to a wide variety of characteristics.
+ A computer network allows sharing of resources and information among interconne
+cted devices.
+\end_layout
+
+\begin_layout Standard
+Ethernet as it is defined by IEEE 802 utilizes various standards and mediums
+ that enable communication between devices.
+ Frequently deployed devices include hubs, switches, bridges, or routers.
+ Wireless LAN technology is designed to connect devices without wiring.
+ These devices use radio waves or infrared signals as a transmission medium.
+ ITU-T G.hn technology uses existing home wiring (coaxial cable, phone lines
+ and power lines) to create a high-speed (up to 1 Gigabit/s) local area
+ network.
+\end_layout
+
+\begin_layout Standard
+Computer networks may be classified according to the network topology upon
+ which the network is based, such as bus network, star network, ring network,
+ mesh network.
+ Network topology is the coordination by which devices in the network are
+ arranged in their logical relations to one another, independent of physical
+ arrangement.
+ Even if networked computers are physically placed in a linear arrangement
+ and are connected to a hub, the network has a star topology, rather than
+ a bus topology.
+ In this regard the visual and operational characteristics of a network
+ are distinct.
+ Networks may be classified based on the method of data used to convey the
+ data, these include digital and analog networks.
+\end_layout
+
+\begin_layout Standard
+]]
+\end_layout
+
+\begin_layout Standard
+The way that the network is modeled in the SESC simulator will be presented
+ in Section 6, Experimental Setup.
 \end_layout
 
 \begin_layout Subsection
@@ -3627,7 +3676,7 @@ Experimental Setup
 \begin_inset Float table
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \align center
@@ -3781,16 +3830,106 @@ memory write
 \end_inset
 
 
+\begin_inset Tabular
+<lyxtabular version="3" rows="4" columns="2">
+<features>
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Device type
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Latency (cycles)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+remote send time
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Plain Layout
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Latencies
+Parameters
 \begin_inset CommandInset label
 LatexCommand label
-name "tab:latencies"
+name "tab:parameters"
 
 \end_inset
 
@@ -3808,14 +3947,30 @@ name "tab:latencies"
 \end_layout
 
 \begin_layout Standard
+This section will describe how the various components in the system are
+ setup.
+ Specifically, I will present the configuration of the simulator.
+ 
+\end_layout
+
+\begin_layout Standard
 The SESC simulator allows configuration of various parameters.
- Block size is set by
+ Block size is set by comparing the system with the real system, as seen
+ on a real SGI Origin system.
 \end_layout
 
 \begin_layout Standard
 All benchmarks are run on the default settings with 64KB L1 cache and 1MB
  L2 cache, with the processor count between 4 and 32.
- The latencies for running each of the benchmarks are shown in 
+\end_layout
+
+\begin_layout Standard
+The number of processors were chosen to show the difference between various
+ number of processors and their effect on the protocol.
+\end_layout
+
+\begin_layout Standard
+The configurations for running each of the benchmarks are shown in 
 \begin_inset ERT
 status open
 
@@ -3835,14 +3990,18 @@ tablename
 
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "tab:latencies"
+reference "tab:parameters"
 
 \end_inset
 
 .
- The latencies for the memory are significantly larger than the caches,
+ The parameters for the memory are significantly larger than the caches,
  but is still relatively small to simulate the behavior of main memory in
  a DSM.
+\end_layout
+
+\begin_layout Standard
+Both of the caches in the two 
 \end_layout
 
 \begin_layout Standard
@@ -3866,6 +4025,10 @@ In the simulator, we make sure that whenever a message is being sent to
  If this is the case, it just forwards it straight on to the function that
  would handle it on the local directory node rather than emitting something
  on the network.
+\end_layout
+
+\begin_layout Standard
+Since the simulator could only simulate 
 \end_layout
 
 \begin_layout Section
@@ -4548,6 +4711,11 @@ key "WOO00"
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+-m12 -p32 -n65536 -l4 was the parameter used for this benchmark.
+ This represents running the benchmark on 32 threads.
 \end_layout
 
 \begin_layout Standard

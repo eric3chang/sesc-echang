@@ -1185,10 +1185,10 @@ void OSSim::simFinish()
 			{
 				Memory::BIPDirectory *tempDevice = (Memory::BIPDirectory*)ptr;
 
-				totalLatency += tempDevice->GetTotalLatency();
-				totalReadResponses += tempDevice->GetTotalReadResponses();
-				totalLatencySimple += tempDevice->GetTotalLatencySimple();
-				totalReadResponsesSimple += tempDevice->GetTotalReadResponsesSimple();
+				//totalLatency += tempDevice->GetTotalLatency();
+				//totalReadResponses += tempDevice->GetTotalReadResponses();
+				//totalLatencySimple += tempDevice->GetTotalLatencySimple();
+				//totalReadResponsesSimple += tempDevice->GetTotalReadResponsesSimple();
 				directoryCount++;
 			}
 			else if (isOriginDirectory)

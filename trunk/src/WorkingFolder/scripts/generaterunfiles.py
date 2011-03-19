@@ -7,16 +7,11 @@ import sys
 OUT_DIR='../'
 
 # don't need to change these when moving this script
-AUGSESC='augSesc-Debug'
-#AUGSESC='augSesc-Release'
-#AUGSESC='augSesc-O1'
-
 COMBINED_OUT='runfile-all'
 EXE_EXT='.mips'
 OUT_EXT='.sh'
 OUT_PRE='runfile-'
 HEADER1='#!/bin/bash\n\n'
-HEADER2='#!/bin/bash\nDATE=$(date "+%m%d%H%M")\nHOSTNAME=$(hostname)\nAUGSESC='+AUGSESC+'\n\n'
 LARGE_STACK='-k65536 '
 STRING11='nice -10 ./$AUGSESC '
 STRING12='-cconfigs/workFile/'
@@ -42,7 +37,8 @@ LU_PARAMS_POST=' -b8 -t'
 #LU_PARAMS_POST=' -b16 -t'
 #LU_PARAMS_POST=' -b32 -t'
 NEWTEST_PARAMS_PRE='-p'
-NEWTEST_PARAMS_POST=' -n10000'
+#NEWTEST_PARAMS_POST=' -n10000'
+NEWTEST_PARAMS_POST=' -n1000'
 OCEAN_PARAMS_PRE='-n130 -p'
 #OCEAN_PARAMS_PRE='-n258 -p'
 OCEAN_PARAMS_POST=' -e1e-7 -r20000.0 -t28800.0'
@@ -165,18 +161,26 @@ processorCountHi, L1Low, L1Hi, L2Low, L2Hi):
 
 def main():
     #benchmarkNames = ['barnes', 'cholesky', 'fft', 'fmm', 'lu','newtest', 'radix', 'raytrace', 'ocean']
-    benchmarkNames = ['cholesky', 'fft', 'newtest', 'radix', 'ocean']
+    #benchmarkNames = ['cholesky', 'fft', 'newtest', 'radix', 'ocean']
+    benchmarkNames = ['newtest']
     directoryTypes = ['bip', 'origin']
-    processorCountLow = '128'
-    processorCountHi = '128'
+    processorCountLow = '2'
+    processorCountHi = '32'
     #L1Low = '8'
     #L1Hi = '64'
     L1Low = '64'
     L1Hi = '64'
     #L2Low = '128'
+    #L2Low = '512'
     #L2Hi = '4096'
-    L2Low = '128'
-    L2Hi = '128'
+    L2Low = '512'
+    L2Hi = '512'
+    global AUGSESC
+    #AUGSESC='augSesc-Debug'
+    #AUGSESC='augSesc-Release'
+    AUGSESC='augSesc-O1'
+    global HEADER2
+    HEADER2='#!/bin/bash\nDATE=$(date "+%m%d%H%M")\nHOSTNAME=$(hostname)\nAUGSESC='+AUGSESC+'\n\n'
 
     combinedOutfilename = OUT_DIR+COMBINED_OUT+OUT_EXT
     combinedOutfile = open(combinedOutfilename, 'wb')
