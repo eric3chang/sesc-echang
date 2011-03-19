@@ -1,6 +1,6 @@
 // toggles debug messages
-//#define MEMORY_BIP_DIRECTORY_DEBUG_VERBOSE
-//#define MEMORY_BIP_DIRECTORY_DEBUG_DIRECTORY_DATA
+#define MEMORY_BIP_DIRECTORY_DEBUG_VERBOSE
+#define MEMORY_BIP_DIRECTORY_DEBUG_DIRECTORY_DATA
 //#define MEMORY_BIP_DIRECTORY_DEBUG_VERBOSE_OLD
 //#define MEMORY_BIP_DIRECTORY_DEBUG_MSG_COUNT
 //#define MEMORY_BIP_DIRECTORY_DEBUG_PENDING_DIRECTORY_SHARED_READS
@@ -50,6 +50,26 @@ namespace Memory
 			nodeSet.push_back(Config::GetInt(node,"NodeIDSet",0,i));
 		}
 	}
+
+   BIPDirectory::BlockData::BlockData()
+   	: owner(InvalidNodeID)
+   {}
+
+   void BIPDirectory::BlockData::print(Address myAddress, MessageID myMessageID,bool isSharedBusy, bool isExclusiveBusy)
+   {
+      cout << setw(10) << " ";
+      cout << " adr=" << myAddress;
+      cout << " msg=" << myMessageID;
+      cout << " own=" << BaseMsg::convertNodeIDToDeviceID(owner);
+      cout << " sh=";
+      for (HashSet<NodeID>::iterator i = sharers.begin(); i != sharers.end(); i++)
+      {
+         cout << BaseMsg::convertNodeIDToDeviceID(*i) << " ";
+      }
+      cout << " isShBusy=" << isSharedBusy
+         << " isExBusy=" << isExclusiveBusy
+         << endl;
+   }
 
 	// debug function
    void BIPDirectory::dump(HashMap<MessageID, const BaseMsg*> &m)
@@ -1187,6 +1207,7 @@ namespace Memory
 
 		const ReadMsg* ref = pendingLocalReads[m->solicitingMessage];
 
+		//TODO check if addr is in reversePendingLocalReads, if so, and it's requesting for exclusive, discard it
 		if(!m->satisfied)
 		{
 #ifdef MEMORY_BIP_DIRECTORY_DEBUG_PENDING_LOCAL_READS
@@ -1208,6 +1229,7 @@ namespace Memory
 		r->addr = ref->addr;
 		r->blockAttached = m->blockAttached;
 		r->directoryLookup = false;
+		//TODO possibly have to change this if another read request arrives
 		r->exclusiveOwnership = m->exclusiveOwnership;
 		r->satisfied = true;
 		r->size = ref->size;

@@ -487,7 +487,7 @@ def main():
     #maxl2 = '4096'
     maxl2 = '512'
     isNorm = False
-    isSavFig = False
+    isSavFig = True
     isSwitchDir = False
     global IN_EXT
     #IN_EXT = '.memDevResults.network10'
