@@ -30,10 +30,27 @@ namespace Memory
 	SESCProcessorInterface::SESCProcessorInterface(const char *section, const char *sName)
 		: MemObj(section,sName)
 	{}
+
 	Time_t SESCProcessorInterface::getNextFreeCycle() const
 	{
 		return globalClock;
 	}
+
+	unsigned int SESCProcessorInterface::GetReadCount()
+	{
+		return readCount;
+	}
+
+	unsigned int SESCProcessorInterface::GetWriteCount()
+	{
+		return writeCount;
+	}
+
+	unsigned int SESCProcessorInterface::GetTotalOperations()
+	{
+		return readCount+writeCount;
+	}
+
 	void SESCProcessorInterface::access(MemRequest *mreq)
 	{
 		DebugAssert(mreq);

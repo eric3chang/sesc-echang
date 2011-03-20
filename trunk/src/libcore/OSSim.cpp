@@ -1069,6 +1069,11 @@ void OSSim::simFinish()
 		long long unsigned int totalReadResponsesSimple = 0;
 		int directoryCount = 0;
 
+		// for use by processors
+		unsigned long long totalReadCount = 0;
+		unsigned long long totalWriteCount = 0;
+		unsigned long long totalTotalOperations = 0;
+
 		for (std::vector<BaseMemDevice*>::iterator i=deviceSet.begin(); i!=deviceSet.end(); i++)
 		{
 			BaseMemDevice* ptr = *i;
@@ -1088,6 +1093,7 @@ void OSSim::simFinish()
 			bool isBIPMOESICache = (typeid(*ptr)==typeid(Memory::BIPMOESICache));
 			bool isBIPDirectory = (typeid(*ptr)==typeid(Memory::BIPDirectory));
 			bool isOriginDirectory = (typeid(*ptr)==typeid(Memory::OriginDirectory));
+			bool isProcessor = (typeid(*ptr)==typeid(Memory::SESCProcessorInterface));
 
 			if (isMSICache)
 			{
@@ -1199,6 +1205,13 @@ void OSSim::simFinish()
 				//totalReadResponses += tempDevice->GetTotalReadResponses();
 				directoryCount++;
 			}
+			else if (isProcessor)
+			{
+				Memory::SESCProcessorInterface *tempDevice = (Memory::SESCProcessorInterface*)ptr;
+				totalReadCount += tempDevice->GetReadCount();
+				totalWriteCount += tempDevice->GetWriteCount();
+				totalTotalOperations += tempDevice->GetTotalOperations();
+			}
 
 			out << ptr->DeviceName() << std::endl;
 			ptr->DumpStats(out);
@@ -1267,7 +1280,6 @@ void OSSim::simFinish()
 		{
 			averageWaitTime = totalLatency/totalReadResponses;
 		}
-
 		unsigned long long averageWaitTimeSimple = 0;
 		if (totalReadResponsesSimple != 0)
 		{
@@ -1275,6 +1287,12 @@ void OSSim::simFinish()
 		}
 		out << "TotalDirectory:" << "averageWaitTime:" << averageWaitTime << endl;
 		out << "TotalDirectory:" << "averageWaitTimeSimple:" << averageWaitTimeSimple << endl;
+		out << endl;
+
+		out << "TotalProcessor" << endl;
+		out << "TotalProcessor:totalReadCount:" << totalReadCount << endl;
+		out << "TotalProcessor:totalWriteCount:" << totalWriteCount << endl;
+		out << "TotalProcessor:totalTotalOperations:" << totalTotalOperations << endl;
 
 		out << endl;
 
