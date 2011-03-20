@@ -160,6 +160,8 @@ processorCountHi, L1Low, L1Hi, L2Low, L2Hi):
     os.chmod(outPath,0700)
 
 def main():
+    global AUGSESC
+    global HEADER2
     #benchmarkNames = ['barnes', 'cholesky', 'fft', 'fmm', 'lu','newtest', 'radix', 'raytrace', 'ocean']
     #benchmarkNames = ['cholesky', 'fft', 'newtest', 'radix', 'ocean']
     benchmarkNames = ['newtest']
@@ -175,11 +177,9 @@ def main():
     #L2Hi = '4096'
     L2Low = '512'
     L2Hi = '512'
-    global AUGSESC
-    #AUGSESC='augSesc-Debug'
+    AUGSESC='augSesc-Debug'
     #AUGSESC='augSesc-Release'
-    AUGSESC='augSesc-O1'
-    global HEADER2
+    #AUGSESC='augSesc-O1'
     HEADER2='#!/bin/bash\nDATE=$(date "+%m%d%H%M")\nHOSTNAME=$(hostname)\nAUGSESC='+AUGSESC+'\n\n'
 
     combinedOutfilename = OUT_DIR+COMBINED_OUT+OUT_EXT

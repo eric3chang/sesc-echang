@@ -487,15 +487,15 @@ def main():
     #maxl2 = '4096'
     maxl2 = '512'
     isNorm = False
-    isSavFig = True
+    isSavFig = False
     isSwitchDir = False
     global IN_EXT
     #IN_EXT = '.memDevResults.network10'
-    #fileAdd = ''
+    fileAdd = ''
     #fileAdd = '.network10'
     #fileAdd = '.network05'
     #fileAdd = '.localsendtime4.network05'
-    fileAdd = '.localsendtime60.network05'
+    #fileAdd = '.localsendtime60.network05'
     #IN_EXT = '.memDevResults' + fileAdd
     IN_EXT = '.memDevResults' + fileAdd
 

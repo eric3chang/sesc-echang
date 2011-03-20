@@ -646,6 +646,8 @@ namespace Memory
 		if(m->satisfied)
 		{
 			BlockData &myBlockData = directoryData[m->addr];
+			NodeID& owner = myBlockData.owner;
+			HashSet<NodeID>& sharers = myBlockData.sharers;
 
 			if(m->exclusiveOwnership)
 			{
@@ -655,16 +657,28 @@ namespace Memory
 			// if there is some pending shared read on this address
 			if(pendingDirectorySharedReads.find(m->addr) != pendingDirectorySharedReads.end())
 			{
-				int numberOfReaders = 0;
 				AddrLDReadMultimap::iterator tempIterator;
 				AddrLDReadMultimapPairii ret;
 				ret = pendingDirectorySharedReads.equal_range(m->addr);
+
+				// add directory shares first
 				for (tempIterator=ret.first; tempIterator!=ret.second; tempIterator++)
 				{
-					numberOfReaders++;
+					AddDirectoryShare(m->addr,tempIterator->second.sourceNode,false);
 				}
-				bool isOneReader = (numberOfReaders==1);
-			   // for all the elements in pendingDirectorySharedReads where key is in the range of m->addr
+				int numberOfSharers = 0;
+				if (owner!=InvalidNodeID)
+				{
+					numberOfSharers++;
+				}
+				HashSet<NodeID>::iterator sharersIterator;
+				for (sharersIterator=sharers.begin(); sharersIterator!=sharers.end(); sharersIterator++)
+				{
+					numberOfSharers++;
+				}
+				bool isOneReader = (numberOfSharers==1);
+
+				// for all the elements in pendingDirectorySharedReads where key is in the range of m->addr
 				for(tempIterator = ret.first; tempIterator != ret.second; tempIterator++)
 				{
 					ReadResponseMsg* r = EM().CreateReadResponseMsg(GetDeviceID(),tempIterator->second.msg->GeneratingPC());
@@ -675,7 +689,6 @@ namespace Memory
 					r->exclusiveOwnership = isOneReader;
 					r->satisfied = true;
 					r->solicitingMessage = tempIterator->second.msg->MsgID();
-					AddDirectoryShare(m->addr,tempIterator->second.sourceNode,false);
 					if(tempIterator->second.sourceNode == nodeID)
 					{
 #ifdef MEMORY_BIP_DIRECTORY_DEBUG_VERBOSE_OLD
@@ -720,7 +733,8 @@ namespace Memory
 					}
 					else
 					{
-						SendMsg(localCacheConnectionID, response, lookupTime + localSendTime);
+						//SendMsg(localCacheConnectionID, response, lookupTime + localSendTime);
+						OnDirectoryBlockResponse(response, nodeID);
 					}
 					AddDirectoryShare(m->addr,pendingDirectoryExclusiveReads[m->addr].sourceNode,true);
 					EM().DisposeMsg(pendingDirectoryExclusiveReads[m->addr].msg);

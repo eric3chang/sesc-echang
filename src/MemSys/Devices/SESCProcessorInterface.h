@@ -38,6 +38,10 @@ namespace Memory
 		typedef CallbackMember1<SESCProcessorInterface, MemRequest*,&SESCProcessorInterface::access> accessCB;
 	public:
 #endif
+		unsigned int GetReadCount();
+		unsigned int GetWriteCount();
+		unsigned int GetTotalOperations();
+
 		virtual void Initialize(EventManager* em, const RootConfigNode& config, const std::vector<Connection*>& connectionSet);
 		virtual void DumpRunningState(RootConfigNode& node);
 		virtual void DumpStats(std::ostream& out);
