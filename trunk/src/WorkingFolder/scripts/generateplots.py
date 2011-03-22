@@ -473,12 +473,12 @@ def main():
     #benchmarks = ['cholesky', 'fft', 'lu','newtest', 'radix', 'ocean']
     #benchmarks = ['cholesky', 'fft', 'newtest', 'radix', 'ocean']
     benchmarks = ['newtest']
-    dirtypes = ['bip','origin']
+    dirtypes = ['bip', 'origin']
     #bipdirtypes = ['bip']
     #origindirtypes = ['origin']
     #fileAdd = '-100-110'
     mincpu = '2'
-    maxcpu = '32'
+    maxcpu = '8'
     l1 = '64'
     #minl2 = '128'
     #minl2 = '512'
@@ -491,7 +491,7 @@ def main():
     isSwitchDir = False
     global IN_EXT
     #IN_EXT = '.memDevResults.network10'
-    fileAdd = ''
+    fileAdd = '.newtest2'
     #fileAdd = '.network10'
     #fileAdd = '.network05'
     #fileAdd = '.localsendtime4.network05'

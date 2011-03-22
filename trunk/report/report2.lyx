@@ -399,8 +399,8 @@ The most important job of any cache coherence protocols is to maintain data
  messages to each other over a network.
  In a directory-based cache coherence protocol, the directory is responsible
  for storing some of these states.
- I will introduce the network, the cache, and the directory in the following
- sections.
+ I will introduce the network that connects the individual nodes together,
+ followed by the cache and the directory.
 \end_layout
 
 \begin_layout Subsection
@@ -409,57 +409,58 @@ Network
 
 \begin_layout Standard
 The network connects the different nodes of the system together.
- It is responsible for making sure that the different nodes receive the
- packets, as desired.
+ It is responsible for making sure that the various nodes receive the messages
+ correctly and allows the nodes to share resources via internodal communication.
+ It is important that the network does not slow down the system or cost
+ too much to build.
+ Since many messages must travel through the network as part of the communicatio
+n between different nodes, the network needs to be designed to transfer
+ as much information as possible in the shortest amount of time without
+ incurring a substantial cost.
 \end_layout
 
 \begin_layout Standard
-[[
+There are several different ways to deliver a message in a network, which
+ are broadcasting, multicasting, and unicasting.
+ Broadcasting refers to sending out the message to all nodes connected to
+ the network; multicasting refers to having some mechanism in the network
+ to create copies of messages for sending from a single source; unicasting
+ means the transmission of each message is intended for only one device.
+ The system that is used here uses unicasting, because it sends out individual
+ messages into the network for every single request or response.
 \end_layout
 
 \begin_layout Standard
-A computer network, often simply referred to as a network, is a collection
- of computers and devices interconnected by communications channels that
- facilitate communications among users and allows users to share resources.
- Networks may be classified according to a wide variety of characteristics.
- A computer network allows sharing of resources and information among interconne
-cted devices.
+There are some latencies involved in sending messages into the network.
+ First, there is the amount of time it takes for sending or receiving node
+ to process the messages before putting it in the network.
+ In addition to the sending overhead and the receiving overhead, there is
+ the transport latency.
+ This is how long the messages spends in the network.
+ Essentially, it is from when the first bit of the packet arrives into the
+ network to when the last bit leaves the network.
+ The overhead at the sender and the receiver is not included in this latency.
+ In most cases, these overheads are shorter than the network latency, so
+ it is possible to saturate the network if messages are sent continuously.
+ However, that should only happen if the workload is tuned to generate lots
+ of messages into the network.
 \end_layout
 
 \begin_layout Standard
-Ethernet as it is defined by IEEE 802 utilizes various standards and mediums
- that enable communication between devices.
- Frequently deployed devices include hubs, switches, bridges, or routers.
- Wireless LAN technology is designed to connect devices without wiring.
- These devices use radio waves or infrared signals as a transmission medium.
- ITU-T G.hn technology uses existing home wiring (coaxial cable, phone lines
- and power lines) to create a high-speed (up to 1 Gigabit/s) local area
- network.
-\end_layout
+\begin_inset CommandInset citation
+LatexCommand cite
+key "LAU00"
 
-\begin_layout Standard
-Computer networks may be classified according to the network topology upon
- which the network is based, such as bus network, star network, ring network,
- mesh network.
- Network topology is the coordination by which devices in the network are
- arranged in their logical relations to one another, independent of physical
- arrangement.
- Even if networked computers are physically placed in a linear arrangement
- and are connected to a hub, the network has a star topology, rather than
- a bus topology.
- In this regard the visual and operational characteristics of a network
- are distinct.
- Networks may be classified based on the method of data used to convey the
- data, these include digital and analog networks.
-\end_layout
+\end_inset
 
-\begin_layout Standard
-]]
-\end_layout
 
-\begin_layout Standard
-The way that the network is modeled in the SESC simulator will be presented
- in Section 6, Experimental Setup.
+\begin_inset CommandInset citation
+LatexCommand cite
+key "HEN00"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection
@@ -1133,6 +1134,11 @@ Message Types
 
 \begin_layout Standard
 In this section, I will introduce the basic message types used in the system.
+ Messages sent in the network need to contain the message type and the address.
+ The message type is necessary for the receiver to know what operations
+ it should take with the message and the address is used to find the requested
+ information.
+ It can also contain data if it is a response to a request.
  To begin with, every cache coherence system needs a read request message
  type.
  In a directory-based cache coherence system, this message would be sent
@@ -3676,7 +3682,7 @@ Experimental Setup
 \begin_inset Float table
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -3947,10 +3953,26 @@ name "tab:parameters"
 \end_layout
 
 \begin_layout Standard
+The system simulates a shared-media network, as opposed to a switched-network.
+\end_layout
+
+\begin_layout Standard
+In order to keep track of the messages, every message has a message ID associate
+d with it.
+ Many of the messages that will be utilized expect a response message.
+ Some expect two response messages.
+ Message ID can be placed in the header
+\end_layout
+
+\begin_layout Standard
 This section will describe how the various components in the system are
  setup.
  Specifically, I will present the configuration of the simulator.
- 
+\end_layout
+
+\begin_layout Standard
+The way that the network is modeled in the SESC simulator will be presented
+ in Section 6, Experimental Setup.
 \end_layout
 
 \begin_layout Standard
