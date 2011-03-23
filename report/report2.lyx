@@ -145,8 +145,7 @@ ing architectures and how schemes offer different tradeoffs between speed
 \end_layout
 
 \begin_layout Standard
-For this purpose, I have made a detailed analysis of the cache coherence
- protocol presented in 
+For this purpose, I will present the cache coherence protocol shown in 
 \begin_inset Quotes eld
 \end_inset
 
@@ -186,7 +185,19 @@ key "LAU00"
 \end_layout
 
 \begin_layout Standard
-The simulation I developed for testing my hypothesis uses the SESC simulator.
+To show the differences between these two protocols, I show their performances
+ according to several benchmarks.
+ The Origin protocol is superior than BIP because BIP uses more messages
+ than the Origin protocol for several different types of requests.
+ To demonstrate this, I created a synthetic benchmark that generates many
+ requests, which will generate different amount of messages between Origin
+ protocol and BIP.
+ I will also show the protocols' performance on real-world benchmarks.
+ This will demonstrate their performance when faced with benchmarks that
+ are not specifically geared to exploit the differences between the protocols.
+ The experiments I ran will indicate that the difference in protocol is
+ what causes the difference in performance, and not because of some other
+ differences in the simulator.
 \end_layout
 
 \begin_layout Standard
@@ -443,10 +454,7 @@ There are some latencies involved in sending messages into the network.
  In most cases, these overheads are shorter than the network latency, so
  it is possible to saturate the network if messages are sent continuously.
  However, that should only happen if the workload is tuned to generate lots
- of messages into the network.
-\end_layout
-
-\begin_layout Standard
+ of messages into the network
 \begin_inset CommandInset citation
 LatexCommand cite
 key "LAU00"
@@ -460,7 +468,7 @@ key "HEN00"
 
 \end_inset
 
-
+.
 \end_layout
 
 \begin_layout Subsection
@@ -1137,6 +1145,661 @@ Message Types
 \end_layout
 
 \begin_layout Standard
+\begin_inset Float table
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="1" columns="3">
+<features>
+<column alignment="center" valignment="top" width="20text%">
+<column alignment="center" valignment="top" width="25text%">
+<column alignment="center" valignment="top" width="55text%">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Message Type
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Message Content
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Message Semantics
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="17" columns="3">
+<features>
+<column alignment="center" valignment="top" width="20text%">
+<column alignment="center" valignment="top" width="25text%">
+<column alignment="left" valignment="top" width="55text%">
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Read
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+isExclusive
+\end_layout
+
+\begin_layout Plain Layout
+Address
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+A cache is requesting from the directory to read a block.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Intervention
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+isExclusive
+\end_layout
+
+\begin_layout Plain Layout
+Address
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+The directory is requesting a block from the exclusive owner.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Read Reply
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+isExclusive
+\end_layout
+
+\begin_layout Plain Layout
+Address
+\end_layout
+
+\begin_layout Plain Layout
+BlockData
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+A reply with data from the home node.
+ The cache will be filled with the block received from the read reply.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Read Response (Origin)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+isExclusive
+\end_layout
+
+\begin_layout Plain Layout
+Address
+\end_layout
+
+\begin_layout Plain Layout
+BlockData
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+A response with data from the previous exclusive owner with data.
+ The read response moves the data from the previous owner to the new owner
+ or sharer and signifies that the new owner should use the data in this
+ response to fill its cache.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Read Ack (Origin)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+isExclusive
+\end_layout
+
+\begin_layout Plain Layout
+Address
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+An ack from the previous owner to the new owner without data.
+ This message indicates that the new owner should use the speculative reply
+ to fill its cache.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Speculative Reply (Origin)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Address
+\end_layout
+
+\begin_layout Plain Layout
+BlockData
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+A speculative reply from the directory to the cache.
+ The new owner with fill its cache with data from this message if the other
+ response message it receives is a read ack and not a read response.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Writeback Request
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Address
+\end_layout
+
+\begin_layout Plain Layout
+BlockData
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+The cache is in Dirty Exclusive and wants to evict a block.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Eviction Request (BIP)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Address
+\end_layout
+
+\begin_layout Plain Layout
+BlockData
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+The cache is in Clean Exclusive and wants to evict a block.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Writeback Ack (BIP)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Address
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Sent from directory to writeback requester to indicate that writeback was
+ received.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Writeback Ack (Origin)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+isBusy
+\end_layout
+
+\begin_layout Plain Layout
+Address
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Sent from directory to writeback requester to indicate that writeback was
+ received.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Eviction Ack (BIP)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Address
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+The directory sends this message to the requester to signal a successful
+ eviction.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Writeback
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Address
+\end_layout
+
+\begin_layout Plain Layout
+BlockData
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+If the cache is asked to give up a block and it is in Dirty Exclusive, it
+ will send this message with the block attached to the directory.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Transfer (Origin)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+isDirty
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+The cache is being asked via an intervention message to give up a block,
+ but it does not need to send the block data to the directory.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Invalidate (BIP)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Address
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+The cache is being asked by the directory to invalidate its block in the
+ Shared state.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Invalidate (Origin)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+NewOwner
+\end_layout
+
+\begin_layout Plain Layout
+Address
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+The cache is being asked by the directory to invalidate its block in the
+ Shared state.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Invalidate Ack
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Address
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+This is sent from the cache to either the new owner or the directory to
+ indicate that the cache received the invalidate.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Nak
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+isCache
+\end_layout
+
+\begin_layout Plain Layout
+Address
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+A nak is sent whenever the cache or the directory is busy and cannot process
+ the current request.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+All message types used in BIP and Origin protocol
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:All-message-types"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
 In this section, I will introduce the basic message types used in the system.
  Messages sent in the network need to contain the message type and the address.
  The message type is necessary for the receiver to know what operations
@@ -1174,7 +1837,7 @@ Another message that is similar to the read request message is the intervention
 The four read response types used amongst the two protocols are read response,
  read reply, read ack, and speculative reply.
  A read response indicates a response from another cache, whereas the read
- reply message indicates a response from the memory.
+ reply message indicates a response from the memory or the home node.
  Since the BIP only supports bilateral interactions between a cache and
  a directory, and never between two caches, there are no read response messages
  sent in the BIP protocol.
@@ -3686,7 +4349,7 @@ Experimental Setup
 \begin_inset Float table
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -4097,7 +4760,7 @@ Interfacing with the network are many nodes, which contain a cache, a directory,
  the protocols and their difference in generating messages from requests.
  The parameters for the memory are significantly larger than the caches,
  but is still relatively small to simulate the behavior of main memory in
- a DSM 
+ a DSM
 \begin_inset CommandInset citation
 LatexCommand cite
 key "gwennap1994mips"
@@ -4140,6 +4803,22 @@ In this section, I will discuss the results of running the simulation on
  in protocol.
  Then, I will present the results of running the simulator on the SPLASH-2
  benchmarks.
+\end_layout
+
+\begin_layout Standard
+To show the differences between these two protocols, I show their performances
+ according to several benchmarks.
+ The Origin protocol is superior than BIP because BIP uses more messages
+ than the Origin protocol for several different types of requests.
+ To demonstrate this, I created a synthetic benchmark that generates many
+ requests, which will generate different amount of messages between Origin
+ protocol and BIP.
+ I will also show the protocols' performance on real-world benchmarks.
+ This will demonstrate their performance when faced with benchmarks that
+ are not specifically geared to exploit the differences between the protocols.
+ The experiments I ran will indicate that the difference in protocol is
+ what causes the difference in performance, and not because of some other
+ differences in the simulator.
 \end_layout
 
 \begin_layout Subsection
@@ -4280,6 +4959,15 @@ name "fig:Synthetic-Benchmark"
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+by creating situations that involve many exclusive reads from the caches.
+\end_layout
+
+\begin_layout Standard
+This generates many messages in the network because regardless of the protocol,
+ the directory needs to send some type of intervention to the 
 \end_layout
 
 \begin_layout Standard
