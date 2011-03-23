@@ -435,7 +435,7 @@ There are some latencies involved in sending messages into the network.
  First, there is the amount of time it takes for sending or receiving node
  to process the messages before putting it in the network.
  In addition to the sending overhead and the receiving overhead, there is
- the transport latency.
+ the network latency.
  This is how long the messages spends in the network.
  Essentially, it is from when the first bit of the packet arrives into the
  network to when the last bit leaves the network.
@@ -570,7 +570,7 @@ status open
 <column alignment="left" valignment="middle" width="25text%">
 <column alignment="left" valignment="middle" width="25text%">
 <row>
-<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -579,7 +579,7 @@ status open
 
 \end_inset
 </cell>
-<cell alignment="left" valignment="top" topline="true" rightline="true" usebox="none">
+<cell alignment="left" valignment="top" topline="true" bottomline="true" rightline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -588,7 +588,7 @@ Main Memory
 
 \end_inset
 </cell>
-<cell alignment="left" valignment="top" topline="true" rightline="true" usebox="none">
+<cell alignment="left" valignment="top" topline="true" bottomline="true" rightline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -597,7 +597,7 @@ Cache Line
 
 \end_inset
 </cell>
-<cell alignment="left" valignment="top" topline="true" rightline="true" usebox="none">
+<cell alignment="left" valignment="top" topline="true" bottomline="true" rightline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -764,6 +764,10 @@ May hold valid or invalid copy
 \end_inset
 
 
+\end_layout
+
+\begin_layout Plain Layout
+\align center
 \begin_inset Caption
 
 \begin_layout Plain Layout
@@ -909,7 +913,7 @@ status open
 <column alignment="center" valignment="top" width="0">
 <column alignment="center" valignment="top" width="0">
 <row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -918,7 +922,7 @@ Cache State
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -3682,12 +3686,12 @@ Experimental Setup
 \begin_inset Float table
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \align center
 \begin_inset Tabular
-<lyxtabular version="3" rows="7" columns="2">
+<lyxtabular version="3" rows="10" columns="2">
 <features>
 <column alignment="center" valignment="top" width="0">
 <column alignment="center" valignment="top" width="0">
@@ -3696,7 +3700,7 @@ status collapsed
 \begin_inset Text
 
 \begin_layout Plain Layout
-Memory level
+Latency Type
 \end_layout
 
 \end_inset
@@ -3705,7 +3709,7 @@ Memory level
 \begin_inset Text
 
 \begin_layout Plain Layout
-Latency (cycles)
+Number of Cycles
 \end_layout
 
 \end_inset
@@ -3716,7 +3720,7 @@ Latency (cycles)
 \begin_inset Text
 
 \begin_layout Plain Layout
-L1 cache hit
+L1 Cache Hit
 \end_layout
 
 \end_inset
@@ -3736,7 +3740,7 @@ L1 cache hit
 \begin_inset Text
 
 \begin_layout Plain Layout
-L1 cache miss
+L1 Cache Miss
 \end_layout
 
 \end_inset
@@ -3756,7 +3760,7 @@ L1 cache miss
 \begin_inset Text
 
 \begin_layout Plain Layout
-L2 cache hit
+L2 Cache Hit
 \end_layout
 
 \end_inset
@@ -3776,7 +3780,7 @@ L2 cache hit
 \begin_inset Text
 
 \begin_layout Plain Layout
-L2 cache miss
+L2 Cache Miss
 \end_layout
 
 \end_inset
@@ -3796,7 +3800,7 @@ L2 cache miss
 \begin_inset Text
 
 \begin_layout Plain Layout
-memory read
+Memory Read
 \end_layout
 
 \end_inset
@@ -3812,16 +3816,16 @@ memory read
 </cell>
 </row>
 <row>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
-memory write
+Memory Write
 \end_layout
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -3831,31 +3835,21 @@ memory write
 \end_inset
 </cell>
 </row>
-</lyxtabular>
-
-\end_inset
-
-
-\begin_inset Tabular
-<lyxtabular version="3" rows="4" columns="2">
-<features>
-<column alignment="center" valignment="top" width="0">
-<column alignment="center" valignment="top" width="0">
 <row>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
-Device type
+Network Minimum
 \end_layout
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
-Latency (cycles)
+100
 \end_layout
 
 \end_inset
@@ -3866,7 +3860,7 @@ Latency (cycles)
 \begin_inset Text
 
 \begin_layout Plain Layout
-remote send time
+Network Random Range
 \end_layout
 
 \end_inset
@@ -3875,27 +3869,7 @@ remote send time
 \begin_inset Text
 
 \begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
+10
 \end_layout
 
 \end_inset
@@ -3906,7 +3880,7 @@ remote send time
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+Network Multiplier
 \end_layout
 
 \end_inset
@@ -3915,7 +3889,7 @@ remote send time
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+0.1
 \end_layout
 
 \end_inset
@@ -3932,7 +3906,7 @@ remote send time
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Parameters
+Parameters used for simulator configuration
 \begin_inset CommandInset label
 LatexCommand label
 name "tab:parameters"
@@ -3953,46 +3927,12 @@ name "tab:parameters"
 \end_layout
 
 \begin_layout Standard
-The system simulates a shared-media network, as opposed to a switched-network.
-\end_layout
-
-\begin_layout Standard
-In order to keep track of the messages, every message has a message ID associate
-d with it.
- Many of the messages that will be utilized expect a response message.
- Some expect two response messages.
- Message ID can be placed in the header
-\end_layout
-
-\begin_layout Standard
-This section will describe how the various components in the system are
- setup.
- Specifically, I will present the configuration of the simulator.
-\end_layout
-
-\begin_layout Standard
-The way that the network is modeled in the SESC simulator will be presented
- in Section 6, Experimental Setup.
-\end_layout
-
-\begin_layout Standard
-The SESC simulator allows configuration of various parameters.
- Block size is set by comparing the system with the real system, as seen
- on a real SGI Origin system.
-\end_layout
-
-\begin_layout Standard
-All benchmarks are run on the default settings with 64KB L1 cache and 1MB
- L2 cache, with the processor count between 4 and 32.
-\end_layout
-
-\begin_layout Standard
-The number of processors were chosen to show the difference between various
- number of processors and their effect on the protocol.
-\end_layout
-
-\begin_layout Standard
-The configurations for running each of the benchmarks are shown in 
+In this section, I will go over the experimental setup used for running
+ the simulations and explain why these parameters were chosen.
+ The processor is modeled as superscalar and out-of-order to simulate the
+ R10000 processor that is used in the SGI Origin 2000 computer systems.
+ The rest of the components have their parameters configured according to
+ 
 \begin_inset ERT
 status open
 
@@ -4017,22 +3957,118 @@ reference "tab:parameters"
 \end_inset
 
 .
- The parameters for the memory are significantly larger than the caches,
- but is still relatively small to simulate the behavior of main memory in
- a DSM.
+ The number of cycles that each of the components take are approximated
+ from the latency values in the SGI Origin 2000.
+ The values for the network are approximated from the remote memory latencies
+ in the SGI Origin system, and the values used for main memory are interpreted
+ from the Origin's local memory latencies.
+ It is assumed that writes take longer than reads and misses take longer
+ than hits.
 \end_layout
 
 \begin_layout Standard
-Both of the caches in the two 
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Formula \begin{equation}
+T_{L}=T_{m}+rand\left(0,T_{R}\right)+\left(T_{X}\times N\right)\label{eq:network-latency-equation-for}\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Network latency equation for a single message
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Network-latency-equation"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
-The underlying network in use for this simulator is a simple black box model.
- It does not model a real network with routing.
- Instead it models messages going in and out of the network using a random
- delay with a lower-bound of 4 and an upper-bound of 20.
- When more messages arrive, the delay coming from the random delay generator
- will be shifted higher as to model the higher traffic conditions.
+The network is modeled according to 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+equationname
+\end_layout
+
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:network-latency-equation-for"
+
+\end_inset
+
+.
+ The Network Latency (
+\begin_inset Formula $T_{L}$
+\end_inset
+
+) is determined by a combination of the Network Minimum (
+\begin_inset Formula $T_{m}$
+\end_inset
+
+), Network Random Range (
+\begin_inset Formula $T_{R}$
+\end_inset
+
+), Network Multiplier (
+\begin_inset Formula $T_{X}$
+\end_inset
+
+), and the number of messages in the network (
+\begin_inset Formula $N$
+\end_inset
+
+).
+ Network Minimum is a lower bound to how long the message is in the network.
+ Messages will be in the network for at least this time before being sent
+ to the receiver.
+ Random Network Range is used to introduce some randomness into the network
+ model.
+ This is chosen to be 10% of the Network Minimum so that there would be
+ some variation in the network latency, but not be large enough for the
+ random values to affect the overall latency significantly.
+ The Network Multiplier is used as part of the calculation for the additional
+ time it would take for a message to pass through the network when there
+ are other messages in the network.
+ The dependence of the network latency on network traffic uses a linear
+ model, which means that the more messages there are in the network, the
+ higher the network latency is.
+ The model takes into account additional messages in the network by multiplying
+ Network Multiplier with the number of messages in the network to get the
+ addtional network delay.
 \end_layout
 
 \begin_layout Standard
@@ -4040,21 +4076,45 @@ In the simulator, we make sure that whenever a message is being sent to
  a remote node that has the same node ID as the current node, we send the
  message to itself.
  For example, if processor 1 requests a block A, where processor 1 is block
- A's home node, sending a network message from a node to itself it pointless
- and just results in needless network traffic.
+ A's home node, sending a network message from a node to itself results
+ in unnecessary network traffic.
  We perform a check to see if the destination for a message is the same
- as the source of the message, previous to sending the network message.
- If this is the case, it just forwards it straight on to the function that
- would handle it on the local directory node rather than emitting something
- on the network.
+ as the source of the message before sending the network message.
+ If this is the case, it just forwards it to the local hub and the message
+ does not get into the network.
 \end_layout
 
 \begin_layout Standard
-Since the simulator could only simulate 
+Interfacing with the network are many nodes, which contain a cache, a directory,
+ and a portion of the main memory that forms part of the DSM.
+ The latencies and block sizes for the caches are configured to resemble
+ the latencies on the R10000.
+ For example, L1 cache is 64KB because this is the size of the L1 cache
+ in the R10000 (32KB instruction + 32KB data).
+ The L2 cache in has a size of 512KB, since that is the minimum that the
+ SGI Origin 2000 can support, and we want the L2 cache size to be small
+ to incur more messages in the network, since the point of interest is on
+ the protocols and their difference in generating messages from requests.
+ The parameters for the memory are significantly larger than the caches,
+ but is still relatively small to simulate the behavior of main memory in
+ a DSM 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "gwennap1994mips"
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
-We are only interested in the comparison between the protocols.
+All of the SPLASH-2 benchmarks, unless otherwise specified, are run with
+ 64KB L1 cache and 512KB L2 cache, with the processor count between 4 and
+ 32.
+ The number of processors were chosen to show the difference between various
+ number of processors and their effect on the protocol.
+ All of the benchmarks are run with one thread on each node, which means
+ that there are as many threads as there are processors.
 \end_layout
 
 \begin_layout Section
