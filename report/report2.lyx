@@ -1148,7 +1148,7 @@ Message Types
 \begin_inset Float table
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \align center
@@ -1197,7 +1197,7 @@ Message Semantics
 \begin_layout Plain Layout
 \align center
 \begin_inset Tabular
-<lyxtabular version="3" rows="17" columns="3">
+<lyxtabular version="3" rows="18" columns="3">
 <features>
 <column alignment="center" valignment="top" width="20text%">
 <column alignment="center" valignment="top" width="20text%">
@@ -1375,6 +1375,44 @@ Address
 \begin_layout Plain Layout
 An ack from the previous owner or the home node to the new owner without
  data.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Memory Return
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+isExclusive
+\end_layout
+
+\begin_layout Plain Layout
+Address
+\end_layout
+
+\begin_layout Plain Layout
+BlockData
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+A read response message from the memory to the directory with the block
+ attached.
 \end_layout
 
 \end_inset
@@ -1861,8 +1899,8 @@ Another message that is similar to the read request message is the intervention
 \end_layout
 
 \begin_layout Standard
-The four read response types used amongst the two protocols are read response,
- read reply, read ack, and speculative reply.
+The five read response types used amongst the two protocols are read response,
+ read reply, read ack, speculative reply, and memory return.
  A read response indicates a response from another cache, whereas the read
  reply message indicates a response from the memory or the home node.
  Since the BIP only supports bilateral interactions between a cache and
@@ -1879,6 +1917,11 @@ The four read response types used amongst the two protocols are read response,
  whether or not the owner of the block is in Clean Exclusive or Dirty Exclusive,
  and the directory expects the owner to send its block to the requester,
  as well, if it was in the Dirty Exclusive state.
+ The final type of message sent in response to a read request is the memory
+ return message type.
+ This message can only be emitted from the main memory, and it is only used
+ to send a message from the memory to the directory when the directory requests
+ for data.
 \end_layout
 
 \begin_layout Standard
@@ -1977,6 +2020,50 @@ In this section, I will be going into protocol details.
  protocol, based on the SGI Origin protocol, where it is possible for each
  node to emit two messages in response to a request, and not all requests
  have to pass through the directory before being satisfied.
+\end_layout
+
+\begin_layout Standard
+An interesting aspect about the finite-state machines (FSMs) shown in this
+ section is that they contain many more states than previous sections would
+ indicate.
+ However, the system does not actually store this many states in the system.
+ The reason that there appear to be many more states than there are when
+ the directory and the cache was described in Section 3 is because many
+ of the states in the FSM diagrams are almost mirror-images of each other.
+ For example, in many cases, the transitions for a shared request versus
+ an exclusive request are the same, except shared responses are emitted
+ for the former and exclusive messages are sent for the latter.
+ These transitions and states are shown separately on the state diagram
+ to avoid having too many transitions out of any state in the diagram.
+ In addition, the previous section shows that many messages include an exclusive
+ bit or a dirty bit, which can also reduce the number of states stored as
+ the sender does not need to remember how these bits are set in the messages
+ that it sent.
+\end_layout
+
+\begin_layout Standard
+Some examples of the above mechanisms at work can show that the directory
+ and the cache does not need to actually store all the individual states
+ shown in the diagrams.
+ One instance is that the directory knows when it is in the Unowned state
+ when there are no sharers or owners for an address.
+ Similarly, the directory can tell when it is in the Shared state or Exclusive
+ state by counting the number of nodes that has the address.
+ If there is only one node with ownership, then the directory knows that
+ it is in one of the exclusive states.
+ If there are more than one sharers, then the directory knows that it is
+ in one of the shared states.
+ However, it is necessary to have a busy bit to indicate when the directory
+ is busy processing some request.
+ The cache has comparble properties.
+ The cache has to keep some information to indicate whether or not the cache
+ is clean or dirty, and whether or not it has exclusive ownership of the
+ block.
+ The MESI cache requires at least two bits per cache line to store its four
+ states.
+ Like the directory, it needs a busy/waiting bit to indicate that the cache
+ is processing some request and cannot respond to any requests, but it does
+ not need to store all the states that are shown in the FSMs presented below.
 \end_layout
 
 \begin_layout Subsection
