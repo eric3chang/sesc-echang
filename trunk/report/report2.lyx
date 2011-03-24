@@ -911,7 +911,7 @@ key "HEN00"
 \begin_inset Float table
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -1148,7 +1148,7 @@ Message Types
 \begin_inset Float table
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -1351,7 +1351,7 @@ A response with data from the previous exclusive owner with data.
 \begin_inset Text
 
 \begin_layout Plain Layout
-Read Ack (Origin)
+Read Ack
 \end_layout
 
 \end_inset
@@ -1373,9 +1373,8 @@ Address
 \begin_inset Text
 
 \begin_layout Plain Layout
-An ack from the previous owner to the new owner without data.
- This message indicates that the new owner should use the speculative reply
- to fill its cache.
+An ack from the previous owner or the home node to the new owner without
+ data.
 \end_layout
 
 \end_inset
@@ -1615,7 +1614,7 @@ If the cache is asked to give up a block and it is in Dirty Exclusive, it
 \begin_inset Text
 
 \begin_layout Plain Layout
-Transfer (Origin)
+Transfer
 \end_layout
 
 \end_inset
@@ -1627,9 +1626,13 @@ Transfer (Origin)
 isDirty
 \end_layout
 
+\begin_layout Plain Layout
+Address
+\end_layout
+
 \end_inset
 </cell>
-<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -1800,8 +1803,32 @@ name "tab:All-message-types"
 \end_layout
 
 \begin_layout Standard
-In this section, I will introduce the basic message types used in the system.
- Messages sent in the network need to contain the message type and the address.
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+tablename
+\end_layout
+
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:All-message-types"
+
+\end_inset
+
+ shows the message types used in the system.
+ Messages sent in the network all need to contain the message type and the
+ address.
  The message type is necessary for the receiver to know what operations
  it should take with the message and the address is used to find the requested
  information.
@@ -1826,9 +1853,9 @@ Another message that is similar to the read request message is the intervention
  evict its block or send a copy in response to the request.
  In BIP, the response from the current owner is sent to the directory, whereas
  the response is sent to the original requester in Origin protocol.
- When the intervention message is shared, the current owner transitions
+ When a shared intervention request is received, the current owner transitions
  to the Shared state, whereas the current owner transitions to the Invalid
- state if the intervention request was exclusive.
+ state if an exclusive intervention request was received.
  After sending the read request message, the sending cache would wait for
  a response to the read request.
 \end_layout
@@ -1873,16 +1900,16 @@ After sending a writeback request or an eviction request, writeback responses
  busy ack and eviction ack.
  Writeback busy acks are only used in the Origin protocol and eviction acks
  are only used in BIP.
- Writeback exclusive acks are sent normally by the directory after receiving
- a writeback request.
- However, a writeback busy ack would be used if an intervention message
- arrives after a writeback request was sent.
- Eviction acks would be sent in response to eviction requests.
+ Regular writeback exclusive acks are sent normally by the directory after
+ receiving a writeback request.
+ However, in the Origin protocol, a writeback busy ack would be used if
+ an intervention message arrives after a writeback request was sent.
+ Eviction acks are sent in response to eviction requests.
 \end_layout
 
 \begin_layout Standard
 Besides the writeback request messages, there are also the writeback and
- transfer messages, used only in the Origin protocol.
+ transfer messages.
  These messages are used whenever an intervention message is sent by the
  directory to the previous owner.
  The previous owner needs to notify the directory that it has received the
@@ -1903,12 +1930,14 @@ The next message type is invalidate.
  by sending invalidates to all of them.
  The caches that receive the invalidate have to send an invalidate ack after
  invalidating their cache.
- Depending on the protocol, the invalidate ack would either go to the directory
- or the cache of the new owner.
+ In the Origin protocol, the invalidates are required to carry a NewOwner
+ tag so that the receiver knows where the invalidate acks should be sent.
+ In BIP, invalidate acks always go to the home node, which is calculated
+ from the address.
 \end_layout
 
 \begin_layout Standard
-The final message type is the nak message type.
+The final message type is the nak message.
  The nak message is further divided into directory nak message and cache
  nak message, since it is important for the hub to know whether to send
  the nak message to the directory or the cache.
@@ -2413,16 +2442,17 @@ Exclusive
  state is when the directory receives an exclusive read and the requester
  is not the owner.
  In this situation, the directory would set the requester as the owner and
- send an invalidate to the previous owner, while transitioning to 
+ send an intervention exclusive request to the previous owner, while transitioni
+ng to 
 \begin_inset Quotes eld
 \end_inset
 
-Waiting for Invalidate Response,
+Waiting for Writeback,
 \begin_inset Quotes erd
 \end_inset
 
- where it waits for a writeback request, an eviction request, or an invalidate
- ack to cause it to transition back to 
+ where it waits for a writeback request, an eviction request, a writeback,
+ or a transfer to cause it to transition back to 
 \begin_inset Quotes eld
 \end_inset
 
@@ -2434,7 +2464,7 @@ Exclusive.
 \begin_inset Quotes eld
 \end_inset
 
-Waiting for Invalidate Response,
+Waiting for Writeback,
 \begin_inset Quotes erd
 \end_inset
 
@@ -2464,12 +2494,11 @@ Exclusive
 \begin_inset Quotes eld
 \end_inset
 
-Waiting for Invalidate Response,
+Waiting for Writeback,
 \begin_inset Quotes erd
 \end_inset
 
- the directory could also receive an invalidate response or an invalidate
- ack.
+ the directory could also receive a writeback or a transfer message.
  In both cases, the directory would send an exclusive reply to the new owner
  and transition to 
 \begin_inset Quotes eld
@@ -2479,8 +2508,8 @@ Exclusive,
 \begin_inset Quotes erd
 \end_inset
 
- but it would only send a write to memory if it received an invalidate response,
- indicating that the cache was in the 
+ but it would only send a write to memory if it received a writeback, indicating
+ that the cache was in the 
 \begin_inset Quotes eld
 \end_inset
 
@@ -2510,8 +2539,8 @@ Exclusive Shared Waiting for Reply
 
  when the directory receives a shared read.
  This shared read has to come from a requester that is not the owner.
- The directory has to forward the request to the previous owner and add
- the requester as a sharer.
+ The directory has to send an intervention shared request to the previous
+ owner and add the requester as a sharer.
  In 
 \begin_inset Quotes eld
 \end_inset
@@ -2842,8 +2871,8 @@ Clean Exclusive,
 \begin_inset Quotes erd
 \end_inset
 
- the cache can receive an invalidate message from the directory, when it
- has to reply with an invalidate ack and transition to 
+ the cache can receive an intervention exclusive request from the directory,
+ when it has to reply with a dirty transfer and transition to 
 \begin_inset Quotes eld
 \end_inset
 
@@ -2851,7 +2880,7 @@ Invalid.
 \begin_inset Quotes erd
 \end_inset
 
- The cache could also receive a shared read request from the directory,
+ The cache could also receive an intervention shared request from the directory,
  indicating that the cache should transition into the 
 \begin_inset Quotes eld
 \end_inset
@@ -2860,7 +2889,7 @@ Shared
 \begin_inset Quotes erd
 \end_inset
 
- state and send a shared reply to the directory.
+ state and send a shared transfer to the directory.
  In addition, the cache could decide to evict the block by sending an eviction
  request to the directory and transitioning to 
 \begin_inset Quotes eld
@@ -2899,8 +2928,8 @@ Dirty Exclusive
 \end_inset
 
  state, several things can happen.
- The cache can receive an invalidate from the directory, when it would have
- to transition to 
+ The cache can receive an intervention exclusive request from the directory,
+ when it would have to transition to 
 \begin_inset Quotes eld
 \end_inset
 
@@ -2908,9 +2937,17 @@ Invalid
 \begin_inset Quotes erd
 \end_inset
 
- and send an invalidate response with the block attached to the directory.
- If the cache has to evict the block, it would send a writeback request
- to the directory and transition into 
+ and send a writeback to the directory.
+ If the cache decides to evict the block while in 
+\begin_inset Quotes eld
+\end_inset
+
+Dirty Exclusive,
+\begin_inset Quotes erd
+\end_inset
+
+ it would send a writeback request to the directory and transition into
+ 
 \begin_inset Quotes eld
 \end_inset
 
@@ -2935,7 +2972,7 @@ Dirty Exclusive,
 \begin_inset Quotes erd
 \end_inset
 
- the cache could also receive a shared read request from the directory,
+ the cache could also receive an intervention shared request from the directory,
  indicating that the cache should transition into the 
 \begin_inset Quotes eld
 \end_inset
@@ -2944,7 +2981,7 @@ Shared
 \begin_inset Quotes erd
 \end_inset
 
- state and send a shared reply to the directory.
+ state and send a writeback to the directory.
 \end_layout
 
 \begin_layout Standard

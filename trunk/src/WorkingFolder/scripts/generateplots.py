@@ -13,7 +13,7 @@ OUT_DIR='../../../report/generated-figures/'
 
 # don't need to change these when moving this script
 CHOLESKY_INPUT='tk23'
-DPI=600
+#DPI=600
 #LU_INPUT='b8'
 #LU_INPUT='b16'
 LU_INPUT='b32'
@@ -403,7 +403,8 @@ def plotGraphMultiple(benchmarks,dirtypes,iResults,minimum,maximum,myXlabel,myYl
             outfullpath = OUT_DIR+benchmarkString+filename+'.'+LU_INPUT+OUT_EXT
         else:
             outfullpath = OUT_DIR+benchmarkString+filename+OUT_EXT
-        savefig(outfullpath, dpi=DPI)
+        #savefig(outfullpath, dpi=DPI)
+        savefig(outfullpath)
     else:
         show()
     close()
