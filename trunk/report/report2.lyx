@@ -1156,8 +1156,8 @@ status open
 <lyxtabular version="3" rows="1" columns="3">
 <features>
 <column alignment="center" valignment="top" width="20text%">
-<column alignment="center" valignment="top" width="25text%">
-<column alignment="center" valignment="top" width="55text%">
+<column alignment="center" valignment="top" width="20text%">
+<column alignment="center" valignment="top" width="60text%">
 <row>
 <cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
@@ -1200,8 +1200,8 @@ Message Semantics
 <lyxtabular version="3" rows="17" columns="3">
 <features>
 <column alignment="center" valignment="top" width="20text%">
-<column alignment="center" valignment="top" width="25text%">
-<column alignment="left" valignment="top" width="55text%">
+<column alignment="center" valignment="top" width="20text%">
+<column alignment="left" valignment="top" width="60text%">
 <row>
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
@@ -2220,11 +2220,12 @@ BIP Directory FSM
 \begin_inset Float figure
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
+\align center
 \begin_inset Graphics
-	filename diagrams/regular-directory-fsm-1.emf
+	filename diagrams/bip-directory-fsm-1.emf
 	width 100text%
 
 \end_inset
@@ -2705,11 +2706,12 @@ BIP Cache FSM
 \begin_inset Float figure
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
+\align center
 \begin_inset Graphics
-	filename diagrams/regular-cache-fsm-1.emf
+	filename diagrams/bip-cache-fsm-1.emf
 	width 100text%
 
 \end_inset
@@ -3232,6 +3234,7 @@ sideways false
 status collapsed
 
 \begin_layout Plain Layout
+\align center
 \begin_inset Graphics
 	filename diagrams/origin-fsm-directory-03-combined.emf
 	width 100text%
@@ -3694,9 +3697,10 @@ Origin Protocol Cache FSM
 \begin_inset Float figure
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
+\align center
 \begin_inset Graphics
 	filename diagrams/origin-fsm-cache-02.emf
 	width 100text%
@@ -4636,8 +4640,8 @@ sideways false
 status open
 
 \begin_layout Plain Layout
-\begin_inset Formula \begin{equation}
-T_{L}=T_{m}+rand\left(0,T_{R}\right)+\left(T_{X}\times N\right)\label{eq:network-latency-equation-for}\end{equation}
+\begin_inset Formula \[
+T_{L}=T_{m}+rand\left(0,T_{R}\right)+\left(T_{X}\times N\right)\]
 
 \end_inset
 
@@ -4669,7 +4673,7 @@ name "fig:Network-latency-equation"
 \end_layout
 
 \begin_layout Standard
-The network is modeled according to 
+The network is modeled according to the equation in 
 \begin_inset ERT
 status open
 
@@ -4677,7 +4681,7 @@ status open
 
 
 \backslash
-equationname
+figurename
 \end_layout
 
 \end_inset
@@ -4689,7 +4693,7 @@ equationname
 
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "eq:network-latency-equation-for"
+reference "fig:Network-latency-equation"
 
 \end_inset
 
@@ -4732,6 +4736,9 @@ reference "eq:network-latency-equation-for"
  The model takes into account additional messages in the network by multiplying
  Network Multiplier with the number of messages in the network to get the
  addtional network delay.
+ So the network latency for a single message is Network Minimum plus a random
+ number between 0 and Network Random Range plus the Network Multiplier times
+ the number of messages in the network.
 \end_layout
 
 \begin_layout Standard
