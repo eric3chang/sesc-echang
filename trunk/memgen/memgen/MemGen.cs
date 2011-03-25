@@ -1,6 +1,8 @@
 ﻿public static class MemGen
 {
    static int LOCAL_SEND_TIME = 0;
+   static float PER_BYTE = 0.0f;
+   static float PER_PACKET = 0.0f;
 
 	public enum EvictionPolicy
 	{
@@ -64,6 +66,11 @@
 
         tempMin *= multiplyFactor;
         tempMax *= multiplyFactor;
+
+        if (tempMin==0 && tempMax==0)
+        {
+           tempMax = 1;
+        }
 
         _ret.randomMin = (int)tempMin;
         _ret.randomMax = (int)tempMax;
@@ -311,7 +318,7 @@
         output.WriteLine("String Type RandomLoaded");
         output.WriteLine("Int MinTime " + randomMin);
         output.WriteLine("Int MaxTime " + randomMax);
-        output.WriteLine("Int TimePerByte 1");
+        output.WriteLine("Int TimePerByte " + PER_BYTE);
         output.WriteLine("Real TimePerPacket " + perPacket);
         output.WriteLine("Int EnforceOrder 0");
         output.WriteLine("End");
@@ -464,7 +471,7 @@
         NetworkTimingData myNetworkTimingData = GetNetworkTimingData(nodeCount, multiplyFactor);
         int randomMin = myNetworkTimingData.randomMin;
         int randomMax = myNetworkTimingData.randomMax;
-        AddOriginNetwork("Network", nodeCount, randomMin, randomMax, 0.1f);
+        AddOriginNetwork("Network", nodeCount, randomMin, randomMax, PER_PACKET);
         //AddNetworkMemoryInterface("NMInt", nodeCount + 10);
         l1 *= 1024;
         l2 *= 1024;
@@ -501,7 +508,7 @@
         NetworkTimingData myNetworkTimingData = GetNetworkTimingData(nodeCount, multiplyFactor);
         int randomMin = myNetworkTimingData.randomMin;
         int randomMax = myNetworkTimingData.randomMax;
-        AddOriginNetwork("Network", nodeCount, randomMin, randomMax, 0.1f);
+        AddOriginNetwork("Network", nodeCount, randomMin, randomMax, PER_PACKET);
         //AddNetworkMemoryInterface("NMInt", nodeCount + 10);
         l1 *= 1024;
         l2 *= 1024;
@@ -530,12 +537,15 @@
 	{
 		System.IO.Directory.CreateDirectory("memoryConfigs");
 
-      float networkMultiplyFactor = 0.5f;
+      float networkMultiplyFactor = 0.0f;
       string filesysSeperator = "/";   // unix
       //string filesysSeperator = "\\";   // windows
       //string filenameAddition = "";
-      string filenameAddition = "localsendtime4-network05-";
+      string filenameAddition = "localsendtime4-network00-";
       LOCAL_SEND_TIME = 4;
+      PER_BYTE = 0.0f;
+      PER_PACKET = 0.0f;
+      //PER_PACKET = 0.1f;
       
       // nodeCount also determines the total number of processors
 		for (int nodeCount = 2; nodeCount <= 32; nodeCount *= 2)
@@ -545,8 +555,8 @@
             //for (int l1 = 8; l1 <= 1024; l1 *= 2)
 			{
 //				OutSimpleMemory1(i, l1);
-				for (int l2 = l1 * 2; l2 <= 4 * 1024; l2 *= 2)
-            //for (int l2 = l1 * 2; l2 <= 128; l2 *= 2)
+				//for (int l2 = l1 * 2; l2 <= 4 * 1024; l2 *= 2)
+            for (int l2 = 512; l2 <= 512; l2 *= 2)
 				{
                OutBIPDirectoryMemory(nodeCount, l1, l2, networkMultiplyFactor, filesysSeperator,filenameAddition);
                //OutDirectoryMemory(nodeCount, l1, l2, networkMultiplyFactor, filesysSeperator,filenameAddition);

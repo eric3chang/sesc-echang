@@ -101,6 +101,7 @@ int main(int argc, char** argv)
    int numberOfLoops = 0;
    int numberOfReads = 0;
    int processorCount = 0;
+   int localInt = 0;
 
    // process arguments
    for (t=0; t<argc; t++)
@@ -151,17 +152,6 @@ int main(int argc, char** argv)
    t = 0;
    while (1)
    {
-      printf("Creating read thread %d\n", t);
-#ifdef USE_SESC
-      sesc_spawn((void (*)(void*)) *readInt, &numberOfLoops, SESC_FLAG_NOMIGRATE|SESC_FLAG_MAP|t+1);
-#else
-      pthread_create(&threads[t], NULL, readInt, &numberOfLoops);
-#endif
-      t++;
-      if (t >= processorCount-1)
-      {
-         break;
-      }
       printf("Creating write thread %d\n", t);
 #ifdef USE_SESC
       sesc_spawn((void (*)(void*)) *incInt, &numberOfLoops, SESC_FLAG_NOMIGRATE|SESC_FLAG_MAP|t+1);
@@ -169,11 +159,22 @@ int main(int argc, char** argv)
       pthread_create(&threads[t], NULL, incInt, &numberOfLoops);
 #endif
       t++;
+      if (t >= processorCount-1)
+      {
+         break;
+      }
+      printf("Creating read thread %d\n", t);
+#ifdef USE_SESC
+      sesc_spawn((void (*)(void*)) *readInt, &numberOfLoops, SESC_FLAG_NOMIGRATE|SESC_FLAG_MAP|t+1);
+#else
+      pthread_create(&threads[t], NULL, readInt, &numberOfLoops);
+#endif
+      t++;
    }
 
-   printf("Creating write thread %d\n", t);
+   printf("Creating read thread %d\n", t);
 
-   // begin incInt section
+   // begin readInt section
    for (t=0; t<numberOfLoops; t++)
    {
 #ifdef USE_SESC
@@ -181,14 +182,14 @@ int main(int argc, char** argv)
 #else
       pthread_mutex_lock(&myLock);
 #endif
-      myInt = myInt + 1;
+      localInt = myInt;
 #ifdef USE_SESC
       sesc_unlock(&myLock);
 #else
       pthread_mutex_unlock(&myLock);
 #endif
    }
-   // end incInt section
+   // end readInt section
 
 #ifdef USE_SESC
    sesc_wait(); // wait for threads to finish

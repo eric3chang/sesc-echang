@@ -62,7 +62,7 @@ def convertToInt(incoming):
         quit()
     return outgoing
 
-def generateOneRunfile(benchmarkName, directoryType, processorCount, L1Size, L2Size):
+def generateOneRunfile(benchmarkName, directoryType, processorCount, L1Size, L2Size, CONFFILE_ADDITION):
     # check if these variables are numbers before using them
     processorCountInt = convertToInt(processorCount)
     L1SizeInt = convertToInt(L1Size)
@@ -92,7 +92,8 @@ def generateOneRunfile(benchmarkName, directoryType, processorCount, L1Size, L2S
         print('Unknown benchmark ' + benchmarkName)
         quit()
 
-    confFilename = benchmarkName + '-' + directoryType + '-' + processorCount + '-' + L1Size + '-' + L2Size
+    confFilename = benchmarkName + '-' + directoryType + '-' + processorCount + '-' + L1Size + '-' + L2Size\
+          + CONFFILE_ADDITION
 
     returnString = ''
     if (isUseLargeStack):
@@ -142,20 +143,41 @@ processorCountHi, L1Low, L1Hi, L2Low, L2Hi):
         processorIndex *=2
     '''
 
-    L1Index = L1LowInt
-    while (L1Index <= L1HiInt):
-        processorIndex = processorCountLowInt
-        while (processorIndex <= processorCountHiInt):
-            L2Index = L1Index * 2
-            if (L2Index < L2LowInt):
-                L2Index = L2LowInt
-            while (L2Index <= L2HiInt):
-                outputString += generateOneRunfile(benchmarkName, directoryType, str(processorIndex), str(L1Index), str(L2Index))
-                outputString += '\n'
-                #print(str(processorIndex) + ' ' + str(L1Index) + ' ' + str(L2Index))
-                L2Index *= 2
-            processorIndex *=2
-        L1Index *= 2
+    if (CONFFILE_ADDITION_PRE != ''):
+        for number in LOCAL_SENDTIME_RANGE:
+            CONFFILE_ADDITION = '.' + CONFFILE_ADDITION_PRE+str(number)+CONFFILE_ADDITION_POST
+            L1Index = L1LowInt
+            while (L1Index <= L1HiInt):
+                processorIndex = processorCountLowInt
+                while (processorIndex <= processorCountHiInt):
+                    L2Index = L1Index * 2
+                    if (L2Index < L2LowInt):
+                        L2Index = L2LowInt
+                    while (L2Index <= L2HiInt):
+                        outputString += generateOneRunfile(benchmarkName, directoryType, str(processorIndex), str(L1Index), str(L2Index),
+                            CONFFILE_ADDITION)
+                        outputString += '\n'
+                        #print(str(processorIndex) + ' ' + str(L1Index) + ' ' + str(L2Index))
+                        L2Index *= 2
+                    processorIndex *=2
+                L1Index *= 2
+    else:
+        CONFFILE_ADDITION=''
+        L1Index = L1LowInt
+        while (L1Index <= L1HiInt):
+            processorIndex = processorCountLowInt
+            while (processorIndex <= processorCountHiInt):
+                L2Index = L1Index * 2
+                if (L2Index < L2LowInt):
+                    L2Index = L2LowInt
+                while (L2Index <= L2HiInt):
+                    outputString += generateOneRunfile(benchmarkName, directoryType, str(processorIndex), str(L1Index), str(L2Index),
+                        CONFFILE_ADDITION)
+                    outputString += '\n'
+                    #print(str(processorIndex) + ' ' + str(L1Index) + ' ' + str(L2Index))
+                    L2Index *= 2
+                processorIndex *=2
+            L1Index *= 2
  
     outFile.write(outputString)
     outFile.close()
@@ -166,10 +188,11 @@ def main():
     global HEADER2
     #benchmarkNames = ['barnes', 'cholesky', 'fft', 'fmm', 'lu','newtest', 'radix', 'raytrace', 'ocean']
     #benchmarkNames = ['cholesky', 'fft', 'newtest', 'radix', 'ocean']
-    benchmarkNames = ['cholesky', 'fft', 'radix', 'ocean']
+    #benchmarkNames = ['cholesky', 'fft', 'radix', 'ocean']
+    benchmarkNames = ['newtest']
     directoryTypes = ['bip', 'origin']
     processorCountLow = '2'
-    processorCountHi = '32'
+    processorCountHi = '2'
     #L1Low = '8'
     #L1Hi = '64'
     L1Low = '64'
@@ -179,10 +202,18 @@ def main():
     #L2Hi = '4096'
     L2Low = '512'
     L2Hi = '512'
-    #AUGSESC='augSesc-Debug'
+    AUGSESC='augSesc-Debug'
     #AUGSESC='augSesc-Release'
-    AUGSESC='augSesc-O1'
+    #AUGSESC='augSesc-O1'
     HEADER2='#!/bin/bash\nDATE=$(date "+%m%d%H%M")\nHOSTNAME=$(hostname)\nAUGSESC='+AUGSESC+'\n\n'
+    global CONFFILE_ADDITION
+    #CONFFILE_ADDITION=''
+    global CONFFILE_ADDITION_PRE
+    CONFFILE_ADDITION_PRE='localsendtime4-network'
+    global CONFFILE_ADDITION_POST
+    CONFFILE_ADDITION_POST='0'
+    global LOCAL_SENDTIME_RANGE
+    LOCAL_SENDTIME_RANGE=range(0,8)
 
     combinedOutfilename = OUT_DIR+COMBINED_OUT+OUT_EXT
     combinedOutfile = open(combinedOutfilename, 'wb')
@@ -195,6 +226,7 @@ def main():
         for directory in directoryTypes:
             generateMultipleRunfiles(combinedOutfile, name, directory, processorCountLow,\
                 processorCountHi, L1Low, L1Hi, L2Low, L2Hi)
+
     combinedOutfile.close()
     # leading 0 implies octal
     os.chmod(combinedOutfilename,0700)

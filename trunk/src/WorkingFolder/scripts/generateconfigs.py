@@ -35,7 +35,10 @@ def generateConfig(benchmarkName, directoryType, processorCount, L1Size, L2Size,
 
     outFilename = benchmarkName + '-' + directoryType + '-' \
         + processorCount + '-' + L1Size + '-' + L2Size
-    outFilenameFull = outFilename + OUTPUT_EXTENSION
+    if (USE_MEMORYFILE_PREFIX):
+        outFilenameFull = outFilename + '.' + memoryfilePrefix + OUTPUT_EXTENSION
+    else:
+        outFilenameFull = outFilename + OUTPUT_EXTENSION
 
     outPath = OUTPUT_DIRECTORY + outFilenameFull
     outFile = open(outPath, 'w')
@@ -48,8 +51,10 @@ def generateConfig(benchmarkName, directoryType, processorCount, L1Size, L2Size,
     outFile.write('FilterSize = 64\n')
     # don't need to write ReportFile, since it has no useful information
     #outFile.write("ReportFile = 'results/" + outFilename + ".report'\n")
-    #outFile.write("MemDeviceReportFile = 'results/" + outFilename + ".memDevResults." + memoryfilePrefix + "'\n")
-    outFile.write("MemDeviceReportFile = 'results/" + outFilename + ".memDevResults'\n")
+    if (USE_MEMORYFILE_PREFIX):
+        outFile.write("MemDeviceReportFile = 'results/" + outFilename + ".memDevResults." + memoryfilePrefix + "'\n")
+    else:
+        outFile.write("MemDeviceReportFile = 'results/" + outFilename + ".memDevResults'\n")
     outFile.write("CompositionResultFile = 'results/" + outFilename + ".dat'\n")
     outFile.write("BenchName = '" + benchmarkName + "'\n")
     outFile.write('MemorySystemConfig = "' + MEMORY_SYSTEM_CONFIG_DIRECTORY + memoryfilePrefix + "-" + directoryType \
@@ -89,28 +94,39 @@ def generateAllBenchmarks(benchmarkNames, directoryType, processorCountLow, proc
             memoryfilePrefix,L2Low,L2Hi)
 
 def main():
-    benchmarkNames = ['cholesky', 'fft', 'newtest', 'radix', 'ocean']
+    #benchmarkNames = ['cholesky', 'fft', 'newtest', 'radix', 'ocean']
+    benchmarkNames = ['fft']
     directoryTypes = ['bip','origin']
-    processorCountLow = '2'
-    processorCountHi = '32'
+    processorCountLow = '16'
+    processorCountHi = '16'
     L1Low = '64'
     L1Hi = '64'
     #L2Low = '128'
     #L2Low = '512'
     #L2Hi = '4096'
     L2Low = '512'
-    L2Hi = '4096'
+    L2Hi = '512'
     #memoryfilePrefix = 'localsendtime4-network05'
     #memoryfilePrefix = 'localsendtime4-network10'
     #memoryfilePrefix = 'localsendtime4-network20'
-    #memoryfilePrefix = 'localsendtime4-network90'
+    memoryfilePrefix = 'localsendtime4-network90'
     #memoryfilePrefix = 'localsendtime60-network05'
     #memoryfilePrefix = 'localsendtime60-network10'
     #memoryfilePrefix = 'localsendtime60-network20'
-    memoryfilePrefix = 'localsendtime60-network90'
+    #memoryfilePrefix = 'localsendtime60-network90'
+    global USE_MEMORYFILE_PREFIX
+    USE_MEMORYFILE_PREFIX=True
 
-    for directory in directoryTypes:
-       generateAllBenchmarks(benchmarkNames, directory, processorCountLow, processorCountHi, L1Low, L1Hi,memoryfilePrefix,L2Low,L2Hi)
+    if (USE_MEMORYFILE_PREFIX):
+       for number in range(0,10):
+          memoryfilePrefix='localsendtime4-network'
+          memoryfilePrefix += str(number)
+          memoryfilePrefix += '0'
+          for directory in directoryTypes:
+             generateAllBenchmarks(benchmarkNames, directory, processorCountLow, processorCountHi, L1Low, L1Hi,memoryfilePrefix,L2Low,L2Hi)
+    else:
+        for directory in directoryTypes:
+            generateAllBenchmarks(benchmarkNames, directory, processorCountLow, processorCountHi, L1Low, L1Hi,memoryfilePrefix,L2Low,L2Hi)
 
 if __name__ == "__main__":
     main()
