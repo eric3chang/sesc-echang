@@ -54,7 +54,7 @@ def getCpuResults(benchmarks, dirtypes, minCpu, maxCpu, l1, l2, component, key):
             cpuResults = {}
             cpu = mincpuInt
             while (cpu <= maxcpuInt):
-                dictionary = getDictionary(benchmark, dirtype, str(cpu), l1, l2)
+                dictionary = getDictionary(benchmark, dirtype, str(cpu), l1, l2, IN_EXT)
                 if component not in dictionary:
                     printError(component + ' should be in the file')
                 else:
@@ -79,7 +79,7 @@ def getL1Results(benchmarks, dirtypes, cpu, minimum, maximum, l2, component, key
             iResults = {}
             i = minInt
             while (i <= maxInt):
-                dictionary = getDictionary(benchmark, dirtype, cpu, str(i), l2)
+                dictionary = getDictionary(benchmark, dirtype, cpu, str(i), l2, IN_EXT)
                 if component not in dictionary:
                     printError(component + ' should be in the file')
                 else:
@@ -104,7 +104,7 @@ def getL2Results(benchmarks, dirtypes, cpu, l1, minimum, maximum, component, key
             iResults = {}
             i = minInt
             while (i <= maxInt):
-                dictionary = getDictionary(benchmark, dirtype, cpu, l1, str(i))
+                dictionary = getDictionary(benchmark, dirtype, cpu, l1, str(i), IN_EXT)
                 if component not in dictionary:
                     printError(component + ' should be in the file')
                 else:
@@ -119,8 +119,40 @@ def getL2Results(benchmarks, dirtypes, cpu, l1, minimum, maximum, component, key
         benchmarkResults[benchmark] = dirtypeResults
     return benchmarkResults
 
-def getDictionary(benchmark, dirtype, cpu, l1, l2):
-    fullpath = getFilename(benchmark, dirtype, cpu, l1, l2)
+def getLatencyResults(benchmarks, dirtypes, cpu, l1, l2, minlatency, maxlatency, component, key):
+    benchmarkResults = {}
+    minlatencyInt = convertToInt(minlatency)
+    maxlatencyInt = convertToInt(maxlatency)
+    for benchmark in benchmarks:
+        dirtypeResults = {}
+        for dirtype in dirtypes:
+            latencyResults = {}
+            latency = minlatencyInt
+            while (latency <= maxlatencyInt):
+                fileAdd = '.localsendtime4-network'
+                fileAdd += str(latency)
+                fileAdd += '0'
+                inExt = '.memDevResults' + fileAdd
+                dictionary = getDictionary(benchmark, dirtype, str(cpu), l1, l2, inExt)
+                if component not in dictionary:
+                    printError(component + ' should be in the file')
+                else:
+                    subDictionary = dictionary[component]
+                if key not in subDictionary:
+                    printError(key + ' should be in the file')
+                else:
+                    value = subDictionary[key]
+                subDirectory = dictionary['Network']
+                initialTime = subDirectory['initialTime']
+
+                latencyResults[initialTime] = value
+                latency *= 2
+            dirtypeResults[dirtype] = latencyResults
+        benchmarkResults[benchmark] = dirtypeResults
+    return benchmarkResults
+
+def getDictionary(benchmark, dirtype, cpu, l1, l2, inExt):
+    fullpath = getFilename(benchmark, dirtype, cpu, l1, l2, inExt)
     # replace cholesky's filename with correct one
     if (benchmark=='cholesky'):
         splitfullpath = fullpath.split('.')
@@ -161,8 +193,8 @@ def getDictionary(benchmark, dirtype, cpu, l1, l2):
             subDictionary[key] = value
     return dictionary
 
-def getFilename(benchmark, dirtype, cpu, l1, l2):
-    filename = benchmark+'-'+dirtype+'-'+cpu+'-'+l1+'-'+l2+IN_EXT
+def getFilename(benchmark, dirtype, cpu, l1, l2, inExt):
+    filename = benchmark+'-'+dirtype+'-'+cpu+'-'+l1+'-'+l2+ inExt
     fullpath = IN_DIR+filename
     return fullpath
 
@@ -171,21 +203,23 @@ def getGraphAverageResults(benchmarks, dirtypes, benchmarkResults, minimum, maxi
     minInt = convertToInt(minimum)
     maxInt = convertToInt(maximum)
     maxValue = 0.0
+    firstDirtypeSource = benchmarkResults[benchmarks[0]]
+    firstISource = firstDirtypeSource[dirtypes[0]]
+    allKeys = firstISource.keys()
     for dirtype in dirtypes:
         iResults = {}
         i = minInt
-        while (i <= maxInt):
+        for key in allKeys:
             total = 0
             for benchmark in benchmarks:
                 dirtypeSources = benchmarkResults[benchmark]
                 iSources = dirtypeSources[dirtype]
-                value = iSources[i]
+                value = iSources[key]
                 total += float(value)
             average = total/len(benchmarks)
-            iResults[i] = average
+            iResults[key] = average
             if (average > maxValue):
                 maxValue = average
-            i *= 2
         dirtypeResults[dirtype] = iResults
     if (isNormalize):
         # normalize values
@@ -307,6 +341,19 @@ def plotCpuAverage(benchmarks, dirtypes, mincpu, maxcpu, component, key,isNormal
     myTitle = 'combined average'
     graphResults = getGraphAverageResults(benchmarks, dirtypes, cpuResults, mincpu, maxcpu,isNormalize)
     plotGraphSingle(dirtypes, graphResults, mincpu, maxcpu, myXlabel, myYlabel, myTitle,isSwitchDirtypes)
+
+def plotLatencySingle(benchmarks, dirtypes, cpu,l1,l2, minimum, maximum, component,key, myYlabel, filename,isSaveFigure,isNormalize,isSwitchDirtype):
+    myXlabel='Network Latency (Cycles)'
+    iResults = getLatencyResults(benchmarks, dirtypes, cpu, l1, l2, minimum, maximum, component, key)
+
+    for benchmark in benchmarks:
+        myTitle = benchmark
+        tempBenchmarks = [benchmark]
+        plotGraphMultiple(tempBenchmarks,dirtypes, iResults, minimum, maximum, myXlabel, myYlabel,filename,isSaveFigure,isNormalize,isSwitchDirtype)
+
+def plotLatencyTimeSingle(benchmarks, dirtypes, cpu,l1,l2, minlatency, maxlatency, isSaveFigure,isNormalize,filenameAddition,isSwitchDirtype):
+    plotLatencySingle(benchmarks, dirtypes, cpu,l1,l2, minlatency, maxlatency, 'TotalRunTime', 'TotalRunTime', 'Runtime (%)',
+        'latency-time-p' + cpu + '-c'+l2+filenameAddition,isSaveFigure,isNormalize,isSwitchDirtype)
 
 def plotL1NetworkLatencyMultiple(benchmarks, dirtypes,cpu,minimum,maximum, l2,isSaveFigure,isNormalize,filenameAddition,isSwitchDirtype):
     plotL1Multiple(benchmarks, dirtypes,cpu,minimum, maximum,l2,'Network', 'AverageLatency', 'Average Latency (%)',
@@ -433,18 +480,17 @@ def plotGraphSingle(dirtypes, graphResults, minimum, maximum, myXlabel, myYlabel
     if (not isSwitchDirtypes):
         for dirtype in dirtypes:
             iSources = graphResults[dirtype]
-            i = minInt
+            keys = iSources.keys()
             xValues = []
             yValues = []
-            while (i <= maxInt):
-                x = i
-                y = iSources[i]
+            for myKey in keys:
+                x = myKey
+                y = iSources[myKey]
                 xValues.append(x)
                 yValues.append(y)
                 if (y > yAxis):
                     yAxis= y
-                ticks.append(i)
-                i *= 2
+                ticks.append(x)
             plot(xValues, yValues, linestyle, label=dirtype)
             plot(xValues, yValues, LINESTYLE_SOLID)
             # change line style
@@ -490,36 +536,42 @@ def plotGraphSingle(dirtypes, graphResults, minimum, maximum, myXlabel, myYlabel
 def main():
     #benchmarks = ['cholesky', 'fft', 'lu','newtest', 'radix', 'ocean']
     #benchmarks = ['cholesky', 'fft', 'newtest', 'radix', 'ocean']
-    benchmarks = ['cholesky']
+    benchmarks = ['fft']
     dirtypes = ['bip', 'origin']
     #bipdirtypes = ['bip']
     #origindirtypes = ['origin']
+    cpu = '16'
     mincpu = '4'
     maxcpu = '32'
     l1 = '64'
+    l2 = '512'
     #minl2 = '128'
     #minl2 = '512'
     #maxl2 = '4096'
     minl2 = '1024'
     maxl2 = '1024'
-    isNorm = True
-    isSavFig = True
+    minlatency = '1'
+    maxlatency = '7'
+    isNorm = False
+    isSavFig = False
     isSwitchDir = False
     global IN_EXT
-    #fileAdd = ''
+    fileAdd = ''
     #fileAdd = '.network05'
-    fileAdd = '.network10'
+    #fileAdd = '.network10'
     #fileAdd = '.newtest20'
     #fileAdd = '.network90'
     #fileAdd = '.localsendtime4.network05'
     #fileAdd = '.localsendtime60.network05'
     IN_EXT = '.memDevResults' + fileAdd
 
+    plotLatencyTimeSingle(benchmarks, dirtypes, cpu, l1, l2, minlatency, maxlatency, isSavFig,isNorm,fileAdd,isSwitchDir)
+
     l2Index = int(minl2)
     while (l2Index <= int(maxl2)):
         #plotCpuTimeSingle(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index),isSavFig,isNorm,fileAdd,isSwitchDir)
         #plotCpuMessagesSingle(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index), isSavFig,isNorm,fileAdd,isSwitchDir)
-        plotCpuL2Misses(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index), isSavFig, isNorm, fileAdd, isSwitchDir)
+        #plotCpuL2Misses(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index), isSavFig, isNorm, fileAdd, isSwitchDir)
 
         #plotCpuTimeMultiple(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index),isSavFig,isNorm,fileAdd,isSwitchDir)
         #plotCpuNetworkLatencySingle(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index), isSavFig,isNorm,fileAdd,isSwitchDir)
