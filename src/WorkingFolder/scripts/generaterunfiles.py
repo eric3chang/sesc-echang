@@ -166,10 +166,9 @@ def main():
     global HEADER2
     #benchmarkNames = ['barnes', 'cholesky', 'fft', 'fmm', 'lu','newtest', 'radix', 'raytrace', 'ocean']
     #benchmarkNames = ['cholesky', 'fft', 'newtest', 'radix', 'ocean']
-    #benchmarkNames = ['newtest']
-    benchmarkNames = ['cholesky', 'ocean']
+    benchmarkNames = ['cholesky', 'fft', 'radix', 'ocean']
     directoryTypes = ['bip', 'origin']
-    processorCountLow = '32'
+    processorCountLow = '2'
     processorCountHi = '32'
     #L1Low = '8'
     #L1Hi = '64'
@@ -180,9 +179,9 @@ def main():
     #L2Hi = '4096'
     L2Low = '512'
     L2Hi = '512'
-    AUGSESC='augSesc-Debug'
+    #AUGSESC='augSesc-Debug'
     #AUGSESC='augSesc-Release'
-    #AUGSESC='augSesc-O1'
+    AUGSESC='augSesc-O1'
     HEADER2='#!/bin/bash\nDATE=$(date "+%m%d%H%M")\nHOSTNAME=$(hostname)\nAUGSESC='+AUGSESC+'\n\n'
 
     combinedOutfilename = OUT_DIR+COMBINED_OUT+OUT_EXT
