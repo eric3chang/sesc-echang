@@ -226,12 +226,22 @@ def plotCpuNetworkLatencySingle(benchmarks, dirtypes, minimum, maximum, l1, l2,i
         'cpu-networklatency-c'+l2+filenameAddition,isSaveFigure,isNormalize,isSwitchDirtype)
 
 def plotCpuMessagesMultiple(benchmarks, dirtypes, minimum, maximum,l1,l2,isSaveFigure,isNormalize,filenameAddition,isSwitchDirtype):
+    messagesReceived=''
+    if (isNormalize):
+        messagesReceived='Messages Received (%)'
+    else:
+        messagesReceived='Messages Received'
     plotCpuMultiple(benchmarks, dirtypes, minimum, maximum,l1,l2,'Network', 'TotalMessagesReceived',
-        'Messages Received (%)','cpu-messages-c'+l2+filenameAddition,isSaveFigure,isNormalize,isSwitchDirtype)
+        messagesReceived,'cpu-messages-c'+l2+filenameAddition,isSaveFigure,isNormalize,isSwitchDirtype)
 
 def plotCpuMessagesSingle(benchmarks, dirtypes, minimum, maximum,l1,l2,isSaveFigure,isNormalize,filenameAddition,isSwitchDirtype):
+    messagesReceived=''
+    if (isNormalize):
+        messagesReceived='Messages Received (%)'
+    else:
+        messagesReceived='Messages Received'
     plotCpuSingle(benchmarks, dirtypes, minimum, maximum,l1,l2,'Network', 'TotalMessagesReceived',
-        'Messages Received (%)','cpu-messages-c'+l2+filenameAddition,isSaveFigure,isNormalize,isSwitchDirtype)
+        messagesReceived,'cpu-messages-c'+l2+filenameAddition,isSaveFigure,isNormalize,isSwitchDirtype)
 
 def plotCpuTimeMultiple(benchmarks, dirtypes, minimum, maximum, l1, l2, isSaveFigure,isNormalize,filenameAddition,isSwitchDirtype):
     plotCpuMultiple(benchmarks, dirtypes, minimum, maximum, l1, l2, 'TotalRunTime', 'TotalRunTime',
@@ -243,7 +253,11 @@ def plotCpuTimeSingle(benchmarks, dirtypes, minimum, maximum,l1,l2,isSaveFigure,
 
 def plotCpuL2Misses(benchmarks, dirtypes, minimum, maximum, l1, l2, isSaveFigure, isNorm, filenameAdd, isSwitchDirtype):
     myXlabel='Number of Processors'
-    myYlabel='L2 Misses (%)'
+    myYlabel=''
+    if (isNorm):
+        myYlabel='L2 Misses (%)'
+    else:
+        myYlabel='L2 Misses'
     filename='cpu-l2miss-c'+l2+filenameAdd
     exclusiveReadMisses = getCpuResults(benchmarks, dirtypes, minimum,maximum, l1, l2, 'TotalCache', 'totalL2CacheExclusiveReadMisses')
     sharedReadMisses = getCpuResults(benchmarks, dirtypes, minimum, maximum, l1, l2, 'TotalCache', 'totalL2CacheSharedReadMisses')
@@ -481,36 +495,38 @@ def main():
     #bipdirtypes = ['bip']
     #origindirtypes = ['origin']
     mincpu = '4'
-    maxcpu = '4'
+    maxcpu = '32'
     l1 = '64'
     #minl2 = '128'
     #minl2 = '512'
     #maxl2 = '4096'
-    minl2 = '512'
-    #maxl2 = '4096'
-    maxl2 = '512'
-    isNorm = False
+    minl2 = '1024'
+    maxl2 = '1024'
+    isNorm = True
     isSavFig = True
     isSwitchDir = False
     global IN_EXT
-    #fileAdd = '.newtest20'
-    fileAdd = '.network10'
+    #fileAdd = ''
     #fileAdd = '.network05'
+    fileAdd = '.network10'
+    #fileAdd = '.newtest20'
+    #fileAdd = '.network90'
     #fileAdd = '.localsendtime4.network05'
     #fileAdd = '.localsendtime60.network05'
     IN_EXT = '.memDevResults' + fileAdd
 
     l2Index = int(minl2)
     while (l2Index <= int(maxl2)):
-        plotCpuTimeSingle(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index),isSavFig,isNorm,fileAdd,isSwitchDir)
-        #plotCpuTimeMultiple(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index),isSavFig,isNorm,fileAdd,isSwitchDir)
+        #plotCpuTimeSingle(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index),isSavFig,isNorm,fileAdd,isSwitchDir)
         #plotCpuMessagesSingle(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index), isSavFig,isNorm,fileAdd,isSwitchDir)
+        plotCpuL2Misses(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index), isSavFig, isNorm, fileAdd, isSwitchDir)
+
+        #plotCpuTimeMultiple(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index),isSavFig,isNorm,fileAdd,isSwitchDir)
         #plotCpuNetworkLatencySingle(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index), isSavFig,isNorm,fileAdd,isSwitchDir)
         #plotCpuCacheLatencySingle(benchmarks, origindirtypes, mincpu, maxcpu, l1, str(l2Index), isSavFig,isNorm,fileAdd,isSwitchDir)
         #plotCpuCacheLatencySimpleSingle(benchmarks, bipdirtypes, mincpu, maxcpu, l1, str(l2Index), isSavFig,isNorm,fileAdd,isSwitchDir)
         #plotCpuCacheTotalLatencySingle(benchmarks, origindirtypes, mincpu, maxcpu, l1, str(l2Index), isSavFig,isNorm,fileAdd,isSwitchDir)
         #plotCpuCacheTotalLatencySimpleSingle(benchmarks, bipdirtypes, mincpu, maxcpu, l1, str(l2Index), isSavFig,isNorm,fileAdd,isSwitchDir)
-        #plotCpuL2Misses(benchmarks, dirtypes, mincpu, maxcpu, l1, str(l2Index), isSavFig, isNorm, fileAdd, isSwitchDir)
         l2Index *= 2
 
     cpuIndex = int(mincpu)

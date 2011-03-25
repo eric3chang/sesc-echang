@@ -7053,14 +7053,14 @@ status collapsed
 \begin_layout Plain Layout
 \align center
 \begin_inset Graphics
-	filename diagrams/fft-cpu-time-c1-.png
+	filename results-figures/fft-cpu-time-c512.network10.pdf
 	width 50text%
 
 \end_inset
 
 
 \begin_inset Graphics
-	filename diagrams/fft-cpu-messages-c1-.png
+	filename results-figures/fft-cpu-messages-c512.network10.pdf
 	width 50text%
 
 \end_inset
@@ -7071,7 +7071,7 @@ status collapsed
 \begin_layout Plain Layout
 \align center
 \begin_inset Graphics
-	filename diagrams/fft-cpu-l2miss-c128.network1.0.png
+	filename results-figures/fft-cpu-l2miss-c512.network10.pdf
 	width 50text%
 
 \end_inset
@@ -7191,14 +7191,14 @@ status collapsed
 \begin_layout Plain Layout
 \align center
 \begin_inset Graphics
-	filename diagrams/radix-cpu-time-c1-.png
+	filename results-figures/radix-cpu-time-c512.network90.pdf
 	width 50text%
 
 \end_inset
 
 
 \begin_inset Graphics
-	filename diagrams/radix-cpu-messages-c1-.png
+	filename results-figures/radix-cpu-messages-c512.network90.pdf
 	width 50text%
 
 \end_inset
@@ -7209,7 +7209,7 @@ status collapsed
 \begin_layout Plain Layout
 \align center
 \begin_inset Graphics
-	filename diagrams/radix-cpu-l2miss-c1024.network1.0.png
+	filename results-figures/radix-cpu-l2miss-c512.network90.pdf
 	width 50text%
 
 \end_inset
@@ -7314,7 +7314,7 @@ Ocean
 \begin_inset Float figure
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -7418,19 +7418,19 @@ Cholesky
 \begin_inset Float figure
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
 \begin_inset Graphics
-	filename diagrams/cholesky-cpu-time-c512.network10.png
+	filename results-figures/cholesky-cpu-time-c512.network90.pdf
 	width 50text%
 
 \end_inset
 
 
 \begin_inset Graphics
-	filename diagrams/cholesky-cpu-messages-c512.network10.png
+	filename results-figures/cholesky-cpu-messages-c512.network90.pdf
 	width 50text%
 
 \end_inset
@@ -7441,7 +7441,7 @@ status open
 \begin_layout Plain Layout
 \align center
 \begin_inset Graphics
-	filename diagrams/cholesky-cpu-l2miss-c1024.network1.0.png
+	filename results-figures/cholesky-cpu-l2miss-c1024.network10.pdf
 	width 50text%
 
 \end_inset
