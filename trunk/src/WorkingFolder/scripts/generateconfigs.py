@@ -105,9 +105,9 @@ def main():
     #memoryfilePrefix = 'localsendtime4-network20'
     #memoryfilePrefix = 'localsendtime4-network90'
     #memoryfilePrefix = 'localsendtime60-network05'
-    memoryfilePrefix = 'localsendtime60-network10'
+    #memoryfilePrefix = 'localsendtime60-network10'
     #memoryfilePrefix = 'localsendtime60-network20'
-    #memoryfilePrefix = 'localsendtime60-network90'
+    memoryfilePrefix = 'localsendtime60-network90'
 
     for directory in directoryTypes:
        generateAllBenchmarks(benchmarkNames, directory, processorCountLow, processorCountHi, L1Low, L1Hi,memoryfilePrefix,L2Low,L2Hi)
