@@ -192,7 +192,7 @@ To show the differences between these two protocols, I show their performances
  To demonstrate this, I created a synthetic benchmark that generates many
  requests, which will generate different amount of messages between Origin
  protocol and BIP.
- I will also show the protocols' performance on real-world benchmarks.
+ I will also show the protocols' performances on real-world benchmarks.
  This will demonstrate their performance when faced with benchmarks that
  are not specifically geared to exploit the differences between the protocols.
  The experiments I ran will indicate that the difference in protocol is
@@ -1908,7 +1908,11 @@ The five read response types used amongst the two protocols are read response,
  sent in the BIP protocol.
  It is also possible for a read ack to be sent, in the case where the block
  does not need to be attached.
- For all three of the read response message types mentioned above, the message
+ Another type of read response message is the memory return message type.
+ This message can only be emitted from the main memory, and it is only used
+ to send a message from the memory to the directory when the directory requests
+ for data.
+ For all of the read response message types mentioned above, the message
  can be additionally qualified with whether or not it is a response to an
  exclusive or a shared request.
  The final read response type is the speculative reply, used only by the
@@ -1917,11 +1921,6 @@ The five read response types used amongst the two protocols are read response,
  whether or not the owner of the block is in Clean Exclusive or Dirty Exclusive,
  and the directory expects the owner to send its block to the requester,
  as well, if it was in the Dirty Exclusive state.
- The final type of message sent in response to a read request is the memory
- return message type.
- This message can only be emitted from the main memory, and it is only used
- to send a message from the memory to the directory when the directory requests
- for data.
 \end_layout
 
 \begin_layout Standard
@@ -1989,14 +1988,14 @@ The final message type is the nak message.
  The component that receives a nak message would retry its request
 \begin_inset CommandInset citation
 LatexCommand cite
-key "HEN00"
+key "LAU00"
 
 \end_inset
 
 
 \begin_inset CommandInset citation
 LatexCommand cite
-key "LAU00"
+key "HEN00"
 
 \end_inset
 
@@ -4062,7 +4061,7 @@ status open
 <lyxtabular version="3" rows="1" columns="2">
 <features>
 <column alignment="center" valignment="top" width="30text%">
-<column alignment="left" valignment="top" width="70text%">
+<column alignment="center" valignment="top" width="70text%">
 <row>
 <cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
@@ -4073,7 +4072,7 @@ Directory State
 
 \end_inset
 </cell>
-<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -7280,7 +7279,7 @@ SPLASH-2 benchmarks
 
 \begin_layout Standard
 The SPLASH-2 benchmarks represent a set of programs designed to facilitate
- the study of systems like the one mentioned in this report 
+ the study of systems like the one mentioned in this report
 \begin_inset CommandInset citation
 LatexCommand cite
 key "WOO00"
@@ -7624,10 +7623,10 @@ reference "fig:FFT-results"
 .
  
 \family roman
-We also see that for both Origin and BIP, as the CPU count increases, the
- run-time decreases, this is to be expected as more work can be done in
- the same amount of time when one has more processors that can be used at
- the same time.
+We see that for both Origin and BIP, as the CPU count increases, the run-time
+ decreases, this is to be expected as more work can be done in the same
+ amount of time when one has more processors that can be used at the same
+ time.
 
 \family default
  As we can see, the biggest speedup is going from 4 processor to 8 processors.
@@ -7794,19 +7793,19 @@ Ocean
 \begin_inset Float figure
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \align center
 \begin_inset Graphics
-	filename diagrams/ocean-cpu-time-c1-.png
+	filename results-figures/ocean-cpu-time-c1.png
 	width 50text%
 
 \end_inset
 
 
 \begin_inset Graphics
-	filename diagrams/ocean-cpu-messages-c1-.png
+	filename results-figures/ocean-cpu-messages-c1.png
 	width 50text%
 
 \end_inset
@@ -7817,7 +7816,7 @@ status collapsed
 \begin_layout Plain Layout
 \align center
 \begin_inset Graphics
-	filename diagrams/ocean-cpu-l2miss-c2048.network1.0.png
+	filename results-figures/ocean-cpu-l2miss-c2048.network1.0.png
 	width 50text%
 
 \end_inset
@@ -8142,14 +8141,14 @@ As for future work, we can compare the protocol we have to a snarfing protocol.
  with the new data
 \begin_inset CommandInset citation
 LatexCommand cite
-key "FAR00"
+key "LAU00"
 
 \end_inset
 
 
 \begin_inset CommandInset citation
 LatexCommand cite
-key "LAU00"
+key "FAR00"
 
 \end_inset
 
