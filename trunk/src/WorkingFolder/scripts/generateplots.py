@@ -146,7 +146,7 @@ def getLatencyResults(benchmarks, dirtypes, cpu, l1, l2, minlatency, maxlatency,
                 initialTime = subDirectory['initialTime']
 
                 latencyResults[initialTime] = value
-                latency *= 2
+                latency += 1
             dirtypeResults[dirtype] = latencyResults
         benchmarkResults[benchmark] = dirtypeResults
     return benchmarkResults
@@ -206,6 +206,7 @@ def getGraphAverageResults(benchmarks, dirtypes, benchmarkResults, minimum, maxi
     firstDirtypeSource = benchmarkResults[benchmarks[0]]
     firstISource = firstDirtypeSource[dirtypes[0]]
     allKeys = firstISource.keys()
+    allKeys.sort()
     for dirtype in dirtypes:
         iResults = {}
         i = minInt
@@ -224,14 +225,13 @@ def getGraphAverageResults(benchmarks, dirtypes, benchmarkResults, minimum, maxi
     if (isNormalize):
         # normalize values
         for dirtype in dirtypes:
-            i = minInt
             iSources = dirtypeResults[dirtype]
-            while (i <= maxInt):
-                value = iSources[i]
+            keys = iSources.keys()
+            for key in keys:
+                value = iSources[key]
                 value /= maxValue
                 value *= 100
-                iSources[i] = value
-                i *= 2
+                iSources[key] = value
     return dirtypeResults
 
 def plotCpuCacheLatencySingle(benchmarks, dirtypes, minimum, maximum,l1,l2,isSaveFigure,isNormalize,filenameAddition,isSwitchDirtype):
@@ -481,6 +481,7 @@ def plotGraphSingle(dirtypes, graphResults, minimum, maximum, myXlabel, myYlabel
         for dirtype in dirtypes:
             iSources = graphResults[dirtype]
             keys = iSources.keys()
+            keys.sort()
             xValues = []
             yValues = []
             for myKey in keys:
@@ -528,19 +529,19 @@ def plotGraphSingle(dirtypes, graphResults, minimum, maximum, myXlabel, myYlabel
     legend(loc='best')
     xlabel(myXlabel)
     ylabel(myYlabel)
-    xticks(ticks)
+    #xticks(ticks)
     grid(True)
     title(myTitle)
-    axis([0, maxInt*1.1, 0, yAxis*1.1])
+    #axis([0, maxInt*1.1, 0, yAxis*1.1])
 
 def main():
     #benchmarks = ['cholesky', 'fft', 'lu','newtest', 'radix', 'ocean']
     #benchmarks = ['cholesky', 'fft', 'newtest', 'radix', 'ocean']
-    benchmarks = ['fft']
+    benchmarks = ['newtest']
     dirtypes = ['bip', 'origin']
     #bipdirtypes = ['bip']
     #origindirtypes = ['origin']
-    cpu = '16'
+    cpu = '2'
     mincpu = '4'
     maxcpu = '32'
     l1 = '64'
@@ -552,7 +553,7 @@ def main():
     maxl2 = '1024'
     minlatency = '1'
     maxlatency = '7'
-    isNorm = False
+    isNorm = True
     isSavFig = False
     isSwitchDir = False
     global IN_EXT
