@@ -95,10 +95,10 @@ def generateAllBenchmarks(benchmarkNames, directoryType, processorCountLow, proc
 
 def main():
     #benchmarkNames = ['cholesky', 'fft', 'newtest', 'radix', 'ocean']
-    benchmarkNames = ['fft']
+    benchmarkNames = ['newtest']
     directoryTypes = ['bip','origin']
-    processorCountLow = '16'
-    processorCountHi = '16'
+    processorCountLow = '2'
+    processorCountHi = '2'
     L1Low = '64'
     L1Hi = '64'
     #L2Low = '128'
