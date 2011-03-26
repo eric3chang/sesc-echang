@@ -131,7 +131,8 @@ def getLatencyResults(benchmarks, dirtypes, cpu, l1, l2, minlatency, maxlatency,
             while (latency <= maxlatencyInt):
                 fileAdd = '.localsendtime4-network'
                 fileAdd += str(latency)
-                fileAdd += '0'
+                fileAdd += '0.newtest2'
+                #fileAdd += '0'
                 inExt = '.memDevResults' + fileAdd
                 dictionary = getDictionary(benchmark, dirtype, str(cpu), l1, l2, inExt)
                 if component not in dictionary:
@@ -552,9 +553,9 @@ def main():
     minl2 = '1024'
     maxl2 = '1024'
     minlatency = '0'
-    maxlatency = '7'
-    isNorm = True
-    isSavFig = True
+    maxlatency = '4'
+    isNorm = False
+    isSavFig = False
     isSwitchDir = False
     global IN_EXT
     fileAdd = ''
