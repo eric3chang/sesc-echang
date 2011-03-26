@@ -551,10 +551,10 @@ def main():
     #maxl2 = '4096'
     minl2 = '1024'
     maxl2 = '1024'
-    minlatency = '1'
+    minlatency = '0'
     maxlatency = '7'
     isNorm = True
-    isSavFig = False
+    isSavFig = True
     isSwitchDir = False
     global IN_EXT
     fileAdd = ''
