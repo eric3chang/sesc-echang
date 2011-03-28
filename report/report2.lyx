@@ -6678,7 +6678,430 @@ sideways false
 status collapsed
 
 \begin_layout Plain Layout
-\align center
+int myInt = 1
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset VSpace defskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+readInt(numberOfIndividualLoops):
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset space \qquad{}
+\end_inset
+
+loop numberOfIndividualLoops times:
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset space \qquad{}
+\end_inset
+
+
+\begin_inset space \qquad{}
+\end_inset
+
+read myInt
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset space \qquad{}
+\end_inset
+
+
+\begin_inset space \qquad{}
+\end_inset
+
+barrier
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset VSpace defskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+incInt(numberOfIndividualLoops):
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset space \qquad{}
+\end_inset
+
+loop numberOfIndividualLoops times:
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset space \qquad{}
+\end_inset
+
+
+\begin_inset space \qquad{}
+\end_inset
+
+increment myInt
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset space \qquad{}
+\end_inset
+
+
+\begin_inset space \qquad{}
+\end_inset
+
+barrier
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset VSpace defskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+main(numberOfProcessors , numberOfLoops):
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset space \qquad{}
+\end_inset
+
+numberOfIndividualLoops = numberOfLoops / numberOfProcessors
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset space \qquad{}
+\end_inset
+
+loop numberOfProcessors / 2 times:
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset space \qquad{}
+\end_inset
+
+
+\begin_inset space \qquad{}
+\end_inset
+
+spawn thread incInt(numberOfIndividualLoops)
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset space \qquad{}
+\end_inset
+
+
+\begin_inset space \qquad{}
+\end_inset
+
+spawn thread readInt(numberOfIndividualLoops)
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Synthetic benchmark read increment pseudocode
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Synthetic-Benchmark-read-increment"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This section introduces the synthetic benchmark as well as the results received
+ from running the synthetic benchmark.
+ The synthetic benchmark was created to illustrate the strength of the Origin
+ protocol.
+ With this synthetic benchmark, I am trying to force a node to repeatedly
+ obtain access to a block and then be forced to give it up as some other
+ node requests it.
+ The easiest way to achieve this is by creating situations that involve
+ many evictions forced by the directory.
+ In other words, I want to show that in situtations where the directory
+ has to transition in or out of 
+\begin_inset Quotes eld
+\end_inset
+
+Exclusive,
+\begin_inset Quotes erd
+\end_inset
+
+ and the directory uses intervention messages, that the required number
+ of network transactions is higher on BIP than on Origin.
+\end_layout
+
+\begin_layout Standard
+The pseudocode for the synthetic benchmark is shown in 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+figurename
+\end_layout
+
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Synthetic-Benchmark-read-increment"
+
+\end_inset
+
+.
+ We want to avoid the scenario where readInt execute all its iterations
+ before incInt executes its iterations, so we use barriers to make sure
+ that the threads are synchronized.
+ The global int, myInt, is the variable that will be read and written in
+ this synthetic benchmark.
+ The readInt and the incInt functions both take in a parameter, numberOfIndividu
+alLoops, that tells the function how many times to read the myInt variable.
+ The difference is that the readInt function only reads from myInt and the
+ incInt function reads myInt and also increments it.
+ In both functions, there are barriers after access to myInt to make sure
+ that the accesses are synchronized.
+ The main function requires two arguments.
+ NumberOfProcessors specify how many processors are in the system and affects
+ how many threads get created, and this variable should be a power of 2
+ that is at least 1.
+ NumberOfLoops specify how many times the threads would read the variable
+ myInt.
+ We divide the numberOfLoops by the numberOfProcessors to get numberOfIndividual
+Loops, which we pass into readInt and incInt.
+ This is to ensure that the number of times myInt is being read is the same
+ regardless of the number of processors being used.
+ Then incInt and readInt are each spawned numberOfProcessors / 2 times to
+ put a thread on all the available processors in the simulator.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Plain Layout
+This program spawns a number of read threads and write threads specified
+ by a command-line parameter.
+ The first one reads myInt continuously 10000 times.
+ The second thread increments this same variable continuously 10000 times.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In order to make sure that the overheads of setting up the barrier are not
+ counted towards the final number of messages, I also wrote a variation
+ of the same program that calls only readInt but not incInt.
+ Instead of the main process spawning readInt threads and incInt threads,
+ this program will spawn only readInt reads.
+ The program is shown in 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+figurename
+\end_layout
+
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Synthetic-Benchmark-read-only"
+
+\end_inset
+
+.
+ This 
+\begin_inset Quotes eld
+\end_inset
+
+base case
+\begin_inset Quotes erd
+\end_inset
+
+ program will tell us the execution time and number of messages that are
+ used to set up the barrier.
+ We will take the results of the program in 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+figurename
+\end_layout
+
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Synthetic-Benchmark-read-increment"
+
+\end_inset
+
+ and subtract the number of messages and the execution time of the base
+ case program to find the execution time and number of messages that I am
+ trying to measure.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+int myInt = 1
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset VSpace defskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+readInt(numberOfIndividualLoops):
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset space \qquad{}
+\end_inset
+
+loop numberOfIndividualLoops times:
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset space \qquad{}
+\end_inset
+
+
+\begin_inset space \qquad{}
+\end_inset
+
+read myInt
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset space \qquad{}
+\end_inset
+
+
+\begin_inset space \qquad{}
+\end_inset
+
+barrier
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset VSpace defskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+main(numberOfProcessors , numberOfLoops):
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset space \qquad{}
+\end_inset
+
+loop numberOfProcessors:
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset space \qquad{}
+\end_inset
+
+
+\begin_inset space \qquad{}
+\end_inset
+
+spawn thread readInt(numberOfLoops)
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Synthetic benchmark read-only pseudocode
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Synthetic-Benchmark-read-only"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
 \begin_inset Tabular
 <lyxtabular version="3" rows="7" columns="4">
 <features>
@@ -7010,7 +7433,7 @@ None
 Messages generated for each read in BIP
 \begin_inset CommandInset label
 LatexCommand label
-name "fig:Messages-generated-for-read-BIP"
+name "tab:Messages-generated-for-read-BIP"
 
 \end_inset
 
@@ -7028,7 +7451,132 @@ name "fig:Messages-generated-for-read-BIP"
 \end_layout
 
 \begin_layout Standard
-\begin_inset Float figure
+The number of messages that has to be generated for each read in BIP is
+ shown in 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+tablename
+\end_layout
+
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:Messages-generated-for-read-BIP"
+
+\end_inset
+
+.
+ Initially, the requester will send a shared read request message to the
+ directory, and transition from 
+\begin_inset Quotes eld
+\end_inset
+
+Invalid
+\begin_inset Quotes erd
+\end_inset
+
+ to 
+\begin_inset Quotes eld
+\end_inset
+
+Waiting for Shared Read Reply.
+\begin_inset Quotes erd
+\end_inset
+
+ Next, the directory will receive the shared read request, and transition
+ from 
+\begin_inset Quotes eld
+\end_inset
+
+Exclusive
+\begin_inset Quotes erd
+\end_inset
+
+ to 
+\begin_inset Quotes eld
+\end_inset
+
+Exclusive Shared Waiting for Reply,
+\begin_inset Quotes erd
+\end_inset
+
+ sending an intervention shared request to the previous owner during the
+ transition.
+ Then, depending on whether or not the previous owner has the block in 
+\begin_inset Quotes eld
+\end_inset
+
+Clean Exclusive
+\begin_inset Quotes erd
+\end_inset
+
+ or 
+\begin_inset Quotes eld
+\end_inset
+
+Dirty Exclusive,
+\begin_inset Quotes erd
+\end_inset
+
+ the previous owner would send a shared transfer or a shared writeback to
+ the directory, then transition to 
+\begin_inset Quotes eld
+\end_inset
+
+Shared.
+\begin_inset Quotes erd
+\end_inset
+
+ The directory would receive the shared transfer/writeback, then transition
+ from 
+\begin_inset Quotes eld
+\end_inset
+
+Exclusive Shared Waiting for Reply
+\begin_inset Quotes erd
+\end_inset
+
+ into 
+\begin_inset Quotes eld
+\end_inset
+
+Shared,
+\begin_inset Quotes erd
+\end_inset
+
+ and send out a shared reply to the original requester.
+ Finally, the requester receives the shared reply and transitions from 
+\begin_inset Quotes eld
+\end_inset
+
+Waiting for Shared Read Reply
+\begin_inset Quotes erd
+\end_inset
+
+ to 
+\begin_inset Quotes eld
+\end_inset
+
+Shared.
+\begin_inset Quotes erd
+\end_inset
+
+ In summary, four messages get send for the read in BIP.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
 wide false
 sideways false
 status collapsed
@@ -7171,6 +7719,14 @@ intervention shared
 \end_inset
 
 Previous Owner
+\end_layout
+
+\begin_layout Plain Layout
+speculative reply
+\begin_inset Formula $\rightarrow$
+\end_inset
+
+Requester
 \end_layout
 
 \end_inset
@@ -7432,7 +7988,7 @@ None
 Messages generated for each read in Origin
 \begin_inset CommandInset label
 LatexCommand label
-name "fig:Messages-generated-for-read-Origin"
+name "tab:Messages-generated-for-read-Origin"
 
 \end_inset
 
@@ -7454,7 +8010,165 @@ name "fig:Messages-generated-for-read-Origin"
 \end_layout
 
 \begin_layout Standard
-\begin_inset Float figure
+For a read in Origin, the messages sent in the system is shown in 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+tablename
+\end_layout
+
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:Messages-generated-for-read-Origin"
+
+\end_inset
+
+.
+ First, the requester would send the shared read to the directory and transition
+ from 
+\begin_inset Quotes eld
+\end_inset
+
+Invalid
+\begin_inset Quotes erd
+\end_inset
+
+ to 
+\begin_inset Quotes eld
+\end_inset
+
+Waiting for Shared Read Response.
+\begin_inset Quotes erd
+\end_inset
+
+ Next, the directory receives the shared read and transitions from 
+\begin_inset Quotes eld
+\end_inset
+
+Exclusive
+\begin_inset Quotes erd
+\end_inset
+
+ to 
+\begin_inset Quotes eld
+\end_inset
+
+Busy-Shared (Memory-Access),
+\begin_inset Quotes erd
+\end_inset
+
+ then from that state to 
+\begin_inset Quotes eld
+\end_inset
+
+Busy-Shared.
+\begin_inset Quotes erd
+\end_inset
+
+ No messages are emitted on the network for the transition from 
+\begin_inset Quotes eld
+\end_inset
+
+Exclusive
+\begin_inset Quotes erd
+\end_inset
+
+ to 
+\begin_inset Quotes eld
+\end_inset
+
+Busy-Shared (Memory-Access).
+\begin_inset Quotes erd
+\end_inset
+
+ During these transitions, the directory sends an intervention shared request
+ to the previous owner and a speculative reply to the requester.
+ If the previous owner receives the intervention shared request in the 
+\begin_inset Quotes eld
+\end_inset
+
+Clean Exclusive
+\begin_inset Quotes erd
+\end_inset
+
+ state, it would send a shared ack to the requester and a shared transfer
+ to the directory, while transitioning to 
+\begin_inset Quotes eld
+\end_inset
+
+Shared.
+\begin_inset Quotes erd
+\end_inset
+
+ However, if the previous owner receives the message in 
+\begin_inset Quotes eld
+\end_inset
+
+Dirty Exclusive,
+\begin_inset Quotes erd
+\end_inset
+
+ it would send a shared response to the requester and a shared writeback
+ to the directory while transitioning to 
+\begin_inset Quotes eld
+\end_inset
+
+Shared.
+\begin_inset Quotes erd
+\end_inset
+
+ When the directory receives the shared transfer/writeback, it would transition
+ from 
+\begin_inset Quotes eld
+\end_inset
+
+Busy-Shared
+\begin_inset Quotes erd
+\end_inset
+
+ to 
+\begin_inset Quotes eld
+\end_inset
+
+Shared
+\begin_inset Quotes erd
+\end_inset
+
+ without sending any messages into the network.
+ Finally, the requester will receive both the speculative reply and the
+ shared response/ack, transitioning from 
+\begin_inset Quotes eld
+\end_inset
+
+Waiting for Shared Read Response
+\begin_inset Quotes erd
+\end_inset
+
+ to 
+\begin_inset Quotes eld
+\end_inset
+
+Shared,
+\begin_inset Quotes erd
+\end_inset
+
+ and not sending any more messages into the network.
+ This operation takes five messages to perform.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
 wide false
 sideways false
 status collapsed
@@ -7818,7 +8532,11 @@ Exclusive
 \begin_inset Text
 
 \begin_layout Plain Layout
-None
+exclusive reply
+\begin_inset Formula $\rightarrow$
+\end_inset
+
+Requester
 \end_layout
 
 \end_inset
@@ -7880,7 +8598,7 @@ None
 Messages generated for each increment in BIP
 \begin_inset CommandInset label
 LatexCommand label
-name "fig:Messages-generated-for-increment-BIP"
+name "tab:Messages-generated-for-increment-BIP"
 
 \end_inset
 
@@ -7898,15 +8616,190 @@ name "fig:Messages-generated-for-increment-BIP"
 \end_layout
 
 \begin_layout Standard
-\begin_inset Float figure
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+tablename
+\end_layout
+
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:Messages-generated-for-increment-BIP"
+
+\end_inset
+
+ is the table for the messages sent for each increment in BIP.
+ The requester would have held this block in 
+\begin_inset Quotes eld
+\end_inset
+
+Shared,
+\begin_inset Quotes erd
+\end_inset
+
+ since the previous request into the directory involved a shared read request.
+ Initially, the requester would send an exclusive read to the directory
+ and transition from 
+\begin_inset Quotes eld
+\end_inset
+
+Shared
+\begin_inset Quotes erd
+\end_inset
+
+ to 
+\begin_inset Quotes eld
+\end_inset
+
+Waiting for Exclusive Read Reply.
+\begin_inset Quotes erd
+\end_inset
+
+ Next, the directory sends an intervention exclusive request to a sharer
+ S and transitions from 
+\begin_inset Quotes eld
+\end_inset
+
+Shared
+\begin_inset Quotes erd
+\end_inset
+
+ to 
+\begin_inset Quotes eld
+\end_inset
+
+Waiting to Send Invalidates
+\begin_inset Quotes erd
+\end_inset
+
+ when it receives the exclusive read.
+ Sharer S is chosen by the directory to be a random sharer that is not the
+ requester.
+ Since there are only two processor in this example, we know that sharer
+ S can only be the node that is not the requester.
+ When sharer S receives the intervention exclusive request, it would transition
+ from 
+\begin_inset Quotes eld
+\end_inset
+
+Shared
+\begin_inset Quotes erd
+\end_inset
+
+ to 
+\begin_inset Quotes eld
+\end_inset
+
+Shared Waiting for Exclusive Ack
+\begin_inset Quotes erd
+\end_inset
+
+ and send an eviction message to the directory.
+ After the directory receives the eviction message, it would transition
+ from 
+\begin_inset Quotes eld
+\end_inset
+
+Waiting to Send Invalidates
+\begin_inset Quotes erd
+\end_inset
+
+ to 
+\begin_inset Quotes eld
+\end_inset
+
+Waiting for K Invalidates, J Invalidates Received So Far
+\begin_inset Quotes erd
+\end_inset
+
+, send an invalidate message to the requester, and send an eviction ack
+ to sharer S.
+ When sharer S receives the eviction ack, it would transition from 
+\begin_inset Quotes eld
+\end_inset
+
+Shared Waiting for Exclusive Ack
+\begin_inset Quotes erd
+\end_inset
+
+ to 
+\begin_inset Quotes eld
+\end_inset
+
+Invalid.
+\begin_inset Quotes erd
+\end_inset
+
+ After the requester receives an invalidate in 
+\begin_inset Quotes eld
+\end_inset
+
+Waiting for Exclusive Read Reply,
+\begin_inset Quotes erd
+\end_inset
+
+ it would send an invalidate ack to the directory, but it does not transition
+ into a different state.
+ When the directory receives the invalidate ack, it would transition from
+ 
+\begin_inset Quotes eld
+\end_inset
+
+Waiting for K Invalidates, J Invalidates Received So Far
+\begin_inset Quotes erd
+\end_inset
+
+ into 
+\begin_inset Quotes eld
+\end_inset
+
+Exclusive,
+\begin_inset Quotes erd
+\end_inset
+
+ and send an exclusive reply to the requester.
+ Finally, the requester receives the exclusive reply and transitions from
+ 
+\begin_inset Quotes eld
+\end_inset
+
+Waiting for Exclusive Read Reply
+\begin_inset Quotes erd
+\end_inset
+
+ to 
+\begin_inset Quotes eld
+\end_inset
+
+Dirty Exclusive
+\begin_inset Quotes erd
+\end_inset
+
+ without sending any more messages into the network.
+ In total, seven messages get sent on the network.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
 \begin_inset Tabular
-<lyxtabular version="3" rows="5" columns="4">
+<lyxtabular version="3" rows="6" columns="4">
 <features>
 <column alignment="center" valignment="top" width="10text%">
 <column alignment="center" valignment="top" width="10text%">
@@ -8036,7 +8929,7 @@ Exclusive
 \begin_inset Text
 
 \begin_layout Plain Layout
-exclusive reply
+exclusive reply with invalidates pending
 \begin_inset Formula $\rightarrow$
 \end_inset
 
@@ -8097,7 +8990,7 @@ None
 </cell>
 </row>
 <row>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -8106,7 +8999,7 @@ None
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -8115,7 +9008,7 @@ Previous Owner
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -8128,7 +9021,7 @@ Invalid
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -8137,6 +9030,48 @@ invalidate ack
 \end_inset
 
 Requester
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+5
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Requester
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Waiting for K Invalidates, J Invalidates Received So Far
+\begin_inset Formula $\Rightarrow$
+\end_inset
+
+Exclusive
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+None
 \end_layout
 
 \end_inset
@@ -8156,7 +9091,7 @@ Requester
 Messages generated for each increment in Origin
 \begin_inset CommandInset label
 LatexCommand label
-name "fig:Messages-generated-for-increment-Origin"
+name "tab:Messages-generated-for-increment-Origin"
 
 \end_inset
 
@@ -8174,294 +9109,8 @@ name "fig:Messages-generated-for-increment-Origin"
 \end_layout
 
 \begin_layout Standard
-This section introduces the synthetic benchmark as well as the results received
- from running the synthetic benchmark.
- The synthetic benchmark was created to illustrate the strength of the Origin
- protocol.
- With this synthetic benchmark, I am trying to force a node to repeatedly
- obtain access to a block and then be forced to give it up as some other
- node requests it.
- The easiest way to achieve this is by creating situations that involve
- many evictions forced by the directory.
- In other words, I want to show that when another node requests the block
- when the directory is in 
-\begin_inset Quotes eld
-\end_inset
-
-Exclusive,
-\begin_inset Quotes erd
-\end_inset
-
- and the directory uses intervention messages, that the required number
- of network transactions is higher on BIP than on Origin.
-\end_layout
-
-\begin_layout Standard
-\begin_inset Float figure
-wide false
-sideways false
-status open
-
-\begin_layout Plain Layout
-int myInt = 1
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset VSpace defskip
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-readInt(numberOfIndividualLoops):
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset space \qquad{}
-\end_inset
-
-loop numberOfIndividualLoops times:
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset space \qquad{}
-\end_inset
-
-
-\begin_inset space \qquad{}
-\end_inset
-
-read myInt
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset space \qquad{}
-\end_inset
-
-
-\begin_inset space \qquad{}
-\end_inset
-
-barrier
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset VSpace defskip
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-incInt(numberOfIndividualLoops):
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset space \qquad{}
-\end_inset
-
-loop numberOfIndividualLoops times:
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset space \qquad{}
-\end_inset
-
-
-\begin_inset space \qquad{}
-\end_inset
-
-increment myInt
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset space \qquad{}
-\end_inset
-
-
-\begin_inset space \qquad{}
-\end_inset
-
-barrier
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset VSpace defskip
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-main(numberOfProcessors , numberOfLoops):
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset space \qquad{}
-\end_inset
-
-numberOfIndividualLoops = numberOfLoops / numberOfProcessors
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset space \qquad{}
-\end_inset
-
-loop numberOfProcessors / 2 times:
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset space \qquad{}
-\end_inset
-
-
-\begin_inset space \qquad{}
-\end_inset
-
-spawn thread incInt(numberOfIndividualLoops)
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset space \qquad{}
-\end_inset
-
-
-\begin_inset space \qquad{}
-\end_inset
-
-spawn thread readInt(numberOfIndividualLoops)
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset Caption
-
-\begin_layout Plain Layout
-Synthetic benchmark read increment pseudocode
-\begin_inset CommandInset label
-LatexCommand label
-name "fig:Synthetic-Benchmark-read-increment"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset Float figure
-wide false
-sideways false
-status open
-
-\begin_layout Plain Layout
-int myInt = 1
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset VSpace defskip
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-readInt(numberOfIndividualLoops):
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset space \qquad{}
-\end_inset
-
-loop numberOfIndividualLoops times:
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset space \qquad{}
-\end_inset
-
-
-\begin_inset space \qquad{}
-\end_inset
-
-read myInt
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset space \qquad{}
-\end_inset
-
-
-\begin_inset space \qquad{}
-\end_inset
-
-barrier
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset VSpace defskip
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-main(numberOfProcessors , numberOfLoops):
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset space \qquad{}
-\end_inset
-
-loop numberOfProcessors:
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset space \qquad{}
-\end_inset
-
-
-\begin_inset space \qquad{}
-\end_inset
-
-spawn thread readInt(numberOfLoops)
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset Caption
-
-\begin_layout Plain Layout
-Synthetic benchmark read-only pseudocode
-\begin_inset CommandInset label
-LatexCommand label
-name "fig:Synthetic-Benchmark-read-only"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-The pseudocode for the synthetic benchmark is shown in 
+The Origin protocol has a different behavior for each increment, which is
+ shown in 
 \begin_inset ERT
 status open
 
@@ -8469,7 +9118,7 @@ status open
 
 
 \backslash
-figurename
+tablename
 \end_layout
 
 \end_inset
@@ -8481,46 +9130,303 @@ figurename
 
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "fig:Synthetic-Benchmark-read-increment"
+reference "tab:Messages-generated-for-increment-Origin"
 
 \end_inset
 
 .
- There is a global lock myLock that makes sure that the threads are synchronized.
- The global int, myInt, is the variable that will be read and written in
- this synthetic benchmark.
- The readInt and the incInt functions both take in a parameter, numberOfIndividu
-alLoops, that tells the function how many times to read the myInt variable.
- The difference is that the readInt function only reads from myInt and the
- incInt function reads myInt and also increments it.
- In both functions, there are locks around the myInt variable to make sure
- that the accesses are synchronized.
- The main function requires two arguments.
- NumberOfProcessors specify how many processors are in the system and affects
- how many threads get created, and this variable should be a power of 2
- that is at least 1.
- NumberOfLoops specify how many times the threads would read the variable
- myInt.
- We divide the numberOfLoops by the numberOfProcessors to get numberOfIndividual
-Loops, which we pass into readInt and incInt.
- This is to ensure that the number of times myInt is being read is the same
- regardless of the number of processors being used.
- Then incInt and readInt are each spawned numberOfProcessors / 2 times to
- put a thread on all the available processors in the simulator.
- Since the incInt is spawned first and there are locks around the myInt
- variable, we avoid the scenario where readInt execute all its iterations
- before incInt executes its iterations.
+ Initially, the requester sends an exclusive read to the directory while
+ transitioning from 
+\begin_inset Quotes eld
+\end_inset
+
+Shared
+\begin_inset Quotes erd
+\end_inset
+
+ to 
+\begin_inset Quotes eld
+\end_inset
+
+Waiting for Exclusive Read Response.
+\begin_inset Quotes erd
+\end_inset
+
+ Since the previous request into the directory involved a shared read request,
+ the requester would have held this block in 
+\begin_inset Quotes eld
+\end_inset
+
+Shared.
+\begin_inset Quotes erd
+\end_inset
+
+ When the directory receives the exclusive read, it transitions from 
+\begin_inset Quotes eld
+\end_inset
+
+Shared
+\begin_inset Quotes erd
+\end_inset
+
+ to 
+\begin_inset Quotes eld
+\end_inset
+
+Shared Exclusive (Memory-Access)
+\begin_inset Quotes erd
+\end_inset
+
+ to 
+\begin_inset Quotes eld
+\end_inset
+
+Exclusive
+\begin_inset Quotes erd
+\end_inset
+
+ while sending out an exclusive reply to the requester and an invalidate
+ to the previous owner.
+ When the requester receives the exclusive reply with invalidates pending,
+ it transitions from 
+\begin_inset Quotes eld
+\end_inset
+
+Waiting for Exclusive Read Response
+\begin_inset Quotes erd
+\end_inset
+
+ to 
+\begin_inset Quotes eld
+\end_inset
+
+Waiting for K Invalidates, J Invalidates Received So Far,
+\begin_inset Quotes erd
+\end_inset
+
+ but it does not emit any messages.
+ When the previous owner receives the invalidate, it would transition from
+ 
+\begin_inset Quotes eld
+\end_inset
+
+Shared
+\begin_inset Quotes erd
+\end_inset
+
+ to 
+\begin_inset Quotes eld
+\end_inset
+
+Invalid,
+\begin_inset Quotes erd
+\end_inset
+
+ and send an invalidate ack to the requester.
+ Finally, the requester receives the invalidate ack and transitions from
+ 
+\begin_inset Quotes eld
+\end_inset
+
+Waiting for K Invliadates, J Invalidates Received So Far
+\begin_inset Quotes erd
+\end_inset
+
+ into 
+\begin_inset Quotes eld
+\end_inset
+
+Exclusive.
+\begin_inset Quotes erd
+\end_inset
+
+ In summary, there are four messages sent into the network.
+ The overall number of messages sent into the network for each read/increment
+ is shown in 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+tablename
+\end_layout
+
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:Number-of-messages"
+
+\end_inset
+
+.
+ This shows that the Origin protocol should use two fewer messages for each
+ read/increment function call.
 \end_layout
 
 \begin_layout Standard
-\begin_inset Note Note
-status collapsed
+\begin_inset Wrap table
+lines 0
+placement o
+overhang 0col%
+width "50col%"
+status open
 
 \begin_layout Plain Layout
-This program spawns a number of read threads and write threads specified
- by a command-line parameter.
- The first one reads myInt continuously 10000 times.
- The second thread increments this same variable continuously 10000 times.
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="4" columns="3">
+<features>
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<row>
+<cell alignment="center" valignment="top" bottomline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+BIP
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Origin
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Read
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+4
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+5
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Increment
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+7
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+4
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Total
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+11
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+9
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Number of messages sent into the network for each read/increment
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:Number-of-messages"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \end_inset

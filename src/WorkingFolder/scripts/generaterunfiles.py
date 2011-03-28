@@ -49,6 +49,10 @@ RADIX_PARAMS_POST=' -n262144 -r1024 -m524288'
 #RADIX_PARAMS_POST=' -n524288 -r1024 -m524288'
 RAYTRACE_PARAMS_PRE='-p'
 RAYTRACE_PARAMS_POST=' benchmarks-splash2-sesc/raytrace-inputs/balls4.env'
+READTEST_PARAMS_PRE='-p'
+READTEST_PARAMS_POST=' -n1000'
+WRITETEST_PARAMS_PRE='-p'
+WRITETEST_PARAMS_POST=' -n1000'
 
 thisFileName = sys.argv[0]
 thisFileName = os.path.basename(thisFileName)
@@ -88,6 +92,10 @@ def generateOneRunfile(benchmarkName, directoryType, processorCount, L1Size, L2S
         parameters = RADIX_PARAMS_PRE + processorCount + RADIX_PARAMS_POST
     elif (benchmarkName=='raytrace'):
         parameters = RAYTRACE_PARAMS_PRE + processorCount + RAYTRACE_PARAMS_POST
+    elif (benchmarkName=='readtest'):
+        parameters = READTEST_PARAMS_PRE + processorCount + READTEST_PARAMS_POST
+    elif (benchmarkName=='writetest'):
+        parameters = WRITETEST_PARAMS_PRE + processorCount + WRITETEST_PARAMS_POST
     else:
         print('Unknown benchmark ' + benchmarkName)
         quit()
@@ -189,10 +197,10 @@ def main():
     #benchmarkNames = ['barnes', 'cholesky', 'fft', 'fmm', 'lu','newtest', 'radix', 'raytrace', 'ocean']
     #benchmarkNames = ['cholesky', 'fft', 'newtest', 'radix', 'ocean']
     #benchmarkNames = ['cholesky', 'fft', 'radix', 'ocean']
-    benchmarkNames = ['newtest']
+    benchmarkNames = ['readtest', 'writetest']
     directoryTypes = ['bip', 'origin']
-    processorCountLow = '2'
-    processorCountHi = '2'
+    processorCountLow = '4'
+    processorCountHi = '4'
     #L1Low = '8'
     #L1Hi = '64'
     L1Low = '64'

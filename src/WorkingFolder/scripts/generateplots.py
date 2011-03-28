@@ -131,8 +131,8 @@ def getLatencyResults(benchmarks, dirtypes, cpu, l1, l2, minlatency, maxlatency,
             while (latency <= maxlatencyInt):
                 fileAdd = '.localsendtime4-network'
                 fileAdd += str(latency)
-                fileAdd += '0.newtest2'
-                #fileAdd += '0'
+                #fileAdd += '0.newtest2'
+                fileAdd += '0'
                 inExt = '.memDevResults' + fileAdd
                 dictionary = getDictionary(benchmark, dirtype, str(cpu), l1, l2, inExt)
                 if component not in dictionary:
@@ -538,11 +538,12 @@ def plotGraphSingle(dirtypes, graphResults, minimum, maximum, myXlabel, myYlabel
 def main():
     #benchmarks = ['cholesky', 'fft', 'lu','newtest', 'radix', 'ocean']
     #benchmarks = ['cholesky', 'fft', 'newtest', 'radix', 'ocean']
-    benchmarks = ['newtest']
+    #benchmarks = ['readtest']
+    benchmarks = ['writetest']
     dirtypes = ['bip', 'origin']
     #bipdirtypes = ['bip']
     #origindirtypes = ['origin']
-    cpu = '2'
+    cpu = '4'
     mincpu = '4'
     maxcpu = '32'
     l1 = '64'
@@ -553,7 +554,7 @@ def main():
     minl2 = '1024'
     maxl2 = '1024'
     minlatency = '0'
-    maxlatency = '4'
+    maxlatency = '7'
     isNorm = False
     isSavFig = False
     isSwitchDir = False

@@ -115,33 +115,14 @@ int main(int argc, char** argv)
 
    // calculate the number of Loops
    //numberOfLoops = numberOfReads / (processorCount-2);
+   processorCount = 2;
    numberOfLoops = numberOfReads / processorCount;
    printf("numberOfLoops=%d\n", numberOfLoops);
 
-   t = 0;
-   while (1)
-   {
-      printf("Creating write thread %d\n", t);
-#ifdef USE_SESC
-      sesc_spawn((void (*)(void*)) *incInt, &numberOfLoops, SESC_FLAG_NOMIGRATE|SESC_FLAG_MAP|t+1);
-      //sesc_spawn((void (*)(void*)) *readInt, &numberOfLoops, SESC_FLAG_NOMIGRATE|SESC_FLAG_MAP|t+1);
-#else
-      pthread_create(&threads[t], NULL, incInt, &numberOfLoops);
-      //pthread_create(&threads[t], NULL, readInt, &numberOfLoops);
-#endif
-      t++;
-      if (t >= processorCount-1)
-      {
-         break;
-      }
-      printf("Creating read thread %d\n", t);
-#ifdef USE_SESC
-      sesc_spawn((void (*)(void*)) *readInt, &numberOfLoops, SESC_FLAG_NOMIGRATE|SESC_FLAG_MAP|t+1);
-#else
-      pthread_create(&threads[t], NULL, readInt, &numberOfLoops);
-#endif
-      t++;
-   }
+   // spawn on processor 1
+   sesc_spawn((void (*)(void*)) *incInt, &numberOfLoops, SESC_FLAG_NOMIGRATE|SESC_FLAG_MAP|1);
+   // spawn on processor 2
+   sesc_spawn((void (*)(void*)) *readInt, &numberOfLoops, SESC_FLAG_NOMIGRATE|SESC_FLAG_MAP|2);
 
 #ifdef USE_SESC
    sesc_wait(); // wait for threads to finish

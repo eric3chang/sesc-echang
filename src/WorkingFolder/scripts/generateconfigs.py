@@ -95,10 +95,10 @@ def generateAllBenchmarks(benchmarkNames, directoryType, processorCountLow, proc
 
 def main():
     #benchmarkNames = ['cholesky', 'fft', 'newtest', 'radix', 'ocean']
-    benchmarkNames = ['readtest']
+    benchmarkNames = ['readtest', 'writetest']
     directoryTypes = ['bip','origin']
-    processorCountLow = '2'
-    processorCountHi = '2'
+    processorCountLow = '4'
+    processorCountHi = '4'
     L1Low = '64'
     L1Hi = '64'
     #L2Low = '128'
@@ -118,7 +118,7 @@ def main():
     USE_MEMORYFILE_PREFIX=True
 
     if (USE_MEMORYFILE_PREFIX):
-       for number in range(0,10):
+       for number in range(0,8):
           memoryfilePrefix='localsendtime4-network'
           memoryfilePrefix += str(number)
           memoryfilePrefix += '0'
