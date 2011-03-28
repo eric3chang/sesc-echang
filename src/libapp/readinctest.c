@@ -123,11 +123,11 @@ int main(int argc, char** argv)
    {
       printf("Creating write thread %d\n", t);
 #ifdef USE_SESC
-      //sesc_spawn((void (*)(void*)) *incInt, &numberOfLoops, SESC_FLAG_NOMIGRATE|SESC_FLAG_MAP|t+1);
-      sesc_spawn((void (*)(void*)) *readInt, &numberOfLoops, SESC_FLAG_NOMIGRATE|SESC_FLAG_MAP|t+1);
+      sesc_spawn((void (*)(void*)) *incInt, &numberOfLoops, SESC_FLAG_NOMIGRATE|SESC_FLAG_MAP|t+1);
+      //sesc_spawn((void (*)(void*)) *readInt, &numberOfLoops, SESC_FLAG_NOMIGRATE|SESC_FLAG_MAP|t+1);
 #else
-      //pthread_create(&threads[t], NULL, incInt, &numberOfLoops);
-      pthread_create(&threads[t], NULL, readInt, &numberOfLoops);
+      pthread_create(&threads[t], NULL, incInt, &numberOfLoops);
+      //pthread_create(&threads[t], NULL, readInt, &numberOfLoops);
 #endif
       t++;
       if (t >= processorCount-1)
