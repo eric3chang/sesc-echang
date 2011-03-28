@@ -7077,7 +7077,7 @@ status collapsed
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Synthetic benchmark results - network latency versus execution time
+Synthetic benchmark results - execution time versus network latency 
 \begin_inset CommandInset label
 LatexCommand label
 name "fig:Synthetic-benchmark-results-runtime"
@@ -7289,36 +7289,22 @@ key "WOO00"
 .
  The results from running these benchmarks will be used to show the performance
  of BIP versus Origin protocol.
- The 
+ An execution time (
 \begin_inset Quotes eld
 \end_inset
 
-processor count versus time
+runtime
 \begin_inset Quotes erd
 \end_inset
 
- graph for each of these benchmarks are normalized to the highest value
- on the graph.
+) versus processor count graph is shown for each of these benchmarks.
+ In each of these graphs, the execution time is normalized.
  For example, in each graph featuring the runtime, the results will not
  be shown in raw runtime numbers; the numbers represent the current y value
  versus the highest y value on the graph.
- The 
-\begin_inset Quotes eld
-\end_inset
-
-processor versus number of messages
-\begin_inset Quotes erd
-\end_inset
-
- graph and 
-\begin_inset Quotes eld
-\end_inset
-
-processor versus L2 cache misses
-\begin_inset Quotes erd
-\end_inset
-
- graph for each of the benchmarks are presented in a similar fashion.
+ A number of messages versus processor count graph and an L2 cache misses
+ versus processor count graph for each of these benchmarks are presented
+ in a similar fashion.
  The benchmarks that will be presented from the SPLASH-2 Benchmark Suite
  are FFT, Radix, Ocean, and Cholesky.
 \end_layout
@@ -7578,7 +7564,7 @@ This benchmark was run with
 \begin_inset Quotes eld
 \end_inset
 
-network latency versus runtime
+runtime versus network latency
 \begin_inset Quotes erd
 \end_inset
 
@@ -7893,7 +7879,7 @@ reference "fig:Ocean-results"
  For both benchmarks, the greatest speedup occur when going from 4 to 8
  processors.
  However, the interesting part is that in the results for 32 processors,
- the Ocean protocol is noticeably faster than BIP, when compared to the
+ the Origin protocol is noticeably faster than BIP, when compared to the
  speedup experienced in 4, 8, or 16 processors.
  This is because the Origin protocol sends proportionally fewer messages
  than BIP at 32 processors compared to the results received at other processor
