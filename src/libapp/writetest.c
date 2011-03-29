@@ -26,7 +26,8 @@
 
 volatile int myInt = 1;
 #ifdef USE_SESC
-sbarrier_t barr;
+sbarrier_t barr1;
+sbarrier_t barr2;
 #endif
 
 void *readInt(void *numberOfLoops)
@@ -37,10 +38,9 @@ void *readInt(void *numberOfLoops)
    
    for (i=0; i<*((int*)numberOfLoops); i++)
    {
+      sesc_barrier(&barr1, THREADS);
+      sesc_barrier(&barr2, THREADS);
       localInt = myInt;
-#ifdef USE_SESC
-      sesc_barrier(&barr, THREADS);
-#endif
    }
 #ifdef USE_SESC
    sesc_exit(0);
@@ -54,10 +54,9 @@ void *incInt(void *numberOfLoops)
    int i=0;
    for (i=0; i<*((int*)numberOfLoops); i++)
    {
+      sesc_barrier(&barr1, THREADS);
       myInt = myInt + 1;
-#ifdef USE_SESC
-      sesc_barrier(&barr, THREADS);
-#endif
+      sesc_barrier(&barr2, THREADS);
    }
 #ifdef USE_SESC
    sesc_exit(0);
@@ -71,17 +70,15 @@ int main(int argc, char** argv)
 {
 #ifdef USE_SESC
 	sesc_init();
-   sesc_barrier_init(&barr);
+   sesc_barrier_init(&barr1);
+   sesc_barrier_init(&barr2);
 #else
    pthread_t threads[MAX_NUM_THREADS];
 #endif
    char *tempString = NULL;
    int t = 0;
-   int threadIndexMax = 0;
    int numberOfLoops = 0;
-   int numberOfReads = 0;
-   int processorCount = 0;
-   int localInt = 0;
+   int homeNode;
 
    // process arguments
    for (t=0; t<argc; t++)
@@ -89,20 +86,16 @@ int main(int argc, char** argv)
       tempString = argv[t];
       if (tempString[0]=='-')
       {
-         if (tempString[1]=='p')
+         if (tempString[1]=='n')
          {
-            processorCount = atoi(tempString+2);
-         }
-         else if (tempString[1]=='n')
-         {
-            numberOfReads = atoi(tempString+2);
+            numberOfLoops = atoi(tempString+2);
          }
       }
    }
 
-   if (!processorCount || !numberOfReads)
+   if (!numberOfLoops)
    {
-      printf("Usage: readtest -p[number of processors] -n[number of reads]\n");
+      printf("Usage: readtest -n[number of reads]\n");
 #ifdef USE_SESC
       sesc_exit(1);
 #else
@@ -110,19 +103,33 @@ int main(int argc, char** argv)
 #endif
    }
 
-   threadIndexMax = processorCount - 2;
-   threadIndexMax = threadIndexMax / 2;
+   // calculate home node, 64 is the pageSize, we're using 4 nodes in sesc
+   homeNode = (int)(&myInt);
+   //printf("&myInt=%d\n", homeNode);
+   homeNode = homeNode/64;
+   //printf("&myInt/64=%d\n", homeNode);
+   homeNode = homeNode % 4;
+   //printf("&myInt/64%4=%d\n", homeNode);
 
-   // calculate the number of Loops
-   //numberOfLoops = numberOfReads / (processorCount-2);
-   processorCount = 2;
-   numberOfLoops = numberOfReads / processorCount;
-   printf("numberOfLoops=%d\n", numberOfLoops);
+   //printf("homenode=%d\n", homeNode);
 
-   // spawn on processor 1
-   sesc_spawn((void (*)(void*)) *incInt, &numberOfLoops, SESC_FLAG_NOMIGRATE|SESC_FLAG_MAP|1);
-   // spawn on processor 2
-   sesc_spawn((void (*)(void*)) *readInt, &numberOfLoops, SESC_FLAG_NOMIGRATE|SESC_FLAG_MAP|2);
+   // calculate read node
+   t = 1;
+   if (t==homeNode)
+   {
+      t++;
+   }
+   // spawn thread
+   printf("t=%d\n", t);
+   sesc_spawn((void (*)(void*)) *readInt, &numberOfLoops, SESC_FLAG_NOMIGRATE|SESC_FLAG_MAP|t);
+   t++;
+   if (t==homeNode)
+   {
+      t++;
+   }
+   // spawn thread
+   printf("t=%d\n", t);
+   sesc_spawn((void (*)(void*)) *incInt, &numberOfLoops, SESC_FLAG_NOMIGRATE|SESC_FLAG_MAP|t);
 
 #ifdef USE_SESC
    sesc_wait(); // wait for threads to finish

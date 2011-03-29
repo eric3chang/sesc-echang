@@ -532,7 +532,8 @@ def plotGraphSingle(dirtypes, graphResults, minimum, maximum, myXlabel, myYlabel
     ylabel(myYlabel)
     #xticks(ticks)
     grid(True)
-    title(myTitle)
+    #title(myTitle)
+    title('synthetic benchmark')
     #axis([0, maxInt*1.1, 0, yAxis*1.1])
 
 def main():
@@ -555,8 +556,8 @@ def main():
     maxl2 = '1024'
     minlatency = '0'
     maxlatency = '7'
-    isNorm = False
-    isSavFig = False
+    isNorm = True
+    isSavFig = True
     isSwitchDir = False
     global IN_EXT
     fileAdd = ''

@@ -74,6 +74,7 @@ namespace Memory
 		unsigned long long remoteEvictionResponsesReceived;
 		unsigned long long remoteInvalidatesReceived;
 		unsigned long long remoteInvalidateResponsesReceived;
+		unsigned long long remoteMessagesReceived;
 		unsigned long long remoteReadsReceived;
 		unsigned long long remoteReadResponsesReceived;
 		unsigned long long remoteWritesReceived;
@@ -190,6 +191,7 @@ namespace Memory
 		CBOnRemoteReadResponse cbOnRemoteReadResponse;
 		*/
 	public:
+		virtual unsigned long long GetRemoteMessagesReceived();
 		virtual void Initialize(EventManager* em, const RootConfigNode& config, const std::vector<Connection*>& connectionSet);
 		virtual void DumpRunningState(RootConfigNode& node);
 		virtual void DumpStats(std::ostream& out);

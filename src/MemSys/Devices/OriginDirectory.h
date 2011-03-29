@@ -203,6 +203,7 @@ namespace Memory
 		unsigned long long directoryWritebacksReceived;
 		unsigned long long directoryWritebackRequestsReceived;
 		unsigned long long directoryWriteResponsesReceived;
+		unsigned long long remoteMessagesReceived;
 
 		TimeDelta localSendTime;
 		TimeDelta remoteSendTime;
@@ -351,6 +352,7 @@ namespace Memory
 		typedef PooledFunctionGenerator<StoredClassFunction2<OriginDirectory,const BaseMsg*,NodeID,&OriginDirectory::RecvMsgCache> > CBRecvMsgCache;
 		CBRecvMsgCache cbRecvMsgCache;
 	public:
+		virtual unsigned long long GetRemoteMessagesReceived();
 		virtual void Initialize(EventManager* em, const RootConfigNode& config, const std::vector<Connection*>& connectionSet);
 		virtual void DumpRunningState(RootConfigNode& node);
 		virtual void DumpStats(std::ostream& out);
