@@ -345,7 +345,10 @@ def plotCpuAverage(benchmarks, dirtypes, mincpu, maxcpu, component, key,isNormal
 
 def plotLatencySingle(benchmarks, dirtypes, cpu,l1,l2, minimum, maximum, component,key, myYlabel, filename,isSaveFigure,isNormalize,isSwitchDirtype):
     myXlabel='Network Latency (Cycles)'
-    iResults = getLatencyResults(benchmarks, dirtypes, cpu, l1, l2, minimum, maximum, component, key)
+    iResults1 = getLatencyResults(['writetest'], dirtypes, cpu, l1, l2, minimum, maximum, component, key)
+    iResults2 = getLatencyResults(['readtest'], dirtypes, cpu, l1, l2, minimum, maximum, component, key)
+
+    iResults = subtractResults('writetest', iResults1, 'readtest', iResults2, dirtypes, cpu, l1, l2, minimum, maximum)
 
     for benchmark in benchmarks:
         myTitle = benchmark
@@ -536,6 +539,25 @@ def plotGraphSingle(dirtypes, graphResults, minimum, maximum, myXlabel, myYlabel
     title('synthetic benchmark')
     #axis([0, maxInt*1.1, 0, yAxis*1.1])
 
+def subtractResults(benchmark1, results1, benchmark2, results2, dirtypes, cpu, l1, l2, minimum, maximum):
+    minInt = convertToInt(minimum)
+    maxInt = convertToInt(maximum)
+
+    sources1 = results1[benchmark1]
+    sources2 = results2[benchmark2]
+    for dirtype in dirtypes:
+        dirtypeSources1 = sources1[dirtype]
+        dirtypeSources2 = sources2[dirtype]
+        keys = dirtypeSources1.keys()
+        keys.sort()
+        for key in keys:
+            myInt = 0
+            myInt = int(dirtypeSources1[key]) - int(dirtypeSources2[key])
+            dirtypeSources1[key] = str(myInt)
+        sources1[dirtype] = dirtypeSources1
+    results1[benchmark1] = sources1
+    return results1
+
 def main():
     #benchmarks = ['cholesky', 'fft', 'lu','newtest', 'radix', 'ocean']
     #benchmarks = ['cholesky', 'fft', 'newtest', 'radix', 'ocean']
@@ -556,8 +578,8 @@ def main():
     maxl2 = '1024'
     minlatency = '0'
     maxlatency = '7'
-    isNorm = True
-    isSavFig = True
+    isNorm = False
+    isSavFig = False
     isSwitchDir = False
     global IN_EXT
     fileAdd = ''
