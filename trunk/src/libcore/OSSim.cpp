@@ -1067,6 +1067,7 @@ void OSSim::simFinish()
 		long long unsigned int totalReadResponses = 0;
 		long long unsigned int totalLatencySimple = 0;
 		long long unsigned int totalReadResponsesSimple = 0;
+		long long unsigned totalRemoteMessagesReceived = 0;
 		int directoryCount = 0;
 
 		// for use by processors
@@ -1195,6 +1196,7 @@ void OSSim::simFinish()
 				//totalReadResponses += tempDevice->GetTotalReadResponses();
 				//totalLatencySimple += tempDevice->GetTotalLatencySimple();
 				//totalReadResponsesSimple += tempDevice->GetTotalReadResponsesSimple();
+				totalRemoteMessagesReceived += tempDevice->GetRemoteMessagesReceived();
 				directoryCount++;
 			}
 			else if (isOriginDirectory)
@@ -1203,6 +1205,7 @@ void OSSim::simFinish()
 
 				//totalLatency += tempDevice->GetTotalLatency();
 				//totalReadResponses += tempDevice->GetTotalReadResponses();
+				totalRemoteMessagesReceived += tempDevice->GetRemoteMessagesReceived();
 				directoryCount++;
 			}
 			else if (isProcessor)
@@ -1260,13 +1263,19 @@ void OSSim::simFinish()
 		out << "TotalCache:" << "totalL2CacheSharedReadMisses:" << totalL2CacheSharedReadMisses << std::endl;
 		out << "TotalCache:" << "totalL2CacheWriteHits:" << totalL2CacheWriteHits << std::endl;
 		out << "TotalCache:" << "totalL2CacheWriteMisses:" << totalL2CacheWriteMisses << std::endl;
+		unsigned long long totalL2CacheHits = totalL2CacheExclusiveReadHits + totalL2CacheSharedReadHits + totalL2CacheWriteHits;
+		unsigned long long totalL2CacheMisses = totalL2CacheExclusiveReadMisses + totalL2CacheSharedReadMisses + totalL2CacheWriteMisses;
+		out << "TotalCache:" << "totalL2CacheHits:" << totalL2CacheHits << endl;
+		out << "TotalCache:" << "totalL2CacheMisses:" << totalL2CacheMisses << endl;
 		//out << "TotalCache:" << std::endl;
+		/*
 		out << "TotalCache:" << "totalCacheExclusiveReadHits:" << totalCacheExclusiveReadHits << std::endl;
 		out << "TotalCache:" << "totalCacheExclusiveReadMisses:" << totalCacheExclusiveReadMisses << std::endl;
 		out << "TotalCache:" << "totalCacheSharedReadHits:" << totalCacheSharedReadHits << std::endl;
 		out << "TotalCache:" << "totalCacheSharedReadMisses:" << totalCacheSharedReadMisses << std::endl;
 		out << "TotalCache:" << "totalCacheWriteHits:" << totalCacheWriteHits << std::endl;
 		out << "TotalCache:" << "totalCacheWriteMisses:" << totalCacheWriteMisses << std::endl;
+		*/
 		out << endl;
 
 		out << "TotalDirectory" << endl;
@@ -1287,6 +1296,7 @@ void OSSim::simFinish()
 		}
 		out << "TotalDirectory:" << "averageWaitTime:" << averageWaitTime << endl;
 		out << "TotalDirectory:" << "averageWaitTimeSimple:" << averageWaitTimeSimple << endl;
+		out << "TotalDirectory:" << "totalRemoteMessagesReceived:" << totalRemoteMessagesReceived << endl;
 		out << endl;
 
 		out << "TotalProcessor" << endl;

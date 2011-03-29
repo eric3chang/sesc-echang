@@ -6488,7 +6488,7 @@ synthetic benchmark
 \begin_inset Text
 
 \begin_layout Plain Layout
--p2 -n1000
+-n500
 \end_layout
 
 \end_inset
@@ -6689,14 +6689,14 @@ int myInt = 1
 \end_layout
 
 \begin_layout Plain Layout
-readInt(numberOfIndividualLoops):
+readInt(numberOfLoops):
 \end_layout
 
 \begin_layout Plain Layout
 \begin_inset space \qquad{}
 \end_inset
 
-loop numberOfIndividualLoops times:
+loop numberOfLoops times:
 \end_layout
 
 \begin_layout Plain Layout
@@ -6729,14 +6729,14 @@ barrier
 \end_layout
 
 \begin_layout Plain Layout
-incInt(numberOfIndividualLoops):
+incInt(numberOfLoops):
 \end_layout
 
 \begin_layout Plain Layout
 \begin_inset space \qquad{}
 \end_inset
 
-loop numberOfIndividualLoops times:
+loop numberOfLoops times:
 \end_layout
 
 \begin_layout Plain Layout
@@ -6769,43 +6769,21 @@ barrier
 \end_layout
 
 \begin_layout Plain Layout
-main(numberOfProcessors , numberOfLoops):
+main(numberOfLoops):
 \end_layout
 
 \begin_layout Plain Layout
 \begin_inset space \qquad{}
 \end_inset
 
-numberOfIndividualLoops = numberOfLoops / numberOfProcessors
+spawn thread incInt(numberOfLoops)
 \end_layout
 
 \begin_layout Plain Layout
 \begin_inset space \qquad{}
 \end_inset
 
-loop numberOfProcessors / 2 times:
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset space \qquad{}
-\end_inset
-
-
-\begin_inset space \qquad{}
-\end_inset
-
-spawn thread incInt(numberOfIndividualLoops)
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset space \qquad{}
-\end_inset
-
-
-\begin_inset space \qquad{}
-\end_inset
-
-spawn thread readInt(numberOfIndividualLoops)
+spawn thread readInt(numberOfLoops)
 \end_layout
 
 \begin_layout Plain Layout
@@ -6886,24 +6864,16 @@ reference "fig:Synthetic-Benchmark-read-increment"
  that the threads are synchronized.
  The global int, myInt, is the variable that will be read and written in
  this synthetic benchmark.
- The readInt and the incInt functions both take in a parameter, numberOfIndividu
-alLoops, that tells the function how many times to read the myInt variable.
+ The readInt and the incInt functions both take in a parameter, numberOfLoops,
+ that tells the function how many times to read the myInt variable.
  The difference is that the readInt function only reads from myInt and the
  incInt function reads myInt and also increments it.
  In both functions, there are barriers after access to myInt to make sure
  that the accesses are synchronized.
- The main function requires two arguments.
- NumberOfProcessors specify how many processors are in the system and affects
- how many threads get created, and this variable should be a power of 2
- that is at least 1.
+ The main function takes one argument, NumberOfLoops.
  NumberOfLoops specify how many times the threads would read the variable
  myInt.
- We divide the numberOfLoops by the numberOfProcessors to get numberOfIndividual
-Loops, which we pass into readInt and incInt.
- This is to ensure that the number of times myInt is being read is the same
- regardless of the number of processors being used.
- Then incInt and readInt are each spawned numberOfProcessors / 2 times to
- put a thread on all the available processors in the simulator.
+ IncInt and readInt are each spawned once onto different processors.
 \end_layout
 
 \begin_layout Standard
@@ -6926,8 +6896,8 @@ This program spawns a number of read threads and write threads specified
 In order to make sure that the overheads of setting up the barrier are not
  counted towards the final number of messages, I also wrote a variation
  of the same program that calls only readInt but not incInt.
- Instead of the main process spawning readInt threads and incInt threads,
- this program will spawn only readInt threads.
+ Instead of the main process spawning a readInt thread and an incInt thread,
+ this program will spawn two readInt threads onto two different processors.
  The program is shown in 
 \begin_inset ERT
 status open
@@ -7010,14 +6980,14 @@ int myInt = 1
 \end_layout
 
 \begin_layout Plain Layout
-readInt(numberOfIndividualLoops):
+readInt(numberOfLoops):
 \end_layout
 
 \begin_layout Plain Layout
 \begin_inset space \qquad{}
 \end_inset
 
-loop numberOfIndividualLoops times:
+loop numberOfLoops times:
 \end_layout
 
 \begin_layout Plain Layout
@@ -7050,21 +7020,17 @@ barrier
 \end_layout
 
 \begin_layout Plain Layout
-main(numberOfProcessors , numberOfLoops):
+main(numberOfLoops):
 \end_layout
 
 \begin_layout Plain Layout
 \begin_inset space \qquad{}
 \end_inset
 
-loop numberOfProcessors:
+spawn thread readInt(numberOfLoops)
 \end_layout
 
 \begin_layout Plain Layout
-\begin_inset space \qquad{}
-\end_inset
-
-
 \begin_inset space \qquad{}
 \end_inset
 
@@ -9439,12 +9405,12 @@ The synthetic benchmark was run with a parameter of
 \begin_inset Quotes eld
 \end_inset
 
--p2 -n1000
+-n500
 \begin_inset Quotes erd
 \end_inset
 
  to simulate reading the myInt variable 500 times and incrementing it 500
- times in two processors.
+ times in the two processors.
  Since both threads are using the same memory location, this program generates
  an extremely large number of exclusive reads.
  This forces the block that contains myInt to get continuously evicted,
@@ -9559,12 +9525,12 @@ The following is the original
 \begin_inset Float figure
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \align center
 \begin_inset Graphics
-	filename results-figures/newtest-latency-time-p2-c512.pdf
+	filename results-figures/writetest-latency-time-p4-c512.pdf
 	width 75text%
 
 \end_inset
@@ -9605,10 +9571,12 @@ status collapsed
 \begin_layout Plain Layout
 \align center
 \begin_inset Tabular
-<lyxtabular version="3" rows="3" columns="2">
+<lyxtabular version="3" rows="3" columns="4">
 <features>
-<column alignment="center" valignment="top" width="20text%">
-<column alignment="center" valignment="top" width="60text%">
+<column alignment="center" valignment="top" width="10text%">
+<column alignment="center" valignment="top" width="30text%">
+<column alignment="center" valignment="top" width="30text%">
+<column alignment="center" valignment="top" width="30text%">
 <row>
 <cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
@@ -9619,11 +9587,29 @@ Protocol
 
 \end_inset
 </cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Number of Network Messages in Read-Only
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Number of Network Messages in Read Increment
+\end_layout
+
+\end_inset
+</cell>
 <cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
-Number of Network Messages
+Net Number of Network Messages
 \end_layout
 
 \end_inset
@@ -9639,11 +9625,29 @@ BIP
 
 \end_inset
 </cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+63
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1411
+\end_layout
+
+\end_inset
+</cell>
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
-4764
+1348
 \end_layout
 
 \end_inset
@@ -9659,11 +9663,29 @@ Origin
 
 \end_inset
 </cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+66
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1205
+\end_layout
+
+\end_inset
+</cell>
 <cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
-2976
+1139
 \end_layout
 
 \end_inset

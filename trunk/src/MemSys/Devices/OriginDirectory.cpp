@@ -132,6 +132,11 @@ namespace Memory
 		return directoryDataMap[currentAddress];
 	}
 
+   unsigned long long OriginDirectory::GetRemoteMessagesReceived()
+   {
+   	return remoteMessagesReceived;
+   }
+
 	void OriginDirectory::PerformMemoryReadResponseCheck(const ReadResponseMsg *m, NodeID src)
 	{
 		DebugAssertWithMessageID(src==InvalidNodeID, m->MsgID());
@@ -152,6 +157,7 @@ namespace Memory
 
 	void OriginDirectory::RecvMsgCache(const BaseMsg *msg, NodeID src)
 	{
+		remoteMessagesReceived++;
 		Address addr = BaseMemDevice::GetAddress(msg);
 		
 		if (msg->Type()==mt_CacheNak)
@@ -161,6 +167,7 @@ namespace Memory
 		}
 		else if (msg->Type()==mt_Eviction)
 		{
+			remoteMessagesReceived--;
 			const EvictionMsg* m = (const EvictionMsg*)msg;
 			DebugAssertWithMessageID(src==InvalidNodeID, m->MsgID());
 			OnCacheEviction(m, src);
@@ -187,6 +194,7 @@ namespace Memory
 		}
 		else if (msg->Type()==mt_Read)
 		{
+			remoteMessagesReceived--;
 			DebugAssertWithMessageID(src==InvalidNodeID, msg->MsgID());
 			const ReadMsg* m = (const ReadMsg*) msg;
 			OnCacheRead(m);
@@ -228,6 +236,7 @@ namespace Memory
 
 	void OriginDirectory::RecvMsgDirectory(const BaseMsg *msg, NodeID src, bool isFromMemory)
 	{
+		remoteMessagesReceived++;
 		if (msg->Type()==mt_DirectoryNak)
 		{
 			DebugAssertWithMessageID(!isFromMemory, msg->MsgID());
@@ -242,6 +251,7 @@ namespace Memory
 		}
 		else if (msg->Type()==mt_ReadResponse)
 		{
+			remoteMessagesReceived--;
 			const ReadResponseMsg* m = (const ReadResponseMsg*)msg;
 			DirectoryData& directoryData = GetDirectoryData(m->addr);
 			DebugAssertWithMessageID(isFromMemory, m->solicitingMessage);
@@ -527,6 +537,7 @@ namespace Memory
 		directoryWritebacksReceived = 0;
 		directoryWritebackRequestsReceived = 0;
 		directoryWriteResponsesReceived = 0;
+		remoteMessagesReceived = 0;
 	}
 
 	/**
@@ -563,6 +574,7 @@ namespace Memory
 		out << DeviceName() << ":directoryWritebacksReceived:" << directoryWritebacksReceived << std::endl;
 		out << DeviceName() << ":directoryWritebackRequestsReceived:" << directoryWritebackRequestsReceived << std::endl;
 		out << DeviceName() << ":directoryWriteResponsesReceived:" << directoryWriteResponsesReceived << std::endl;
+		out << DeviceName() << ":RemoteMessagesReceived:" << remoteMessagesReceived << std::endl;
 	}
 
 	void OriginDirectory::OnCacheCacheNak(const CacheNakMsg* m, NodeID src)

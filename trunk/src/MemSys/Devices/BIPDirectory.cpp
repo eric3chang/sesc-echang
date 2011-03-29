@@ -293,6 +293,11 @@ namespace Memory
 		}
 	}
 
+	unsigned long long BIPDirectory::GetRemoteMessagesReceived()
+	{
+		return remoteMessagesReceived;
+	}
+
 	void BIPDirectory::SendDirectoryNak(const InvalidateMsg *m)
 	{
    	DirectoryNakMsg* dnk = EM().CreateDirectoryNakMsg(GetDeviceID(), m->GeneratingPC());
@@ -555,6 +560,7 @@ namespace Memory
 
 	void BIPDirectory::OnLocalMemoryReadResponse(const ReadResponseMsg* m)
 	{
+		remoteMessagesReceived--;
 #ifdef MEMORY_BIP_DIRECTORY_DEBUG_VERBOSE
 		PrintDebugInfo("LocMemReadRes",*m,"");
 #endif
@@ -565,6 +571,7 @@ namespace Memory
 
 	void BIPDirectory::OnLocalMemoryWriteResponse(const WriteResponseMsg* m)
 	{
+		remoteMessagesReceived--;
 #ifdef MEMORY_BIP_DIRECTORY_DEBUG_VERBOSE
 		PrintDebugInfo("LocMemWriteRes",*m,"");
 #endif
@@ -582,6 +589,7 @@ namespace Memory
 	*/
 	void BIPDirectory::OnRemoteReadCache(const ReadMsg* m, NodeID src)
 	{
+		remoteMessagesReceived++;
 		remoteReadsReceived++;
 #ifdef MEMORY_BIP_DIRECTORY_DEBUG_VERBOSE
       PrintDebugInfo("RemReadCache",*m,"",src);
@@ -634,6 +642,7 @@ namespace Memory
 
 	void BIPDirectory::OnRemoteReadResponse(const ReadResponseMsg* m, NodeID src)
 	{
+		remoteMessagesReceived++;
 		remoteReadResponsesReceived++;
 #ifdef MEMORY_BIP_DIRECTORY_DEBUG_VERBOSE
       PrintDebugInfo("RemReadRes",*m,"",src);
@@ -804,6 +813,7 @@ namespace Memory
 
 	void BIPDirectory::OnRemoteWrite(const WriteMsg* m, NodeID src)
 	{
+		remoteMessagesReceived++;
 		remoteWritesReceived++;
 #ifdef MEMORY_BIP_DIRECTORY_DEBUG_VERBOSE
       PrintDebugInfo("RemWrite",*m,"",src);
@@ -838,6 +848,7 @@ namespace Memory
 
 	void BIPDirectory::OnRemoteWriteResponse(const WriteResponseMsg* m, NodeID src)
 	{
+		remoteMessagesReceived++;
 		remoteWriteResponsesReceived++;
 #ifdef MEMORY_BIP_DIRECTORY_DEBUG_VERBOSE
       PrintDebugInfo("RemWriteRes",*m,"",src);
@@ -848,6 +859,7 @@ namespace Memory
 
 	void BIPDirectory::OnRemoteDirectoryNak(const DirectoryNakMsg* m, NodeID src)
 	{
+		remoteMessagesReceived++;
 #ifdef MEMORY_BIP_DIRECTORY_DEBUG_VERBOSE
 		PrintDebugInfo("RemDirNak",*m,"",src);
 #endif
@@ -900,6 +912,7 @@ namespace Memory
 
 	void BIPDirectory::OnRemoteEviction(const EvictionMsg* m, NodeID src)
 	{
+		remoteMessagesReceived++;
 #ifdef MEMORY_BIP_DIRECTORY_DEBUG_VERBOSE
 		PrintDebugInfo("RemEvic",*m,"",src);
 #endif
@@ -969,6 +982,7 @@ namespace Memory
 
 	void BIPDirectory::OnRemoteEvictionResponse(const EvictionResponseMsg* m, NodeID src)
 	{
+		remoteMessagesReceived++;
 		remoteEvictionResponsesReceived++;
 #ifdef MEMORY_BIP_DIRECTORY_DEBUG_VERBOSE
       PrintDebugInfo("RemEvicRes",*m,"",src);
@@ -985,6 +999,7 @@ namespace Memory
 
 	void BIPDirectory::OnRemoteInvalidate(const InvalidateMsg* m, NodeID src)
 	{
+		remoteMessagesReceived++;
 #ifdef MEMORY_BIP_DIRECTORY_DEBUG_VERBOSE
       PrintDebugInfo("RemInv",*m,"",src);
 #endif
@@ -1015,6 +1030,7 @@ namespace Memory
 
 	void BIPDirectory::OnRemoteInvalidateResponse(const InvalidateResponseMsg* m, NodeID src)
 	{
+		remoteMessagesReceived++;
 		remoteInvalidateResponsesReceived++;
 #ifdef MEMORY_BIP_DIRECTORY_DEBUG_VERBOSE
       PrintDebugInfo("RemInvRes",*m,"",src);
@@ -1341,6 +1357,7 @@ namespace Memory
 		remoteEvictionResponsesReceived = 0;
 		remoteInvalidatesReceived = 0;
 		remoteInvalidateResponsesReceived = 0;
+		remoteMessagesReceived = 0;
 		remoteReadsReceived = 0;
 		remoteReadResponsesReceived = 0;
 		remoteWritesReceived = 0;
@@ -1374,6 +1391,7 @@ namespace Memory
 		out << DeviceName() << ":remoteEvictionResponsesReceived:" << remoteEvictionResponsesReceived << std::endl;
 		out << DeviceName() << ":remoteInvalidatesReceived:" << remoteInvalidatesReceived << std::endl;
 		out << DeviceName() << ":remoteInvalidateResponsesReceived:" << remoteInvalidateResponsesReceived << std::endl;
+		out << DeviceName() << ":remoteMessagesReceived:" << remoteMessagesReceived << std::endl;
 		out << DeviceName() << ":remoteReadsReceived:" << remoteReadsReceived << std::endl;
 		out << DeviceName() << ":remoteReadResponsesReceived:" << remoteReadResponsesReceived << std::endl;
 		out << DeviceName() << ":remoteWritesReceived:" << remoteWritesReceived << std::endl;
@@ -1464,6 +1482,7 @@ namespace Memory
 		}
 		else if(connectionID == remoteConnectionID)
 		{
+			remoteMessagesReceived++;
 			DebugAssert(msg->Type() == mt_Network);
 			const NetworkMsg* m = (const NetworkMsg*)msg;
 			const BaseMsg* payload = m->payloadMsg;
